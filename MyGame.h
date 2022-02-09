@@ -1,29 +1,26 @@
 #pragma once
+#include"Framework.h"
 
-#include"GameScene.h"
-#include"WinApp.h"
-#include"DirectXCommon.h"
-#include"Input.h"
-
-class MyGame
+class MyGame:public Framework
 {
 public:
-
+	/// <summary>
+	/// èâä˙âª
+	/// </summary>
 	void Initialize();
-
+	/// <summary>
+	/// çXêV
+	/// </summary>
 	void Update();
-
+	/// <summary>
+	/// ï`âÊ
+	/// </summary>
 	void Draw();
-
+	/// <summary>
+	/// èIóπ
+	/// </summary>
 	void Finalize();
 
-	bool GetFinish() { return finish; }
-private:
-	bool finish = false;
-
-	DirectXCommon* dxCommon = nullptr;
-	WinApp* winApp = nullptr;
-	Input* input = nullptr;
-	GameScene* gamescene = nullptr;
+	
 };
 

@@ -40,15 +40,19 @@ const int spriteSRVCount = 512;
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	MyGame game;
+	//初期化
 	game.Initialize();
 	while (true)//ゲームループ
 	{
+		//更新
 		game.Update();
 		if (game.GetFinish()) {
 			break;
 		}
+		//描画
 		game.Draw();
 	}
+	//終了
 	game.Finalize();
 	return 0;
 }
