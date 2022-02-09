@@ -35,26 +35,12 @@ using namespace Microsoft::WRL;
 
 const int spriteSRVCount = 512;
 
-LRESULT WindowProc(HWND hwnd, UINT msg, WPARAM wparm, LPARAM lparam)
-{
-	//メッセージで分岐
-	switch (msg)
-	{
-	case WM_DESTROY://ウィンドウが破壊された
-		PostQuitMessage(0);//OSに対して、アプリの終了を伝える
-		return 0;
-	}
-	return DefWindowProc(hwnd, msg, wparm, lparam);//標準の処理を行う
-}
 
 //Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	MyGame game;
-
 	game.Initialize();
-	
-
 	while (true)//ゲームループ
 	{
 		game.Update();
@@ -62,9 +48,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 			break;
 		}
 		game.Draw();
-	
 	}
-
 	game.Finalize();
 	return 0;
 }
