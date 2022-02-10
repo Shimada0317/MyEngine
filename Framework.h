@@ -11,8 +11,32 @@
 class Framework
 {
 public:
+	/// <summary>
+	/// 実行
+	/// </summary>
+	void Run();
+
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	virtual void Initialize();
+
+	/// <summary>
+	/// 終了
+	/// </summary>
+	virtual void Finalize();
+
+	/// <summary>
+		/// 更新
+		/// </summary>
+	virtual void Update();
+	/// <summary>
+	/// 描画
+	/// </summary>
+	virtual void Draw() = 0;
 	bool GetFinish() { return finish; }
-private:
+protected:
 	bool finish = false;
 
 	DirectXCommon* dxCommon = nullptr;

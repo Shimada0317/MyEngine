@@ -7,19 +7,19 @@ public:
 	/// <summary>
 	/// ‰Šú‰»
 	/// </summary>
-	void Initialize();
+	void Initialize() override;
 	/// <summary>
 	/// XV
 	/// </summary>
-	void Update();
+	void Update() override;
 	/// <summary>
 	/// •`‰æ
 	/// </summary>
-	void Draw();
+	void Draw() override;
 	/// <summary>
 	/// I—¹
 	/// </summary>
-	void Finalize();
+	void Finalize() override;
 
 	
 };

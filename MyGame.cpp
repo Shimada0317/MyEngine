@@ -2,38 +2,8 @@
 
 void MyGame::Initialize()
 {
-	//Sprite* spriteC = nullptr;
-	winApp = new WinApp();
-	winApp->Initialize();
-	//Sprite* spriteC = nullptr;
-
-
-	dxCommon = new DirectXCommon();
-	dxCommon->Initialize(winApp);
-	//Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
-
-	//DirectX初期化処理　ここから
-#ifdef _DEBUG
-	//デバッグレイヤーをオンに
-	ID3D12Debug* debugContoroller;
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugContoroller))))
-	{
-		debugContoroller->EnableDebugLayer();
-	}
-#endif // DEBUG
-
-	HRESULT result;
-
-	//GameScene.hに
-
-	input = new Input();
-
-	gamescene = new GameScene();
-
-	gamescene->StaticInitialize(dxCommon, winApp, input);
-
-	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
-	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
+	//基底クラスの初期化
+	Framework::Initialize();
 
 	gamescene->Initialize(dxCommon);
 	gamescene->GameSceneInitialize();
@@ -41,12 +11,9 @@ void MyGame::Initialize()
 
 void MyGame::Update()
 {
-	if (winApp->ProcessMessage()) {
-		finish = true;
-		return;
-	}
-	//DirectX毎フレーム処理 ここから
-	input->Update();
+	//基底クラスの更新
+	Framework::Update();
+
 	gamescene->Update(dxCommon, input);
 }
 
@@ -61,16 +28,9 @@ void MyGame::Draw()
 
 void MyGame::Finalize()
 {
-	winApp->Finalize();
-
-	//ウィンドウ表示
-	ShowWindow(winApp->GetHwnd(), SW_SHOW);
-	//コンソールへの文字出力
-	OutputDebugStringA("Hello,DirectX!!\n");
-
-	delete input;
-	delete winApp;
-	delete dxCommon;
+	//基底クラスの終了
+	Framework::Finalize();
+	
 	//delete contoroller;
 	//delete model;
 }
