@@ -1,6 +1,8 @@
 #pragma once
 #include"Framework.h"
 
+class GameScene;
+
 class MyGame:public Framework
 {
 public:
@@ -20,7 +22,9 @@ public:
 	/// èIóπ
 	/// </summary>
 	void Finalize() override;
-
+private:
+	//ÉVÅ[Éì
+	GameScene* scene_;
 	
 };
 
