@@ -24,8 +24,6 @@ private:
 
 public://ÉÅÉìÉoïœêî
 
-	void StaticInitialize(DirectXCommon* dxCommon,WinApp* winApp,Input* input);
-
 	void Initialize(DirectXCommon* dxCommon);
 
 	void GameSceneInitialize();
@@ -48,9 +46,7 @@ private:
 	Sprite* last = nullptr;
 	Input* input = nullptr;
 	
-	Audio* audio = nullptr;
-	Audio* se = nullptr;
-	Audio* hit = nullptr;
+	
 
 	DirectXCommon* dxCommon = nullptr;
 

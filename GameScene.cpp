@@ -5,24 +5,14 @@
 
 using namespace DirectX;
 
-void GameScene::StaticInitialize(DirectXCommon* dxCommon,WinApp* winApp,Input* input) {
-
-	audio = new Audio();
-	audio->StaticInitialize();
-	se = new Audio();
-	se->StaticInitialize();
-	hit = new Audio();
-	hit->StaticInitialize();
-
-
-	input->Initialize(winApp);
-}
-
 void GameScene::Initialize(DirectXCommon* dxCommon)
 {
 	assert(dxCommon);
 
 	this->dxCommon = dxCommon;
+
+	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
+	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/haikei.png");
 	Sprite::LoadTexture(2, L"Resources/life.png");
@@ -68,8 +58,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon)
 
 void GameScene::GameSceneInitialize()
 {
-	assert(audio);
-	this->audio = audio;
+
 
 
 	for (int i = 0; i < 20; i++) {
@@ -109,7 +98,7 @@ void GameScene::GameSceneInitialize()
 	vol[1] = 0.01f;
 	vol[2] = 0.01f;
 
-	audio->LoadFile("Resources/digitalworld.wav", vol[0]);
+
 }
 
 void GameScene::Update(DirectXCommon* dxCommon,Input* input)
@@ -214,13 +203,13 @@ void GameScene::Update(DirectXCommon* dxCommon,Input* input)
 				c[i] = speed.z - enemyspeed[i].z;
 				d[i] = sqrtf(a[i] * a[i] + b[i] * b[i] + c[i] * c[i]);
 				if (d[i] <= playerradius + enemyradius[i]) {
-					hit->LoadFile("Resources/coin4.wav", vol[2]);
+					//hit->LoadFile("Resources/coin4.wav", vol[2]);
 				}
 
 				if (move == 0) {
 					if (input->PushKey(DIK_SPACE)) {
 						if (d[i] <= playerradius + enemyradius[i]) {
-							se->LoadFile("Resources/se_ymd04.wav", vol[0]);
+							//se->LoadFile("Resources/se_ymd04.wav", vol[0]);
 							enemyF[i] = 1;
 							count += 1;
 						}

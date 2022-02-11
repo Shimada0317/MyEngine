@@ -4,6 +4,7 @@
 #include"WinApp.h"
 #include"DirectXCommon.h"
 #include"Input.h"
+#include"Audio.h"
 
 /// <summary>
 /// フレームワーク
@@ -43,5 +44,8 @@ protected:
 	WinApp* winApp = nullptr;
 	Input* input = nullptr;
 	GameScene* gamescene = nullptr;
+
+	Audio* audio = nullptr;
+	
 };
 

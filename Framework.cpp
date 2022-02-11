@@ -45,15 +45,15 @@ void Framework::Initialize()
 	//GameScene.h‚É
 
 	input = new Input();
+	input->Initialize(winApp);
 
 	gamescene = new GameScene();
-
-	gamescene->StaticInitialize(dxCommon, winApp, input);
-
-	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
-	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
-
+	audio = new Audio();
+	audio->StaticInitialize();
 	
+
+	gamescene->Initialize(dxCommon);
+	audio->LoadFile("Resources/digitalworld.wav", 0.1);
 }
 
 void Framework::Finalize()
@@ -74,7 +74,7 @@ void Framework::Finalize()
 
 void Framework::Update()
 {
-
+	
 	if (winApp->ProcessMessage()) {
 		finish = true;
 		return;
