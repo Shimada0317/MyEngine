@@ -2,16 +2,15 @@
 
 #pragma once
 
+#include"BaseScene.h"
 #include "DirectXCommon.h"
 #include <DirectXMath.h>
-#include "Input.h"
 #include "Sprite.h"
 #include"Object3d.h"
 #include"Model.h"
-#include"Audio.h"
-#include"DebugText.h"
+#include"Input.h"
 
-class TitleScene
+class TitleScene :public BaseScene
 {
 private: // エイリアス
 // Microsoft::WRL::を省略
@@ -25,33 +24,35 @@ private:
 	static const int debugTextNumber = 0;
 
 public://メンバ変数
+	TitleScene(SceneManager* sceneManager_);
 
-	void Initialize(DirectXCommon* dxCommon);
+	void Initialize() override;
 
-	void TitleSceneInitialize();
+	void SetPosSclRot();
 
-	void Update(DirectXCommon* dxCommon, Input* input);
+	void Update() override;
 
-	void Draw(DirectXCommon* dxCommon);
+	void Draw(DirectXCommon* dxCommon)override;
 
-	void Finalize();
+	void Finalize() override;
 private:
-	Sprite* sprite = nullptr;
-
-	Sprite* title = nullptr;
 
 	DirectXCommon* dxCommon = nullptr;
 
-	Object3d* player3d = nullptr;
 	Model* playermodel = nullptr;
-
-	Object3d* ramieru3d = nullptr;
 	Model* ramieru = nullptr;
-
-	Object3d* human3d = nullptr;
 	Model* human = nullptr;
 
+	Object3d* player3d = nullptr;
+	Object3d* ramieru3d = nullptr;
+	Object3d* human3d = nullptr;
 
-	DebugText* debugText;
+	Sprite* sprite = nullptr;
+	Sprite* title = nullptr;
+
+
+	XMFLOAT3 ramieru_pos = { 0,0,0 };
+
+
 };
 

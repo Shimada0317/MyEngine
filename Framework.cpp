@@ -28,10 +28,13 @@ void Framework::Initialize()
 	input->Initialize(winApp);
 	audio = new Audio();
 	audio->StaticInitialize();
-	audio->LoadFile("Resources/digitalworld.wav", 0.1);
-	gamescene = new GameScene();
-	gamescene->Initialize(dxCommon);
-	
+	//audio->LoadFile("Resources/digitalworld.wav", 0.1);
+	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height, dxCommon->GetCmdList());
+	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
+	debugText = DebugText::GetInstance();
+	debugText->Initialize(debugTextNumber);
+	//シーンマネージャー
+	sceneManager_ = new SceneManager;
 }
 
 void Framework::Update()
@@ -43,6 +46,9 @@ void Framework::Update()
 	}
 	//DirectX毎フレーム処理 ここから
 	input->Update();
+
+	//シーンの更新
+	sceneManager_->Update();
 }
 
 
@@ -50,6 +56,8 @@ void Framework::Finalize()
 {
 
 	winApp->Finalize();
+	
+	delete sceneManager_;
 
 	//ウィンドウ表示
 	ShowWindow(winApp->GetHwnd(), SW_SHOW);
@@ -65,6 +73,12 @@ void Framework::Finalize()
 
 void Framework::Draw()
 {
-
-
+	//描画前処理
+	dxCommon->PreDraw();
+	//シーン描画
+	sceneManager_->Draw(dxCommon);
+	//デバッグテキスト描画
+	debugText->DrawAll();
+	//描画後処理
+	dxCommon->PostDraw();
 }

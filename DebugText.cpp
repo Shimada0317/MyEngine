@@ -66,7 +66,7 @@ void DebugText::Printf(const char* fmt, ...)
 	va_end(args);
 }
 
-void DebugText::DrawAll(ID3D12GraphicsCommandList* cmdList)
+void DebugText::DrawAll()
 {
 	for (int i = 0; i < spriteIndex; i++) {
 		spriteDatas[i]->Draw();

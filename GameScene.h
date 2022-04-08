@@ -2,14 +2,13 @@
 
 #include "DirectXCommon.h"
 #include <DirectXMath.h>
-#include "Input.h"
 #include "Sprite.h"
 #include"Object3d.h"
 #include"Model.h"
-#include"Audio.h"
-#include"DebugText.h"
+#include"Input.h"
+#include"BaseScene.h"
 
-class GameScene
+class GameScene:public BaseScene
 {
 private: // エイリアス
 // Microsoft::WRL::を省略
@@ -20,38 +19,39 @@ private: // エイリアス
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 private:
-	static const int debugTextNumber = 0;
+	
 
 public://メンバ変数
 
-	void Initialize(DirectXCommon* dxCommon);
+	GameScene(SceneManager* sceneManager_);
 
-	void GameSceneInitialize();
+	void Initialize() override;
 
-	void Update(DirectXCommon* dxCommon,Input* input);
+	void SetPosSclRot();
 
-	void Draw(DirectXCommon* dxCommon);
+	void Update() override;
 
-	void Finalize();
+	void Draw(DirectXCommon* dxCommon)override;
+
+	void Finalize() override;
 private:
-	Sprite* sprite = nullptr;
-
-	Sprite* title = nullptr;
 
 	DirectXCommon* dxCommon = nullptr;
 
-	Object3d* player3d = nullptr;
 	Model* playermodel = nullptr;
-
-	Object3d* ramieru3d = nullptr;
 	Model* ramieru = nullptr;
-
-	Object3d* human3d = nullptr;
 	Model* human = nullptr;
+
+	Object3d* player3d = nullptr;
+	Object3d* ramieru3d = nullptr;
+	Object3d* human3d = nullptr;
+
+	Sprite* sprite = nullptr;
+	Sprite* title = nullptr;
 
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
-	DebugText* debugText;
+	
 };
 

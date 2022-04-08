@@ -69,8 +69,6 @@ bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int wind
 
 void Object3d::PreDraw()
 {
-
-
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelinestate.Get());
 	// ルートシグネチャの設定

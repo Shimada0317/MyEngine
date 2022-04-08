@@ -6,6 +6,8 @@
 #include"Input.h"
 #include"Audio.h"
 #include"Object3d.h"
+#include"DebugText.h"
+#include"SceneManager.h"
 
 /// <summary>
 /// フレームワーク
@@ -36,16 +38,19 @@ public:
 	/// <summary>
 	/// 描画
 	/// </summary>
-	virtual void Draw() = 0;
+	virtual void Draw();
+
 	bool GetFinish() { return finish; }
+private:
+	static const int debugTextNumber = 0;
 protected:
 	bool finish = false;
-
+	DebugText* debugText;
 	DirectXCommon* dxCommon = nullptr;
 	WinApp* winApp = nullptr;
 	Input* input = nullptr;
 	GameScene* gamescene = nullptr;
 	Audio* audio = nullptr;
-	
+	SceneManager* sceneManager_ = nullptr;
 };
 
