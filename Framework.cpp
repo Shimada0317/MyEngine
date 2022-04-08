@@ -20,41 +20,31 @@ void Framework::Run()
 
 void Framework::Initialize()
 {
-	//Sprite* spriteC = nullptr;
 	winApp = new WinApp();
 	winApp->Initialize();
-	//Sprite* spriteC = nullptr;
-
-
 	dxCommon = new DirectXCommon();
 	dxCommon->Initialize(winApp);
-	//Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
-
-	//DirectX初期化処理　ここから
-#ifdef _DEBUG
-	//デバッグレイヤーをオンに
-	ID3D12Debug* debugContoroller;
-	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugContoroller))))
-	{
-		debugContoroller->EnableDebugLayer();
-	}
-#endif // DEBUG
-
-	HRESULT result;
-
-	//GameScene.hに
-
-	input = new Input();
+	input = Input::GetInstance();
 	input->Initialize(winApp);
-
-	gamescene = new GameScene();
 	audio = new Audio();
 	audio->StaticInitialize();
-	
-
-	gamescene->Initialize(dxCommon);
 	audio->LoadFile("Resources/digitalworld.wav", 0.1);
+	gamescene = new GameScene();
+	gamescene->Initialize(dxCommon);
+	
 }
+
+void Framework::Update()
+{
+
+	if (winApp->ProcessMessage()) {
+		finish = true;
+		return;
+	}
+	//DirectX毎フレーム処理 ここから
+	input->Update();
+}
+
 
 void Framework::Finalize()
 {
@@ -67,21 +57,11 @@ void Framework::Finalize()
 	OutputDebugStringA("Hello,DirectX!!\n");
 
 
-	delete input;
+	//delete input;
 	delete winApp;
 	delete dxCommon;
 }
 
-void Framework::Update()
-{
-	
-	if (winApp->ProcessMessage()) {
-		finish = true;
-		return;
-	}
-	//DirectX毎フレーム処理 ここから
-	input->Update();
-}
 
 void Framework::Draw()
 {

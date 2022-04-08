@@ -1,5 +1,7 @@
 #pragma once
 
+#pragma once
+
 #include "DirectXCommon.h"
 #include <DirectXMath.h>
 #include "Input.h"
@@ -9,7 +11,7 @@
 #include"Audio.h"
 #include"DebugText.h"
 
-class GameScene
+class TitleScene
 {
 private: // エイリアス
 // Microsoft::WRL::を省略
@@ -26,9 +28,9 @@ public://メンバ変数
 
 	void Initialize(DirectXCommon* dxCommon);
 
-	void GameSceneInitialize();
+	void TitleSceneInitialize();
 
-	void Update(DirectXCommon* dxCommon,Input* input);
+	void Update(DirectXCommon* dxCommon, Input* input);
 
 	void Draw(DirectXCommon* dxCommon);
 
@@ -49,8 +51,6 @@ private:
 	Object3d* human3d = nullptr;
 	Model* human = nullptr;
 
-
-	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
 	DebugText* debugText;
 };

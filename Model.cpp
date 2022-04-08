@@ -305,87 +305,87 @@ void Model::LoadFromOBJInternal(const std::string& modelname)
 	std::ifstream file;
 
 	//const string modelname = "triangle_mat";
-const string filename = modelname + ".obj";
-const string directoryPath = "Resources/" + modelname + "/";
+	const string filename = modelname + ".obj";
+	const string directoryPath = "Resources/" + modelname + "/";
 
-file.open(directoryPath + filename);
+	file.open(directoryPath + filename);
 
-if (file.fail()) {
-	assert(0);
-}
+	if (file.fail()) {
+		assert(0);
+	}
 
 
-vector<XMFLOAT3>positions;
-vector<XMFLOAT3>normals;
-vector<XMFLOAT2>texcoords;
+	vector<XMFLOAT3>positions;
+	vector<XMFLOAT3>normals;
+	vector<XMFLOAT2>texcoords;
 
-string line;
+	string line;
 
-while (getline(file, line))
-{
-
-	std::istringstream line_stream(line);
-
-	string key;
-	getline(line_stream, key, ' ');
-
-	if (key == "mtllib")
+	while (getline(file, line))
 	{
-		string filename;
-		line_stream >> filename;
 
-		LoadMaterial(directoryPath, filename);
-	}
+		std::istringstream line_stream(line);
 
-	if (key == "v") {
-		XMFLOAT3 position{};
-		line_stream >> position.x;
-		line_stream >> position.y;
-		line_stream >> position.z;
+		string key;
+		getline(line_stream, key, ' ');
 
-		positions.emplace_back(position);
+		if (key == "mtllib")
+		{
+			string filename;
+			line_stream >> filename;
 
-		/*VertexPosNormalUv vertex{};
-		vertex.pos = position;
-		vertices.emplace_back(vertex);*/
-	}
+			LoadMaterial(directoryPath, filename);
+		}
 
-	if (key == "vt") {
-		XMFLOAT2 texcoord{};
-		line_stream >> texcoord.x;
-		line_stream >> texcoord.y;
+		if (key == "v") {
+			XMFLOAT3 position{};
+			line_stream >> position.x;
+			line_stream >> position.y;
+			line_stream >> position.z;
 
-		texcoord.y = 1.0f - texcoord.y;
-		texcoords.emplace_back(texcoord);
-	}
+			positions.emplace_back(position);
 
-	if (key == "vn") {
-		XMFLOAT3 normal{};
-		line_stream >> normal.x;
-		line_stream >> normal.y;
-		line_stream >> normal.z;
+			/*VertexPosNormalUv vertex{};
+			vertex.pos = position;
+			vertices.emplace_back(vertex);*/
+		}
 
-		normals.emplace_back(normal);
-	}
+		if (key == "vt") {
+			XMFLOAT2 texcoord{};
+			line_stream >> texcoord.x;
+			line_stream >> texcoord.y;
 
-	if (key == "f") {
-		string index_string;
-		while (getline(line_stream, index_string, ' ')) {
-			std::istringstream index_stream(index_string);
-			unsigned short indexPosition, indexNormal, indexTexcoord;
-			index_stream >> indexPosition;
-			index_stream.seekg(1, ios_base::cur);
-			index_stream >> indexTexcoord;
-			index_stream.seekg(1, ios_base::cur);
-			index_stream >> indexNormal;
-			VertexPosNormalUv vertex{};
-			vertex.pos = positions[indexPosition - 1];
-			vertex.normal = normals[indexNormal - 1];
-			vertex.uv = texcoords[indexTexcoord - 1];
-			vertices.emplace_back(vertex);
-			indices.emplace_back((unsigned short)indices.size());
+			texcoord.y = 1.0f - texcoord.y;
+			texcoords.emplace_back(texcoord);
+		}
+
+		if (key == "vn") {
+			XMFLOAT3 normal{};
+			line_stream >> normal.x;
+			line_stream >> normal.y;
+			line_stream >> normal.z;
+
+			normals.emplace_back(normal);
+		}
+
+		if (key == "f") {
+			string index_string;
+			while (getline(line_stream, index_string, ' ')) {
+				std::istringstream index_stream(index_string);
+				unsigned short indexPosition, indexNormal, indexTexcoord;
+				index_stream >> indexPosition;
+				index_stream.seekg(1, ios_base::cur);
+				index_stream >> indexTexcoord;
+				index_stream.seekg(1, ios_base::cur);
+				index_stream >> indexNormal;
+				VertexPosNormalUv vertex{};
+				vertex.pos = positions[indexPosition - 1];
+				vertex.normal = normals[indexNormal - 1];
+				vertex.uv = texcoords[indexTexcoord - 1];
+				vertices.emplace_back(vertex);
+				indices.emplace_back((unsigned short)indices.size());
+			}
 		}
 	}
-}
-file.close();
+	file.close();
 }

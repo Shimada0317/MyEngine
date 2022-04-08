@@ -24,6 +24,7 @@ public:
 		posY = y;
 	}
 
+
 	inline void SetSize(float size) { this->size = size; }
 
 	void Print(const  std::string& text, float x, float y, float size);

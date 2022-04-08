@@ -1,11 +1,11 @@
-#include "GameScene.h"
+#include "TitleScene.h"
 #include<cassert>
 #include <sstream>
 #include <iomanip>
 
 using namespace DirectX;
 
-void GameScene::Initialize(DirectXCommon* dxCommon)
+void TitleScene::Initialize(DirectXCommon* dxCommon)
 {
 	assert(dxCommon);
 
@@ -39,7 +39,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon)
 }
 
 
-void GameScene::GameSceneInitialize()
+void TitleScene::TitleSceneInitialize()
 {
 	//プレイヤー
 	/*player3d->SetRotation({ 0,450,-270 });
@@ -57,10 +57,10 @@ void GameScene::GameSceneInitialize()
 	title->SetSize({ 1280.0f,720.0f });
 }
 
-void GameScene::Update(DirectXCommon* dxCommon,Input* input)
+void TitleScene::Update(DirectXCommon* dxCommon, Input* input)
 {
 	//DirectX毎フレーム処理 ここから
-	
+
 	this->dxCommon = dxCommon;
 	//this->audio = audio;
 
@@ -71,7 +71,7 @@ void GameScene::Update(DirectXCommon* dxCommon,Input* input)
 	//human3d->Update();
 }
 
-void GameScene::Draw(DirectXCommon* dxCommon)
+void TitleScene::Draw(DirectXCommon* dxCommon)
 {
 	// コマンドリストの取得
 	//ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();
@@ -98,7 +98,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 
 }
 
-void GameScene::Finalize()
+void TitleScene::Finalize()
 {
 	delete title;
 	delete player3d;

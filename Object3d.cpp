@@ -40,12 +40,13 @@ std::vector<unsigned short>Object3d::indices;
 //Object3d::Material Object3d::material;
 
 
-bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
+bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height, ID3D12GraphicsCommandList* cmdList)
 {
 	// nullptrチェック
 	assert(device);
 
 	Object3d::device = device;
+	Object3d::cmdList = cmdList;
 	//モデルにデバイスをセット
 	Model::SetDev(device);
 	// デスクリプタヒープの初期化
@@ -66,13 +67,9 @@ bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int wind
 	return true;
 }
 
-void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
+void Object3d::PreDraw()
 {
-	// PreDrawとPostDrawがペアで呼ばれていなければエラー
-	assert(Object3d::cmdList == nullptr);
 
-	// コマンドリストをセット
-	Object3d::cmdList = cmdList;
 
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelinestate.Get());
@@ -84,8 +81,8 @@ void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
 
 void Object3d::PostDraw()
 {
-	// コマンドリストを解除
-	Object3d::cmdList = nullptr;
+
+
 }
 
 Object3d* Object3d::Create()
