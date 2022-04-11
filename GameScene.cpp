@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include"SceneManager.h"
+#include"FbxLoader.h"
 
 using namespace DirectX;
 
@@ -26,6 +27,9 @@ void GameScene::Initialize()
 	ramieru = Model::LoadFromObJ("ramieru");
 	ramieru3d = Object3d::Create();
 	ramieru3d->SetModel(ramieru);
+
+	//モデル名を指定してファイル読み込み
+	FbxLoader::GetInstance()->LoadModelFromFile("cube");
 }
 
 void GameScene::SetPosSclRot()

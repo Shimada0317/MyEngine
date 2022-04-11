@@ -1,4 +1,5 @@
 #include "Framework.h"
+#include"FbxLoader.h"
 
 void Framework::Run()
 {
@@ -35,6 +36,8 @@ void Framework::Initialize()
 	debugText->Initialize(debugTextNumber);
 	//シーンマネージャー
 	sceneManager_ = new SceneManager;
+	//Fbx
+	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
 }
 
 void Framework::Update()
@@ -64,6 +67,7 @@ void Framework::Finalize()
 	//コンソールへの文字出力
 	OutputDebugStringA("Hello,DirectX!!\n");
 
+	FbxLoader::GetInstance()->Finalize();
 
 	//delete input;
 	delete winApp;
