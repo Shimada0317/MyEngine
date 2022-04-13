@@ -50,8 +50,18 @@ private:
 	Sprite* title = nullptr;
 
 
-	XMFLOAT3 ramieru_pos = { 0,0,0 };
-
+	XMFLOAT3 ramieru_pos = { 0,0,10 };
+	XMFLOAT3 ramieru_scl = { 0.5,0.5,0.5 };
 	
+	//重力
+	float g = 0.01f;
+	//タイム
+	float t = 0;
+	//初速度
+	float Start_Speed = 0.29;
+	//速度
+	float Speed = 0;
+	//フラグ
+	int GravityF = 0;
 };
 

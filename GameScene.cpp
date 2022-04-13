@@ -16,7 +16,7 @@ GameScene::GameScene(SceneManager* sceneManager_)
 void GameScene::Initialize()
 {
 	////スプライトの読み込み
-	Sprite::LoadTexture(1, L"Resources/tst1.png");
+	Sprite::LoadTexture(1, L"Resources/GameScene.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
 	//モデルの読み込み
@@ -41,7 +41,7 @@ void GameScene::SetPosSclRot()
 
 	ramieru3d->SetRotation({ 0,0,0 });
 	ramieru3d->SetPosition({ ramieru_pos });
-	ramieru3d->SetScale({ 1.0f,1.0f,1.0f });
+	ramieru3d->SetScale({ramieru_scl});
 
 	title->SetSize({ 1280.0f,720.0f });
 }
@@ -50,10 +50,21 @@ void GameScene::Update()
 {
 	//DirectX毎フレーム処理 ここから
 	
-
-	if (Input::GetInstance()->PushKey(DIK_1)) {
-		
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		GravityF = 1;
 	}
+
+	if (GravityF == 1) {
+		//自由落下
+		t += 0.5;
+		ramieru_pos.y = -0.5 * g * t * t;
+		//投げ上げ?
+	/*	Speed = -g * t + Start_Speed;
+		ramieru_pos.y = (-0.5 * g * t * t) + (Start_Speed * t);*/
+	}
+
+	
+
 	SetPosSclRot();
 	ramieru3d->Update();
 
