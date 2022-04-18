@@ -54,7 +54,7 @@ public:
 	//マテリアル読み取り
 	void ParseMaterial(FbxModel* model, FbxNode* fbxNode);
 	//テクスチャ読み取り
-	void ParseTexture(FbxModel* model, const  std::string& fullpath);
+	void LoadTexture(FbxModel* model, const  std::string& fullpath);
 /// <summary>
 /// 後始末
 /// </summary>
@@ -79,4 +79,7 @@ private:
 	FbxManager* fbxManager = nullptr;
 	//FBXインポーター
 	FbxImporter* fbxImporter = nullptr;
+
+	//テクスチャが無い場合の標準テクスチャファイル名
+	static const string defaultTextureName;
 };
