@@ -57,10 +57,12 @@ void GameScene::Update()
 	if (GravityF == 1) {
 		//é©óRóéâ∫
 		t += 0.5;
-		ramieru_pos.y = -0.5 * g * t * t;
+		//ramieru_pos.y = -0.5 * g * t * t;
 		//ìäÇ∞è„Ç∞?
-	/*	Speed = -g * t + Start_Speed;
-		ramieru_pos.y = (-0.5 * g * t * t) + (Start_Speed * t);*/
+		//Speed = -g * t + Start_Speed;
+		Speed = fricition * t;
+		ramieru_pos.x = ramieru_pos.x+(SpeedX-fricition);
+		//ramieru_pos.y = (-0.5f * g * t * t) + (Start_Speed * t);
 	}
 
 	

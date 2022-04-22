@@ -50,18 +50,22 @@ private:
 	Sprite* title = nullptr;
 
 
-	XMFLOAT3 ramieru_pos = { 0,0,10 };
+	XMFLOAT3 ramieru_pos = { -15,0,10 };
 	XMFLOAT3 ramieru_scl = { 0.5,0.5,0.5 };
 	
 	//重力
 	float g = 0.01f;
 	//タイム
 	float t = 0;
+	//横の速度
+	float SpeedX=0.1f;
 	//初速度
-	float Start_Speed = 0.29;
+	float Start_Speed = 0.29f;
 	//速度
 	float Speed = 0;
 	//フラグ
 	int GravityF = 0;
+	//摩擦
+	float fricition = 0.01f;
 };
 
