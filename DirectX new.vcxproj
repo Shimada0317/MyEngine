@@ -153,9 +153,11 @@
   <ItemGroup>
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionPrimitive.cpp" />
     <ClCompile Include="Contoroller.cpp" />
+    <ClCompile Include="DebugCamera.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="FbxLoader.cpp" />
@@ -225,9 +227,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionPrimitive.h" />
     <ClInclude Include="Contoroller.h" />
+    <ClInclude Include="DebugCamera.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="FbxLoader.h" />
