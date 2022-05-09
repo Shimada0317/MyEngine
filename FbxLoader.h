@@ -32,7 +32,7 @@ public:
 /// ファイルからFBXモデル読込
 /// </summary>
 /// <param name="modelName">モデル名</param>
-	void LoadModelFromFile(const string& modelName);
+	FbxModel* LoadModelFromFile(const string& modelName);
 	/// <summary>
 	/// ファイルからFBXモデル読込
 	/// </summary>

@@ -4,6 +4,7 @@
 #include <iomanip>
 #include"SceneManager.h"
 #include"FbxLoader.h"
+#include"FbxObject3d.h"
 
 using namespace DirectX;
 
@@ -15,6 +16,9 @@ GameScene::GameScene(SceneManager* sceneManager_)
 
 void GameScene::Initialize()
 {
+
+	
+
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/tst1.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
@@ -28,8 +32,16 @@ void GameScene::Initialize()
 	ramieru3d = Object3d::Create();
 	ramieru3d->SetModel(ramieru);
 
+	
+
 	//モデル名を指定してファイル読み込み
-	FbxLoader::GetInstance()->LoadModelFromFile("cube");
+	model = FbxLoader::GetInstance()->LoadModelFromFile("cube");
+
+	
+
+	Object = new FbxObject3d;
+	Object->Initialize();
+	Object->SetModel(model);
 }
 
 void GameScene::SetPosSclRot()
@@ -54,9 +66,12 @@ void GameScene::Update()
 	if (Input::GetInstance()->PushKey(DIK_1)) {
 		
 	}
+	
 	SetPosSclRot();
 	ramieru3d->Update();
-
+	Object->Update();
+	
+	camera->Update();
 }
 
 void GameScene::Draw(DirectXCommon* dxCommon)
@@ -75,6 +90,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	//オブジェクト後処理
 	Object3d::PostDraw();
 
+	Object->Draw(dxCommon->GetCmdList());
 }
 
 void GameScene::Finalize()

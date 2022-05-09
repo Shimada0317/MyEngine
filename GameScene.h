@@ -7,6 +7,8 @@
 #include"Model.h"
 #include"Input.h"
 #include"BaseScene.h"
+#include"FbxObject3d.h"
+#include"DebugCamera.h"
 
 class GameScene:public BaseScene
 {
@@ -46,9 +48,13 @@ private:
 	Object3d* ramieru3d = nullptr;
 	Object3d* human3d = nullptr;
 
+	FbxModel* model = nullptr;
+	FbxObject3d* Object = nullptr;
+
 	Sprite* sprite = nullptr;
 	Sprite* title = nullptr;
 
+	DebugCamera* camera = nullptr;
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 

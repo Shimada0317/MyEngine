@@ -64,6 +64,9 @@ public:
 	std::vector<VertexPosNormalUv> vertices;
 	//頂点インデックス配列
 	std::vector<unsigned short> indices;
+
+	//モデルの変形行列取得
+	const XMMATRIX& GetModelTransform() { return meshNode->globalTransform; }
 private:
 	//アンビエント係数
 	DirectX::XMFLOAT3 ambient = { 1,1,1 };
@@ -87,8 +90,7 @@ private:
 	D3D12_INDEX_BUFFER_VIEW ibView = {};
 	//SRV用デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
-	//モデルの変形行列取得
-	const XMMATRIX& GetModelTransform() { return meshNode->globalTransform; }
+	
 public:
 	//バッファ生成
 	void CreateBuffers(ID3D12Device* device);

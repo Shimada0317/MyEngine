@@ -13,29 +13,33 @@ Camera::Camera(int window_width, int window_height)
 	matViewProjection = matView * matProjection;
 }
 
+Camera::~Camera()
+{
+}
+
 void Camera::Iniitialize()
 {
 }
 
 void Camera::Update()
 {
-	if (viewflag || projectionflag) {
-		//ビュー行列の再計算があるなら
-		if (viewflag) {
-			//再計算(更新)
+	if (viewflag == true || projectionflag == true ) {
+		// 再計算必要なら
+		if (viewflag ==true ) {
+			// ビュー行列更新
 			UpdatematView();
 			viewflag = false;
 		}
-		//射影行列の再計算があるなら
-		if (projectionflag) {
-			//再計算(更新)
+
+		// 再計算必要なら
+		if (projectionflag==true) {
+			// ビュー行列更新
 			UpdatematProjection();
 			projectionflag = false;
 		}
-		//ビュープロジェクション
+		// ビュープロジェクションの合成
 		matViewProjection = matView * matProjection;
 	}
-
 }
 
 void Camera::UpdatematView()

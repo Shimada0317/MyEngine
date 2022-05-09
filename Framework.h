@@ -8,6 +8,7 @@
 #include"Object3d.h"
 #include"DebugText.h"
 #include"SceneManager.h"
+#include"DebugCamera.h"
 
 /// <summary>
 /// フレームワーク
@@ -52,5 +53,6 @@ protected:
 	GameScene* gamescene = nullptr;
 	Audio* audio = nullptr;
 	SceneManager* sceneManager_ = nullptr;
+	DebugCamera* camera = nullptr;
 };
 

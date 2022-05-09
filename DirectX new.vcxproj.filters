@@ -88,12 +88,15 @@
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
+    <None Include="FBX.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\BasicPS.hlsl" />
     <FxCompile Include="Resources\shaders\BasicVS.hlsl" />
     <FxCompile Include="Resources\shaders\SpritePS.hlsl" />
     <FxCompile Include="Resources\shaders\SpriteVS.hlsl" />
+    <FxCompile Include="FBXVS.hlsl" />
+    <FxCompile Include="FBXPS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">

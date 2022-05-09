@@ -675,6 +675,7 @@ void Object3d::Update()
 		matWorld *= parent->matWorld;
 	}
 
+
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);

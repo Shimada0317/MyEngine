@@ -47,6 +47,10 @@ public://メンバ関数
 	}
 
 
+	inline const XMMATRIX& GetViewProjectionMatrix() {
+		return matViewProjection;
+	}
+
 	/// <summary>
 	/// ビルボード行列
 	/// </summary>
@@ -97,7 +101,7 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="up"></param>
 	inline void SetUp(XMFLOAT3 up) {
-		this->up = up;
+		this->up = up; viewflag = true;
 	}
 	
 	void MoveEyeVectror(const XMFLOAT3& move);

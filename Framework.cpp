@@ -36,8 +36,15 @@ void Framework::Initialize()
 	debugText->Initialize(debugTextNumber);
 	//シーンマネージャー
 	sceneManager_ = new SceneManager;
+
+	camera = new DebugCamera(WinApp::window_width, WinApp::window_height,input);
+
 	//Fbx
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
+	
+	FbxObject3d::SetDevice(dxCommon->GetDev());
+	FbxObject3d::SetCamera(camera);
+	FbxObject3d::CreateGraphicPipeline();
 }
 
 void Framework::Update()
