@@ -228,7 +228,7 @@ void DirectXCommon::PostDraw()
 	UINT bbIndex = swapchain->GetCurrentBackBufferIndex();
 
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(backBuffers[bbIndex].Get(),
-		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET));
+		D3D12_RESOURCE_STATE_RENDER_TARGET,D3D12_RESOURCE_STATE_PRESENT));
 
 
 	//ñΩóﬂÇÃÉNÉçÅ[ÉY

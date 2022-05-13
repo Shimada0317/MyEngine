@@ -27,7 +27,7 @@ public://ƒƒ“ƒo•Ï”
 
 	GameScene(SceneManager* sceneManager_);
 
-	void Initialize() override;
+	void Initialize(DirectXCommon* dxComon) override;
 
 	void SetPosSclRot();
 

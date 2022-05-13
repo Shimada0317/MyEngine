@@ -14,11 +14,12 @@ GameScene::GameScene(SceneManager* sceneManager_)
 
 }
 
-void GameScene::Initialize()
+void GameScene::Initialize(DirectXCommon* dxComon)
 {
+	
+	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 
 	
-
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/tst1.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
@@ -33,15 +34,23 @@ void GameScene::Initialize()
 	ramieru3d->SetModel(ramieru);
 
 	
+	
+	
+	
+	camera->SetTarget({ 0,20,0 });
+	camera->SetDistance({ 100.0f });
 
 	//モデル名を指定してファイル読み込み
 	model = FbxLoader::GetInstance()->LoadModelFromFile("cube");
 
-	
+	FbxObject3d::SetDevice(dxComon->GetDev());
+	FbxObject3d::SetCamera(camera);
+	FbxObject3d::CreateGraphicPipeline();
 
 	Object = new FbxObject3d;
 	Object->Initialize();
 	Object->SetModel(model);
+
 }
 
 void GameScene::SetPosSclRot()
@@ -54,7 +63,7 @@ void GameScene::SetPosSclRot()
 	ramieru3d->SetRotation({ 0,0,0 });
 	ramieru3d->SetPosition({ ramieru_pos });
 	ramieru3d->SetScale({ 1.0f,1.0f,1.0f });
-
+	
 	title->SetSize({ 1280.0f,720.0f });
 }
 
@@ -68,10 +77,11 @@ void GameScene::Update()
 	}
 	
 	SetPosSclRot();
+	camera->Update();
 	ramieru3d->Update();
 	Object->Update();
 	
-	camera->Update();
+
 }
 
 void GameScene::Draw(DirectXCommon* dxCommon)
@@ -79,7 +89,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	title->Draw();
+	//title->Draw();
 	Sprite::PostDraw();
 
 	//オブジェクト前処理

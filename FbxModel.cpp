@@ -23,7 +23,7 @@ void FbxModel::CreateBuffers(ID3D12Device* device)
 	}
 	//頂点バッファビュー(VBV)の作成
 	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	vbView.StrideInBytes = sizeVB;
+	vbView.SizeInBytes = sizeVB;
 	vbView.StrideInBytes = sizeof(vertices[0]);
 	//頂点インデクス全体のサイズ
 	UINT sizeIB = static_cast<UINT>(sizeof(unsigned short) * indices.size());

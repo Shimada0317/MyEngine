@@ -13,7 +13,7 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 
 }
 
-void TitleScene::Initialize()
+void TitleScene::Initialize(DirectXCommon* dxComon)
 {
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/tst.png");

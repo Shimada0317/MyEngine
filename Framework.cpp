@@ -37,14 +37,10 @@ void Framework::Initialize()
 	//シーンマネージャー
 	sceneManager_ = new SceneManager;
 
-	camera = new DebugCamera(WinApp::window_width, WinApp::window_height,input);
 
 	//Fbx
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
-	
-	FbxObject3d::SetDevice(dxCommon->GetDev());
-	FbxObject3d::SetCamera(camera);
-	FbxObject3d::CreateGraphicPipeline();
+
 }
 
 void Framework::Update()
@@ -58,7 +54,7 @@ void Framework::Update()
 	input->Update();
 
 	//シーンの更新
-	sceneManager_->Update();
+	sceneManager_->Update(dxCommon);
 }
 
 

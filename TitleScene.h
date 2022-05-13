@@ -26,7 +26,7 @@ private:
 public://ƒƒ“ƒo•Ï”
 	TitleScene(SceneManager* sceneManager_);
 
-	void Initialize() override;
+	void Initialize(DirectXCommon* dxComon) override;
 
 	void SetPosSclRot();
 

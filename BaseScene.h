@@ -13,7 +13,7 @@ class BaseScene
 public:
 	BaseScene(SceneManager* sceneManager);
 
-	virtual void Initialize() = 0;
+	virtual void Initialize(DirectXCommon* dxComon) = 0;
 
 	virtual void Finalize() = 0;
 
