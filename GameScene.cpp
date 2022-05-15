@@ -21,7 +21,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	
 	////スプライトの読み込み
-	Sprite::LoadTexture(1, L"Resources/tst1.png");
+	Sprite::LoadTexture(1, L"Resources/background.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
 	//モデルの読み込み
@@ -36,12 +36,12 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	
 	
 	
-	
-	camera->SetTarget({ 0,20,0 });
-	camera->SetDistance({ 100.0f });
+	camera->SetEye({ 0,0,90 });
+	camera->SetTarget({ 0,1,0 });
+	camera->SetDistance({ 10.0f });
 
 	//モデル名を指定してファイル読み込み
-	model = FbxLoader::GetInstance()->LoadModelFromFile("cube");
+	model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
 	FbxObject3d::SetDevice(dxComon->GetDev());
 	FbxObject3d::SetCamera(camera);
@@ -64,6 +64,8 @@ void GameScene::SetPosSclRot()
 	ramieru3d->SetPosition({ ramieru_pos });
 	ramieru3d->SetScale({ 1.0f,1.0f,1.0f });
 	
+	
+
 	title->SetSize({ 1280.0f,720.0f });
 }
 
@@ -73,12 +75,13 @@ void GameScene::Update()
 	
 
 	if (Input::GetInstance()->PushKey(DIK_1)) {
-		
+		Object->PlayAnimation();
 	}
 	
 	SetPosSclRot();
 	camera->Update();
 	ramieru3d->Update();
+	
 	Object->Update();
 	
 
@@ -89,13 +92,13 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	//title->Draw();
+	title->Draw();
 	Sprite::PostDraw();
 
 	//オブジェクト前処理
 	Object3d::PreDraw();
 	//player3d->Draw();
-	ramieru3d->Draw();
+	//ramieru3d->Draw();
 	//human3d->Draw();
 	//オブジェクト後処理
 	Object3d::PostDraw();

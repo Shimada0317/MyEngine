@@ -12,7 +12,9 @@
 
 class FbxObject3d
 {
-
+public://定数
+//ボーンの最大数
+	static const int MAX_BONES = 32;
 protected:
 	// Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -27,6 +29,11 @@ public://サブクラス
 		XMMATRIX viewproj;
 		XMMATRIX world;
 		XMFLOAT3 camerapos;
+	};
+
+	struct ConstBufferDataSkin
+	{
+		XMMATRIX bones[MAX_BONES];
 	};
 public://静的メンバ
 	static void SetDevice(ID3D12Device* device) { FbxObject3d::device = device; }
@@ -54,6 +61,11 @@ public://メンバ関数
 /// モデルのセット
 /// </summary>
 	void SetModel(FbxModel* model) { this->model = model; }
+/// <summary>
+/// アニメーション開始
+/// </summary>
+	void PlayAnimation();
+
 protected://メンバ変数
 	ComPtr<ID3D12Resource>ConstBufferTransForm;
 
@@ -61,10 +73,12 @@ protected://メンバ変数
 
 	static ComPtr<ID3D12PipelineState> pipelinestate;
 
+	ComPtr<ID3D12Resource> constBuffSkin;
 private:
 	static ID3D12Device* device;
 
 	static Camera* camera;
+
 protected:
 	XMFLOAT3 scale = { 1,1,1 };
 
@@ -75,5 +89,16 @@ protected:
 	XMMATRIX matWorld;
 
 	FbxModel* model = nullptr;
+public:
+	//1フレームの時間
+	FbxTime frameTime;
+	//アニメーション開始時間
+	FbxTime startTime;
+	//アニメーション終了時間
+	FbxTime endTime;
+	//現在時間
+	FbxTime currentTime;
+	//アニメーション再生中
+	bool isPlay = false;
 };
 

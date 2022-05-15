@@ -55,6 +55,8 @@ public:
 	void ParseMaterial(FbxModel* model, FbxNode* fbxNode);
 	//テクスチャ読み取り
 	void LoadTexture(FbxModel* model, const  std::string& fullpath);
+	//スキニング情報の読み取り
+	void ParseSkin(FbxModel* model, FbxMesh* fbxMesh);
 /// <summary>
 /// 後始末
 /// </summary>
@@ -62,6 +64,13 @@ public:
 
 	//ディレクトリを含んだファイルパスからファイル名を抽出
 	std::string ExtractFileName(const std::string& path);
+
+	/// <summary>
+	/// FBXの行列をMatirixに変換
+	/// </summary>
+	/// <param name="dst">書き込み先</param>
+	/// <param name="src">元となるFBX行列</param>
+	static void ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, FbxAMatrix& src);
 
 private:
 	// privateなコンストラクタ（シングルトンパターン）

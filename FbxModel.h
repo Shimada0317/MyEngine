@@ -7,6 +7,7 @@
 #include<wrl.h>
 #include<d3d12.h>
 #include<d3dx12.h>
+#include<fbxsdk.h>
 
 struct Node
 {
@@ -26,6 +27,7 @@ struct Node
 	Node* parent = nullptr;
 };
 
+
 class FbxModel
 {
 private://エイリアス
@@ -43,6 +45,19 @@ private://エイリアス
 	using string = std::string;
 	template<class T>using vector = std::vector<T>;
 public:
+	struct Bone
+	{
+		std::string name;
+
+		DirectX::XMMATRIX invInitialPose;
+
+		FbxCluster* fbxCluster;
+
+		Bone(const std::string& name) {
+			this->name = name;
+		}
+	};
+public:
 	//フレンドクラス
 	friend class FbxLoader;
 private:
@@ -50,18 +65,26 @@ private:
 	std::string name;
 	//ノード配列
 	std::vector<Node> nodes;
+private:
+	std::vector<Bone> bones;
 public:
-	struct VertexPosNormalUv
+	std::vector<Bone>& GetBones() { return bones; }
+
+	static const int MAX_BONE_INDICES = 4;
+public:
+	struct VertexPosNormalUvSkin
 	{
 		DirectX::XMFLOAT3 pos;
 		DirectX::XMFLOAT3 normal;
 		DirectX::XMFLOAT2 uv;
+		UINT boneIndex[MAX_BONE_INDICES];
+		float boneWeight[MAX_BONE_INDICES];
 	};
 
 	//メッシュを持つノード
 	Node* meshNode = nullptr;
 	//頂点データ配列
-	std::vector<VertexPosNormalUv> vertices;
+	std::vector<VertexPosNormalUvSkin> vertices;
 	//頂点インデックス配列
 	std::vector<unsigned short> indices;
 
@@ -91,10 +114,17 @@ private:
 	//SRV用デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeapSRV;
 	
+	//FBXシーン
+	FbxScene* fbxScene = nullptr;
 public:
 	//バッファ生成
 	void CreateBuffers(ID3D12Device* device);
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList);
+	//デストラクタ
+	~FbxModel();
+public:
+	FbxScene* GetFbxScene() { return fbxScene; }
+
 };
 

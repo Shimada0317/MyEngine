@@ -46,7 +46,7 @@ bool Model::LoadTexture(const std::string& directoryPath, const std::string& fil
 	TexMetadata metadata{};
 	ScratchImage scratchImg{};
 
-	string filepath = directoryPath + filename;
+	const string& filepath = directoryPath + filename;
 
 	wchar_t wfilepath[128];
 	int iBufferSize = MultiByteToWideChar(CP_ACP, 0,
