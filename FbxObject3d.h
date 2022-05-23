@@ -62,6 +62,11 @@ public://メンバ関数
 /// </summary>
 	void SetModel(FbxModel* model) { this->model = model; }
 /// <summary>
+/// 角度のセット
+/// </summary>
+	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
+
+/// <summary>
 /// アニメーション開始
 /// </summary>
 	void PlayAnimation();

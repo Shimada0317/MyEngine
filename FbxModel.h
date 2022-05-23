@@ -47,12 +47,13 @@ private://エイリアス
 public:
 	struct Bone
 	{
+		//名前
 		std::string name;
-
+		//初期姿勢行列
 		DirectX::XMMATRIX invInitialPose;
-
+		//クラスター
 		FbxCluster* fbxCluster;
-
+		//コンストラクタ
 		Bone(const std::string& name) {
 			this->name = name;
 		}
@@ -66,10 +67,12 @@ private:
 	//ノード配列
 	std::vector<Node> nodes;
 private:
+	//ボーン配列
 	std::vector<Bone> bones;
 public:
+	//getter
 	std::vector<Bone>& GetBones() { return bones; }
-
+	//ボーンインデックスの最大数
 	static const int MAX_BONE_INDICES = 4;
 public:
 	struct VertexPosNormalUvSkin
@@ -77,8 +80,8 @@ public:
 		DirectX::XMFLOAT3 pos;
 		DirectX::XMFLOAT3 normal;
 		DirectX::XMFLOAT2 uv;
-		UINT boneIndex[MAX_BONE_INDICES];
-		float boneWeight[MAX_BONE_INDICES];
+		UINT boneIndex[MAX_BONE_INDICES];//番号
+		float boneWeight[MAX_BONE_INDICES];//重み
 	};
 
 	//メッシュを持つノード

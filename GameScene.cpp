@@ -36,9 +36,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	
 	
 	
-	camera->SetEye({ 0,0,90 });
-	camera->SetTarget({ 0,1,0 });
-	camera->SetDistance({ 10.0f });
 
 	//モデル名を指定してファイル読み込み
 	model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
@@ -60,11 +57,16 @@ void GameScene::SetPosSclRot()
 	player3d->SetPosition({ 0,0,0 });
 	player3d->SetScale({0.5f,0.5f,0.5f});*/
 
+
+	camera->SetEye({ 0,0,90 });
+	camera->SetTarget({ 0,2.5f,0 });
+	camera->SetDistance({ 8.0f });
+
 	ramieru3d->SetRotation({ 0,0,0 });
 	ramieru3d->SetPosition({ ramieru_pos });
 	ramieru3d->SetScale({ 1.0f,1.0f,1.0f });
-	
-	
+
+	Object->SetRotation({ 0.0f,90.0f,0.0f });
 
 	title->SetSize({ 1280.0f,720.0f });
 }

@@ -251,8 +251,11 @@ std::string FbxLoader::ExtractFileName(const std::string& path)
 
 void FbxLoader::ConvertMatrixFromFbx(DirectX::XMMATRIX* dst, FbxAMatrix& src)
 {
+    //行
     for (int i = 0; i < 4; i++) {
+        //列
         for (int j = 0; j < 4; j++) {
+            //要素のコピー
             dst->r[i].m128_f32[j] = (float)src.Get(i, j);
         }
     }
