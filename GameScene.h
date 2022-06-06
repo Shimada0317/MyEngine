@@ -9,6 +9,7 @@
 #include"BaseScene.h"
 #include"FbxObject3d.h"
 #include"DebugCamera.h"
+#include"PostEffect.h"
 
 class GameScene:public BaseScene
 {
@@ -58,6 +59,6 @@ private:
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
-	
+	PostEffect* posetEffect = nullptr;
 };
 

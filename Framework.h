@@ -9,6 +9,7 @@
 #include"DebugText.h"
 #include"SceneManager.h"
 #include"DebugCamera.h"
+#include"PostEffect.h"
 
 /// <summary>
 /// フレームワーク
@@ -54,5 +55,6 @@ protected:
 	Audio* audio = nullptr;
 	SceneManager* sceneManager_ = nullptr;
 	DebugCamera* camera = nullptr;
+	PostEffect* postEffect = nullptr;
 };
 

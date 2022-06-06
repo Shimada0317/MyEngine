@@ -42,7 +42,7 @@ public://静的メンバ関数
 
 	static Sprite* SpriteCreate(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);
 
-private://静的メンバ変数
+protected://静的メンバ変数
 	static const int spriteSRVCount = 512;
 	//頂点数
 	static const int vertNum = 4;
@@ -92,7 +92,7 @@ public://メンバ関数
 	//描画
 	void Draw();
 
-private://メンバ変数
+protected://メンバ変数
 		//頂点バッファ
 	ComPtr<ID3D12Resource> vertBuff ;
 	//定数バッファ

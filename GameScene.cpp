@@ -22,6 +22,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/background.png");
+	Sprite::LoadTexture(100, L"Resources/white1x1.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
 	//モデルの読み込み
@@ -97,6 +98,8 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	title->Draw();
 	Sprite::PostDraw();
 
+	posetEffect->Draw(dxCommon->GetCmdList());
+
 	//オブジェクト前処理
 	Object3d::PreDraw();
 	//player3d->Draw();
@@ -104,7 +107,6 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	//human3d->Draw();
 	//オブジェクト後処理
 	Object3d::PostDraw();
-
 	Object->Draw(dxCommon->GetCmdList());
 }
 

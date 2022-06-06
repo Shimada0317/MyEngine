@@ -1,4 +1,8 @@
 #include "PostEffect.h"
+#include<d3dx12.h>
+
+using namespace DirectX;
+
 
 PostEffect::PostEffect()
 	:Sprite(100,//番号
@@ -9,4 +13,38 @@ PostEffect::PostEffect()
 		false,//左右反転
 		false)//上下反転
 {
+}
+
+void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
+{
+	this->matWorld = XMMatrixIdentity();
+	this->matWorld *= XMMatrixRotationZ(XMConvertToRadians(rotation));
+	this->matWorld *= XMMatrixTranslation(position.x, position.y, 0.0f);
+
+	ConstBufferData* constMap = nullptr;
+	HRESULT result = this->constBuff->Map(0, nullptr, (void**)&constMap);
+	if (SUCCEEDED(result))
+	{
+		constMap->color = this->color;
+		constMap->mat = this->matWorld * matProjection;
+		this->constBuff->Unmap(0, nullptr);
+	}
+	//パイプラインステートの設定
+	cmdList->SetPipelineState(pipelinestate.Get());
+	//ルートシグネチャの設定
+	cmdList->SetGraphicsRootSignature(rootsignature.Get());
+	//プリミティブ形状の設定
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	cmdList->IASetVertexBuffers(0, 1, &this->vbView);
+
+	ID3D12DescriptorHeap* ppHeaps[] = { descHeap.Get() };
+
+	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+
+	cmdList->SetGraphicsRootConstantBufferView(0, this->constBuff->GetGPUVirtualAddress());
+
+	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), this->texNumber, descriptorHandleIncrementSize));
+
+	cmdList->DrawInstanced(4, 1, 0, 0);
 }
