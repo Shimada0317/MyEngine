@@ -17,7 +17,10 @@ void GameScene::Initialize()
 {
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/GameScene.png");
+	Sprite::LoadTexture(2, L"Resources/circle.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
+	sprite = Sprite::SpriteCreate(2, { 1.0f,1.0f });
+
 
 	//モデルの読み込み
 	/*playermodel = Model::LoadFromObJ("player");
@@ -44,6 +47,8 @@ void GameScene::SetPosSclRot()
 	ramieru3d->SetScale({ramieru_scl});
 
 	title->SetSize({ 1280.0f,720.0f });
+	sprite->SetSize({ 64.0f,64.0f });
+	
 }
 
 void GameScene::Update()
@@ -78,6 +83,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	title->Draw();
+	sprite->Draw();
 	Sprite::PostDraw();
 
 	//オブジェクト前処理
@@ -93,5 +99,6 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 void GameScene::Finalize()
 {
 	delete title;
+	delete sprite;
 	delete player3d;
 }
