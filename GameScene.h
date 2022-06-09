@@ -59,6 +59,6 @@ private:
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
-	PostEffect* posetEffect = nullptr;
+	PostEffect* postEffect = nullptr;
 };
 

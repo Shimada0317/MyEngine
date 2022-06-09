@@ -30,8 +30,6 @@ void Framework::Initialize()
 	input->Initialize(winApp);
 	audio = new Audio();
 	audio->StaticInitialize();
-	postEffect = new PostEffect();
-	postEffect->StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	//audio->LoadFile("Resources/digitalworld.wav", 0.1);
 	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height, dxCommon->GetCmdList());
 	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
@@ -40,6 +38,7 @@ void Framework::Initialize()
 	//シーンマネージャー
 	sceneManager_ = new SceneManager;
 
+	
 
 	//Fbx
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());

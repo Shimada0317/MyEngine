@@ -1,11 +1,15 @@
 #include "PostEffect.h"
 #include<d3dx12.h>
+#include <cassert>
+#include <d3dcompiler.h>
+#include <DirectXTex.h>
 
 using namespace DirectX;
 
 
 PostEffect::PostEffect()
-	:Sprite(100,//番号
+	:Sprite(
+		100,//番号
 		{ 0,0 },//座標
 		{ 500.0f,500.0f },//サイズ
 		{ 1,1,1,1 },//色
@@ -34,7 +38,7 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 	//ルートシグネチャの設定
 	cmdList->SetGraphicsRootSignature(rootsignature.Get());
 	//プリミティブ形状の設定
-	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	cmdList->IASetVertexBuffers(0, 1, &this->vbView);
 
