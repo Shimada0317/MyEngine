@@ -1,5 +1,5 @@
 #include "Collision.h"
-
+#include<math.h>
 
 using namespace DirectX;
 
@@ -172,4 +172,44 @@ bool Collision::CheckRay2Triangle(const Ray& ray, const Triangle& trieangle, flo
 		*inter = interPlane;
 	}
 	return true;
+}
+
+
+void Collision::CheckPlayer2Enemy(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Enemyposition, XMFLOAT3 Enemyscale,int PlayerHp,int PlayerLevel)
+{
+	const int attack = 5;
+	if (Player2Other(Playerposition, Playerscale, Enemyposition, Enemyscale) == true) {
+		PlayerHp = PlayerHp - attack;
+	}
+
+}
+
+void Collision::CheckPlayer2Boss(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Bossposition, XMFLOAT3 Bossscale, int PlayerHp, int PlayerLevel)
+{
+	const int attack = 10;
+	if (Player2Other(Playerposition, Playerscale, Bossposition, Bossscale) == true) {
+		PlayerHp = PlayerHp - attack;
+	}
+
+}
+
+bool Collision::Player2Other(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Otherposition, XMFLOAT3 Otherscale)
+{
+	float x = Playerposition.x - Otherposition.x;
+	float y = Playerposition.y - Otherposition.y;
+	float z = Playerposition.z - Otherposition.z;
+
+	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
+	float BossAllscale = Otherscale.x + Otherscale.y + Otherscale.z;
+
+	const int attack = 5;
+
+	float length = sqrt(x * x + y * y + z * z);
+
+	if (length <= PlayerAllscale + BossAllscale) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }

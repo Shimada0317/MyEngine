@@ -1,8 +1,23 @@
 #pragma once
 
 #include"CollisionPrimitive.h"
+#include<Windows.h>
+#include<wrl.h>
+#include<d3d12.h>
+#include<d3dx12.h>
+#include<DirectXMath.h>
+
 class Collision
 {
+private: // エイリアス
+// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
+
 public:
 
 	///<summary>
@@ -46,5 +61,11 @@ public:
 	/// <param name="inter">交点(出力用)</param>
 	/// <return>交差しているか否か</return>
 	static bool CheckRay2Triangle(const Ray& ray, const Triangle& triangle, float* distance = nullptr, DirectX::XMVECTOR* inter = nullptr);
+
+	void CheckPlayer2Enemy(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Enemyposition, XMFLOAT3 Enemyscale,int PlayerHp,int PlayerLevel);
+
+	void CheckPlayer2Boss(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Bossposition, XMFLOAT3 Bossscale, int PlayerHp,int PlayerLevel);
+
+	static bool Player2Other(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Otherposition, XMFLOAT3 Otherscale);
 };
 

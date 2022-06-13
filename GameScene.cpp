@@ -27,7 +27,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	Sprite::LoadTexture(100, L"Resources/white1x1.png");
 	postEffect = new PostEffect();
-	postEffect->InitializeSprite();
+	postEffect->Initialize();
+	//postEffect->InitializeSprite();
 
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	/*playermodel = Model::LoadFromObJ("player");
