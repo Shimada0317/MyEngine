@@ -34,11 +34,32 @@ public:
     ///<param name="cmdList">コマンドリスト</param>
     void Draw(ID3D12GraphicsCommandList* cmdList);
 
+    ///<summary>
+   ///描画前準備
+   ///</summary>
+   ///<param name="cmdList">コマンドリスト</param>
+    void PreDrawScene(ID3D12GraphicsCommandList* cmdList);
+
+   ///<summary>
+   ///描画後処理
+   ///</summary>
+   ///<param name="cmdList">コマンドリスト</param>
+   void PostDrawScene(ID3D12GraphicsCommandList* cmdList);
+
 private:
     //テクスチャバッファ
     ComPtr<ID3D12Resource>texBuff;
     //SRV用のデスクリプタヒープ
     ComPtr<ID3D12DescriptorHeap>descHeapSRV;
+    //深度バッファ
+    ComPtr<ID3D12Resource> depthBuff;
+    //RTV(レンダーターゲット)用デスクリプタヒープ
+    ComPtr<ID3D12DescriptorHeap> descHeapRTV;
+    //DSV(デプステンシルビュー)用デスクリプタヒープ
+    ComPtr<ID3D12DescriptorHeap> descHeapDSV;
 
+private://静的メンバ変数
+    //画面クリアカラー
+    static const float clearColor[4];
 };
 

@@ -82,6 +82,9 @@ void Framework::Finalize()
 
 void Framework::Draw()
 {
+
+
+
 	//•`‰æ‘Oˆ—
 	dxCommon->PreDraw();
 	//ƒV[ƒ“•`‰æ

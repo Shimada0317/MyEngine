@@ -97,7 +97,7 @@ void GameScene::Update()
 
 void GameScene::Draw(DirectXCommon* dxCommon)
 {
-	
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	//title->Draw();
@@ -113,6 +113,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	//オブジェクト後処理
 	Object3d::PostDraw();
 	Object->Draw(dxCommon->GetCmdList());
+	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 }
 
 void GameScene::Finalize()
