@@ -17,6 +17,10 @@ GameScene::GameScene(SceneManager* sceneManager_)
 void GameScene::Initialize(DirectXCommon* dxComon)
 {
 	
+	Sprite::LoadTexture(100, L"Resources/white1x1.png");
+	postEffect = new PostEffect();
+	postEffect->Initialize();
+
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 
 	
@@ -25,9 +29,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
-	Sprite::LoadTexture(100, L"Resources/white1x1.png");
-	postEffect = new PostEffect();
-	postEffect->Initialize();
+	
 	//postEffect->InitializeSprite();
 
 	//モデルの読み込み
@@ -95,16 +97,8 @@ void GameScene::Update()
 
 }
 
-void GameScene::Draw(DirectXCommon* dxCommon)
+void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
-
-	Sprite::PreDraw(dxCommon->GetCmdList());
-	//title->Draw();
-	Sprite::PostDraw();
-
-	postEffect->Draw(dxCommon->GetCmdList());
-
 	//オブジェクト前処理
 	Object3d::PreDraw();
 	//player3d->Draw();
@@ -113,11 +107,34 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	//オブジェクト後処理
 	Object3d::PostDraw();
 	Object->Draw(dxCommon->GetCmdList());
-	//postEffect->PostDrawScene(dxCommon->GetCmdList());
+}
+
+void GameScene::SpriteDraw(DirectXCommon* dxCommon)
+{
+	Sprite::PreDraw(dxCommon->GetCmdList());
+	//title->Draw();
+	Sprite::PostDraw();
+}
+
+
+
+void GameScene::Draw(DirectXCommon* dxCommon)
+{
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
+	SpriteDraw(dxCommon);
+	ObjDraw(dxCommon);
+	postEffect->PostDrawScene(dxCommon->GetCmdList());
+	//描画前処理
+	dxCommon->PreDraw();
+	postEffect->Draw(dxCommon->GetCmdList());
+	//描画後処理
+	dxCommon->PostDraw();
 }
 
 void GameScene::Finalize()
 {
 	delete title;
 	delete player3d;
+	delete winApp;
+	delete dxCommon;
 }

@@ -58,6 +58,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
+	dxCommon->PreDraw();
 	// コマンドリストの取得
 	//ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();
 
@@ -65,10 +66,12 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	title->Draw();
 	Sprite::PostDraw();
+	dxCommon->PostDraw();
 }
 
 void TitleScene::Finalize()
 {
 	delete title;
 	delete player3d;
+	delete dxCommon;
 }

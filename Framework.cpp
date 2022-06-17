@@ -37,7 +37,7 @@ void Framework::Initialize()
 	debugText->Initialize(debugTextNumber);
 	//シーンマネージャー
 	sceneManager_ = new SceneManager;
-
+	
 	
 
 	//Fbx
@@ -86,11 +86,11 @@ void Framework::Draw()
 
 
 	//描画前処理
-	dxCommon->PreDraw();
+	//dxCommon->PreDraw();
 	//シーン描画
 	sceneManager_->Draw(dxCommon);
 	//デバッグテキスト描画
 	debugText->DrawAll();
 	//描画後処理
-	dxCommon->PostDraw();
+	//dxCommon->PostDraw();
 }

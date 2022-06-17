@@ -34,6 +34,10 @@ public://ÉÅÉìÉoïœêî
 
 	void Update() override;
 
+	void ObjDraw(DirectXCommon* dxCommon);
+
+	void SpriteDraw(DirectXCommon* dxCommon);
+
 	void Draw(DirectXCommon* dxCommon)override;
 
 	void Finalize() override;
@@ -48,6 +52,8 @@ private:
 	Object3d* player3d = nullptr;
 	Object3d* ramieru3d = nullptr;
 	Object3d* human3d = nullptr;
+
+	WinApp* winApp = nullptr;
 
 	FbxModel* model = nullptr;
 	FbxObject3d* Object = nullptr;
