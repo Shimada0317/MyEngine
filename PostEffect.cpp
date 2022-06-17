@@ -138,6 +138,48 @@ void PostEffect::Initialize()
 	dev->CreateDepthStencilView(depthBuff.Get(),
 		&dsvDesc,
 		descHeapDSV->GetCPUDescriptorHandleForHeapStart());
+
+
+	//頂点バッファ生成
+	result = dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(VertexPosUv) * vertNum),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&vertBuff));
+	assert(SUCCEEDED(result));
+
+	//頂点データ
+	VertexPosUv vertices[vertNum] = {
+		{{-0.5f,-0.5f,0.0f},{0.0f,1.0f}},
+		{{-0.5f,+0.5f,0.0f},{0.0f,0.0f}},
+		{{+0.5f,-0.5f,0.0f},{1.0f,1.0f}},
+		{{+0.5f,+0.5f,0.0f},{1.0f,0.0f}},
+	};
+
+	//頂点バッファへのデータ転送
+	VertexPosUv* vertMap = nullptr;
+	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
+	if (SUCCEEDED(result)) {
+		memcpy(vertMap, vertices, sizeof(vertices));
+		vertBuff->Unmap(0, nullptr);
+	}
+
+	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
+	vbView.SizeInBytes = sizeof(VertexPosUv) * 4;
+	vbView.StrideInBytes = sizeof(VertexPosUv);
+
+	//定数バッファの生成
+	result = dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
+		D3D12_HEAP_FLAG_NONE,
+		&CD3DX12_RESOURCE_DESC::Buffer((sizeof(ConstBufferData) +
+			0xff) & ~0xff),
+		D3D12_RESOURCE_STATE_GENERIC_READ,
+		nullptr,
+		IID_PPV_ARGS(&constBuff));
+	assert(SUCCEEDED(result));
 }
 
 void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -151,7 +193,7 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 	if (SUCCEEDED(result))
 	{
 		constMap->color = this->color;
-		constMap->mat = this->matWorld * matProjection;
+		constMap->mat = XMMatrixIdentity();
 		this->constBuff->Unmap(0, nullptr);
 	}
 	//パイプラインステートの設定

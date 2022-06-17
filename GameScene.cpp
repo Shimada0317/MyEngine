@@ -2,6 +2,7 @@
 #include<cassert>
 #include <sstream>
 #include <iomanip>
+#include"Action.h"
 #include"SceneManager.h"
 #include"FbxLoader.h"
 #include"FbxObject3d.h"
@@ -17,7 +18,7 @@ GameScene::GameScene(SceneManager* sceneManager_)
 void GameScene::Initialize(DirectXCommon* dxComon)
 {
 	
-	Sprite::LoadTexture(100, L"Resources/white1x1.png");
+	//Sprite::LoadTexture(100, L"Resources/background.png");
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
@@ -87,6 +88,8 @@ void GameScene::Update()
 	if (Input::GetInstance()->PushKey(DIK_1)) {
 		Object->PlayAnimation();
 	}
+
+	//Action::GetInstance()->PlayerMove3d()
 	
 	SetPosSclRot();
 	camera->Update();
@@ -112,7 +115,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	//title->Draw();
+	title->Draw();
 	Sprite::PostDraw();
 }
 
