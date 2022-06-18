@@ -24,6 +24,11 @@ public:
     PostEffect();
 
     ///<summary>
+    ///パイプライン生成
+    ///</summary>
+    void CreatePipeline();
+
+    ///<summary>
     ///初期化
     ///</summary>
     void Initialize();
@@ -57,7 +62,10 @@ private:
     ComPtr<ID3D12DescriptorHeap> descHeapRTV;
     //DSV(デプステンシルビュー)用デスクリプタヒープ
     ComPtr<ID3D12DescriptorHeap> descHeapDSV;
-
+    //グラフィックスパイプライン
+    ComPtr<ID3D12PipelineState> pipelineState;
+    //ルートシグネチャ
+    ComPtr<ID3D12RootSignature> rootSignature;
 private://静的メンバ変数
     //画面クリアカラー
     static const float clearColor[4];
