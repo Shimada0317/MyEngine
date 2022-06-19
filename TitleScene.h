@@ -7,7 +7,7 @@
 #include <DirectXMath.h>
 #include "Sprite.h"
 #include"Object3d.h"
-#include"Model.h"
+#include"ObjModel.h"
 #include"Input.h"
 
 class TitleScene :public BaseScene
@@ -39,9 +39,9 @@ private:
 
 	DirectXCommon* dxCommon = nullptr;
 
-	Model* playermodel = nullptr;
-	Model* ramieru = nullptr;
-	Model* human = nullptr;
+	ObjModel* playermodel = nullptr;
+	ObjModel* ramieru = nullptr;
+	ObjModel* human = nullptr;
 
 	Object3d* player3d = nullptr;
 	Object3d* ramieru3d = nullptr;

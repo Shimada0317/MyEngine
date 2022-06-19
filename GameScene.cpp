@@ -38,7 +38,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	player3d = Object3d::Create();
 	player3d->SetModel(playermodel);*/
 
-	ramieru = Model::LoadFromObJ("ramieru");
+	ramieru = ObjModel::LoadFromObJ("ramieru");
 	ramieru3d = Object3d::Create();
 	ramieru3d->SetModel(ramieru);
 
@@ -67,17 +67,17 @@ void GameScene::SetPosSclRot()
 	player3d->SetScale({0.5f,0.5f,0.5f});*/
 
 
-	camera->SetEye({ 0,0,90 });
-	camera->SetTarget({ 0,2.5f,0 });
-	camera->SetDistance({ 8.0f });
+	camera->SetEye({ cameraEye });
+	camera->SetTarget({ cameraTarget });
+	camera->SetDistance({ cameradistance });
 
-	ramieru3d->SetRotation({ 0,0,0 });
+	ramieru3d->SetRotation({ ramieru_rot });
 	ramieru3d->SetPosition({ ramieru_pos });
-	ramieru3d->SetScale({ 1.0f,1.0f,1.0f });
+	ramieru3d->SetScale({ ramieru_scl });
 
-	Object->SetRotation({ 0.0f,90.0f,0.0f });
+	Object->SetRotation({ obj_rot });
 
-	title->SetSize({ 1280.0f,720.0f });
+	title->SetSize({ screen_size });
 }
 
 void GameScene::Update()

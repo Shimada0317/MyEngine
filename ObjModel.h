@@ -10,7 +10,7 @@ using namespace std;
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
-class Model
+class ObjModel
 {
 public: // サブクラス
 // 頂点データ構造体
@@ -49,7 +49,7 @@ public: // サブクラス
 	};
 public:
 	//OBJファイル読み込み
-	static Model* LoadFromObJ(const std::string& modelname);
+	static ObjModel* LoadFromObJ(const std::string& modelname);
 private://メンバ変数
 	//インデックス配列
 	std::vector<unsigned short> indices;
@@ -85,7 +85,7 @@ public://メンバ関数
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial);
 public://静的メンバ変数
-	static void SetDev(ID3D12Device* dev) { Model::dev = dev; }
+	static void SetDev(ID3D12Device* dev) { ObjModel::dev = dev; }
 	// テクスチャバッファ
 	static ComPtr<ID3D12Resource> texbuff;
 	// デスクリプタサイズ

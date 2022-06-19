@@ -4,7 +4,7 @@
 #include <DirectXMath.h>
 #include "Sprite.h"
 #include"Object3d.h"
-#include"Model.h"
+#include"ObjModel.h"
 #include"Input.h"
 #include"BaseScene.h"
 #include"FbxObject3d.h"
@@ -45,9 +45,9 @@ private:
 
 	DirectXCommon* dxCommon = nullptr;
 
-	Model* playermodel = nullptr;
-	Model* ramieru = nullptr;
-	Model* human = nullptr;
+	ObjModel* playermodel = nullptr;
+	ObjModel* ramieru = nullptr;
+	ObjModel* human = nullptr;
 
 	Object3d* player3d = nullptr;
 	Object3d* ramieru3d = nullptr;
@@ -63,7 +63,17 @@ private:
 
 	DebugCamera* camera = nullptr;
 
+	XMFLOAT3 cameraEye = {0,0,90};
+	XMFLOAT3 cameraTarget = {0,2.5f,0};
+	float cameradistance = 8.0f;
+
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
+	XMFLOAT3 ramieru_rot = { 0,0,0 };
+	XMFLOAT3 ramieru_scl = { 1.0f,1.0f,1.0f };
+
+	XMFLOAT3 obj_rot = { 0,90,0 };
+
+	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 
 	PostEffect* postEffect = nullptr;
 };

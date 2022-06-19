@@ -1,8 +1,8 @@
-#include "MyGame.h"
+#include "BaseClassIUDF.h"
 #include"GameScene.h"
 #include"TitleScene.h"
 
-void MyGame::Initialize()
+void BaseClassIUDF::Initialize()
 {
 	//基底クラスの初期化
 	Framework::Initialize();
@@ -12,19 +12,19 @@ void MyGame::Initialize()
 
 }
 
-void MyGame::Update()
+void BaseClassIUDF::Update()
 {
 	//基底クラスの更新
 	Framework::Update();
 
 }
 
-void MyGame::Draw()
+void BaseClassIUDF::Draw()
 {
 	Framework::Draw();
 }
 
-void MyGame::Finalize()
+void BaseClassIUDF::Finalize()
 {
 	//基底クラスの終了
 	Framework::Finalize();

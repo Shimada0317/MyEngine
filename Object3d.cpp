@@ -48,7 +48,7 @@ bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int wind
 	Object3d::device = device;
 	Object3d::cmdList = cmdList;
 	//モデルにデバイスをセット
-	Model::SetDev(device);
+	ObjModel::SetDev(device);
 	// デスクリプタヒープの初期化
 	InitializeDescriptorHeap();
 

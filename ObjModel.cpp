@@ -1,4 +1,4 @@
-#include "Model.h"
+#include "ObjModel.h"
 #include<string>
 #include<cassert>
 #include<fstream>
@@ -12,19 +12,19 @@ using namespace std;
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
-UINT Model::descriptorHandleIncrementSize = 0;
-ID3D12Device* Model::dev = nullptr;
-ComPtr<ID3D12Resource> Model::texbuff;
-ComPtr<ID3D12DescriptorHeap> Model::descHeap;
-CD3DX12_CPU_DESCRIPTOR_HANDLE Model::cpuDescHandleSRV;
-CD3DX12_GPU_DESCRIPTOR_HANDLE Model::gpuDescHandleSRV;
+UINT ObjModel::descriptorHandleIncrementSize = 0;
+ID3D12Device* ObjModel::dev = nullptr;
+ComPtr<ID3D12Resource> ObjModel::texbuff;
+ComPtr<ID3D12DescriptorHeap> ObjModel::descHeap;
+CD3DX12_CPU_DESCRIPTOR_HANDLE ObjModel::cpuDescHandleSRV;
+CD3DX12_GPU_DESCRIPTOR_HANDLE ObjModel::gpuDescHandleSRV;
 
-Model* Model::LoadFromObJ(const std::string& modelname)
+ObjModel* ObjModel::LoadFromObJ(const std::string& modelname)
 {
 
-	//Modelのインスタンスをnewする
-	//<形>Model* model=new Model();
-	Model* model = new Model();
+	//ObjModelのインスタンスをnewする
+	//<形>ObjModel* model=new ObjModel();
+	ObjModel* model = new ObjModel();
 
 	//デスクリプタヒープの生成
 	model->InitializeDescriptorHeap();
@@ -34,11 +34,11 @@ Model* Model::LoadFromObJ(const std::string& modelname)
 
 	//読み込んだデータをもとにバッファ生成
 	model->CreateBuffers();
-	//return 生成したModel
+	//return 生成したObjModel
 	return model;
 }
 
-bool Model::LoadTexture(const std::string& directoryPath, const std::string& filename)
+bool ObjModel::LoadTexture(const std::string& directoryPath, const std::string& filename)
 {
 	HRESULT result = S_FALSE;
 
@@ -121,7 +121,7 @@ bool Model::LoadTexture(const std::string& directoryPath, const std::string& fil
 	return true;
 }
 
-void Model::LoadMaterial(const std::string& directoryPath,
+void ObjModel::LoadMaterial(const std::string& directoryPath,
 	const std::string& filename)
 {
 	std::ifstream file;
@@ -176,7 +176,7 @@ void Model::LoadMaterial(const std::string& directoryPath,
 	file.close();
 }
 
-void Model::InitializeDescriptorHeap()
+void ObjModel::InitializeDescriptorHeap()
 {
 	HRESULT result = S_FALSE;
 
@@ -192,7 +192,7 @@ void Model::InitializeDescriptorHeap()
 
 }
 
-void Model::CreateBuffers()
+void ObjModel::CreateBuffers()
 {
 	HRESULT result;
 
@@ -277,7 +277,7 @@ void Model::CreateBuffers()
 	}
 }
 
-void Model::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial)
+void ObjModel::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial)
 {
 	//頂点バッファビューの設定
 	cmdList->IASetVertexBuffers(0, 1, &vbView);
@@ -300,7 +300,7 @@ void Model::Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial
 	cmdList->DrawIndexedInstanced((UINT)indices.size(),1, 0, 0, 0);
 }
 
-void Model::LoadFromOBJInternal(const std::string& modelname)
+void ObjModel::LoadFromOBJInternal(const std::string& modelname)
 {
 	std::ifstream file;
 

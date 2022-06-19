@@ -181,7 +181,6 @@ void Collision::CheckPlayer2Enemy(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale,
 	if (Player2Other(Playerposition, Playerscale, Enemyposition, Enemyscale) == true) {
 		PlayerHp = PlayerHp - attack;
 	}
-
 }
 
 void Collision::CheckPlayer2Boss(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Bossposition, XMFLOAT3 Bossscale, int PlayerHp, int PlayerLevel)
@@ -201,8 +200,6 @@ bool Collision::Player2Other(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFL
 
 	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
 	float BossAllscale = Otherscale.x + Otherscale.y + Otherscale.z;
-
-	const int attack = 5;
 
 	float length = sqrt(x * x + y * y + z * z);
 

@@ -6,7 +6,7 @@
 #include <DirectXMath.h>
 #include <d3dx12.h>
 #include<string>
-#include"Model.h"
+#include"ObjModel.h"
 
 
 
@@ -225,7 +225,7 @@ public: // メンバ関数
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
-	void SetModel(Model* model) { this->model = model; }
+	void SetModel(ObjModel* model) { this->model = model; }
 private: // メンバ変数
 	//ComPtr<ID3D12Resource> constBuff; // 定数バッファ
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
@@ -243,7 +243,7 @@ private: // メンバ変数
 	// 親オブジェクト
 	Object3d* parent = nullptr;
 	//モデル
-	Model* model = nullptr;
+	ObjModel* model = nullptr;
 
 };
 

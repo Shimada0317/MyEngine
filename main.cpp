@@ -10,7 +10,7 @@
 #include<DirectXTex.h>
 #include<wrl.h>
 #include<d3dx12.h>
-#include"MyGame.h"
+#include"BaseClassIUDF.h"
 #include"Framework.h"
 //#include"fbxsdk.h"
 
@@ -26,7 +26,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 
 //	FbxManager* fbxManager = FbxManager::Create();
-	Framework* game=new MyGame;
+	Framework* game=new BaseClassIUDF;
 
 	game->Run();
 

@@ -1,7 +1,7 @@
 #pragma once
 #include"Framework.h"
 
-class MyGame:public Framework
+class BaseClassIUDF:public Framework
 {
 public:
 	/// <summary>

@@ -168,8 +168,8 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="MyGame.cpp" />
+    <ClCompile Include="ObjModel.cpp" />
+    <ClCompile Include="BaseClassIUDF.cpp" />
     <ClCompile Include="Object3d.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -271,8 +271,8 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="BaseScene.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="MyGame.h" />
+    <ClInclude Include="ObjModel.h" />
+    <ClInclude Include="BaseClassIUDF.h" />
     <ClInclude Include="Object3d.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="SceneManager.h" />
