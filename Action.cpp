@@ -38,3 +38,14 @@ void Action::PlayerMove2d(XMFLOAT2 position, XMFLOAT2 Speed)
 		position.x -= Speed.x;
 	}
 }
+
+void Action::Gunshot(bool alive, bool havegun, int Remainigbullet, bool shot)
+{
+	if (alive != true)return;
+	if (havegun != true)return;
+	if (Remainigbullet < 0)return;
+	shot = true;
+}
+
+
+
