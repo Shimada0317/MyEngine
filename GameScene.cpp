@@ -89,7 +89,7 @@ void GameScene::Update()
 		Object->PlayAnimation();
 	}
 
-	//Action::GetInstance()->PlayerMove3d()
+	Action::GetInstance()->PlayerMove3d(obj_rot, 0.5f);
 	
 	SetPosSclRot();
 	camera->Update();

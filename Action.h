@@ -20,9 +20,9 @@ private: // エイリアス
 public:
 	static Action* GetInstance();
 
-	void PlayerMove3d(XMFLOAT3 position,XMFLOAT3 Speed);
+	void PlayerMove3d(XMFLOAT3 &position,float Speed);
 
-	void PlayerMove2d(XMFLOAT2 position, XMFLOAT2 Speed);
+	void PlayerMove2d(XMFLOAT2 position, float Speed);
 
 	void Gunshot(bool alive, bool havegun, int bullet,bool shot);
 };

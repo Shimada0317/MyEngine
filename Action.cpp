@@ -7,35 +7,35 @@ Action* Action::GetInstance()
 	return &instance;
 }
 
-void Action::PlayerMove3d(XMFLOAT3 position, XMFLOAT3 Speed)
+void Action::PlayerMove3d(XMFLOAT3 &position, float Speed)
 {
-	if (Input::GetInstance()->TriggerKey(DIK_UP)) {
-		position.y += Speed.y;
+	if (Input::GetInstance()->PushKey(DIK_UP)) {
+		position.y += Speed;
 	}
-	else if (Input::GetInstance()->TriggerKey(DIK_DOWN)) {
-		position.y -= Speed.y;
+	else if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+		position.y -= Speed;
 	}
-	else if (Input::GetInstance()->TriggerKey(DIK_RIGHT)) {
-		position.x += Speed.x;
+	else if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+		position.x += Speed;
 	}
-	else if (Input::GetInstance()->TriggerKey(DIK_LEFT)) {
-		position.x -= Speed.x;
+	else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+		position.x -= Speed;
 	}
 }
 
-void Action::PlayerMove2d(XMFLOAT2 position, XMFLOAT2 Speed)
+void Action::PlayerMove2d(XMFLOAT2 position, float Speed)
 {
 	if (Input::GetInstance()->TriggerKey(DIK_UP)) {
-		position.y += Speed.y;
+		position.y += Speed;
 	}
 	else if (Input::GetInstance()->TriggerKey(DIK_DOWN)) {
-		position.y -= Speed.y;
+		position.y -= Speed;
 	}
 	else if (Input::GetInstance()->TriggerKey(DIK_RIGHT)) {
-		position.x += Speed.x;
+		position.x += Speed;
 	}
 	else if (Input::GetInstance()->TriggerKey(DIK_LEFT)) {
-		position.x -= Speed.x;
+		position.x -= Speed;
 	}
 }
 
