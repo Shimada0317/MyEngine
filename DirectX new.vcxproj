@@ -168,6 +168,8 @@
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="BaseClassIUDF.cpp" />
     <ClCompile Include="Object3d.cpp" />
@@ -271,6 +273,8 @@
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="BaseClassIUDF.h" />
     <ClInclude Include="Object3d.h" />

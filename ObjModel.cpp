@@ -12,12 +12,10 @@ using namespace std;
 using namespace DirectX;
 using namespace Microsoft::WRL;
 
-UINT ObjModel::descriptorHandleIncrementSize = 0;
+//UINT ObjModel::descriptorHandleIncrementSize = 0;
 ID3D12Device* ObjModel::dev = nullptr;
-ComPtr<ID3D12Resource> ObjModel::texbuff;
-ComPtr<ID3D12DescriptorHeap> ObjModel::descHeap;
-CD3DX12_CPU_DESCRIPTOR_HANDLE ObjModel::cpuDescHandleSRV;
-CD3DX12_GPU_DESCRIPTOR_HANDLE ObjModel::gpuDescHandleSRV;
+//ComPtr<ID3D12Resource> ObjModel::texbuff;
+
 
 ObjModel* ObjModel::LoadFromObJ(const std::string& modelname)
 {
@@ -329,14 +327,7 @@ void ObjModel::LoadFromOBJInternal(const std::string& modelname)
 		string key;
 		getline(line_stream, key, ' ');
 
-		if (key == "mtllib")
-		{
-			string filename;
-			line_stream >> filename;
-
-			LoadMaterial(directoryPath, filename);
-		}
-
+		
 		if (key == "v") {
 			XMFLOAT3 position{};
 			line_stream >> position.x;
@@ -367,6 +358,15 @@ void ObjModel::LoadFromOBJInternal(const std::string& modelname)
 
 			normals.emplace_back(normal);
 		}
+
+		if (key == "mtllib")
+		{
+			string filename;
+			line_stream >> filename;
+
+			LoadMaterial(directoryPath, filename);
+		}
+
 
 		if (key == "f") {
 			string index_string;

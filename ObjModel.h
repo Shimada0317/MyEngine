@@ -50,6 +50,7 @@ public: // サブクラス
 public:
 	//OBJファイル読み込み
 	static ObjModel* LoadFromObJ(const std::string& modelname);
+	static void SetDev(ID3D12Device* dev) { ObjModel::dev = dev; }
 private://メンバ変数
 	//インデックス配列
 	std::vector<unsigned short> indices;
@@ -68,8 +69,16 @@ private://メンバ変数
 	Microsoft::WRL::ComPtr<ID3D12Resource>constBuffB1;
 	//マテリアル
 	Material material;
-	//デバイス
-	static ID3D12Device* dev;
+	// デスクリプタサイズ
+	UINT descriptorHandleIncrementSize;
+	// デスクリプタヒープ
+	ComPtr<ID3D12DescriptorHeap> descHeap;
+	// シェーダリソースビューのハンドル(CPU)
+	CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
+	// シェーダリソースビューのハンドル(CPU)
+	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV;
+	// テクスチャバッファ
+	ComPtr<ID3D12Resource> texbuff;
 
 private://非公開のメンバ関数
 	void LoadFromOBJInternal(const std::string&  modelname);
@@ -84,17 +93,8 @@ public://メンバ関数
 	void CreateBuffers();
 	//描画
 	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial);
-public://静的メンバ変数
-	static void SetDev(ID3D12Device* dev) { ObjModel::dev = dev; }
-	// テクスチャバッファ
-	static ComPtr<ID3D12Resource> texbuff;
-	// デスクリプタサイズ
-	static UINT descriptorHandleIncrementSize;
-	// デスクリプタヒープ
-	static ComPtr<ID3D12DescriptorHeap> descHeap;
-	// シェーダリソースビューのハンドル(CPU)
-	static CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
-	// シェーダリソースビューのハンドル(CPU)
-	static CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV;
+private://静的メンバ変数
+	//デバイス
+	static ID3D12Device* dev;
 };
 

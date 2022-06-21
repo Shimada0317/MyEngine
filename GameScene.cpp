@@ -34,9 +34,9 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//postEffect->InitializeSprite();
 
 	//モデルの読み込み
-	/*playermodel = Model::LoadFromObJ("player");
+	playermodel = ObjModel::LoadFromObJ("sea");
 	player3d = Object3d::Create();
-	player3d->SetModel(playermodel);*/
+	player3d->SetModel(playermodel);
 
 	ramieru = ObjModel::LoadFromObJ("ramieru");
 	ramieru3d = Object3d::Create();
@@ -62,9 +62,9 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 void GameScene::SetPosSclRot()
 {
 	//プレイヤー
-	/*player3d->SetRotation({ 0,450,-270 });
+	player3d->SetRotation({ 0,450,-270 });
 	player3d->SetPosition({ 0,0,0 });
-	player3d->SetScale({0.5f,0.5f,0.5f});*/
+	player3d->SetScale({0.5f,0.5f,0.5f});
 
 
 	camera->SetEye({ cameraEye });
@@ -89,12 +89,12 @@ void GameScene::Update()
 		Object->PlayAnimation();
 	}
 
-	Action::GetInstance()->PlayerMove3d(obj_rot, 0.5f);
+	Action::GetInstance()->PlayerMove3d(ramieru_pos, 0.5f);
 	
 	SetPosSclRot();
 	camera->Update();
 	ramieru3d->Update();
-	
+	player3d->Update();
 	Object->Update();
 	
 
@@ -104,8 +104,8 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
 	//オブジェクト前処理
 	Object3d::PreDraw();
-	//player3d->Draw();
-	//ramieru3d->Draw();
+	player3d->Draw();
+	ramieru3d->Draw();
 	//human3d->Draw();
 	//オブジェクト後処理
 	Object3d::PostDraw();
