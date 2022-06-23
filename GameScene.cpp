@@ -70,8 +70,8 @@ void GameScene::SetPosSclRot()
 
 
 	camera->SetDistance({ cameradistance });
-	camera->SetEye({ obj_pos });
-	camera->SetTarget({ obj_pos });
+	camera->SetEye({ cameraEye });
+	camera->SetTarget({ cameraTarget });
 
 	ramieru3d->SetRotation({ ramieru_rot });
 	ramieru3d->SetPosition({ ramieru_pos });

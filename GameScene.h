@@ -64,8 +64,8 @@ private:
 	DebugCamera* camera = nullptr;
 
 	XMFLOAT3 cameraEye = {0,0,90};
-	XMFLOAT3 cameraTarget = {0,5.5f,0};
-	float cameradistance = 20.0f;
+	XMFLOAT3 cameraTarget = {0,2.5f,0};
+	float cameradistance = 8.0f;
 
 	XMFLOAT3 pos = { 0,0,0 };
 
@@ -78,7 +78,7 @@ private:
 	XMFLOAT3 ground_rot = { 0,90,0 };
 
 	XMFLOAT3 obj_rot = { 0,90,0 };
-	XMFLOAT3 obj_pos = { 0,1,0 };
+	XMFLOAT3 obj_pos = { 0,0,0 };
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 
