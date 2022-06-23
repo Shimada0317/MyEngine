@@ -39,14 +39,16 @@ std::vector<Object3d::VertexPosNormalUv>Object3d::vertices;
 std::vector<unsigned short>Object3d::indices;
 //Object3d::Material Object3d::material;
 
+Camera* Object3d::camera = nullptr;
 
-bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height, ID3D12GraphicsCommandList* cmdList)
+bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height, ID3D12GraphicsCommandList* cmdList,Camera* camera)
 {
 	// nullptrチェック
 	assert(device);
 
 	Object3d::device = device;
 	Object3d::cmdList = cmdList;
+	Object3d::camera = camera;
 	//モデルにデバイスをセット
 	ObjModel::SetDev(device);
 	// デスクリプタヒープの初期化
@@ -290,7 +292,7 @@ bool Object3d::InitializeGraphicsPipeline()
 
 	gpipeline.NumRenderTargets = 2;	// 描画対象は1つ
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
-	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
+	gpipeline.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ
@@ -423,56 +425,7 @@ void Object3d::LoadMaterial(
 	const std::string& filename
 )
 {
-	//std::ifstream file;
 
-	//file.open(directoryPath + filename);
-
-	//if (file.fail()) {
-	//	assert(0);
-	//}
-
-	//string line;
-	//while (getline(file, line))
-	//{
-	//	std::istringstream line_stream(line);
-	//	string key;
-	//	getline(line_stream, key, ' ');
-
-	//	if (key[0] == '\t') {
-	//		key.erase(key.begin());
-	//	}
-
-	//	if (key == "newmtl")
-	//	{
-	//		line_stream >> material.name;
-	//	}
-
-	//	if (key == "Ka") {
-	//		line_stream >> material.ambient.x;
-	//		line_stream >> material.ambient.y;
-	//		line_stream >> material.ambient.z;
-	//	}
-
-	//	if (key == "Kd") {
-	//		line_stream >> material.diffuse.x;
-	//		line_stream >> material.diffuse.y;
-	//		line_stream >> material.diffuse.z;
-	//	}
-
-	//	if (key == "Ks") {
-	//		line_stream >> material.specular.x;
-	//		line_stream >> material.specular.y;
-	//		line_stream >> material.specular.z;
-	//	}
-
-	//	if (key == "map_Kd") {
-	//		line_stream >> material.textureFilname;
-
-	//		LoadTexture(directoryPath, material.textureFilname);
-	//	}
-
-	//}
-	//file.close();
 }
 
 void Object3d::CreateModel()
@@ -481,150 +434,7 @@ void Object3d::CreateModel()
 
 	std::ifstream file;
 
-	//const string modelname = "triangle_mat";
-	//const string filename = modelname + ".obj";
-	//const string directoryPath = "Resources/" + modelname + "/";
-	//file.open(directoryPath + filename);
 
-	//if (file.fail()) {
-	//	assert(0);
-	//}
-
-
-	//vector<XMFLOAT3>positions;
-	//vector<XMFLOAT3>normals;
-	//vector<XMFLOAT2>texcoords;
-
-	//string line;
-
-	//while (getline(file, line))
-	//{
-
-	//	std::istringstream line_stream(line);
-
-	//	string key;
-	//	getline(line_stream, key, ' ');
-
-	//	if (key == "mtllib")
-	//	{
-	//		string filename;
-	//		line_stream >> filename;
-
-	//		LoadMaterial(directoryPath, filename);
-	//	}
-
-	//	if (key == "v") {
-	//		XMFLOAT3 position{};
-	//		line_stream >> position.x;
-	//		line_stream >> position.y;
-	//		line_stream >> position.z;
-
-	//		positions.emplace_back(position);
-
-	//		/*VertexPosNormalUv vertex{};
-	//		vertex.pos = position;
-	//		vertices.emplace_back(vertex);*/
-	//	}
-
-	//	if (key == "vt") {
-	//		XMFLOAT2 texcoord{};
-	//		line_stream >> texcoord.x;
-	//		line_stream >> texcoord.y;
-
-	//		texcoord.y = 1.0f - texcoord.y;
-	//		texcoords.emplace_back(texcoord);
-	//	}
-
-	//	if (key == "vn") {
-	//		XMFLOAT3 normal{};
-	//		line_stream >> normal.x;
-	//		line_stream >> normal.y;
-	//		line_stream >> normal.z;
-
-	//		normals.emplace_back(normal);
-	//	}
-
-	//	if (key == "f") {
-	//		string index_string;
-	//		while (getline(line_stream, index_string, ' ')) {
-	//			std::istringstream index_stream(index_string);
-	//			unsigned short indexPosition, indexNormal, indexTexcoord;
-	//			index_stream >> indexPosition;
-	//			index_stream.seekg(1, ios_base::cur);
-	//			index_stream >> indexTexcoord;
-	//			index_stream.seekg(1, ios_base::cur);
-	//			index_stream >> indexNormal;
-	//			VertexPosNormalUv vertex{};
-	//			vertex.pos = positions[indexPosition - 1];
-	//			vertex.normal = normals[indexNormal - 1];
-	//			vertex.uv = texcoords[indexTexcoord - 1];
-	//			vertices.emplace_back(vertex);
-	//			indices.emplace_back((unsigned short)indices.size());
-	//		}
-	//	}
-	//}
-	//file.close();
-
-	//UINT sizeVB = static_cast<UINT>(sizeof(VertexPosNormalUv) * vertices.size());
-	//UINT sizeIB = static_cast<UINT>(sizeof(unsigned short) * indices.size());
-
-	//// 頂点バッファ生成
-	//result = device->CreateCommittedResource(
-	//	&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-	//	D3D12_HEAP_FLAG_NONE,
-	//	&CD3DX12_RESOURCE_DESC::Buffer(sizeVB),
-	//	D3D12_RESOURCE_STATE_GENERIC_READ,
-	//	nullptr,
-	//	IID_PPV_ARGS(&vertBuff));
-	//if (FAILED(result)) {
-	//	assert(0);
-	//	return;
-	//}
-
-	//// インデックスバッファ生成
-	//result = device->CreateCommittedResource(
-	//	&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-	//	D3D12_HEAP_FLAG_NONE,
-	//	//&CD3DX12_RESOURCE_DESC::Buffer(sizeof(indices)),
-	//	&CD3DX12_RESOURCE_DESC::Buffer(sizeIB),
-	//	D3D12_RESOURCE_STATE_GENERIC_READ,
-	//	nullptr,
-	//	IID_PPV_ARGS(&indexBuff));
-	//if (FAILED(result)) {
-	//	assert(0);
-	//	return;
-	//}
-
-	//// 頂点バッファへのデータ転送
-	//VertexPosNormalUv* vertMap = nullptr;
-	//result = vertBuff->Map(0, nullptr, (void**)&vertMap);
-	//if (SUCCEEDED(result)) {
-	//	//memcpy(vertMap, vertices, sizeof(vertices));
-	//	std::copy(vertices.begin(), vertices.end(), vertMap);
-	//	vertBuff->Unmap(0, nullptr);
-	//}
-
-	//// インデックスバッファへのデータ転送
-	//unsigned short* indexMap = nullptr;
-	//result = indexBuff->Map(0, nullptr, (void**)&indexMap);
-	//if (SUCCEEDED(result)) {
-
-	//	std::copy(indices.begin(), indices.end(), indexMap);
-
-	//	indexBuff->Unmap(0, nullptr);
-	//}
-
-	//// 頂点バッファビューの作成
-	//vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	////vbView.SizeInBytes = sizeof(vertices);
-	//vbView.SizeInBytes = sizeVB;
-	//vbView.StrideInBytes = sizeof(vertices[0]);
-
-	//// インデックスバッファビューの作成
-	//ibView.BufferLocation = indexBuff->GetGPUVirtualAddress();
-	//ibView.Format = DXGI_FORMAT_R16_UINT;
-	////ibView.SizeInBytes = sizeof(indices);
-	//ibView.SizeInBytes = sizeIB;
 }
 
 void Object3d::UpdateViewMatrix()
@@ -670,6 +480,12 @@ void Object3d::Update()
 	matWorld *= matRot; // ワールド行列に回転を反映
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
+	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
+
+	const XMFLOAT3& cameraPos = camera->GetEye();
+
+
+
 	// 親オブジェクトがあれば
 	if (parent != nullptr) {
 		// 親オブジェクトのワールド行列を掛ける
@@ -680,10 +496,13 @@ void Object3d::Update()
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
-	//constMap->color = color;
-	constMap->mat = matWorld * matView * matProjection;	// 行列の合成
-	constBuffB0->Unmap(0, nullptr);
 
+	constMap->viewproj = matViewProjection;
+	constMap->world = matWorld;
+	constMap->camerapos = cameraPos;
+	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
+	constBuffB0->Unmap(0, nullptr);
+	
 	//// 定数バッファへデータ転送
 	//ConstBufferDataB1* constMap1 = nullptr;
 	//result = constBuffB1->Map(0, nullptr, (void**)&constMap1);

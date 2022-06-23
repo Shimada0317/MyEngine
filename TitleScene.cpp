@@ -74,4 +74,7 @@ void TitleScene::Finalize()
 	delete title;
 	delete player3d;
 	delete dxCommon;
+	delete ramieru3d;
+	delete ramieru;
+
 }

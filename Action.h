@@ -22,8 +22,13 @@ public:
 
 	void PlayerMove3d(XMFLOAT3 &position,float Speed);
 
+	void PlayerJump(XMFLOAT3& position,bool& JumpFlag);
+
 	void PlayerMove2d(XMFLOAT2 position, float Speed);
 
+
 	void Gunshot(bool alive, bool havegun, int bullet,bool shot);
+private:
+	float JumpPosition = 0;
 };
 

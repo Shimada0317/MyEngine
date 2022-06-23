@@ -47,11 +47,11 @@ private:
 
 	ObjModel* playermodel = nullptr;
 	ObjModel* ramieru = nullptr;
-	ObjModel* human = nullptr;
+	ObjModel* ground = nullptr;
 
-	Object3d* player3d = nullptr;
+	Object3d* sphere = nullptr;
 	Object3d* ramieru3d = nullptr;
-	Object3d* human3d = nullptr;
+	Object3d* groundObj = nullptr;
 
 	WinApp* winApp = nullptr;
 
@@ -64,17 +64,26 @@ private:
 	DebugCamera* camera = nullptr;
 
 	XMFLOAT3 cameraEye = {0,0,90};
-	XMFLOAT3 cameraTarget = {0,2.5f,0};
-	float cameradistance = 8.0f;
+	XMFLOAT3 cameraTarget = {0,5.5f,0};
+	float cameradistance = 20.0f;
 
-	XMFLOAT3 ramieru_pos = { 0,0,0 };
+	XMFLOAT3 pos = { 0,0,0 };
+
+	XMFLOAT3 ramieru_pos = { 0,0,1 };
 	XMFLOAT3 ramieru_rot = { 0,0,0 };
-	XMFLOAT3 ramieru_scl = { 1.0f,1.0f,1.0f };
+	XMFLOAT3 ramieru_scl = { 0.5f,0.5f,0.5f };
+
+	XMFLOAT3 ground_pos = { 0,-1,0 };
+	XMFLOAT3 ground_scl = { 10,10,10 };
+	XMFLOAT3 ground_rot = { 0,90,0 };
 
 	XMFLOAT3 obj_rot = { 0,90,0 };
+	XMFLOAT3 obj_pos = { 0,1,0 };
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 
 	PostEffect* postEffect = nullptr;
+
+	bool JumpFlag = false;
 };
 

@@ -23,7 +23,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect->Initialize();
 
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
-
+	Object3d::SetCamera(camera);
 	
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/background.png");
@@ -34,15 +34,17 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//postEffect->InitializeSprite();
 
 	//モデルの読み込み
-	playermodel = ObjModel::LoadFromObJ("sea");
-	player3d = Object3d::Create();
-	player3d->SetModel(playermodel);
+	playermodel = ObjModel::LoadFromObJ("skydome");
+	sphere = Object3d::Create();
+	sphere->SetModel(playermodel);
 
 	ramieru = ObjModel::LoadFromObJ("ramieru");
 	ramieru3d = Object3d::Create();
 	ramieru3d->SetModel(ramieru);
 
-	
+	ground = ObjModel::LoadFromObJ("ground");
+	groundObj = Object3d::Create();
+	groundObj->SetModel(ground);
 	
 	
 
@@ -62,20 +64,24 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 void GameScene::SetPosSclRot()
 {
 	//プレイヤー
-	player3d->SetRotation({ 0,450,-270 });
-	player3d->SetPosition({ 0,0,0 });
-	player3d->SetScale({0.5f,0.5f,0.5f});
+	sphere->SetRotation({ 0,0,0 });
+	sphere->SetPosition({ pos });
+	sphere->SetScale({4.0f,4.0f,4.0f});
 
 
-	camera->SetEye({ cameraEye });
-	camera->SetTarget({ cameraTarget });
 	camera->SetDistance({ cameradistance });
+	camera->SetEye({ obj_pos });
+	camera->SetTarget({ obj_pos });
 
 	ramieru3d->SetRotation({ ramieru_rot });
 	ramieru3d->SetPosition({ ramieru_pos });
 	ramieru3d->SetScale({ ramieru_scl });
 
+	groundObj->SetPosition({ ground_pos });
+	groundObj->SetScale({ ground_scl });
+
 	Object->SetRotation({ obj_rot });
+	Object->SetPosition({ obj_pos });
 
 	title->SetSize({ screen_size });
 }
@@ -89,13 +95,16 @@ void GameScene::Update()
 		Object->PlayAnimation();
 	}
 
-	Action::GetInstance()->PlayerMove3d(ramieru_pos, 0.5f);
-	
+	//Action::GetInstance()->PlayerMove3d(cameraEye, 0.5f);
+	Action::GetInstance()->PlayerMove3d(obj_pos, 0.02f);
+	Action::GetInstance()->PlayerJump(ramieru_pos,JumpFlag);
+
 	SetPosSclRot();
 	camera->Update();
 	ramieru3d->Update();
-	player3d->Update();
+	sphere->Update();
 	Object->Update();
+	groundObj->Update();
 	
 
 }
@@ -104,7 +113,8 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
 	//オブジェクト前処理
 	Object3d::PreDraw();
-	player3d->Draw();
+	sphere->Draw();
+	groundObj->Draw();
 	ramieru3d->Draw();
 	//human3d->Draw();
 	//オブジェクト後処理
@@ -137,7 +147,10 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 void GameScene::Finalize()
 {
 	delete title;
-	delete player3d;
+	delete sphere;
+	delete groundObj;
+	delete ramieru3d;
+	//delete sphere;
 	delete winApp;
 	delete dxCommon;
 }

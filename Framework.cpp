@@ -30,8 +30,9 @@ void Framework::Initialize()
 	input->Initialize(winApp);
 	audio = new Audio();
 	audio->StaticInitialize();
+	camera = new DebugCamera(WinApp::window_width,WinApp::window_height);
 	//audio->LoadFile("Resources/digitalworld.wav", 0.1);
-	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height, dxCommon->GetCmdList());
+	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height, dxCommon->GetCmdList(),camera);
 	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	debugText = DebugText::GetInstance();
 	debugText->Initialize(debugTextNumber);
