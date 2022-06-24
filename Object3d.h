@@ -1,5 +1,4 @@
 ﻿#pragma once
-
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
@@ -8,8 +7,6 @@
 #include<string>
 #include"ObjModel.h"
 #include"Camera.h"
-
-
 
 
 /// <summary>
@@ -118,7 +115,6 @@ public: // 静的メンバ関数
 	/// <param name="move">移動量</param>
 	static void CameraMoveVector(XMFLOAT3 move);
 
-	static void LoadMaterial(const std::string& directoryPath, const std::string& filename);
 
 	static void SetCamera(Camera* camera) { Object3d::camera = camera; }
 private: // 静的メンバ変数
@@ -187,12 +183,6 @@ private:// 静的メンバ関数
 	/// </summary>
 	/// <returns>成否</returns>
 	static bool InitializeGraphicsPipeline();
-
-	/// <summary>
-	/// テクスチャ読み込み
-	/// </summary>
-	/// <returns>成否</returns>
-	static bool LoadTexture(const std::string& directoryPath, const std::string& filename);
 
 	/// <summary>
 	/// モデル作成

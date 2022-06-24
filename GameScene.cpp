@@ -113,7 +113,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
 	//オブジェクト前処理
 	Object3d::PreDraw();
-	sphere->Draw();
+	//sphere->Draw();
 	groundObj->Draw();
 	ramieru3d->Draw();
 	//human3d->Draw();
