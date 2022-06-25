@@ -63,8 +63,8 @@ private:
 
 	DebugCamera* camera = nullptr;
 
-	XMFLOAT3 cameraEye = {0,0,90};
-	XMFLOAT3 cameraTarget = {0,5.5f,0};
+	XMFLOAT3 cameraEye = {0,1.0f,90};
+	XMFLOAT3 cameraTarget = {0,1.0f,0};
 	float cameradistance = 20.0f;
 
 	XMFLOAT3 pos = { 0,0,0 };

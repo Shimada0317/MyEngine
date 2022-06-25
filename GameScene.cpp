@@ -70,7 +70,7 @@ void GameScene::SetPosSclRot()
 
 
 	camera->SetDistance({ cameradistance });
-	camera->SetEye({ obj_pos });
+	camera->SetEye({ obj_pos.x + 10,obj_pos.y + 10,obj_pos.z });
 	camera->SetTarget({ obj_pos });
 
 	ramieru3d->SetRotation({ ramieru_rot });
@@ -96,7 +96,8 @@ void GameScene::Update()
 	}
 
 	//Action::GetInstance()->PlayerMove3d(cameraEye, 0.5f);
-	Action::GetInstance()->PlayerMove3d(obj_pos, 0.02f);
+//	Action::GetInstance()->PlayerMove3d(cameraEye, 0.2f);
+	Action::GetInstance()->PlayerMove3d(cameraTarget, 0.2f);
 	Action::GetInstance()->PlayerJump(ramieru_pos,JumpFlag);
 
 	SetPosSclRot();
