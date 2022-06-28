@@ -23,6 +23,10 @@ void DirectXCommon::Initialize(WinApp* winApp) {
 	InitializeDepthBuffer();
 	//フェンスの初期化
 	InitializeFence();
+	//imgui初期化
+	if (!initializeImg()) {
+		assert(0);
+	}
 }
 
 void DirectXCommon::InitializeDevice() {
@@ -106,6 +110,52 @@ void DirectXCommon::InitializeCommand()
 	D3D12_COMMAND_QUEUE_DESC cmdQueueDesc{};
 
 	dev->CreateCommandQueue(&cmdQueueDesc, IID_PPV_ARGS(&cmdQueue));
+}
+
+bool DirectXCommon::initializeImg()
+{
+	HRESULT result = S_FALSE;
+
+	D3D12_DESCRIPTOR_HEAP_DESC heapDesc{};
+	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	heapDesc.NumDescriptors = 1;
+	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	result = dev->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&DescriptorHeapImg));
+	if (FAILED(result)) {
+		assert(0);
+		return false;
+	}
+
+	//スワップチェーンの情報取得
+	DXGI_SWAP_CHAIN_DESC swDesc = {};
+	result = swapchain->GetDesc(&swDesc);
+	if (FAILED(result)) {
+		assert(0);
+		return false;
+	}
+
+	if (ImGui::CreateContext() == nullptr) {
+		assert(0);
+		return false;
+	}
+
+	if (!ImGui_ImplWin32_Init(winApp->GetHwnd())) {
+		assert(0);
+		return false;
+	}
+	if (!ImGui_ImplDX12_Init(
+		GetDev(),
+		swDesc.BufferCount,
+		swDesc.BufferDesc.Format,
+		DescriptorHeapImg.Get(),
+		DescriptorHeapImg->GetCPUDescriptorHandleForHeapStart(),
+		DescriptorHeapImg->GetGPUDescriptorHandleForHeapStart()
+	)) {
+		assert(0);
+		return false;
+	}
+
+	return true;
 }
 
 void DirectXCommon::InitializeSwapchain()
@@ -221,10 +271,21 @@ void DirectXCommon::PreDraw()
 	//シザー短形の設定
 	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, WinApp::window_width, WinApp::window_height));
 
+	//imgui
+	ImGui_ImplDX12_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
 }
 
 void DirectXCommon::PostDraw()
 {
+	//imgui描画
+	ImGui::Render();
+	ID3D12DescriptorHeap* ppHeaps[] = { DescriptorHeapImg.Get() };
+	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList.Get());
+
 	UINT bbIndex = swapchain->GetCurrentBackBufferIndex();
 
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(backBuffers[bbIndex].Get(),

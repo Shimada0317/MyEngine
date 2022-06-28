@@ -7,6 +7,7 @@
 #include"FbxLoader.h"
 #include"FbxObject3d.h"
 
+
 using namespace DirectX;
 
 GameScene::GameScene(SceneManager* sceneManager_)
@@ -70,7 +71,7 @@ void GameScene::SetPosSclRot()
 
 
 	camera->SetDistance({ cameradistance });
-	camera->SetEye({ obj_pos.x + 10,obj_pos.y + 10,obj_pos.z });
+	camera->SetEye({obj_pos });
 	camera->SetTarget({ obj_pos });
 
 	ramieru3d->SetRotation({ ramieru_rot });
@@ -96,8 +97,8 @@ void GameScene::Update()
 	}
 
 	//Action::GetInstance()->PlayerMove3d(cameraEye, 0.5f);
-//	Action::GetInstance()->PlayerMove3d(cameraEye, 0.2f);
-	Action::GetInstance()->PlayerMove3d(cameraTarget, 0.2f);
+	//Action::GetInstance()->PlayerMove3d(cameraTarget, 0.2f);
+	Action::GetInstance()->PlayerMove3d(obj_pos, 0.5f);
 	Action::GetInstance()->PlayerJump(ramieru_pos,JumpFlag);
 
 	SetPosSclRot();
@@ -130,7 +131,12 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 	Sprite::PostDraw();
 }
 
-
+void GameScene::ImgDraw()
+{
+	ImGui::Begin("Rendering Test Menu");
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::End();
+}
 
 void GameScene::Draw(DirectXCommon* dxCommon)
 {
@@ -141,6 +147,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	//•`‰æ‘Oˆ—
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
+	ImgDraw();
 	//•`‰æŒãˆ—
 	dxCommon->PostDraw();
 }

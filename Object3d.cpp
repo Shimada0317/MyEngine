@@ -502,17 +502,6 @@ void Object3d::Update()
 	constMap->camerapos = cameraPos;
 	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
 	constBuffB0->Unmap(0, nullptr);
-	
-	//// 定数バッファへデータ転送
-	//ConstBufferDataB1* constMap1 = nullptr;
-	//result = constBuffB1->Map(0, nullptr, (void**)&constMap1);
-	////constMap->color = color;
-	////constMap->mat = matWorld * matView * matProjection;	// 行列の合成
-	//constMap1->ambient = material.ambient;
-	//constMap1->diffuse = material.diffuse;
-	//constMap1->specular = material.specular;
-	//constMap1->alpha = material.alpha;
-	//constBuffB1->Unmap(0, nullptr);
 }
 
 void Object3d::Draw()

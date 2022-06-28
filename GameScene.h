@@ -38,6 +38,8 @@ public://ƒƒ“ƒo•Ï”
 
 	void SpriteDraw(DirectXCommon* dxCommon);
 
+	void ImgDraw();
+
 	void Draw(DirectXCommon* dxCommon)override;
 
 	void Finalize() override;
