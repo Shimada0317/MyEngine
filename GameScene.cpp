@@ -133,9 +133,13 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 void GameScene::ImgDraw()
 {
-	ImGui::Begin("Rendering Test Menu");
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.2f,1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.3f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Rendering Test Menu");
 	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 }
 
 void GameScene::Draw(DirectXCommon* dxCommon)
