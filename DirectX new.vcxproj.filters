@@ -120,9 +120,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />
@@ -131,6 +128,7 @@
     <None Include="Resources\shaders\PostEffectTest.hlsli">
       <Filter>リソース ファイル</Filter>
     </None>
+    <None Include="Resources\shaders\Particle.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\BasicPS.hlsl" />
@@ -145,6 +143,8 @@
     <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl">
       <Filter>リソース ファイル</Filter>
     </FxCompile>
+    <FxCompile Include="Resources\shaders\ParticleVS.hlsl" />
+    <FxCompile Include="Resources\shaders\ParticlePS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -248,9 +248,6 @@
     </ClInclude>
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleManager.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

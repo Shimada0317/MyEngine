@@ -9,7 +9,6 @@
 #include"Object3d.h"
 #include"ObjModel.h"
 #include"Input.h"
-#include"ParticleManager.h"
 
 class TitleScene :public BaseScene
 {
@@ -54,7 +53,6 @@ private:
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
-	ParticleManager* particle = nullptr;
 
 
 };
