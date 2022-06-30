@@ -27,6 +27,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	ramieru = ObjModel::LoadFromObJ("ramieru");
 	ramieru3d = Object3d::Create();
 	ramieru3d->SetModel(ramieru);
+
+	//particle = ParticleManager::Create();
+
 }
 
 void TitleScene::SetPosSclRot()
@@ -39,6 +42,9 @@ void TitleScene::SetPosSclRot()
 
 
 	title->SetSize({ 1280.0f,720.0f });
+
+//	XMFLOAT3 position = particle->GetPosition();
+	//particle->SetPosition(position);
 }
 
 void TitleScene::Update()
@@ -53,7 +59,7 @@ void TitleScene::Update()
 	}
 	SetPosSclRot();
 	ramieru3d->Update();
-
+	//particle->Update();
 }
 
 void TitleScene::Draw(DirectXCommon* dxCommon)
@@ -63,6 +69,10 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	//ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();
 
 	//dxCommon->GetCmdList()->IASetVertexBuffers(0, 1, &vbView);
+//	ParticleManager::PreDraw(dxCommon->GetCmdList());
+	//particle->Draw();
+//	ParticleManager::PostDraw();
+
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	title->Draw();
 	Sprite::PostDraw();
@@ -76,5 +86,5 @@ void TitleScene::Finalize()
 	delete dxCommon;
 	delete ramieru3d;
 	delete ramieru;
-
+	delete particle;
 }

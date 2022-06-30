@@ -10,6 +10,7 @@
 #include"SceneManager.h"
 #include"DebugCamera.h"
 #include"PostEffect.h"
+#include"ParticleManager.h"
 
 /// <summary>
 /// フレームワーク
@@ -56,5 +57,6 @@ protected:
 	SceneManager* sceneManager_ = nullptr;
 	DebugCamera* camera = nullptr;
 	PostEffect* postEffect = nullptr;
+	ParticleManager* particle = nullptr;
 };
 
