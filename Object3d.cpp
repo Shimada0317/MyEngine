@@ -463,6 +463,8 @@ bool Object3d::Initialize()
 
 void Object3d::Update()
 {
+	assert(camera);
+
 	HRESULT result;
 	XMMATRIX matScale, matRot, matTrans;
 
@@ -480,23 +482,18 @@ void Object3d::Update()
 	matWorld *= matRot; // ワールド行列に回転を反映
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
-	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
-
-	const XMFLOAT3& cameraPos = camera->GetEye();
-
-
-
 	// 親オブジェクトがあれば
 	if (parent != nullptr) {
 		// 親オブジェクトのワールド行列を掛ける
 		matWorld *= parent->matWorld;
 	}
 
+	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
+	const XMFLOAT3& cameraPos = camera->GetEye();
 
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
-
 	constMap->viewproj = matViewProjection;
 	constMap->world = matWorld;
 	constMap->camerapos = cameraPos;

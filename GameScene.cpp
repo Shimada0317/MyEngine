@@ -24,7 +24,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect->Initialize();
 
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
-	Object3d::SetCamera(camera);
+	//Object3d::SetCamera(camera);
 	
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/background.png");
@@ -42,6 +42,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	ramieru = ObjModel::LoadFromObJ("ramieru");
 	ramieru3d = Object3d::Create();
 	ramieru3d->SetModel(ramieru);
+	ramieru3d->SetCamera({ camera });
 
 	ground = ObjModel::LoadFromObJ("ground");
 	groundObj = Object3d::Create();
@@ -52,13 +53,13 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//モデル名を指定してファイル読み込み
 	model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 
-	FbxObject3d::SetDevice(dxComon->GetDev());
-	FbxObject3d::SetCamera(camera);
-	FbxObject3d::CreateGraphicPipeline();
+	//FbxObject3d::SetDevice(dxComon->GetDev());
+	//FbxObject3d::SetCamera(camera);
+	//FbxObject3d::CreateGraphicPipeline();
 
-	Object = new FbxObject3d;
-	Object->Initialize();
-	Object->SetModel(model);
+	//Object = new FbxObject3d;
+	//Object->Initialize();
+	//Object->SetModel(model);
 
 }
 
@@ -71,18 +72,20 @@ void GameScene::SetPosSclRot()
 
 
 	camera->SetDistance({ cameradistance });
-	camera->SetEye({obj_pos });
-	camera->SetTarget({ obj_pos });
+	camera->SetEye({ramieru_pos });
+	camera->SetTarget({ ramieru_pos });
 
 	ramieru3d->SetRotation({ ramieru_rot });
 	ramieru3d->SetPosition({ ramieru_pos });
 	ramieru3d->SetScale({ ramieru_scl });
+	
 
 	groundObj->SetPosition({ ground_pos });
 	groundObj->SetScale({ ground_scl });
 
-	Object->SetRotation({ obj_rot });
-	Object->SetPosition({ obj_pos });
+	//Object->SetRotation({ obj_rot });
+	//Object->SetPosition({ obj_pos });
+	//Object->SetRotation({ obj_rot });
 
 	title->SetSize({ screen_size });
 }
@@ -93,19 +96,19 @@ void GameScene::Update()
 	
 
 	if (Input::GetInstance()->PushKey(DIK_1)) {
-		Object->PlayAnimation();
+		//Object->PlayAnimation();
 	}
 
 	//Action::GetInstance()->PlayerMove3d(cameraEye, 0.5f);
 	//Action::GetInstance()->PlayerMove3d(cameraTarget, 0.2f);
-	Action::GetInstance()->PlayerMove3d(obj_pos, 0.5f);
+	Action::GetInstance()->PlayerMove3d(ramieru_pos, 0.5f);
 	Action::GetInstance()->PlayerJump(ramieru_pos,JumpFlag);
 
 	SetPosSclRot();
 	camera->Update();
 	ramieru3d->Update();
 	sphere->Update();
-	Object->Update();
+	//Object->Update();
 	groundObj->Update();
 	
 
@@ -121,7 +124,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	//human3d->Draw();
 	//オブジェクト後処理
 	Object3d::PostDraw();
-	Object->Draw(dxCommon->GetCmdList());
+	//Object->Draw(dxCommon->GetCmdList());
 }
 
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
