@@ -16,8 +16,16 @@ private: // エイリアス
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+private:
+	Action();
+	
+	~Action();
 
 public:
+	Action(const Action&) = delete;
+
+	Action& operator=(const Action&) = delete;
+
 	static Action* GetInstance();
 
 	void PlayerMove3d(XMFLOAT3 &position,float Speed);

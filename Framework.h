@@ -10,6 +10,7 @@
 #include"SceneManager.h"
 #include"DebugCamera.h"
 #include"PostEffect.h"
+#include"ParticleManager.h"
 
 
 /// <summary>

@@ -497,7 +497,7 @@ void Object3d::Update()
 	constMap->viewproj = matViewProjection;
 	constMap->world = matWorld;
 	constMap->camerapos = cameraPos;
-	//constMap->mat = matWorld * matView * matProjection;	// 行列の合成
+	constMap->mat = matWorld * matView * matProjection;	// 行列の合成
 	constBuffB0->Unmap(0, nullptr);
 }
 

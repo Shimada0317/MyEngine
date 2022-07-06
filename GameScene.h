@@ -10,6 +10,7 @@
 #include"FbxObject3d.h"
 #include"DebugCamera.h"
 #include"PostEffect.h"
+#include"ParticleManager.h"
 
 class GameScene:public BaseScene
 {
@@ -31,6 +32,8 @@ public://ÉÅÉìÉoïœêî
 	void Initialize(DirectXCommon* dxComon) override;
 
 	void SetPosSclRot();
+
+	void AllUpdate();
 
 	void Update() override;
 
@@ -65,13 +68,13 @@ private:
 
 	DebugCamera* camera = nullptr;
 
-	XMFLOAT3 cameraEye = {0,1.0f,90};
-	XMFLOAT3 cameraTarget = {0,1.0f,0};
+	XMFLOAT3 cameraEye = {0.0f,0.0f,-10};
+	XMFLOAT3 cameraTarget = {0.0f,1.0f,0.0f};
 	float cameradistance = 20.0f;
 
 	XMFLOAT3 pos = { 0,0,0 };
 
-	XMFLOAT3 ramieru_pos = { 0,0,1 };
+	XMFLOAT3 ramieru_pos = { 0,0,0 };
 	XMFLOAT3 ramieru_rot = { 0,0,0 };
 	XMFLOAT3 ramieru_scl = { 0.5f,0.5f,0.5f };
 
@@ -85,6 +88,7 @@ private:
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 
 	PostEffect* postEffect = nullptr;
+	ParticleManager* particle = nullptr;
 
 	bool JumpFlag = false;
 };
