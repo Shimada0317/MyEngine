@@ -11,6 +11,7 @@
 #include"DebugCamera.h"
 #include"PostEffect.h"
 #include"ParticleManager.h"
+#include"Player.h"
 
 class GameScene:public BaseScene
 {
@@ -51,11 +52,10 @@ private:
 	DirectXCommon* dxCommon = nullptr;
 
 	ObjModel* playermodel = nullptr;
-	ObjModel* ramieru = nullptr;
 	ObjModel* ground = nullptr;
+	ObjModel* p = nullptr;
 
 	Object3d* sphere = nullptr;
-	Object3d* ramieru3d = nullptr;
 	Object3d* groundObj = nullptr;
 
 	WinApp* winApp = nullptr;
@@ -74,10 +74,6 @@ private:
 
 	XMFLOAT3 pos = { 0,0,0 };
 
-	XMFLOAT3 ramieru_pos = { 0,0,0 };
-	XMFLOAT3 ramieru_rot = { 0,0,0 };
-	XMFLOAT3 ramieru_scl = { 0.5f,0.5f,0.5f };
-
 	XMFLOAT3 ground_pos = { 0,-1,0 };
 	XMFLOAT3 ground_scl = { 10,10,10 };
 	XMFLOAT3 ground_rot = { 0,90,0 };
@@ -91,5 +87,7 @@ private:
 	ParticleManager* particle = nullptr;
 
 	bool JumpFlag = false;
+
+	Player* player = nullptr;
 };
 

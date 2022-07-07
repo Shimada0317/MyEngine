@@ -39,15 +39,10 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	sphere = Object3d::Create();
 	sphere->SetModel(playermodel);
 
-	ramieru = ObjModel::LoadFromObJ("ramieru");
-	ramieru3d = Object3d::Create();
-	ramieru3d->SetModel(ramieru);
-	ramieru3d->SetCamera({ camera });
 
 	ground = ObjModel::LoadFromObJ("ground");
 	groundObj = Object3d::Create();
 	groundObj->SetModel(ground);
-	
 	
 
 	//モデル名を指定してファイル読み込み
@@ -64,22 +59,17 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	particle = ParticleManager::Create();
 	particle->Update();
 
+	player = new Player();
+	player->Initalize();
+
 }
 
 void GameScene::SetPosSclRot()
 {
-	//プレイヤー
+
 	sphere->SetRotation({ 0,0,0 });
 	sphere->SetPosition({ pos });
 	sphere->SetScale({4.0f,4.0f,4.0f});
-
-
-	ramieru3d->SetRotation({ ramieru_rot });
-	ramieru3d->SetPosition({ ramieru_pos });
-	ramieru3d->SetScale({ ramieru_scl });
-	ramieru3d->SetEye({ cameraEye });
-	ramieru3d->SetTarget({ cameraTarget });
-	ramieru3d->CameraMoveVector({ ramieru_pos });
 
 	camera->SetDistance({ cameradistance });
 	camera->SetEye({ cameraEye });
@@ -114,17 +104,18 @@ void GameScene::SetPosSclRot()
 		particle->Add(60, pos, vel, acc, 1.0f, 0.0f);
 		break;
 	}
+	//プレイヤー
+	player->Set();
 }
 
 void GameScene::AllUpdate()
 {
 	camera->Update();
-	ramieru3d->Update();
 	sphere->Update();
 	Object->Update();
 	groundObj->Update();
 	particle->Update();
-
+	player->Update();
 }
 
 void GameScene::Update()
@@ -136,8 +127,8 @@ void GameScene::Update()
 
 	//Action::GetInstance()->PlayerMove3d(cameraEye, 0.5f);
 	//Action::GetInstance()->PlayerMove3d(cameraTarget, 0.2f);
-	Action::GetInstance()->PlayerMove3d(ramieru_pos, 0.5f);
-	Action::GetInstance()->PlayerJump(ramieru_pos,JumpFlag);
+	//Action::GetInstance()->PlayerMove3d(ramieru_pos, 0.5f);
+	//Action::GetInstance()->PlayerJump(ramieru_pos,JumpFlag);
 
 	SetPosSclRot();
 	AllUpdate();
@@ -153,11 +144,10 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	Object3d::PreDraw();
 	sphere->Draw();
 	groundObj->Draw();
-	ramieru3d->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
+	player->Draw();
 	Object3d::PostDraw();
-
 
 	Object->Draw(dxCommon->GetCmdList());
 }
@@ -179,9 +169,9 @@ void GameScene::ImgDraw()
 	//フラグを手動で切りたい時
 	ImGui::Checkbox("ramieruposition",&blnCk);
 	//スライダーで動きをいじりたいとき
-	ImGui::SliderFloat("ramieru_pos.x", &ramieru_pos.x, -100.0f, 100.0f);
+	/*ImGui::SliderFloat("ramieru_pos.x", &ramieru_pos.x, -100.0f, 100.0f);
 	ImGui::SliderFloat("ramieru_pos.y", &ramieru_pos.y, -100.0f, 100.0f);
-	ImGui::SliderFloat("ramieru_pos.z", &ramieru_pos.z, -100.0f, 100.0f);
+	ImGui::SliderFloat("ramieru_pos.z", &ramieru_pos.z, -100.0f, 100.0f);*/
 
 	ImGui::End();
 	ImGui::PopStyleColor();
@@ -207,8 +197,8 @@ void GameScene::Finalize()
 	delete title;
 	delete sphere;
 	delete groundObj;
-	delete ramieru3d;
 	//delete sphere;
 	delete winApp;
 	delete dxCommon;
+	delete player;
 }

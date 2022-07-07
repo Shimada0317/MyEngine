@@ -183,6 +183,7 @@
     <ClCompile Include="BaseClassIUDF.cpp" />
     <ClCompile Include="Object3d.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="RailCamera.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -321,6 +322,7 @@
     <ClInclude Include="BaseClassIUDF.h" />
     <ClInclude Include="Object3d.h" />
     <ClInclude Include="ParticleManager.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RailCamera.h" />
     <ClInclude Include="SceneManager.h" />
