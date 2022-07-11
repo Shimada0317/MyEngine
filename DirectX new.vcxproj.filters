@@ -129,6 +129,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />
@@ -138,6 +141,7 @@
       <Filter>リソース ファイル</Filter>
     </None>
     <None Include="Resources\shaders\Particle.hlsli" />
+    <None Include="Resources\shaders\Texture.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\BasicPS.hlsl" />
@@ -155,6 +159,9 @@
     <FxCompile Include="Resources\shaders\ParticleVS.hlsl" />
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl" />
     <FxCompile Include="Resources\shaders\ParticleGS.hlsl" />
+    <FxCompile Include="Resources\shaders\TextureGS.hlsl" />
+    <FxCompile Include="Resources\shaders\TexturePS.hlsl" />
+    <FxCompile Include="Resources\shaders\TextureVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -266,6 +273,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

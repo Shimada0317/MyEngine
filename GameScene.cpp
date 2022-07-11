@@ -146,7 +146,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	groundObj->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
-	player->Draw();
+	player->Draw(dxCommon->GetCmdList());
 	Object3d::PostDraw();
 
 	Object->Draw(dxCommon->GetCmdList());

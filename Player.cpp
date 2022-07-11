@@ -11,7 +11,9 @@ void Player::Initalize()
 	player->SetModel(model);
 
 	position = player->GetPosition();
-	
+
+	tex = Texture::Create();
+	tex->Update();
 };
 
 void Player::Set()
@@ -22,17 +24,25 @@ void Player::Set()
 	player->SetEye({ cameraEye});
 	player->SetTarget({ cameraTarget });
 	player->CameraMoveVector({ position });
+
+
+	//tex->SetEye({ cameraEye });
+	//tex->SetTarget({ cameraTarget });
+	//tex->CameraMoveVector({ position });
 }
 
 void Player::Update()
 {
 	Action::GetInstance()->PlayerMove2d(position, 0.5f);
 	//Action::GetInstance()->PlayerMove2d(cameraTarget, 0.5f);
-	player->Update();
+	tex->Update();
 
 }
 
-void Player::Draw()
+void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	player->Draw();
+	Texture::PreDraw(cmdList);
+	tex->Draw();
+	Texture::PostDraw();
+
 }

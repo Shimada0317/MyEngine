@@ -5,6 +5,7 @@
 #include"DebugText.h"
 #include"Action.h"
 #include"DebugCamera.h"
+#include"Texture.h"
 #include<vector>
 
 class Player
@@ -17,11 +18,12 @@ public:
 
 	void Update();
 
-	void Draw();
+	void Draw(ID3D12GraphicsCommandList* cmdList);
 
 private:
 	ObjModel* model = nullptr;
 	Object3d* player = nullptr;
+	Texture* tex = nullptr;
 
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
