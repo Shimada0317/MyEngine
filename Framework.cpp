@@ -35,7 +35,7 @@ void Framework::Initialize()
 	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height, dxCommon->GetCmdList(),camera);
 	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	ParticleManager::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
-	Texture::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
+	Texture::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height,dxCommon->GetCmdList(),camera);
 	debugText = DebugText::GetInstance();
 	debugText->Initialize(debugTextNumber);
 	//シーンマネージャー

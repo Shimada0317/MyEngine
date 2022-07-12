@@ -35,15 +35,18 @@ unsigned short Texture::indices[indexCount];
 XMMATRIX Texture::matBillbord = XMMatrixIdentity();
 XMMATRIX Texture::matBillbordY = XMMatrixIdentity();
 
-bool Texture::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
+Camera* Texture::camera = nullptr;
+
+bool Texture::StaticInitialize(ID3D12Device* device, int window_width, int window_height, ID3D12GraphicsCommandList* cmdList, Camera* camera)
 {
 	// nullptrチェック
 	assert(device);
 
 	Texture::device = device;
+	Texture::cmdList = cmdList;
+	Texture::camera = camera;
+	TextureModel::setDev(device);
 
-	// デスクリプタヒープの初期化
-	InitializeDescriptorHeap();
 
 	// カメラ初期化
 	InitializeCamera(window_width, window_height);
@@ -51,23 +54,11 @@ bool Texture::StaticInitialize(ID3D12Device* device, int window_width, int windo
 	// パイプライン初期化
 	InitializeGraphicsPipeline();
 
-	// テクスチャ読み込み
-	LoadTexture();
-
-	// モデル生成
-	CreateModel();
-
 	return true;
 }
 
 void Texture::PreDraw(ID3D12GraphicsCommandList* cmdList)
 {
-	// PreDrawとPostDrawがペアで呼ばれていなければエラー
-	assert(Texture::cmdList == nullptr);
-
-	// コマンドリストをセット
-	Texture::cmdList = cmdList;
-
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelinestate.Get());
 	// ルートシグネチャの設定
@@ -78,8 +69,7 @@ void Texture::PreDraw(ID3D12GraphicsCommandList* cmdList)
 
 void Texture::PostDraw()
 {
-	// コマンドリストを解除
-	Texture::cmdList = nullptr;
+
 }
 
 Texture* Texture::Create()
@@ -140,27 +130,6 @@ void Texture::CameraMoveEyeVector(XMFLOAT3 move)
 	eye_moved.z += move.z;
 
 	SetEye(eye_moved);
-}
-
-bool Texture::InitializeDescriptorHeap()
-{
-	HRESULT result = S_FALSE;
-
-	// デスクリプタヒープを生成	
-	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
-	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
-	descHeapDesc.NumDescriptors = 1; // シェーダーリソースビュー1つ
-	result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//生成
-	if (FAILED(result)) {
-		assert(0);
-		return false;
-	}
-
-	// デスクリプタサイズを取得
-	descriptorHandleIncrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-
-	return true;
 }
 
 void Texture::InitializeCamera(int window_width, int window_height)
@@ -355,161 +324,6 @@ bool Texture::InitializeGraphicsPipeline()
 	return true;
 }
 
-bool Texture::LoadTexture()
-{
-	HRESULT result = S_FALSE;
-
-	// WICテクスチャのロード
-	TexMetadata metadata{};
-	ScratchImage scratchImg{};
-
-	result = LoadFromWICFile(
-		L"Resources/effect1.png", WIC_FLAGS_NONE,
-		&metadata, scratchImg);
-	if (FAILED(result)) {
-		return result;
-	}
-
-	const Image* img = scratchImg.GetImage(0, 0, 0); // 生データ抽出
-
-	// リソース設定
-	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		metadata.format,
-		metadata.width,
-		(UINT)metadata.height,
-		(UINT16)metadata.arraySize,
-		(UINT16)metadata.mipLevels
-	);
-
-	// テクスチャ用バッファの生成
-	result = device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0),
-		D3D12_HEAP_FLAG_NONE,
-		&texresDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ, // テクスチャ用指定
-		nullptr,
-		IID_PPV_ARGS(&texbuff));
-	if (FAILED(result)) {
-		return result;
-	}
-
-	// テクスチャバッファにデータ転送
-	result = texbuff->WriteToSubresource(
-		0,
-		nullptr, // 全領域へコピー
-		img->pixels,    // 元データアドレス
-		(UINT)img->rowPitch,  // 1ラインサイズ
-		(UINT)img->slicePitch // 1枚サイズ
-	);
-	if (FAILED(result)) {
-		return result;
-	}
-
-	// シェーダリソースビュー作成
-	cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
-	gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
-
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // 設定構造体
-	D3D12_RESOURCE_DESC resDesc = texbuff->GetDesc();
-
-	srvDesc.Format = resDesc.Format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテクスチャ
-	srvDesc.Texture2D.MipLevels = 1;
-
-	device->CreateShaderResourceView(texbuff.Get(), //ビューと関連付けるバッファ
-		&srvDesc, //テクスチャ設定情報
-		cpuDescHandleSRV
-	);
-
-	return true;
-}
-
-void Texture::CreateModel()
-{
-	HRESULT result = S_FALSE;
-
-	//std::vector<VertexPos> realVertices;
-	//VertexPosNormalUv verticesSquare[] = {
-	//	{{-5.0f,-5.0f,0.0f},{0,0,1},{0,1}},
-	//	{{-5.0f,5.0f,0.0f},{0,0,1},{0,0}},
-	//	{{5.0f,-5.0f,0.0f},{0,0,1},{1,1}},
-	//	{{5.0f,5.0f,0.0f},{0,0,1},{1,0}},
-	//};
-	//std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
-
-	VertexPos verticesPoint[] = {
-		{{0.0f,0.0f,0.0f}},
-	};
-
-	std::copy(std::begin(verticesPoint), std::end(verticesPoint), vertices);
-
-	unsigned short indicesSquare[] = {
-		0,1,2,
-		2,1,3,
-	};
-
-	std::copy(std::begin(indicesSquare), std::end(indicesSquare), indices);
-
-	// 頂点バッファ生成
-	result = device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(vertices)),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&vertBuff));
-	if (FAILED(result)) {
-		assert(0);
-		return;
-	}
-
-	// インデックスバッファ生成
-	result = device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD),
-		D3D12_HEAP_FLAG_NONE,
-		&CD3DX12_RESOURCE_DESC::Buffer(sizeof(indices)),
-		D3D12_RESOURCE_STATE_GENERIC_READ,
-		nullptr,
-		IID_PPV_ARGS(&indexBuff));
-	if (FAILED(result)) {
-		assert(0);
-		return;
-	}
-
-	// 頂点バッファへのデータ転送
-	VertexPos* vertMap = nullptr;
-	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
-	if (SUCCEEDED(result)) {
-		memcpy(vertMap, vertices, sizeof(vertices));
-		vertBuff->Unmap(0, nullptr);
-	}
-
-	// インデックスバッファへのデータ転送
-	unsigned short* indexMap = nullptr;
-	result = indexBuff->Map(0, nullptr, (void**)&indexMap);
-	if (SUCCEEDED(result)) {
-
-		// 全インデックスに対して
-		for (int i = 0; i < _countof(indices); i++)
-		{
-			indexMap[i] = indices[i];	// インデックスをコピー
-		}
-
-		indexBuff->Unmap(0, nullptr);
-	}
-
-	// 頂点バッファビューの作成
-	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	vbView.SizeInBytes = sizeof(vertices);
-	vbView.StrideInBytes = sizeof(vertices[0]);
-
-	// インデックスバッファビューの作成
-	ibView.BufferLocation = indexBuff->GetGPUVirtualAddress();
-	ibView.Format = DXGI_FORMAT_R16_UINT;
-	ibView.SizeInBytes = sizeof(indices);
-}
-
 void Texture::UpdateViewMatrix()
 {
 	XMVECTOR eyePosition = XMLoadFloat3(&eye);
@@ -598,6 +412,8 @@ bool Texture::Initialize()
 
 void Texture::Update()
 {
+	assert(camera);
+
 	HRESULT result;
 	XMMATRIX matScale, matRot, matTrans;
 
@@ -623,10 +439,15 @@ void Texture::Update()
 		matWorld *= parent->matWorld;
 	}
 
+	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
+	const XMFLOAT3& cameraPos = camera->GetEye();
+
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
-	constMap->mat = matView * matProjection;
+	constMap->world = matWorld;
+	constMap->camerapos = cameraPos;
+	constMap->mat = matView * matProjection*matWorld;
 	constBuff->Unmap(0, nullptr);
 }
 
@@ -636,19 +457,10 @@ void Texture::Draw()
 	assert(device);
 	assert(Texture::cmdList);
 
-	// 頂点バッファの設定
-	cmdList->IASetVertexBuffers(0, 1, &vbView);
-	// インデックスバッファの設定
-	cmdList->IASetIndexBuffer(&ibView);
-
-	// デスクリプタヒープの配列
-	ID3D12DescriptorHeap* ppHeaps[] = { descHeap.Get() };
-	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	if (model == nullptr)return;
 
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuff->GetGPUVirtualAddress());
-	// シェーダリソースビューをセット
-	cmdList->SetGraphicsRootDescriptorTable(1, gpuDescHandleSRV);
-	// 描画コマンド
-	cmdList->DrawInstanced(_countof(vertices), 1, 0, 0);
+
+	model->Draw(cmdList);
 }
