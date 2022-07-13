@@ -5,11 +5,9 @@
 #include"DebugText.h"
 #include"Action.h"
 #include"DebugCamera.h"
-#include"Texture.h"
-#include"TextureModel.h"
 #include<vector>
 
-class Player
+class Enemy
 {
 public:
 
@@ -21,16 +19,11 @@ public:
 
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
-	void ImGuiDraw();
-
 	void Finalize();
 
 private:
 	ObjModel* model = nullptr;
-	Object3d* player = nullptr;
-	
-	Texture* tex = nullptr;
-	TextureModel* texmodel = nullptr;
+	Object3d* enemy = nullptr;
 
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
@@ -40,11 +33,5 @@ private:
 	XMFLOAT3 cameraEye = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 
-	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };
-
-	XMFLOAT3 Eye_pos = {};
-	XMFLOAT3 Target_pos = {};
-
-	bool stopF = false;
 };
 

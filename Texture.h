@@ -35,6 +35,7 @@ public: // サブクラス
 		//XMFLOAT4 color;	// 色 (RGBA)
 		XMMATRIX mat;	// ３Ｄ変換行列
 		XMMATRIX world;
+		XMMATRIX viewproj;
 		XMFLOAT3 camerapos;
 	};
 

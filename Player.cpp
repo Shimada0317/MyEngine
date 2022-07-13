@@ -1,5 +1,6 @@
 #include "Player.h"
 #include<cassert>
+#include "imgui/imgui.h"
 
 void Player::Initalize()
 {
@@ -22,17 +23,21 @@ void Player::Set()
 {
 	//Eye_pos = { position.x + cameraEye.x,position.y + cameraEye.y,position.z + cameraEye.z };
 	//Target_pos = { position.x + cameraTarget.x,position.y + cameraTarget.y,position.z + cameraTarget.z };
-	//player->SetPosition(position);
 
+	camerapos = { position };
+	player->SetPosition(position);
 	player->SetEye({ cameraEye });
 	player->SetTarget({ cameraTarget });
+	if (stopF == true) {
 	player->CameraMoveVector({ camerapos });
-
-	tex->SetScale({ 0.3f,0.3f,0.3f });
-	tex->SetPosition({ position });
+	player->SetPosition(camerapos);
+	position = { camerapos };
+	}
+	//tex->SetScale({ 0.3f,0.3f,0.3f });
+	/*tex->SetPosition({ position });
 	tex->SetEye({ cameraEye });
 	tex->SetTarget({ cameraTarget });
-	tex->CameraMoveEyeVector({ position });
+	tex->CameraMoveVector({ position });*/
 
 
 	//tex->SetEye({ cameraEye });
@@ -42,9 +47,9 @@ void Player::Set()
 
 void Player::Update()
 {
-	if (stopF == false) {
-		Action::GetInstance()->PlayerMove2d(position, 0.03f);
-	}
+
+	Action::GetInstance()->PlayerMove2d(position, 0.03f);
+	
 
 	if (Input::GetInstance()->PushKey(DIK_2)) {
 		stopF = true;
@@ -53,24 +58,41 @@ void Player::Update()
 		stopF = false;
 	}
 
-	if (stopF == true) {
-		Action::GetInstance()->PlayerMove2d(camerapos, 1.3f);
 
-	}
 	
 
 	//Action::GetInstance()->PlayerMove2d(cameraTarget, 0.5f);
 	Set();
-	tex->Update();
+	//tex->Update();
 	player->Update();
 }
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	Texture::PreDraw(cmdList);
+	
+	/*Texture::PreDraw(cmdList);
 	tex->Draw();
-	Texture::PostDraw();
-	//player->Draw();
+	Texture::PostDraw();*/
+	player->Draw();
+}
+
+void Player::ImGuiDraw()
+{
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.3f, 0.1f, 0.0f));
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Player");
+	bool blnCk = false;
+	//フラグを手動で切りたい時
+	//ImGui::Checkbox("ramieruposition", &blnCk);
+	//スライダーで動きをいじりたいとき
+	ImGui::SliderFloat("player.x", &position.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("player.y", &position.y, -100.0f, 100.0f);
+	ImGui::SliderFloat("player.z", &position.z, -100.0f, 100.0f);
+
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 }
 
 void Player::Finalize()

@@ -12,6 +12,7 @@
 #include"PostEffect.h"
 #include"ParticleManager.h"
 #include"Player.h"
+#include"Enemy.h"
 
 class GameScene:public BaseScene
 {
@@ -89,5 +90,6 @@ private:
 	bool JumpFlag = false;
 
 	Player* player = nullptr;
+	Enemy* enemy = nullptr;
 };
 

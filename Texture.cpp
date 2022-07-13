@@ -134,7 +134,7 @@ void Texture::CameraMoveEyeVector(XMFLOAT3 move)
 
 void Texture::InitializeCamera(int window_width, int window_height)
 {
-	UpdateViewMatrix();
+	//UpdateViewMatrix();
 
 	// ビュー行列の生成
 	matView = XMMatrixLookAtLH(
@@ -326,70 +326,70 @@ bool Texture::InitializeGraphicsPipeline()
 
 void Texture::UpdateViewMatrix()
 {
-	XMVECTOR eyePosition = XMLoadFloat3(&eye);
+	//XMVECTOR eyePosition = XMLoadFloat3(&eye);
 
-	XMVECTOR targetPosition = XMLoadFloat3(&target);
+	//XMVECTOR targetPosition = XMLoadFloat3(&target);
 
-	XMVECTOR upVector = XMLoadFloat3(&up);
+	//XMVECTOR upVector = XMLoadFloat3(&up);
 
-	XMVECTOR cameraAxisZ = XMVectorSubtract(targetPosition, eyePosition);
+	//XMVECTOR cameraAxisZ = XMVectorSubtract(targetPosition, eyePosition);
 
-	assert(!XMVector3Equal(cameraAxisZ, XMVectorZero()));
-	assert(!XMVector3IsInfinite(cameraAxisZ));
-	assert(!XMVector3Equal(upVector, XMVectorZero()));
-	assert(!XMVector3IsInfinite(upVector));
+	//assert(!XMVector3Equal(cameraAxisZ, XMVectorZero()));
+	//assert(!XMVector3IsInfinite(cameraAxisZ));
+	//assert(!XMVector3Equal(upVector, XMVectorZero()));
+	//assert(!XMVector3IsInfinite(upVector));
 
-	cameraAxisZ = XMVector3Normalize(cameraAxisZ);
+	//cameraAxisZ = XMVector3Normalize(cameraAxisZ);
 
-	XMVECTOR cameraAxisX;
+	//XMVECTOR cameraAxisX;
 
-	cameraAxisX = XMVector3Cross(upVector, cameraAxisZ);
+	//cameraAxisX = XMVector3Cross(upVector, cameraAxisZ);
 
-	cameraAxisX = XMVector3Normalize(cameraAxisX);
+	//cameraAxisX = XMVector3Normalize(cameraAxisX);
 
-	XMVECTOR cameraAxisY;
+	//XMVECTOR cameraAxisY;
 
-	cameraAxisY = XMVector3Cross(cameraAxisZ, cameraAxisX);
+	//cameraAxisY = XMVector3Cross(cameraAxisZ, cameraAxisX);
 
-	XMMATRIX matCameraRot;
+	//XMMATRIX matCameraRot;
 
-	matCameraRot.r[0] = cameraAxisX;
-	matCameraRot.r[1] = cameraAxisY;
-	matCameraRot.r[2] = cameraAxisZ;
-	matCameraRot.r[3] = XMVectorSet(0, 0, 0, 1);
+	//matCameraRot.r[0] = cameraAxisX;
+	//matCameraRot.r[1] = cameraAxisY;
+	//matCameraRot.r[2] = cameraAxisZ;
+	//matCameraRot.r[3] = XMVectorSet(0, 0, 0, 1);
 
-	matView = XMMatrixTranspose(matCameraRot);
+	//matView = XMMatrixTranspose(matCameraRot);
 
-	XMVECTOR reverseEyePosition = XMVectorNegate(eyePosition);
+	//XMVECTOR reverseEyePosition = XMVectorNegate(eyePosition);
 
-	XMVECTOR tX = XMVector3Dot(cameraAxisX, reverseEyePosition);
-	XMVECTOR tY = XMVector3Dot(cameraAxisY, reverseEyePosition);
-	XMVECTOR tZ = XMVector3Dot(cameraAxisZ, reverseEyePosition);
+	//XMVECTOR tX = XMVector3Dot(cameraAxisX, reverseEyePosition);
+	//XMVECTOR tY = XMVector3Dot(cameraAxisY, reverseEyePosition);
+	//XMVECTOR tZ = XMVector3Dot(cameraAxisZ, reverseEyePosition);
 
-	XMVECTOR transition = XMVectorSet(tX.m128_f32[0], tY.m128_f32[1], tZ.m128_f32[2], 1.0f);
+	//XMVECTOR transition = XMVectorSet(tX.m128_f32[0], tY.m128_f32[1], tZ.m128_f32[2], 1.0f);
 
-	matView.r[3] = transition;
+	//matView.r[3] = transition;
 
-	matBillbord.r[0] = cameraAxisX;
-	matBillbord.r[1] = cameraAxisY;
-	matBillbord.r[2] = cameraAxisZ;
-	matBillbord.r[3] = XMVectorSet(0, 0, 0, 1);
+	//matBillbord.r[0] = cameraAxisX;
+	//matBillbord.r[1] = cameraAxisY;
+	//matBillbord.r[2] = cameraAxisZ;
+	//matBillbord.r[3] = XMVectorSet(0, 0, 0, 1);
 
-	XMVECTOR ybillCameraAxisX, ybillCameraAxisY, ybillCameraAxisZ;
+	//XMVECTOR ybillCameraAxisX, ybillCameraAxisY, ybillCameraAxisZ;
 
-	ybillCameraAxisX = cameraAxisX;
+	//ybillCameraAxisX = cameraAxisX;
 
-	ybillCameraAxisY = XMVector3Normalize(upVector);
+	//ybillCameraAxisY = XMVector3Normalize(upVector);
 
-	ybillCameraAxisZ = XMVector3Cross(ybillCameraAxisX, ybillCameraAxisY);
+	//ybillCameraAxisZ = XMVector3Cross(ybillCameraAxisX, ybillCameraAxisY);
 
-	matBillbordY.r[0] = ybillCameraAxisX;
-	matBillbordY.r[1] = ybillCameraAxisY;
-	matBillbordY.r[2] = ybillCameraAxisZ;
-	matBillbordY.r[3] = XMVectorSet(0, 0, 0, 1);
+	//matBillbordY.r[0] = ybillCameraAxisX;
+	//matBillbordY.r[1] = ybillCameraAxisY;
+	//matBillbordY.r[2] = ybillCameraAxisZ;
+	//matBillbordY.r[3] = XMVectorSet(0, 0, 0, 1);
 
 	// ビュー行列の更新
-	//matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
 }
 
 bool Texture::Initialize()
@@ -446,6 +446,7 @@ void Texture::Update()
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	constMap->world = matWorld;
+	constMap->viewproj = matViewProjection;
 	constMap->camerapos = cameraPos;
 	constMap->mat = matView * matProjection*matWorld;
 	constBuff->Unmap(0, nullptr);

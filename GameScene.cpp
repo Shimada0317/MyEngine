@@ -62,6 +62,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	player = new Player();
 	player->Initalize();
 
+	enemy = new Enemy();
+	enemy->Initalize();
 }
 
 void GameScene::SetPosSclRot()
@@ -106,6 +108,7 @@ void GameScene::SetPosSclRot()
 	}
 	//プレイヤー
 	player->Set();
+	enemy->Set();
 }
 
 void GameScene::AllUpdate()
@@ -116,6 +119,7 @@ void GameScene::AllUpdate()
 	groundObj->Update();
 	particle->Update();
 	player->Update();
+	enemy -> Update();
 }
 
 void GameScene::Update()
@@ -146,6 +150,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	groundObj->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
+	enemy->Draw(dxCommon->GetCmdList());
 	player->Draw(dxCommon->GetCmdList());
 	Object3d::PostDraw();
 
@@ -188,6 +193,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
 	ImgDraw();
+	player->ImGuiDraw();
 	//描画後処理
 	dxCommon->PostDraw();
 }
@@ -201,4 +207,5 @@ void GameScene::Finalize()
 	delete winApp;
 	delete dxCommon;
 	delete player;
+	delete enemy;
 }
