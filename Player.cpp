@@ -21,36 +21,35 @@ void Player::Initalize()
 
 void Player::Set()
 {
-	//Eye_pos = { position.x + cameraEye.x,position.y + cameraEye.y,position.z + cameraEye.z };
-	//Target_pos = { position.x + cameraTarget.x,position.y + cameraTarget.y,position.z + cameraTarget.z };
 
-	camerapos = { position };
-	player->SetPosition(position);
-	player->SetEye({ cameraEye });
-	player->SetTarget({ cameraTarget });
-	if (stopF == true) {
-	player->CameraMoveVector({ camerapos });
-	player->SetPosition(camerapos);
-	position = { camerapos };
-	}
-	//tex->SetScale({ 0.3f,0.3f,0.3f });
-	/*tex->SetPosition({ position });
+
+	
+	//player->SetPosition(position);
+	//player->SetEye({ cameraEye });
+	//player->SetTarget({ cameraTarget });
+	//player->CameraMoveVector({ position.x+3,position.y,position.z });
+	//if (stopF == true) {
+	//	position.x = camerapos.x;
+	//	position.y = camerapos.y;
+	//	position.z = camerapos.z;
+	//}
+	//else if (stopF == false) {
+	//	player->SetPosition(position);
+	//}
+
+	
+	tex->SetScale({ 0.3f,0.3f,0.3f });
+	tex->SetPosition({ position });
 	tex->SetEye({ cameraEye });
 	tex->SetTarget({ cameraTarget });
-	tex->CameraMoveVector({ position });*/
-
-
-	//tex->SetEye({ cameraEye });
-	//tex->SetTarget({ cameraTarget });
-	//tex->CameraMoveVector({ position });
+	if (stopF == true) {
+		tex->CameraMoveVector({ position });
+	}
 }
 
 void Player::Update()
 {
-
-	Action::GetInstance()->PlayerMove2d(position, 0.03f);
-	
-
+	Action::GetInstance()->PlayerMove2d(position, 0.1f);
 	if (Input::GetInstance()->PushKey(DIK_2)) {
 		stopF = true;
 	}
@@ -59,20 +58,22 @@ void Player::Update()
 	}
 
 
-	
-
-	//Action::GetInstance()->PlayerMove2d(cameraTarget, 0.5f);
 	Set();
-	//tex->Update();
+	tex->Update();
 	player->Update();
 }
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	
-	/*Texture::PreDraw(cmdList);
+	Texture::PreDraw(cmdList);
 	tex->Draw();
-	Texture::PostDraw();*/
+	Texture::PostDraw();
+
+	//player->Draw();
+}
+
+void Player::ObjDraw()
+{
 	player->Draw();
 }
 
@@ -89,6 +90,14 @@ void Player::ImGuiDraw()
 	ImGui::SliderFloat("player.x", &position.x, -100.0f, 100.0f);
 	ImGui::SliderFloat("player.y", &position.y, -100.0f, 100.0f);
 	ImGui::SliderFloat("player.z", &position.z, -100.0f, 100.0f);
+
+	ImGui::SliderFloat("Eye.x", &cameraEye.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("Eye.y", &cameraEye.y, -100.0f, 100.0f);
+	ImGui::SliderFloat("Eye.z", &cameraEye.z, -100.0f, 100.0f);
+
+	ImGui::SliderFloat("Target.x", &cameraTarget.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("Target.y", &cameraTarget.y, -100.0f, 100.0f);
+	ImGui::SliderFloat("Target.z", &cameraTarget.z, -100.0f, 100.0f);
 
 	ImGui::End();
 	ImGui::PopStyleColor();

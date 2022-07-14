@@ -5,11 +5,12 @@ SamplerState smp : register(s0);      // 0番スロットに設定されたサンプラー
 
 float4 main(GSOutput input) : SV_TARGET
 {
-	return tex.Sample(smp,input.uv);
+	//パーティクル
+	//4return tex.Sample(smp,input.uv);
 //float3 light = normalize(float3(1,-1,1)); // 右下奥　向きのライト
 //float diffuse = saturate(dot(-light, input.normal));
 //float brightness = diffuse + 0.3f;
 //float4 texcolor = tex.Sample(smp, input.uv) * color;
 //return float4(texcolor.rgb * brightness, texcolor.a);
-//return float4(1, 1, 1, 1);
+return float4(1, 1, 1, 1);
 }

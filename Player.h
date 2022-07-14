@@ -21,6 +21,8 @@ public:
 
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
+	void ObjDraw();
+
 	void ImGuiDraw();
 
 	void Finalize();

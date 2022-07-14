@@ -150,9 +150,11 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	groundObj->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
-	enemy->Draw(dxCommon->GetCmdList());
-	player->Draw(dxCommon->GetCmdList());
+//	enemy->Draw(dxCommon->GetCmdList());
+	player->ObjDraw();
 	Object3d::PostDraw();
+	player->Draw(dxCommon->GetCmdList());
+
 
 	Object->Draw(dxCommon->GetCmdList());
 }
