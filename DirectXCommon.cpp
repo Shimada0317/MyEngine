@@ -32,10 +32,11 @@ void DirectXCommon::Initialize(WinApp* winApp) {
 void DirectXCommon::InitializeDevice() {
 	HRESULT result;
 	//デバッグレイヤーをオンに
-	ID3D12Debug* debugContoroller;
+	ID3D12Debug1* debugContoroller;
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugContoroller))))
 	{
 		debugContoroller->EnableDebugLayer();
+		//debugContoroller->SetEnableGPUBasedValidation(TRUE);
 	}
 
 	//対応レベルの配列

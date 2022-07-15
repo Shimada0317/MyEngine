@@ -9,9 +9,6 @@
 #include"ObjModel.h"
 #include"Camera.h"
 
-
-
-
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>

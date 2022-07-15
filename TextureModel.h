@@ -22,15 +22,17 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 public: // サブクラス
 // 頂点データ構造体
-	struct VertexPos
+	struct VertexPosNormalUv
 	{
 		XMFLOAT3 pos;
+		XMFLOAT3 noramal;
+		XMFLOAT2 uv;
 	};
 
 	// 定数バッファ用データ構造体
 	struct ConstBufferData
 	{
-		//XMFLOAT4 color;	// 色 (RGBA)
+		XMFLOAT4 color;	// 色 (RGBA)
 		XMMATRIX mat;	// ３Ｄ変換行列
 	};
 
@@ -42,7 +44,7 @@ private: // 定数
 	static const float radius;				// 底面の半径
 	static const float prizmHeight;			// 柱の高さ
 	static const int planeCount = division * 2 + division * 2;		// 面の数
-	static const int vertexCount = 1;		// 頂点数
+	static const int vertexCount = 4;		// 頂点数
 	static const int indexCount = 3 * 2;
 private:
 	// デバイス
@@ -82,7 +84,7 @@ private:
 	// インデックスバッファビュー
 	static D3D12_INDEX_BUFFER_VIEW ibView;
 	// 頂点データ配列
-	static VertexPos vertices[vertexCount];
+	static VertexPosNormalUv vertices[vertexCount];
 	// 頂点インデックス配列
 	static unsigned short indices[indexCount];
 

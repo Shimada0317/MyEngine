@@ -26,7 +26,7 @@ XMFLOAT3 TextureModel::target = { 0, 0, 0 };
 XMFLOAT3 TextureModel::up = { 0, 1, 0 };
 D3D12_VERTEX_BUFFER_VIEW TextureModel::vbView{};
 D3D12_INDEX_BUFFER_VIEW TextureModel::ibView{};
-TextureModel::VertexPos TextureModel::vertices[vertexCount];
+TextureModel::VertexPosNormalUv TextureModel::vertices[vertexCount];
 unsigned short TextureModel::indices[indexCount];
 XMMATRIX TextureModel::matBillbord = XMMatrixIdentity();
 XMMATRIX TextureModel::matBillbordY = XMMatrixIdentity();
@@ -140,13 +140,19 @@ void TextureModel::CreateModel()
 {
 	HRESULT result = S_FALSE;
 
-	VertexPos verticesPoint[] = {
-		{{0.0f,0.0f,0.0f}},
+	std::vector<VertexPosNormalUv> realVertices;
+
+	VertexPosNormalUv verticesSquare[] = {
+		{{-5.0f,-5.0f,0.0f},{0,0,1},{0,1}},
+		{{-5.0f,+5.0f,0.0f},{0,0,1},{0,0}},
+		{{+5.0f,-5.0f,0.0f},{0,0,1},{1,1}},
+		{{+5.0f,+5.0f,0.0f},{0,0,1},{1,0}},
 	};
 
-	std::copy(std::begin(verticesPoint), std::end(verticesPoint), vertices);
+	std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
 
-	unsigned short indicesSquare[] = {
+	unsigned short indicesSquare[] =
+	{
 		0,1,2,
 		2,1,3,
 	};
@@ -180,7 +186,7 @@ void TextureModel::CreateModel()
 	}
 
 	// 頂点バッファへのデータ転送
-	VertexPos* vertMap = nullptr;
+	VertexPosNormalUv* vertMap = nullptr;
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
 	if (SUCCEEDED(result)) {
 		memcpy(vertMap, vertices, sizeof(vertices));

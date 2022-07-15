@@ -17,9 +17,13 @@ public:
 
 	void Update();
 
-	void Draw(ID3D12GraphicsCommandList* cmdList);
+	void Draw();
+
+	void ImGuiDraw();
 
 	void Finalize();
+
+	void Active();
 
 private:
 	ObjModel* model = nullptr;
@@ -29,9 +33,10 @@ private:
 	DebugText* debugtext = nullptr;
 	DebugCamera* camer = nullptr;
 
-	XMFLOAT3 position = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 position = { 0.0f,0.0f,2.0f };
 	XMFLOAT3 cameraEye = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 
+	bool arive = true;
 };
 

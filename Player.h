@@ -27,6 +27,7 @@ public:
 
 	void Finalize();
 
+	const XMFLOAT3& GetPosition() { return position; }
 private:
 	ObjModel* model = nullptr;
 	Object3d* player = nullptr;
@@ -39,6 +40,8 @@ private:
 	DebugCamera* camer = nullptr;
 
 	XMFLOAT3 position = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 scael = { 0.5f,0.5f,0.5f };
 	XMFLOAT3 cameraEye = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 
@@ -46,6 +49,9 @@ private:
 
 	XMFLOAT3 Eye_pos = {};
 	XMFLOAT3 Target_pos = {};
+
+	XMFLOAT3 size = { 0,0,0};
+	XMFLOAT4 color = { 1,1,1,1 };
 
 	bool stopF = false;
 };
