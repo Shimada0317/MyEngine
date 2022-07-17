@@ -179,6 +179,7 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Light.cpp" />
+    <ClCompile Include="LightGroup.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -187,6 +188,7 @@
     <ClCompile Include="Object3d.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PostEffect.cpp" />
     <ClCompile Include="RailCamera.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -424,6 +426,7 @@
     <ClInclude Include="Input.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="LightGroup.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ObjModel.h" />
@@ -431,8 +434,10 @@
     <ClInclude Include="Object3d.h" />
     <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RailCamera.h" />
+    <ClInclude Include="Resources\shaders\DirectionalLight.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureModel.h" />
