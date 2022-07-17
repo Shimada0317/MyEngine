@@ -30,7 +30,10 @@ public:
 	const XMFLOAT3& GetPosition() { return position; }
 private:
 	ObjModel* model = nullptr;
+	ObjModel* modelnext = nullptr;
+
 	Object3d* player = nullptr;
+	Object3d* playernext = nullptr;
 	
 	Texture* tex = nullptr;
 	TextureModel* texmodel = nullptr;
@@ -53,6 +56,7 @@ private:
 	XMFLOAT3 size = { 0,0,0};
 	XMFLOAT4 color = { 1,1,1,1 };
 
+	bool Changeshader = false;
 	bool stopF = false;
 };
 

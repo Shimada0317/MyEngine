@@ -8,11 +8,18 @@ void Player::Initalize()
 	Sprite::LoadTexture(3, L"Resources/mark.png");
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
-	model = ObjModel::LoadFromObJ("mark");
+	model = ObjModel::LoadFromObJ("white");
+
+	player->InitializeGraphicsPipeline(L"Resources/shaders/toonVS.hlsl", L"Resources/shaders/toonPS.hlsl");
 	player = Object3d::Create();
 	player->SetModel(model);
 
 	position = player->GetPosition();
+
+	modelnext = ObjModel::LoadFromObJ("white");
+	playernext->InitializeGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+	playernext = Object3d::Create();
+	playernext->SetModel(modelnext);
 
 	Texture::LoadTexture(100, L"Resources/mark.png");
 	tex = Texture::Create(100,position,size,color);
@@ -22,16 +29,12 @@ void Player::Initalize()
 
 void Player::Set()
 {
-
-
 	player->SetRotation(rotation);
 	player->SetPosition(position);
 	player->SetScale(scael);
 	player->SetEye(cameraEye);
 	player->SetTarget(cameraTarget);
-	
 
-	
 	if (stopF == true) {
 		player->CameraMoveVector({ position.x,position.y,position.z });
 		cameraEye.x = position.x;
@@ -44,12 +47,11 @@ void Player::Set()
 		player->SetPosition(position);
 	}*/
 
-	
-	
-	/*tex->SetPosition({ position });
-	tex->SetEye({ cameraEye });
-	tex->SetTarget({ cameraTarget });
-	tex->CameraMoveVector({ position });*/
+	playernext->SetRotation(rotation);
+	playernext->SetPosition({position.x + 4, position.y, position.z});
+	playernext->SetScale(scael);
+	playernext->SetEye(cameraEye);
+	playernext->SetTarget(cameraTarget);
 
 }
 
@@ -64,10 +66,10 @@ void Player::Update()
 		stopF = false;
 	}
 
-
 	Set();
 	tex->Update();
 	player->Update();
+	playernext->Update();
 }
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -82,6 +84,8 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 void Player::ObjDraw()
 {
 	player->Draw();
+
+	playernext->Draw();
 }
 
 void Player::ImGuiDraw()
@@ -92,7 +96,7 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Player");
 	bool blnCk = false;
 	//フラグを手動で切りたい時
-	//ImGui::Checkbox("ramieruposition", &blnCk);
+	ImGui::Checkbox("shader", &Changeshader);
 	//スライダーで動きをいじりたいとき
 
 	if (ImGui::TreeNode("position")) {
@@ -122,6 +126,8 @@ void Player::ImGuiDraw()
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
+
+	
 }
 
 void Player::Finalize()
@@ -130,4 +136,6 @@ void Player::Finalize()
 	delete texmodel;
 	delete player;
 	delete model;
+	delete playernext;
+	delete modelnext;
 }

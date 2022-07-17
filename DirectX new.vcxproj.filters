@@ -16,6 +16,15 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{effd6efe-0f3c-4a82-869f-3d760151e74d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\3d">
+      <UniqueIdentifier>{9c49c2cd-481e-4acd-841c-73d6c2fd7d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\2d">
+      <UniqueIdentifier>{f80c1636-b7b7-4115-9ad5-8e0295464c3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\camera">
+      <UniqueIdentifier>{ec553963-e5fd-49d2-8a0e-ab14d1a9f9d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Input.cpp">
@@ -25,9 +34,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="DirectXCommon.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="WinApp.cpp">
@@ -72,19 +78,7 @@
     <ClCompile Include="BaseScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="FbxLoader.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="FbxModel.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="DebugCamera.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="FbxObject3d.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="PostEffect.cpp">
@@ -138,6 +132,24 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\FbxModel.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\FbxObject3d.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="2d\Sprite.cpp">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\Camera.cpp">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\FbxLoader.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />
@@ -148,6 +160,13 @@
     </None>
     <None Include="Resources\shaders\Particle.hlsli" />
     <None Include="Resources\shaders\Texture.hlsli" />
+    <None Include="Resources\shaders\Obj.hlsli" />
+    <None Include="Resources\shaders\Lambert.hlsli" />
+    <None Include="Resources\shaders\Light.hlsli" />
+    <None Include="Resources\shaders\toon.hlsli">
+      <Filter>ソース ファイル</Filter>
+    </None>
+    <None Include="Resources\shaders\toonL.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\BasicPS.hlsl" />
@@ -168,12 +187,17 @@
     <FxCompile Include="Resources\shaders\TextureGS.hlsl" />
     <FxCompile Include="Resources\shaders\TexturePS.hlsl" />
     <FxCompile Include="Resources\shaders\TextureVS.hlsl" />
+    <FxCompile Include="Resources\shaders\ObjVS.hlsl" />
+    <FxCompile Include="Resources\shaders\ObjPS.hlsl" />
+    <FxCompile Include="Resources\shaders\LambertVS.hlsl" />
+    <FxCompile Include="Resources\shaders\LambertPS.hlsl" />
+    <FxCompile Include="Resources\shaders\LightVS.hlsl" />
+    <FxCompile Include="Resources\shaders\LightPS.hlsl" />
+    <FxCompile Include="Resources\shaders\toonPS.hlsl" />
+    <FxCompile Include="Resources\shaders\toonVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="WinApp.h">
@@ -221,19 +245,7 @@
     <ClInclude Include="SceneManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="FbxLoader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="FbxModel.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="DebugCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="FbxObject3d.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="PostEffect.h">
@@ -289,6 +301,24 @@
     </ClInclude>
     <ClInclude Include="Enemy.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\FbxModel.h">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\FbxObject3d.h">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="2d\Sprite.h">
+      <Filter>ソース ファイル\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\Camera.h">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\FbxLoader.h">
+      <Filter>ソース ファイル\3d</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

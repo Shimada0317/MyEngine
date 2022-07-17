@@ -92,7 +92,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	title->Draw();
 	Sprite::PostDraw();
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
-	particle->Draw();
+	//particle->Draw();
 	ParticleManager::PostDraw();
 	dxCommon->PostDraw();
 }

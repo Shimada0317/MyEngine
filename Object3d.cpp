@@ -5,6 +5,8 @@
 #include<sstream>
 #include<string>
 #include<vector>
+#include"imgui/imgui.h"
+
 using namespace std;
 
 #pragma comment(lib, "d3dcompiler.lib")
@@ -38,8 +40,10 @@ D3D12_INDEX_BUFFER_VIEW Object3d::ibView{};
 std::vector<Object3d::VertexPosNormalUv>Object3d::vertices;
 std::vector<unsigned short>Object3d::indices;
 //Object3d::Material Object3d::material;
+bool Object3d::Shader = false;
 
 Camera* Object3d::camera = nullptr;
+Light* Object3d::light = nullptr;
 
 bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height, ID3D12GraphicsCommandList* cmdList,Camera* camera)
 {
@@ -58,7 +62,6 @@ bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int wind
 	InitializeCamera(window_width, window_height);
 
 	// パイプライン初期化
-	InitializeGraphicsPipeline();
 
 	// テクスチャ読み込み
 	//LoadTexture();
@@ -66,6 +69,7 @@ bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int wind
 	// モデル生成
 	CreateModel();
 
+	//InitializeGraphicsPipeline();
 	return true;
 }
 
@@ -179,57 +183,109 @@ void Object3d::InitializeCamera(int window_width, int window_height)
 	);
 }
 
-bool Object3d::InitializeGraphicsPipeline()
+void Object3d::InitializeGraphicsPipeline(const wchar_t* vs,const wchar_t* ps)
 {
-	HRESULT result = S_FALSE;
-	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
-	ComPtr<ID3DBlob> psBlob;	// ピクセルシェーダオブジェクト
-	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
+	HRESULT result;
+	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト vsBlob; // 頂点シェーダオブジェクト
+	ComPtr<ID3DBlob> psBlob;	// ピクセルシェーダオブジェクト psBlob;	// ピクセルシェーダオブジェクト
+	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト errorBlob; // エラーオブジェクト
 
-	// 頂点シェーダの読み込みとコンパイル
-	result = D3DCompileFromFile(
-		L"Resources/shaders/BasicVS.hlsl",	// シェーダファイル名
-		nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
-		"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
-		0,
-		&vsBlob, &errorBlob);
-	if (FAILED(result)) {
-		// errorBlobからエラー内容をstring型にコピー
-		std::string errstr;
-		errstr.resize(errorBlob->GetBufferSize());
+	if (Shader == false) {
+		// 頂点シェーダの読み込みとコンパイル
+		result = D3DCompileFromFile(
+			//L"Resources/shaders/LambertVS.hlsl",	// シェーダファイル名
+			vs,
+			nullptr,
+			D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
+			"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
+			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
+			0,
+			&vsBlob, &errorBlob);
+		if (FAILED(result)) {
+			// errorBlobからエラー内容をstring型にコピー
+			std::string errstr;
+			errstr.resize(errorBlob->GetBufferSize());
 
-		std::copy_n((char*)errorBlob->GetBufferPointer(),
-			errorBlob->GetBufferSize(),
-			errstr.begin());
-		errstr += "\n";
-		// エラー内容を出力ウィンドウに表示
-		OutputDebugStringA(errstr.c_str());
-		exit(1);
+			std::copy_n((char*)errorBlob->GetBufferPointer(),
+				errorBlob->GetBufferSize(),
+				errstr.begin());
+			errstr += "\n";
+			// エラー内容を出力ウィンドウに表示
+			OutputDebugStringA(errstr.c_str());
+			exit(1);
+		}
+
+		// ピクセルシェーダの読み込みとコンパイル
+		result = D3DCompileFromFile(
+			//L"Resources/shaders/LambertPS.hlsl",	// シェーダファイル名
+			ps,
+			nullptr,
+			D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
+			"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
+			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
+			0,
+			&psBlob, &errorBlob);
+		if (FAILED(result)) {
+			// errorBlobからエラー内容をstring型にコピー
+			std::string errstr;
+			errstr.resize(errorBlob->GetBufferSize());
+
+			std::copy_n((char*)errorBlob->GetBufferPointer(),
+				errorBlob->GetBufferSize(),
+				errstr.begin());
+			errstr += "\n";
+			// エラー内容を出力ウィンドウに表示
+			OutputDebugStringA(errstr.c_str());
+			exit(1);
+		}
 	}
 
-	// ピクセルシェーダの読み込みとコンパイル
-	result = D3DCompileFromFile(
-		L"Resources/shaders/BasicPS.hlsl",	// シェーダファイル名
-		nullptr,
-		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
-		"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
-		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
-		0,
-		&psBlob, &errorBlob);
-	if (FAILED(result)) {
-		// errorBlobからエラー内容をstring型にコピー
-		std::string errstr;
-		errstr.resize(errorBlob->GetBufferSize());
+	else if (Shader == true) {
+		// 頂点シェーダの読み込みとコンパイル
+		result = D3DCompileFromFile(
+			L"Resources/shaders/BasicVS.hlsl",	// シェーダファイル名
+			nullptr,
+			D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
+			"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
+			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
+			0,
+			&vsBlob, &errorBlob);
+		if (FAILED(result)) {
+			// errorBlobからエラー内容をstring型にコピー
+			std::string errstr;
+			errstr.resize(errorBlob->GetBufferSize());
 
-		std::copy_n((char*)errorBlob->GetBufferPointer(),
-			errorBlob->GetBufferSize(),
-			errstr.begin());
-		errstr += "\n";
-		// エラー内容を出力ウィンドウに表示
-		OutputDebugStringA(errstr.c_str());
-		exit(1);
+			std::copy_n((char*)errorBlob->GetBufferPointer(),
+				errorBlob->GetBufferSize(),
+				errstr.begin());
+			errstr += "\n";
+			// エラー内容を出力ウィンドウに表示
+			OutputDebugStringA(errstr.c_str());
+			exit(1);
+		}
+
+		// ピクセルシェーダの読み込みとコンパイル
+		result = D3DCompileFromFile(
+			L"Resources/shaders/BasicPS.hlsl",	// シェーダファイル名
+			nullptr,
+			D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
+			"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
+			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
+			0,
+			&psBlob, &errorBlob);
+		if (FAILED(result)) {
+			// errorBlobからエラー内容をstring型にコピー
+			std::string errstr;
+			errstr.resize(errorBlob->GetBufferSize());
+
+			std::copy_n((char*)errorBlob->GetBufferPointer(),
+				errorBlob->GetBufferSize(),
+				errstr.begin());
+			errstr += "\n";
+			// エラー内容を出力ウィンドウに表示
+			OutputDebugStringA(errstr.c_str());
+			exit(1);
+		}
 	}
 
 	// 頂点レイアウト
@@ -308,6 +364,7 @@ bool Object3d::InitializeGraphicsPipeline()
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
+	//rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -322,7 +379,7 @@ bool Object3d::InitializeGraphicsPipeline()
 	// ルートシグネチャの生成
 	result = device->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&rootsignature));
 	if (FAILED(result)) {
-		return result;
+		assert(0);
 	}
 
 	gpipeline.pRootSignature = rootsignature.Get();
@@ -331,10 +388,9 @@ bool Object3d::InitializeGraphicsPipeline()
 	result = device->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&pipelinestate));
 
 	if (FAILED(result)) {
-		return result;
+		assert(0);
 	}
 
-	return true;
 }
 
 bool Object3d::LoadTexture(const std::string& directoryPath, const std::string& filename)
@@ -420,13 +476,27 @@ bool Object3d::LoadTexture(const std::string& directoryPath, const std::string& 
 	return true;
 }
 
-void Object3d::LoadMaterial(
-	const std::string& directoryPath,
-	const std::string& filename
-)
-{
 
+void Object3d::ImGuiDraw()
+{
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.3f, 0.1f, 0.0f));
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Shader");
+
+	//フラグを手動で切りたい時
+	ImGui::Checkbox("ChangeShader",&Shader );
+	//スライダーで動きをいじりたいとき
+	/*ImGui::SliderFloat("ramieru_pos.x", &ramieru_pos.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("ramieru_pos.y", &ramieru_pos.y, -100.0f, 100.0f);
+	ImGui::SliderFloat("ramieru_pos.z", &ramieru_pos.z, -100.0f, 100.0f);*/
+
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 }
+
+
 
 void Object3d::CreateModel()
 {
@@ -497,34 +567,22 @@ void Object3d::Update()
 	constMap->viewproj = matViewProjection;
 	constMap->world = matWorld;
 	constMap->camerapos = cameraPos;
-	constMap->mat = matWorld * matView * matProjection;	// 行列の合成
 	constBuffB0->Unmap(0, nullptr);
 }
 
 void Object3d::Draw()
 {
+
+
 	//// nullptrチェック
 	assert(device);
 	assert(Object3d::cmdList);
 
 	if (model == nullptr)return;
-	//// 頂点バッファの設定
-	//cmdList->IASetVertexBuffers(0, 1, &vbView);
-	//// インデックスバッファの設定
-	//cmdList->IASetIndexBuffer(&ibView);
-
-	//// デスクリプタヒープの配列
-	//ID3D12DescriptorHeap* ppHeaps[] = { descHeap.Get() };
-	//cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
-
 	//// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
-	//cmdList->SetGraphicsRootConstantBufferView(1, constBuffB1->GetGPUVirtualAddress());
-	//// シェーダリソースビューをセット
-	//cmdList->SetGraphicsRootDescriptorTable(2, gpuDescHandleSRV);
-	//// 描画コマンド
-	//cmdList->DrawIndexedInstanced((UINT)indices.size(), 1, 0, 0, 0);
+
+	//light->Draw(cmdList, 3);
 
 	model->Draw(cmdList, 1);
-	
 }

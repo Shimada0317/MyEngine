@@ -8,6 +8,7 @@
 #include<string>
 #include"ObjModel.h"
 #include"Camera.h"
+#include"Light.h"
 
 /// <summary>
 /// 3Dオブジェクト
@@ -36,7 +37,6 @@ public: // サブクラス
 	struct ConstBufferDataB0
 	{
 		//XMFLOAT4 color;	// 色 (RGBA)
-		XMMATRIX mat;	// ３Ｄ変換行列
 		XMMATRIX viewproj;
 		XMMATRIX world;
 		XMFLOAT3 camerapos;
@@ -118,6 +118,11 @@ public: // 静的メンバ関数
 	static void LoadMaterial(const std::string& directoryPath, const std::string& filename);
 
 	static void SetCamera(Camera* camera) { Object3d::camera = camera; }
+
+	static void ChangeShader(HRESULT& result,ComPtr<ID3DBlob>& vsblob,ComPtr<ID3DBlob>& psblob,ComPtr<ID3DBlob>& errorblob);
+
+	static void SetLight(Light* light) { Object3d::light = light; }
+	
 private: // 静的メンバ変数
 	// デバイス
 	static ID3D12Device* device;
@@ -164,6 +169,9 @@ private: // 静的メンバ変数
 	//カメラ
 	static Camera* camera;
 	
+	static Light* light;
+
+	static bool Shader;
 
 private:// 静的メンバ関数
 	/// <summary>
@@ -179,11 +187,7 @@ private:// 静的メンバ関数
 	/// <param name="window_height">画面縦幅</param>
 	static void InitializeCamera(int window_width, int window_height);
 
-	/// <summary>
-	/// グラフィックパイプライン生成
-	/// </summary>
-	/// <returns>成否</returns>
-	static bool InitializeGraphicsPipeline();
+	
 
 	/// <summary>
 	/// テクスチャ読み込み
@@ -212,6 +216,13 @@ public: // メンバ関数
 	/// 描画
 	/// </summary>
 	void Draw();
+
+	void ImGuiDraw();
+
+	/// <summary>
+	/// グラフィックパイプライン生成
+	/// </summary>
+	void  InitializeGraphicsPipeline(const wchar_t* vs, const wchar_t* ps);
 
 	/// <summary>
 	/// 座標の取得
@@ -246,6 +257,8 @@ private: // メンバ変数
 	Object3d* parent = nullptr;
 	//モデル
 	ObjModel* model = nullptr;
+
+	bool Change = false;
 
 };
 

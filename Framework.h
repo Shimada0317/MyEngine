@@ -12,6 +12,7 @@
 #include"PostEffect.h"
 #include"ParticleManager.h"
 #include"Texture.h"
+#include"Light.h"
 
 /// <summary>
 /// フレームワーク

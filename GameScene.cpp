@@ -35,11 +35,12 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//postEffect->InitializeSprite();
 
 	//モデルの読み込み
+	sphere->InitializeGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	playermodel = ObjModel::LoadFromObJ("skydome");
 	sphere = Object3d::Create();
 	sphere->SetModel(playermodel);
 
-
+	groundObj->InitializeGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	ground = ObjModel::LoadFromObJ("ground");
 	groundObj = Object3d::Create();
 	groundObj->SetModel(ground);
@@ -64,6 +65,12 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	enemy = new Enemy();
 	enemy->Initalize();
+
+	light = Light::Create();
+
+	//light->SetLightColor({ 1,1,1 });
+
+	//Object3d::SetLight(light);
 }
 
 void GameScene::SetPosSclRot()
@@ -71,7 +78,7 @@ void GameScene::SetPosSclRot()
 
 	sphere->SetRotation({ 0,0,0 });
 	sphere->SetPosition({ pos });
-	sphere->SetScale({4.0f,4.0f,4.0f});
+	sphere->SetScale({ 4.0f,4.0f,4.0f });
 
 	camera->SetDistance({ cameradistance });
 	camera->SetEye({ cameraEye });
@@ -109,7 +116,17 @@ void GameScene::SetPosSclRot()
 	//プレイヤー
 	player->Set();
 	enemy->Set();
-}
+
+	static XMVECTOR lightDir = { 0,1,5,0 };
+
+	if (Input::GetInstance()->PushKey(DIK_W)) { lightDir.m128_f32[1] += 1.0f; }
+	else if (Input::GetInstance()->PushKey(DIK_S)) { lightDir.m128_f32[1] -= 1.0f; }
+	if (Input::GetInstance()->PushKey(DIK_D)) { lightDir.m128_f32[0] += 1.0f; }
+	else if (Input::GetInstance()->PushKey(DIK_A)) { lightDir.m128_f32[0] -= 1.0f; }
+
+	///light->SetLightDir(lightDir);
+
+};
 
 void GameScene::AllUpdate()
 {
@@ -120,6 +137,7 @@ void GameScene::AllUpdate()
 	particle->Update();
 	player->Update();
 	enemy -> Update();
+	//light->Update();
 }
 
 void GameScene::Update()
@@ -150,7 +168,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	groundObj->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
-	enemy->Draw();
+	//enemy->Draw();
 	player->ObjDraw();
 	Object3d::PostDraw();
 	player->Draw(dxCommon->GetCmdList());
@@ -168,21 +186,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 void GameScene::ImgDraw()
 {
-	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f,1.0f));
-	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.3f, 0.1f, 0.0f));
-	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
-	ImGui::Begin("Rendering Test Menu");
-	bool blnCk = false;
-	//フラグを手動で切りたい時
-	ImGui::Checkbox("ramieruposition",&blnCk);
-	//スライダーで動きをいじりたいとき
-	/*ImGui::SliderFloat("ramieru_pos.x", &ramieru_pos.x, -100.0f, 100.0f);
-	ImGui::SliderFloat("ramieru_pos.y", &ramieru_pos.y, -100.0f, 100.0f);
-	ImGui::SliderFloat("ramieru_pos.z", &ramieru_pos.z, -100.0f, 100.0f);*/
 
-	ImGui::End();
-	ImGui::PopStyleColor();
-	ImGui::PopStyleColor();
 }
 
 void GameScene::Draw(DirectXCommon* dxCommon)
@@ -197,6 +201,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 	ImgDraw();
 	player->ImGuiDraw();
 	enemy->ImGuiDraw();
+	groundObj->ImGuiDraw();
 	//描画後処理
 	dxCommon->PostDraw();
 }
@@ -211,4 +216,7 @@ void GameScene::Finalize()
 	delete dxCommon;
 	delete player;
 	delete enemy;
+	delete light;
+	delete Object;
+	delete model;
 }

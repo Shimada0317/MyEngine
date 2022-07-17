@@ -13,6 +13,7 @@
 #include"ParticleManager.h"
 #include"Player.h"
 #include"Enemy.h"
+#include"Light.h"
 
 class GameScene:public BaseScene
 {
@@ -75,8 +76,8 @@ private:
 
 	XMFLOAT3 pos = { 0,0,0 };
 
-	XMFLOAT3 ground_pos = { 0,-1,0 };
-	XMFLOAT3 ground_scl = { 10,10,10 };
+	XMFLOAT3 ground_pos = { 3,1,0 };
+	XMFLOAT3 ground_scl = { 1,1,1 };
 	XMFLOAT3 ground_rot = { 0,90,0 };
 
 	XMFLOAT3 obj_rot = { 90,0,0 };
@@ -91,5 +92,7 @@ private:
 
 	Player* player = nullptr;
 	Enemy* enemy = nullptr;
+
+	Light* light = nullptr;
 };
 
