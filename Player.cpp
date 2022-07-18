@@ -16,13 +16,6 @@ void Player::Initalize()
 	player = Object3d::Create();
 	player->SetModel(model);
 
-	position = player->GetPosition();
-
-	modelnext = ObjModel::CreateFromOBJ("drugon");
-	playernext->CreateGraphicsPipeline(L"Resources/shaders/toonVS.hlsl", L"Resources/shaders/toonPS.hlsl");
-	playernext = Object3d::Create();
-	playernext->SetModel(modelnext);
-
 	Texture::LoadTexture(100, L"Resources/mark.png");
 	tex = Texture::Create(100,position,size,color);
 	tex->CreateNormalTexture();
@@ -35,29 +28,16 @@ void Player::Set()
 	player->SetPosition(position);
 	player->SetScale(scael);
 
-
-	playernext->SetRotation(rotation);
-	playernext->SetPosition({position.x + 2, position.y, position.z});
-	playernext->SetScale(scael);
-
-
 }
 
 void Player::Update()
 {
 	Action::GetInstance()->PlayerMove2d(position, 0.1f);
 	Action::GetInstance()->PlayerMove2d(rotation, 0.1f);
-	if (Input::GetInstance()->PushKey(DIK_2)) {
-		stopF = true;
-	}
-	else if(Input::GetInstance()->PushKey(DIK_3)) {
-		stopF = false;
-	}
 
 	Set();
 	tex->Update();
 	player->Update();
-	playernext->Update();
 }
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -72,8 +52,6 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 void Player::ObjDraw()
 {
 	player->Draw();
-
-	playernext->Draw();
 }
 
 void Player::ImGuiDraw()

@@ -46,6 +46,8 @@ public://ƒƒ“ƒo•Ï”
 
 	void ImgDraw();
 
+	void PostEffectDraw(DirectXCommon* dxCommon);
+
 	void Draw(DirectXCommon* dxCommon)override;
 
 	void Finalize() override;
@@ -94,5 +96,7 @@ private:
 	Enemy* enemy = nullptr;
 
 	Light* light = nullptr;
+
+	bool change = nullptr;
 };
 

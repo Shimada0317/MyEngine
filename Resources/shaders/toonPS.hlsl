@@ -8,26 +8,26 @@ SamplerState smp :register(s0);
 float4 main(VSOutput input) : SV_TARGET
 {
 
-    float4 color = tex.Sample(smp,input.uv);
+    float4 color = {1,0,1,1};
+
+    float3 white = { 1, 1, 1};
 
     float3 eyeDir = normalize(camerapos.xyz - input.world);
-    float3 halfVec = normalize(float3(0,0,0) + eyeDir);
+    float3 halfVec = normalize(float3(0,1,0) + eyeDir);
     float intensity = saturate(dot(normalize(input.normal), halfVec));
     float4 reflection = pow(intensity, 30);
 
     float shine = step(0.3, intensity);
     float syadow = 1 - step(0.5, intensity);
 
-    float4 l = color;
-    float4 d = (color.r * 0.5f, color.g * 0.5f, color.b * 0.5f, color.a*0.5);
-    float4 white = (0, 0, 0, 1);
+    float3 l = color.rgb;
+    float3 d = color.rgb*0.5f;
 
+    float3 ambient = d * syadow;
+    float3 diffuse = shine * l;
+    float3 specular = step(0.5, reflection) * white;
+    
 
-    float4 ambient = d * syadow;
-    float4 diffuse = shine * l;
-    float4 specular = step(0.5, reflection) * white;
-    float4 ads = ambient + diffuse + specular;
-
-    return ads;
+    return float4(ambient + specular + diffuse, 1);
 
 }

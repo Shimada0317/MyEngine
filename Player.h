@@ -42,8 +42,8 @@ private:
 	DebugText* debugtext = nullptr;
 	DebugCamera* camer = nullptr;
 
-	XMFLOAT3 position = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 position = { 0.0f,0.0f,-17.0f };
+	XMFLOAT3 rotation = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 scael = { 0.5f,0.5f,0.5f };
 	XMFLOAT3 cameraEye = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
