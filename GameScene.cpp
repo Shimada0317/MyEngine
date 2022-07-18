@@ -89,7 +89,6 @@ void GameScene::SetPosSclRot()
 	groundObj->SetPosition({ ground_pos });
 	groundObj->SetScale({ ground_scl });
 
-	Object->SetRotation({ obj_rot });
 	Object->SetPosition({ obj_pos });
 	Object->SetRotation({ obj_rot });
 
@@ -193,14 +192,14 @@ void GameScene::ImgDraw()
 
 void GameScene::Draw(DirectXCommon* dxCommon)
 {
-	//postEffect->PreDrawScene(dxCommon->GetCmdList());
-	
-	//postEffect->PostDrawScene(dxCommon->GetCmdList());
-	//•`‰æ‘Oˆ—
-	dxCommon->PreDraw();
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
 	//SpriteDraw(dxCommon);
 	ObjDraw(dxCommon);
-	//postEffect->Draw(dxCommon->GetCmdList());
+	postEffect->PostDrawScene(dxCommon->GetCmdList());
+	//•`‰æ‘Oˆ—
+	dxCommon->PreDraw();
+	
+	postEffect->Draw(dxCommon->GetCmdList());
 	ImgDraw();
 	player->ImGuiDraw();
 	enemy->ImGuiDraw();

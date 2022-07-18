@@ -333,10 +333,10 @@ void PostEffect::Initialize()
 
 	//頂点データ
 	VertexPosUv vertices[vertNum] = {
-		{{-1.0f,-1.0f,0.0f},{0.0f,1.0f}},
-		{{-1.0f,+1.0f,0.0f},{0.0f,0.0f}},
-		{{+1.0f,-1.0f,0.0f},{1.0f,1.0f}},
-		{{+1.0f,+1.0f,0.0f},{1.0f,0.0f}},
+		{{-0.5f,-0.5f,0.0f},{0.0f,1.0f}},
+		{{-0.5f,+0.5f,0.0f},{0.0f,0.0f}},
+		{{+0.5f,-0.5f,0.0f},{1.0f,1.0f}},
+		{{+0.5f,+0.5f,0.0f},{1.0f,0.0f}},
 	};
 
 	//頂点バッファへのデータ転送
@@ -403,22 +403,22 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void PostEffect::PreDrawScene(ID3D12GraphicsCommandList* cmdList)
 {
-	if (Input::GetInstance()->TriggerKey(DIK_0)) {
-		//デスクリプタヒープにSRV作成
-		static int tex = 0;
-		//テクスチャバッファ番号0と1で切り替え
-		tex = (tex + 1) % 2;
+	//if (Input::GetInstance()->TriggerKey(DIK_0)) {
+	//	//デスクリプタヒープにSRV作成
+	//	static int tex = 0;
+	//	//テクスチャバッファ番号0と1で切り替え
+	//	tex = (tex + 1) % 2;
 
-		D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};//設定構造体
-		srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-		srvDesc.Texture2D.MipLevels = 1;
-		dev->CreateShaderResourceView(texBuff[tex].Get(),
-			&srvDesc,
-			descHeapSRV->GetCPUDescriptorHandleForHeapStart()
-		);
-	}
+	//	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};//設定構造体
+	//	srvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	//	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
+	//	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+	//	srvDesc.Texture2D.MipLevels = 1;
+	//	dev->CreateShaderResourceView(texBuff[tex].Get(),
+	//		&srvDesc,
+	//		descHeapSRV->GetCPUDescriptorHandleForHeapStart()
+	//	);
+	//}
 
 	for (int i = 0; i < 2; i++) {
 		//リソースバリアを変更

@@ -90,7 +90,7 @@ private:
 	static Camera* camera;
 
 protected:
-	XMFLOAT3 scale = { 1,1,1 };
+	XMFLOAT3 scale = { 3,3,3 };
 
 	XMFLOAT3 rotation = { 0,0,0 };
 
