@@ -35,13 +35,15 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//postEffect->InitializeSprite();
 
 	//モデルの読み込み
-	sphere->InitializeGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
-	playermodel = ObjModel::LoadFromObJ("skydome");
+
+	playermodel = ObjModel::CreateFromOBJ("skydome");
+	sphere->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	sphere = Object3d::Create();
 	sphere->SetModel(playermodel);
 
-	groundObj->InitializeGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
-	ground = ObjModel::LoadFromObJ("ground");
+
+	ground = ObjModel::CreateFromOBJ("ground");
+	groundObj->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	groundObj = Object3d::Create();
 	groundObj->SetModel(ground);
 	
@@ -160,10 +162,10 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
 
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
-	particle->Draw();
+	//particle->Draw();
 	ParticleManager::PostDraw();
 	////オブジェクト前処理
-	Object3d::PreDraw();
+	Object3d::PreDraw(dxCommon->GetCmdList());
 	sphere->Draw();
 	groundObj->Draw();
 	////human3d->Draw();
@@ -191,17 +193,17 @@ void GameScene::ImgDraw()
 
 void GameScene::Draw(DirectXCommon* dxCommon)
 {
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
-	//SpriteDraw(dxCommon);
-	ObjDraw(dxCommon);
-	postEffect->PostDrawScene(dxCommon->GetCmdList());
+	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	
+	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 	//描画前処理
 	dxCommon->PreDraw();
-	postEffect->Draw(dxCommon->GetCmdList());
+	//SpriteDraw(dxCommon);
+	ObjDraw(dxCommon);
+	//postEffect->Draw(dxCommon->GetCmdList());
 	ImgDraw();
 	player->ImGuiDraw();
 	enemy->ImGuiDraw();
-	groundObj->ImGuiDraw();
 	//描画後処理
 	dxCommon->PostDraw();
 }

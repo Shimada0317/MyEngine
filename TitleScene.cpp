@@ -24,7 +24,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	player3d = Object3d::Create();
 	player3d->SetModel(playermodel);*/
 
-	ramieru = ObjModel::LoadFromObJ("ramieru");
+	ramieru = ObjModel::CreateFromOBJ("ramieru");
 	ramieru3d = Object3d::Create();
 	ramieru3d->SetModel(ramieru);
 

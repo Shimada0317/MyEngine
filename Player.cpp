@@ -8,16 +8,18 @@ void Player::Initalize()
 	Sprite::LoadTexture(3, L"Resources/mark.png");
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
-	model = ObjModel::LoadFromObJ("white");
 
-	player->InitializeGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+
+
+	model = ObjModel::CreateFromOBJ("drugon");
+	player->CreateGraphicsPipeline(L"Resources/shaders/toonVS.hlsl", L"Resources/shaders/toonPS.hlsl");
 	player = Object3d::Create();
 	player->SetModel(model);
 
 	position = player->GetPosition();
 
-	modelnext = ObjModel::LoadFromObJ("white");
-	playernext->InitializeGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+	modelnext = ObjModel::CreateFromOBJ("drugon");
+	playernext->CreateGraphicsPipeline(L"Resources/shaders/toonVS.hlsl", L"Resources/shaders/toonPS.hlsl");
 	playernext = Object3d::Create();
 	playernext->SetModel(modelnext);
 
@@ -32,26 +34,12 @@ void Player::Set()
 	player->SetRotation(rotation);
 	player->SetPosition(position);
 	player->SetScale(scael);
-	player->SetEye(cameraEye);
-	player->SetTarget(cameraTarget);
 
-	if (stopF == true) {
-		player->CameraMoveVector({ position.x,position.y,position.z });
-		cameraEye.x = position.x;
-		cameraEye.y = position.y;
-		cameraTarget.x = position.x;
-		cameraTarget.y = position.y;
-		cameraTarget.z = position.z;
-	}
-	/*if (stopF == false) {
-		player->SetPosition(position);
-	}*/
 
 	playernext->SetRotation(rotation);
-	playernext->SetPosition({position.x + 4, position.y, position.z});
+	playernext->SetPosition({position.x + 2, position.y, position.z});
 	playernext->SetScale(scael);
-	playernext->SetEye(cameraEye);
-	playernext->SetTarget(cameraTarget);
+
 
 }
 

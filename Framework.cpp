@@ -32,7 +32,7 @@ void Framework::Initialize()
 	audio->StaticInitialize();
 	camera = new DebugCamera(WinApp::window_width,WinApp::window_height);
 	//audio->LoadFile("Resources/digitalworld.wav", 0.1);
-	Object3d::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height, dxCommon->GetCmdList(),camera);
+	Object3d::StaticInitialize(dxCommon->GetDev(),camera);
 	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	ParticleManager::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	Texture::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height,camera);

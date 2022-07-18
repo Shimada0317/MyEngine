@@ -1,292 +1,96 @@
 ﻿#include "Object3d.h"
 #include <d3dcompiler.h>
-#include <DirectXTex.h>
-#include<fstream>
-#include<sstream>
-#include<string>
-#include<vector>
-#include"imgui/imgui.h"
-
-using namespace std;
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #pragma comment(lib, "d3dcompiler.lib")
 
 using namespace DirectX;
 using namespace Microsoft::WRL;
+using namespace std;
 
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
-const float Object3d::radius = 5.0f;				// 底面の半径
-const float Object3d::prizmHeight = 8.0f;			// 柱の高さ
 ID3D12Device* Object3d::device = nullptr;
-UINT Object3d::descriptorHandleIncrementSize = 0;
 ID3D12GraphicsCommandList* Object3d::cmdList = nullptr;
-ComPtr<ID3D12RootSignature> Object3d::rootsignature;
-ComPtr<ID3D12PipelineState> Object3d::pipelinestate;
-ComPtr<ID3D12DescriptorHeap> Object3d::descHeap;
-ComPtr<ID3D12Resource> Object3d::vertBuff;
-ComPtr<ID3D12Resource> Object3d::indexBuff;
-ComPtr<ID3D12Resource> Object3d::texbuff;
-CD3DX12_CPU_DESCRIPTOR_HANDLE Object3d::cpuDescHandleSRV;
-CD3DX12_GPU_DESCRIPTOR_HANDLE Object3d::gpuDescHandleSRV;
-XMMATRIX Object3d::matView{};
-XMMATRIX Object3d::matProjection{};
-XMFLOAT3 Object3d::eye = { 0, 0, -5.0f };
-XMFLOAT3 Object3d::target = { 0, 0, 0 };
-XMFLOAT3 Object3d::up = { 0, 1, 0 };
-D3D12_VERTEX_BUFFER_VIEW Object3d::vbView{};
-D3D12_INDEX_BUFFER_VIEW Object3d::ibView{};
-std::vector<Object3d::VertexPosNormalUv>Object3d::vertices;
-std::vector<unsigned short>Object3d::indices;
-//Object3d::Material Object3d::material;
-bool Object3d::Shader = false;
-
+Object3d::PipelineSet Object3d::pipelineSet;
 Camera* Object3d::camera = nullptr;
-Light* Object3d::light = nullptr;
 LightGroup* Object3d::lightGroup = nullptr;
 
-bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height, ID3D12GraphicsCommandList* cmdList,Camera* camera)
+void Object3d::StaticInitialize(ID3D12Device* device, Camera* camera)
 {
+	// 再初期化チェック
+	assert(!Object3d::device);
+
 	// nullptrチェック
 	assert(device);
 
 	Object3d::device = device;
-	Object3d::cmdList = cmdList;
 	Object3d::camera = camera;
-	//モデルにデバイスをセット
-	ObjModel::SetDev(device);
-	// デスクリプタヒープの初期化
-	InitializeDescriptorHeap();
 
-	// カメラ初期化
-	InitializeCamera(window_width, window_height);
+	// グラフィックパイプラインの生成
+	
 
-	// パイプライン初期化
+	// モデルの静的初期化
+	ObjModel::StaticInitialize(device);
 
-	// テクスチャ読み込み
-	//LoadTexture();
-
-	// モデル生成
-	CreateModel();
-
-	//InitializeGraphicsPipeline();
-	return true;
+	
 }
 
-void Object3d::PreDraw()
-{
-	// パイプラインステートの設定
-	cmdList->SetPipelineState(pipelinestate.Get());
-	// ルートシグネチャの設定
-	cmdList->SetGraphicsRootSignature(rootsignature.Get());
-	// プリミティブ形状を設定
-	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-}
-
-void Object3d::PostDraw()
-{
-
-
-}
-
-Object3d* Object3d::Create()
-{
-	// 3Dオブジェクトのインスタンスを生成
-	Object3d* object3d = new Object3d();
-	if (object3d == nullptr) {
-		return nullptr;
-	}
-
-	// 初期化
-	if (!object3d->Initialize()) {
-		delete object3d;
-		assert(0);
-		return nullptr;
-	}
-
-	float scale_val = 1;
-	object3d->scale = { scale_val,scale_val,scale_val };
-
-	return object3d;
-}
-
-void Object3d::SetEye(XMFLOAT3 eye)
-{
-	Object3d::eye = eye;
-
-	UpdateViewMatrix();
-}
-
-void Object3d::SetTarget(XMFLOAT3 target)
-{
-	Object3d::target = target;
-
-	UpdateViewMatrix();
-}
-
-void Object3d::CameraMoveVector(XMFLOAT3 move)
-{
-	XMFLOAT3 eye_moved = GetEye();
-	XMFLOAT3 target_moved = GetTarget();
-
-	eye_moved.x += move.x;
-	eye_moved.y += move.y;
-	eye_moved.z += move.z;
-
-	target_moved.x += move.x;
-	target_moved.y += move.y;
-	target_moved.z += move.z;
-
-	SetEye(eye_moved);
-	SetTarget(target_moved);
-}
-
-bool Object3d::InitializeDescriptorHeap()
+void Object3d::CreateGraphicsPipeline(const wchar_t* vs,const wchar_t*ps)
 {
 	HRESULT result = S_FALSE;
+	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
+	ComPtr<ID3DBlob> psBlob;    // ピクセルシェーダオブジェクト
+	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト
 
-	// デスクリプタヒープを生成	
-	D3D12_DESCRIPTOR_HEAP_DESC descHeapDesc = {};
-	descHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
-	descHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;//シェーダから見えるように
-	descHeapDesc.NumDescriptors = 1; // シェーダーリソースビュー1つ
-	result = device->CreateDescriptorHeap(&descHeapDesc, IID_PPV_ARGS(&descHeap));//生成
+	// 頂点シェーダの読み込みとコンパイル
+	result = D3DCompileFromFile(
+		vs,    // シェーダファイル名
+		nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
+		"main", "vs_5_0",    // エントリーポイント名、シェーダーモデル指定
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
+		0,
+		&vsBlob, &errorBlob);
 	if (FAILED(result)) {
-		assert(0);
-		return false;
+		// errorBlobからエラー内容をstring型にコピー
+		std::string errstr;
+		errstr.resize(errorBlob->GetBufferSize());
+
+		std::copy_n((char*)errorBlob->GetBufferPointer(),
+			errorBlob->GetBufferSize(),
+			errstr.begin());
+		errstr += "\n";
+		// エラー内容を出力ウィンドウに表示
+		OutputDebugStringA(errstr.c_str());
+		exit(1);
 	}
 
-	// デスクリプタサイズを取得
-	descriptorHandleIncrementSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	// ピクセルシェーダの読み込みとコンパイル
+	result = D3DCompileFromFile(
+		ps,    // シェーダファイル名
+		nullptr,
+		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
+		"main", "ps_5_0",    // エントリーポイント名、シェーダーモデル指定
+		D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
+		0,
+		&psBlob, &errorBlob);
+	if (FAILED(result)) {
+		// errorBlobからエラー内容をstring型にコピー
+		std::string errstr;
+		errstr.resize(errorBlob->GetBufferSize());
 
-	return true;
-}
-
-void Object3d::InitializeCamera(int window_width, int window_height)
-{
-	// ビュー行列の生成
-	matView = XMMatrixLookAtLH(
-		XMLoadFloat3(&eye),
-		XMLoadFloat3(&target),
-		XMLoadFloat3(&up));
-
-	// 平行投影による射影行列の生成
-	//constMap->mat = XMMatrixOrthographicOffCenterLH(
-	//	0, window_width,
-	//	window_height, 0,
-	//	0, 1);
-	// 透視投影による射影行列の生成
-	matProjection = XMMatrixPerspectiveFovLH(
-		XMConvertToRadians(60.0f),
-		(float)window_width / window_height,
-		0.1f, 1000.0f
-	);
-}
-
-void Object3d::InitializeGraphicsPipeline(const wchar_t* vs,const wchar_t* ps)
-{
-	HRESULT result;
-	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト vsBlob; // 頂点シェーダオブジェクト
-	ComPtr<ID3DBlob> psBlob;	// ピクセルシェーダオブジェクト psBlob;	// ピクセルシェーダオブジェクト
-	ComPtr<ID3DBlob> errorBlob; // エラーオブジェクト errorBlob; // エラーオブジェクト
-
-	if (Shader == false) {
-		// 頂点シェーダの読み込みとコンパイル
-		result = D3DCompileFromFile(
-			//L"Resources/shaders/LambertVS.hlsl",	// シェーダファイル名
-			vs,
-			nullptr,
-			D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
-			"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
-			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
-			0,
-			&vsBlob, &errorBlob);
-		if (FAILED(result)) {
-			// errorBlobからエラー内容をstring型にコピー
-			std::string errstr;
-			errstr.resize(errorBlob->GetBufferSize());
-
-			std::copy_n((char*)errorBlob->GetBufferPointer(),
-				errorBlob->GetBufferSize(),
-				errstr.begin());
-			errstr += "\n";
-			// エラー内容を出力ウィンドウに表示
-			OutputDebugStringA(errstr.c_str());
-			exit(1);
-		}
-
-		// ピクセルシェーダの読み込みとコンパイル
-		result = D3DCompileFromFile(
-			//L"Resources/shaders/LambertPS.hlsl",	// シェーダファイル名
-			ps,
-			nullptr,
-			D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
-			"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
-			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
-			0,
-			&psBlob, &errorBlob);
-		if (FAILED(result)) {
-			// errorBlobからエラー内容をstring型にコピー
-			std::string errstr;
-			errstr.resize(errorBlob->GetBufferSize());
-
-			std::copy_n((char*)errorBlob->GetBufferPointer(),
-				errorBlob->GetBufferSize(),
-				errstr.begin());
-			errstr += "\n";
-			// エラー内容を出力ウィンドウに表示
-			OutputDebugStringA(errstr.c_str());
-			exit(1);
-		}
-	}
-
-	else if (Shader == true) {
-		// 頂点シェーダの読み込みとコンパイル
-		result = D3DCompileFromFile(
-			L"Resources/shaders/BasicVS.hlsl",	// シェーダファイル名
-			nullptr,
-			D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
-			"main", "vs_5_0",	// エントリーポイント名、シェーダーモデル指定
-			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
-			0,
-			&vsBlob, &errorBlob);
-		if (FAILED(result)) {
-			// errorBlobからエラー内容をstring型にコピー
-			std::string errstr;
-			errstr.resize(errorBlob->GetBufferSize());
-
-			std::copy_n((char*)errorBlob->GetBufferPointer(),
-				errorBlob->GetBufferSize(),
-				errstr.begin());
-			errstr += "\n";
-			// エラー内容を出力ウィンドウに表示
-			OutputDebugStringA(errstr.c_str());
-			exit(1);
-		}
-
-		// ピクセルシェーダの読み込みとコンパイル
-		result = D3DCompileFromFile(
-			L"Resources/shaders/BasicPS.hlsl",	// シェーダファイル名
-			nullptr,
-			D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
-			"main", "ps_5_0",	// エントリーポイント名、シェーダーモデル指定
-			D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION, // デバッグ用設定
-			0,
-			&psBlob, &errorBlob);
-		if (FAILED(result)) {
-			// errorBlobからエラー内容をstring型にコピー
-			std::string errstr;
-			errstr.resize(errorBlob->GetBufferSize());
-
-			std::copy_n((char*)errorBlob->GetBufferPointer(),
-				errorBlob->GetBufferSize(),
-				errstr.begin());
-			errstr += "\n";
-			// エラー内容を出力ウィンドウに表示
-			OutputDebugStringA(errstr.c_str());
-			exit(1);
-		}
+		std::copy_n((char*)errorBlob->GetBufferPointer(),
+			errorBlob->GetBufferSize(),
+			errstr.begin());
+		errstr += "\n";
+		// エラー内容を出力ウィンドウに表示
+		OutputDebugStringA(errstr.c_str());
+		exit(1);
 	}
 
 	// 頂点レイアウト
@@ -324,7 +128,7 @@ void Object3d::InitializeGraphicsPipeline(const wchar_t* vs,const wchar_t* ps)
 
 	// レンダーターゲットのブレンド設定
 	D3D12_RENDER_TARGET_BLEND_DESC blenddesc{};
-	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;	// RBGA全てのチャンネルを描画
+	blenddesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;    // RBGA全てのチャンネルを描画
 	blenddesc.BlendEnable = true;
 	blenddesc.BlendOp = D3D12_BLEND_OP_ADD;
 	blenddesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;
@@ -336,7 +140,7 @@ void Object3d::InitializeGraphicsPipeline(const wchar_t* vs,const wchar_t* ps)
 
 	// ブレンドステートの設定
 	gpipeline.BlendState.RenderTarget[0] = blenddesc;
-	gpipeline.BlendState.RenderTarget[1] = blenddesc;
+
 	// 深度バッファのフォーマット
 	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 
@@ -347,9 +151,8 @@ void Object3d::InitializeGraphicsPipeline(const wchar_t* vs,const wchar_t* ps)
 	// 図形の形状設定（三角形）
 	gpipeline.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
-	gpipeline.NumRenderTargets = 2;	// 描画対象は1つ
+	gpipeline.NumRenderTargets = 1;    // 描画対象は1つ
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
-	gpipeline.RTVFormats[1] = DXGI_FORMAT_R8G8B8A8_UNORM; // 0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1; // 1ピクセルにつき1回サンプリング
 
 	// デスクリプタレンジ
@@ -357,10 +160,6 @@ void Object3d::InitializeGraphicsPipeline(const wchar_t* vs,const wchar_t* ps)
 	descRangeSRV.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 0); // t0 レジスタ
 
 	// ルートパラメータ
-	/*CD3DX12_ROOT_PARAMETER rootparams[2];
-	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
-	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);*/
-
 	CD3DX12_ROOT_PARAMETER rootparams[4];
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
@@ -378,140 +177,58 @@ void Object3d::InitializeGraphicsPipeline(const wchar_t* vs,const wchar_t* ps)
 	// バージョン自動判定のシリアライズ
 	result = D3DX12SerializeVersionedRootSignature(&rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1_0, &rootSigBlob, &errorBlob);
 	// ルートシグネチャの生成
-	result = device->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&rootsignature));
+	result = device->CreateRootSignature(0, rootSigBlob->GetBufferPointer(), rootSigBlob->GetBufferSize(), IID_PPV_ARGS(&pipelineSet.rootsignature));
 	if (FAILED(result)) {
 		assert(0);
 	}
 
-	gpipeline.pRootSignature = rootsignature.Get();
+	gpipeline.pRootSignature = pipelineSet.rootsignature.Get();
 
 	// グラフィックスパイプラインの生成
-	result = device->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&pipelinestate));
+	result = device->CreateGraphicsPipelineState(&gpipeline, IID_PPV_ARGS(&pipelineSet.pipelinestate));
 
 	if (FAILED(result)) {
 		assert(0);
 	}
-
 }
 
-bool Object3d::LoadTexture(const std::string& directoryPath, const std::string& filename)
+void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
 {
-	HRESULT result = S_FALSE;
+	// PreDrawとPostDrawがペアで呼ばれていなければエラー
+	assert(Object3d::cmdList == nullptr);
 
-	// WICテクスチャのロード
-	TexMetadata metadata{};
-	ScratchImage scratchImg{};
+	// コマンドリストをセット
+	Object3d::cmdList = cmdList;
 
-	string filepath = directoryPath + filename;
+	// プリミティブ形状を設定
+	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+}
 
-	wchar_t wfilepath[128];
-	int iBufferSize = MultiByteToWideChar(CP_ACP, 0,
-		filepath.c_str(), -1, wfilepath, _countof(wfilepath));
+void Object3d::PostDraw()
+{
+	// コマンドリストを解除
+	Object3d::cmdList = nullptr;
+}
 
-
-	//result = LoadFromWICFile(
-	//	L"Resources/texture.png", WIC_FLAGS_NONE,
-	//	&metadata, scratchImg);
-
-	result = LoadFromWICFile(
-		wfilepath, WIC_FLAGS_NONE,
-		&metadata, scratchImg
-	);
-
-	if (FAILED(result)) {
-		return result;
+Object3d* Object3d::Create(ObjModel* model)
+{
+	// 3Dオブジェクトのインスタンスを生成
+	Object3d* object3d = new Object3d();
+	if (object3d == nullptr) {
+		return nullptr;
 	}
 
-	const Image* img = scratchImg.GetImage(0, 0, 0); // 生データ抽出
-
-	// リソース設定
-	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		metadata.format,
-		metadata.width,
-		(UINT)metadata.height,
-		(UINT16)metadata.arraySize,
-		(UINT16)metadata.mipLevels
-	);
-
-	// テクスチャ用バッファの生成
-	result = device->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK, D3D12_MEMORY_POOL_L0),
-		D3D12_HEAP_FLAG_NONE,
-		&texresDesc,
-		D3D12_RESOURCE_STATE_GENERIC_READ, // テクスチャ用指定
-		nullptr,
-		IID_PPV_ARGS(&texbuff));
-	if (FAILED(result)) {
-		return result;
+	// 初期化
+	if (!object3d->Initialize()) {
+		delete object3d;
+		assert(0);
 	}
 
-	// テクスチャバッファにデータ転送
-	result = texbuff->WriteToSubresource(
-		0,
-		nullptr, // 全領域へコピー
-		img->pixels,    // 元データアドレス
-		(UINT)img->rowPitch,  // 1ラインサイズ
-		(UINT)img->slicePitch // 1枚サイズ
-	);
-	if (FAILED(result)) {
-		return result;
+	if (model) {
+		object3d->SetModel(model);
 	}
 
-	// シェーダリソースビュー作成
-	cpuDescHandleSRV = CD3DX12_CPU_DESCRIPTOR_HANDLE(descHeap->GetCPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
-	gpuDescHandleSRV = CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), 0, descriptorHandleIncrementSize);
-
-	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{}; // 設定構造体
-	D3D12_RESOURCE_DESC resDesc = texbuff->GetDesc();
-
-	srvDesc.Format = resDesc.Format;
-	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;//2Dテクスチャ
-	srvDesc.Texture2D.MipLevels = 1;
-
-	device->CreateShaderResourceView(texbuff.Get(), //ビューと関連付けるバッファ
-		&srvDesc, //テクスチャ設定情報
-		cpuDescHandleSRV
-	);
-
-	return true;
-}
-
-
-void Object3d::ImGuiDraw()
-{
-	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.3f, 0.1f, 0.0f));
-	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
-	ImGui::Begin("Shader");
-
-	//フラグを手動で切りたい時
-	ImGui::Checkbox("ChangeShader",&Shader );
-	//スライダーで動きをいじりたいとき
-	/*ImGui::SliderFloat("ramieru_pos.x", &ramieru_pos.x, -100.0f, 100.0f);
-	ImGui::SliderFloat("ramieru_pos.y", &ramieru_pos.y, -100.0f, 100.0f);
-	ImGui::SliderFloat("ramieru_pos.z", &ramieru_pos.z, -100.0f, 100.0f);*/
-
-	ImGui::End();
-	ImGui::PopStyleColor();
-	ImGui::PopStyleColor();
-}
-
-
-
-void Object3d::CreateModel()
-{
-	HRESULT result = S_FALSE;
-
-	std::ifstream file;
-
-
-}
-
-void Object3d::UpdateViewMatrix()
-{
-	// ビュー行列の更新
-	matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+	return object3d;
 }
 
 bool Object3d::Initialize()
@@ -520,7 +237,7 @@ bool Object3d::Initialize()
 	assert(device);
 
 	HRESULT result;
-	//// 定数バッファの生成
+	// 定数バッファの生成
 	result = device->CreateCommittedResource(
 		&CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD), 	// アップロード可能
 		D3D12_HEAP_FLAG_NONE,
@@ -553,6 +270,16 @@ void Object3d::Update()
 	matWorld *= matRot; // ワールド行列に回転を反映
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
+	if (isBillboard) {
+		const XMMATRIX& matBillboard = camera->GetBillboardMatrix();
+
+		matWorld = XMMatrixIdentity();
+		matWorld *= matScale; // ワールド行列にスケーリングを反映
+		matWorld *= matRot; // ワールド行列に回転を反映
+		matWorld *= matBillboard;
+		matWorld *= matTrans; // ワールド行列に平行移動を反映
+	}
+
 	// 親オブジェクトがあれば
 	if (parent != nullptr) {
 		// 親オブジェクトのワールド行列を掛ける
@@ -567,22 +294,31 @@ void Object3d::Update()
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
 	constMap->viewproj = matViewProjection;
 	constMap->world = matWorld;
-	constMap->camerapos = cameraPos;
+	constMap->cameraPos = cameraPos;
 	constBuffB0->Unmap(0, nullptr);
 }
 
 void Object3d::Draw()
 {
-
-
-	//// nullptrチェック
+	// nullptrチェック
 	assert(device);
 	assert(Object3d::cmdList);
 
-	if (model == nullptr)return;
-	//// 定数バッファビューをセット
+	// モデルの割り当てがなければ描画しない
+	if (model == nullptr) {
+		return;
+	}
+
+	// パイプラインステートの設定
+	cmdList->SetPipelineState(pipelineSet.pipelinestate.Get());
+	// ルートシグネチャの設定
+	cmdList->SetGraphicsRootSignature(pipelineSet.rootsignature.Get());
+	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
 
+	// ライトの描画
+	//lightGroup->Draw(cmdList, 3);
 
-	model->Draw(cmdList, 1);
+	// モデル描画
+	model->Draw(cmdList);
 }
