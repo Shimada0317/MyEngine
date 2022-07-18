@@ -123,7 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -178,8 +178,8 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="LightGroup.cpp" />
+    <ClCompile Include="light\Light.cpp" />
+    <ClCompile Include="light\LightGroup.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />
@@ -217,7 +217,7 @@
     <None Include="Resources\shaders\Texture.hlsli" />
     <None Include="Resources\shaders\toon.hlsli" />
     <None Include="Resources\shaders\toonL.hlsli">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -388,14 +388,14 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="Resources\shaders\toonVS.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
@@ -425,8 +425,9 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="BaseScene.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="LightGroup.h" />
+    <ClInclude Include="light\DirectionalLight.h" />
+    <ClInclude Include="light\Light.h" />
+    <ClInclude Include="light\LightGroup.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ObjModel.h" />
@@ -437,7 +438,6 @@
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PostEffect.h" />
     <ClInclude Include="RailCamera.h" />
-    <ClInclude Include="Resources\shaders\DirectionalLight.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureModel.h" />

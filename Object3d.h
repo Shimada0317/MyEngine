@@ -9,6 +9,7 @@
 #include"ObjModel.h"
 #include"Camera.h"
 #include"Light.h"
+#include"LightGroup.h"
 
 /// <summary>
 /// 3Dオブジェクト
@@ -119,9 +120,11 @@ public: // 静的メンバ関数
 
 	static void SetCamera(Camera* camera) { Object3d::camera = camera; }
 
-	static void ChangeShader(HRESULT& result,ComPtr<ID3DBlob>& vsblob,ComPtr<ID3DBlob>& psblob,ComPtr<ID3DBlob>& errorblob);
-
 	static void SetLight(Light* light) { Object3d::light = light; }
+
+	static void SetLightGroupe(LightGroup* lightGroup){
+		Object3d::lightGroup = lightGroup;
+	}
 	
 private: // 静的メンバ変数
 	// デバイス
@@ -170,6 +173,8 @@ private: // 静的メンバ変数
 	static Camera* camera;
 	
 	static Light* light;
+
+	static LightGroup* lightGroup;
 
 	static bool Shader;
 

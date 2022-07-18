@@ -25,6 +25,9 @@
     <Filter Include="ソース ファイル\camera">
       <UniqueIdentifier>{ec553963-e5fd-49d2-8a0e-ab14d1a9f9d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\light">
+      <UniqueIdentifier>{97b5989c-ee5e-4213-a10e-b978ff685776}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Input.cpp">
@@ -132,9 +135,6 @@
     <ClCompile Include="Enemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Light.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="3d\FbxModel.cpp">
       <Filter>ソース ファイル\3d</Filter>
     </ClCompile>
@@ -153,8 +153,11 @@
     <ClCompile Include="PointLight.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="LightGroup.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="light\Light.cpp">
+      <Filter>ソース ファイル\light</Filter>
+    </ClCompile>
+    <ClCompile Include="light\LightGroup.cpp">
+      <Filter>ソース ファイル\light</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,9 +311,6 @@
     <ClInclude Include="Enemy.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Light.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="3d\FbxModel.h">
       <Filter>ソース ファイル\3d</Filter>
     </ClInclude>
@@ -326,14 +326,17 @@
     <ClInclude Include="3d\FbxLoader.h">
       <Filter>ソース ファイル\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Resources\shaders\DirectionalLight.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="PointLight.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="LightGroup.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="light\Light.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\LightGroup.h">
+      <Filter>ソース ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\DirectionalLight.h">
+      <Filter>ソース ファイル\light</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

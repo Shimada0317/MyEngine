@@ -44,6 +44,7 @@ bool Object3d::Shader = false;
 
 Camera* Object3d::camera = nullptr;
 Light* Object3d::light = nullptr;
+LightGroup* Object3d::lightGroup = nullptr;
 
 bool Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height, ID3D12GraphicsCommandList* cmdList,Camera* camera)
 {
@@ -360,11 +361,11 @@ void Object3d::InitializeGraphicsPipeline(const wchar_t* vs,const wchar_t* ps)
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[1].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);*/
 
-	CD3DX12_ROOT_PARAMETER rootparams[3];
+	CD3DX12_ROOT_PARAMETER rootparams[4];
 	rootparams[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[1].InitAsConstantBufferView(1, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparams[2].InitAsDescriptorTable(1, &descRangeSRV, D3D12_SHADER_VISIBILITY_ALL);
-	//rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
+	rootparams[3].InitAsConstantBufferView(2, 0, D3D12_SHADER_VISIBILITY_ALL);
 
 	// スタティックサンプラー
 	CD3DX12_STATIC_SAMPLER_DESC samplerDesc = CD3DX12_STATIC_SAMPLER_DESC(0);
@@ -582,7 +583,6 @@ void Object3d::Draw()
 	//// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
 
-	//light->Draw(cmdList, 3);
 
 	model->Draw(cmdList, 1);
 }

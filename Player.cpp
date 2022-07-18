@@ -10,7 +10,7 @@ void Player::Initalize()
 	debugtext = DebugText::GetInstance();
 	model = ObjModel::LoadFromObJ("white");
 
-	player->InitializeGraphicsPipeline(L"Resources/shaders/toonVS.hlsl", L"Resources/shaders/toonPS.hlsl");
+	player->InitializeGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	player = Object3d::Create();
 	player->SetModel(model);
 
