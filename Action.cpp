@@ -61,12 +61,28 @@ void Action::PlayerMove2d(XMFLOAT3 &position, float Speed)
 	}
 }
 
-void Action::Gunshot(bool alive, bool havegun, int Remainigbullet, bool shot)
+void Action::Gunshot(int Remainigbullet, bool& shot)
 {
-	if (alive != true)return;
-	if (havegun != true)return;
-	if (Remainigbullet < 0)return;
-	shot = true;
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		if (Remainigbullet < 0)return;
+		shot = true;
+	}
+
+}
+
+bool Action::Shot(int bullet, bool& shot)
+{
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		if (bullet > 0) {
+			shot = true;
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	
 }
 
 

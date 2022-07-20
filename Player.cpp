@@ -2,6 +2,7 @@
 #include<cassert>
 #include "imgui/imgui.h"
 #include"imgui/imconfig.h"
+#include"WinApp.h"
 
 void Player::Initalize()
 {
@@ -9,10 +10,12 @@ void Player::Initalize()
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 
+	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 
+	player->SetCamera(camera);
 
-	model = ObjModel::CreateFromOBJ("drugon");
-	player->CreateGraphicsPipeline(L"Resources/shaders/toonVS.hlsl", L"Resources/shaders/toonPS.hlsl");
+	model = ObjModel::CreateFromOBJ("mark");
+	player->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	player = Object3d::Create();
 	player->SetModel(model);
 
@@ -20,6 +23,13 @@ void Player::Initalize()
 	tex = Texture::Create(100,position,size,color);
 	tex->CreateNormalTexture();
 	tex->Update();
+	camera->SetTarget({ 0.0f,0.2f,0.0f });
+	camera->SetEye({ 1,1,1 });
+	camera->SetDistance(5.0f);
+
+	bul = new Bullet();
+	bul->Initialize();
+
 };
 
 void Player::Set()
@@ -27,17 +37,41 @@ void Player::Set()
 	player->SetRotation(rotation);
 	player->SetPosition(position);
 	player->SetScale(scael);
+	
+	camera->SetEye(position);
+	camera->SetTarget(cameraTarget);
 
+	
 }
 
 void Player::Update()
 {
-	Action::GetInstance()->PlayerMove2d(position, 0.1f);
-	Action::GetInstance()->PlayerMove2d(rotation, 0.1f);
+	Action::GetInstance()->PlayerMove2d(position, moveSpeed);
+	Action::GetInstance()->Gunshot(2, shot);
+	
 
+	//Action::GetInstance()->PlayerMove2d(rotation, 0.1f);
+	if (position.y <= 0.5f) {
+		position.y = 0.5f;
+	}
+	else if (position.y >= 6.2f) {
+		position.y = 6.2f;
+	}
+
+	if (position.x >= 9.8f) {
+		position.x = 9.8f;
+	}
+	else if (position.x <= -9.8f) {
+		position.x = -9.8f;
+	}
+
+	//if(position.x)
+	bul->bun(position);
 	Set();
 	tex->Update();
+	bul->Update();
 	player->Update();
+	camera->Update();
 }
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -51,6 +85,7 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void Player::ObjDraw()
 {
+	bul->Draw();
 	player->Draw();
 }
 
@@ -69,6 +104,7 @@ void Player::ImGuiDraw()
 		ImGui::SliderFloat("player.x", &position.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("player.y", &position.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("player.z", &position.z, -100.0f, 100.0f);
+
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("rotation")) {
@@ -93,7 +129,7 @@ void Player::ImGuiDraw()
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
 
-	
+	bul->ImgUiDraw();
 }
 
 void Player::Finalize()

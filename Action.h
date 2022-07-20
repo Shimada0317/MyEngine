@@ -35,7 +35,9 @@ public:
 	void PlayerMove2d(XMFLOAT3 &position, float Speed);
 
 
-	void Gunshot(bool alive, bool havegun, int bullet,bool shot);
+	void Gunshot(int bullet,bool& shot);
+
+	bool Shot(int bullet, bool& shot);
 private:
 	float JumpPosition = 0;
 };

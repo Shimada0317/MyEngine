@@ -19,7 +19,7 @@ float4 main(VSOutput input) : SV_TARGET
 	float4 color = colortex0;
 
 
-	if (fmod(input.uv.y, 0.1f) < 0.05f) {
+	/*if (fmod(input.uv.y, 0.1f) < 0.05f) {
 	
 		
 		float dy = 1.0f / 720;
@@ -40,6 +40,6 @@ float4 main(VSOutput input) : SV_TARGET
 	color = colortex1;
 	return ret / 9;
 	}
-	
+	*/
 	return float4(color.rgb, 1);
 }

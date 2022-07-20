@@ -37,14 +37,14 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//モデルの読み込み
 
 	playermodel = ObjModel::CreateFromOBJ("skydome");
-	sphere->CreateGraphicsPipeline(L"Resources/shaders/toonVS.hlsl", L"Resources/shaders/toonPS.hlsl");
+	sphere->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	sphere = Object3d::Create();
 	sphere->SetModel(playermodel);
 
 
 	ground = ObjModel::CreateFromOBJ("ground");
-	groundObj->CreateGraphicsPipeline(L"Resources/shaders/toonVS.hlsl", L"Resources/shaders/toonPS.hlsl");
 	groundObj = Object3d::Create();
+	groundObj->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	groundObj->SetModel(ground);
 	
 
@@ -67,6 +67,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	enemy = new Enemy();
 	enemy->Initalize();
+
 
 	light = Light::Create();
 
@@ -114,9 +115,6 @@ void GameScene::SetPosSclRot()
 		particle->Add(60, pos, vel, acc, 1.0f, 0.0f);
 		break;
 	}
-	//プレイヤー
-	player->Set();
-	enemy->Set();
 
 	static XMVECTOR lightDir = { 0,1,5,0 };
 
@@ -146,6 +144,8 @@ void GameScene::Update()
 	//DirectX毎フレーム処理 ここから
 	if (Input::GetInstance()->PushKey(DIK_1)) {
 		Object->PlayAnimation();
+		
+		enemy->SetPosition(pos);
 	}
 
 	if (Input::GetInstance()->PushKey(DIK_2)) {
@@ -155,11 +155,6 @@ void GameScene::Update()
 	else if (Input::GetInstance()->PushKey(DIK_3)) {
 		change = false;
 	}
-
-	//Action::GetInstance()->PlayerMove3d(cameraEye, 0.5f);
-	//Action::GetInstance()->PlayerMove3d(cameraTarget, 0.2f);
-	//Action::GetInstance()->PlayerMove3d(ramieru_pos, 0.5f);
-	//Action::GetInstance()->PlayerJump(ramieru_pos,JumpFlag);
 
 	SetPosSclRot();
 	AllUpdate();
@@ -173,17 +168,16 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	ParticleManager::PostDraw();
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	//sphere->Draw();
-	//groundObj->Draw();
+	sphere->Draw();
+	groundObj->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
-	//enemy->Draw();
+	enemy->Draw();
 	player->ObjDraw();
 	Object3d::PostDraw();
 	player->Draw(dxCommon->GetCmdList());
 
-
-	Object->Draw(dxCommon->GetCmdList());
+	//Object->Draw(dxCommon->GetCmdList());
 }
 
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
@@ -209,29 +203,15 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 
 	postEffect->Draw(dxCommon->GetCmdList());
 	ImgDraw();
-	//player->ImGuiDraw();
-	//enemy->ImGuiDraw();
+	player->ImGuiDraw();
+	enemy->ImGuiDraw();
 	//描画後処理
 	dxCommon->PostDraw();
 }
 
 void GameScene::Draw(DirectXCommon* dxCommon)
 {
-	if (change == true) {
-		PostEffectDraw(dxCommon);
-	}
-
-	else if (change == false) {
-		//描画前処理
-		dxCommon->PreDraw();
-		//SpriteDraw(dxCommon);
-		ObjDraw(dxCommon);
-		ImgDraw();
-		//player->ImGuiDraw();
-		//enemy->ImGuiDraw();
-		//描画後処理
-		dxCommon->PostDraw();
-	}
+	PostEffectDraw(dxCommon);
 }
 
 void GameScene::Finalize()

@@ -78,7 +78,7 @@ private:
 
 	XMFLOAT3 pos = { 0,0,0 };
 
-	XMFLOAT3 ground_pos = { 3,1,0 };
+	XMFLOAT3 ground_pos = { 0,0,0 };
 	XMFLOAT3 ground_scl = { 1,1,1 };
 	XMFLOAT3 ground_rot = { 0,90,0 };
 
@@ -97,6 +97,6 @@ private:
 
 	Light* light = nullptr;
 
-	bool change = nullptr;
+	bool change = false;
 };
 
