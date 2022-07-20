@@ -62,11 +62,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	particle = ParticleManager::Create();
 	particle->Update();
 
-	player = new Player();
-	player->Initalize();
-
-	enemy = new Enemy();
-	enemy->Initalize();
+	mid = new middle;
+	mid->Initialize();
 
 
 	light = Light::Create();
@@ -134,8 +131,7 @@ void GameScene::AllUpdate()
 	Object->Update();
 	groundObj->Update();
 	particle->Update();
-	player->Update();
-	enemy -> Update();
+	mid->Update();
 	//light->Update();
 }
 
@@ -144,8 +140,6 @@ void GameScene::Update()
 	//DirectX毎フレーム処理 ここから
 	if (Input::GetInstance()->PushKey(DIK_1)) {
 		Object->PlayAnimation();
-		
-		enemy->SetPosition(pos);
 	}
 
 	if (Input::GetInstance()->PushKey(DIK_2)) {
@@ -172,10 +166,9 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	groundObj->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
-	enemy->Draw();
-	player->ObjDraw();
+	mid->Draw();
 	Object3d::PostDraw();
-	player->Draw(dxCommon->GetCmdList());
+
 
 	//Object->Draw(dxCommon->GetCmdList());
 }
@@ -189,7 +182,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 void GameScene::ImgDraw()
 {
-
+	mid->ImGuiDraw();
 }
 
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
@@ -203,8 +196,6 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 
 	postEffect->Draw(dxCommon->GetCmdList());
 	ImgDraw();
-	player->ImGuiDraw();
-	enemy->ImGuiDraw();
 	//描画後処理
 	dxCommon->PostDraw();
 }
@@ -222,8 +213,6 @@ void GameScene::Finalize()
 	//delete sphere;
 	delete winApp;
 	delete dxCommon;
-	delete player;
-	delete enemy;
 	delete light;
 	delete Object;
 	delete model;

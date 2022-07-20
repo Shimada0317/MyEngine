@@ -11,37 +11,27 @@ void Enemy::Initalize()
 	enemy= Object3d::Create();
 	enemy->SetModel(model);
 
-	bull = new Bullet;
-	bull->Initialize();
-
-	bulpos = bull->GetPosition();
-	bulscl = bull->GetScale();
 
 }
 
 void Enemy::Set()
 {
 
-	bull->SetPosition(bulpos);
-	bull->SetScale(bulscl);
 	enemy->SetPosition(position);
+	enemy->SetRotation(rotation);
+	enemy->SetScale(scale);
 
 }
 
 void Enemy::Update()
 {
 	Set();
-	if (Collision::Player2Other(bulpos, bulscl, position, scale)) {
-		arive = false;
-	}
-
-	
 	enemy->Update();
 }
 
 void Enemy::Draw()
 {
-	Active();
+	enemy->Draw();
 }
 
 void Enemy::ImGuiDraw()
@@ -78,10 +68,3 @@ void Enemy::Finalize()
 {
 }
 
-void Enemy::Active()
-{
-	if (arive == true) {
-		enemy->Draw();
-	}
-
-}

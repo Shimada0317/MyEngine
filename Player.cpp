@@ -27,8 +27,6 @@ void Player::Initalize()
 	camera->SetEye({ 1,1,1 });
 	camera->SetDistance(5.0f);
 
-	bul = new Bullet();
-	bul->Initialize();
 
 };
 
@@ -36,7 +34,7 @@ void Player::Set()
 {
 	player->SetRotation(rotation);
 	player->SetPosition(position);
-	player->SetScale(scael);
+	player->SetScale(scale);
 	
 	camera->SetEye(position);
 	camera->SetTarget(cameraTarget);
@@ -46,30 +44,12 @@ void Player::Set()
 
 void Player::Update()
 {
-	Action::GetInstance()->PlayerMove2d(position, moveSpeed);
-	Action::GetInstance()->Gunshot(2, shot);
-	
 
-	//Action::GetInstance()->PlayerMove2d(rotation, 0.1f);
-	if (position.y <= 0.5f) {
-		position.y = 0.5f;
-	}
-	else if (position.y >= 6.2f) {
-		position.y = 6.2f;
-	}
-
-	if (position.x >= 9.8f) {
-		position.x = 9.8f;
-	}
-	else if (position.x <= -9.8f) {
-		position.x = -9.8f;
-	}
 
 	//if(position.x)
-	bul->bun(position);
+	
 	Set();
 	tex->Update();
-	bul->Update();
 	player->Update();
 	camera->Update();
 }
@@ -85,7 +65,6 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void Player::ObjDraw()
 {
-	bul->Draw();
 	player->Draw();
 }
 
@@ -97,7 +76,7 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Player");
 	bool blnCk = false;
 	//フラグを手動で切りたい時
-	ImGui::Checkbox("shader", &Changeshader);
+
 	//スライダーで動きをいじりたいとき
 
 	if (ImGui::TreeNode("position")) {
@@ -128,8 +107,6 @@ void Player::ImGuiDraw()
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
-
-	bul->ImgUiDraw();
 }
 
 void Player::Finalize()

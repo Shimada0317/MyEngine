@@ -18,6 +18,8 @@ public:
 
 	void Draw();
 
+	void ImGuiDraw();
+
 	void Fainalize();
 private:
 	Player* player = nullptr;
@@ -35,5 +37,10 @@ private:
 	XMFLOAT3 enemyPos = { 0,0,0 };
 	XMFLOAT3 enemyScl = { 0,0,0 };
 	XMFLOAT3 enemyRot = { 0,0,0 };
+
+	bool arive = true;
+
+	float moveSpeed = 0.1f;
+	bool shot = false;
 };
 

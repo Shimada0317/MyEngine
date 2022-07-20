@@ -11,9 +11,8 @@
 #include"DebugCamera.h"
 #include"PostEffect.h"
 #include"ParticleManager.h"
-#include"Player.h"
-#include"Enemy.h"
 #include"Light.h"
+#include"middle.h"
 
 class GameScene:public BaseScene
 {
@@ -92,11 +91,11 @@ private:
 
 	bool JumpFlag = false;
 
-	Player* player = nullptr;
-	Enemy* enemy = nullptr;
 
 	Light* light = nullptr;
 
 	bool change = false;
+
+	middle* mid = nullptr;
 };
 

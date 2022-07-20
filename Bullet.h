@@ -18,7 +18,9 @@ private:
 public:
 	void Initialize();
 
-	void bun(XMFLOAT3 pos);
+	void bun(XMFLOAT3& pos,XMFLOAT3 position,int speed,bool& shot);
+
+	void Set();
 
 	void Update();
 
@@ -34,17 +36,22 @@ public:
 
 	void SetPosition(XMFLOAT3 position) { this->pos = position; }
 
-	const XMFLOAT3& GetScale() { return scl; }
+	const XMFLOAT3& GetRotation() { return rot; }
 
-	void SetScale(XMFLOAT3 scale) { this->scl = scale; }
+	void SetRotation(XMFLOAT3 rotation) { this->rot = rotation; }
+
+	const XMFLOAT3& GetScl() { return scl; }
+
+	void SetScl(XMFLOAT3 scale) { this->scl = scale; }
 private:
 	Object3d* bullet = nullptr;
 	ObjModel* bulModel = nullptr;
 
 
-	XMFLOAT3 pos = { 1.0f,1.0f,-10.0f };
+	XMFLOAT3 pos = { 1.0f,1.0f,0.0f };
 	XMFLOAT3 oldpos{ 0.0f,0.0f,0.0f };
 	XMFLOAT3 scl = { 1.0f,1.0f,0.01f };
+	XMFLOAT3 rot = { 0.0f,0.0f,0.0f };
 
 	bool shot = false;
 	float speed = 1.0f;

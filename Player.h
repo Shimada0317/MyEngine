@@ -8,7 +8,6 @@
 #include"Texture.h"
 #include"TextureModel.h"
 #include<vector>
-#include"Bullet.h"
 
 class Player
 {
@@ -29,6 +28,16 @@ public:
 	void Finalize();
 
 	const XMFLOAT3& GetPosition() { return position; }
+
+	void SetPosition(XMFLOAT3 position) { this->position = position; }
+
+	const XMFLOAT3& GetRotation() { return rotation; }
+
+	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
+
+	const XMFLOAT3& GetScl() { return scale; }
+
+	void SetScl(XMFLOAT3 scale) { this->scale = scale; }
 private:
 	ObjModel* model = nullptr;
 	ObjModel* modelnext = nullptr;
@@ -39,15 +48,13 @@ private:
 	Texture* tex = nullptr;
 	TextureModel* texmodel = nullptr;
 
-	Bullet* bul = nullptr;
-
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
 
 	XMFLOAT3 position = { 0.0f,0.2f,5.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 scael = { 0.5f,0.5f,0.5f };
+	XMFLOAT3 scale = { 0.5f,0.5f,0.5f };
 	XMFLOAT3 cameraEye = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 
@@ -59,10 +66,6 @@ private:
 	XMFLOAT3 size = { 0,0,0};
 	XMFLOAT4 color = { 1,1,1,1 };
 
-	float moveSpeed = 0.1f;
 
-	bool Changeshader = false;
-	bool stopF = false;
-	bool shot = false;
 };
 
