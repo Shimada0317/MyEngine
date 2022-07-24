@@ -63,7 +63,7 @@ void Action::PlayerMove2d(XMFLOAT3 &position, float Speed)
 
 void Action::Gunshot(int Remainigbullet, bool& shot)
 {
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+	if (Input::GetInstance()->PushClick(0)) {
 		if (Remainigbullet < 0)return;
 		shot = true;
 	}

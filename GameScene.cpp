@@ -42,7 +42,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	sphere->SetModel(playermodel);
 
 
-	ground = ObjModel::CreateFromOBJ("ground");
+	ground = ObjModel::CreateFromOBJ("city");
 	groundObj = Object3d::Create();
 	groundObj->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	groundObj->SetModel(ground);

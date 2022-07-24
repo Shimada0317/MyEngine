@@ -50,7 +50,7 @@ private:
 
 	XMFLOAT3 pos = { 1.0f,1.0f,0.0f };
 	XMFLOAT3 oldpos{ 0.0f,0.0f,0.0f };
-	XMFLOAT3 scl = { 1.0f,1.0f,0.01f };
+	XMFLOAT3 scl = { 0.1f,0.1f,0.1f };
 	XMFLOAT3 rot = { 0.0f,0.0f,0.0f };
 
 	bool shot = false;

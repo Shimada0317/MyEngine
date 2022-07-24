@@ -9,7 +9,6 @@ LRESULT WinApp::WidowProck(HWND hwnd, UINT msg, WPARAM wparm, LPARAM lparam)
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparm, lparam)) {
 		return 1;
 	}
-
 	//メッセージで分岐
 	switch (msg)
 	{

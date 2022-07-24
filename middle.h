@@ -3,6 +3,7 @@
 #include"Player.h"
 #include"Bullet.h"
 #include"Enemy.h"
+#include"Input.h"
 #include"Collision.h"
 
 class middle
@@ -37,6 +38,10 @@ private:
 	XMFLOAT3 enemyPos = { 0,0,0 };
 	XMFLOAT3 enemyScl = { 0,0,0 };
 	XMFLOAT3 enemyRot = { 0,0,0 };
+
+	XMFLOAT3 absolutePos = { 0,0,0 };
+
+	Input* input = nullptr;
 
 	bool arive = true;
 

@@ -43,7 +43,6 @@ void Framework::Initialize()
 	//シーンマネージャー
 	sceneManager_ = new SceneManager;
 	
-	
 
 	//Fbx
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());

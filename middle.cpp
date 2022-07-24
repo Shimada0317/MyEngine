@@ -38,6 +38,8 @@ void middle::SetPSR()
 	bull->SetPosition(bullPos);
 	bull->SetScl(bullScl);
 	bull->SetRotation(bullRot);
+	
+	Input::GetInstance()->SetPosition(playerPos.x, playerPos.y);
 }
 
 void middle::AllUpdate()
