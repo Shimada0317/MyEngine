@@ -161,7 +161,6 @@ void PostEffect::CreatePipeline()
 	CD3DX12_DESCRIPTOR_RANGE  descRangeSRV1;
 	descRangeSRV1.Init(D3D12_DESCRIPTOR_RANGE_TYPE_SRV, 1, 1);
 
-
 	CD3DX12_ROOT_PARAMETER rootparm[3];
 	rootparm[0].InitAsConstantBufferView(0, 0, D3D12_SHADER_VISIBILITY_ALL);
 	rootparm[1].InitAsDescriptorTable(1, &descRangeSRV0, D3D12_SHADER_VISIBILITY_ALL);
@@ -255,12 +254,11 @@ void PostEffect::Initialize()
 	srvDesc.Texture2D.MipLevels = 1;
 
 	for (int i = 0; i < 2; i++) {
-
 		//デスクリプタヒープにSRV設定
 		dev->CreateShaderResourceView(texBuff[i].Get(),
 			&srvDesc,
 			CD3DX12_CPU_DESCRIPTOR_HANDLE(
-				descHeapSRV->GetCPUDescriptorHandleForHeapStart(),i,
+			descHeapSRV->GetCPUDescriptorHandleForHeapStart(),i,
 				dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
 			)
 		);
@@ -333,10 +331,10 @@ void PostEffect::Initialize()
 
 	//頂点データ
 	VertexPosUv vertices[vertNum] = {
-		{{-1.0f,-1.0f,0.0f},{0.0f,1.0f}},
-		{{-1.0f,+1.0f,0.0f},{0.0f,0.0f}},
-		{{+1.0f,-1.0f,0.0f},{1.0f,1.0f}},
-		{{+1.0f,+1.0f,0.0f},{1.0f,0.0f}},
+		{{-0.5f,-0.5f,0.0f},{0.0f,1.0f}},
+		{{-0.5f,+0.5f,0.0f},{0.0f,0.0f}},
+		{{+0.5f,-0.5f,0.0f},{1.0f,1.0f}},
+		{{+0.5f,+0.5f,0.0f},{1.0f,0.0f}},
 	};
 
 	//頂点バッファへのデータ転送
@@ -394,9 +392,15 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 
 	//cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeap->GetGPUDescriptorHandleForHeapStart(), this->texNumber, descriptorHandleIncrementSize));
 
-	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE( descHeapSRV->GetGPUDescriptorHandleForHeapStart(),0,dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	cmdList->SetGraphicsRootDescriptorTable(1, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+		descHeapSRV->GetGPUDescriptorHandleForHeapStart(),0,
+		dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV))
+	);
 
-	cmdList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(descHeapSRV->GetGPUDescriptorHandleForHeapStart(), 1, dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)));
+	cmdList->SetGraphicsRootDescriptorTable(2, CD3DX12_GPU_DESCRIPTOR_HANDLE(
+		descHeapSRV->GetGPUDescriptorHandleForHeapStart(), 1,
+		dev->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV))
+	);
 
 	cmdList->DrawInstanced(4, 1, 0, 0);
 }
