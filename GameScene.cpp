@@ -122,6 +122,9 @@ void GameScene::SetPosSclRot()
 
 	///light->SetLightDir(lightDir);
 
+
+
+
 };
 
 void GameScene::AllUpdate()
@@ -166,7 +169,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	groundObj->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
-	mid->Draw();
+	mid->Draw(dxCommon->GetCmdList());
 	Object3d::PostDraw();
 
 

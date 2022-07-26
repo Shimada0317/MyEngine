@@ -7,6 +7,8 @@
 void Player::Initalize()
 {
 	Sprite::LoadTexture(3, L"Resources/mark.png");
+	reticle = Sprite::SpriteCreate(3, { 1.0f,1.0f });
+
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 
@@ -36,15 +38,15 @@ void Player::Set()
 	player->SetPosition(position);
 	player->SetScale(scale);
 	
-	camera->SetEye(position);
+	camera->SetEye(cameraEye);
 	camera->SetTarget(cameraTarget);
-
+	camera->SetUp(up);
 	
 }
 
 void Player::Update()
 {
-
+	MouthContoroll();
 
 	//if(position.x)
 	
@@ -61,6 +63,9 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 	Texture::PostDraw();*/
 
 	//player->Draw();
+	reticle->PreDraw(cmdList);
+	reticle->Draw();
+	reticle->PostDraw();
 }
 
 void Player::ObjDraw()
@@ -117,4 +122,37 @@ void Player::Finalize()
 	delete model;
 	delete playernext;
 	delete modelnext;
+}
+
+void Player::MouthContoroll()
+{
+
+	GetCursorPos(&pos);
+
+	ScreenToClient(FindWindowA("DirectXGame",nullptr), &pos);
+
+	position.x = pos.x;
+	position.y = pos.y;
+
+	//Input::MousePos mouseMove = Input::GetInstance()->GetMouseMove();
+	//position.x = mouseMove.lX;
+	//position.y = mouseMove.lY;
+
+	//XMMATRIX matProjection = XMMatrixPerspectiveFovLH(
+	//	XMConvertToRadians(60.0f),
+	//	(float)WinApp::window_width / WinApp::window_height,
+	//	0.1f, 1000.0f
+	//);
+
+	//const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
+
+	//XMMATRIX matVPV = XMMatrixLookAtLH(XMLoadFloat3(&Eye_pos), XMLoadFloat3(&cameraTarget), XMLoadFloat3(&up))*matProjection;
+
+	//XMMATRIX matIverserVPV = XMMatrixInverse(nullptr,matVPV);
+
+	//XMVECTOR posNear = XMVECTOR(0, 0, 0);
+	//XMVECTOR posFar
+
+	//posNear=
+	//posFar
 }

@@ -23,6 +23,8 @@ void middle::Initialize()
 	bullPos = bull->GetPosition();
 	bullScl = bull->GetScl();
 	bullRot = bull->GetRotation();
+
+	shot = false;
 }
 
 void middle::SetPSR()
@@ -39,7 +41,12 @@ void middle::SetPSR()
 	bull->SetScl(bullScl);
 	bull->SetRotation(bullRot);
 	
-	Input::GetInstance()->SetPosition(playerPos.x, playerPos.y);
+	
+	//ビュープロジェクションビューポート合成行列
+	//matVPV= XMMatrixLookAtLH(XMLoadFloat3(&eye),XMLoadFloat3(&target),XMLoadFloat3(&up))**
+	//逆行列計算
+	//matInverseVPV=
+
 }
 
 void middle::AllUpdate()
@@ -81,13 +88,14 @@ void middle::Update()
 	AllUpdate();
 }
 
-void middle::Draw()
+void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	bull->Draw();
 	if (arive == true) {
 		enemy->Draw();
 	}
-	player->ObjDraw();
+	player->Draw(cmdList);
+	//player->ObjDraw();
 }
 
 void middle::ImGuiDraw()
@@ -147,6 +155,8 @@ void middle::ImGuiDraw()
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
+
+	player->ImGuiDraw();
 }
 
 void middle::Fainalize()

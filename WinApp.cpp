@@ -16,6 +16,8 @@ LRESULT WinApp::WidowProck(HWND hwnd, UINT msg, WPARAM wparm, LPARAM lparam)
 		PostQuitMessage(0);//OSに対して、アプリの終了を伝える
 		return 0;
 	}
+
+
 	return DefWindowProc(hwnd, msg, wparm, lparam);//標準の処理を行う
 }
 

@@ -14,7 +14,6 @@ public:
 	struct MousePos {
 		LONG lX;
 		LONG lY;
-		LONG lZ;
 	};
 
 private:
@@ -37,7 +36,7 @@ public://ƒƒ“ƒoŠÖ”
 
 	bool PushClick(BYTE click);
 
-	void SetPosition(int posx,int posy); 
+	MousePos& GetPosition() {this->pos;}
 
 	MousePos GetMouseMove();
 private:

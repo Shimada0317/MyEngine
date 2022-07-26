@@ -17,7 +17,7 @@ public:
 
 	void Update();
 
-	void Draw();
+	void Draw(ID3D12GraphicsCommandList* cmdList);
 
 	void ImGuiDraw();
 
@@ -45,7 +45,20 @@ private:
 
 	bool arive = true;
 
+	float mouseX = 0;
+	float mouseY = 0;
+
 	float moveSpeed = 0.1f;
 	bool shot = false;
+
+
+
+	XMMATRIX matVPV;
+	XMMATRIX matInverseVPV;
+	
+	XMFLOAT3 eye = { 0, 0, -5 };
+	XMFLOAT3 target = { 0,0,0 };
+	XMFLOAT3 up = { 0,1,0 };
+
 };
 

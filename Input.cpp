@@ -68,13 +68,7 @@ void Input::Update()
 
 	result = Onclick->GetDeviceState(sizeof(DIMOUSESTATE), &cli);
 
-	GetCursorPos(&pos);
-
-	ScreenToClient(winApp->GetHwnd(), &pos);
-
-
 	
-
 }
 
 bool Input::PushKey(BYTE keyNumber)
@@ -102,17 +96,11 @@ bool Input::PushClick(BYTE click)
 	return false;
 }
 
-void Input::SetPosition(int posx, int posy)
-{
-	SetCursorPos(posx, posy);
-}
-
 Input::MousePos Input::GetMouseMove()
 {
 	MousePos tmp;
 	tmp.lX = cli.lX;
 	tmp.lY = cli.lY;
-	tmp.lZ = cli.lZ;
 
 	return tmp;
 }

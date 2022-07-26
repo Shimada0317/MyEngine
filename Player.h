@@ -7,6 +7,7 @@
 #include"DebugCamera.h"
 #include"Texture.h"
 #include"TextureModel.h"
+#include"WinApp.h"
 #include<vector>
 
 class Player
@@ -26,6 +27,8 @@ public:
 	void ImGuiDraw();
 
 	void Finalize();
+
+	void MouthContoroll();
 
 	const XMFLOAT3& GetPosition() { return position; }
 
@@ -48,6 +51,8 @@ private:
 	Texture* tex = nullptr;
 	TextureModel* texmodel = nullptr;
 
+	Sprite* reticle = nullptr;
+
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
@@ -62,10 +67,13 @@ private:
 
 	XMFLOAT3 Eye_pos = {};
 	XMFLOAT3 Target_pos = {};
+	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
 
 	XMFLOAT3 size = { 0,0,0};
 	XMFLOAT4 color = { 1,1,1,1 };
 
+	POINT pos;
+	WinApp* winapp = nullptr;
 
 };
 

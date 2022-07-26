@@ -54,6 +54,8 @@ private:
 	XMFLOAT3 rot = { 0.0f,0.0f,0.0f };
 
 	bool shot = false;
+	bool retime = true;
 	float speed = 1.0f;
+	float Loadtime = 0.0f;
 };
 
