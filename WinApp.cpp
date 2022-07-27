@@ -21,6 +21,13 @@ LRESULT WinApp::WidowProck(HWND hwnd, UINT msg, WPARAM wparm, LPARAM lparam)
 	return DefWindowProc(hwnd, msg, wparm, lparam);//•W€‚Ìˆ—‚ğs‚¤
 }
 
+WinApp* WinApp::GetInstance()
+{
+	static WinApp instance;
+
+	return &instance;
+}
+
 void WinApp::Initialize()
 {
 

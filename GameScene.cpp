@@ -65,7 +65,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	mid = new middle;
 	mid->Initialize();
 
-
 	light = Light::Create();
 
 	//light->SetLightColor({ 1,1,1 });
@@ -119,12 +118,6 @@ void GameScene::SetPosSclRot()
 	else if (Input::GetInstance()->PushKey(DIK_S)) { lightDir.m128_f32[1] -= 1.0f; }
 	if (Input::GetInstance()->PushKey(DIK_D)) { lightDir.m128_f32[0] += 1.0f; }
 	else if (Input::GetInstance()->PushKey(DIK_A)) { lightDir.m128_f32[0] -= 1.0f; }
-
-	///light->SetLightDir(lightDir);
-
-
-
-
 };
 
 void GameScene::AllUpdate()
@@ -140,19 +133,6 @@ void GameScene::AllUpdate()
 
 void GameScene::Update()
 {
-	//DirectX–ˆƒtƒŒ[ƒ€ˆ— ‚±‚±‚©‚ç
-	if (Input::GetInstance()->PushKey(DIK_1)) {
-		Object->PlayAnimation();
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_2)) {
-		change = true;
-	}
-
-	else if (Input::GetInstance()->PushKey(DIK_3)) {
-		change = false;
-	}
-
 	SetPosSclRot();
 	AllUpdate();
 }
@@ -185,7 +165,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 void GameScene::ImgDraw()
 {
-	mid->ImGuiDraw();
+	//mid->ImGuiDraw();
 }
 
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)

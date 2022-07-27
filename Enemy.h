@@ -38,7 +38,9 @@ public:
 
 	void SetScl(XMFLOAT3 scale) { this->scale = scale; }
 
+	const bool& GetArive() { return arive; }
 
+	void SetArive(bool arive) { this->arive = arive; }
 private:
 	ObjModel* model = nullptr;
 	Object3d* enemy = nullptr;
@@ -47,7 +49,7 @@ private:
 	DebugText* debugtext = nullptr;
 	DebugCamera* camer = nullptr;
 
-	XMFLOAT3 position = { 1.0f,1.0f,10.0f };
+	XMFLOAT3 position = { 0.0f,0.0f,10.0f };
 	XMFLOAT3 scale = { 1.0f,1.0f,1.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 
@@ -55,5 +57,6 @@ private:
 	XMFLOAT3 bulscl = { 0,0,0 };
 
 	bool arive = true;
+	
 };
 

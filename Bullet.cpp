@@ -9,27 +9,47 @@ void Bullet::Initialize()
 	bullet->SetModel(bulModel);
 }
 
-void Bullet::bun(XMFLOAT3& pos,XMFLOAT3 position, int speed,bool& shot)
+void Bullet::bun(XMFLOAT3& pos,XMFLOAT3 position, float speed,bool& shot)
 {
-	//float b2pX, b2pY,b2p;
-
-		if (shot == true) {
-			/*b2pX = pos.x - position.x;
-			b2pY = pos.y - position.y;
-			b2p = sqrtf((b2pX * b2pX) + (b2pY * b2pY));
-			pos.x = b2pX / b2p * 5;
-			pos.y = b2pY / b2p * 10;*/
+	XMFLOAT3 oldpos;
+	oldpos.x = pos.x;
+	oldpos.y = pos.y;
+	oldpos.z = pos.z;
+	if (retime == true) {
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 			pos.x = position.x;
 			pos.y = position.y;
-			retime == true;
-			shot = false;
-		}
-	
-	if (retime == false) {
-		pos.z += speed;
-		if (pos.z >= 30.0f) {
+			shot = true;
+			retime = false;
 		}
 	}
+	if (shot == true) {
+	
+		pos.z += speed;
+	}
+	if (pos.z >= 30) {
+		pos.z = -10;
+		pos.x = oldpos.x;
+		pos.y = oldpos.y;
+		shot = false;
+		retime = true;
+	}
+
+}
+
+void Bullet::Shot(XMFLOAT3& pos, XMFLOAT2 position, int speed, bool& shot)
+{
+		if (shot == true) {
+			pos.x = position.x;
+			pos.y = position.y;
+			pos.z += speed;
+			retime == false;
+			if (pos.z >= 30) {
+				pos.z = 0;
+			}
+		}
+	
+	
 }
 
 void Bullet::Set()

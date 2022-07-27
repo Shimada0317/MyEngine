@@ -29,7 +29,7 @@ private:
 
 	XMFLOAT3 playerPos = { 0,0,0 };
 	XMFLOAT3 playerScl = { 0,0,0 };
-	XMFLOAT3 playerRot = { 0,0,0 };
+	XMFLOAT3 playerRot = { 0,0 ,0 };
 
 	XMFLOAT3 bullPos = { 0,0,0 };
 	XMFLOAT3 bullScl = { 0,0,0 };
@@ -43,14 +43,14 @@ private:
 
 	Input* input = nullptr;
 
-	bool arive = true;
+	bool arive = false;
 
 	float mouseX = 0;
 	float mouseY = 0;
 
 	float moveSpeed = 0.1f;
 	bool shot = false;
-
+	float responetime = 0.0f;
 
 
 	XMMATRIX matVPV;

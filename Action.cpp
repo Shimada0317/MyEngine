@@ -18,10 +18,10 @@ Action* Action::GetInstance()
 void Action::PlayerMove3d(XMFLOAT3 &position, float Speed)
 {
 	if (Input::GetInstance()->PushKey(DIK_UP)) {
-		position.z += Speed;
+		position.y += Speed;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-		position.z -= Speed;
+		position.y -= Speed;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
 		position.x += Speed;
@@ -45,7 +45,7 @@ void Action::PlayerJump(XMFLOAT3& position,bool& JumpFlag)
 
 }
 
-void Action::PlayerMove2d(XMFLOAT3 &position, float Speed)
+void Action::PlayerMove2d(XMFLOAT2 &position, float Speed)
 {
 	if (Input::GetInstance()->PushKey(DIK_UP)) {
 		position.y += Speed;
@@ -63,8 +63,7 @@ void Action::PlayerMove2d(XMFLOAT3 &position, float Speed)
 
 void Action::Gunshot(int Remainigbullet, bool& shot)
 {
-	if (Input::GetInstance()->PushClick(0)) {
-		if (Remainigbullet < 0)return;
+ 	if (Input::GetInstance()->PushClick(0)||Input::GetInstance()->PushKey(DIK_SPACE)) {
 		shot = true;
 	}
 

@@ -16,7 +16,7 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
 	////スプライトの読み込み
-	Sprite::LoadTexture(1, L"Resources/tst.png");
+	Sprite::LoadTexture(1, L"Resources/mark.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
 	//モデルの読み込み
@@ -30,6 +30,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 
 	particle = ParticleManager::Create();
 	particle->Update();
+
+	mid = new middle;
+	mid->Initialize();
 }
 
 void TitleScene::SetPosSclRot()
@@ -41,7 +44,8 @@ void TitleScene::SetPosSclRot()
 
 
 
-	title->SetSize({ 1280.0f,720.0f });
+	title->SetSize({retsize});
+	title->SetPosition({ retpos });
 
 	for (int i = 0; i < 1000; i++) {
 		const float rnd_pos = 10.0f;
@@ -63,12 +67,20 @@ void TitleScene::SetPosSclRot()
 		particle->Add(60, pos, vel, acc, 1.0f, 0.0f);
 		break;
 	}
+
+	/*GetCursorPos(&pos);
+
+	ScreenToClient(FindWindowA("DirectXGame", nullptr), &pos);
+
+	retpos.x = pos.x;
+	retpos.y = pos.y;*/
 }
 
 void TitleScene::Update()
 {
 	//DirectX毎フレーム処理 ここから
 
+	Action::GetInstance()->PlayerMove2d(retpos, 1);
 
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 		//シーン切り替え
@@ -78,22 +90,20 @@ void TitleScene::Update()
 	SetPosSclRot();
 	ramieru3d->Update();
 	particle->Update();
+	mid->Update();
 }
 
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
 	dxCommon->PreDraw();
-	// コマンドリストの取得
-	//ID3D12GraphicsCommandList* cmdList = dxCommon->GetCmdList();
-
-	//dxCommon->GetCmdList()->IASetVertexBuffers(0, 1, &vbView);
-
+	Object3d::PreDraw(dxCommon->GetCmdList());
+	mid->Draw(dxCommon->GetCmdList());
+	Object3d::PostDraw();
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	title->Draw();
 	Sprite::PostDraw();
-	ParticleManager::PreDraw(dxCommon->GetCmdList());
-	//particle->Draw();
-	ParticleManager::PostDraw();
+
+	mid->ImGuiDraw();
 	dxCommon->PostDraw();
 }
 

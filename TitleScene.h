@@ -10,6 +10,9 @@
 #include"ObjModel.h"
 #include"Input.h"
 #include"ParticleManager.h"
+#include"Player.h"
+#include"Bullet.h"
+#include"middle.h"
 
 class TitleScene :public BaseScene
 {
@@ -40,6 +43,11 @@ private:
 
 	DirectXCommon* dxCommon = nullptr;
 
+	Player* ret = nullptr;
+	Bullet* bull = nullptr;
+	middle* mid = nullptr;
+
+
 	ObjModel* playermodel = nullptr;
 	ObjModel* ramieru = nullptr;
 	ObjModel* human = nullptr;
@@ -55,7 +63,8 @@ private:
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
-
-
+	XMFLOAT2 retsize = { 64.0f,64.0f };
+	XMFLOAT2 retpos = { 0.0f,0.0f };
+	POINT pos;
 };
 

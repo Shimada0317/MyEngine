@@ -41,17 +41,23 @@ public:
 	const XMFLOAT3& GetScl() { return scale; }
 
 	void SetScl(XMFLOAT3 scale) { this->scale = scale; }
-private:
-	ObjModel* model = nullptr;
-	ObjModel* modelnext = nullptr;
 
-	Object3d* player = nullptr;
-	Object3d* playernext = nullptr;
-	
-	Texture* tex = nullptr;
-	TextureModel* texmodel = nullptr;
+
+	const XMFLOAT2& GetRetPosition() { return retpos; }
+
+	void SetRetPosition(XMFLOAT2 position) { this->retpos = position; }
+
+	const XMFLOAT2& GetRetSiz() { return retsize; }
+
+	void SetRetSiz(XMFLOAT2 scale) { this->retsize = scale; }
+private:
+	float OffsetX = 0.0f;
+	float OffsetY = 0.0f;
 
 	Sprite* reticle = nullptr;
+	Object3d* player = nullptr;
+	ObjModel* playerModel = nullptr;
+
 
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
@@ -60,17 +66,18 @@ private:
 	XMFLOAT3 position = { 0.0f,0.2f,5.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.5f,0.5f,0.5f };
-	XMFLOAT3 cameraEye = { 0.0f,0.0f,-10.0f };
+
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
-
 	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };
-
 	XMFLOAT3 Eye_pos = {};
 	XMFLOAT3 Target_pos = {};
 	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
 
 	XMFLOAT3 size = { 0,0,0};
 	XMFLOAT4 color = { 1,1,1,1 };
+
+	XMFLOAT2 retpos = { 0.0f,0.0f };
+	XMFLOAT2 retsize = { 64.0f,64.0f };
 
 	POINT pos;
 	WinApp* winapp = nullptr;

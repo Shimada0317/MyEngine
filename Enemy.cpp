@@ -25,13 +25,22 @@ void Enemy::Set()
 
 void Enemy::Update()
 {
+	
+	if (arive == false) {
+		position.x = rand() % 10 - 5;
+		position.z = rand() % 1 + 20;
+	}
+	
+
 	Set();
 	enemy->Update();
 }
 
 void Enemy::Draw()
 {
-	enemy->Draw();
+	if (arive == true) {
+		enemy->Draw();
+	}
 }
 
 void Enemy::ImGuiDraw()
@@ -44,20 +53,6 @@ void Enemy::ImGuiDraw()
 	//フラグを手動で切りたい時
 	ImGui::Checkbox("arive", &arive);
 	//スライダーで動きをいじりたいとき
-
-	if (ImGui::TreeNode("bull")) {
-		ImGui::SliderFloat("position.x", &bulpos.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("position.y", &bulpos.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("position.z", &bulpos.z, -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("position")) {
-		ImGui::SliderFloat("position.x", &position.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("position.y", &position.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("position.z", &position.z, -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
 
 	ImGui::End();
 	ImGui::PopStyleColor();

@@ -199,7 +199,7 @@ bool Collision::Player2Other(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFL
 	float z = Playerposition.z - Otherposition.z;
 
 	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
-	float BossAllscale = Otherscale.x + Otherscale.y + Otherscale.z;
+	float BossAllscale = (Otherscale.x + Otherscale.y + Otherscale.z)/4;
 
 	float length = sqrt(x * x + y * y + z * z);
 

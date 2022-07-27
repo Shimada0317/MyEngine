@@ -18,7 +18,9 @@ private:
 public:
 	void Initialize();
 
-	void bun(XMFLOAT3& pos,XMFLOAT3 position,int speed,bool& shot);
+	void bun(XMFLOAT3& pos,XMFLOAT3 position,float speed,bool& shot);
+
+	void Shot(XMFLOAT3& pos, XMFLOAT2 position, int speed, bool& shot);
 
 	void Set();
 
@@ -48,7 +50,7 @@ private:
 	ObjModel* bulModel = nullptr;
 
 
-	XMFLOAT3 pos = { 1.0f,1.0f,0.0f };
+	XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 oldpos{ 0.0f,0.0f,0.0f };
 	XMFLOAT3 scl = { 0.1f,0.1f,0.1f };
 	XMFLOAT3 rot = { 0.0f,0.0f,0.0f };
