@@ -41,6 +41,10 @@ public:
 	const bool& GetArive() { return arive; }
 
 	void SetArive(bool arive) { this->arive = arive; }
+
+	const int& GetLife() { return life; }
+
+	void SetLife(int life) { this->life = life; }
 private:
 	ObjModel* model = nullptr;
 	Object3d* enemy = nullptr;
@@ -57,6 +61,6 @@ private:
 	XMFLOAT3 bulscl = { 0,0,0 };
 
 	bool arive = true;
-	
+	int life = 3;
 };
 

@@ -16,11 +16,11 @@ void middle::Initialize()
 
 	bullPos = bull->GetPosition();
 	bullScl = bull->GetScl();
-
+	lost = bull->GetLost();
 	enemyPos = enemy->GetPosition();
 	enemyScl = enemy->GetScl();
 	arive = enemy->GetArive();
-
+	life = enemy->GetLife();
 }
 
 void middle::SetPSR()
@@ -29,13 +29,14 @@ void middle::SetPSR()
 	
 	bull->SetPosition(bullPos);
 	bull->SetScl(bullScl);
+	bull->SetLost(lost);
 	if (arive == false) {
 		enemyPos = enemy->GetPosition();
 	}
 	enemy->SetPosition(enemyPos);
 	enemy->SetScl(enemyScl);
 	enemy->SetArive(arive);
-	
+	enemy->SetLife(life);
 }
 	
 
@@ -50,7 +51,14 @@ void middle::Update()
 {
 
 	if (Collision::Player2Other(bullPos, bullScl, enemyPos, enemyScl)) {
-		arive = false;
+		life -= 1;
+		lost = true;
+		shot = false;
+		bullPos.z = -10;
+		speed = 0;
+	}
+	else {
+		lost = false;
 	}
 
 	if (arive == false) {
@@ -78,7 +86,7 @@ void middle::Update()
 	}
 
 	
-	bull->bun(bullPos, playerPos, 0.5f, shot);
+	bull->bun(bullPos, playerPos, speed, shot);
 
 	SetPSR();
 	AllUpdate();
@@ -100,10 +108,12 @@ void middle::ImGuiDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("mouth");
-
+	ImGui::Checkbox("shot", &shot);
 	if (ImGui::TreeNode("playerPos")) {
 		ImGui::SliderFloat("playerPos.x", &playerPos.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.y", &playerPos.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("Pos.y", &bullPos.z, -100.0f, 100.0f);
+		ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

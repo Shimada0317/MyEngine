@@ -18,7 +18,7 @@ private:
 public:
 	void Initialize();
 
-	void bun(XMFLOAT3& pos,XMFLOAT3 position,float speed,bool& shot);
+	void bun(XMFLOAT3& pos,XMFLOAT3 position,float& speed,bool& shot);
 
 	void Shot(XMFLOAT3& pos, XMFLOAT2 position, int speed, bool& shot);
 
@@ -45,6 +45,10 @@ public:
 	const XMFLOAT3& GetScl() { return scl; }
 
 	void SetScl(XMFLOAT3 scale) { this->scl = scale; }
+
+	const bool& GetLost() { return lost; }
+
+	void SetLost(bool lost) { this->lost = lost; }
 private:
 	Object3d* bullet = nullptr;
 	ObjModel* bulModel = nullptr;
@@ -59,5 +63,7 @@ private:
 	bool retime = true;
 	float speed = 1.0f;
 	float Loadtime = 0.0f;
+
+	bool lost = false;
 };
 

@@ -165,7 +165,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 void GameScene::ImgDraw()
 {
-	//mid->ImGuiDraw();
+	mid->ImGuiDraw();
 }
 
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)

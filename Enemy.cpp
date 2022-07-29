@@ -25,7 +25,10 @@ void Enemy::Set()
 
 void Enemy::Update()
 {
-	
+	if (life <= 0) {
+		arive = false;
+	}
+
 	if (arive == false) {
 		position.x = rand() % 10 - 5;
 		position.z = rand() % 1 + 20;
