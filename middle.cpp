@@ -6,21 +6,24 @@ void middle::Initialize()
 	player = new Player();
 	player->Initalize();
 
-	enemy = new Enemy();
-	enemy->Initalize();
-
+	playerPos = player->GetPosition();
+	
 	bull = new Bullet();
 	bull->Initialize();
 
-	playerPos = player->GetPosition();
 
 	bullPos = bull->GetPosition();
 	bullScl = bull->GetScl();
 	lost = bull->GetLost();
-	enemyPos = enemy->GetPosition();
-	enemyScl = enemy->GetScl();
-	arive = enemy->GetArive();
-	life = enemy->GetLife();
+
+	for (int i = 0; i < 10; i++) {
+		enemy[i] = new Enemy();
+		enemy[i]->Initalize();
+		enemyPos[i] = enemy[i]->GetPosition();
+		enemyScl = enemy[i]->GetScl();
+		arive = enemy[i]->GetArive();
+		life = enemy[i]->GetLife();
+	}
 }
 
 void middle::SetPSR()
@@ -30,44 +33,54 @@ void middle::SetPSR()
 	bull->SetPosition(bullPos);
 	bull->SetScl(bullScl);
 	bull->SetLost(lost);
-	if (arive == false) {
-		enemyPos = enemy->GetPosition();
+	for (int i = 0; i < 10; i++) {
+		if (life == 0) {
+			enemyPos[i] = enemy[i]->GetPosition();
+			arive = enemy[i]->GetArive();
+			enemy[i]->SetPosition(enemyPos[i]);
+		}
+		enemy[i]->SetScl(enemyScl);
+		enemy[i]->SetArive(arive);
+		enemy[i]->SetLife(life);
 	}
-	enemy->SetPosition(enemyPos);
-	enemy->SetScl(enemyScl);
-	enemy->SetArive(arive);
-	enemy->SetLife(life);
 }
 	
 
 void middle::AllUpdate()
 {
 	player->Update();
-	enemy->Update();
+	for (int i = 0; i < 10; i++) {
+		enemy[i]->Update();
+	}
 	bull->Update();
 }
 
 void middle::Update()
 {
 
-	if (Collision::Player2Other(bullPos, bullScl, enemyPos, enemyScl)) {
-		life -= 1;
-		lost = true;
-		shot = false;
-		bullPos.z = -10;
-		speed = 0;
-	}
-	else {
-		lost = false;
-	}
-
-	if (arive == false) {
-		responetime += 0.2f;
-		if (responetime >= 10.0f) {
-			responetime = 0.0f;
-			arive = true;
+	if (arive == true) {
+		for (int i = 0; i < 10; i++) {
+			if (Collision::Player2Other(bullPos, bullScl, enemyPos[i], enemyScl)) {
+				life -= 1;
+				lost = true;
+				shot = false;
+				bullPos.z = -10;
+				speed = 0;
+			}
+			else {
+				lost = false;
+			}
 		}
 	}
+
+		if (arive == false) {
+			responetime += 0.2f;
+			life = 3;
+			if (responetime >= 10.0f) {
+				responetime = 0.0f;
+				arive = true;
+			}
+		}
 	Action::GetInstance()->PlayerMove3d(playerPos, 0.2f);
 	
 
@@ -95,7 +108,9 @@ void middle::Update()
 void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	bull->Draw();
-	enemy->Draw();
+	for (int i = 0; i < 10; i++) {
+		enemy[i]->Draw();
+	}
 	//player->Draw(cmdList);
 	player->ObjDraw();
 }
@@ -103,7 +118,7 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 void middle::ImGuiDraw()
 {
 	player->ImGuiDraw();
-
+	float l = life;
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
@@ -114,13 +129,15 @@ void middle::ImGuiDraw()
 		ImGui::SliderFloat("playerPos.y", &playerPos.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("Pos.y", &bullPos.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);
+		ImGui::SliderFloat("life", &l, -100.0f, 100.0f);
+		ImGui::SliderFloat("responetime", &responetime, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
-	enemy->ImGuiDraw();
+	enemy[0]->ImGuiDraw();
 }
 
 void middle::Fainalize()

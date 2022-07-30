@@ -20,7 +20,6 @@ void Enemy::Set()
 	enemy->SetPosition(position);
 	enemy->SetRotation(rotation);
 	enemy->SetScale(scale);
-
 }
 
 void Enemy::Update()
@@ -30,6 +29,7 @@ void Enemy::Update()
 	}
 
 	if (arive == false) {
+		life = 3;
 		position.x = rand() % 10 - 5;
 		position.z = rand() % 1 + 20;
 	}

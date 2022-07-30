@@ -25,7 +25,7 @@ public:
 private:
 	Player* player = nullptr;
 	Bullet* bull = nullptr;
-	Enemy* enemy = nullptr;
+	Enemy* enemy[10];
 
 	XMFLOAT3 playerPos = { 0,0,0 };
 	XMFLOAT3 playerScl = { 0,0,0 };
@@ -35,7 +35,7 @@ private:
 	XMFLOAT3 bullScl = { 0,0,0 };
 	XMFLOAT3 bullRot = { 0,0,0 };
 
-	XMFLOAT3 enemyPos = { 0,0,0 };
+	XMFLOAT3 enemyPos[10];
 	XMFLOAT3 enemyScl = { 0,0,0 };
 	XMFLOAT3 enemyRot = { 0,0,0 };
 
