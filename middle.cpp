@@ -16,12 +16,11 @@ void middle::Initialize()
 	bullScl = bull->GetScl();
 	lost = bull->GetLost();
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 2; i++) {
 		enemy[i] = new Enemy();
 		enemy[i]->Initalize();
 		enemyPos[i] = enemy[i]->GetPosition();
 		enemyScl = enemy[i]->GetScl();
-		arive = enemy[i]->GetArive();
 		life = enemy[i]->GetLife();
 	}
 }
@@ -33,15 +32,14 @@ void middle::SetPSR()
 	bull->SetPosition(bullPos);
 	bull->SetScl(bullScl);
 	bull->SetLost(lost);
-	for (int i = 0; i < 10; i++) {
-		if (life == 0) {
+	for (int i = 0; i < 2; i++) {
+		if (life <= 0) {
 			enemyPos[i] = enemy[i]->GetPosition();
-			arive = enemy[i]->GetArive();
 			enemy[i]->SetPosition(enemyPos[i]);
+			enemy[i]->SetScl(enemyScl);
+			life = enemy[i]->GetLife();
 		}
-		enemy[i]->SetScl(enemyScl);
-		enemy[i]->SetArive(arive);
-		enemy[i]->SetLife(life);
+		
 	}
 }
 	
@@ -49,7 +47,7 @@ void middle::SetPSR()
 void middle::AllUpdate()
 {
 	player->Update();
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 2; i++) {
 		enemy[i]->Update();
 	}
 	bull->Update();
@@ -58,29 +56,20 @@ void middle::AllUpdate()
 void middle::Update()
 {
 
-	if (arive == true) {
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 2; i++) {
 			if (Collision::Player2Other(bullPos, bullScl, enemyPos[i], enemyScl)) {
 				life -= 1;
 				lost = true;
 				shot = false;
 				bullPos.z = -10;
 				speed = 0;
+				enemy[i]->SetLife(life);
 			}
 			else {
 				lost = false;
 			}
 		}
-	}
 
-		if (arive == false) {
-			responetime += 0.2f;
-			life = 3;
-			if (responetime >= 10.0f) {
-				responetime = 0.0f;
-				arive = true;
-			}
-		}
 	Action::GetInstance()->PlayerMove3d(playerPos, 0.2f);
 	
 
@@ -108,7 +97,7 @@ void middle::Update()
 void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 {
 	bull->Draw();
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 2; i++) {
 		enemy[i]->Draw();
 	}
 	//player->Draw(cmdList);
@@ -130,7 +119,6 @@ void middle::ImGuiDraw()
 		ImGui::SliderFloat("Pos.y", &bullPos.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);
 		ImGui::SliderFloat("life", &l, -100.0f, 100.0f);
-		ImGui::SliderFloat("responetime", &responetime, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

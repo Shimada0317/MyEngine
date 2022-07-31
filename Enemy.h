@@ -62,5 +62,6 @@ private:
 
 	bool arive = true;
 	int life = 3;
+	float responetime = 0.0f;
 };
 

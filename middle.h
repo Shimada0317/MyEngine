@@ -50,11 +50,10 @@ private:
 
 	float moveSpeed = 0.1f;
 	bool shot = false;
-	float responetime = 0.0f;
 	float speed = 0.5f;
 
 	bool lost = false;
-	int life = 0;
+	int life=3;
 
 	XMMATRIX matVPV;
 	XMMATRIX matInverseVPV;

@@ -16,7 +16,6 @@ void Enemy::Initalize()
 
 void Enemy::Set()
 {
-
 	enemy->SetPosition(position);
 	enemy->SetRotation(rotation);
 	enemy->SetScale(scale);
@@ -29,11 +28,17 @@ void Enemy::Update()
 	}
 
 	if (arive == false) {
-		life = 3;
 		position.x = rand() % 10 - 5;
 		position.z = rand() % 1 + 20;
+		responetime += 0.2f;
 	}
-	
+
+
+	if (responetime >= 10.0f) {
+		life = 3;
+		responetime = 0.0f;
+		arive = true;
+	}
 
 	Set();
 	enemy->Update();
@@ -48,6 +53,8 @@ void Enemy::Draw()
 
 void Enemy::ImGuiDraw()
 {
+	float l = life;
+
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
@@ -56,7 +63,7 @@ void Enemy::ImGuiDraw()
 	//フラグを手動で切りたい時
 	ImGui::Checkbox("arive", &arive);
 	//スライダーで動きをいじりたいとき
-
+	ImGui::SliderFloat("life", &l, -100.0f, 100.0f);
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
