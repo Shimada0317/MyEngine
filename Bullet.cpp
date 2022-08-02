@@ -9,7 +9,7 @@ void Bullet::Initialize()
 	bullet->SetModel(bulModel);
 }
 
-void Bullet::bun(XMFLOAT3& pos,XMFLOAT3 position, float& speed,bool& shot)
+void Bullet::bun(XMFLOAT3& pos,XMFLOAT3 position, float& speed,bool& shot,int& Remaining)
 {
 	XMFLOAT3 oldpos;
 	oldpos.x = pos.x;
@@ -22,22 +22,30 @@ void Bullet::bun(XMFLOAT3& pos,XMFLOAT3 position, float& speed,bool& shot)
 			shot = true;
 			retime = false;
 			speed = 0.5f;
+			Remaining -= 1;
 		}
 	}
-	if (shot == true) {
-	
-		pos.z += speed;
-	}
-	if (pos.z >= 30) {
-		pos.z = -10;
-		pos.x = oldpos.x;
-		pos.y = oldpos.y;
-		shot = false;
-	}
-	if (shot == false) {
-		retime = true;
-	}
+	if (Remaining >= 0) {
+		if (shot == true) {
 
+			pos.z += speed;
+		}
+		if (pos.z >= 30) {
+			pos.z = -10;
+			pos.x = oldpos.x;
+			pos.y = oldpos.y;
+			shot = false;
+		}
+		if (shot == false) {
+			retime = true;
+		}
+	}
+	else {
+		retime = true;
+		pos.z = -10;
+		shot = false;
+		Remaining = 0;
+	}
 }
 
 void Bullet::Shot(XMFLOAT3& pos, XMFLOAT2 position, int speed, bool& shot)
@@ -65,6 +73,7 @@ void Bullet::Set()
 
 void Bullet::Update()
 {
+
 	Set();
 	bullet->Update();
 }

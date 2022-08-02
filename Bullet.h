@@ -18,7 +18,7 @@ private:
 public:
 	void Initialize();
 
-	void bun(XMFLOAT3& pos,XMFLOAT3 position,float& speed,bool& shot);
+	void bun(XMFLOAT3& pos,XMFLOAT3 position,float& speed,bool& shot,int& Remaining);
 
 	void Shot(XMFLOAT3& pos, XMFLOAT2 position, int speed, bool& shot);
 
@@ -31,8 +31,6 @@ public:
 	void ImgUiDraw();
 
 	void Finalize();
-
-	void SetPos();
 
 	const XMFLOAT3& GetPosition() { return pos; }
 

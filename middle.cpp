@@ -21,7 +21,7 @@ void middle::Initialize()
 		enemy[i]->Initalize();
 		enemyPos[i] = enemy[i]->GetPosition();
 		enemyScl = enemy[i]->GetScl();
-		life = enemy[i]->GetLife();
+		life[i] = enemy[i]->GetLife();
 	}
 }
 
@@ -33,13 +33,12 @@ void middle::SetPSR()
 	bull->SetScl(bullScl);
 	bull->SetLost(lost);
 	for (int i = 0; i < 2; i++) {
-		if (life <= 0) {
+		if (life[i] <= 0) {
 			enemyPos[i] = enemy[i]->GetPosition();
 			enemy[i]->SetPosition(enemyPos[i]);
 			enemy[i]->SetScl(enemyScl);
-			life = enemy[i]->GetLife();
+			life[i] = enemy[i]->GetLife();
 		}
-		
 	}
 }
 	
@@ -57,16 +56,18 @@ void middle::Update()
 {
 
 		for (int i = 0; i < 2; i++) {
-			if (Collision::Player2Other(bullPos, bullScl, enemyPos[i], enemyScl)) {
-				life -= 1;
-				lost = true;
-				shot = false;
-				bullPos.z = -10;
-				speed = 0;
-				enemy[i]->SetLife(life);
-			}
-			else {
-				lost = false;
+			if (life[i] >= 0) {
+				if (Collision::Player2Other(bullPos, bullScl, enemyPos[i], enemyScl)) {
+					life[i] -= 1;
+					lost = true;
+					shot = false;
+					bullPos.z = -10;
+					speed = 0;
+					enemy[i]->SetLife(life[i]);
+				}
+				else {
+					lost = false;
+				}
 			}
 		}
 
@@ -87,9 +88,12 @@ void middle::Update()
 		playerPos.x = -6.8f;
 	}
 
-	
-	bull->bun(bullPos, playerPos, speed, shot);
-
+	//if (Remaining >= 0) {
+		bull->bun(bullPos, playerPos, speed, shot, Remaining);
+	//}
+		if (Input::GetInstance()->PushKey(DIK_R)) {
+			Remaining = 9;
+		}
 	SetPSR();
 	AllUpdate();
 }
@@ -107,7 +111,8 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 void middle::ImGuiDraw()
 {
 	player->ImGuiDraw();
-	float l = life;
+	float l = life[0];
+	float r = Remaining;
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
@@ -118,6 +123,7 @@ void middle::ImGuiDraw()
 		ImGui::SliderFloat("playerPos.y", &playerPos.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("Pos.y", &bullPos.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);
+		ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
 		ImGui::SliderFloat("life", &l, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
@@ -126,6 +132,7 @@ void middle::ImGuiDraw()
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
 	enemy[0]->ImGuiDraw();
+	enemy[1]->ImGuiDraw();
 }
 
 void middle::Fainalize()
