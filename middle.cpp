@@ -22,6 +22,8 @@ void middle::Initialize()
 		enemyPos[i] = enemy[i]->GetPosition();
 		enemyScl = enemy[i]->GetScl();
 		life[i] = enemy[i]->GetLife();
+		enemy[i]->SetPlayer(player);
+		enemy[i]->SetSpeed(enespeed);
 	}
 }
 
@@ -38,6 +40,7 @@ void middle::SetPSR()
 			enemy[i]->SetPosition(enemyPos[i]);
 			enemy[i]->SetScl(enemyScl);
 			life[i] = enemy[i]->GetLife();
+			enemy[i]->SetSpeed(enespeed);
 		}
 	}
 }
@@ -48,13 +51,13 @@ void middle::AllUpdate()
 	player->Update();
 	for (int i = 0; i < 2; i++) {
 		enemy[i]->Update();
+		enemyPos[i] = enemy[i]->GetPosition();
 	}
 	bull->Update();
 }
 
 void middle::Update()
 {
-
 		for (int i = 0; i < 2; i++) {
 			if (life[i] >= 0) {
 				if (Collision::Player2Other(bullPos, bullScl, enemyPos[i], enemyScl)) {
@@ -64,9 +67,11 @@ void middle::Update()
 					bullPos.z = -10;
 					speed = 0;
 					enemy[i]->SetLife(life[i]);
+					enespeed = 0;
 				}
 				else {
 					lost = false;
+					enemy[i]->GetSpeed();
 				}
 			}
 		}
@@ -119,7 +124,8 @@ void middle::ImGuiDraw()
 	ImGui::Begin("mouth");
 	ImGui::Checkbox("shot", &shot);
 	if (ImGui::TreeNode("playerPos")) {
-		ImGui::SliderFloat("playerPos.x", &playerPos.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("playerPos.z", &enemyPos[0].z, -100.0f, 100.0f);
+		ImGui::SliderFloat("playerPos.z", &enemyPos[1].z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.y", &playerPos.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("Pos.y", &bullPos.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);

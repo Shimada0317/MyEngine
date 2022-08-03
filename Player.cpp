@@ -113,3 +113,15 @@ void Player::MouthContoroll()
 
 	//pos=posNear+mouseDirection
 }
+
+XMVECTOR Player::GetWorldPosition()
+{
+	XMVECTOR worldPos;
+
+	worldPos.m128_f32[0] = position.x;
+	worldPos.m128_f32[1] = position.y;
+	worldPos.m128_f32[2] = position.z;
+	worldPos.m128_f32[3] = 1;
+
+	return worldPos;
+}

@@ -9,6 +9,7 @@
 
 using namespace DirectX;
 
+class Player;
 class Enemy
 {
 public:
@@ -45,6 +46,17 @@ public:
 	const int& GetLife() { return life; }
 
 	void SetLife(int life) { this->life = life; }
+
+	void SetPlayer(Player* player) { player_ = player; }
+
+	XMVECTOR GetWorldPos();
+
+	void SetSpeed(float speed) { this->speed = speed; }
+
+	const float& GetSpeed() { return speed; }
+
+	void SetTime(float time) { this->stopT = time; }
+
 private:
 	ObjModel* model = nullptr;
 	Object3d* enemy = nullptr;
@@ -63,5 +75,9 @@ private:
 	bool arive = true;
 	int life = 3;
 	float responetime = 0.0f;
+	Player* player_ = nullptr;
+	float speed = 0.1f;
+	float stopT = 0.0f;
+	bool timer = false;
 };
 

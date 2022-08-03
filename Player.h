@@ -50,6 +50,8 @@ public:
 	const XMFLOAT2& GetRetSiz() { return retsize; }
 
 	void SetRetSiz(XMFLOAT2 scale) { this->retsize = scale; }
+
+	XMVECTOR GetWorldPosition();
 private:
 	float OffsetX = 0.0f;
 	float OffsetY = 0.0f;
@@ -63,9 +65,9 @@ private:
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
 
-	XMFLOAT3 position = { 0.0f,0.2f,5.0f };
+	XMFLOAT3 position = { 0.0f,0.2f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 scale = { 0.5f,0.5f,0.5f };
+	XMFLOAT3 scale = { 0.2f,0.2f,0.2f };
 
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };

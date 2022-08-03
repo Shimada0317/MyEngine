@@ -19,6 +19,7 @@ void Enemy::Set()
 	enemy->SetPosition(position);
 	enemy->SetRotation(rotation);
 	enemy->SetScale(scale);
+
 }
 
 void Enemy::Update()
@@ -40,7 +41,19 @@ void Enemy::Update()
 		arive = true;
 	}
 
+	if (arive == true) {
+		position.z -= speed;
+		enemy->SetPosition(position);
+	}
+
+	if (position.z <= 3) {
+		speed = 0;
+	}
+	else {
+		speed = 0.1f;
+	}
 	Set();
+
 	enemy->Update();
 }
 
@@ -64,6 +77,7 @@ void Enemy::ImGuiDraw()
 	ImGui::Checkbox("arive", &arive);
 	//スライダーで動きをいじりたいとき
 	ImGui::SliderFloat("life", &l, -100.0f, 100.0f);
+	ImGui::SliderFloat("pos", &position.z, -100.0f, 100.0f);
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
@@ -71,5 +85,19 @@ void Enemy::ImGuiDraw()
 
 void Enemy::Finalize()
 {
+	delete enemy;
+	delete model;
+}
+
+XMVECTOR Enemy::GetWorldPos()
+{
+	XMVECTOR worldPos;
+
+	worldPos.m128_f32[0] = position.x;
+	worldPos.m128_f32[1] = position.y;
+	worldPos.m128_f32[2] = position.z;
+	worldPos.m128_f32[3] = 1;
+
+	return worldPos;
 }
 
