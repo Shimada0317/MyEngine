@@ -24,6 +24,7 @@ void Enemy::Set()
 
 void Enemy::Update()
 {
+
 	if (life <= 0) {
 		arive = false;
 	}
@@ -46,12 +47,6 @@ void Enemy::Update()
 		enemy->SetPosition(position);
 	}
 
-	if (position.z <= 3) {
-		speed = 0;
-	}
-	else {
-		speed = 0.1f;
-	}
 	Set();
 
 	enemy->Update();
@@ -78,6 +73,7 @@ void Enemy::ImGuiDraw()
 	//スライダーで動きをいじりたいとき
 	ImGui::SliderFloat("life", &l, -100.0f, 100.0f);
 	ImGui::SliderFloat("pos", &position.z, -100.0f, 100.0f);
+	ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
@@ -87,6 +83,31 @@ void Enemy::Finalize()
 {
 	delete enemy;
 	delete model;
+}
+
+void Enemy::Active(bool& StopT)
+{
+	if (StopT == true) {
+		timer += 0.2f;
+		if (timer <= 10) {
+			speed = 0;
+		}
+		else if (timer > 10) {
+			StopT = false;
+			timer = 0;
+		}
+	}
+
+	if (StopT == false) {
+		if (position.z <= 3) {
+			speed = 0;
+		}
+		else {
+			speed = 0.1f;
+		}
+	}
+	
+	
 }
 
 XMVECTOR Enemy::GetWorldPos()

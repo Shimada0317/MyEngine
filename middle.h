@@ -64,7 +64,8 @@ private:
 	XMFLOAT3 target = { 0,0,0 };
 	XMFLOAT3 up = { 0,1,0 };
 
-	float enespeed = 0.1f;
+	float enespeed[2];
 	float stopT = 0;
+	bool stop[2];
 };
 

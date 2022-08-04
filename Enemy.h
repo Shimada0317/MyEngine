@@ -26,7 +26,7 @@ public:
 
 	void Finalize();
 
-	void Active();
+	void Active(bool& StopT);
 	const XMFLOAT3& GetPosition() { return position; }
 
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
@@ -76,8 +76,9 @@ private:
 	int life = 3;
 	float responetime = 0.0f;
 	Player* player_ = nullptr;
-	float speed = 0.1f;
+	float speed = 0.0f;
 	float stopT = 0.0f;
-	bool timer = false;
+
+	float timer = 0;
 };
 

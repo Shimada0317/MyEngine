@@ -23,7 +23,7 @@ void middle::Initialize()
 		enemyScl = enemy[i]->GetScl();
 		life[i] = enemy[i]->GetLife();
 		enemy[i]->SetPlayer(player);
-		enemy[i]->SetSpeed(enespeed);
+		stop[i] = false;
 	}
 }
 
@@ -40,7 +40,6 @@ void middle::SetPSR()
 			enemy[i]->SetPosition(enemyPos[i]);
 			enemy[i]->SetScl(enemyScl);
 			life[i] = enemy[i]->GetLife();
-			enemy[i]->SetSpeed(enespeed);
 		}
 	}
 }
@@ -67,14 +66,17 @@ void middle::Update()
 					bullPos.z = -10;
 					speed = 0;
 					enemy[i]->SetLife(life[i]);
-					enespeed = 0;
+					stop[i] = true;
 				}
 				else {
 					lost = false;
 					enemy[i]->GetSpeed();
 				}
+				enemy[i]->Active(stop[i]);
 			}
 		}
+
+		
 
 	Action::GetInstance()->PlayerMove3d(playerPos, 0.2f);
 	
@@ -123,6 +125,8 @@ void middle::ImGuiDraw()
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("mouth");
 	ImGui::Checkbox("shot", &shot);
+	ImGui::Checkbox("stop", &stop[0]);
+	ImGui::Checkbox("stop", &stop[1]);
 	if (ImGui::TreeNode("playerPos")) {
 		ImGui::SliderFloat("playerPos.z", &enemyPos[0].z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.z", &enemyPos[1].z, -100.0f, 100.0f);
