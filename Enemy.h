@@ -26,7 +26,7 @@ public:
 
 	void Finalize();
 
-	void Active(bool& StopT);
+	void Active(bool& StopT,int action,XMFLOAT3 position);
 	const XMFLOAT3& GetPosition() { return position; }
 
 	void SetPosition(XMFLOAT3 position) { this->position = position; }

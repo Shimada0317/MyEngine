@@ -43,8 +43,7 @@ void Enemy::Update()
 	}
 
 	if (arive == true) {
-		position.z -= speed;
-		enemy->SetPosition(position);
+		
 	}
 
 	Set();
@@ -85,8 +84,26 @@ void Enemy::Finalize()
 	delete model;
 }
 
-void Enemy::Active(bool& StopT)
+void Enemy::Active(bool& StopT,int action,XMFLOAT3 positionP)
 {
+	if (action == 0) {
+		position.z -= speed;
+	}
+
+	if (action == 1) {
+		float vx = (positionP.x - position.x);
+		float vz = (positionP.z - position.z);
+		float v2x = pow(vx, 2);
+		float v2z = pow(vz, 2);
+		float l = sqrtf(v2x + v2z);
+		float v3x= (vx / l) * speed;
+		float v3z = (vz / l) * speed;
+
+		position.x += v3x;
+		position.z += v3z;
+	}
+	enemy->SetPosition(position);
+
 	if (StopT == true) {
 		timer += 0.2f;
 		if (timer <= 10) {
@@ -103,7 +120,7 @@ void Enemy::Active(bool& StopT)
 			speed = 0;
 		}
 		else {
-			speed = 0.1f;
+			speed = 0.05f;
 		}
 	}
 	

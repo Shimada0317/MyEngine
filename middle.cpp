@@ -72,7 +72,7 @@ void middle::Update()
 					lost = false;
 					enemy[i]->GetSpeed();
 				}
-				enemy[i]->Active(stop[i]);
+				enemy[i]->Active(stop[i],1,playerPos);
 			}
 		}
 
