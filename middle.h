@@ -39,8 +39,6 @@ private:
 	XMFLOAT3 enemyScl = { 0,0,0 };
 	XMFLOAT3 enemyRot = { 0,0,0 };
 
-	XMFLOAT3 HeadPos[2];
-
 	XMFLOAT3 absolutePos = { 0,0,0 };
 
 	Input* input = nullptr;
