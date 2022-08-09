@@ -72,6 +72,20 @@ void middle::Update()
 					lost = false;
 					enemy[i]->GetSpeed();
 				}
+				if(Collision::HeadShot(bullPos, bullScl, enemyPos[i], enemyScl)) {
+					life[i] -= 3;
+					lost = true;
+					shot = false;
+					bullPos.z = -10;
+					speed = 0;
+					enemy[i]->SetLife(life[i]);
+					stop[i] = true;
+				}
+				else {
+					lost = false;
+					enemy[i]->GetSpeed();
+				}
+
 				enemy[i]->Active(stop[i],1,playerPos);
 			}
 		}

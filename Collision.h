@@ -67,5 +67,7 @@ public:
 	void CheckPlayer2Boss(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Bossposition, XMFLOAT3 Bossscale, int PlayerHp,int PlayerLevel);
 
 	static bool Player2Other(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Otherposition, XMFLOAT3 Otherscale);
+
+	static bool HeadShot(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Otherposition, XMFLOAT3 Otherscale);
 };
 

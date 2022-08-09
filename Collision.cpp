@@ -199,11 +199,32 @@ bool Collision::Player2Other(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFL
 	float z = Playerposition.z - Otherposition.z;
 
 	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
-	float BossAllscale = (Otherscale.x + Otherscale.y + Otherscale.z)/4;
+	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z)/4;
 
 	float length = sqrt(x * x + y * y + z * z);
 
-	if (length <= PlayerAllscale + BossAllscale) {
+	if (length <= PlayerAllscale + EnemyAllscale) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+bool Collision::HeadShot(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Otherposition, XMFLOAT3 Otherscale)
+{
+	Otherposition.y = Otherposition.y + 2;
+
+	float x = Playerposition.x - Otherposition.x;
+	float y = Playerposition.y - Otherposition.y;
+	float z = Playerposition.z - Otherposition.z;
+
+	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
+	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z) / 4;
+
+	float length = sqrt(x * x + y * y + z * z);
+
+	if (length <= PlayerAllscale + EnemyAllscale) {
 		return true;
 	}
 	else {
