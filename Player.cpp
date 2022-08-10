@@ -27,15 +27,18 @@ void Player::Set()
 	player->SetPosition({ position });
 	player->SetRotation({ rotation });
 	player->SetScale({ scale });
+
+	camera->SetEye({ Eye_pos });
+	camera->SetTarget({ Target_pos });
 }
 
 void Player::Update()
 {
 	//MouthContoroll();
-	
+	Target_pos.z += 1;
 	Set();
 	player->Update();
-	
+	camera->Update();
 }
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
