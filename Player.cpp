@@ -29,13 +29,14 @@ void Player::Set()
 	player->SetScale({ scale });
 
 	camera->SetEye({ Eye_pos });
-	camera->SetTarget({ Target_pos });
+	camera->SetTarget({position});
+	camera->SetDistance(10);
 }
 
 void Player::Update()
 {
 	//MouthContoroll();
-	Target_pos.z += 1;
+	position.x += 0.1f;
 	Set();
 	player->Update();
 	camera->Update();
@@ -62,8 +63,9 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("position")) {
-		ImGui::SliderFloat("position.x", &retpos.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("position.y", &retpos.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("position.x", &position.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("position.y", &position.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("position.z", &position.z, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

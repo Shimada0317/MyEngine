@@ -90,7 +90,6 @@ void middle::Update()
 			}
 		}
 
-		
 
 	Action::GetInstance()->PlayerMove3d(playerPos, 0.2f);
 	
@@ -145,6 +144,7 @@ void middle::ImGuiDraw()
 		ImGui::SliderFloat("playerPos.z", &enemyPos[0].z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.z", &enemyPos[1].z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.y", &playerPos.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("playerPos.z", &playerPos.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("Pos.y", &bullPos.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);
 		ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
