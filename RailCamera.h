@@ -18,16 +18,40 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public:
+	RailCamera(int window_width, int window_height);
+
+	~RailCamera();
 
 	void Initialize();
 
 	void Update();
 
+	void UpdateViewMatrix();
+
+	void UpdateProjectionMatrix();
+
 private:
 	Camera* camera = nullptr;
 
-	XMMATRIX matViewProjection = camera->GetViewProjectionMatrix();
-
 	XMMATRIX world;
+
+	// ローカルワールド変換行列
+	XMMATRIX matWorld;
+
+	XMMATRIX matRot, matTrans;
+
+	XMFLOAT3 target = { 0,0,0 };
+	XMFLOAT3 eye = { 0,0,0 };
+
+	// ビュー行列
+	XMMATRIX matView = DirectX::XMMatrixIdentity();
+	// 射影行列
+	XMMATRIX matProjection = DirectX::XMMatrixIdentity();
+	// ビュー射影行列
+	XMMATRIX matViewProjection = DirectX::XMMatrixIdentity();
+	// 上方向ベクトル
+	XMFLOAT3 up = { 0, 1, 0 };
+	// アスペクト比
+	float aspectRatio = 1.0f;
 };
 
