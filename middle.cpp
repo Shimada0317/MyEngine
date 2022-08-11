@@ -49,7 +49,7 @@ void middle::AllUpdate()
 {
 	player->Update();
 	for (int i = 0; i < 2; i++) {
-		enemy[i]->Update();
+		enemy[i]->Update(playerPos);
 		enemyPos[i] = enemy[i]->GetPosition();
 	}
 	bull->Update();
@@ -67,6 +67,9 @@ void middle::Update()
 					speed = 0;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
+					if (life[i] == 0) {
+						count = true;
+					}
 				}
 				else {
 					lost = false;
@@ -80,16 +83,42 @@ void middle::Update()
 					speed = 0;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
+					if (life[i] == 0) {
+						count = true;
+					}
 				}
 				else {
 					lost = false;
 					enemy[i]->GetSpeed();
 				}
+			
+
 
 				enemy[i]->Active(stop[i],1,playerPos);
 			}
 		}
+		if (count == true) {
+			hit += 1;
+			count = false;
+		}
 
+		
+		if (hit == 2) {
+			patern += 1;
+			cammove = 0.1f;
+			hit = 0;
+		}
+
+		if (patern == 1) {
+			playerPos.z += cammove;
+			life[1] -= 3;
+			life[0] -= 3;
+			if (playerPos.z >= 10) {
+				hit = 0;
+				cammove = 0;
+			}
+		}
+		
 
 	Action::GetInstance()->PlayerMove3d(playerPos, 0.2f);
 	
@@ -131,8 +160,8 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 void middle::ImGuiDraw()
 {
 	player->ImGuiDraw();
-	float l = life[0];
 	float r = Remaining;
+	float p = patern;
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
@@ -143,12 +172,18 @@ void middle::ImGuiDraw()
 	if (ImGui::TreeNode("playerPos")) {
 		ImGui::SliderFloat("playerPos.z", &enemyPos[0].z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.z", &enemyPos[1].z, -100.0f, 100.0f);
-		ImGui::SliderFloat("playerPos.y", &playerPos.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.z", &playerPos.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("Pos.y", &bullPos.z, -100.0f, 100.0f);
+	
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("other")) {
 		ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);
 		ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
-		ImGui::SliderFloat("life", &l, -100.0f, 100.0f);
+		ImGui::SliderFloat("hit", &hit, -100.0f, 100.0f);
+		ImGui::SliderFloat("patern", &p, -100.0f, 100.0f);
+		ImGui::Checkbox("count", &count);
 		ImGui::TreePop();
 	}
 

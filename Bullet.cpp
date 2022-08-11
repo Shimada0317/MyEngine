@@ -30,7 +30,7 @@ void Bullet::bun(XMFLOAT3& pos,XMFLOAT3 position, float& speed,bool& shot,int& R
 
 			pos.z += speed;
 		}
-		if (pos.z >= 30) {
+		if (pos.z >= 30+position.z) {
 			pos.z = -10;
 			pos.x = oldpos.x;
 			pos.y = oldpos.y;

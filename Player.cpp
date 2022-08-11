@@ -30,13 +30,12 @@ void Player::Set()
 
 	camera->SetEye({ Eye_pos });
 	camera->SetTarget({position});
-	camera->SetDistance(10);
+	camera->SetDistance(5);
 }
 
 void Player::Update()
 {
 	//MouthContoroll();
-	position.x += 0.1f;
 	Set();
 	player->Update();
 	camera->Update();

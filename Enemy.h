@@ -6,6 +6,7 @@
 #include"Action.h"
 #include"DebugCamera.h"
 #include<vector>
+#include"Player.h"
 
 using namespace DirectX;
 
@@ -18,7 +19,7 @@ public:
 
 	void Set();
 
-	void Update();
+	void Update(XMFLOAT3 pos);
 
 	void Draw();
 
@@ -80,5 +81,8 @@ private:
 	float stopT = 0.0f;
 
 	float timer = 0;
+
+	Player* player = nullptr;
+	float nowpos = 0;
 };
 

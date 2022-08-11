@@ -11,7 +11,6 @@ void Enemy::Initalize()
 	enemy= Object3d::Create();
 	enemy->SetModel(model);
 
-
 }
 
 void Enemy::Set()
@@ -22,7 +21,7 @@ void Enemy::Set()
 
 }
 
-void Enemy::Update()
+void Enemy::Update(XMFLOAT3 pos)
 {
 
 	if (life <= 0) {
@@ -31,10 +30,9 @@ void Enemy::Update()
 
 	if (arive == false) {
 		position.x = rand() % 10 - 5;
-		position.z = rand() % 1 + 20;
+		position.z = rand() % 1 + 30+pos.z;
 		responetime += 0.2f;
 	}
-
 
 	if (responetime >= 10.0f) {
 		life = 3;
@@ -42,9 +40,7 @@ void Enemy::Update()
 		arive = true;
 	}
 
-	if (arive == true) {
-		
-	}
+
 
 	Set();
 
@@ -116,7 +112,7 @@ void Enemy::Active(bool& StopT,int action,XMFLOAT3 positionP)
 	}
 
 	if (StopT == false) {
-		if (position.z <= 3) {
+		if (position.z <= positionP.z+3) {
 			speed = 0;
 		}
 		else {

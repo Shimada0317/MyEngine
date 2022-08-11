@@ -67,5 +67,10 @@ private:
 	float enespeed[2];
 	float stopT = 0;
 	bool stop[2];
+
+	float hit = 0;
+	int patern = 0;
+	float cammove = 0.1f;
+	bool count = false;
 };
 
