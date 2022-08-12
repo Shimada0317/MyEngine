@@ -67,7 +67,7 @@ void middle::Update()
 					speed = 0;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
-					if (life[i] == 0) {
+					if (life[i] <= 0) {
 						count = true;
 					}
 				}
@@ -83,7 +83,7 @@ void middle::Update()
 					speed = 0;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
-					if (life[i] == 0) {
+					if (life[i] <= 0) {
 						count = true;
 					}
 				}
@@ -92,7 +92,10 @@ void middle::Update()
 					enemy[i]->GetSpeed();
 				}
 			
-
+				if (playerPos.z >= enemyPos[i].z) {
+					life[i] = 0;
+					enemy[i]->SetLife(life[i]);
+				}
 
 				enemy[i]->Active(stop[i],1,playerPos);
 			}
@@ -109,15 +112,15 @@ void middle::Update()
 			hit = 0;
 		}
 
-		if (patern == 1) {
+		if (patern != 0) {
 			playerPos.z += cammove;
 			life[1] -= 3;
 			life[0] -= 3;
-			if (playerPos.z >= 10) {
-				hit = 0;
+			if (playerPos.z >= 10*patern) {
 				cammove = 0;
 			}
 		}
+
 		
 
 	Action::GetInstance()->PlayerMove3d(playerPos, 0.2f);

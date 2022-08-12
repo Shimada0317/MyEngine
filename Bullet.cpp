@@ -19,6 +19,7 @@ void Bullet::bun(XMFLOAT3& pos,XMFLOAT3 position, float& speed,bool& shot,int& R
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 			pos.x = position.x;
 			pos.y = position.y;
+			pos.z = position.z;
 			shot = true;
 			retime = false;
 			speed = 0.5f;
