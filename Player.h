@@ -72,7 +72,7 @@ private:
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Eye_pos = {};
-	XMFLOAT3 Target_pos = {};
+	XMFLOAT3 Target_pos = {0.0f,0.0f,0.0f};
 	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
 
 	XMFLOAT3 size = { 0,0,0};

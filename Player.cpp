@@ -29,12 +29,39 @@ void Player::Set()
 	player->SetScale({ scale });
 
 	camera->SetEye({ Eye_pos });
-	camera->SetTarget({position});
+	camera->SetTarget({Target_pos.x,Target_pos.y,position.z});
 	camera->SetDistance(5);
 }
 
 void Player::Update()
 {
+	if (position.x >= 4) {
+		Target_pos.x += 0.1f;
+		if (Target_pos.x >= 2.0f) {
+			Target_pos.x = 2.0f;
+		}
+	}
+	else if(position.x<=3.9f&&position.x > 0) {
+		Target_pos.x -= 0.1f;
+		if (Target_pos.x <= 0.0f) {
+			Target_pos.x = 0.0f;
+		}
+	}
+
+	if (position.x <= -4) {
+		Target_pos.x -= 0.1f;
+		if (Target_pos.x <= -2.0f) {
+			Target_pos.x = -2.0f;
+		}
+	}
+	else if(position.x >= -3.9f && position.x < 0)
+	{
+		Target_pos.x += 0.1f;
+		if (Target_pos.x >= 0.0f) {
+			Target_pos.x = 0.0f;
+		}
+	}
+
 	//MouthContoroll();
 	Set();
 	player->Update();
@@ -43,6 +70,7 @@ void Player::Update()
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
+	
 	
 	reticle->PreDraw(cmdList);
 	reticle->Draw();
@@ -65,6 +93,8 @@ void Player::ImGuiDraw()
 		ImGui::SliderFloat("position.x", &position.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("position.y", &position.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("position.z", &position.z, -100.0f, 100.0f);
+		ImGui::SliderFloat("target.x", &Target_pos.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("target.y", &Target_pos.y, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

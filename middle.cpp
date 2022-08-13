@@ -176,6 +176,7 @@ void middle::ImGuiDraw()
 		ImGui::SliderFloat("playerPos.z", &enemyPos[0].z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.z", &enemyPos[1].z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.z", &playerPos.z, -100.0f, 100.0f);
+		ImGui::SliderFloat("playerPos.x", &playerPos.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("Pos.y", &bullPos.z, -100.0f, 100.0f);
 	
 		ImGui::TreePop();
