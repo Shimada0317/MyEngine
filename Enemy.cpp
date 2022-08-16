@@ -6,7 +6,7 @@ void Enemy::Initalize()
 {
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
-	model = ObjModel::CreateFromOBJ("block0");
+	model = ObjModel::CreateFromOBJ("enemy");
 	enemy->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
 	enemy= Object3d::Create();
 	enemy->SetModel(model);
