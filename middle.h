@@ -24,14 +24,14 @@ public:
 	void Fainalize();
 private:
 	Player* player = nullptr;
-	Bullet* bull = nullptr;
+	Bullet* bull[9];
 	Enemy* enemy[2];
 
 	XMFLOAT3 playerPos = { 0,0,0 };
 	XMFLOAT3 playerScl = { 0,0,0 };
 	XMFLOAT3 playerRot = { 0,0 ,0 };
 
-	XMFLOAT3 bullPos = { 0,0,0 };
+	XMFLOAT3 bullPos[9];
 	XMFLOAT3 bullScl = { 0,0,0 };
 	XMFLOAT3 bullRot = { 0,0,0 };
 
@@ -49,8 +49,10 @@ private:
 	float mouseY = 0;
 
 	float moveSpeed = 0.1f;
-	bool shot = false;
+	bool shot [9];
+	int debug[9];
 	float speed = 0.5f;
+	int next = 0;
 
 	bool lost = false;
 	int life[2];

@@ -7,14 +7,17 @@ void middle::Initialize()
 	player->Initalize();
 
 	playerPos = player->GetPosition();
-	
-	bull = new Bullet();
-	bull->Initialize();
+	for (int j = 0; j < 9; j++) {
+		bull[j] = new Bullet();
+		bull[j]->Initialize();
 
 
-	bullPos = bull->GetPosition();
-	bullScl = bull->GetScl();
-	lost = bull->GetLost();
+		bullPos[j] = bull[j]->GetPosition();
+		bullScl = bull[j]->GetScl();
+		lost = bull[j]->GetLost();
+		shot[j] = true;
+		debug[j] = 0;
+	}
 
 	for (int i = 0; i < 2; i++) {
 		enemy[i] = new Enemy();
@@ -30,10 +33,11 @@ void middle::Initialize()
 void middle::SetPSR()
 {
 	player->SetPosition(playerPos);
-	
-	bull->SetPosition(bullPos);
-	bull->SetScl(bullScl);
-	bull->SetLost(lost);
+	for(int j = 0; j < 9; j++) {
+		bull[j]->SetPosition(bullPos[j]);
+		bull[j]->SetScl(bullScl);
+		bull[j]->SetLost(lost);
+	}
 	for (int i = 0; i < 2; i++) {
 		if (life[i] <= 0) {
 			enemyPos[i] = enemy[i]->GetPosition();
@@ -52,18 +56,21 @@ void middle::AllUpdate()
 		enemy[i]->Update(playerPos);
 		enemyPos[i] = enemy[i]->GetPosition();
 	}
-	bull->Update();
+	for(int j = 0; j < 9; j++) {
+		bull[j]->Update();
+	}
 }
 
 void middle::Update()
 {
-		for (int i = 0; i < 2; i++) {
-			if (life[i] >= 0) {
-				if (Collision::Player2Other(bullPos, bullScl, enemyPos[i], enemyScl)) {
+	for (int i = 0; i < 2; i++) {
+		if (life[i] >= 0) {
+			for (int j = 0; j < 9; j++) {
+				if (Collision::Player2Other(bullPos[j], bullScl, enemyPos[i], enemyScl)) {
 					life[i] -= 1;
 					lost = true;
-					shot = false;
-					bullPos.z = -10;
+					shot[j] = false;
+					bullPos[j].z = -10;
 					speed = 0;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
@@ -75,11 +82,11 @@ void middle::Update()
 					lost = false;
 					enemy[i]->GetSpeed();
 				}
-				if(Collision::HeadShot(bullPos, bullScl, enemyPos[i], enemyScl)) {
+				if (Collision::HeadShot(bullPos[j], bullScl, enemyPos[i], enemyScl)) {
 					life[i] -= 3;
 					lost = true;
-					shot = false;
-					bullPos.z = -10;
+					shot[j] = false;
+					bullPos[j].z = -10;
 					speed = 0;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
@@ -87,19 +94,21 @@ void middle::Update()
 						count = true;
 					}
 				}
+
 				else {
 					lost = false;
 					enemy[i]->GetSpeed();
 				}
-			
-				if (playerPos.z >= enemyPos[i].z) {
-					life[i] = 0;
-					enemy[i]->SetLife(life[i]);
-				}
-
-				enemy[i]->Active(stop[i],1,playerPos);
 			}
+		if (playerPos.z >= enemyPos[i].z) {
+			life[i] = 0;
+			enemy[i]->SetLife(life[i]);
 		}
+
+		enemy[i]->Active(stop[i], 1, playerPos);
+
+		}
+	}
 		if (count == true) {
 			hit += 1;
 			count = false;
@@ -140,9 +149,22 @@ void middle::Update()
 		playerPos.x = -6.8f;
 	}
 
-	//if (Remaining >= 0) {
-		bull->bun(bullPos, playerPos, speed, shot, Remaining);
-	//}
+	for (int j = 0; j < 9; j++) {
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			bull[j]->bun(bullPos[j], playerPos, speed, shot[j], Remaining);
+		}
+		
+	}
+	if (next < 8) {
+		if (Input::GetInstance()->TriggerKey(DIK_A)) {
+
+			next += 1;
+			if (next >= 8) {
+				next = 8;
+			}
+			bullPos[next].x = playerPos.x;
+		}
+	}
 		if (Input::GetInstance()->PushKey(DIK_R)) {
 			Remaining = 9;
 		}
@@ -152,7 +174,9 @@ void middle::Update()
 
 void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	bull->Draw();
+	for (int j = 0; j < 9; j++) {
+		bull[j]->Draw();
+	}
 	for (int i = 0; i < 2; i++) {
 		enemy[i]->Draw();
 	}
@@ -169,7 +193,7 @@ void middle::ImGuiDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("mouth");
-	ImGui::Checkbox("shot", &shot);
+	ImGui::Checkbox("shot", &shot[0]);
 	ImGui::Checkbox("stop", &stop[0]);
 	ImGui::Checkbox("stop", &stop[1]);
 	if (ImGui::TreeNode("playerPos")) {
@@ -177,7 +201,11 @@ void middle::ImGuiDraw()
 		ImGui::SliderFloat("playerPos.z", &enemyPos[1].z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.z", &playerPos.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.x", &playerPos.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Pos.y", &bullPos.z, -100.0f, 100.0f);
+		ImGui::SliderFloat("Pos.y", &bullPos[0].x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Pos.y", &bullPos[1].x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Pos.y", &bullPos[2].x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Pos.y", &bullPos[3].x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Pos.y", &bullPos[4].x, -100.0f, 100.0f);
 	
 		ImGui::TreePop();
 	}
