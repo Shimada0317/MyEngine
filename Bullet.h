@@ -18,7 +18,7 @@ private:
 public:
 	void Initialize();
 
-	void bun(XMFLOAT3& pos,XMFLOAT3 position,float& speed,bool& shot,int& Remaining);
+	void bun(XMFLOAT3& pos,XMFLOAT3 position,float& speed,bool& shot,int& Remaining,bool& retime);
 
 	void Shot(XMFLOAT3& pos, XMFLOAT2 position, int speed, bool& shot);
 

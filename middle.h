@@ -53,6 +53,8 @@ private:
 	int debug[9];
 	float speed = 0.5f;
 	int next = 0;
+	bool retime[9];
+
 
 	bool lost = false;
 	int life[2];

@@ -11,7 +11,7 @@ void middle::Initialize()
 		bull[j] = new Bullet();
 		bull[j]->Initialize();
 
-
+		retime[j] = false;
 		bullPos[j] = bull[j]->GetPosition();
 		bullScl = bull[j]->GetScl();
 		lost = bull[j]->GetLost();
@@ -149,20 +149,17 @@ void middle::Update()
 		playerPos.x = -6.8f;
 	}
 
-	for (int j = 0; j < 9; j++) {
-		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-			bull[j]->bun(bullPos[j], playerPos, speed, shot[j], Remaining);
-		}
-		
-	}
-	if (next < 8) {
-		if (Input::GetInstance()->TriggerKey(DIK_A)) {
 
+	if (next < 8) {
+
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			retime[next] = true;
+			bull[next]->bun(bullPos[next], playerPos, speed, shot[next], Remaining,retime[next]);
 			next += 1;
-			if (next >= 8) {
-				next = 8;
-			}
-			bullPos[next].x = playerPos.x;
+		}
+
+		if (next >= 8) {
+			next = 8;
 		}
 	}
 		if (Input::GetInstance()->PushKey(DIK_R)) {
