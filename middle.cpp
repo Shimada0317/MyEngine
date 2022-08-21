@@ -30,7 +30,7 @@ void middle::Initialize()
 	}
 
 	Sprite::LoadTexture(10, L"Resources/bullet.png");
-	bullet = Sprite::SpriteCreate(10, { 1.0f,1.0f });
+	bullet = Sprite::SpriteCreate(10, {spPos});
 }
 
 void middle::SetPSR()

@@ -106,7 +106,7 @@ protected://メンバ変数
 	//Z軸回りの回転角
 	float rotation = 0.0f;
 	//座標
-	XMFLOAT2 position{};
+	XMFLOAT2 position{0.0f,0.0f};
 	//大きさ
 	XMFLOAT2 size = { 1.0f,1.0f };
 	//ワールド行列

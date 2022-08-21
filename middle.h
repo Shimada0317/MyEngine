@@ -46,7 +46,7 @@ private:
 	XMFLOAT3 absolutePos = { 0,0,0 };
 
 	XMFLOAT2 spSiz = { 0.1f,0.1f };
-	XMFLOAT2 spPos = { 1.0f,1.0f };
+	XMFLOAT2 spPos = { 100.0f,100.0f };
 
 	Input* input = nullptr;
 
