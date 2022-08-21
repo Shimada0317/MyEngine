@@ -16,7 +16,7 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
 	////スプライトの読み込み
-	Sprite::LoadTexture(1, L"Resources/mark.png");
+	Sprite::LoadTexture(1, L"Resources/bullet.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
 	//モデルの読み込み
@@ -24,7 +24,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	player3d = Object3d::Create();
 	player3d->SetModel(playermodel);*/
 
-	ramieru = ObjModel::CreateFromOBJ("ramieru");
+	ramieru = ObjModel::CreateFromOBJ("sphere");
 	ramieru3d = Object3d::Create();
 	ramieru3d->SetModel(ramieru);
 
@@ -42,7 +42,8 @@ void TitleScene::SetPosSclRot()
 	player3d->SetPosition({ 0,0,0 });
 	player3d->SetScale({0.5f,0.5f,0.5f});*/
 
-
+	ramieru3d->SetPosition({ ramieru_pos });
+	ramieru3d->SetScale({ 10.0f,10.0f ,10.0f});
 
 	title->SetSize({retsize});
 	title->SetPosition({ retpos });
@@ -80,7 +81,7 @@ void TitleScene::Update()
 {
 	//DirectX毎フレーム処理 ここから
 
-	Action::GetInstance()->PlayerMove2d(retpos, 1);
+	//Action::GetInstance()->PlayerMove2d(retpos, 1);
 
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 		//シーン切り替え
@@ -98,9 +99,11 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	dxCommon->PreDraw();
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	mid->Draw(dxCommon->GetCmdList());
+	ramieru->Draw(dxCommon->GetCmdList());
 	Object3d::PostDraw();
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	title->Draw();
+//	title->Draw();
+	mid->SpriteDraw();
 	Sprite::PostDraw();
 
 	mid->ImGuiDraw();

@@ -29,7 +29,7 @@ private:
 	Bullet* bull[9];
 	Enemy* enemy[2];
 
-	Sprite* bullet=nullptr;
+	Sprite* bulletHUD=nullptr;
 
 	XMFLOAT3 playerPos = { 0,0,0 };
 	XMFLOAT3 playerScl = { 0,0,0 };
@@ -45,8 +45,8 @@ private:
 
 	XMFLOAT3 absolutePos = { 0,0,0 };
 
-	XMFLOAT2 spSiz = { 0.1f,0.1f };
-	XMFLOAT2 spPos = { 100.0f,100.0f };
+	XMFLOAT2 spSiz = { 64.0f,64.0f };
+	XMFLOAT2 spPos = { 1200.0f,0.0f };
 
 	Input* input = nullptr;
 

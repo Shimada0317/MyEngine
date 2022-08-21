@@ -29,14 +29,15 @@ void middle::Initialize()
 		stop[i] = false;
 	}
 
-	Sprite::LoadTexture(10, L"Resources/bullet.png");
-	bullet = Sprite::SpriteCreate(10, {spPos});
+	////スプライトの読み込み
+	Sprite::LoadTexture(1, L"Resources/bullet.png");
+	bulletHUD = Sprite::SpriteCreate(1, { 10.0f,10.0f });
 }
 
 void middle::SetPSR()
 {
-	bullet->SetSize({ spSiz });
-	bullet->SetPosition({ spPos });
+	bulletHUD->SetSize({ spSiz });
+	bulletHUD->SetPosition({ spPos });
 
 	player->SetPosition(playerPos);
 	for (int j = 0; j < 9; j++) {
@@ -210,7 +211,7 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void middle::SpriteDraw()
 {
-	bullet->Draw();
+	bulletHUD->Draw();
 }
 
 void middle::ImGuiDraw()
@@ -239,7 +240,7 @@ void middle::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("bullet")) {
+	if (ImGui::TreeNode("bulletHUD")) {
 		ImGui::Checkbox("shot", &shot[0]);
 		ImGui::Checkbox("shot", &shot[1]);
 		ImGui::Checkbox("shot", &shot[2]);
