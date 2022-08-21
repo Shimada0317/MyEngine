@@ -19,6 +19,8 @@ public:
 
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
+	void SpriteDraw();
+
 	void ImGuiDraw();
 
 	void Fainalize();
@@ -26,6 +28,8 @@ private:
 	Player* player = nullptr;
 	Bullet* bull[9];
 	Enemy* enemy[2];
+
+	Sprite* bullet=nullptr;
 
 	XMFLOAT3 playerPos = { 0,0,0 };
 	XMFLOAT3 playerScl = { 0,0,0 };
@@ -40,6 +44,9 @@ private:
 	XMFLOAT3 enemyRot = { 0,0,0 };
 
 	XMFLOAT3 absolutePos = { 0,0,0 };
+
+	XMFLOAT2 spSiz = { 0.1f,0.1f };
+	XMFLOAT2 spPos = { 1.0f,1.0f };
 
 	Input* input = nullptr;
 

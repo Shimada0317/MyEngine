@@ -159,7 +159,8 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	title->Draw();
+	//title->Draw();
+	mid->SpriteDraw();
 	Sprite::PostDraw();
 }
 
@@ -170,14 +171,14 @@ void GameScene::ImgDraw()
 
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 {
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
-	//SpriteDraw(dxCommon);
-	ObjDraw(dxCommon);
-	postEffect->PostDrawScene(dxCommon->GetCmdList());
-
 	dxCommon->PreDraw();
+	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	ObjDraw(dxCommon);
+	SpriteDraw(dxCommon);
+	//postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-	postEffect->Draw(dxCommon->GetCmdList());
+
+	//postEffect->Draw(dxCommon->GetCmdList());
 	ImgDraw();
 	//•`‰æŒãˆ—
 	dxCommon->PostDraw();

@@ -28,10 +28,16 @@ void middle::Initialize()
 		enemy[i]->SetPlayer(player);
 		stop[i] = false;
 	}
+
+	Sprite::LoadTexture(10, L"Resources/bullet.png");
+	bullet = Sprite::SpriteCreate(10, { 1.0f,1.0f });
 }
 
 void middle::SetPSR()
 {
+	bullet->SetSize({ spSiz });
+	bullet->SetPosition({ spPos });
+
 	player->SetPosition(playerPos);
 	for (int j = 0; j < 9; j++) {
 		bull[j]->SetPosition(bullPos[j]);
@@ -200,6 +206,11 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 	}
 	//player->Draw(cmdList);
 	player->ObjDraw();
+}
+
+void middle::SpriteDraw()
+{
+	bullet->Draw();
 }
 
 void middle::ImGuiDraw()
