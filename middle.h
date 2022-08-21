@@ -51,15 +51,15 @@ private:
 	float moveSpeed = 0.1f;
 	bool shot [9];
 	int debug[9];
-	float speed = 0.5f;
+	float speed[9];
 	int next = 0;
 	bool retime[9];
-
+	bool reshot = false;
 
 	bool lost = false;
 	int life[2];
 
-	int Remaining = 9;
+	int Remaining = 0;
 
 	XMMATRIX matVPV;
 	XMMATRIX matInverseVPV;

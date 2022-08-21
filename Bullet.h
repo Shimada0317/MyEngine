@@ -18,9 +18,11 @@ private:
 public:
 	void Initialize();
 
-	void bun(XMFLOAT3& pos,XMFLOAT3 position,float& speed,bool& shot,int& Remaining,bool& retime);
+	void bun(XMFLOAT3& pos, XMFLOAT3 position, float& speed, bool& shot, int& Remaining,bool& retime);
 
 	void Shot(XMFLOAT3& pos, XMFLOAT2 position, int speed, bool& shot);
+
+	void debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed,bool& d);
 
 	void Set();
 
@@ -58,10 +60,14 @@ private:
 	XMFLOAT3 rot = { 0.0f,0.0f,0.0f };
 
 	bool shot = false;
-	bool retime = true;
+	int rebun = 0;
 	float speed = 1.0f;
 	float Loadtime = 0.0f;
 
 	bool lost = false;
-};
 
+
+
+	//debug
+	bool d = false;
+};

@@ -11,12 +11,12 @@ void middle::Initialize()
 		bull[j] = new Bullet();
 		bull[j]->Initialize();
 
-		retime[j] = false;
+		retime[j] = true;
 		bullPos[j] = bull[j]->GetPosition();
 		bullScl = bull[j]->GetScl();
 		lost = bull[j]->GetLost();
-		shot[j] = true;
 		debug[j] = 0;
+		speed[j] = 0.5f;
 	}
 
 	for (int i = 0; i < 2; i++) {
@@ -33,7 +33,7 @@ void middle::Initialize()
 void middle::SetPSR()
 {
 	player->SetPosition(playerPos);
-	for(int j = 0; j < 9; j++) {
+	for (int j = 0; j < 9; j++) {
 		bull[j]->SetPosition(bullPos[j]);
 		bull[j]->SetScl(bullScl);
 		bull[j]->SetLost(lost);
@@ -47,7 +47,7 @@ void middle::SetPSR()
 		}
 	}
 }
-	
+
 
 void middle::AllUpdate()
 {
@@ -56,7 +56,7 @@ void middle::AllUpdate()
 		enemy[i]->Update(playerPos);
 		enemyPos[i] = enemy[i]->GetPosition();
 	}
-	for(int j = 0; j < 9; j++) {
+	for (int j = 0; j < 9; j++) {
 		bull[j]->Update();
 	}
 }
@@ -71,7 +71,7 @@ void middle::Update()
 					lost = true;
 					shot[j] = false;
 					bullPos[j].z = -10;
-					speed = 0;
+					speed[j] = 0;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
 					if (life[i] <= 0) {
@@ -87,7 +87,7 @@ void middle::Update()
 					lost = true;
 					shot[j] = false;
 					bullPos[j].z = -10;
-					speed = 0;
+					speed[j] = 0;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
 					if (life[i] <= 0) {
@@ -100,40 +100,40 @@ void middle::Update()
 					enemy[i]->GetSpeed();
 				}
 			}
-		if (playerPos.z >= enemyPos[i].z) {
-			life[i] = 0;
-			enemy[i]->SetLife(life[i]);
-		}
+			if (playerPos.z >= enemyPos[i].z) {
+				life[i] = 0;
+				enemy[i]->SetLife(life[i]);
+			}
 
-		enemy[i]->Active(stop[i], 1, playerPos);
+			enemy[i]->Active(stop[i], 1, playerPos);
 
 		}
 	}
-		if (count == true) {
-			hit += 1;
-			count = false;
-		}
+	if (count == true) {
+		hit += 1;
+		count = false;
+	}
 
-		
-		if (hit == 2) {
-			patern += 1;
-			cammove = 0.1f;
-			hit = 0;
-		}
 
-		if (patern != 0) {
-			playerPos.z += cammove;
-			life[1] -= 3;
-			life[0] -= 3;
-			if (playerPos.z >= 10*patern) {
-				cammove = 0;
-			}
-		}
+	if (hit == 2) {
+		patern += 1;
+		cammove = 0.1f;
+		hit = 0;
+	}
 
-		
+	if (patern != 0) {
+		playerPos.z += cammove;
+		life[1] -= 3;
+		life[0] -= 3;
+		if (playerPos.z >= 10 * patern) {
+			cammove = 0;
+		}
+	}
+
+
 
 	Action::GetInstance()->PlayerMove3d(playerPos, 0.2f);
-	
+
 
 	if (playerPos.y <= 0.0f) {
 		playerPos.y = 0.0f;
@@ -149,22 +149,43 @@ void middle::Update()
 		playerPos.x = -6.8f;
 	}
 
-
-	if (next < 8) {
-
+	//if (next < 9) {
+ //		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+	//		//shot[next] = true;
+			//bull[next]->bun(bullPos[next], playerPos, speed[next], shot[next], Remaining, retime[next]);
+	//		next += 1;
+	//	}
+	//}
+	if (Remaining < 9) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			retime[next] = true;
-			bull[next]->bun(bullPos[next], playerPos, speed, shot[next], Remaining,retime[next]);
-			next += 1;
-		}
-
-		if (next >= 8) {
-			next = 8;
+			Remaining += 1;
+			for (int i = 0; i < 9; i++) {
+				if (shot[i] == false) {
+					bullPos[i].x = playerPos.x;
+					bullPos[i].y = playerPos.y;
+					bullPos[i].z = playerPos.z;
+					shot[i] = true;
+					break;
+				}
+			}
 		}
 	}
-		if (Input::GetInstance()->PushKey(DIK_R)) {
-			Remaining = 9;
+	for (int i = 0; i < 9; i++) {
+		if (shot[i] == true) {
+			bullPos[i].z++;
 		}
+		if (bullPos[i].z >= 30 + playerPos.z) {
+			bullPos[i].z = -10;
+			//bullPos[i].x = oldpos.x;
+			//bullPos[i].y = oldpos.y;
+			shot[i] = false;
+		}
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_R)) {
+		Remaining = 0;
+
+	}
 	SetPSR();
 	AllUpdate();
 }
@@ -203,12 +224,25 @@ void middle::ImGuiDraw()
 		ImGui::SliderFloat("Pos.y", &bullPos[2].x, -100.0f, 100.0f);
 		ImGui::SliderFloat("Pos.y", &bullPos[3].x, -100.0f, 100.0f);
 		ImGui::SliderFloat("Pos.y", &bullPos[4].x, -100.0f, 100.0f);
-	
+
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("bullet")) {
+		ImGui::Checkbox("shot", &shot[0]);
+		ImGui::Checkbox("shot", &shot[1]);
+		ImGui::Checkbox("shot", &shot[2]);
+		ImGui::Checkbox("shot", &shot[3]);
+		ImGui::Checkbox("shot", &shot[4]);
+		ImGui::Checkbox("shot", &shot[5]);
+		ImGui::Checkbox("shot", &shot[6]);
+		ImGui::Checkbox("shot", &shot[7]);
+		ImGui::Checkbox("shot", &shot[8]);
 		ImGui::TreePop();
 	}
 
 	if (ImGui::TreeNode("other")) {
-		ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);
+		ImGui::SliderFloat("speed", &speed[0], -100.0f, 100.0f);
 		ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
 		ImGui::SliderFloat("hit", &hit, -100.0f, 100.0f);
 		ImGui::SliderFloat("patern", &p, -100.0f, 100.0f);
