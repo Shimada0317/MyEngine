@@ -31,6 +31,10 @@ private:
 
 	Sprite* bulletHUD[9];
 	Sprite* Reload = nullptr;
+	Sprite* wave = nullptr;
+	Sprite* maxcount = nullptr;
+	Sprite* slash = nullptr;
+	Sprite* changecount[5];
 
 	XMFLOAT3 playerPos = { 0,0,0 };
 	XMFLOAT3 playerScl = { 0,0,0 };

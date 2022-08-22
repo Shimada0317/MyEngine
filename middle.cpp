@@ -39,19 +39,50 @@ void middle::Initialize()
 
 	Sprite::LoadTexture(10, L"Resources/reload.png");
 	Reload = Sprite::SpriteCreate(10, { 10.0f,10.0f }, {1.0f,1.0f,1.0f,1.0f});
+
+	Sprite::LoadTexture(11, L"Resources/wave.png");
+	wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
+
+	Sprite::LoadTexture(17, L"Resources/five.png");
+	maxcount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
+
+	Sprite::LoadTexture(12, L"Resources/slash.png");
+	slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
+
+	Sprite::LoadTexture(13, L"Resources/one.png");
+	Sprite::LoadTexture(14, L"Resources/two.png");
+	Sprite::LoadTexture(15, L"Resources/three.png");
+	Sprite::LoadTexture(16, L"Resources/four.png");
+	for (int i = 0; i < 5; i++) {
+		changecount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
+	}
+
 }
 
 void middle::SetPSR()
 {
 	//HUDのポジションセット
 	for (int i = 0; i < 9; i++) {
-		bulletHUD[i]->SetSize({spSiz});
-		bulletHUD[i]->SetPosition({spPos.x,spPos.y+32*i});
+		bulletHUD[i]->SetSize({ spSiz });
+		bulletHUD[i]->SetPosition({ spPos.x,spPos.y + 32 * i });
 	}
 
 	Reload->SetSize({ 128,64 });
 	Reload->SetPosition({ 1140,300 });
 
+	wave->SetSize({ 256,128 });
+	wave->SetPosition({ 0,600 });
+
+	maxcount->SetSize({ 80,80 });
+	maxcount->SetPosition({ 320, 630 });
+
+	slash->SetSize({ 80,80 });
+	slash->SetPosition({ 280,630 });
+
+	for (int i = 0; i < 5; i++) {
+		changecount[i]->SetSize({ 80,80 });
+		changecount[i]->SetPosition({ 240,630 });
+	}
 
 	//プレイヤーのポジションセット
 	player->SetPosition(playerPos);
@@ -246,6 +277,27 @@ void middle::SpriteDraw()
 	if (Remaining == 8) {
 		Reload->Draw();
 	}
+
+	if (patern == 0) {
+		changecount[0]->Draw();
+	}
+	else if (patern == 1) {
+		changecount[1]->Draw();
+	}
+	else if (patern == 2) {
+		changecount[2]->Draw();
+	}
+	else if (patern == 3) {
+		changecount[3]->Draw();
+	}
+	else if (patern == 4) {
+		changecount[4]->Draw();
+	}
+
+	maxcount->Draw();
+
+	wave->Draw();
+	slash->Draw();
 		//bulletHUD[i]->Draw();
 
 }
