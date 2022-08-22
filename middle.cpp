@@ -3,10 +3,12 @@
 
 void middle::Initialize()
 {
+	//プレイヤー(レティクル)の読み込み
 	player = new Player();
 	player->Initalize();
-
 	playerPos = player->GetPosition();
+
+	//弾の読み込み
 	for (int j = 0; j < 9; j++) {
 		bull[j] = new Bullet();
 		bull[j]->Initialize();
@@ -18,7 +20,7 @@ void middle::Initialize()
 		debug[j] = 0;
 		speed[j] = 0.5f;
 	}
-
+	//敵の読み込み
 	for (int i = 0; i < 2; i++) {
 		enemy[i] = new Enemy();
 		enemy[i]->Initalize();
@@ -30,21 +32,35 @@ void middle::Initialize()
 	}
 
 	////スプライトの読み込み
-	Sprite::LoadTexture(1, L"Resources/bullet.png");
-	bulletHUD = Sprite::SpriteCreate(1, { 10.0f,10.0f });
+	for (int i = 0; i < 9; i++) {
+		Sprite::LoadTexture(i, L"Resources/bullet.png");
+		bulletHUD[i] = Sprite::SpriteCreate(i, {10.0f,10.0f});
+	}
+
+	Sprite::LoadTexture(10, L"Resources/reload.png");
+	Reload = Sprite::SpriteCreate(10, { 10.0f,10.0f }, {1.0f,1.0f,1.0f,1.0f});
 }
 
 void middle::SetPSR()
 {
-	bulletHUD->SetSize({ spSiz });
-	bulletHUD->SetPosition({ spPos });
+	//HUDのポジションセット
+	for (int i = 0; i < 9; i++) {
+		bulletHUD[i]->SetSize({spSiz});
+		bulletHUD[i]->SetPosition({spPos.x,spPos.y+32*i});
+	}
 
+	Reload->SetSize({ 128,64 });
+	Reload->SetPosition({ 1140,300 });
+
+
+	//プレイヤーのポジションセット
 	player->SetPosition(playerPos);
 	for (int j = 0; j < 9; j++) {
 		bull[j]->SetPosition(bullPos[j]);
 		bull[j]->SetScl(bullScl);
 		bull[j]->SetLost(lost);
 	}
+	//敵のポジションセット
 	for (int i = 0; i < 2; i++) {
 		if (life[i] <= 0) {
 			enemyPos[i] = enemy[i]->GetPosition();
@@ -58,11 +74,15 @@ void middle::SetPSR()
 
 void middle::AllUpdate()
 {
+	//プレイヤーの更新
 	player->Update();
+
+	//敵の更新
 	for (int i = 0; i < 2; i++) {
 		enemy[i]->Update(playerPos);
 		enemyPos[i] = enemy[i]->GetPosition();
 	}
+	//弾の更新
 	for (int j = 0; j < 9; j++) {
 		bull[j]->Update();
 	}
@@ -116,12 +136,13 @@ void middle::Update()
 
 		}
 	}
+	//敵を倒した時、hitカウントを上げる
 	if (count == true) {
 		hit += 1;
 		count = false;
 	}
 
-
+	//hitカウントが2になった時、ウェーブを進める
 	if (hit == 2) {
 		patern += 1;
 		cammove = 0.1f;
@@ -156,14 +177,8 @@ void middle::Update()
 		playerPos.x = -6.8f;
 	}
 
-	//if (next < 9) {
- //		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-	//		//shot[next] = true;
-			//bull[next]->bun(bullPos[next], playerPos, speed[next], shot[next], Remaining, retime[next]);
-	//		next += 1;
-	//	}
-	//}
-	if (Remaining < 9) {
+
+	if (Remaining < 8 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			Remaining += 1;
 			for (int i = 0; i < 9; i++) {
@@ -183,16 +198,30 @@ void middle::Update()
 		}
 		if (bullPos[i].z >= 30 + playerPos.z) {
 			bullPos[i].z = -10;
-			//bullPos[i].x = oldpos.x;
-			//bullPos[i].y = oldpos.y;
 			shot[i] = false;
 		}
 	}
-
-	if (Input::GetInstance()->PushKey(DIK_R)) {
-		Remaining = 0;
-
+	if (Remaining > 0) {
+		if (Input::GetInstance()->PushKey(DIK_R)) {
+			ReloadFlag = true;
+		}
 	}
+	
+
+	if (ReloadFlag == true) {
+		ReloadTime += 1;
+		ans = ReloadTime % 10;
+		if (ans  == 0) {
+			Remaining -= 1;
+			if(Remaining == 0) {
+				ReloadFlag = false;
+				ReloadTime = 0;
+			}
+		}
+	}
+	
+	
+
 	SetPSR();
 	AllUpdate();
 }
@@ -205,13 +234,20 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 	for (int i = 0; i < 2; i++) {
 		enemy[i]->Draw();
 	}
-	//player->Draw(cmdList);
 	player->ObjDraw();
 }
 
 void middle::SpriteDraw()
 {
-	bulletHUD->Draw();
+	for (int i = Remaining; i < 8; i++) {
+		bulletHUD[i]->Draw();
+	}
+
+	if (Remaining == 8) {
+		Reload->Draw();
+	}
+		//bulletHUD[i]->Draw();
+
 }
 
 void middle::ImGuiDraw()
@@ -219,6 +255,8 @@ void middle::ImGuiDraw()
 	player->ImGuiDraw();
 	float r = Remaining;
 	float p = patern;
+	float a = ans;
+	float t = ReloadTime;
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
@@ -226,6 +264,9 @@ void middle::ImGuiDraw()
 	ImGui::Checkbox("shot", &shot[0]);
 	ImGui::Checkbox("stop", &stop[0]);
 	ImGui::Checkbox("stop", &stop[1]);
+	ImGui::SliderFloat("ReloadTimer", &t, -100.0f, 100.0f);
+	ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
+	ImGui::SliderFloat("Remaining", &a, -100.0f, 100.0f);
 	if (ImGui::TreeNode("playerPos")) {
 		ImGui::SliderFloat("playerPos.z", &enemyPos[0].z, -100.0f, 100.0f);
 		ImGui::SliderFloat("playerPos.z", &enemyPos[1].z, -100.0f, 100.0f);

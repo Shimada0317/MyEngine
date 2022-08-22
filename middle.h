@@ -29,7 +29,8 @@ private:
 	Bullet* bull[9];
 	Enemy* enemy[2];
 
-	Sprite* bulletHUD=nullptr;
+	Sprite* bulletHUD[9];
+	Sprite* Reload = nullptr;
 
 	XMFLOAT3 playerPos = { 0,0,0 };
 	XMFLOAT3 playerScl = { 0,0,0 };
@@ -65,8 +66,11 @@ private:
 
 	bool lost = false;
 	int life[2];
-
+	//リロード機能
 	int Remaining = 0;
+	bool ReloadFlag = false;
+	int ReloadTime = 0;
+	int ans = 0;
 
 	XMMATRIX matVPV;
 	XMMATRIX matInverseVPV;

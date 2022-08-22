@@ -78,7 +78,7 @@ private:
 	XMFLOAT3 pos = { 0,0,0 };
 
 	XMFLOAT3 ground_pos = { 0,-1,5 };
-	XMFLOAT3 ground_scl = { 5,5,5 };
+	XMFLOAT3 ground_scl = { 5,5,50 };
 	XMFLOAT3 ground_rot = { 0,90,0 };
 
 	XMFLOAT3 obj_rot = { 0,90,0 };
