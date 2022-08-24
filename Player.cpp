@@ -13,8 +13,8 @@ void Player::Initalize()
 	reticle = Sprite::SpriteCreate(3, { 1.0f,1.0f });
 
 	playerModel = ObjModel::CreateFromOBJ("mark");
-	player->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
-	player = Object3d::Create();
+	player->CreateGraphicsPipeline();
+	player.reset(Object3d::Create());
 	player->SetModel(playerModel);
 
 	input = Input::GetInstance();
@@ -105,7 +105,7 @@ void Player::ImGuiDraw()
 
 void Player::Finalize()
 {
-
+	delete camera;
 }
 
 void Player::MouthContoroll()

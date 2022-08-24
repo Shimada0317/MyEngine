@@ -6,6 +6,10 @@
 #include"Input.h"
 #include"Collision.h"
 
+#include<memory>
+
+using namespace std;
+
 class middle
 {
 public: 
@@ -25,7 +29,7 @@ public:
 
 	void Fainalize();
 private:
-	Player* player = nullptr;
+	Player* player;
 	Bullet* bull[9];
 	Enemy* enemy[2];
 
@@ -91,5 +95,7 @@ private:
 	int patern = 0;
 	float cammove = 0.1f;
 	bool count = false;
+
+	
 };
 

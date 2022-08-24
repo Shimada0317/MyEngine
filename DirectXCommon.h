@@ -53,5 +53,6 @@ private:
 	ComPtr<ID3D12DescriptorHeap>DescriptorHeapImg;
 	//ƒq[ƒv•Û—p
 	ComPtr<ID3D12DescriptorHeap>_heapForImg;
+
 };
 

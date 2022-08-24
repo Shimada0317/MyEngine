@@ -5,6 +5,8 @@
 #include"Action.h"
 #include"Collision.h"
 
+#include<memory>
+
 class Player;
 class Bullet
 {
@@ -50,7 +52,7 @@ public:
 
 	void SetLost(bool lost) { this->lost = lost; }
 private:
-	Object3d* bullet = nullptr;
+	std::unique_ptr<Object3d> bullet;
 	ObjModel* bulModel = nullptr;
 
 

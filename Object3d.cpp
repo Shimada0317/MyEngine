@@ -40,7 +40,7 @@ void Object3d::StaticInitialize(ID3D12Device* device, Camera* camera)
 	
 }
 
-void Object3d::CreateGraphicsPipeline(const wchar_t* vs,const wchar_t*ps)
+void Object3d::CreateGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -49,7 +49,7 @@ void Object3d::CreateGraphicsPipeline(const wchar_t* vs,const wchar_t*ps)
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		vs,    // シェーダファイル名
+		L"Resources/shaders/BasicVS.hlsl",    // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0",    // エントリーポイント名、シェーダーモデル指定
@@ -72,7 +72,7 @@ void Object3d::CreateGraphicsPipeline(const wchar_t* vs,const wchar_t*ps)
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		ps,    // シェーダファイル名
+		L"Resources/shaders/BasicPS.hlsl",    // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",    // エントリーポイント名、シェーダーモデル指定

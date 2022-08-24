@@ -7,8 +7,8 @@ void Enemy::Initalize()
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 	model = ObjModel::CreateFromOBJ("enemy");
-	enemy->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
-	enemy= Object3d::Create();
+	enemy->CreateGraphicsPipeline();
+	enemy.reset (Object3d::Create());
 	enemy->SetModel(model);
 
 }
@@ -76,7 +76,6 @@ void Enemy::ImGuiDraw()
 
 void Enemy::Finalize()
 {
-	delete enemy;
 	delete model;
 }
 

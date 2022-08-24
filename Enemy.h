@@ -6,11 +6,10 @@
 #include"Action.h"
 #include"DebugCamera.h"
 #include<vector>
-#include"Player.h"
+#include<memory>
 
 using namespace DirectX;
 
-class Player;
 class Enemy
 {
 public:
@@ -48,8 +47,6 @@ public:
 
 	void SetLife(int life) { this->life = life; }
 
-	void SetPlayer(Player* player) { player_ = player; }
-
 	XMVECTOR GetWorldPos();
 
 	void SetSpeed(float speed) { this->speed = speed; }
@@ -60,7 +57,7 @@ public:
 
 private:
 	ObjModel* model = nullptr;
-	Object3d* enemy = nullptr;
+	std::unique_ptr<Object3d> enemy;
 
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
@@ -76,13 +73,11 @@ private:
 	bool arive = true;
 	int life = 3;
 	float responetime = 0.0f;
-	Player* player_ = nullptr;
 	float speed = 0.0f;
 	float stopT = 0.0f;
 
 	float timer = 0;
 
-	Player* player = nullptr;
 	float nowpos = 0;
 };
 

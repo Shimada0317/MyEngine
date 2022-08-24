@@ -41,7 +41,6 @@ void DirectXCommon::InitializeDevice() {
 	}
 
 
-
 	//‘Î‰žƒŒƒxƒ‹‚Ì”z—ñ
 	D3D_FEATURE_LEVEL levels[] =
 	{

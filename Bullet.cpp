@@ -3,9 +3,13 @@
 
 void Bullet::Initialize()
 {
+
+	bullet.reset(new Object3d);
+	bulModel = new ObjModel;
+
 	bulModel = ObjModel::CreateFromOBJ("white");
-	bullet->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
-	bullet = Object3d::Create();
+	bullet->CreateGraphicsPipeline();
+	bullet.reset (Object3d::Create());
 	bullet->SetModel(bulModel);
 }
 
@@ -110,7 +114,7 @@ void Bullet::ImgUiDraw()
 
 void Bullet::Finalize()
 {
-	delete bullet;
+
 	delete bulModel;
 }
 

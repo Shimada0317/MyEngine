@@ -10,6 +10,8 @@
 #include"WinApp.h"
 #include<vector>
 
+#include<memory>
+
 class Player
 {
 public:
@@ -57,7 +59,7 @@ private:
 	float OffsetY = 0.0f;
 
 	Sprite* reticle = nullptr;
-	Object3d* player = nullptr;
+	std::unique_ptr<Object3d> player;
 	ObjModel* playerModel = nullptr;
 
 

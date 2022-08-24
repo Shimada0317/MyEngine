@@ -108,7 +108,7 @@ public: // メンバ関数
 	/// <summary>
 	/// グラフィックパイプラインの生成
 	/// </summary>
-	void CreateGraphicsPipeline(const wchar_t* vs,const wchar_t* ps);
+	void CreateGraphicsPipeline();
 
 	/// <summary>
 	/// 描画

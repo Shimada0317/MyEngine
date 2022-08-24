@@ -27,7 +27,6 @@ void middle::Initialize()
 		enemyPos[i] = enemy[i]->GetPosition();
 		enemyScl = enemy[i]->GetScl();
 		life[i] = enemy[i]->GetLife();
-		enemy[i]->SetPlayer(player);
 		stop[i] = false;
 	}
 
@@ -364,4 +363,7 @@ void middle::ImGuiDraw()
 
 void middle::Fainalize()
 {
+	delete player;
+	delete[] enemy;
+	delete[] bull;
 }

@@ -37,14 +37,14 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
 
 	playermodel = ObjModel::CreateFromOBJ("skydome");
-	sphere->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+	sphere->CreateGraphicsPipeline();
 	sphere = Object3d::Create();
 	sphere->SetModel(playermodel);
 
 
 	ground = ObjModel::CreateFromOBJ("city");
 	groundObj = Object3d::Create();
-	groundObj->CreateGraphicsPipeline(L"Resources/shaders/BasicVS.hlsl", L"Resources/shaders/BasicPS.hlsl");
+	groundObj->CreateGraphicsPipeline();
 	groundObj->SetModel(ground);
 	
 
