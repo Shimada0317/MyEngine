@@ -37,7 +37,7 @@ void Object3d::StaticInitialize(ID3D12Device* device, Camera* camera)
 	// モデルの静的初期化
 	ObjModel::StaticInitialize(device);
 
-	
+	CreateGraphicsPipeline();
 }
 
 void Object3d::CreateGraphicsPipeline()
@@ -210,7 +210,7 @@ void Object3d::PostDraw()
 	Object3d::cmdList = nullptr;
 }
 
-Object3d* Object3d::Create(ObjModel* model)
+std::unique_ptr<Object3d> Object3d::Create(ObjModel* model)
 {
 	// 3Dオブジェクトのインスタンスを生成
 	Object3d* object3d = new Object3d();
@@ -228,7 +228,7 @@ Object3d* Object3d::Create(ObjModel* model)
 		object3d->SetModel(model);
 	}
 
-	return object3d;
+	return std::unique_ptr<Object3d>(object3d);
 }
 
 bool Object3d::Initialize()

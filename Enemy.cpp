@@ -7,8 +7,7 @@ void Enemy::Initalize()
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 	model = ObjModel::CreateFromOBJ("enemy");
-	enemy->CreateGraphicsPipeline();
-	enemy.reset (Object3d::Create());
+	enemy=Object3d::Create();
 	enemy->SetModel(model);
 
 }

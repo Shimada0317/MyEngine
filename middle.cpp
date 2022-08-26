@@ -4,13 +4,13 @@
 void middle::Initialize()
 {
 	//プレイヤー(レティクル)の読み込み
-	player = new Player();
+	player = std::make_unique<Player>();
 	player->Initalize();
 	playerPos = player->GetPosition();
 
 	//弾の読み込み
 	for (int j = 0; j < 9; j++) {
-		bull[j] = new Bullet();
+		bull[j] = std::make_unique<Bullet>();
 		bull[j]->Initialize();
 
 		retime[j] = true;
@@ -22,7 +22,7 @@ void middle::Initialize()
 	}
 	//敵の読み込み
 	for (int i = 0; i < 2; i++) {
-		enemy[i] = new Enemy();
+		enemy[i] = std::make_unique<Enemy>();
 		enemy[i]->Initalize();
 		enemyPos[i] = enemy[i]->GetPosition();
 		enemyScl = enemy[i]->GetScl();
@@ -32,6 +32,7 @@ void middle::Initialize()
 
 	////スプライトの読み込み
 	for (int i = 0; i < 9; i++) {
+
 		Sprite::LoadTexture(i, L"Resources/bullet.png");
 		bulletHUD[i] = Sprite::SpriteCreate(i, {10.0f,10.0f});
 	}
@@ -363,7 +364,5 @@ void middle::ImGuiDraw()
 
 void middle::Fainalize()
 {
-	delete player;
-	delete[] enemy;
-	delete[] bull;
+	delete[] bulletHUD;
 }

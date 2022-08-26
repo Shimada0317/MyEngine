@@ -24,15 +24,11 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	player3d = Object3d::Create();
 	player3d->SetModel(playermodel);*/
 
-	ramieru = ObjModel::CreateFromOBJ("sphere");
-	ramieru3d = Object3d::Create();
-	ramieru3d->SetModel(ramieru);
+
 
 	particle = ParticleManager::Create();
 	particle->Update();
 
-	mid = new middle;
-	mid->Initialize();
 }
 
 void TitleScene::SetPosSclRot()
@@ -42,8 +38,6 @@ void TitleScene::SetPosSclRot()
 	player3d->SetPosition({ 0,0,0 });
 	player3d->SetScale({0.5f,0.5f,0.5f});*/
 
-	ramieru3d->SetPosition({ ramieru_pos });
-	ramieru3d->SetScale({ 10.0f,10.0f ,10.0f});
 
 	title->SetSize({retsize});
 	title->SetPosition({ retpos });
@@ -89,33 +83,24 @@ void TitleScene::Update()
 		sceneManager_->SetNextScene(scene_);
 	}
 	SetPosSclRot();
-	ramieru3d->Update();
 	particle->Update();
-	mid->Update();
 }
 
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
 	dxCommon->PreDraw();
-	Object3d::PreDraw(dxCommon->GetCmdList());
-	mid->Draw(dxCommon->GetCmdList());
-	ramieru->Draw(dxCommon->GetCmdList());
-	Object3d::PostDraw();
 	Sprite::PreDraw(dxCommon->GetCmdList());
+
 //	title->Draw();
-	mid->SpriteDraw();
 	Sprite::PostDraw();
 
-	mid->ImGuiDraw();
 	dxCommon->PostDraw();
 }
 
 void TitleScene::Finalize()
 {
 	delete title;
-	delete player3d;
 	delete dxCommon;
-	delete ramieru3d;
-	delete ramieru;
+
 	//delete particle;
 }

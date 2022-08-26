@@ -13,6 +13,7 @@
 #include"Player.h"
 #include"Bullet.h"
 #include"middle.h"
+#include<memory>
 
 class TitleScene :public BaseScene
 {
@@ -43,18 +44,7 @@ private:
 
 	DirectXCommon* dxCommon = nullptr;
 
-	Player* ret = nullptr;
-	Bullet* bull = nullptr;
-	middle* mid = nullptr;
 
-
-	ObjModel* playermodel = nullptr;
-	ObjModel* ramieru = nullptr;
-	ObjModel* human = nullptr;
-
-	Object3d* player3d = nullptr;
-	Object3d* ramieru3d = nullptr;
-	Object3d* human3d = nullptr;
 
 	Sprite* sprite = nullptr;
 	Sprite* title = nullptr;

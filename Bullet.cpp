@@ -8,8 +8,7 @@ void Bullet::Initialize()
 	bulModel = new ObjModel;
 
 	bulModel = ObjModel::CreateFromOBJ("white");
-	bullet->CreateGraphicsPipeline();
-	bullet.reset (Object3d::Create());
+	bullet=Object3d::Create();
 	bullet->SetModel(bulModel);
 }
 

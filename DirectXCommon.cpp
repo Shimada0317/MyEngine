@@ -102,6 +102,12 @@ void DirectXCommon::InitializeDevice() {
 		infoQueue->Release();
 	}
 
+	ID3D12DebugDevice* pdebug = NULL;
+	if (SUCCEEDED(dev->QueryInterface(&pdebug))) {
+		pdebug->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL|D3D12_RLDO_IGNORE_INTERNAL);
+		pdebug->Release();
+	}
+
 	D3D12_MESSAGE_ID denyIds[] = {
 
 		D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE

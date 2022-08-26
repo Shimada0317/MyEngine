@@ -10,6 +10,7 @@
 #include "ObjModel.h"
 #include "Camera.h"
 #include "LightGroup.h"
+#include<memory>
 
 /// <summary>
 /// 3Dオブジェクト
@@ -84,7 +85,12 @@ public: // 静的メンバ関数
 	/// 3Dオブジェクト生成
 	/// </summary>
 	/// <returns></returns>
-	static Object3d* Create(ObjModel* model = nullptr);
+	static std::unique_ptr<Object3d> Create(ObjModel* model = nullptr);
+
+	/// <summary>
+	/// グラフィックパイプラインの生成
+	/// </summary>
+	static void CreateGraphicsPipeline();
 
 private: // 静的メンバ変数
 	// デバイス
@@ -105,10 +111,7 @@ public: // メンバ関数
 	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// グラフィックパイプラインの生成
-	/// </summary>
-	void CreateGraphicsPipeline();
+	
 
 	/// <summary>
 	/// 描画

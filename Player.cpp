@@ -13,8 +13,7 @@ void Player::Initalize()
 	reticle = Sprite::SpriteCreate(3, { 1.0f,1.0f });
 
 	playerModel = ObjModel::CreateFromOBJ("mark");
-	player->CreateGraphicsPipeline();
-	player.reset(Object3d::Create());
+	player=Object3d::Create();
 	player->SetModel(playerModel);
 
 	input = Input::GetInstance();

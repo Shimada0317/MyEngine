@@ -13,6 +13,9 @@
 #include"ParticleManager.h"
 #include"Light.h"
 #include"middle.h"
+#include<memory>
+
+using namespace std;
 
 class GameScene:public BaseScene
 {
@@ -58,10 +61,8 @@ private:
 	ObjModel* ground = nullptr;
 	ObjModel* p = nullptr;
 
-	Object3d* sphere = nullptr;
-	Object3d* groundObj = nullptr;
-
-	WinApp* winApp = nullptr;
+	unique_ptr <Object3d> sphere;
+	unique_ptr <Object3d> groundObj;
 
 	FbxModel* model = nullptr;
 	FbxObject3d* Object = nullptr;
@@ -96,6 +97,6 @@ private:
 
 	bool change = false;
 
-	middle* mid = nullptr;
+	unique_ptr <middle> mid = nullptr;
 };
 

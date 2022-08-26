@@ -29,9 +29,9 @@ public:
 
 	void Fainalize();
 private:
-	Player* player;
-	Bullet* bull[9];
-	Enemy* enemy[2];
+	unique_ptr <Player> player;
+	unique_ptr <Bullet> bull[9];
+	unique_ptr <Enemy> enemy[2];
 
 	Sprite* bulletHUD[9];
 	Sprite* Reload = nullptr;

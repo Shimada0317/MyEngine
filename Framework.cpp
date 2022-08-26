@@ -80,7 +80,7 @@ void Framework::Finalize()
 
 	//delete input;
 	delete winApp;
-	delete dxCommon;
+	//delete dxCommon;
 }
 
 
