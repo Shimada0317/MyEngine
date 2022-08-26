@@ -5,6 +5,8 @@
 #include"Enemy.h"
 #include"Input.h"
 #include"Collision.h"
+#include"BaseScene.h"
+#include"ClearScene.h"
 
 #include<memory>
 
@@ -28,6 +30,10 @@ public:
 	void ImGuiDraw();
 
 	void Fainalize();
+public:
+	void SetPatern(int patern) { this->patern = patern; }
+
+	const int& GetPatern() { return patern; }
 private:
 	unique_ptr <Player> player;
 	unique_ptr <Bullet> bull[9];

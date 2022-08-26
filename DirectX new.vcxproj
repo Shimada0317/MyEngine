@@ -164,6 +164,7 @@
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
+    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionPrimitive.cpp" />
     <ClCompile Include="Contoroller.cpp" />
@@ -411,6 +412,7 @@
     <ClInclude Include="Audio.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="camera\Camera.h" />
+    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionPrimitive.h" />
     <ClInclude Include="Contoroller.h" />

@@ -56,7 +56,7 @@ void middle::Initialize()
 	for (int i = 0; i < 5; i++) {
 		changecount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
-
+	
 }
 
 void middle::SetPSR()
@@ -250,7 +250,6 @@ void middle::Update()
 			}
 		}
 	}
-	
 	
 
 	SetPSR();

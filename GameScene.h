@@ -13,6 +13,8 @@
 #include"ParticleManager.h"
 #include"Light.h"
 #include"middle.h"
+#include"ClearScene.h"
+
 #include<memory>
 
 using namespace std;
@@ -98,5 +100,7 @@ private:
 	bool change = false;
 
 	unique_ptr <middle> mid = nullptr;
+
+	int patern = 0;
 };
 

@@ -55,6 +55,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	mid =std::make_unique <middle>();
 	mid->Initialize();
+	patern = mid->GetPatern();
 
 	light = Light::Create();
 
@@ -73,7 +74,7 @@ void GameScene::SetPosSclRot()
 	groundObj->SetScale({ ground_scl });
 
 	title->SetSize({ screen_size });
-
+	patern = mid->GetPatern();
 };
 
 void GameScene::AllUpdate()
@@ -86,6 +87,11 @@ void GameScene::AllUpdate()
 
 void GameScene::Update()
 {
+	if (patern == 5) {
+		BaseScene* scene_ = new ClearScene(sceneManager_);
+		sceneManager_->SetNextScene(scene_);
+	}
+
 	SetPosSclRot();
 	AllUpdate();
 }
