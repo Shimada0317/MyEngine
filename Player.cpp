@@ -27,44 +27,54 @@ void Player::Set()
 	player->SetRotation({ rotation });
 	player->SetScale({ scale });
 
-	camera->SetEye({ Eye_pos });
 	camera->SetTarget({Target_pos.x,Target_pos.y,position.z});
+	camera->SetEye({ Eye_pos });
 	camera->SetDistance(5);
 }
 
 void Player::Update()
 {
 	if (position.x >= 4) {
-		Target_pos.x += 0.1f;
-		if (Target_pos.x >= 2.0f) {
-			Target_pos.x = 2.0f;
+		//Target_pos.x += 0.1f;
+		Eye_pos.x -= 0.1f;
+		if (Target_pos.x >= 2.0f||Eye_pos.x <=-1.0f) {
+		//	Target_pos.x = 2.0f;
+			Eye_pos.x = -1.0f;
 		}
 	}
 	else if(position.x<=3.9f&&position.x > 0) {
-		Target_pos.x -= 0.1f;
-		if (Target_pos.x <= 0.0f) {
-			Target_pos.x = 0.0f;
+		//Target_pos.x -= 0.1f;
+		Eye_pos.x += 0.1f;
+		if (Target_pos.x <= 0.0f || Eye_pos.x <= 0.0f) {
+			//Target_pos.x = 0.0f;
+			Eye_pos.x = 0.0f;
 		}
 	}
 
 	if (position.x <= -4) {
-		Target_pos.x -= 0.1f;
-		if (Target_pos.x <= -2.0f) {
-			Target_pos.x = -2.0f;
+	//	Target_pos.x -= 0.1f;
+		Eye_pos.x += 0.1f;
+		if (Target_pos.x <= -2.0f||Eye_pos.x >= 1.0f) {
+			//Target_pos.x = -2.0f;
+			Eye_pos.x = 1.0f;
 		}
 	}
 	else if(position.x >= -3.9f && position.x < 0)
 	{
-		Target_pos.x += 0.1f;
-		if (Target_pos.x >= 0.0f) {
-			Target_pos.x = 0.0f;
+		//Target_pos.x += 0.1f;
+		Eye_pos.x -= 0.1f;
+		if (Target_pos.x >= 0.0f || Eye_pos.x >= 0.0f) {
+			//Target_pos.x = 0.0f;
+			Eye_pos.x = 0.0f;
 		}
 	}
 
+	
+
 	//MouthContoroll();
 	Set();
-	player->Update();
 	camera->Update();
+	player->Update();
 }
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
@@ -94,6 +104,7 @@ void Player::ImGuiDraw()
 		ImGui::SliderFloat("position.z", &position.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("target.x", &Target_pos.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("target.y", &Target_pos.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("Eye_pos.x", &Eye_pos.x, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

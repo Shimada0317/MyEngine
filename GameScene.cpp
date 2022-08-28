@@ -136,7 +136,7 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 
 
 	//postEffect->Draw(dxCommon->GetCmdList());
-	//ImgDraw();
+	ImgDraw();
 	//•`‰æŒãˆ—
 	dxCommon->PostDraw();
 }

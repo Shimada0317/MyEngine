@@ -150,7 +150,7 @@ protected: // メンバ変数
 	// ビュー行列ダーティフラグ
 	bool viewDirty = false;
 	// 射影行列ダーティフラグ
-	bool projectionDirty = false;
+	bool projectionDirty = true;
 	// 視点座標
 	XMFLOAT3 eye = { 0, 0, -5 };
 	// 注視点座標
