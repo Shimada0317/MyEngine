@@ -37,15 +37,15 @@ void Player::Update()
 	if (position.x >= 4) {
 		//Target_pos.x += 0.1f;
 		Eye_pos.x -= 0.1f;
-		if (Target_pos.x >= 2.0f||Eye_pos.x <=-1.0f) {
+		if (Eye_pos.x <=-0.5f) {
 		//	Target_pos.x = 2.0f;
-			Eye_pos.x = -1.0f;
+			Eye_pos.x = -0.5f;
 		}
 	}
 	else if(position.x<=3.9f&&position.x > 0) {
 		//Target_pos.x -= 0.1f;
 		Eye_pos.x += 0.1f;
-		if (Target_pos.x <= 0.0f || Eye_pos.x <= 0.0f) {
+		if (Eye_pos.x >= 0.0f) {
 			//Target_pos.x = 0.0f;
 			Eye_pos.x = 0.0f;
 		}
@@ -54,16 +54,16 @@ void Player::Update()
 	if (position.x <= -4) {
 	//	Target_pos.x -= 0.1f;
 		Eye_pos.x += 0.1f;
-		if (Target_pos.x <= -2.0f||Eye_pos.x >= 1.0f) {
+		if (Eye_pos.x >= 0.5f) {
 			//Target_pos.x = -2.0f;
-			Eye_pos.x = 1.0f;
+			Eye_pos.x = 0.5f;
 		}
 	}
 	else if(position.x >= -3.9f && position.x < 0)
 	{
 		//Target_pos.x += 0.1f;
 		Eye_pos.x -= 0.1f;
-		if (Target_pos.x >= 0.0f || Eye_pos.x >= 0.0f) {
+		if ( Eye_pos.x <= 0.0f) {
 			//Target_pos.x = 0.0f;
 			Eye_pos.x = 0.0f;
 		}
@@ -99,9 +99,10 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("position")) {
-		ImGui::SliderFloat("position.x", &position.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("position.y", &position.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("position.z", &position.z, -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &position.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &position.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &position.z, -100.0f, 100.0f);
+		ImGui::SliderFloat("rot.y", &rotation.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("target.x", &Target_pos.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("target.y", &Target_pos.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("Eye_pos.x", &Eye_pos.x, -100.0f, 100.0f);
