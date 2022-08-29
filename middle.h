@@ -45,15 +45,15 @@ private:
 	Sprite* maxcount = nullptr;
 	Sprite* slash = nullptr;
 	Sprite* changecount[5];
-
+	//プレイヤーのステータス
 	XMFLOAT3 playerPos = { 0,0,0 };
 	XMFLOAT3 playerScl = { 0,0,0 };
 	XMFLOAT3 playerRot = { 0,0 ,0 };
-
+	//弾のステータス
 	XMFLOAT3 bullPos[9];
 	XMFLOAT3 bullScl = { 0,0,0 };
 	XMFLOAT3 bullRot = { 0,0,0 };
-
+	//敵のステータス
 	XMFLOAT3 enemyPos[2];
 	XMFLOAT3 enemyScl = { 0,0,0 };
 	XMFLOAT3 enemyRot = { 0,0,0 };
@@ -62,6 +62,9 @@ private:
 
 	XMFLOAT2 spSiz = { 64.0f,64.0f };
 	XMFLOAT2 spPos = { 1200.0f,0.0f };
+
+	//弾の発射地点
+	XMFLOAT3 startPos = { 2,-0.1f,-1 };
 
 	Input* input = nullptr;
 
@@ -86,6 +89,8 @@ private:
 	int ReloadTime = 0;
 	int ans = 0;
 
+	float speedm = 0.1f;
+
 	XMMATRIX matVPV;
 	XMMATRIX matInverseVPV;
 	
@@ -101,7 +106,8 @@ private:
 	int patern = 0;
 	float cammove = 0.1f;
 	bool count = false;
-
-	
+	//プレイヤーの向きに発射
+	XMVECTOR verosity_;
+	const float bullSpeed = 0.1f;
 };
 

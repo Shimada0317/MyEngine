@@ -66,19 +66,19 @@ void middle::SetPSR()
 		bulletHUD[i]->SetSize({ spSiz });
 		bulletHUD[i]->SetPosition({ spPos.x,spPos.y + 32 * i });
 	}
-
+	//リロードの文字
 	Reload->SetSize({ 128,64 });
 	Reload->SetPosition({ 1140,300 });
-
+	//左下のwaveの文字
 	wave->SetSize({ 256,128 });
 	wave->SetPosition({ 0,600 });
-
+	//waveの最大数
 	maxcount->SetSize({ 80,80 });
 	maxcount->SetPosition({ 320, 630 });
-
+	//waveの最大値と数字の間の/←これ
 	slash->SetSize({ 80,80 });
 	slash->SetPosition({ 280,630 });
-
+	//変動するカウンター
 	for (int i = 0; i < 5; i++) {
 		changecount[i]->SetSize({ 80,80 });
 		changecount[i]->SetPosition({ 240,630 });
@@ -86,6 +86,7 @@ void middle::SetPSR()
 
 	//プレイヤーのポジションセット
 	player->SetPosition(playerPos);
+	//弾のポジションセット
 	for (int j = 0; j < 9; j++) {
 		bull[j]->SetPosition(bullPos[j]);
 		bull[j]->SetScl(bullScl);
@@ -179,7 +180,7 @@ void middle::Update()
 		cammove = 0.1f;
 		hit = 0;
 	}
-
+	//waveが進むごとにカメラも奥に進む
 	if (patern != 0) {
 		playerPos.z += cammove;
 		life[1] -= 3;
@@ -212,11 +213,21 @@ void middle::Update()
 	if (Remaining < 8 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			Remaining += 1;
-			for (int i = 0; i < 9; i++) {
+			/*for (int i = 0; i < 9; i++) {
 				if (shot[i] == false) {
 					bullPos[i].x = playerPos.x;
 					bullPos[i].y = playerPos.y;
 					bullPos[i].z = playerPos.z;
+					shot[i] = true;
+					break;
+				}
+			}*/
+
+			for (int i = 0; i < 9; i++) {
+				if (shot[i] == false) {
+					bullPos[i].x = startPos.x;
+					bullPos[i].y = startPos.y;
+					bullPos[i].z = startPos.z;
 					shot[i] = true;
 					break;
 				}
@@ -225,7 +236,23 @@ void middle::Update()
 	}
 	for (int i = 0; i < 9; i++) {
 		if (shot[i] == true) {
-			bullPos[i].z++;
+			float vx = (startPos.x - playerPos.x);
+			float vy = (startPos.y - playerPos.y);
+			float vz = (startPos.z - playerPos.z);
+			float v2x = pow(vx, 2);
+			float v2y = pow(vy, 2);
+			float v2z = pow(vz, 2);
+			float l = sqrtf(v2x + v2y+v2z);
+			float v3x = (vx / l) * speedm;
+			float v3y = (vy / l) * speedm;
+			float v3z = (vz / l) * speedm;
+
+			bullPos[i].x -= v3x;
+			bullPos[i].y -= v3y;
+			bullPos[i].z -= v3z;
+
+		/*	verosity_ = { 0, 0, bullSpeed, 1 };
+			bullPos[i].z += verosity_.m128_f32[2];*/
 		}
 		if (bullPos[i].z >= 30 + playerPos.z) {
 			bullPos[i].z = -10;

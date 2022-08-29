@@ -7,7 +7,7 @@ void Bullet::Initialize()
 	bullet.reset(new Object3d);
 	bulModel = new ObjModel;
 
-	bulModel = ObjModel::CreateFromOBJ("white");
+	bulModel = ObjModel::CreateFromOBJ("bullet");
 	bullet=Object3d::Create();
 	bullet->SetModel(bulModel);
 }
@@ -94,7 +94,7 @@ void Bullet::Set()
 
 void Bullet::Update()
 {
-
+	rot.x++;
 	Set();
 	bullet->Update();
 }

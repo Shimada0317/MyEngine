@@ -34,7 +34,7 @@ void Player::Set()
 
 void Player::Update()
 {
-	if (position.x >= 4) {
+	if (position.x >= 2) {
 		//Target_pos.x += 0.1f;
 		Eye_pos.x -= 0.1f;
 		if (Eye_pos.x <=-0.5f) {
@@ -42,7 +42,7 @@ void Player::Update()
 			Eye_pos.x = -0.5f;
 		}
 	}
-	else if(position.x<=3.9f&&position.x > 0) {
+	else if(position.x<=1.9f&&position.x > 0) {
 		//Target_pos.x -= 0.1f;
 		Eye_pos.x += 0.1f;
 		if (Eye_pos.x >= 0.0f) {
@@ -51,7 +51,7 @@ void Player::Update()
 		}
 	}
 
-	if (position.x <= -4) {
+	if (position.x <= -2) {
 	//	Target_pos.x -= 0.1f;
 		Eye_pos.x += 0.1f;
 		if (Eye_pos.x >= 0.5f) {
@@ -59,7 +59,7 @@ void Player::Update()
 			Eye_pos.x = 0.5f;
 		}
 	}
-	else if(position.x >= -3.9f && position.x < 0)
+	else if(position.x >= -1.9f && position.x < 0)
 	{
 		//Target_pos.x += 0.1f;
 		Eye_pos.x -= 0.1f;
