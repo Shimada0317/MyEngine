@@ -56,7 +56,7 @@ void middle::Initialize()
 	for (int i = 0; i < 5; i++) {
 		changecount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
-	
+	oldpatern = patern;
 }
 
 void middle::SetPSR()
@@ -111,7 +111,7 @@ void middle::AllUpdate()
 
 	//敵の更新
 	for (int i = 0; i < 2; i++) {
-		enemy[i]->Update(playerPos);
+		enemy[i]->Update(playerPos,patern,oldpatern);
 		enemyPos[i] = enemy[i]->GetPosition();
 	}
 	//弾の更新
@@ -164,7 +164,7 @@ void middle::Update()
 				enemy[i]->SetLife(life[i]);
 			}
 
-			enemy[i]->Active(stop[i], 1, playerPos);
+			enemy[i]->Active(stop[i], playerPos);
 
 		}
 	}
@@ -172,6 +172,7 @@ void middle::Update()
 	if (count == true) {
 		hit += 1;
 		count = false;
+		oldpatern = patern;
 	}
 
 	//hitカウントが2になった時、ウェーブを進める
@@ -213,7 +214,7 @@ void middle::Update()
 	if (Remaining < 8 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			Remaining += 1;
-			/*for (int i = 0; i < 9; i++) {
+			for (int i = 0; i < 9; i++) {
 				if (shot[i] == false) {
 					bullPos[i].x = playerPos.x;
 					bullPos[i].y = playerPos.y;
@@ -221,9 +222,9 @@ void middle::Update()
 					shot[i] = true;
 					break;
 				}
-			}*/
+			}
 
-			for (int i = 0; i < 9; i++) {
+		/*	for (int i = 0; i < 9; i++) {
 				if (shot[i] == false) {
 					bullPos[i].x = startPos.x;
 					bullPos[i].y = startPos.y;
@@ -231,12 +232,13 @@ void middle::Update()
 					shot[i] = true;
 					break;
 				}
-			}
+			}*/
 		}
 	}
 	for (int i = 0; i < 9; i++) {
 		if (shot[i] == true) {
-			float vx = (startPos.x - playerPos.x);
+			//追尾の式の途中
+		/*	float vx = (startPos.x - playerPos.x);
 			float vy = (startPos.y - playerPos.y);
 			float vz = (startPos.z - playerPos.z);
 			float v2x = pow(vx, 2);
@@ -249,10 +251,10 @@ void middle::Update()
 
 			bullPos[i].x -= v3x;
 			bullPos[i].y -= v3y;
-			bullPos[i].z -= v3z;
-
-		/*	verosity_ = { 0, 0, bullSpeed, 1 };
-			bullPos[i].z += verosity_.m128_f32[2];*/
+			bullPos[i].z -= v3z;*/
+			//追尾前の状態
+			verosity_ = { 0, 0, bullSpeed, 1 };
+			bullPos[i].z += verosity_.m128_f32[2];
 		}
 		if (bullPos[i].z >= 30 + playerPos.z) {
 			bullPos[i].z = -10;

@@ -104,10 +104,11 @@ private:
 
 	float hit = 0;
 	int patern = 0;
+	int oldpatern = 0;
 	float cammove = 0.1f;
 	bool count = false;
 	//ƒvƒŒƒCƒ„[‚ÌŒü‚«‚É”­Ë
 	XMVECTOR verosity_;
-	const float bullSpeed = 0.1f;
+	const float bullSpeed = 1.0f;
 };
 

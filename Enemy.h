@@ -18,7 +18,7 @@ public:
 
 	void Set();
 
-	void Update(XMFLOAT3 pos);
+	void Update(XMFLOAT3 pos, int wave,int oldwave);
 
 	void Draw();
 
@@ -26,7 +26,7 @@ public:
 
 	void Finalize();
 
-	void Active(bool& StopT,int action,XMFLOAT3 position);
+	void Active(bool& StopT,XMFLOAT3 position);
 	const XMFLOAT3& GetPosition() { return position; }
 
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
@@ -77,7 +77,7 @@ private:
 	float stopT = 0.0f;
 
 	float timer = 0;
-
+	int oldwave = 0;
 	float nowpos = 0;
 };
 

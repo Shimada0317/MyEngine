@@ -7,7 +7,7 @@ void Enemy::Initalize()
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 	model = ObjModel::CreateFromOBJ("enemy");
-	enemy=Object3d::Create();
+	enemy = Object3d::Create();
 	enemy->SetModel(model);
 
 }
@@ -20,7 +20,7 @@ void Enemy::Set()
 
 }
 
-void Enemy::Update(XMFLOAT3 pos)
+void Enemy::Update(XMFLOAT3 pos, int wave,int oldwave)
 {
 
 	if (life <= 0) {
@@ -29,14 +29,17 @@ void Enemy::Update(XMFLOAT3 pos)
 
 	if (arive == false) {
 		position.x = rand() % 10 - 5;
-		position.z = rand() % 1 + 30+pos.z;
-		responetime += 0.2f;
+		position.z = rand() % 1 + 30 + pos.z;
+		
 	}
 
-	if (responetime >= 10.0f) {
+	if (wave > oldwave) {
 		life = 3;
-		responetime = 0.0f;
-		arive = true;
+		responetime += 0.2f;
+		if (responetime >= 10) {
+			arive = true;
+			responetime = 0;
+		}
 	}
 
 
@@ -78,47 +81,44 @@ void Enemy::Finalize()
 	delete model;
 }
 
-void Enemy::Active(bool& StopT,int action,XMFLOAT3 positionP)
+void Enemy::Active(bool& StopT, XMFLOAT3 positionP)
 {
-	if (action == 0) {
-		position.z -= speed;
-	}
 
-	if (action == 1) {
+	if (arive == true) {
 		float vx = (positionP.x - position.x);
 		float vz = (positionP.z - position.z);
 		float v2x = pow(vx, 2);
 		float v2z = pow(vz, 2);
 		float l = sqrtf(v2x + v2z);
-		float v3x= (vx / l) * speed;
+		float v3x = (vx / l) * speed;
 		float v3z = (vz / l) * speed;
 
 		position.x += v3x;
 		position.z += v3z;
-	}
-	enemy->SetPosition(position);
 
-	if (StopT == true) {
-		timer += 0.2f;
-		if (timer <= 10) {
-			speed = 0;
+		enemy->SetPosition(position);
+
+		if (StopT == true) {
+			timer += 0.2f;
+			if (timer <= 10) {
+				speed = 0;
+			}
+			else if (timer > 10) {
+				StopT = false;
+				timer = 0;
+			}
 		}
-		else if (timer > 10) {
-			StopT = false;
-			timer = 0;
+
+		if (StopT == false) {
+			if (position.z <= positionP.z + 3) {
+				speed = 0;
+			}
+			else {
+				speed = 0.05f;
+			}
 		}
 	}
 
-	if (StopT == false) {
-		if (position.z <= positionP.z+3) {
-			speed = 0;
-		}
-		else {
-			speed = 0.05f;
-		}
-	}
-	
-	
 }
 
 XMVECTOR Enemy::GetWorldPos()
