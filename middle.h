@@ -7,6 +7,7 @@
 #include"Collision.h"
 #include"BaseScene.h"
 #include"ClearScene.h"
+#include<sstream>
 
 #include<memory>
 
@@ -30,6 +31,10 @@ public:
 	void ImGuiDraw();
 
 	void Fainalize();
+
+	void LoadEnemyPopData();
+
+	void UpdateEnemyPopCommands();
 public:
 	void SetPatern(int patern) { this->patern = patern; }
 
@@ -110,5 +115,11 @@ private:
 	//プレイヤーの向きに発射
 	XMVECTOR verosity_;
 	const float bullSpeed = 1.0f;
+
+	//敵発生コマンド
+	std::stringstream enemyPopCommands;
+	//待機コマンド
+	bool waitF = false;
+	int waitTimer = 0;
 };
 

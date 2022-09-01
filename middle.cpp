@@ -1,5 +1,6 @@
 #include "middle.h"
 #include"imgui/imgui.h"
+#include<fstream>
 
 void middle::Initialize()
 {
@@ -56,6 +57,8 @@ void middle::Initialize()
 	for (int i = 0; i < 5; i++) {
 		changecount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
+	//LoadEnemyPopData();
+	//UpdateEnemyPopCommands();
 	oldpatern = patern;
 }
 
@@ -282,6 +285,7 @@ void middle::Update()
 	
 
 	SetPSR();
+	
 	AllUpdate();
 }
 
@@ -348,16 +352,13 @@ void middle::ImGuiDraw()
 	ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
 	ImGui::SliderFloat("Remaining", &a, -100.0f, 100.0f);
 	if (ImGui::TreeNode("playerPos")) {
-		ImGui::SliderFloat("playerPos.z", &enemyPos[0].z, -100.0f, 100.0f);
-		ImGui::SliderFloat("playerPos.z", &enemyPos[1].z, -100.0f, 100.0f);
-		ImGui::SliderFloat("playerPos.z", &playerPos.z, -100.0f, 100.0f);
-		ImGui::SliderFloat("playerPos.x", &playerPos.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Pos.y", &bullPos[0].x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Pos.y", &bullPos[1].x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Pos.y", &bullPos[2].x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Pos.y", &bullPos[3].x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Pos.y", &bullPos[4].x, -100.0f, 100.0f);
 
+		ImGui::SliderFloat("EnePos.x", &enemyPos[0].x, -100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.y", &enemyPos[0].y, -100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.z", &enemyPos[0].z, -100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.x", &enemyPos[1].x, -100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.y", &enemyPos[1].y, -100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.z", &enemyPos[1].z, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
@@ -393,4 +394,83 @@ void middle::ImGuiDraw()
 void middle::Fainalize()
 {
 	delete[] bulletHUD;
+}
+
+void middle::LoadEnemyPopData()
+{
+	//ファイルオープン
+	std::ifstream file;
+	file.open("Resources/enemyPop.csv");
+	assert(file.is_open());
+	//ファイル内容を文字列ストリームにコピー
+	enemyPopCommands << file.rdbuf();
+
+	//ファイルクローズ
+	file.close();
+}
+
+void middle::UpdateEnemyPopCommands()
+{
+	//待機処理
+	if (waitF == true) {
+		waitTimer--;
+		if (waitTimer <= 0) {
+			waitF = false;
+		}
+		return;
+	}
+
+	//1行分の文字列を入れる変数
+	std::string line;
+
+	//コマンド実行ループ
+	while (getline(enemyPopCommands,line))
+	{
+		//1行分の文字列をストリームに変換して解析しやすくする
+		std::istringstream line_stream(line);
+
+		std::string word;
+		//,区切りで行の先頭文字列を取得
+		getline(line_stream, word, ',');
+
+		//"//"から始まる行はコメント
+		if (word.find("//") == 0) {
+			//コメント行を飛ばす
+			continue;
+		}
+		if (word.find("POP") == 0) {
+			//x座標
+			getline(line_stream, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			//y座標
+			getline(line_stream, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			//x座標
+			getline(line_stream, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+
+			//敵を発生させる
+			enemyPos[0].x = x;
+			enemyPos[0].y = y;
+			enemyPos[0].z= z;
+		}
+
+		//WAITコマンド
+		else if (word.find("WAIT") == 0) {
+			getline(line_stream, word, ',');
+
+			//待ち時間
+			int32_t waitTime = atoi(word.c_str());
+
+			//待機時間
+			waitF = true;
+			waitTimer = waitTime;
+
+			//コマンドを抜ける
+			break;
+		}
+	}
 }

@@ -34,40 +34,40 @@ void Player::Set()
 
 void Player::Update()
 {
-	if (position.x >= 2) {
-		//Target_pos.x += 0.1f;
-		Eye_pos.x -= 0.1f;
-		if (Eye_pos.x <=-0.5f) {
-		//	Target_pos.x = 2.0f;
-			Eye_pos.x = -0.5f;
-		}
-	}
-	else if(position.x<=1.9f&&position.x > 0) {
-		//Target_pos.x -= 0.1f;
-		Eye_pos.x += 0.1f;
-		if (Eye_pos.x >= 0.0f) {
-			//Target_pos.x = 0.0f;
-			Eye_pos.x = 0.0f;
-		}
-	}
+	//if (position.x >= 2) {
+	//	//Target_pos.x += 0.1f;
+	//	Eye_pos.x -= 0.1f;
+	//	if (Eye_pos.x <=-0.5f) {
+	//	//	Target_pos.x = 2.0f;
+	//		Eye_pos.x = -0.5f;
+	//	}
+	//}
+	//else if(position.x<=1.9f&&position.x > 0) {
+	//	//Target_pos.x -= 0.1f;
+	//	Eye_pos.x += 0.1f;
+	//	if (Eye_pos.x >= 0.0f) {
+	//		//Target_pos.x = 0.0f;
+	//		Eye_pos.x = 0.0f;
+	//	}
+	//}
 
-	if (position.x <= -2) {
-	//	Target_pos.x -= 0.1f;
-		Eye_pos.x += 0.1f;
-		if (Eye_pos.x >= 0.5f) {
-			//Target_pos.x = -2.0f;
-			Eye_pos.x = 0.5f;
-		}
-	}
-	else if(position.x >= -1.9f && position.x < 0)
-	{
-		//Target_pos.x += 0.1f;
-		Eye_pos.x -= 0.1f;
-		if ( Eye_pos.x <= 0.0f) {
-			//Target_pos.x = 0.0f;
-			Eye_pos.x = 0.0f;
-		}
-	}
+	//if (position.x <= -2) {
+	////	Target_pos.x -= 0.1f;
+	//	Eye_pos.x += 0.1f;
+	//	if (Eye_pos.x >= 0.5f) {
+	//		//Target_pos.x = -2.0f;
+	//		Eye_pos.x = 0.5f;
+	//	}
+	//}
+	//else if(position.x >= -1.9f && position.x < 0)
+	//{
+	//	//Target_pos.x += 0.1f;
+	//	Eye_pos.x -= 0.1f;
+	//	if ( Eye_pos.x <= 0.0f) {
+	//		//Target_pos.x = 0.0f;
+	//		Eye_pos.x = 0.0f;
+	//	}
+	//}
 
 	
 

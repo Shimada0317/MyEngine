@@ -69,7 +69,7 @@ private:
 
 	XMFLOAT3 position = { 0.0f,0.2f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 scale = { 0.2f,0.2f,0.2f };
+	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };
