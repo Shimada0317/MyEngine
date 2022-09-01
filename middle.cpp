@@ -125,15 +125,16 @@ void middle::AllUpdate()
 
 void middle::Update()
 {
+
 	for (int i = 0; i < 2; i++) {
 		if (life[i] >= 0) {
 			for (int j = 0; j < 9; j++) {
 				if (Collision::Player2Other(bullPos[j], bullScl, enemyPos[i], enemyScl)) {
-					life[i] -= 1;
 					lost = true;
 					shot[j] = false;
 					bullPos[j].z = -10;
 					speed[j] = 0;
+					life[i] -= 1;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
 					if (life[i] <= 0) {
@@ -162,20 +163,13 @@ void middle::Update()
 					enemy[i]->GetSpeed();
 				}
 			}
-			if (playerPos.z >= enemyPos[i].z) {
-				life[i] = 0;
-				enemy[i]->SetLife(life[i]);
-			}
-
 			enemy[i]->Active(stop[i], playerPos);
-
 		}
 	}
 	//敵を倒した時、hitカウントを上げる
 	if (count == true) {
 		hit += 1;
 		count = false;
-		oldpatern = patern;
 	}
 
 	//hitカウントが2になった時、ウェーブを進める
@@ -191,6 +185,7 @@ void middle::Update()
 		life[0] -= 3;
 		if (playerPos.z >= 10 * patern) {
 			cammove = 0;
+			oldpatern = patern;
 		}
 	}
 
@@ -341,6 +336,8 @@ void middle::ImGuiDraw()
 	float p = patern;
 	float a = ans;
 	float t = ReloadTime;
+	float ow = oldpatern;
+
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
@@ -380,6 +377,7 @@ void middle::ImGuiDraw()
 		ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
 		ImGui::SliderFloat("hit", &hit, -100.0f, 100.0f);
 		ImGui::SliderFloat("patern", &p, -100.0f, 100.0f);
+		ImGui::SliderFloat("oldpatern", &ow, -100.0f, 100.0f);
 		ImGui::Checkbox("count", &count);
 		ImGui::TreePop();
 	}

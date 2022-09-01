@@ -64,7 +64,7 @@ private:
 	DebugCamera* camer = nullptr;
 
 	XMFLOAT3 position = { 0.0f,0.0f,10.0f };
-	XMFLOAT3 scale = { 0.5f,0.5f,0.5f };
+	XMFLOAT3 scale = { 1.0f,1.0f,1.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 
 	XMFLOAT3 bulpos = { 0,0,0 };
