@@ -29,7 +29,7 @@ public:
 
 	static Action* GetInstance();
 
-	void PlayerMove3d(XMVECTOR &position,float Speed);
+	void PlayerMove3d(XMVECTOR &position);
 
 	void PlayerJump(XMFLOAT3& position,bool& JumpFlag);
 

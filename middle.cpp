@@ -91,7 +91,7 @@ void middle::SetPSR()
 	}
 
 	//プレイヤーのポジションセット
-	player->SetPosition(playerPos);
+	playerPos = player->GetPosition();
 	player->SetRotation(playerRot);
 	//弾のポジションセット
 	for (int j = 0; j < 9; j++) {
@@ -199,23 +199,10 @@ void middle::Update()
 
 
 
-	Action::GetInstance()->PlayerMove3d(playerPos, 0.2f);
+	
 
 
-	if (playerPos.m128_f32[1] <= 0.0f) {
-		playerPos.m128_f32[1] = 0.0f;
-	}
-	else if (playerPos.m128_f32[1] >= 4.2f) {
-		playerPos.m128_f32[1] = 4.2f;
-	}
-
-	if (playerPos.m128_f32[0] >= 6.8f) {
-		playerPos.m128_f32[0] = 6.8f;
-	}
-	else if (playerPos.m128_f32[0] <= -6.8f) {
-		playerPos.m128_f32[0] = -6.8f;
-	}
-
+	
 
 	if (Remaining < 8 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
