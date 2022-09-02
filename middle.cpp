@@ -2,6 +2,8 @@
 #include"imgui/imgui.h"
 #include<fstream>
 
+//セーブ
+
 void middle::Initialize()
 {
 	//プレイヤー(レティクル)の読み込み
