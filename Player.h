@@ -32,9 +32,9 @@ public:
 
 	void MouthContoroll();
 
-	const XMFLOAT3& GetPosition() { return position; }
+	const XMVECTOR& GetPosition() { return position; }
 
-	void SetPosition(XMFLOAT3 position) { this->position = position; }
+	void SetPosition(XMVECTOR position) { this->position = position; }
 
 	const XMFLOAT3& GetRotation() { return rotation; }
 
@@ -67,7 +67,7 @@ private:
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
 
-	XMFLOAT3 position = { 0.0f,0.2f,0.0f };
+	XMVECTOR position = { 0.0f,0.2f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 

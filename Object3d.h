@@ -25,7 +25,7 @@ private: // エイリアス
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
-
+	using XMVECTOR = DirectX::XMVECTOR;
 public: // サブクラス
 
 	// パイプラインセット
@@ -122,7 +122,7 @@ public: // メンバ関数
 	/// 座標の取得
 	/// </summary>
 	/// <returns>座標</returns>
-	const XMFLOAT3& GetPosition() { return position; }
+	const XMVECTOR& GetPosition() { return position; }
 
 	/// <summary>
 	/// 回転の取得
@@ -134,7 +134,9 @@ public: // メンバ関数
 	/// 座標の設定
 	/// </summary>
 	/// <param name="position">座標</param>
-	void SetPosition(XMFLOAT3 position) { this->position = position; }
+	void SetPosition(XMVECTOR position) { this->position = position; }
+
+
 
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 
@@ -167,7 +169,7 @@ private: // メンバ変数
 	// X,Y,Z軸回りのローカル回転角
 	XMFLOAT3 rotation = { 0,0,0 };
 	// ローカル座標
-	XMFLOAT3 position = { 0,0,0 };
+	XMVECTOR position = { 0,0,0 };
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
 	// 親オブジェクト

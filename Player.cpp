@@ -27,7 +27,7 @@ void Player::Set()
 	player->SetRotation({ rotation });
 	player->SetScale({ scale });
 
-	camera->SetTarget({Target_pos.x,Target_pos.y,position.z});
+	camera->SetTarget({Target_pos.x,Target_pos.y,position.m128_f32[2]});
 	camera->SetEye({ Eye_pos });
 	camera->SetDistance(5);
 }
@@ -99,9 +99,9 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("position")) {
-		ImGui::SliderFloat("pos.x", &position.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &position.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &position.z, -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &position.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &position.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &position.m128_f32[2], -100.0f, 100.0f);
 		ImGui::SliderFloat("rot.y", &rotation.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("target.x", &Target_pos.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("target.y", &Target_pos.y, -100.0f, 100.0f);
@@ -163,9 +163,9 @@ XMVECTOR Player::GetWorldPosition()
 {
 	XMVECTOR worldPos;
 
-	worldPos.m128_f32[0] = position.x;
-	worldPos.m128_f32[1] = position.y;
-	worldPos.m128_f32[2] = position.z;
+	worldPos.m128_f32[0] = position.m128_f32[0];
+	worldPos.m128_f32[1] = position.m128_f32[1];
+	worldPos.m128_f32[2] = position.m128_f32[2];
 	worldPos.m128_f32[3] = 1;
 
 	return worldPos;

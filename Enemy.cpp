@@ -20,29 +20,29 @@ void Enemy::Set()
 
 }
 
-void Enemy::Update(XMFLOAT3 pos, int wave, int oldwave)
+void Enemy::Update(XMVECTOR pos, int wave, int oldwave, bool& StopT, XMVECTOR positionP,bool& spown)
 {
 
 	if (life <= 0) {
 		arive = false;
 	}
+	else {
+		arive = true;
+	}
 
 	if (arive == false) {
-		position.x = rand() % 10 - 5;
-		position.z = rand() % 1 + 30 + pos.z;
-
+		position.m128_f32[0] = rand() % 10 - 5;
+		position.m128_f32[2] = rand() % 1 + 30 + pos.m128_f32[2];
 	}
-
-	if (wave > oldwave) {
+	if (spown == true) {
 		life = 3;
-		responetime += 0.2f;
-		if (responetime >= 1) {
-			arive = true;
-			responetime = 0;
-		}
+		spown = false;
 	}
 
 
+	if (life > 0) {
+		Active(StopT, positionP);
+	}
 
 	Set();
 
@@ -69,7 +69,7 @@ void Enemy::ImGuiDraw()
 	ImGui::Checkbox("arive", &arive);
 	//スライダーで動きをいじりたいとき
 	ImGui::SliderFloat("life", &l, -100.0f, 100.0f);
-	ImGui::SliderFloat("pos", &position.z, -100.0f, 100.0f);
+	ImGui::SliderFloat("pos", &position.m128_f32[2], -100.0f, 100.0f);
 	ImGui::SliderFloat("speed", &speed, -100.0f, 100.0f);
 	ImGui::End();
 	ImGui::PopStyleColor();
@@ -81,19 +81,19 @@ void Enemy::Finalize()
 	delete model;
 }
 
-void Enemy::Active(bool& StopT, XMFLOAT3 positionP)
+void Enemy::Active(bool& StopT, XMVECTOR positionP)
 {
 
-	float vx = (positionP.x - position.x);
-	float vz = (positionP.z - position.z);
+	float vx = (positionP.m128_f32[0] - position.m128_f32[0]);
+	float vz = (positionP.m128_f32[2] - position.m128_f32[2]);
 	float v2x = pow(vx, 2);
 	float v2z = pow(vz, 2);
 	float l = sqrtf(v2x + v2z);
 	float v3x = (vx / l) * speed;
 	float v3z = (vz / l) * speed;
 
-	position.x += v3x;
-	position.z += v3z;
+	position.m128_f32[0] += v3x;
+	position.m128_f32[2] += v3z;
 
 	enemy->SetPosition(position);
 
@@ -109,7 +109,7 @@ void Enemy::Active(bool& StopT, XMFLOAT3 positionP)
 	}
 
 	if (StopT == false) {
-		if (position.z <= positionP.z + 3) {
+		if (position.m128_f32[2] <= positionP.m128_f32[2] + 3) {
 			speed = 0;
 		}
 		else {
@@ -117,16 +117,15 @@ void Enemy::Active(bool& StopT, XMFLOAT3 positionP)
 		}
 	}
 
-
 }
 
 XMVECTOR Enemy::GetWorldPos()
 {
 	XMVECTOR worldPos;
 
-	worldPos.m128_f32[0] = position.x;
-	worldPos.m128_f32[1] = position.y;
-	worldPos.m128_f32[2] = position.z;
+	worldPos.m128_f32[0] = position.m128_f32[0];
+	worldPos.m128_f32[1] = position.m128_f32[1];
+	worldPos.m128_f32[2] = position.m128_f32[2];
 	worldPos.m128_f32[3] = 1;
 
 	return worldPos;

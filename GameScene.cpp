@@ -65,12 +65,12 @@ void GameScene::SetPosSclRot()
 {
 
 	sphere->SetRotation({ 0,0,0 });
-	sphere->SetPosition({ pos });
+	sphere->SetPosition( pos );
 	sphere->SetScale({ 4.0f,4.0f,4.0f });
 
 
 
-	groundObj->SetPosition({ ground_pos });
+	groundObj->SetPosition( ground_pos );
 	groundObj->SetScale({ ground_scl });
 
 	title->SetSize({ screen_size });

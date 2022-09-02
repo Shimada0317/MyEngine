@@ -15,19 +15,19 @@ Action* Action::GetInstance()
 	return &instance;
 }
 
-void Action::PlayerMove3d(XMFLOAT3 &position, float Speed)
+void Action::PlayerMove3d(XMVECTOR &position, float Speed)
 {
 	if (Input::GetInstance()->PushKey(DIK_UP)) {
-		position.y += Speed;
+		position.m128_f32[1] += Speed;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-		position.y -= Speed;
+		position.m128_f32[1] -= Speed;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-		position.x += Speed;
+		position.m128_f32[0] += Speed;
 	}
 	else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		position.x -= Speed;
+		position.m128_f32[0] -= Speed;
 	}
 }
 

@@ -177,26 +177,26 @@ bool Collision::CheckRay2Triangle(const Ray& ray, const Triangle& trieangle, flo
 
 void Collision::CheckPlayer2Enemy(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Enemyposition, XMFLOAT3 Enemyscale,int PlayerHp,int PlayerLevel)
 {
-	const int attack = 5;
+	/*const int attack = 5;
 	if (Player2Other(Playerposition, Playerscale, Enemyposition, Enemyscale) == true) {
 		PlayerHp = PlayerHp - attack;
-	}
+	}*/
 }
 
 void Collision::CheckPlayer2Boss(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Bossposition, XMFLOAT3 Bossscale, int PlayerHp, int PlayerLevel)
 {
-	const int attack = 10;
-	if (Player2Other(Playerposition, Playerscale, Bossposition, Bossscale) == true) {
-		PlayerHp = PlayerHp - attack;
-	}
+	//const int attack = 10;
+	//if (Player2Other(Playerposition, Playerscale, Bossposition, Bossscale) == true) {
+	//	PlayerHp = PlayerHp - attack;
+	//}
 
 }
 
-bool Collision::Player2Other(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Otherposition, XMFLOAT3 Otherscale)
+bool Collision::Player2Other(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVECTOR Otherposition, XMFLOAT3 Otherscale)
 {
-	float x = Playerposition.x - Otherposition.x;
-	float y = Playerposition.y - Otherposition.y;
-	float z = Playerposition.z - Otherposition.z;
+	float x = Playerposition.m128_f32[0] - Otherposition.m128_f32[0];
+	float y = Playerposition.m128_f32[1] - Otherposition.m128_f32[1];
+	float z = Playerposition.m128_f32[2] - Otherposition.m128_f32[2];
 
 	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
 	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z)/4;
@@ -211,13 +211,13 @@ bool Collision::Player2Other(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFL
 	}
 }
 
-bool Collision::HeadShot(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Otherposition, XMFLOAT3 Otherscale)
+bool Collision::HeadShot(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVECTOR Otherposition, XMFLOAT3 Otherscale)
 {
-	Otherposition.y = Otherposition.y + 2;
+	Otherposition.m128_f32[1] = Otherposition.m128_f32[1] + 2;
 
-	float x = Playerposition.x - Otherposition.x;
-	float y = Playerposition.y - Otherposition.y;
-	float z = Playerposition.z - Otherposition.z;
+	float x = Playerposition.m128_f32[0] - Otherposition.m128_f32[0];
+	float y = Playerposition.m128_f32[1] - Otherposition.m128_f32[1];
+	float z = Playerposition.m128_f32[2] - Otherposition.m128_f32[2];
 
 	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
 	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z) / 5;

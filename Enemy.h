@@ -18,7 +18,7 @@ public:
 
 	void Set();
 
-	void Update(XMFLOAT3 pos, int wave,int oldwave);
+	void Update(XMVECTOR pos, int wave,int oldwave, bool& StopT, XMVECTOR positionP,bool& spown);
 
 	void Draw();
 
@@ -26,10 +26,10 @@ public:
 
 	void Finalize();
 
-	void Active(bool& StopT,XMFLOAT3 position);
-	const XMFLOAT3& GetPosition() { return position; }
+	void Active(bool& StopT,XMVECTOR position);
+	const XMVECTOR& GetPosition() { return position; }
 
-	void SetPosition(XMFLOAT3 position) { this->position = position; }
+	void SetPosition(XMVECTOR position) { this->position = position; }
 
 	const XMFLOAT3& GetRotation() { return rotation; }
 
@@ -63,7 +63,7 @@ private:
 	DebugText* debugtext = nullptr;
 	DebugCamera* camer = nullptr;
 
-	XMFLOAT3 position = { 0.0f,0.0f,10.0f };
+	XMVECTOR position = { 0.0f,0.0f,10.0f };
 	XMFLOAT3 scale = { 1.0f,1.0f,1.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 

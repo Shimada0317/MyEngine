@@ -78,14 +78,14 @@ private:
 	XMFLOAT3 cameraTarget = {0.0f,1.0f,0.0f};
 	float cameradistance = 20.0f;
 
-	XMFLOAT3 pos = { 0,0,0 };
+	XMVECTOR pos = { 0,0,0 };
 
-	XMFLOAT3 ground_pos = { 0,-1,5 };
+	XMVECTOR ground_pos = { 0,-1,5 };
 	XMFLOAT3 ground_scl = { 5,5,50 };
 	XMFLOAT3 ground_rot = { 0,90,0 };
 
 	XMFLOAT3 obj_rot = { 0,90,0 };
-	XMFLOAT3 obj_pos = { 0,-4,0 };
+	XMVECTOR obj_pos = { 0,-4,0 };
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 

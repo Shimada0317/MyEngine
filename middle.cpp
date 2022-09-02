@@ -8,6 +8,8 @@ void middle::Initialize()
 	player = std::make_unique<Player>();
 	player->Initalize();
 	playerPos = player->GetPosition();
+	playerRot = player->GetRotation();
+
 
 	//弾の読み込み
 	for (int j = 0; j < 9; j++) {
@@ -22,13 +24,14 @@ void middle::Initialize()
 		speed[j] = 0.5f;
 	}
 	//敵の読み込み
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < MAXENEMY; i++) {
 		enemy[i] = std::make_unique<Enemy>();
 		enemy[i]->Initalize();
 		enemyPos[i] = enemy[i]->GetPosition();
 		enemyScl = enemy[i]->GetScl();
 		life[i] = enemy[i]->GetLife();
 		stop[i] = false;
+		spown[i] = false;
 	}
 
 	////スプライトの読み込み
@@ -89,6 +92,7 @@ void middle::SetPSR()
 
 	//プレイヤーのポジションセット
 	player->SetPosition(playerPos);
+	player->SetRotation(playerRot);
 	//弾のポジションセット
 	for (int j = 0; j < 9; j++) {
 		bull[j]->SetPosition(bullPos[j]);
@@ -96,7 +100,7 @@ void middle::SetPSR()
 		bull[j]->SetLost(lost);
 	}
 	//敵のポジションセット
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < MAXENEMY; i++) {
 		if (life[i] <= 0) {
 			enemyPos[i] = enemy[i]->GetPosition();
 			enemy[i]->SetPosition(enemyPos[i]);
@@ -104,6 +108,8 @@ void middle::SetPSR()
 			life[i] = enemy[i]->GetLife();
 		}
 	}
+
+	startPos.z = playerPos.m128_f32[2] - 1;
 }
 
 
@@ -113,8 +119,8 @@ void middle::AllUpdate()
 	player->Update();
 
 	//敵の更新
-	for (int i = 0; i < 2; i++) {
-		enemy[i]->Update(playerPos,patern,oldpatern);
+	for (int i = 0; i < MAXENEMY; i++) {
+		enemy[i]->Update(playerPos,patern,oldpatern, stop[i], playerPos,spown[i]);
 		enemyPos[i] = enemy[i]->GetPosition();
 	}
 	//弾の更新
@@ -126,13 +132,13 @@ void middle::AllUpdate()
 void middle::Update()
 {
 
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < MAXENEMY; i++) {
 		if (life[i] >= 0) {
 			for (int j = 0; j < 9; j++) {
 				if (Collision::Player2Other(bullPos[j], bullScl, enemyPos[i], enemyScl)) {
 					lost = true;
 					shot[j] = false;
-					bullPos[j].z = -10;
+					bullPos[j].m128_f32[2] = -10;
 					speed[j] = 0;
 					life[i] -= 1;
 					enemy[i]->SetLife(life[i]);
@@ -149,7 +155,7 @@ void middle::Update()
 					life[i] -= 3;
 					lost = true;
 					shot[j] = false;
-					bullPos[j].z = -10;
+					bullPos[j].m128_f32[2] = -10;
 					speed[j] = 0;
 					enemy[i]->SetLife(life[i]);
 					stop[i] = true;
@@ -163,7 +169,6 @@ void middle::Update()
 					enemy[i]->GetSpeed();
 				}
 			}
-			enemy[i]->Active(stop[i], playerPos);
 		}
 	}
 	//敵を倒した時、hitカウントを上げる
@@ -172,18 +177,21 @@ void middle::Update()
 		count = false;
 	}
 
-	//hitカウントが2になった時、ウェーブを進める
-	if (hit == 2) {
+	//hitカウントがMAXENEMYになった時、ウェーブを進める
+	if (hit == MAXENEMY) {
 		patern += 1;
 		cammove = 0.1f;
 		hit = 0;
 	}
 	//waveが進むごとにカメラも奥に進む
 	if (patern != 0) {
-		playerPos.z += cammove;
+		playerPos.m128_f32[2] += cammove;
 		life[1] -= 3;
 		life[0] -= 3;
-		if (playerPos.z >= 10 * patern) {
+		if (playerPos.m128_f32[2] >= 10 * patern && patern>oldpatern) {
+			for (int i = 0; i < MAXENEMY; i++) {
+				spown[i] = true;
+			}
 			cammove = 0;
 			oldpatern = patern;
 		}
@@ -194,18 +202,18 @@ void middle::Update()
 	Action::GetInstance()->PlayerMove3d(playerPos, 0.2f);
 
 
-	if (playerPos.y <= 0.0f) {
-		playerPos.y = 0.0f;
+	if (playerPos.m128_f32[1] <= 0.0f) {
+		playerPos.m128_f32[1] = 0.0f;
 	}
-	else if (playerPos.y >= 4.2f) {
-		playerPos.y = 4.2f;
+	else if (playerPos.m128_f32[1] >= 4.2f) {
+		playerPos.m128_f32[1] = 4.2f;
 	}
 
-	if (playerPos.x >= 6.8f) {
-		playerPos.x = 6.8f;
+	if (playerPos.m128_f32[0] >= 6.8f) {
+		playerPos.m128_f32[0] = 6.8f;
 	}
-	else if (playerPos.x <= -6.8f) {
-		playerPos.x = -6.8f;
+	else if (playerPos.m128_f32[0] <= -6.8f) {
+		playerPos.m128_f32[0] = -6.8f;
 	}
 
 
@@ -214,9 +222,9 @@ void middle::Update()
 			Remaining += 1;
 			for (int i = 0; i < 9; i++) {
 				if (shot[i] == false) {
-					bullPos[i].x = playerPos.x;
-					bullPos[i].y = playerPos.y;
-					bullPos[i].z = playerPos.z;
+					bullPos[i].m128_f32[0] = startPos.x;
+					bullPos[i].m128_f32[1] = startPos.y;
+					bullPos[i].m128_f32[2] = startPos.z;
 					shot[i] = true;
 					break;
 				}
@@ -252,10 +260,10 @@ void middle::Update()
 			bullPos[i].z -= v3z;*/
 			//追尾前の状態
 			verosity_ = { 0, 0, bullSpeed, 1 };
-			bullPos[i].z += verosity_.m128_f32[2];
+			bullPos[i].m128_f32[2] += verosity_.m128_f32[2];
 		}
-		if (bullPos[i].z >= 30 + playerPos.z) {
-			bullPos[i].z = -10;
+		if (bullPos[i].m128_f32[2] >= 30 + playerPos.m128_f32[2]) {
+			bullPos[i].m128_f32[2] = -10;
 			shot[i] = false;
 		}
 	}
@@ -289,7 +297,7 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 	for (int j = 0; j < 9; j++) {
 		bull[j]->Draw();
 	}
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < MAXENEMY; i++) {
 		enemy[i]->Draw();
 	}
 	player->ObjDraw();
@@ -348,14 +356,22 @@ void middle::ImGuiDraw()
 	ImGui::SliderFloat("ReloadTimer", &t, -100.0f, 100.0f);
 	ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
 	ImGui::SliderFloat("Remaining", &a, -100.0f, 100.0f);
-	if (ImGui::TreeNode("playerPos")) {
+	if (ImGui::TreeNode("playerSts")) {
 
-		ImGui::SliderFloat("EnePos.x", &enemyPos[0].x, -100.0f, 100.0f);
-		ImGui::SliderFloat("EnePos.y", &enemyPos[0].y, -100.0f, 100.0f);
-		ImGui::SliderFloat("EnePos.z", &enemyPos[0].z, -100.0f, 100.0f);
-		ImGui::SliderFloat("EnePos.x", &enemyPos[1].x, -100.0f, 100.0f);
-		ImGui::SliderFloat("EnePos.y", &enemyPos[1].y, -100.0f, 100.0f);
-		ImGui::SliderFloat("EnePos.z", &enemyPos[1].z, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.x", &playerRot.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.y", &playerRot.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.z", &playerRot.z, -100.0f, 100.0f);
+		
+		ImGui::TreePop();
+	}
+	if (ImGui::TreeNode("EnePos")) {
+
+		ImGui::SliderFloat("EnePos.x", &enemyPos[0].m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.y", &enemyPos[0].m128_f32[1],-100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.z", &enemyPos[0].m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.x", &enemyPos[1].m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.y", &enemyPos[1].m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.z", &enemyPos[1].m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
@@ -451,9 +467,12 @@ void middle::UpdateEnemyPopCommands()
 
 
 			//敵を発生させる
-			enemyPos[0].x = x;
-			enemyPos[0].y = y;
-			enemyPos[0].z= z;
+			enemyPos[0].m128_f32[0] = x;
+			enemyPos[0].m128_f32[1] = y;
+			enemyPos[0].m128_f32[2] = z;
+			XMVECTOR o{ x,y,z };
+			tst = make_unique<Enemy>();
+			tst->SetPosition(o);
 		}
 
 		//WAITコマンド

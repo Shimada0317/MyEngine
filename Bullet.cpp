@@ -12,16 +12,16 @@ void Bullet::Initialize()
 	bullet->SetModel(bulModel);
 }
 
-void Bullet::bun(XMFLOAT3& pos, XMFLOAT3 position, float& speed, bool& shot, int& Remaining,bool& retime)
+void Bullet::bun(XMVECTOR& pos, XMVECTOR position, float& speed, bool& shot, int& Remaining,bool& retime)
 {
 	XMFLOAT3 oldpos;
-	oldpos.x = pos.x;
-	oldpos.y = pos.y;
-	oldpos.z = pos.z;
+	oldpos.x = pos.m128_f32[0];
+	oldpos.y = pos.m128_f32[1];
+	oldpos.z = pos.m128_f32[2];
 	if (retime == true) {
-		pos.x = position.x;
-		pos.y = position.y;
-		pos.z = position.z;
+		pos.m128_f32[0] = position.m128_f32[0];
+		pos.m128_f32[1] = position.m128_f32[1];
+		pos.m128_f32[2] = position.m128_f32[2];
 		shot = true;
 		retime = false;
 		speed = 1.0f;
@@ -29,12 +29,12 @@ void Bullet::bun(XMFLOAT3& pos, XMFLOAT3 position, float& speed, bool& shot, int
 	}
 	if (Remaining >= 0) {
 		if (shot == true) {
-			pos.z += speed;
+			pos.m128_f32[2] += speed;
 		}
-		if (pos.z >= 30 + position.z) {
-			pos.z = -10;
-			pos.x = oldpos.x;
-			pos.y = oldpos.y;
+		if (pos.m128_f32[2] >= 30 + position.m128_f32[2]) {
+			pos.m128_f32[2] = -10;
+			pos.m128_f32[0] = oldpos.x;
+			pos.m128_f32[2] = oldpos.y;
 			shot = false;
 		}
 		if (shot == false) {
@@ -43,21 +43,21 @@ void Bullet::bun(XMFLOAT3& pos, XMFLOAT3 position, float& speed, bool& shot, int
 	}
 	else {
 		retime = true;
-		pos.z = -10;
+		pos.m128_f32[2] = -10;
 		shot = false;
 		Remaining = 0;
 	}
 }
 
-void Bullet::Shot(XMFLOAT3& pos, XMFLOAT2 position, int speed, bool& shot)
+void Bullet::Shot(XMVECTOR& pos, XMFLOAT2 position, int speed, bool& shot)
 {
 	if (shot == true) {
-		pos.x = position.x;
-		pos.y = position.y;
-		pos.z += speed;
+		pos.m128_f32[0] = position.x;
+		pos.m128_f32[1] = position.y;
+		pos.m128_f32[2] += speed;
 
-		if (pos.z >= 30) {
-			pos.z = 0;
+		if (pos.m128_f32[2] >= 30) {
+			pos.m128_f32[2] = 0;
 		}
 	}
 

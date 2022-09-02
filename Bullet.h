@@ -17,12 +17,13 @@ private:
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+	using XMVECTOR = DirectX::XMVECTOR;
 public:
 	void Initialize();
 
-	void bun(XMFLOAT3& pos, XMFLOAT3 position, float& speed, bool& shot, int& Remaining,bool& retime);
+	void bun(XMVECTOR& pos, XMVECTOR position, float& speed, bool& shot, int& Remaining,bool& retime);
 
-	void Shot(XMFLOAT3& pos, XMFLOAT2 position, int speed, bool& shot);
+	void Shot(XMVECTOR& pos, XMFLOAT2 position, int speed, bool& shot);
 
 	void debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed,bool& d);
 
@@ -36,9 +37,9 @@ public:
 
 	void Finalize();
 
-	const XMFLOAT3& GetPosition() { return pos; }
+	const XMVECTOR& GetPosition() { return pos; }
 
-	void SetPosition(XMFLOAT3 position) { this->pos = position; }
+	void SetPosition(XMVECTOR position) { this->pos = position; }
 
 	const XMFLOAT3& GetRotation() { return rot; }
 
@@ -56,8 +57,8 @@ private:
 	ObjModel* bulModel = nullptr;
 
 
-	XMFLOAT3 pos = { 0.0f,0.0f,-100.0f };
-	XMFLOAT3 oldpos{ 0.0f,0.0f,0.0f };
+	XMVECTOR pos = { 0.0f,0.0f,-100.0f };
+	XMVECTOR oldpos{ 0.0f,0.0f,0.0f };
 	XMFLOAT3 scl = { 0.1f,0.1f,0.1f };
 	XMFLOAT3 rot = { 0.0f,-90.0f,0.0f };
 

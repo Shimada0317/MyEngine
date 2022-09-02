@@ -16,6 +16,7 @@ private: // エイリアス
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+	using XMVECTOR = DirectX::XMVECTOR;
 private:
 	Action();
 	
@@ -28,7 +29,7 @@ public:
 
 	static Action* GetInstance();
 
-	void PlayerMove3d(XMFLOAT3 &position,float Speed);
+	void PlayerMove3d(XMVECTOR &position,float Speed);
 
 	void PlayerJump(XMFLOAT3& position,bool& JumpFlag);
 

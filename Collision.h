@@ -17,6 +17,7 @@ private: // エイリアス
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+	using XMVECTOR = DirectX::XMVECTOR;
 
 public:
 
@@ -66,8 +67,8 @@ public:
 
 	void CheckPlayer2Boss(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Bossposition, XMFLOAT3 Bossscale, int PlayerHp,int PlayerLevel);
 
-	static bool Player2Other(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Otherposition, XMFLOAT3 Otherscale);
+	static bool Player2Other(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVECTOR Otherposition, XMFLOAT3 Otherscale);
 
-	static bool HeadShot(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Otherposition, XMFLOAT3 Otherscale);
+	static bool HeadShot(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVECTOR Otherposition, XMFLOAT3 Otherscale);
 };
 
