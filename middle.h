@@ -75,6 +75,7 @@ private:
 	XMFLOAT3 startPos = { 0,0.5f,-1 };
 
 	Input* input = nullptr;
+	bool moveTime = false;
 
 	bool arive = false;
 

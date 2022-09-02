@@ -4,8 +4,13 @@
 #include"ObjModel.h"
 #include"Action.h"
 #include"Collision.h"
+#include <d3dx12.h>
 
 #include<memory>
+
+using namespace DirectX;
+using namespace Microsoft::WRL;
+using namespace std;
 
 class Player;
 class Bullet
@@ -72,7 +77,8 @@ private:
 	bool lost = false;
 
 	XMVECTOR velocity_;
-
+	XMMATRIX mat;
+	XMMATRIX matvel;
 	//debug
 	bool d = false;
 };

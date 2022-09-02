@@ -10,15 +10,14 @@ void Bullet::Initialize()
 	bulModel = ObjModel::CreateFromOBJ("bullet");
 	bullet=Object3d::Create();
 	bullet->SetModel(bulModel);
+	mat = bullet->GetMatrix();
 }
 
 void Bullet::Stanby(const XMVECTOR& playerPos,const XMVECTOR& vel)
 {
 	velocity_ = vel;
 
-	pos.m128_f32[0] = playerPos.m128_f32[0];
-	pos.m128_f32[1] = playerPos.m128_f32[1];
-	pos.m128_f32[2] = playerPos.m128_f32[2];
+	pos = playerPos;
 
 }
 
@@ -99,14 +98,15 @@ void Bullet::Set()
 	bullet->SetPosition({ pos });
 	bullet->SetRotation(rot);
 	bullet->SetScale(scl);
+	mat = bullet->GetMatrix();
 }
 
 
 void Bullet::Update()
 {
-	pos.m128_f32[0] += velocity_.m128_f32[0];
-	pos.m128_f32[1] += velocity_.m128_f32[1];
-	pos.m128_f32[2] += velocity_.m128_f32[2];
+	//pos.m128_f32[0] += velocity_.m128_f32[0];
+	//pos.m128_f32[1] += velocity_.m128_f32[1];
+	pos += velocity_;
 
 	rot.x++;
 	Set();

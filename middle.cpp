@@ -40,11 +40,11 @@ void middle::Initialize()
 	for (int i = 0; i < 9; i++) {
 
 		Sprite::LoadTexture(i, L"Resources/bullet.png");
-		bulletHUD[i] = Sprite::SpriteCreate(i, {10.0f,10.0f});
+		bulletHUD[i] = Sprite::SpriteCreate(i, { 10.0f,10.0f });
 	}
 
 	Sprite::LoadTexture(10, L"Resources/reload.png");
-	Reload = Sprite::SpriteCreate(10, { 10.0f,10.0f }, {1.0f,1.0f,1.0f,1.0f});
+	Reload = Sprite::SpriteCreate(10, { 10.0f,10.0f }, { 1.0f,1.0f,1.0f,1.0f });
 
 	Sprite::LoadTexture(11, L"Resources/wave.png");
 	wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
@@ -93,7 +93,12 @@ void middle::SetPSR()
 	}
 
 	//プレイヤーのポジションセット
-	playerPos = player->GetPosition();
+	if (moveTime == false) {
+		playerPos = player->GetPosition();
+	}
+	else {
+		player->SetPosition(playerPos);
+	}
 	player->SetRotation(playerRot);
 	//弾のポジションセット
 	for (int j = 0; j < 9; j++) {
@@ -122,7 +127,7 @@ void middle::AllUpdate()
 
 	//敵の更新
 	for (int i = 0; i < MAXENEMY; i++) {
-		enemy[i]->Update(playerPos,patern,oldpatern, stop[i], playerPos,spown[i]);
+		enemy[i]->Update(playerPos, patern, oldpatern, stop[i], playerPos, spown[i]);
 		enemyPos[i] = enemy[i]->GetPosition();
 	}
 	//弾の更新
@@ -180,45 +185,39 @@ void middle::Update()
 	}
 
 	//hitカウントがMAXENEMYになった時、ウェーブを進める
-	if (hit == MAXENEMY) {
+	if (hit >= MAXENEMY) {
 		patern += 1;
 		cammove = 0.1f;
 		hit = 0;
+		moveTime = true;
 	}
 	//waveが進むごとにカメラも奥に進む
 	if (patern != 0) {
 		playerPos.m128_f32[2] += cammove;
 		life[1] -= 3;
 		life[0] -= 3;
-		if (playerPos.m128_f32[2] >= 10 * patern && patern>oldpatern) {
+		if (playerPos.m128_f32[2] >= 10 * patern && patern > oldpatern) {
 			for (int i = 0; i < MAXENEMY; i++) {
 				spown[i] = true;
 			}
+			moveTime = false;
 			cammove = 0;
 			oldpatern = patern;
 		}
 	}
 
 
-
-	
-
-
-	
-
 	if (Remaining < 8 && ReloadFlag == false) {
-		//if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		//	Remaining += 1;
-		//	for (int i = 0; i < 9; i++) {
-		//		if (shot[i] == false) {
-		//			bullPos[i].m128_f32[0] = startPos.x;
-		//			bullPos[i].m128_f32[1] = startPos.y;
-		//			bullPos[i].m128_f32[2] = startPos.z;
-		//			shot[i] = true;
-		//			break;
-		//		}
-		//	}
-
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			Remaining += 1;
+			for (int i = 0; i < 9; i++) {
+				if (shot[i] == false) {
+					bullPos[i] = playerPos;
+					shot[i] = true;
+					break;
+				}
+			}
+		}
 		///*	for (int i = 0; i < 9; i++) {
 		//		if (shot[i] == false) {
 		//			bullPos[i].x = startPos.x;
@@ -261,23 +260,23 @@ void middle::Update()
 			ReloadFlag = true;
 		}
 	}
-	
+
 
 	if (ReloadFlag == true) {
 		ReloadTime += 1;
 		ans = ReloadTime % 10;
-		if (ans  == 0) {
+		if (ans == 0) {
 			Remaining -= 1;
-			if(Remaining == 0) {
+			if (Remaining == 0) {
 				ReloadFlag = false;
 				ReloadTime = 0;
 			}
 		}
 	}
-	
+
 
 	SetPSR();
-	
+
 	AllUpdate();
 }
 
@@ -322,7 +321,7 @@ void middle::SpriteDraw()
 
 	wave->Draw();
 	slash->Draw();
-		//bulletHUD[i]->Draw();
+	//bulletHUD[i]->Draw();
 
 }
 
@@ -350,13 +349,13 @@ void middle::ImGuiDraw()
 		ImGui::SliderFloat("Rot.x", &playerRot.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("Rot.y", &playerRot.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("Rot.z", &playerRot.z, -100.0f, 100.0f);
-		
+
 		ImGui::TreePop();
 	}
 	if (ImGui::TreeNode("EnePos")) {
 
 		ImGui::SliderFloat("EnePos.x", &enemyPos[0].m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("EnePos.y", &enemyPos[0].m128_f32[1],-100.0f, 100.0f);
+		ImGui::SliderFloat("EnePos.y", &enemyPos[0].m128_f32[1], -100.0f, 100.0f);
 		ImGui::SliderFloat("EnePos.z", &enemyPos[0].m128_f32[2], -100.0f, 100.0f);
 		ImGui::SliderFloat("EnePos.x", &enemyPos[1].m128_f32[0], -100.0f, 100.0f);
 		ImGui::SliderFloat("EnePos.y", &enemyPos[1].m128_f32[1], -100.0f, 100.0f);
@@ -427,7 +426,7 @@ void middle::UpdateEnemyPopCommands()
 	std::string line;
 
 	//コマンド実行ループ
-	while (getline(enemyPopCommands,line))
+	while (getline(enemyPopCommands, line))
 	{
 		//1行分の文字列をストリームに変換して解析しやすくする
 		std::istringstream line_stream(line);

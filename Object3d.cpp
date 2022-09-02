@@ -254,14 +254,14 @@ void Object3d::Update()
 	assert(camera);
 
 	HRESULT result;
-	XMMATRIX matScale, matRot, matTrans;
+
 
 	// スケール、回転、平行移動行列の計算
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
 	matRot = XMMatrixIdentity();
-	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
 	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
 	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
+	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
 	matTrans = XMMatrixTranslation(position.m128_f32[0], position.m128_f32[1], position.m128_f32[2]);
 
 	// ワールド行列の合成

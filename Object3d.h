@@ -143,6 +143,10 @@ public: // メンバ関数
 	void SetMatrix(XMMATRIX mat) { this->matWorld = mat; }
 
 	const XMMATRIX& GetMatrix() { return matWorld; }
+
+	void SetMatrixR(XMMATRIX matrot) { this->matRot = matrot; }
+
+	const XMMATRIX& GetMatrixR() { return matRot; }
 	/// <summary>
 	/// スケールの設定
 	/// </summary>
@@ -179,5 +183,7 @@ private: // メンバ変数
 	ObjModel* model = nullptr;
 	// ビルボード
 	bool isBillboard = false;
+
+	XMMATRIX matScale, matRot, matTrans;
 };
 

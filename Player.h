@@ -72,7 +72,7 @@ private:
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
 
-	XMVECTOR position = { 0.0f,0.2f,0.0f };
+	XMVECTOR position = { 0.0f,0.0f,0.1f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 	XMMATRIX mat;

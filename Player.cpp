@@ -15,7 +15,6 @@ void Player::Initalize()
 	playerModel = ObjModel::CreateFromOBJ("mark");
 	player=Object3d::Create();
 	player->SetModel(playerModel);
-	mat = player->GetMatrix();
 
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
@@ -29,7 +28,6 @@ void Player::Set()
 	player->SetPosition({ position });
 	player->SetRotation({ rotation });
 	player->SetScale({ scale });
-	mat = player->GetMatrix();
 
 	camera->SetTarget({Target_pos.x,Target_pos.y,position.m128_f32[2]});
 	camera->SetEye({ Eye_pos });
@@ -86,7 +84,7 @@ void Player::Update()
 	position.m128_f32[1] = max(position.m128_f32[1], -0);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
 
-	Attack();
+	//Attack();
 
 	for (std::unique_ptr<Bullet>& bullet : bullets_) {
 		bullet->Update();
@@ -145,11 +143,10 @@ void Player::Finalize()
 void Player::Attack()
 {
    	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		const float kBulletSpeed = 0.001f;
-		XMVECTOR velocity = { 0, 0, kBulletSpeed };
-
+		const float kBulletSpeed = 0.01f;
+		XMVECTOR velocity = { 0, 0, kBulletSpeed,0 };
 		velocity = XMVector3TransformCoord(velocity, mat);
-
+	
 		newBullet = std::make_unique<Bullet>();
 		newBullet->Initialize();
 		newBullet->Stanby(position,velocity);
