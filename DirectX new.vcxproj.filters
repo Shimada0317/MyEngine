@@ -174,12 +174,6 @@
     <ClCompile Include="ClearScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Vector3\Vector3.cpp">
-      <Filter>ソース ファイル\Vector3</Filter>
-    </ClCompile>
-    <ClCompile Include="Matrix4\Matrix4.cpp">
-      <Filter>ソース ファイル\Matrix4</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />
@@ -367,12 +361,6 @@
     </ClInclude>
     <ClInclude Include="ClearScene.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3\Vector3.h">
-      <Filter>ソース ファイル\Vector3</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix4\Matrix4.h">
-      <Filter>ソース ファイル\Matrix4</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

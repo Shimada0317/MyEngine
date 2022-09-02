@@ -3,7 +3,7 @@
 
 class Vector3
 {
-	struct VECTOR {
+	struct VETOR {
 		float x;
 		float y;
 		float z;

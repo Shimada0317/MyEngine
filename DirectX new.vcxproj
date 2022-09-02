@@ -186,7 +186,6 @@
     <ClCompile Include="light\LightGroup.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Matrix4\Matrix4.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="middle.cpp" />
     <ClCompile Include="ObjModel.cpp" />
@@ -201,7 +200,6 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureModel.cpp" />
     <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="Vector3\Vector3.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -438,7 +436,6 @@
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="light\LightGroup.h" />
     <ClInclude Include="Material.h" />
-    <ClInclude Include="Matrix4\Matrix4.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="middle.h" />
     <ClInclude Include="ObjModel.h" />
@@ -453,7 +450,6 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureModel.h" />
     <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="Vector3\Vector3.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
