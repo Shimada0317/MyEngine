@@ -12,6 +12,16 @@ void Bullet::Initialize()
 	bullet->SetModel(bulModel);
 }
 
+void Bullet::Stanby(const XMVECTOR& playerPos,const XMVECTOR& vel)
+{
+	velocity_ = vel;
+
+	pos.m128_f32[0] = playerPos.m128_f32[0];
+	pos.m128_f32[1] = playerPos.m128_f32[1];
+	pos.m128_f32[2] = playerPos.m128_f32[2];
+
+}
+
 void Bullet::bun(XMVECTOR& pos, XMVECTOR position, float& speed, bool& shot, int& Remaining,bool& retime)
 {
 	XMFLOAT3 oldpos;
@@ -86,7 +96,7 @@ void Bullet::debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed, bool& d)
 
 void Bullet::Set()
 {
-	bullet->SetPosition(pos);
+	bullet->SetPosition({ pos });
 	bullet->SetRotation(rot);
 	bullet->SetScale(scl);
 }
@@ -94,6 +104,10 @@ void Bullet::Set()
 
 void Bullet::Update()
 {
+	pos.m128_f32[0] += velocity_.m128_f32[0];
+	pos.m128_f32[1] += velocity_.m128_f32[1];
+	pos.m128_f32[2] += velocity_.m128_f32[2];
+
 	rot.x++;
 	Set();
 	bullet->Update();

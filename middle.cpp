@@ -207,28 +207,28 @@ void middle::Update()
 	
 
 	if (Remaining < 8 && ReloadFlag == false) {
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			Remaining += 1;
-			for (int i = 0; i < 9; i++) {
-				if (shot[i] == false) {
-					bullPos[i].m128_f32[0] = startPos.x;
-					bullPos[i].m128_f32[1] = startPos.y;
-					bullPos[i].m128_f32[2] = startPos.z;
-					shot[i] = true;
-					break;
-				}
-			}
+		//if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		//	Remaining += 1;
+		//	for (int i = 0; i < 9; i++) {
+		//		if (shot[i] == false) {
+		//			bullPos[i].m128_f32[0] = startPos.x;
+		//			bullPos[i].m128_f32[1] = startPos.y;
+		//			bullPos[i].m128_f32[2] = startPos.z;
+		//			shot[i] = true;
+		//			break;
+		//		}
+		//	}
 
-		/*	for (int i = 0; i < 9; i++) {
-				if (shot[i] == false) {
-					bullPos[i].x = startPos.x;
-					bullPos[i].y = startPos.y;
-					bullPos[i].z = startPos.z;
-					shot[i] = true;
-					break;
-				}
-			}*/
-		}
+		///*	for (int i = 0; i < 9; i++) {
+		//		if (shot[i] == false) {
+		//			bullPos[i].x = startPos.x;
+		//			bullPos[i].y = startPos.y;
+		//			bullPos[i].z = startPos.z;
+		//			shot[i] = true;
+		//			break;
+		//		}
+		//	}*/
+		//}
 	}
 	for (int i = 0; i < 9; i++) {
 		if (shot[i] == true) {

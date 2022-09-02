@@ -21,6 +21,8 @@ private:
 public:
 	void Initialize();
 
+	void Stanby(const XMVECTOR& playerPos,const XMVECTOR& vel);
+
 	void bun(XMVECTOR& pos, XMVECTOR position, float& speed, bool& shot, int& Remaining,bool& retime);
 
 	void Shot(XMVECTOR& pos, XMFLOAT2 position, int speed, bool& shot);
@@ -69,7 +71,7 @@ private:
 
 	bool lost = false;
 
-
+	XMVECTOR velocity_;
 
 	//debug
 	bool d = false;

@@ -140,8 +140,9 @@ public: // メンバ関数
 
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 
+	void SetMatrix(XMMATRIX mat) { this->matWorld = mat; }
 
-
+	const XMMATRIX& GetMatrix() { return matWorld; }
 	/// <summary>
 	/// スケールの設定
 	/// </summary>

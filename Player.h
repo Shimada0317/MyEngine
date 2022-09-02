@@ -9,8 +9,10 @@
 #include"TextureModel.h"
 #include"WinApp.h"
 #include<vector>
+#include"Bullet.h"
 
 #include<memory>
+#include<list>
 
 class Player
 {
@@ -29,6 +31,8 @@ public:
 	void ImGuiDraw();
 
 	void Finalize();
+
+	void Attack();
 
 	void MouthContoroll();
 
@@ -62,7 +66,8 @@ private:
 	std::unique_ptr<Object3d> player;
 	ObjModel* playerModel = nullptr;
 
-
+	std::list<std::unique_ptr<Bullet>> bullets_;
+	std::unique_ptr<Bullet> newBullet;
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
@@ -70,6 +75,7 @@ private:
 	XMVECTOR position = { 0.0f,0.2f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
+	XMMATRIX mat;
 
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };

@@ -15,10 +15,13 @@ void Player::Initalize()
 	playerModel = ObjModel::CreateFromOBJ("mark");
 	player=Object3d::Create();
 	player->SetModel(playerModel);
+	mat = player->GetMatrix();
 
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 
+	
+	
 };
 
 void Player::Set()
@@ -26,6 +29,7 @@ void Player::Set()
 	player->SetPosition({ position });
 	player->SetRotation({ rotation });
 	player->SetScale({ scale });
+	mat = player->GetMatrix();
 
 	camera->SetTarget({Target_pos.x,Target_pos.y,position.m128_f32[2]});
 	camera->SetEye({ Eye_pos });
@@ -68,7 +72,9 @@ void Player::Update()
 	//		Eye_pos.x = 0.0f;
 	//	}
 	//}
-
+	if (Input::GetInstance()->PushKey(DIK_A)) {
+		rotation.y++;
+	}
 	
 	Action::GetInstance()->PlayerMove3d(position);
 
@@ -79,6 +85,12 @@ void Player::Update()
 	position.m128_f32[0] = min(position.m128_f32[0], +kMoveLimitX);
 	position.m128_f32[1] = max(position.m128_f32[1], -0);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
+
+	Attack();
+
+	for (std::unique_ptr<Bullet>& bullet : bullets_) {
+		bullet->Update();
+	}
 
 	//MouthContoroll();
 	Set();
@@ -98,19 +110,21 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 void Player::ObjDraw()
 {
 	player->Draw();
+	for (std::unique_ptr<Bullet>& bullet : bullets_) {
+		bullet->Draw();
+	}
 }
 
 void Player::ImGuiDraw()
 {
+
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("position")) {
-		ImGui::SliderFloat("pos.x", &position.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &position.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &position.m128_f32[2], -100.0f, 100.0f);
+
 		ImGui::SliderFloat("rot.y", &rotation.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("target.x", &Target_pos.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("target.y", &Target_pos.y, -100.0f, 100.0f);
@@ -126,6 +140,21 @@ void Player::ImGuiDraw()
 void Player::Finalize()
 {
 	delete camera;
+}
+
+void Player::Attack()
+{
+   	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		const float kBulletSpeed = 0.001f;
+		XMVECTOR velocity = { 0, 0, kBulletSpeed };
+
+		velocity = XMVector3TransformCoord(velocity, mat);
+
+		newBullet = std::make_unique<Bullet>();
+		newBullet->Initialize();
+		newBullet->Stanby(position,velocity);
+		bullets_.push_back(std::move(newBullet));
+	}
 }
 
 void Player::MouthContoroll()
