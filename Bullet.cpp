@@ -101,6 +101,18 @@ void Bullet::Set()
 	mat = bullet->GetMatrix();
 }
 
+void Bullet::ShotBefore(XMVECTOR startPos, bool& shot)
+{
+
+	if (shot == false) {
+		pos.m128_f32[0] = startPos.m128_f32[0];
+		pos.m128_f32[1] = startPos.m128_f32[1];
+		pos.m128_f32[2] = startPos.m128_f32[2];
+		shot = true;
+	}
+
+}
+
 
 void Bullet::Update()
 {

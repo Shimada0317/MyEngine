@@ -32,6 +32,8 @@ public:
 
 	void Fainalize();
 
+	void Fire();
+
 	void LoadEnemyPopData();
 
 	void UpdateEnemyPopCommands();
@@ -55,12 +57,17 @@ private:
 	Sprite* changecount[5];
 	//プレイヤーのステータス
 	XMVECTOR playerPos = { 0,0,0 };
+	XMVECTOR backplayer = { 0,0,-5 };
 	XMFLOAT3 playerScl = { 0,0,0 };
 	XMFLOAT3 playerRot = { 0,0 ,0 };
 	//弾のステータス
 	XMVECTOR bullPos[9];
 	XMFLOAT3 bullScl = { 0,0,0 };
 	XMFLOAT3 bullRot = { 0,0,0 };
+	bool fire[9];
+	float v3x=0;
+	float v3y=0;
+	float v3z=0;
 	//敵のステータス
 	XMVECTOR enemyPos[MAXENEMY];
 	XMFLOAT3 enemyScl = { 0,0,0 };
@@ -99,7 +106,7 @@ private:
 	int ReloadTime = 0;
 	int ans = 0;
 
-	float speedm = 0.1f;
+	float speedm = 2.1f;
 
 	XMMATRIX matInverseVPV;
 	

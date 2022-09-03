@@ -11,7 +11,7 @@ void middle::Initialize()
 	player->Initalize();
 	playerPos = player->GetPosition();
 	playerRot = player->GetRotation();
-
+	backplayer = playerPos;
 
 	//弾の読み込み
 	for (int j = 0; j < 9; j++) {
@@ -19,6 +19,7 @@ void middle::Initialize()
 		bull[j]->Initialize();
 
 		retime[j] = true;
+		fire[j] = false;
 		bullPos[j] = bull[j]->GetPosition();
 		bullScl = bull[j]->GetScl();
 		lost = bull[j]->GetLost();
@@ -69,6 +70,7 @@ void middle::Initialize()
 
 void middle::SetPSR()
 {
+
 	//HUDのポジションセット
 	for (int i = 0; i < 9; i++) {
 		bulletHUD[i]->SetSize({ spSiz });
@@ -99,6 +101,10 @@ void middle::SetPSR()
 	else {
 		player->SetPosition(playerPos);
 	}
+
+	backplayer.m128_f32[0] = -playerPos.m128_f32[0]/2;
+	backplayer.m128_f32[1] = playerPos.m128_f32[1]/2;
+	backplayer.m128_f32[2] = playerPos.m128_f32[2]-5;
 	player->SetRotation(playerRot);
 	//弾のポジションセット
 	for (int j = 0; j < 9; j++) {
@@ -140,7 +146,7 @@ void middle::Update()
 {
 
 	for (int i = 0; i < MAXENEMY; i++) {
-		if (life[i] >= 0) {
+		if (life[i] > 0) {
 			for (int j = 0; j < 9; j++) {
 				if (Collision::Player2Other(bullPos[j], bullScl, enemyPos[i], enemyScl)) {
 					lost = true;
@@ -209,52 +215,30 @@ void middle::Update()
 
 	if (Remaining < 8 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			Remaining += 1;
-			for (int i = 0; i < 9; i++) {
+		Remaining += 1;
+			/*for (int i = 0; i < 9; i++) {
 				if (shot[i] == false) {
 					bullPos[i] = playerPos;
 					shot[i] = true;
 					break;
 				}
 			}
+		}*/
+			for (int i = 0; i < 9; i++) {
+				if (shot[i] == false) {
+					bullPos[i].m128_f32[0] = backplayer.m128_f32[0];
+					bullPos[i].m128_f32[1] = backplayer.m128_f32[1];
+					bullPos[i].m128_f32[2] = backplayer.m128_f32[2];
+					shot[i] = true;
+					fire[i] = true;
+					break;
+				}
+			}
 		}
-		///*	for (int i = 0; i < 9; i++) {
-		//		if (shot[i] == false) {
-		//			bullPos[i].x = startPos.x;
-		//			bullPos[i].y = startPos.y;
-		//			bullPos[i].z = startPos.z;
-		//			shot[i] = true;
-		//			break;
-		//		}
-		//	}*/
-		//}
 	}
-	for (int i = 0; i < 9; i++) {
-		if (shot[i] == true) {
-			//追尾の式の途中
-		/*	float vx = (startPos.x - playerPos.x);
-			float vy = (startPos.y - playerPos.y);
-			float vz = (startPos.z - playerPos.z);
-			float v2x = pow(vx, 2);
-			float v2y = pow(vy, 2);
-			float v2z = pow(vz, 2);
-			float l = sqrtf(v2x + v2y+v2z);
-			float v3x = (vx / l) * speedm;
-			float v3y = (vy / l) * speedm;
-			float v3z = (vz / l) * speedm;
 
-			bullPos[i].x -= v3x;
-			bullPos[i].y -= v3y;
-			bullPos[i].z -= v3z;*/
-			//追尾前の状態
-			verosity_ = { 0, 0, bullSpeed, 1 };
-			bullPos[i].m128_f32[2] += verosity_.m128_f32[2];
-		}
-		if (bullPos[i].m128_f32[2] >= 30 + playerPos.m128_f32[2]) {
-			bullPos[i].m128_f32[2] = -10;
-			shot[i] = false;
-		}
-	}
+	Fire();
+
 	if (Remaining > 0) {
 		if (Input::GetInstance()->PushKey(DIK_R)) {
 			ReloadFlag = true;
@@ -396,6 +380,38 @@ void middle::ImGuiDraw()
 void middle::Fainalize()
 {
 	delete[] bulletHUD;
+}
+
+void middle::Fire()
+{
+	for (int i = 0; i < 9; i++) {
+		if (shot[i] == true) {
+			if (fire[i] == true) {
+				//追尾の式の途中
+				float vx = (backplayer.m128_f32[0] - playerPos.m128_f32[0]);
+				float vy = (backplayer.m128_f32[1] - playerPos.m128_f32[1]);
+				float vz = (backplayer.m128_f32[2] - playerPos.m128_f32[2]);
+				float v2x = pow(vx, 2);
+				float v2y = pow(vy, 2);
+				float v2z = pow(vz, 2);
+				float l = sqrtf(v2x + v2y + v2z);
+				v3x = (vx / l) * speedm;
+				v3y = (vy / l) * speedm;
+				v3z = (vz / l) * speedm;
+				fire[i] = false;
+			}
+			bullPos[i].m128_f32[0] -= v3x;
+			bullPos[i].m128_f32[1] -= v3y;
+			bullPos[i].m128_f32[2] -= v3z;
+			//追尾前の状態
+			/*verosity_ = { 0, 0, bullSpeed, 1 };
+			bullPos[i].m128_f32[2] += verosity_.m128_f32[2];*/
+		}
+		if (bullPos[i].m128_f32[2] >= 30 + playerPos.m128_f32[2]) {
+			bullPos[i].m128_f32[2] = -10;
+			shot[i] = false;
+		}
+	}
 }
 
 void middle::LoadEnemyPopData()

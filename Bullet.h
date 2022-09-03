@@ -36,6 +36,8 @@ public:
 
 	void Set();
 
+	void ShotBefore(XMVECTOR startPos, bool& shot);
+
 	void Update();
 
 	void Draw();

@@ -32,7 +32,7 @@ void Enemy::Update(XMVECTOR pos, int wave, int oldwave, bool& StopT, XMVECTOR po
 
 	if (arive == false) {
 		position.m128_f32[0] = rand() % 10 - 5;
-		position.m128_f32[2] = rand() % 1 + 30 + pos.m128_f32[2];
+		position.m128_f32[2] = rand() % 1 + 10 + pos.m128_f32[2];
 	}
 	if (spown == true) {
 		life = 3;
