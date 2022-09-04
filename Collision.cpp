@@ -220,7 +220,7 @@ bool Collision::HeadShot(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVECTOR
 	float z = Playerposition.m128_f32[2] - Otherposition.m128_f32[2];
 
 	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
-	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z) / 5;
+	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z) / 4;
 
 	float length = sqrt(x * x + y * y + z * z);
 

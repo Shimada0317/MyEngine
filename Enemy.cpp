@@ -9,7 +9,7 @@ void Enemy::Initalize()
 	model = ObjModel::CreateFromOBJ("enemy");
 	enemy = Object3d::Create();
 	enemy->SetModel(model);
-
+	position.m128_f32[0] = rand() % 10 - 5;
 }
 
 void Enemy::Set()
@@ -17,7 +17,6 @@ void Enemy::Set()
 	enemy->SetPosition(position);
 	enemy->SetRotation(rotation);
 	enemy->SetScale(scale);
-
 }
 
 void Enemy::Update(XMVECTOR pos, int wave, int oldwave, bool& StopT, XMVECTOR positionP,bool& spown)
@@ -47,6 +46,7 @@ void Enemy::Update(XMVECTOR pos, int wave, int oldwave, bool& StopT, XMVECTOR po
 	Set();
 
 	enemy->Update();
+
 }
 
 void Enemy::Draw()
@@ -54,6 +54,7 @@ void Enemy::Draw()
 	if (arive == true) {
 		enemy->Draw();
 	}
+
 }
 
 void Enemy::ImGuiDraw()

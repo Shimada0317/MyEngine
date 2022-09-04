@@ -191,6 +191,7 @@
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="BaseClassIUDF.cpp" />
     <ClCompile Include="Object3d.cpp" />
+    <ClCompile Include="ObjParticle.cpp" />
     <ClCompile Include="ParticleManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PointLight.cpp" />
@@ -441,6 +442,7 @@
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="BaseClassIUDF.h" />
     <ClInclude Include="Object3d.h" />
+    <ClInclude Include="ObjParticle.h" />
     <ClInclude Include="ParticleManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PointLight.h" />

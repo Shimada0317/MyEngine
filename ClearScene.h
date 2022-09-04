@@ -1,6 +1,7 @@
 #pragma once
 #include"BaseScene.h"
 #include "DirectXCommon.h"
+#include"Sprite.h"
 #include <DirectXMath.h>
 #include<memory>
 
@@ -31,6 +32,8 @@ public://ƒƒ“ƒo•Ï”
 
 	void Finalize() override;
 private:
-
+	Sprite* Clear = nullptr;
+	XMFLOAT2 retsize = { 1280.0f,720.0f };
+	XMFLOAT2 retpos = { 0.0f,0.0f };
 };
 

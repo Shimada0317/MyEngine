@@ -5,6 +5,7 @@
 #include"DebugText.h"
 #include"Action.h"
 #include"DebugCamera.h"
+
 #include<vector>
 #include<memory>
 
@@ -58,6 +59,8 @@ public:
 private:
 	ObjModel* model = nullptr;
 	std::unique_ptr<Object3d> enemy;
+
+
 
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;

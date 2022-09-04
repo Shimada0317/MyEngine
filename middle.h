@@ -7,6 +7,7 @@
 #include"Collision.h"
 #include"BaseScene.h"
 #include"ClearScene.h"
+#include"ObjParticle.h"
 #include<sstream>
 
 #include<memory>
@@ -68,11 +69,12 @@ private:
 	float v3x=0;
 	float v3y=0;
 	float v3z=0;
+
 	//敵のステータス
 	XMVECTOR enemyPos[MAXENEMY];
 	XMFLOAT3 enemyScl = { 0,0,0 };
 	XMFLOAT3 enemyRot = { 0,0,0 };
-
+	XMVECTOR partPos[MAXENEMY];
 	XMVECTOR absolutePos = { 0,0,0 };
 
 	XMFLOAT2 spSiz = { 64.0f,64.0f };

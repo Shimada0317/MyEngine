@@ -31,6 +31,8 @@ void middle::Initialize()
 		enemy[i] = std::make_unique<Enemy>();
 		enemy[i]->Initalize();
 		enemyPos[i] = enemy[i]->GetPosition();
+		enemyPos[i].m128_f32[0] + i*0.1f;
+		enemy[i]->SetPosition(enemyPos[i]);
 		enemyScl = enemy[i]->GetScl();
 		life[i] = enemy[i]->GetLife();
 		stop[i] = false;
@@ -102,8 +104,8 @@ void middle::SetPSR()
 		player->SetPosition(playerPos);
 	}
 
-	backplayer.m128_f32[0] = -playerPos.m128_f32[0]/2;
-	backplayer.m128_f32[1] = playerPos.m128_f32[1]/2;
+	backplayer.m128_f32[0] = -playerPos.m128_f32[0]/32;
+	backplayer.m128_f32[1] = playerPos.m128_f32[1]/32;
 	backplayer.m128_f32[2] = playerPos.m128_f32[2]-5;
 	player->SetRotation(playerRot);
 	//弾のポジションセット
@@ -116,6 +118,8 @@ void middle::SetPSR()
 	for (int i = 0; i < MAXENEMY; i++) {
 		if (life[i] <= 0) {
 			enemyPos[i] = enemy[i]->GetPosition();
+			enemyPos[i].m128_f32[0] + i;
+
 			enemy[i]->SetPosition(enemyPos[i]);
 			enemy[i]->SetScl(enemyScl);
 			life[i] = enemy[i]->GetLife();
@@ -133,8 +137,10 @@ void middle::AllUpdate()
 
 	//敵の更新
 	for (int i = 0; i < MAXENEMY; i++) {
+
 		enemy[i]->Update(playerPos, patern, oldpatern, stop[i], playerPos, spown[i]);
 		enemyPos[i] = enemy[i]->GetPosition();
+		
 	}
 	//弾の更新
 	for (int j = 0; j < 9; j++) {
@@ -271,6 +277,7 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 	}
 	for (int i = 0; i < MAXENEMY; i++) {
 		enemy[i]->Draw();
+
 	}
 	player->ObjDraw();
 }
