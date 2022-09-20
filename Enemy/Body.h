@@ -1,6 +1,8 @@
 #pragma once
 #include<DirectXMath.h>
 #include"Object3d.h"
+#include"ObjModel.h"
+#include<memory>
 
 class Body
 {
@@ -17,8 +19,11 @@ public:
 	void Update(bool arive);
 
 	void Draw(bool arive);
+
+	void Finalize();
 private:
-	Object3d* body = nullptr;
+	std::unique_ptr<Object3d> body;
+	ObjModel* bodyModel = nullptr;
 
 	XMVECTOR BodyPos = {0.0f,0.0f,0.0f};
 	XMFLOAT3 BodyScl = { 1.0f,1.0f,1.0f };
