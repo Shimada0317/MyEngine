@@ -49,16 +49,16 @@ void Action::PlayerJump(XMFLOAT3& position,bool& JumpFlag)
 
 void Action::PlayerMove2d(XMFLOAT2 &position, float Speed)
 {
-	if (Input::GetInstance()->PushKey(DIK_UP)) {
+	if (Input::GetInstance()->TriggerKey(DIK_UP)) {
 		position.y += Speed;
 	}
-	else if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+	else if (Input::GetInstance()->TriggerKey(DIK_DOWN)) {
 		position.y -= Speed;
 	}
-	else if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+	else if (Input::GetInstance()->TriggerKey(DIK_RIGHT)) {
 		position.x += Speed;
 	}
-	else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+	else if (Input::GetInstance()->TriggerKey(DIK_LEFT)) {
 		position.x -= Speed;
 	}
 }

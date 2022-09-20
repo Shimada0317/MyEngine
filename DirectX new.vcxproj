@@ -123,7 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(SolutionDir)Quaternion;$(SolutionDir)Matrix4;$(SolutionDir)Vector3</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(SolutionDir)Quaternion;$(SolutionDir)Matrix4;$(SolutionDir)Vector3;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -141,7 +141,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(SolutionDir)Quaternion;$(SolutionDir)Matrix4;$(SolutionDir)Vector3</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(SolutionDir)Quaternion;$(SolutionDir)Matrix4;$(SolutionDir)Vector3;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -172,6 +172,10 @@
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy\Body.cpp" />
+    <ClCompile Include="Enemy\Head.cpp" />
+    <ClCompile Include="Enemy\LeftArm.cpp" />
+    <ClCompile Include="Enemy\RightArm.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -421,6 +425,10 @@
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DirectXCommon.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy\Body.h" />
+    <ClInclude Include="Enemy\Head.h" />
+    <ClInclude Include="Enemy\LeftArm.h" />
+    <ClInclude Include="Enemy\RightArm.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="imgui\imconfig.h" />
