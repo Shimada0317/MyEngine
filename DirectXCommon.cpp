@@ -37,7 +37,7 @@ void DirectXCommon::InitializeDevice() {
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugContoroller))))
 	{
 		debugContoroller->EnableDebugLayer();
-		debugContoroller->SetEnableGPUBasedValidation(TRUE);
+		//debugContoroller->SetEnableGPUBasedValidation(TRUE);
 	}
 
 

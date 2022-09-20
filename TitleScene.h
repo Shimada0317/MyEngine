@@ -13,6 +13,7 @@
 #include"Player.h"
 #include"Bullet.h"
 #include"middle.h"
+#include"PostEffect.h"
 #include<memory>
 
 class TitleScene :public BaseScene
@@ -50,10 +51,11 @@ private:
 	Sprite* title = nullptr;
 
 	ParticleManager* particle = nullptr;
+	PostEffect* post = nullptr;
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
-	XMFLOAT2 retsize = { 1280.0f,720.0f };
+	XMFLOAT2 retsize = { 1.0f,-1.0f };
 	XMFLOAT2 retpos = { 0.0f,0.0f };
 	POINT pos;
 };

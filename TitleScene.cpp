@@ -15,15 +15,18 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
+
+	post = new PostEffect();
+	post->Initialize();
+
 	////スプライトの読み込み
-	Sprite::LoadTexture(1, L"Resources/tst.png");
+	Sprite::LoadTexture(1, L"Resources/tst1.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
 	//モデルの読み込み
 	/*playermodel = Model::LoadFromObJ("player");
 	player3d = Object3d::Create();
 	player3d->SetModel(playermodel);*/
-
 
 
 	particle = ParticleManager::Create();
@@ -75,7 +78,7 @@ void TitleScene::Update()
 {
 	//DirectX毎フレーム処理 ここから
 
-	//Action::GetInstance()->PlayerMove2d(retpos, 1);
+	Action::GetInstance()->PlayerMove2d(retsize, 100);
 
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 		//シーン切り替え
@@ -88,12 +91,16 @@ void TitleScene::Update()
 
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
-	dxCommon->PreDraw();
+	post->PreDrawScene(dxCommon->GetCmdList());
 	Sprite::PreDraw(dxCommon->GetCmdList());
 
 	title->Draw();
 	Sprite::PostDraw();
+	post->PostDrawScene(dxCommon->GetCmdList());
 
+	dxCommon->PreDraw();
+	
+	post->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 }
 
