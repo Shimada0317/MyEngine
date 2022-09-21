@@ -20,6 +20,8 @@ public:
 	void Draw(bool arive);
 
 	void Finalize();
+
+	void Attack(int attackT);
 private:
 	std::unique_ptr<Object3d> RArm;
 	ObjModel* RArmModel = nullptr;
@@ -27,5 +29,6 @@ private:
 	XMVECTOR RArmPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 RArmScl = { 1.0f,1.0f,1.0f };
 	XMFLOAT3 RArmRot = { 0.0f,0.0f,0.0f };
+
 };
 

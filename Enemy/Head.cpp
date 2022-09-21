@@ -2,10 +2,9 @@
 
 void Head::Initialize()
 {
-	headModel = ObjModel::CreateFromOBJ("enemy");
+	headModel = ObjModel::CreateFromOBJ("Head");
 	Head = Object3d::Create();
 	Head->SetModel(headModel);
-	Head.reset();
 }
 
 void Head::SetPRS(XMVECTOR bodyPos)
@@ -20,18 +19,19 @@ void Head::SetPRS(XMVECTOR bodyPos)
 void Head::Update(bool arive,XMVECTOR bodyPos)
 {
 	if (arive == true) {
-		SetPRS(bodyPos);
+		//SetPRS(bodyPos);
 	}
 }
 
 void Head::Draw(bool arive)
 {
-	if (arive == true) {
-		Head->Draw();
-	}
+
+	Head->Draw();
+	
 }
 
 void Head::Finalize()
 {
+	Head.reset();
 	delete headModel;
 }

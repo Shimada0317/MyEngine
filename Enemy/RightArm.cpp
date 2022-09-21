@@ -2,10 +2,9 @@
 
 void RightArm::Initialize()
 {
-	RArmModel = ObjModel::CreateFromOBJ("enemy");
+	RArmModel = ObjModel::CreateFromOBJ("Arm");
 	RArm = Object3d::Create();
 	RArm->SetModel(RArmModel);
-	RArm.reset();
 }
 
 void RightArm::SetPRS(XMVECTOR bodyPos)
@@ -26,12 +25,20 @@ void RightArm::Update(bool arive, XMVECTOR bodyPos)
 
 void RightArm::Draw(bool arive)
 {
-	if (arive == true) {
+
 		RArm->Draw();
-	}
+
 }
 
 void RightArm::Finalize()
 {
+	RArm.reset();
 	delete RArmModel;
+}
+
+void RightArm::Attack(int attackT)
+{
+	if (attackT <= 10) {
+		RArmRot.y += 10;
+	}
 }

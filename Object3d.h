@@ -136,8 +136,6 @@ public: // メンバ関数
 	/// <param name="position">座標</param>
 	void SetPosition(XMVECTOR position) { this->position = position; }
 
-
-
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
 
 	void SetMatrix(XMMATRIX mat) { this->matWorld = mat; }

@@ -14,9 +14,9 @@ private:
 public:
 	void Initialize();
 
-	void SetPRS();
+	void SetPRS(XMVECTOR allPos);
 
-	void Update(bool arive);
+	void Update(bool arive,XMVECTOR allPos);
 
 	void Draw(bool arive);
 

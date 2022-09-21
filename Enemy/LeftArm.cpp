@@ -2,10 +2,9 @@
 
 void LeftArm::Initialize()
 {
-	LArmModel = ObjModel::CreateFromOBJ("enemy");
+	LArmModel = ObjModel::CreateFromOBJ("Arm");
 	LArm = Object3d::Create();
 	LArm->SetModel(LArmModel);
-	LArm.reset();
 }
 
 void LeftArm::SetPRS(XMVECTOR bodyPos)
@@ -26,12 +25,19 @@ void LeftArm::Update(bool arive, XMVECTOR bodyPos)
 
 void LeftArm::Draw(bool arive)
 {
-	if (arive == true) {
+
 		LArm->Draw();
-	}
 }
 
 void LeftArm::Finalize()
 {
+	LArm.reset();
 	delete LArmModel;
+}
+
+void LeftArm::Attack(int attackT)
+{
+	if (attackT <= 10) {
+		LArmRot.y += 10;
+	}
 }

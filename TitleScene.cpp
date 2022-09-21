@@ -16,12 +16,15 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
 
-	post = new PostEffect();
-	post->Initialize();
+	//post = new PostEffect();
+	//post->Initialize();
 
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/tst1.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
+
+	enemy = std::make_unique<Robot>();
+	enemy->Initialize();
 
 	//モデルの読み込み
 	/*playermodel = Model::LoadFromObJ("player");
@@ -87,20 +90,25 @@ void TitleScene::Update()
 	}
 	SetPosSclRot();
 	particle->Update();
+	enemy->Update();
 }
 
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
-	post->PreDrawScene(dxCommon->GetCmdList());
-	Sprite::PreDraw(dxCommon->GetCmdList());
-
-	title->Draw();
-	Sprite::PostDraw();
-	post->PostDrawScene(dxCommon->GetCmdList());
-
 	dxCommon->PreDraw();
+	//post->PreDrawScene(dxCommon->GetCmdList());
+
+	Object3d::PreDraw(dxCommon->GetCmdList());
+	enemy->Draw();
+	Object3d::PostDraw();
+
+	//Sprite::PreDraw(dxCommon->GetCmdList());
+
+	//title->Draw();
+	//Sprite::PostDraw();
+	//post->PostDrawScene(dxCommon->GetCmdList());
 	
-	post->Draw(dxCommon->GetCmdList());
+	//post->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 }
 
@@ -108,6 +116,6 @@ void TitleScene::Finalize()
 {
 	delete title;
 	delete dxCommon;
-
+	enemy.reset();
 	//delete particle;
 }

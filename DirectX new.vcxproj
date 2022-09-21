@@ -176,6 +176,7 @@
     <ClCompile Include="Enemy\Head.cpp" />
     <ClCompile Include="Enemy\LeftArm.cpp" />
     <ClCompile Include="Enemy\RightArm.cpp" />
+    <ClCompile Include="Enemy\Robot.cpp" />
     <ClCompile Include="Framework.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -429,6 +430,7 @@
     <ClInclude Include="Enemy\Head.h" />
     <ClInclude Include="Enemy\LeftArm.h" />
     <ClInclude Include="Enemy\RightArm.h" />
+    <ClInclude Include="Enemy\Robot.h" />
     <ClInclude Include="Framework.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="imgui\imconfig.h" />
