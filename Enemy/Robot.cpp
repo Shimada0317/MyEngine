@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include"Action.h"
 
 void Robot::Initialize()
 {
@@ -32,6 +33,10 @@ void Robot::AllUpdate()
 
 void Robot::Update()
 {
+	Action::GetInstance()->PlayerMove3d(allPos);
+
+	
+
 	SetPRS();
 	AllUpdate();
 }

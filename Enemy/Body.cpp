@@ -19,8 +19,9 @@ void Body::SetPRS(XMVECTOR allPos)
 void Body::Update(bool arive,XMVECTOR allPos)
 {
 	if (arive == true) {
-		SetPRS(allPos);
 	}
+	SetPRS(allPos);
+	body->Update();
 }
 
 void Body::Draw(bool arive)

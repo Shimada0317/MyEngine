@@ -27,8 +27,8 @@ private:
 	ObjModel* LArmModel = nullptr;
 
 	XMVECTOR LArmPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 LArmScl = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 LArmRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 LArmScl = { 0.3f,0.4f,0.3f };
+	XMFLOAT3 LArmRot = { 90.0f,0.0f,0.0f };
 
 };
 

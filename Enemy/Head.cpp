@@ -10,7 +10,7 @@ void Head::Initialize()
 void Head::SetPRS(XMVECTOR bodyPos)
 {
 	HeadPos = bodyPos;
-	HeadPos.m128_f32[1] = bodyPos.m128_f32[1] + 1;
+	HeadPos.m128_f32[1] = bodyPos.m128_f32[1] + 0.7f;
 	Head->SetPosition(HeadPos);
 	Head->SetRotation(HeadRot);
 	Head->SetScale(HeadScl);
@@ -21,6 +21,7 @@ void Head::Update(bool arive,XMVECTOR bodyPos)
 	if (arive == true) {
 		//SetPRS(bodyPos);
 	}
+	Head->Update();
 }
 
 void Head::Draw(bool arive)

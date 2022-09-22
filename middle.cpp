@@ -13,6 +13,9 @@ void middle::Initialize()
 	playerRot = player->GetRotation();
 	backplayer = playerPos;
 
+	rob = std::make_unique<Robot>();
+	rob->Initialize();
+
 	//弾の読み込み
 	for (int j = 0; j < 9; j++) {
 		bull[j] = std::make_unique<Bullet>();
@@ -134,6 +137,7 @@ void middle::AllUpdate()
 {
 	//プレイヤーの更新
 	player->Update();
+	rob->Update();
 
 	//敵の更新
 	for (int i = 0; i < MAXENEMY; i++) {
@@ -280,6 +284,7 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 
 	}
 	player->ObjDraw();
+	rob->Draw();
 }
 
 void middle::SpriteDraw()

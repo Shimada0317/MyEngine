@@ -9,6 +9,7 @@
 #include"ClearScene.h"
 #include"ObjParticle.h"
 #include<sstream>
+#include"Robot.h"
 
 #include<memory>
 
@@ -49,6 +50,8 @@ private:
 	unique_ptr <Enemy> enemy[MAXENEMY];
 
 	unique_ptr<Enemy>tst;
+
+	unique_ptr<Robot>rob;
 	
 	Sprite* bulletHUD[9];
 	Sprite* Reload = nullptr;

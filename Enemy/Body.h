@@ -25,8 +25,8 @@ private:
 	std::unique_ptr<Object3d> body;
 	ObjModel* bodyModel = nullptr;
 
-	XMVECTOR BodyPos = {0.0f,0.0f,0.0f};
+	XMVECTOR BodyPos = {0.0f,0.0f,0.1f};
 	XMFLOAT3 BodyScl = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 BodyRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 BodyRot = { 0.0f,90.0f,0.0f };
 };
 
