@@ -26,9 +26,9 @@ void Body::Update(bool arive,XMVECTOR allPos)
 
 void Body::Draw(bool arive)
 {
-
+	if (arive == true) {
 		body->Draw();
-
+	}
 }
 
 void Body::Finalize()

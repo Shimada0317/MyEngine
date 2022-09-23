@@ -26,9 +26,9 @@ void Head::Update(bool arive,XMVECTOR bodyPos)
 
 void Head::Draw(bool arive)
 {
-
-	Head->Draw();
-	
+	if (arive == true) {
+		Head->Draw();
+	}
 }
 
 void Head::Finalize()

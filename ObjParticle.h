@@ -30,6 +30,6 @@ private:
 
 	XMVECTOR position = { 0,0,0 };
 	XMFLOAT3 rotation = { 0,0,0 };
-	XMFLOAT3 scale = { 1.1,1.1,1.1 };
+	XMFLOAT3 scale = { 0.1,0.1,0.1 };
 };
 

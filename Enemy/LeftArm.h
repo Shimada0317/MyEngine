@@ -21,7 +21,7 @@ public:
 
 	void Finalize();
 
-	void Attack(int attackT);
+	void Attack(float attackT);
 private:
 	std::unique_ptr<Object3d> LArm;
 	ObjModel* LArmModel = nullptr;
@@ -30,5 +30,6 @@ private:
 	XMFLOAT3 LArmScl = { 0.3f,0.4f,0.3f };
 	XMFLOAT3 LArmRot = { 90.0f,0.0f,0.0f };
 
+	bool attack = false;
 };
 

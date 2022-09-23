@@ -27,9 +27,9 @@ void RightArm::Update(bool arive, XMVECTOR bodyPos)
 
 void RightArm::Draw(bool arive)
 {
-
+	if (arive == true) {
 		RArm->Draw();
-
+	}
 }
 
 void RightArm::Finalize()
@@ -38,9 +38,21 @@ void RightArm::Finalize()
 	delete RArmModel;
 }
 
-void RightArm::Attack(int attackT)
+void RightArm::Attack(float attackT)
 {
-	if (attackT <= 10) {
-		RArmRot.y += 10;
+	if (attackT >= 10) {
+		if (attack == false) {
+			RArmRot.x += 10.0f;
+			if (RArmRot.x >= 160.0f) {
+				attack = true;
+			}
+		}
+	}
+	if (attack == true) {
+		RArmRot.x -= 10.0f;
+		if (RArmRot.x <= 90.0f) {
+			RArmRot.x = 90.0f;
+			attack = false;
+		}
 	}
 }

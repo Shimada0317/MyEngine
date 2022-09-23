@@ -27,8 +27,9 @@ void LeftArm::Update(bool arive, XMVECTOR bodyPos)
 
 void LeftArm::Draw(bool arive)
 {
-
+	if (arive == true) {
 		LArm->Draw();
+	}
 }
 
 void LeftArm::Finalize()
@@ -37,9 +38,22 @@ void LeftArm::Finalize()
 	delete LArmModel;
 }
 
-void LeftArm::Attack(int attackT)
+void LeftArm::Attack(float attackT)
 {
-	if (attackT <= 10) {
-		LArmRot.y += 10;
+	if (attackT >= 10) {
+		if (attack == false) {
+			LArmRot.x += 10.0f;
+			if (LArmRot.x >= 160.0f) {
+				attack = true;
+			}
+		}
 	}
+	if (attack == true) {
+		LArmRot.x -= 10.0f;
+		if (LArmRot.x <= 90.0f) {
+			LArmRot.x = 90.0f;
+			attack = false;
+		}
+	}
+	
 }
