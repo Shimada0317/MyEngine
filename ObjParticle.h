@@ -3,6 +3,8 @@
 #include"ObjModel.h"
 #include<DirectXMath.h>
 
+const int MAX = 24;
+
 class ObjParticle
 {
 private: // エイリアス
@@ -17,7 +19,7 @@ private: // エイリアス
 public:
 	void Initialize();
 
-	void Set(XMVECTOR& enemyPos);
+	void Set(XMVECTOR& enemyPos,bool arive);
 
 	void Update();
 
@@ -26,10 +28,13 @@ public:
 	void Finalize();
 private:
 	ObjModel* model = nullptr;
-	std::unique_ptr<Object3d> particle[10];
+	std::unique_ptr<Object3d> particle[MAX];
 
-	XMVECTOR position = { 0,0,0 };
+	XMVECTOR position[MAX];
 	XMFLOAT3 rotation = { 0,0,0 };
-	XMFLOAT3 scale = { 0.1,0.1,0.1 };
+	XMFLOAT3 scale[MAX];
+	XMFLOAT3 up[MAX];
+	XMVECTOR go = { 0.01f,0.01f,0.01f };
+	bool effect[MAX];
 };
 

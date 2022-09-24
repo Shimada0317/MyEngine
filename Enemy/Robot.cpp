@@ -27,7 +27,7 @@ void Robot::SetPRS()
 	RArm->SetPRS(allPos);
 	LArm->SetPRS(allPos);
 	body->SetPRS(allPos);
-	par->Set(allPos);
+	par->Set(allPos,arive[3]);
 }
 
 void Robot::AllUpdate()
@@ -36,7 +36,10 @@ void Robot::AllUpdate()
 	RArm->Update(arive[1], allPos);
 	LArm->Update(arive[2], allPos);
 	body->Update(arive[3], allPos);
-	par->Update();
+	if (arive[0] == false && arive[1] == false && arive[2] == false && arive[3] == false) {
+		par->Update();
+	}
+	
 }
 
 void Robot::Update()
