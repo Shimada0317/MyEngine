@@ -17,6 +17,8 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 	using XMVECTOR = DirectX::XMVECTOR;
 public:
+	void InitializeState(int i);
+
 	void Initialize();
 
 	void Set(XMVECTOR& enemyPos,bool arive);
@@ -36,5 +38,9 @@ private:
 	XMFLOAT3 up[MAX];
 	XMVECTOR go = { 0.01f,0.01f,0.01f };
 	bool effect[MAX];
+	float numX = 0;
+	float numY = 0;
+	float scalenumX = 0;
+	float scalenumY = 0;
 };
 
