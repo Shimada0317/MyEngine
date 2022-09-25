@@ -42,5 +42,7 @@ private:
 	float numY = 0;
 	float scalenumX = 0;
 	float scalenumY = 0;
+	float diffX[MAX];
+	float diffY[MAX];
 };
 
