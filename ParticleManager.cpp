@@ -655,17 +655,18 @@ void ParticleManager::Draw()
 	cmdList->DrawInstanced((UINT)std::distance(particles.begin(), particles.end()), 1, 0, 0);
 }
 
-void ParticleManager::Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale)
+void ParticleManager::Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale,float time)
 {
-	particles.emplace_front();
+	if (time <= 1) {
+		particles.emplace_front();
 
-	Particle& p = particles.front();
+		Particle& p = particles.front();
 
-	p.position = position;
-	p.velocity = velocity;
-	p.accel = accel;
-	p.num_frame = file;
-	p.s_scale = start_scale;
-	p.e_scale = end_scale;
-
+		p.position = position;
+		p.velocity = velocity;
+		p.accel = accel;
+		p.num_frame = file;
+		p.s_scale = start_scale;
+		p.e_scale = end_scale;
+	}
 }

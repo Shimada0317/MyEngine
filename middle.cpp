@@ -284,7 +284,7 @@ void middle::Draw(ID3D12GraphicsCommandList* cmdList)
 
 	}
 	player->ObjDraw();
-	rob->Draw();
+	//rob->Draw();
 }
 
 void middle::SpriteDraw()
