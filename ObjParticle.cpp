@@ -21,6 +21,7 @@ void ObjParticle::Initialize()
 {
 	model = ObjModel::CreateFromOBJ("particle");
 	for (int i = 0; i < MAX; i++) {
+
 		particle[i] = Object3d::Create();
 		particle[i]->SetModel(model);
 		InitializeState(i);
@@ -33,7 +34,7 @@ void ObjParticle::Initialize()
 
 void ObjParticle::Set(XMVECTOR& enemyPos, bool arive)
 {
-	srand((unsigned)time(NULL));
+	//srand((unsigned)time(NULL));
 	
 	for (int i = 0; i < MAX; i++) {
 		if (arive == true) {

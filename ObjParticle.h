@@ -2,6 +2,7 @@
 #include"Object3d.h"
 #include"ObjModel.h"
 #include<DirectXMath.h>
+#include"Texture.h"
 
 const int MAX = 24;
 
@@ -31,6 +32,7 @@ public:
 private:
 	ObjModel* model = nullptr;
 	std::unique_ptr<Object3d> particle[MAX];
+	std::unique_ptr<Texture>par[MAX];
 
 	XMVECTOR position[MAX];
 	XMFLOAT3 rotation = { 0,0,0 };

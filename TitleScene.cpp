@@ -102,10 +102,14 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	enemy->Draw();
 	Object3d::PostDraw();
 
-	//Sprite::PreDraw(dxCommon->GetCmdList());
+	Sprite::PreDraw(dxCommon->GetCmdList());
 
-	//title->Draw();
-	//Sprite::PostDraw();
+	title->Draw();
+	Sprite::PostDraw();
+	// 
+	ParticleManager::PreDraw(dxCommon->GetCmdList());
+	particle->Draw();
+	ParticleManager::PostDraw();
 	//post->PostDrawScene(dxCommon->GetCmdList());
 	
 	//post->Draw(dxCommon->GetCmdList());

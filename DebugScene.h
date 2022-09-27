@@ -7,6 +7,7 @@
 #include"DebugCamera.h"
 #include"Object3d.h"
 #include"ObjModel.h"
+#include"ParticleManager.h"
 #include<memory>
 
 class DebugScene :
@@ -41,6 +42,7 @@ private:
 	std::unique_ptr<Body>bob;
 	std::unique_ptr<Head>head;
 	std::unique_ptr<Object3d> bo = nullptr;
+	ParticleManager* part;
 	ObjModel* bomodel = nullptr;
 
 	XMVECTOR position = { 0.0f,0.0f,0.1f };
