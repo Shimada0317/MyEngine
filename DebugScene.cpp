@@ -14,6 +14,9 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 	rob = std::make_unique<Robot>();
 	rob->Initialize();
 
+	player = std::make_unique<Player>();
+	player->Initalize();
+
 }
 
 void DebugScene::SetPosSclRot()
@@ -25,6 +28,7 @@ void DebugScene::Update()
 {
 	SetPosSclRot();
 	rob->Update();
+	player->Update();
 	//camera->Update();
 
 }
@@ -32,10 +36,11 @@ void DebugScene::Update()
 void DebugScene::Draw(DirectXCommon* dxCommon)
 {
 	dxCommon->PreDraw();
+	rob->ParticleDraw(dxCommon);
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	rob->Draw(dxCommon);
+	player->ObjDraw();
 	Object3d::PostDraw();
-
 	dxCommon->PostDraw();
 }
 

@@ -29,6 +29,8 @@ public:
 
 	void Draw(DirectXCommon* dxCommon);
 
+	void ParticleDraw(DirectXCommon* dxCommon);
+
 	void Finalize();
 private:
 	std::unique_ptr<Head> head;

@@ -55,11 +55,11 @@ void Robot::SetPRS()
 
 void Robot::AllUpdate()
 {
+	part->Update(color);
 	head->Update(arive[0], allPos);
 	RArm->Update(arive[1], allPos);
 	LArm->Update(arive[2], allPos);
 	body->Update(arive[3], allPos);
-	part->Update(color);
 	if (arive[0] == false && arive[1] == false && arive[2] == false && arive[3] == false) {
 		time += 0.1f;
 	}
@@ -111,6 +111,11 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	RArm->Draw(arive[1]);
 	LArm->Draw(arive[2]);
 	body->Draw(arive[3]);
+	
+}
+
+void Robot::ParticleDraw(DirectXCommon* dxCommon)
+{
 	if (arive[0] == false && arive[1] == false && arive[2] == false && arive[3] == false) {
 		ParticleManager::PreDraw(dxCommon->GetCmdList());
 		part->Draw();
