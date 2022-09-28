@@ -90,7 +90,6 @@ private:
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 
 	PostEffect* postEffect = nullptr;
-	ParticleManager* particle = nullptr;
 
 	bool JumpFlag = false;
 

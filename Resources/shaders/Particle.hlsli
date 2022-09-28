@@ -1,6 +1,6 @@
 cbuffer cbuff0 : register(b0)
 {
-	//	float4 color; // F(RGBA)
+	float4 color; // F(RGBA)
 	matrix mat; // ‚R‚c•ÏŠ·s—ñ
 	matrix matBillboard;
 };

@@ -35,7 +35,6 @@ private:
 	std::unique_ptr<RightArm> RArm;
 	std::unique_ptr<LeftArm>LArm;
 	std::unique_ptr<Body>body;
-	std::unique_ptr<ObjParticle>par;
 	ParticleManager* part = nullptr;
 
 	XMVECTOR allPos = { 0.0f,0.0f,10.0f };
@@ -43,5 +42,6 @@ private:
 	bool arive[4];
 	float attackT = 0.0f;
 	float time = 0.0f;
+	XMFLOAT4 color = { 1,0,0,0.1f };
 };
 

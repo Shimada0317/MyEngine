@@ -31,10 +31,6 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	player3d = Object3d::Create();
 	player3d->SetModel(playermodel);*/
 
-
-	particle = ParticleManager::Create();
-	particle->Update();
-
 }
 
 void TitleScene::SetPosSclRot()
@@ -62,15 +58,12 @@ void TitleScene::Update()
 {
 	//DirectX毎フレーム処理 ここから
 
-	Action::GetInstance()->PlayerMove2d(retsize, 100);
-
 	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
 		//シーン切り替え
 		BaseScene* scene_ = new GameScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
 	}
 	SetPosSclRot();
-	particle->Update();
 	enemy->Update();
 }
 
@@ -79,18 +72,16 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	dxCommon->PreDraw();
 	//post->PreDrawScene(dxCommon->GetCmdList());
 
-	Object3d::PreDraw(dxCommon->GetCmdList());
-	//enemy->Draw();
-	Object3d::PostDraw();
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
-
-	title->Draw();
+	//title->Draw();
 	Sprite::PostDraw();
+	Object3d::PreDraw(dxCommon->GetCmdList());
+	enemy->Draw(dxCommon);
+	Object3d::PostDraw();
+
+
 	// 
-	ParticleManager::PreDraw(dxCommon->GetCmdList());
-	//particle->Draw();
-	ParticleManager::PostDraw();
 	//post->PostDrawScene(dxCommon->GetCmdList());
 	
 	//post->Draw(dxCommon->GetCmdList());

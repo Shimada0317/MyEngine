@@ -7,7 +7,6 @@ void Robot::Initialize()
 	body = std::make_unique<Body>();
 	LArm = std::make_unique<LeftArm>();
 	RArm = std::make_unique<RightArm>();
-	par = std::make_unique<ObjParticle>();
 
 	part = ParticleManager::Create();
 
@@ -15,7 +14,6 @@ void Robot::Initialize()
 	body->Initialize();
 	LArm->Initialize();
 	RArm->Initialize();
-	par->Initialize();
 
 	for (int i = 0; i < 4; i++) {
 		arive[i] = true;
@@ -45,7 +43,7 @@ void Robot::SetPRS()
 		const float rnd_acc = 0.001f;
 		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
 		
-		part->Add(30, pos, vel, acc, 0.5f, 0.0f,time);
+		part->Add(30, pos, vel, acc, 1.0f, 0.0f,time);
 		break;
 	}
 
@@ -53,7 +51,6 @@ void Robot::SetPRS()
 	RArm->SetPRS(allPos);
 	LArm->SetPRS(allPos);
 	body->SetPRS(allPos);
-	par->Set(allPos,arive[3]);
 }
 
 void Robot::AllUpdate()
@@ -62,10 +59,9 @@ void Robot::AllUpdate()
 	RArm->Update(arive[1], allPos);
 	LArm->Update(arive[2], allPos);
 	body->Update(arive[3], allPos);
-	part->Update();
+	part->Update(color);
 	if (arive[0] == false && arive[1] == false && arive[2] == false && arive[3] == false) {
 		time += 0.1f;
-		par->Update();
 	}
 }
 
@@ -116,7 +112,6 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	LArm->Draw(arive[2]);
 	body->Draw(arive[3]);
 	if (arive[0] == false && arive[1] == false && arive[2] == false && arive[3] == false) {
-		//par->Draw();
 		ParticleManager::PreDraw(dxCommon->GetCmdList());
 		part->Draw();
 		ParticleManager::PostDraw();
@@ -129,4 +124,5 @@ void Robot::Finalize()
 	body->Finalize();
 	LArm->Finalize();
 	RArm->Finalize();
+	delete part;
 }

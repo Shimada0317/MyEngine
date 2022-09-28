@@ -50,8 +50,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//Object->Initialize();
 	//Object->SetModel(model);
 
-	particle = ParticleManager::Create();
-	particle->Update();
 
 	mid =std::make_unique <middle>();
 	mid->Initialize();
@@ -81,7 +79,6 @@ void GameScene::AllUpdate()
 {
 	sphere->Update();
 	groundObj->Update();
-	particle->Update();
 	mid->Update();
 }
 
@@ -99,9 +96,6 @@ void GameScene::Update()
 void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
 
-	ParticleManager::PreDraw(dxCommon->GetCmdList());
-	//particle->Draw();
-	ParticleManager::PostDraw();
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	sphere->Draw();

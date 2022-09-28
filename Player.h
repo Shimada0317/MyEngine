@@ -10,6 +10,7 @@
 #include"WinApp.h"
 #include<vector>
 #include"Bullet.h"
+#include"ParticleManager.h"
 
 #include<memory>
 #include<list>
@@ -65,6 +66,7 @@ private:
 	Sprite* reticle = nullptr;
 	std::unique_ptr<Object3d> player;
 	ObjModel* playerModel = nullptr;
+	ParticleManager* part;
 
 	std::list<std::unique_ptr<Bullet>> bullets_;
 	std::unique_ptr<Bullet> newBullet;
@@ -91,6 +93,9 @@ private:
 
 	POINT pos;
 	WinApp* winapp = nullptr;
+
+
+	float time = 0.0f;
 
 };
 

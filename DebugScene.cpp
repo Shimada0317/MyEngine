@@ -11,10 +11,6 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 	//camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 	//Object3d::SetCamera(camera);
 
-
-	part = ParticleManager::Create();
-	//part->Update();
-
 	rob = std::make_unique<Robot>();
 	rob->Initialize();
 
@@ -23,18 +19,11 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 void DebugScene::SetPosSclRot()
 {
 
-
-	//camera->SetTarget({ Target_pos.x,Target_pos.y,allpos.m128_f32[2] });
-	//camera->SetEye({ Eye_pos });
-	//camera->SetDistance(5);
-
-
 }
 
 void DebugScene::Update()
 {
 	SetPosSclRot();
-	part->Update();
 	rob->Update();
 	//camera->Update();
 
@@ -46,9 +35,6 @@ void DebugScene::Draw(DirectXCommon* dxCommon)
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	rob->Draw(dxCommon);
 	Object3d::PostDraw();
-	ParticleManager::PreDraw(dxCommon->GetCmdList());
-	//part->Draw();
-	ParticleManager::PostDraw();
 
 	dxCommon->PostDraw();
 }

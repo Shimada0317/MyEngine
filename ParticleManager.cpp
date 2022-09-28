@@ -386,7 +386,7 @@ bool ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
-		L"Resources/effect1.png", WIC_FLAGS_NONE,
+		L"Resources/clush.png", WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
 		return result;
@@ -578,7 +578,7 @@ bool ParticleManager::Initialize()
 	return true;
 }
 
-void ParticleManager::Update()
+void ParticleManager::Update(XMFLOAT4 color)
 {
 	HRESULT result;
 
@@ -627,6 +627,7 @@ void ParticleManager::Update()
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
+	constMap->color = color;
 	constMap->mat = matView * matProjection;
 	constMap->matBillboard = matBillboard;
 	constBuff->Unmap(0, nullptr);
@@ -668,5 +669,6 @@ void ParticleManager::Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOA
 		p.num_frame = file;
 		p.s_scale = start_scale;
 		p.e_scale = end_scale;
+		time = 1;
 	}
 }

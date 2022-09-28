@@ -29,7 +29,7 @@ public: // サブクラス
 	// 定数バッファ用データ構造体
 	struct ConstBufferData
 	{
-		//XMFLOAT4 color;	// 色 (RGBA)
+		XMFLOAT4 color;	// 色 (RGBA)
 		XMMATRIX mat;	// ３Ｄ変換行列
 		XMMATRIX matBillboard;
 	};
@@ -211,7 +211,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update();
+	void Update(XMFLOAT4 color);
 
 	/// <summary>
 	/// 描画
@@ -228,5 +228,7 @@ private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
+
+	XMFLOAT4 color = { 1,1,1,1 };
 };
 
