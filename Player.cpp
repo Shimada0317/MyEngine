@@ -20,12 +20,37 @@ void Player::Initalize()
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 
-	
+	part = ParticleManager::Create();
 	
 };
 
 void Player::Set()
 {
+	for (int i = 0; i < 100; i++) {
+		const float rnd_pos = 1.0f;
+		XMFLOAT3 pos{};
+		pos.x = position.m128_f32[0];
+		pos.y = position.m128_f32[1];
+		pos.z = position.m128_f32[2];
+		//pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		//pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		//pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+
+		const float rnd_vel = 0.001f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f;
+		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+		if (time < 20.0f) {
+			part->Add(10, pos, vel, acc, 0.5f, 0.0f, time);
+		}
+		break;
+	}
+
 	player->SetPosition({ position });
 	player->SetRotation({ rotation });
 	player->SetScale({ scale });
@@ -39,11 +64,21 @@ void Player::Set()
 
 void Player::Update()
 {
-	
-	if (Input::GetInstance()->PushKey(DIK_A)) {
-		rotation.y++;
+	if (particle == false) {
+		if (Input::GetInstance()->TriggerKey(DIK_A)) {
+			
+			particle = true;
+		}
 	}
-	
+	if (particle == true) {
+		time += 0.4f;
+		if (time >= 3.0f) {
+			particle = false;
+			time = 0.0f;
+		}
+	}
+
+
 	Action::GetInstance()->PlayerMove3d(position);
 
 	const float kMoveLimitX = 4;
@@ -64,7 +99,16 @@ void Player::Update()
 	Set();
 	camera->Update();
 	player->Update();
+	part->Update(color);
+}
 
+void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
+{
+	ParticleManager::PreDraw(cmdeList);
+	if (particle == true) {
+		part->Draw();
+	}
+	ParticleManager::PostDraw();
 }
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)

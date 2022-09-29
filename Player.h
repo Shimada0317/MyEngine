@@ -25,6 +25,8 @@ public:
 
 	void Update();
 
+	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
+
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
 	void ObjDraw();
@@ -96,6 +98,6 @@ private:
 
 
 	float time = 0.0f;
-
+	bool particle = false;
 };
 
