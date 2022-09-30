@@ -64,30 +64,32 @@ public:
 private:
 	float OffsetX = 0.0f;
 	float OffsetY = 0.0f;
-
-	Sprite* reticle = nullptr;
+	//プレイヤーオブジェクトとモデル
 	std::unique_ptr<Object3d> player;
 	ObjModel* playerModel = nullptr;
+	//発砲時のエフェクト
 	ParticleManager* part;
-
-	std::list<std::unique_ptr<Bullet>> bullets_;
-	std::unique_ptr<Bullet> newBullet;
+	//弾
+	std::unique_ptr<Bullet>bull;
+	/*std::list<std::unique_ptr<Bullet>> bullets_;
+	std::unique_ptr<Bullet> newBullet;*/
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
 
 	XMVECTOR position = { 0.0f,0.0f,0.1f };
+	XMVECTOR backPlayerPos{ 0.0f,0.0f,0.0f };
+	XMVECTOR oldPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 	XMMATRIX mat;
-
+	//カメラ
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Eye_pos = {0.0f,0.0f,0.0f};
 	XMFLOAT3 Target_pos = {0.0f,0.0f,0.0f};
 	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
 
-	XMFLOAT3 size = { 0,0,0};
 	XMFLOAT4 color = { 1,1,1,1 };
 
 	XMFLOAT2 retpos = { 0.0f,0.0f };
@@ -99,5 +101,6 @@ private:
 
 	float time = 0.0f;
 	bool particle = false;
+	bool shot = false;
 };
 

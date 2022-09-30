@@ -42,7 +42,7 @@ void Robot::AllUpdate()
 
 void Robot::Update()
 {
-	Action::GetInstance()->PlayerMove3d(allPos);
+	//Action::GetInstance()->PlayerMove3d(allPos);
 
 	if (Input::GetInstance()->PushKey(DIK_0)) {
 		for (int i = 0; i < 4; i++) {
@@ -82,11 +82,12 @@ void Robot::Update()
 
 void Robot::Draw(DirectXCommon* dxCommon)
 {
+	Object3d::PreDraw(dxCommon->GetCmdList());
 	head->Draw(arive[0]);
 	RArm->Draw(arive[1]);
 	LArm->Draw(arive[2]);
 	body->Draw(arive[3]);
-	
+	Object3d::PostDraw();
 }
 
 void Robot::ParticleDraw(DirectXCommon* dxCommon)

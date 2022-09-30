@@ -9,9 +9,6 @@ void Player::Initalize()
 	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(camera);
 
-	Sprite::LoadTexture(3, L"Resources/mark.png");
-	reticle = Sprite::SpriteCreate(3, { 1.0f,1.0f });
-
 	playerModel = ObjModel::CreateFromOBJ("mark");
 	player=Object3d::Create();
 	player->SetModel(playerModel);
@@ -20,18 +17,29 @@ void Player::Initalize()
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 
+	bull = std::make_unique<Bullet>();
+	bull->Initialize();
+
 	part = ParticleManager::Create();
+	backPlayerPos.m128_f32[0] = -position.m128_f32[0] / 32;
+	backPlayerPos.m128_f32[1] = position.m128_f32[1] / 32;
+	backPlayerPos.m128_f32[2] = position.m128_f32[2] - 5;
+
 	
 };
 
 void Player::Set()
 {
+	backPlayerPos.m128_f32[0] = -position.m128_f32[0] / 32;
+	backPlayerPos.m128_f32[1] = position.m128_f32[1] / 32;
+	backPlayerPos.m128_f32[2] = position.m128_f32[2] - 5;
+	
 	for (int i = 0; i < 100; i++) {
 		const float rnd_pos = 1.0f;
 		XMFLOAT3 pos{};
-		pos.x = position.m128_f32[0];
-		pos.y = position.m128_f32[1];
-		pos.z = position.m128_f32[2];
+		pos.x = oldPos.m128_f32[0];
+		pos.y = oldPos.m128_f32[1];
+		pos.z = oldPos.m128_f32[2];
 		//pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		//pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		//pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
@@ -65,15 +73,17 @@ void Player::Set()
 void Player::Update()
 {
 	if (particle == false) {
-		if (Input::GetInstance()->TriggerKey(DIK_A)) {
-			
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			oldPos = position;
 			particle = true;
+			bull->ShotBefore(position, shot);
 		}
 	}
 	if (particle == true) {
 		time += 0.4f;
 		if (time >= 3.0f) {
 			particle = false;
+			shot = false;
 			time = 0.0f;
 		}
 	}
@@ -91,14 +101,15 @@ void Player::Update()
 
 	//Attack();
 
-	for (std::unique_ptr<Bullet>& bullet : bullets_) {
+	/*for (std::unique_ptr<Bullet>& bullet : bullets_) {
 		bullet->Update();
-	}
+	}*/
 
 	//MouthContoroll();
 	Set();
 	camera->Update();
 	player->Update();
+	bull->Update();
 	part->Update(color);
 }
 
@@ -113,20 +124,17 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 
 void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	
-	
-	reticle->PreDraw(cmdList);
-	reticle->Draw();
-	reticle->PostDraw();
+
+
+
 }
 
 void Player::ObjDraw()
 {
 	player->Draw();
-
-	for (std::unique_ptr<Bullet>& bullet : bullets_) {
-		bullet->Draw();
-	}
+	//if (shot == true) {
+		bull->Draw();
+	//}
 }
 
 void Player::ImGuiDraw()
@@ -163,10 +171,10 @@ void Player::Attack()
 		XMVECTOR velocity = { 0, 0, kBulletSpeed,0 };
 		velocity = XMVector3TransformCoord(velocity, mat);
 	
-		newBullet = std::make_unique<Bullet>();
+	/*	newBullet = std::make_unique<Bullet>();
 		newBullet->Initialize();
 		newBullet->Stanby(position,velocity);
-		bullets_.push_back(std::move(newBullet));
+		bullets_.push_back(std::move(newBullet));*/
 	}
 }
 

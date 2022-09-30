@@ -36,9 +36,9 @@ void DebugScene::Update()
 void DebugScene::Draw(DirectXCommon* dxCommon)
 {
 	dxCommon->PreDraw();
+	rob->Draw(dxCommon);
 	player->ParticleDraw(dxCommon->GetCmdList());
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	rob->Draw(dxCommon);
 	player->ObjDraw();
 	Object3d::PostDraw();
 	dxCommon->PostDraw();
