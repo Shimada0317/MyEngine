@@ -17,8 +17,10 @@ void Player::Initalize()
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 
-	bull = std::make_unique<Bullet>();
-	bull->Initialize();
+	for (int i = 0; i < BULL; i++) {
+		bull[i] = std::make_unique<Bullet>();
+		bull[i]->Initialize();
+	}
 
 	part = ParticleManager::Create();
 	backPlayerPos.m128_f32[0] = -position.m128_f32[0] / 32;
@@ -72,11 +74,12 @@ void Player::Set()
 
 void Player::Update()
 {
-	if (particle == false) {
+	if (particle == false&&fire < BULL) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			oldPos = position;
 			particle = true;
-			bull->ShotBefore(position, shot);
+			bull[fire]->ShotBefore(position, shot);
+			fire += 1;
 		}
 	}
 	if (particle == true) {
@@ -88,7 +91,9 @@ void Player::Update()
 		}
 	}
 
-
+	if (Input::GetInstance()->TriggerKey(DIK_R)) {
+		fire = 0;
+	}
 	Action::GetInstance()->PlayerMove3d(position);
 
 	const float kMoveLimitX = 4;
@@ -109,7 +114,9 @@ void Player::Update()
 	Set();
 	camera->Update();
 	player->Update();
-	bull->Update();
+	for (int i = 0; i < BULL; i++) {
+		bull[i]->Update();
+	}
 	part->Update(color);
 }
 
@@ -133,7 +140,9 @@ void Player::ObjDraw()
 {
 	player->Draw();
 	//if (shot == true) {
-		bull->Draw();
+	for (int i = 0; i < BULL; i++) {
+		bull[i]->Draw();
+	}
 	//}
 }
 

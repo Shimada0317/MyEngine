@@ -15,6 +15,8 @@
 #include<memory>
 #include<list>
 
+const int BULL = 9;
+
 class Player
 {
 public:
@@ -70,7 +72,7 @@ private:
 	//発砲時のエフェクト
 	ParticleManager* part;
 	//弾
-	std::unique_ptr<Bullet>bull;
+	std::unique_ptr<Bullet>bull[BULL];
 	/*std::list<std::unique_ptr<Bullet>> bullets_;
 	std::unique_ptr<Bullet> newBullet;*/
 	Input* input = nullptr;
@@ -102,5 +104,6 @@ private:
 	float time = 0.0f;
 	bool particle = false;
 	bool shot = false;
+	int fire = 0;
 };
 
