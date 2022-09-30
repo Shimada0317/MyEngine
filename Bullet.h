@@ -34,10 +34,15 @@ public:
 
 	void debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed,bool& d);
 
+
 	void Set();
 
-	void ShotBefore(XMVECTOR startPos, bool& shot);
+	void ShotBefore(XMVECTOR startPos);
 
+	void TriggerOn();
+
+	void ShotAfter(XMVECTOR baclplayerpos, XMVECTOR playerpos,int& remaining);
+	
 	void Update();
 
 	void Draw();
@@ -83,4 +88,7 @@ private:
 	XMMATRIX matvel;
 	//debug
 	bool d = false;
+	float v3x = 0, v3y = 0, v3z = 0;
+	bool fire = false;
+	bool Trigger = false;
 };

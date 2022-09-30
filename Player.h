@@ -72,7 +72,7 @@ private:
 	//発砲時のエフェクト
 	ParticleManager* part;
 	//弾
-	std::unique_ptr<Bullet>bull[BULL];
+	std::unique_ptr<Bullet>bull;
 	/*std::list<std::unique_ptr<Bullet>> bullets_;
 	std::unique_ptr<Bullet> newBullet;*/
 	Input* input = nullptr;

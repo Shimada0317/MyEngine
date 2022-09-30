@@ -10,24 +10,24 @@ void Player::Initalize()
 	Object3d::SetCamera(camera);
 
 	playerModel = ObjModel::CreateFromOBJ("mark");
-	player=Object3d::Create();
+	player = Object3d::Create();
 	player->SetModel(playerModel);
 
 
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 
-	for (int i = 0; i < BULL; i++) {
-		bull[i] = std::make_unique<Bullet>();
-		bull[i]->Initialize();
-	}
+	//for (int i = 0; i < BULL; i++) {
+		bull = std::make_unique<Bullet>();
+		bull->Initialize();
+	//}
 
 	part = ParticleManager::Create();
 	backPlayerPos.m128_f32[0] = -position.m128_f32[0] / 32;
 	backPlayerPos.m128_f32[1] = position.m128_f32[1] / 32;
 	backPlayerPos.m128_f32[2] = position.m128_f32[2] - 5;
 
-	
+
 };
 
 void Player::Set()
@@ -35,7 +35,7 @@ void Player::Set()
 	backPlayerPos.m128_f32[0] = -position.m128_f32[0] / 32;
 	backPlayerPos.m128_f32[1] = position.m128_f32[1] / 32;
 	backPlayerPos.m128_f32[2] = position.m128_f32[2] - 5;
-	
+
 	for (int i = 0; i < 100; i++) {
 		const float rnd_pos = 1.0f;
 		XMFLOAT3 pos{};
@@ -65,7 +65,7 @@ void Player::Set()
 	player->SetRotation({ rotation });
 	player->SetScale({ scale });
 
-	camera->SetTarget({Target_pos.x,Target_pos.y,position.m128_f32[2]});
+	camera->SetTarget({ Target_pos.x,Target_pos.y,position.m128_f32[2] });
 	camera->SetEye({ Eye_pos });
 	camera->SetDistance(5);
 
@@ -74,22 +74,25 @@ void Player::Set()
 
 void Player::Update()
 {
-	if (particle == false&&fire < BULL) {
+	bull->ShotBefore(backPlayerPos);
+	if (fire < BULL-1) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			oldPos = position;
 			particle = true;
-			bull[fire]->ShotBefore(position, shot);
-			fire += 1;
+			bull->TriggerOn();
 		}
 	}
 	if (particle == true) {
 		time += 0.4f;
 		if (time >= 3.0f) {
 			particle = false;
-			shot = false;
 			time = 0.0f;
 		}
 	}
+
+	bull->ShotAfter(backPlayerPos, position,fire);
+
+
 
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {
 		fire = 0;
@@ -114,9 +117,9 @@ void Player::Update()
 	Set();
 	camera->Update();
 	player->Update();
-	for (int i = 0; i < BULL; i++) {
-		bull[i]->Update();
-	}
+	//for (int i = 0; i < BULL; i++) {
+		bull->Update();
+	//}
 	part->Update(color);
 }
 
@@ -138,12 +141,12 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void Player::ObjDraw()
 {
-	player->Draw();
-	//if (shot == true) {
-	for (int i = 0; i < BULL; i++) {
-		bull[i]->Draw();
-	}
+
+	//for (int i = 0; i < BULL; i++) {
+		bull->Draw();
 	//}
+
+	player->Draw();
 }
 
 void Player::ImGuiDraw()
@@ -175,15 +178,15 @@ void Player::Finalize()
 
 void Player::Attack()
 {
-   	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		const float kBulletSpeed = 0.01f;
 		XMVECTOR velocity = { 0, 0, kBulletSpeed,0 };
 		velocity = XMVector3TransformCoord(velocity, mat);
-	
-	/*	newBullet = std::make_unique<Bullet>();
-		newBullet->Initialize();
-		newBullet->Stanby(position,velocity);
-		bullets_.push_back(std::move(newBullet));*/
+
+		/*	newBullet = std::make_unique<Bullet>();
+			newBullet->Initialize();
+			newBullet->Stanby(position,velocity);
+			bullets_.push_back(std::move(newBullet));*/
 	}
 }
 
@@ -206,21 +209,21 @@ void Player::MouthContoroll()
 		0.1f, 1000.0f
 	);
 	//ビューポート行列
-	XMMATRIX matViewport = { WinApp::window_width / 2,0,0,0  ,0,-WinApp::window_height / 2,0,0    ,0,0,1,0   ,WinApp::window_width/2+OffsetX,WinApp::window_height/2+OffsetY,0,1 };
+	XMMATRIX matViewport = { WinApp::window_width / 2,0,0,0  ,0,-WinApp::window_height / 2,0,0    ,0,0,1,0   ,WinApp::window_width / 2 + OffsetX,WinApp::window_height / 2 + OffsetY,0,1 };
 	//ビュー、プロジェクション、ビューポート3つの行列の乗算
-	XMMATRIX matVPV = XMMatrixLookAtLH(XMLoadFloat3(&Eye_pos), XMLoadFloat3(&cameraTarget), XMLoadFloat3(&up))*matProjection*matViewport;
+	XMMATRIX matVPV = XMMatrixLookAtLH(XMLoadFloat3(&Eye_pos), XMLoadFloat3(&cameraTarget), XMLoadFloat3(&up)) * matProjection * matViewport;
 
-	XMMATRIX matIverserVPV = XMMatrixInverse(nullptr,matVPV);
+	XMMATRIX matIverserVPV = XMMatrixInverse(nullptr, matVPV);
 
 
 	XMVECTOR posNear = { pos.x, pos.y, 0,1 };
 	XMVECTOR posFar = { pos.x,pos.y,1,1 };
 
-	posNear = XMVector3TransformCoord( posNear, matIverserVPV );
+	posNear = XMVector3TransformCoord(posNear, matIverserVPV);
 	posFar = XMVector3TransformCoord(posFar, matIverserVPV);
 
 	XMVECTOR mouseDirection = posNear + posFar;
-	mouseDirection=XMVector3Normalize(mouseDirection);
+	mouseDirection = XMVector3Normalize(mouseDirection);
 
 	const float kDistanceTestObject = 10;
 
