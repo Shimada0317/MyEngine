@@ -36,7 +36,7 @@ void Body::Update(bool& arive,XMVECTOR allPos,Bullet* bull)
 
 	
 
-	if (Collision::Player2Other(BodyPos, BodyScl, BullPos, BullScl)) {
+	if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)) {
 		arive = false;
 	}
 }

@@ -231,3 +231,29 @@ bool Collision::HeadShot(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVECTOR
 		return false;
 	}
 }
+
+bool Collision::BodyHit(XMVECTOR bodyPos, XMFLOAT3 bodyScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl)
+{
+
+	float mbx = bodyPos.m128_f32[0] - bodyScl.x/2;
+	float pbx = bodyPos.m128_f32[0] + bodyScl.x/2;
+	float mby = bodyPos.m128_f32[1] - bodyScl.y/2;
+	float pby = bodyPos.m128_f32[1] + bodyScl.y/2;
+	float mbz = bodyPos.m128_f32[2] - bodyScl.z;
+
+	float mpx = PlayerPos.m128_f32[0] - playerScl.x/2;
+	float ppx = PlayerPos.m128_f32[0] + playerScl.x/2;
+	float mpy = PlayerPos.m128_f32[1] - playerScl.y/2;
+	float ppy = PlayerPos.m128_f32[1] + playerScl.y/2;
+	float ppz = PlayerPos.m128_f32[2] + playerScl.z;
+
+	/*if ((mbx <= ppx && mpx >= pbx || mby <= ppy && mby >= ppy) && mbz <= ppz) {
+		return true;
+	}*/
+
+	if ((mbx <= ppx && mpx <= pbx && mby <= ppy && mpy<=pby) && mbz <= ppz) {
+		return true;
+	}
+
+	return false;
+}
