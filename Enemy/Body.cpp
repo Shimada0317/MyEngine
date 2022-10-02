@@ -36,9 +36,9 @@ void Body::Update(bool& arive,XMVECTOR allPos,Bullet* bull)
 
 	
 
-	if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)) {
-		arive = false;
-	}
+	//if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)) {
+	//	arive = false;
+	//}
 }
 
 void Body::Draw(bool& arive)

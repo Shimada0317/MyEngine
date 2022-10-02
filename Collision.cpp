@@ -257,3 +257,24 @@ bool Collision::BodyHit(XMVECTOR bodyPos, XMFLOAT3 bodyScl, XMVECTOR PlayerPos, 
 
 	return false;
 }
+
+bool Collision::HeadHit(XMVECTOR headPos, XMFLOAT3 headScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl)
+{
+	float mbx = headPos.m128_f32[0] - headScl.x / 4;
+	float pbx = headPos.m128_f32[0] + headScl.x / 4;
+	float mby = headPos.m128_f32[1] - headScl.y / 4;
+	float pby = headPos.m128_f32[1] + headScl.y / 4;
+	float mbz = headPos.m128_f32[2] - headScl.z;
+
+	float mpx = PlayerPos.m128_f32[0] - playerScl.x / 2;
+	float ppx = PlayerPos.m128_f32[0] + playerScl.x / 2;
+	float mpy = PlayerPos.m128_f32[1] - playerScl.y / 2;
+	float ppy = PlayerPos.m128_f32[1] + playerScl.y / 2;
+	float ppz = PlayerPos.m128_f32[2] + playerScl.z;
+
+	if ((mbx <= ppx && mpx <= pbx && mby <= ppy && mpy <= pby) && mbz <= ppz) {
+		return true;
+	}
+
+	return false;
+}

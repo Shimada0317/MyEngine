@@ -3,6 +3,8 @@
 #include"Object3d.h"
 #include"ObjModel.h"
 #include"Bullet.h"
+#include"Collision.h"
+
 #include<memory>
 class Head
 {
@@ -14,11 +16,11 @@ private:
 public:
 	void Initialize();
 
-	void SetPRS(XMVECTOR bodyPos);
+	void SetPRS(XMVECTOR bodyPos,Bullet* bull);
 
-	void Update(bool arive,XMVECTOR bodyPos);
+	void Update(bool& arive,XMVECTOR bodyPos,Bullet* bull);
 
-	void Draw(bool arive);
+	void Draw(bool& arive);
 
 	void Finalize();
 private:
@@ -30,5 +32,8 @@ private:
 	XMVECTOR HeadPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 HeadScl = { 1.0f,1.0f,1.0f };
 	XMFLOAT3 HeadRot = { 0.0f,0.0f,0.0f };
+
+	XMVECTOR bullPos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 bullScl = { 0.0f,0.0f,0.0f };
 };
 

@@ -23,7 +23,7 @@ void Robot::SetPRS(Bullet* bull)
 {
 
 
-	head->SetPRS(allPos);
+	head->SetPRS(allPos,bull);
 	RArm->SetPRS(allPos);
 	LArm->SetPRS(allPos);
 	body->SetPRS(allPos,bull);
@@ -31,7 +31,7 @@ void Robot::SetPRS(Bullet* bull)
 
 void Robot::AllUpdate(Bullet* bull)
 {
-	head->Update(arive[0], allPos);
+	head->Update(arive[0], allPos,bull);
 	RArm->Update(arive[1], allPos);
 	LArm->Update(arive[2], allPos);
 	body->Update(arive[3], allPos,bull);
