@@ -2,6 +2,7 @@
 #include<DirectXMath.h>
 #include"Object3d.h"
 #include"ObjModel.h"
+#include"Bullet.h"
 #include<memory>
 class Head
 {
@@ -23,6 +24,8 @@ public:
 private:
 	std::unique_ptr<Object3d> Head;
 	ObjModel* headModel = nullptr;
+
+	std::unique_ptr<Bullet>bull;
 
 	XMVECTOR HeadPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 HeadScl = { 1.0f,1.0f,1.0f };

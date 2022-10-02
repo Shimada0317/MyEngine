@@ -21,11 +21,11 @@ public:
 
 	void Initialize();
 
-	void SetPRS();
+	void SetPRS(Bullet* bull);
 
-	void AllUpdate();
+	void AllUpdate(Bullet* bull);
 
-	void Update();
+	void Update(Bullet* bull);
 
 	void Draw(DirectXCommon* dxCommon);
 

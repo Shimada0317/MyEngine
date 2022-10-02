@@ -44,6 +44,8 @@ private:
 	std::unique_ptr<Head>head;
 	std::unique_ptr<Object3d> bo = nullptr;
 	std::unique_ptr<Player>player;
+	Bullet* bull;
+
 	ObjModel* bomodel = nullptr;
 
 	XMVECTOR position = { 0.0f,0.0f,0.1f };
@@ -57,4 +59,5 @@ private:
 	XMFLOAT3 Target_pos = { 0.0f,0.0f,0.0f };
 	bool arive = true;
 };
+
 

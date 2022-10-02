@@ -19,28 +19,28 @@ void Robot::Initialize()
 
 }
 
-void Robot::SetPRS()
+void Robot::SetPRS(Bullet* bull)
 {
 
 
 	head->SetPRS(allPos);
 	RArm->SetPRS(allPos);
 	LArm->SetPRS(allPos);
-	body->SetPRS(allPos);
+	body->SetPRS(allPos,bull);
 }
 
-void Robot::AllUpdate()
+void Robot::AllUpdate(Bullet* bull)
 {
 	head->Update(arive[0], allPos);
 	RArm->Update(arive[1], allPos);
 	LArm->Update(arive[2], allPos);
-	body->Update(arive[3], allPos);
+	body->Update(arive[3], allPos,bull);
 	if (arive[0] == false && arive[1] == false && arive[2] == false && arive[3] == false) {
 		time += 0.1f;
 	}
 }
 
-void Robot::Update()
+void Robot::Update(Bullet* bull)
 {
 	//Action::GetInstance()->PlayerMove3d(allPos);
 
@@ -76,8 +76,8 @@ void Robot::Update()
 		attackT = 0.0f;
 	}
 	
-	SetPRS();
-	AllUpdate();
+	SetPRS(bull);
+	AllUpdate(bull);
 }
 
 void Robot::Draw(DirectXCommon* dxCommon)

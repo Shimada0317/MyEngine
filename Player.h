@@ -25,7 +25,9 @@ public:
 
 	void Set();
 
-	void Update();
+	void Effect();
+
+	void Update(Bullet* bull);
 
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
 
@@ -72,7 +74,7 @@ private:
 	//発砲時のエフェクト
 	ParticleManager* part;
 	//弾
-	std::unique_ptr<Bullet>bull;
+	std::unique_ptr<Bullet>bullt;
 	/*std::list<std::unique_ptr<Bullet>> bullets_;
 	std::unique_ptr<Bullet> newBullet;*/
 	Input* input = nullptr;

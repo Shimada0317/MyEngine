@@ -18,8 +18,8 @@ void Player::Initalize()
 	debugtext = DebugText::GetInstance();
 
 	//for (int i = 0; i < BULL; i++) {
-		bull = std::make_unique<Bullet>();
-		bull->Initialize();
+
+		//bull->Initialize();
 	//}
 
 	part = ParticleManager::Create();
@@ -72,7 +72,11 @@ void Player::Set()
 
 }
 
-void Player::Update()
+void Player::Effect()
+{
+}
+
+void Player::Update(Bullet* bull)
 {
 	bull->ShotBefore(backPlayerPos);
 	if (fire < BULL-1) {
@@ -80,14 +84,18 @@ void Player::Update()
 			oldPos = position;
 			particle = true;
 			bull->TriggerOn();
+			time = 0.0f;
 		}
 	}
 	if (particle == true) {
 		time += 0.4f;
 		if (time >= 3.0f) {
 			particle = false;
-			time = 0.0f;
+			
 		}
+	}
+	else {
+		time = 4.0f;
 	}
 
 	bull->ShotAfter(backPlayerPos, position,fire);
@@ -143,7 +151,7 @@ void Player::ObjDraw()
 {
 
 	//for (int i = 0; i < BULL; i++) {
-		bull->Draw();
+
 	//}
 
 	player->Draw();
