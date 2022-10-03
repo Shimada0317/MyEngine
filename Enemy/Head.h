@@ -30,7 +30,7 @@ private:
 	std::unique_ptr<Bullet>bull;
 
 	XMVECTOR HeadPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 HeadScl = { 1.0f,1.0f,1.0f };
+	XMFLOAT3 HeadScl = { 0.3f,0.3f,0.3f };
 	XMFLOAT3 HeadRot = { 0.0f,0.0f,0.0f };
 
 	XMVECTOR bullPos = { 0.0f,0.0f,0.0f };

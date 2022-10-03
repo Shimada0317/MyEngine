@@ -240,18 +240,20 @@ bool Collision::BodyHit(XMVECTOR bodyPos, XMFLOAT3 bodyScl, XMVECTOR PlayerPos, 
 	float mby = bodyPos.m128_f32[1] - bodyScl.y/2;
 	float pby = bodyPos.m128_f32[1] + bodyScl.y/2;
 	float mbz = bodyPos.m128_f32[2] - bodyScl.z;
+	float pbz = bodyPos.m128_f32[2] + bodyScl.z;
 
 	float mpx = PlayerPos.m128_f32[0] - playerScl.x/2;
 	float ppx = PlayerPos.m128_f32[0] + playerScl.x/2;
 	float mpy = PlayerPos.m128_f32[1] - playerScl.y/2;
 	float ppy = PlayerPos.m128_f32[1] + playerScl.y/2;
+	float mpz = PlayerPos.m128_f32[2] - playerScl.z;
 	float ppz = PlayerPos.m128_f32[2] + playerScl.z;
 
 	/*if ((mbx <= ppx && mpx >= pbx || mby <= ppy && mby >= ppy) && mbz <= ppz) {
 		return true;
 	}*/
 
-	if ((mbx <= ppx && mpx <= pbx && mby <= ppy && mpy<=pby) && mbz <= ppz) {
+	if ((mbx <= ppx && mpx <= pbx && mby <= ppy && mpy<=pby) && (mbz <= ppz&&mpz<=pbz)) {
 		return true;
 	}
 
@@ -260,19 +262,21 @@ bool Collision::BodyHit(XMVECTOR bodyPos, XMFLOAT3 bodyScl, XMVECTOR PlayerPos, 
 
 bool Collision::HeadHit(XMVECTOR headPos, XMFLOAT3 headScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl)
 {
-	float mbx = headPos.m128_f32[0] - headScl.x / 4;
-	float pbx = headPos.m128_f32[0] + headScl.x / 4;
-	float mby = headPos.m128_f32[1] - headScl.y / 4;
-	float pby = headPos.m128_f32[1] + headScl.y / 4;
+	float mbx = headPos.m128_f32[0] - headScl.x ;
+	float pbx = headPos.m128_f32[0] + headScl.x ;
+	float mby = headPos.m128_f32[1] - headScl.y ;
+	float pby = headPos.m128_f32[1] + headScl.y ;
 	float mbz = headPos.m128_f32[2] - headScl.z;
+	float pbz = headPos.m128_f32[2] + headScl.z;
 
-	float mpx = PlayerPos.m128_f32[0] - playerScl.x / 2;
-	float ppx = PlayerPos.m128_f32[0] + playerScl.x / 2;
-	float mpy = PlayerPos.m128_f32[1] - playerScl.y / 2;
-	float ppy = PlayerPos.m128_f32[1] + playerScl.y / 2;
+	float mpx = PlayerPos.m128_f32[0] - playerScl.x / 4;
+	float ppx = PlayerPos.m128_f32[0] + playerScl.x / 4;
+	float mpy = PlayerPos.m128_f32[1] - playerScl.y / 4;
+	float ppy = PlayerPos.m128_f32[1] + playerScl.y / 4;
+	float mpz = PlayerPos.m128_f32[2] - playerScl.z;
 	float ppz = PlayerPos.m128_f32[2] + playerScl.z;
 
-	if ((mbx <= ppx && mpx <= pbx && mby <= ppy && mpy <= pby) && mbz <= ppz) {
+	if ((mbx <= ppx && mpx <= pbx && mby <= ppy && mpy <= pby) && (mbz <= ppz&&mpz<=pbz)) {
 		return true;
 	}
 

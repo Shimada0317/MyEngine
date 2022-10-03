@@ -112,7 +112,7 @@ void Player::Update(Bullet* bull)
 
 	position.m128_f32[0] = max(position.m128_f32[0], -kMoveLimitX);
 	position.m128_f32[0] = min(position.m128_f32[0], +kMoveLimitX);
-	position.m128_f32[1] = max(position.m128_f32[1], -0);
+	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
 
 	//Attack();

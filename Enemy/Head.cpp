@@ -14,7 +14,7 @@ void Head::SetPRS(XMVECTOR bodyPos,Bullet* bull)
 	bullScl = bull->GetScl();
 
 	HeadPos = bodyPos;
-	HeadPos.m128_f32[1] = bodyPos.m128_f32[1] + 1.0f;
+	HeadPos.m128_f32[1] = bodyPos.m128_f32[1] +1.0f;
 	Head->SetPosition(HeadPos);
 	Head->SetRotation(HeadRot);
 	Head->SetScale(HeadScl);
