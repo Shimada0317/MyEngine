@@ -44,6 +44,7 @@ private:
 	bool arive[4];
 	float attackT = 0.0f;
 	float time = 0.0f;
+
 	XMFLOAT4 color = { 1,0,0,0.1f };
 };
 

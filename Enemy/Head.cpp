@@ -27,9 +27,9 @@ void Head::Update(bool& arive,XMVECTOR bodyPos,Bullet* bull)
 	}
 	SetPRS(bodyPos, bull);
 
-	if (Collision::HeadHit(HeadPos, HeadScl, bullPos, bullScl)) {
-		arive = false;
-	}
+	//if (Collision::HeadHit(HeadPos, HeadScl, bullPos, bullScl)) {
+	//	arive = false;
+	//}
 
 
 	Head->Update();
