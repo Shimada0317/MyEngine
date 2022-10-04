@@ -10,10 +10,10 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 
 	//camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 	//Object3d::SetCamera(camera);
-
-	bull = new Bullet();
-	bull->Initialize();
-
+	for (int i = 0; i < 9; i++) {
+		bull[i] = new Bullet();
+		bull[i]->Initialize();
+	}
 	rob = std::make_unique<Robot>();
 	rob->Initialize();
 
@@ -30,8 +30,11 @@ void DebugScene::SetPosSclRot()
 void DebugScene::Update()
 {
 	SetPosSclRot();
-	rob->Update(bull);
-	player->Update(bull);
+	for (int i = 0; i < 9; i++) {
+		rob->Update(bull[i]);
+		player->Update(bull[i]);
+		break;
+	}
 	//camera->Update();
 
 }
@@ -42,7 +45,9 @@ void DebugScene::Draw(DirectXCommon* dxCommon)
 	rob->Draw(dxCommon);
 	player->ParticleDraw(dxCommon->GetCmdList());
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	bull->Draw();
+	for (int i = 0; i < 9; i++) {
+		bull[i]->Draw();
+	}
 	player->ObjDraw();
 	Object3d::PostDraw();
 	dxCommon->PostDraw();
@@ -50,5 +55,6 @@ void DebugScene::Draw(DirectXCommon* dxCommon)
 
 void DebugScene::Finalize()
 {
-	//rob->Finalize();
+	rob->Finalize();
+	player->Finalize();
 }

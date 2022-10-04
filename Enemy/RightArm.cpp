@@ -7,21 +7,36 @@ void RightArm::Initialize()
 	RArm->SetModel(RArmModel);
 }
 
-void RightArm::SetPRS(XMVECTOR bodyPos)
+void RightArm::SetPRS(XMVECTOR bodyPos, Bullet* bull)
 {
 	RArmPos = bodyPos;
 	RArmPos.m128_f32[0] = bodyPos.m128_f32[0] + 0.8;
 	RArmPos.m128_f32[2] = bodyPos.m128_f32[2] - 0.3f;
+
+	bullPos = bull->GetPosition();
+	bullScl = bull->GetScl();
+
 	RArm->SetPosition(RArmPos);
 	RArm->SetRotation(RArmRot);
 	RArm->SetScale(RArmScl);
 }
 
-void RightArm::Update(bool arive, XMVECTOR bodyPos)
+void RightArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp)
 {
 	if (arive == true) {
-		SetPRS(bodyPos);
+		SetPRS(bodyPos, bull);
+
+		if (Collision::ArmHit(RArmPos, RArmScl, bullPos, bullScl)) {
+			Hp -= 10;
+			HitCount += 1;
+		}
 	}
+
+	if (HitCount >= 3) {
+		HitCount = 0;
+		arive = false;
+	}
+
 	RArm->Update();
 }
 

@@ -22,9 +22,11 @@ public:
 
 	void Initialize();
 
-	void Set(XMVECTOR& enemyPos,bool arive);
+	void Set(XMVECTOR& enemyPos);
 
 	void Update();
+
+	void Effect();
 
 	void Draw();
 
@@ -35,16 +37,17 @@ private:
 	std::unique_ptr<Texture>par[MAX];
 
 	XMVECTOR position[MAX];
-	XMFLOAT3 rotation = { 0,0,0 };
+	XMFLOAT3 rotation = { 90,0,0 };
 	XMFLOAT3 scale[MAX];
 	XMFLOAT3 up[MAX];
 	XMVECTOR go = { 0.01f,0.01f,0.01f };
 	bool effect[MAX];
-	float numX = 0;
-	float numY = 0;
+	float numX[MAX];
+	float numY[MAX];
 	float scalenumX = 0;
 	float scalenumY = 0;
 	float diffX[MAX];
 	float diffY[MAX];
+
 };
 

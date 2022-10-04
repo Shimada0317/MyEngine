@@ -73,10 +73,7 @@ private:
 	ObjModel* playerModel = nullptr;
 	//発砲時のエフェクト
 	ParticleManager* part;
-	//弾
-	std::unique_ptr<Bullet>bullt;
-	/*std::list<std::unique_ptr<Bullet>> bullets_;
-	std::unique_ptr<Bullet> newBullet;*/
+
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
@@ -107,5 +104,7 @@ private:
 	bool particle = false;
 	bool shot = false;
 	int fire = 0;
+
+	int Hp = 5;
 };
 

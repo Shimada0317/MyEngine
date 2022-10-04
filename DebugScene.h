@@ -44,7 +44,7 @@ private:
 	std::unique_ptr<Head>head;
 	std::unique_ptr<Object3d> bo = nullptr;
 	std::unique_ptr<Player>player;
-	Bullet* bull;
+	Bullet* bull[9];
 
 	ObjModel* bomodel = nullptr;
 

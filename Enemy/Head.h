@@ -18,7 +18,7 @@ public:
 
 	void SetPRS(XMVECTOR bodyPos,Bullet* bull);
 
-	void Update(bool& arive,XMVECTOR bodyPos,Bullet* bull);
+	void Update(bool& arive,XMVECTOR bodyPos,Bullet* bull,int& Hp);
 
 	void Draw(bool& arive);
 

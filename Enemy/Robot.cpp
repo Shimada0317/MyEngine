@@ -7,34 +7,34 @@ void Robot::Initialize()
 	body = std::make_unique<Body>();
 	LArm = std::make_unique<LeftArm>();
 	RArm = std::make_unique<RightArm>();
+	part = std::make_unique<ObjParticle>();
 
 	head->Initialize();
 	body->Initialize();
 	LArm->Initialize();
 	RArm->Initialize();
+	part->Initialize();
 
 	for (int i = 0; i < 4; i++) {
 		arive[i] = true;
 	}
-
+	OldHp = Hp;
 }
 
 void Robot::SetPRS(Bullet* bull)
 {
+	OldHp = Hp;
 
-
-	head->SetPRS(allPos,bull);
-	RArm->SetPRS(allPos);
-	LArm->SetPRS(allPos,bull);
-	body->SetPRS(allPos,bull);
 }
 
 void Robot::AllUpdate(Bullet* bull)
 {
-	head->Update(arive[0], allPos,bull);
-	RArm->Update(arive[1], allPos);
-	LArm->Update(arive[2], allPos,bull);
-	body->Update(arive[3], allPos,bull);
+	head->Update(arive[0], allPos,bull,Hp);
+	RArm->Update(arive[1], allPos,bull,Hp);
+	LArm->Update(arive[2], allPos,bull,Hp);
+	body->Update(arive[3], allPos,bull,Hp);
+	part->Set(allPos);
+	part->Update();
 	if (arive[0] == false && arive[1] == false && arive[2] == false && arive[3] == false) {
 		time += 0.1f;
 	}
@@ -44,9 +44,15 @@ void Robot::Update(Bullet* bull)
 {
 	//Action::GetInstance()->PlayerMove3d(allPos);
 
+	if (OldHp > Hp) {
+		part->Effect();
+		
+	}
+
 	if (Input::GetInstance()->PushKey(DIK_0)) {
 		for (int i = 0; i < 4; i++) {
 			arive[i] = true;
+			Hp = 50;
 			time = 0.0f;
 		}
 	}
@@ -61,11 +67,6 @@ void Robot::Update(Bullet* bull)
 		arive[3] = false;
 	}
 
-	if (arive[3] == false || arive[0] == false) {
-		for (int i = 0; i < 4; i++) {
-			arive[i] = false;
-		}
-	}
 
 	attackT += 0.5f;
 
@@ -74,6 +75,12 @@ void Robot::Update(Bullet* bull)
 
 	if (attackT >= 10.0f) {
 		attackT = 0.0f;
+	}
+
+	if (Hp <= 0) {
+		for (int i = 0; i < 4; i++) {
+			arive[i] = false;
+		}
 	}
 	
 	SetPRS(bull);
@@ -87,6 +94,7 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	RArm->Draw(arive[1]);
 	LArm->Draw(arive[2]);
 	body->Draw(arive[3]);
+	part->Draw();
 	Object3d::PostDraw();
 }
 
@@ -101,4 +109,5 @@ void Robot::Finalize()
 	body->Finalize();
 	LArm->Finalize();
 	RArm->Finalize();
+	part->Finalize();
 }

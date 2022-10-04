@@ -16,7 +16,7 @@ public:
 
 	void SetPRS(XMVECTOR bodyPos,Bullet* bull);
 
-	void Update(bool& arive, XMVECTOR bodyPos,Bullet* bull);
+	void Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp);
 
 	void Draw(bool& arive);
 
@@ -28,12 +28,13 @@ private:
 	ObjModel* LArmModel = nullptr;
 
 	XMVECTOR LArmPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 LArmScl = { 0.3f,0.4f,0.3f };
+	XMFLOAT3 LArmScl = { 0.2f,0.2f,0.2f };
 	XMFLOAT3 LArmRot = { 90.0f,0.0f,0.0f };
 
 	XMVECTOR bullPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 bullScl = { 0.0f,0.0f,0.0f };
 
 	bool attack = false;
+	int HitCount = 0;
 };
 

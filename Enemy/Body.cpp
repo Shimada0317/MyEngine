@@ -20,25 +20,26 @@ void Body::SetPRS(XMVECTOR allPos,Bullet* bull)
 	body->SetScale(BodyScl);
 }
 
-void Body::Update(bool& arive,XMVECTOR allPos,Bullet* bull)
+void Body::Update(bool& arive,XMVECTOR allPos,Bullet* bull,int& Hp)
 {
 
 	if (arive == true) {
+
+
+		if (BullPos.m128_f32[2] >= 10) {
+			BullPos.m128_f32[2] = 0;
+		}
+
+		SetPRS(allPos, bull);
+
+		body->Update();
+
+
+
+		if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)) {
+			Hp -= 10;
+		}
 	}
-
-	if (BullPos.m128_f32[2] >= 10) {
-		BullPos.m128_f32[2] = 0;
-	}
-
-	SetPRS(allPos,bull);
-
-	body->Update();
-
-	
-
-	//if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)) {
-	//	arive = false;
-	//}
 }
 
 void Body::Draw(bool& arive)

@@ -76,5 +76,8 @@ public:
 	static bool HeadHit(XMVECTOR headPos, XMFLOAT3 headScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl);
 
 	static bool ArmHit(XMVECTOR armPos, XMFLOAT3 armScl, XMVECTOR PlayerPos, XMFLOAT3 PlayerScl);
+
+private:
+
 };
 

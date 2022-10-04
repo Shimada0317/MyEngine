@@ -20,16 +20,16 @@ void Head::SetPRS(XMVECTOR bodyPos,Bullet* bull)
 	Head->SetScale(HeadScl);
 }
 
-void Head::Update(bool& arive,XMVECTOR bodyPos,Bullet* bull)
+void Head::Update(bool& arive,XMVECTOR bodyPos,Bullet* bull,int& Hp)
 {
 	if (arive == true) {
 		//SetPRS(bodyPos);
-	}
-	SetPRS(bodyPos, bull);
+		SetPRS(bodyPos, bull);
 
-	//if (Collision::HeadHit(HeadPos, HeadScl, bullPos, bullScl)) {
-	//	arive = false;
-	//}
+		if (Collision::HeadHit(HeadPos, HeadScl, bullPos, bullScl)) {
+			Hp -= 25;
+		}
+	}
 
 
 	Head->Update();

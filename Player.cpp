@@ -182,6 +182,7 @@ void Player::ImGuiDraw()
 void Player::Finalize()
 {
 	delete camera;
+	delete playerModel;
 }
 
 void Player::Attack()

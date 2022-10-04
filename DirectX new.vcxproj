@@ -207,6 +207,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureModel.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="Wepon.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +465,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureModel.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="Wepon.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

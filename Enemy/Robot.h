@@ -4,7 +4,6 @@
 #include"LeftArm.h"
 #include"Head.h"
 #include"ObjParticle.h"
-#include"ParticleManager.h"
 #include"DirectXCommon.h"
 #include<DirectXMath.h>
 #include<memory>
@@ -37,13 +36,15 @@ private:
 	std::unique_ptr<RightArm> RArm;
 	std::unique_ptr<LeftArm>LArm;
 	std::unique_ptr<Body>body;
-	ParticleManager* part = nullptr;
+	std::unique_ptr<ObjParticle>part;
 
 	XMVECTOR allPos = { 0.0f,0.0f,10.0f };
 
 	bool arive[4];
 	float attackT = 0.0f;
 	float time = 0.0f;
+	int Hp = 50;
+	int OldHp = 0;
 
 	XMFLOAT4 color = { 1,0,0,0.1f };
 };

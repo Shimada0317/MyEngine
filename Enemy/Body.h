@@ -19,7 +19,7 @@ public:
 
 	void SetPRS(XMVECTOR allPos,Bullet* bull);
 
-	void Update(bool& arive,XMVECTOR allPos,Bullet* bull);
+	void Update(bool& arive,XMVECTOR allPos,Bullet* bull,int& Hp);
 
 	void Draw(bool& arive);
 

@@ -20,12 +20,19 @@ void LeftArm::SetPRS(XMVECTOR bodyPos,Bullet* bull)
 	LArm->SetRotation(LArmRot);
 }
 
-void LeftArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull)
+void LeftArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp)
 {
 	if (arive == true) {
 		SetPRS(bodyPos,bull);
+		if (Collision::ArmHit(LArmPos, LArmScl, bullPos, bullScl)) {
+			Hp -= 10;
+			HitCount += 1;
+
+		}
 	}
-	if (Collision::ArmHit(LArmPos, LArmScl, bullPos, bullScl)) {
+
+	if (HitCount >= 3) {
+		HitCount = 0;
 		arive = false;
 	}
 

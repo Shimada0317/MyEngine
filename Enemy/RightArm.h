@@ -2,6 +2,7 @@
 #include<DirectXMath.h>
 #include"Object3d.h"
 #include"ObjModel.h"
+#include"Bullet.h"
 #include<memory>
 class RightArm
 {
@@ -13,9 +14,9 @@ private:
 public:
 	void Initialize();
 
-	void SetPRS(XMVECTOR bodyPos);
+	void SetPRS(XMVECTOR bodyPos,Bullet* bull);
 
-	void Update(bool arive, XMVECTOR bodyPos);
+	void Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp);
 
 	void Draw(bool arive);
 
@@ -30,6 +31,12 @@ private:
 	XMFLOAT3 RArmScl = { 0.3f,0.4f,0.3f };
 	XMFLOAT3 RArmRot = { 90.0f,0.0f,0.0f };
 
+	XMVECTOR bullPos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 bullScl = { 0.0f,0.0f,0.0f };
+
 	bool attack = false;
+	int HitCount = 0;
+
+
 };
 

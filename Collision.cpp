@@ -285,8 +285,8 @@ bool Collision::HeadHit(XMVECTOR headPos, XMFLOAT3 headScl, XMVECTOR PlayerPos, 
 
 bool Collision::ArmHit(XMVECTOR armPos, XMFLOAT3 armScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl)
 {
-	float max = armPos.m128_f32[0] - armScl.x;
-	float pax = armPos.m128_f32[0] + armScl.x;
+	float max = armPos.m128_f32[0] - armScl.x/4;
+	float pax = armPos.m128_f32[0] + armScl.x/4;
 	float may = armPos.m128_f32[1] - armScl.y;
 	float pay = armPos.m128_f32[1] + armScl.y;
 	float maz = armPos.m128_f32[2] - armScl.z;
