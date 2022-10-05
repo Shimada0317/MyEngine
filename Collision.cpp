@@ -266,8 +266,8 @@ bool Collision::HeadHit(XMVECTOR headPos, XMFLOAT3 headScl, XMVECTOR PlayerPos, 
 	float pbx = headPos.m128_f32[0] + headScl.x ;
 	float mby = headPos.m128_f32[1] - headScl.y ;
 	float pby = headPos.m128_f32[1] + headScl.y ;
-	float mbz = headPos.m128_f32[2] - headScl.z;
-	float pbz = headPos.m128_f32[2] + headScl.z;
+	float mbz = headPos.m128_f32[2] - headScl.z*3;
+	float pbz = headPos.m128_f32[2] + headScl.z*3;
 
 	float mpx = PlayerPos.m128_f32[0] - playerScl.x / 4;
 	float ppx = PlayerPos.m128_f32[0] + playerScl.x / 4;

@@ -91,19 +91,20 @@ void ObjParticle::Update()
 	for (int i = 0; i < MAX; i++) {
 		
 		if (effect[i] == true) {
-			rotation.x += 0.5f;
-			position[i].m128_f32[1] +=numY[i];
-			position[i].m128_f32[0] += numX[i];
-			Wposition[i].m128_f32[0] += wnumX[i];
-			Wposition[i].m128_f32[1] += wnumY[i];
-			scale[i].x -= 0.01f;
-			scale[i].y -= 0.01f;
-			scale[i].z -= 0.01f;
+			rotation.x += 0.5f/20;
+			position[i].m128_f32[1] +=numY[i]/20;
+			position[i].m128_f32[0] += numX[i]/20;
+			Wposition[i].m128_f32[0] += wnumX[i]/20;
+			Wposition[i].m128_f32[1] += wnumY[i]/20;
+			scale[i].x -= 0.01f/20;
+			scale[i].y -= 0.01f/20;
+			scale[i].z -= 0.01f/20;
 			if (scale[i].x <=0 && scale[i].y <= 0 && scale[i].z <= 0) {
 				scale[i].x = 0.0f;
 				scale[i].y = 0.0f;
 				scale[i].z = 0.0f;
 				effect[i] = false;
+				break;
 			}
 		}
 		particle[i]->Update();
@@ -115,6 +116,7 @@ void ObjParticle::Effect()
 {
 	for (int i = 0; i < MAX; i++) {
 		effect[i] = true;
+
 	}
 }
 

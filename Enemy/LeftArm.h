@@ -36,5 +36,6 @@ private:
 
 	bool attack = false;
 	int HitCount = 0;
+	bool Hit = false;
 };
 

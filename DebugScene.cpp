@@ -32,7 +32,7 @@ void DebugScene::Update()
 	SetPosSclRot();
 	for (int i = 0; i < 9; i++) {
 		rob->Update(bull[i]);
-		break;
+		//break;
 	}
 	
 	player->Update(bull,Remaining);

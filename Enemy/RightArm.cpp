@@ -15,6 +15,7 @@ void RightArm::SetPRS(XMVECTOR bodyPos, Bullet* bull)
 
 	bullPos = bull->GetPosition();
 	bullScl = bull->GetScl();
+	Hit = bull->GetTrigger();
 
 	RArm->SetPosition(RArmPos);
 	RArm->SetRotation(RArmRot);
@@ -29,6 +30,8 @@ void RightArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp)
 		if (Collision::ArmHit(RArmPos, RArmScl, bullPos, bullScl)) {
 			Hp -= 10;
 			HitCount += 1;
+			Hit = false;
+			bull->SetTrigger(Hit);
 		}
 	}
 
@@ -57,7 +60,7 @@ void RightArm::Attack(float attackT)
 {
 	if (attackT >= 10) {
 		if (attack == false) {
-			RArmRot.x += 10.0f;
+			RArmRot.x += 10.0f/20;
 			if (RArmRot.x >= 160.0f) {
 				attack = true;
 			}

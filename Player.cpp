@@ -117,28 +117,10 @@ void Player::Update(Bullet* bull[], int& Remaining)
 		Remaining = 0;
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_A)) {
-		bull[0]->TriggerOn();
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_B)) {
-		bull[1]->TriggerOn();
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_C)) {
-		bull[2]->TriggerOn();
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_D)) {
-		bull[3]->TriggerOn();
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_E)) {
-		bull[4]->TriggerOn();
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_F)) {
-		bull[5]->TriggerOn();
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_G)) {
-		bull[6]->TriggerOn();
-	}
+	
 	Action::GetInstance()->PlayerMove3d(position);
+	Eye_pos.x = position.m128_f32[0];
+	Eye_pos.y = position.m128_f32[1];
 
 	const float kMoveLimitX = 4;
 	const float kMoveLimitY = 2;

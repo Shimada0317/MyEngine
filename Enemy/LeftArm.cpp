@@ -14,6 +14,7 @@ void LeftArm::SetPRS(XMVECTOR bodyPos,Bullet* bull)
 	LArmPos.m128_f32[2] = bodyPos.m128_f32[2] - 0.3f;
 	bullPos = bull->GetPosition();
 	bullScl = bull->GetScl();
+	Hit = bull->GetTrigger();
 
 	LArm->SetPosition(LArmPos);
 	LArm->SetScale(LArmScl);
@@ -25,10 +26,10 @@ void LeftArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp)
 	if (arive == true) {
 		SetPRS(bodyPos,bull);
 		if (Collision::ArmHit(LArmPos, LArmScl, bullPos, bullScl)) {
-			
 			Hp -= 10;
 			HitCount += 1;
-
+			Hit = false;
+			bull->SetTrigger(Hit);
 		}
 	}
 
@@ -57,7 +58,7 @@ void LeftArm::Attack(float attackT)
 {
 	if (attackT >= 10) {
 		if (attack == false) {
-			LArmRot.x += 10.0f;
+			LArmRot.x += 10.0f/20;
 			if (LArmRot.x >= 160.0f) {
 				attack = true;
 			}
