@@ -7,6 +7,8 @@ void ObjParticle::InitializeState(int i)
 	position[i] = { 0.0f,0.0f,0.0f };
 	position[i].m128_f32[0] = 0.1f * i;
 	scale[i] = { 0.3f,0.3f,0.3f };
+	Wposition[i] = { 0.0f,0.0f,0.0f };
+	wscale[i] = { 0.3f,0.3f,0.3f };
 	effect[i] = false;
 	//numY[i] = rand() % 1 + 0.2f;
 	//}
@@ -15,14 +17,20 @@ void ObjParticle::InitializeState(int i)
 void ObjParticle::Initialize()
 {
 	model = ObjModel::CreateFromOBJ("Gear");
+	worm = ObjModel::CreateFromOBJ("Worm");
 	for (int i = 0; i < MAX; i++) {
 
 		particle[i] = Object3d::Create();
 		particle[i]->SetModel(model);
+		Worm[i] = Object3d::Create();
+		Worm[i]->SetModel(worm);
 		InitializeState(i);
 		particle[i]->SetPosition(position[i]);
 		particle[i]->SetScale(scale[i]);
 		particle[i]->SetRotation(rotation);
+		Worm[i]->SetPosition(Wposition[i]);
+		Worm[i]->SetScale(wscale[i]);
+		Worm[i]->SetRotation(Wrotation);
 		up[i] = { 0.01f,0.01f,0.005f };
 	}
 }
@@ -33,30 +41,47 @@ void ObjParticle::Set(XMVECTOR& enemyPos)
 		if (effect[i] == false) {
 			InitializeState(i);
 			position[i] = enemyPos;
+			Wposition[i] = enemyPos;
 			int radX = (rand() % 10);
 			int radY = (rand() % 3+1);
+			int womX = (rand() % 5);
+			int womY = (rand() % 3 + 1);
 			if (radX == 2) {
 				radX = 1;
+				womX = -1;
 			}
 			else if(radX==1) {
 				radX = -1;
+				womX = 1;
 			}
 			else {
 				radX = 0;
+				womX = 0;
 			}
 			float poiX = 0;
 			float poiY = 0;
+
+			float wpoiX = 0;
+			float wpoiY = 0;
+
 			int rad = (rand() % 10)+5;
 
 			poiX = (float)radX / rad;
 			poiY = (float)radY / 10;
+			wpoiX = (float)womX / rad;
+			wpoiY = (float)womY / 10;
 			numX[i] = poiX;
 			numY[i] = poiY;
+			wnumX[i] = wpoiX;
+			wnumY[i] = wpoiY;
 		}
 		
 		particle[i]->SetPosition(position[i]);
 		particle[i]->SetScale(scale[i]);
 		particle[i]->SetRotation(rotation);
+		Worm[i]->SetPosition(Wposition[i]);
+		Worm[i]->SetScale(scale[i]);
+		Worm[i]->SetRotation(rotation);
 	}
 }
 
@@ -69,6 +94,8 @@ void ObjParticle::Update()
 			rotation.x += 0.5f;
 			position[i].m128_f32[1] +=numY[i];
 			position[i].m128_f32[0] += numX[i];
+			Wposition[i].m128_f32[0] += wnumX[i];
+			Wposition[i].m128_f32[1] += wnumY[i];
 			scale[i].x -= 0.01f;
 			scale[i].y -= 0.01f;
 			scale[i].z -= 0.01f;
@@ -80,6 +107,7 @@ void ObjParticle::Update()
 			}
 		}
 		particle[i]->Update();
+		Worm[i]->Update();
 	}
 }
 
@@ -95,6 +123,7 @@ void ObjParticle::Draw()
 	for (int i = 0; i < MAX; i++) {
 		if (effect[i] == true) {
 			particle[i]->Draw();
+			Worm[i]->Draw();
 		}
 	}
 }

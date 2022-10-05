@@ -25,6 +25,7 @@ void LeftArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp)
 	if (arive == true) {
 		SetPRS(bodyPos,bull);
 		if (Collision::ArmHit(LArmPos, LArmScl, bullPos, bullScl)) {
+			
 			Hp -= 10;
 			HitCount += 1;
 

@@ -45,6 +45,7 @@ void Robot::Update(Bullet* bull)
 	//Action::GetInstance()->PlayerMove3d(allPos);
 
 	if (OldHp > Hp) {
+		bull->Hit();
 		part->Effect();
 		
 	}

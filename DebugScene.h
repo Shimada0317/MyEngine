@@ -58,6 +58,8 @@ private:
 	XMFLOAT3 Eye_pos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Target_pos = { 0.0f,0.0f,0.0f };
 	bool arive = true;
+
+	int Remaining = 0.0f;
 };
 
 

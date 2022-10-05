@@ -39,9 +39,13 @@ public:
 
 	void ShotBefore(XMVECTOR startPos);
 
+	bool CheckOk();
+
 	void TriggerOn();
 
 	void ShotAfter(XMVECTOR baclplayerpos, XMVECTOR playerpos,int& remaining);
+
+	void Hit();
 	
 	void Update();
 
@@ -63,9 +67,9 @@ public:
 
 	void SetScl(XMFLOAT3 scale) { this->scl = scale; }
 
-	const bool& GetLost() { return lost; }
+	const bool& GetTrigger() { return Trigger; }
 
-	void SetLost(bool lost) { this->lost = lost; }
+	void SetTrigger(bool Trigger) { this->Trigger = Trigger; }
 private:
 	std::unique_ptr<Object3d> bullet;
 	ObjModel* bulModel = nullptr;
@@ -90,5 +94,6 @@ private:
 	bool d = false;
 	float v3x = 0, v3y = 0, v3z = 0;
 	bool fire = false;
+	bool move = false;
 	bool Trigger = false;
 };

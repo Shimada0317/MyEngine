@@ -33,12 +33,19 @@ public:
 	void Finalize();
 private:
 	ObjModel* model = nullptr;
+	ObjModel* worm;
+	std::unique_ptr<Object3d>Worm[MAX];
 	std::unique_ptr<Object3d> particle[MAX];
 	std::unique_ptr<Texture>par[MAX];
 
 	XMVECTOR position[MAX];
 	XMFLOAT3 rotation = { 90,0,0 };
 	XMFLOAT3 scale[MAX];
+
+	XMVECTOR Wposition[MAX];
+	XMFLOAT3 Wrotation = { 90.0f,0.0f,0.0f };
+	XMFLOAT3 wscale[MAX];
+
 	XMFLOAT3 up[MAX];
 	XMVECTOR go = { 0.01f,0.01f,0.01f };
 	bool effect[MAX];
@@ -46,8 +53,8 @@ private:
 	float numY[MAX];
 	float scalenumX = 0;
 	float scalenumY = 0;
-	float diffX[MAX];
-	float diffY[MAX];
+	float wnumX[MAX];
+	float wnumY[MAX];
 
 };
 

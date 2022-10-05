@@ -28,12 +28,6 @@
     <Filter Include="ソース ファイル\light">
       <UniqueIdentifier>{97b5989c-ee5e-4213-a10e-b978ff685776}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Vector3">
-      <UniqueIdentifier>{e9ae50f4-52bb-4840-b166-092af9c0a069}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Matrix4">
-      <UniqueIdentifier>{4e7116fc-5d7c-4f5b-9a17-b35b21519d10}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Enemy">
       <UniqueIdentifier>{7e15da26-04ba-4ad0-8932-e395c28fb8c1}</UniqueIdentifier>
     </Filter>

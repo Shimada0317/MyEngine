@@ -115,6 +115,15 @@ void Bullet::ShotBefore(XMVECTOR startPos)
 
 }
 
+bool Bullet::CheckOk()
+{
+	if (Trigger == false) {
+		return true;
+	}
+
+	return false;
+}
+
 void Bullet::TriggerOn()
 {
 	Trigger = true;
@@ -122,7 +131,7 @@ void Bullet::TriggerOn()
 
 void Bullet::ShotAfter(XMVECTOR baclplayerpos, XMVECTOR playerPos,int& remaining)
 {
-	float speedm = 2.1f;
+	float speedm = 0.1;
 
 
 	if (Trigger == true) {
@@ -138,7 +147,7 @@ void Bullet::ShotAfter(XMVECTOR baclplayerpos, XMVECTOR playerPos,int& remaining
 			v3x = (vx / l) * speedm;
 			v3y = (vy / l) * speedm;
 			v3z = (vz / l) * speedm;
-			remaining += 1;
+			//remaining += 1;
 			fire = false;
 		}
 	}
@@ -154,6 +163,11 @@ void Bullet::ShotAfter(XMVECTOR baclplayerpos, XMVECTOR playerPos,int& remaining
 		pos.m128_f32[2] = -10;
 		Trigger = false;
 	}
+}
+
+void Bullet::Hit()
+{
+
 }
 
 

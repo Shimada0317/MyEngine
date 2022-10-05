@@ -76,34 +76,67 @@ void Player::Effect()
 {
 }
 
-void Player::Update(Bullet* bull)
+void Player::Update(Bullet* bull[], int& Remaining)
 {
-	bull->ShotBefore(backPlayerPos);
-	if (fire < BULL-1) {
+
+	if (Remaining < BULL - 1) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			Remaining += 1;
 			oldPos = position;
-			particle = true;
-			bull->TriggerOn();
 			time = 0.0f;
+			particle = true;
+			for(int i=0;i<BULL;i++){
+				if (bull[i]->CheckOk()) {
+					bull[i]->TriggerOn();
+					break;
+				}
+			}
+
 		}
+	}
+	for (int i = 0; i < BULL; i++) {
+		bull[i]->ShotBefore(backPlayerPos);
+		//break;
 	}
 	if (particle == true) {
 		time += 0.4f;
 		if (time >= 3.0f) {
 			particle = false;
-			
+
 		}
 	}
 	else {
 		time = 4.0f;
 	}
-
-	bull->ShotAfter(backPlayerPos, position,fire);
-
-
+	for (int i = 0; i < BULL; i++) {
+		bull[i]->ShotAfter(backPlayerPos, position, Remaining);
+		//break;
+	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {
-		fire = 0;
+		Remaining = 0;
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_A)) {
+		bull[0]->TriggerOn();
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_B)) {
+		bull[1]->TriggerOn();
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_C)) {
+		bull[2]->TriggerOn();
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_D)) {
+		bull[3]->TriggerOn();
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_E)) {
+		bull[4]->TriggerOn();
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_F)) {
+		bull[5]->TriggerOn();
+	}
+	if (Input::GetInstance()->TriggerKey(DIK_G)) {
+		bull[6]->TriggerOn();
 	}
 	Action::GetInstance()->PlayerMove3d(position);
 
@@ -125,9 +158,9 @@ void Player::Update(Bullet* bull)
 	Set();
 	camera->Update();
 	player->Update();
-	//for (int i = 0; i < BULL; i++) {
-		bull->Update();
-	//}
+	for (int i = 0; i < BULL; i++) {
+		bull[i]->Update();
+	}
 	part->Update(color);
 }
 

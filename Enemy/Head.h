@@ -35,5 +35,7 @@ private:
 
 	XMVECTOR bullPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 bullScl = { 0.0f,0.0f,0.0f };
+
+	bool Hit = false;
 };
 
