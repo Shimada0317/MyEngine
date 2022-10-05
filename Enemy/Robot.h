@@ -31,6 +31,8 @@ public:
 	void ParticleDraw(DirectXCommon* dxCommon);
 
 	void Finalize();
+
+	void SetPosition(XMVECTOR allPos) { this->allPos = allPos; }
 private:
 	std::unique_ptr<Head> head;
 	std::unique_ptr<RightArm> RArm;

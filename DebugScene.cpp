@@ -14,9 +14,11 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 		bull[i] = new Bullet();
 		bull[i]->Initialize();
 	}
-	rob = std::make_unique<Robot>();
-	rob->Initialize();
-
+	for (int i = 0; i < 3; i++) {
+		rob[i] = std::make_unique<Robot>();
+		rob[i]->Initialize();
+		allpos[i] = {0.0f + i*1.0f,0.0f,10.0f};
+	}
 	player = std::make_unique<Player>();
 	player->Initalize();
 
@@ -24,14 +26,19 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 
 void DebugScene::SetPosSclRot()
 {
-
+	for (int i = 0; i < 3; i++) {
+		rob[i]->SetPosition(allpos[i]);
+	}
 }
 
 void DebugScene::Update()
 {
 	SetPosSclRot();
 	for (int i = 0; i < 9; i++) {
-		rob->Update(bull[i]);
+		for (int j = 0; j < 3; j++) {
+			rob[j]->Update(bull[i]);
+			//break;
+		}
 		//break;
 	}
 	
@@ -43,7 +50,9 @@ void DebugScene::Update()
 void DebugScene::Draw(DirectXCommon* dxCommon)
 {
 	dxCommon->PreDraw();
-	rob->Draw(dxCommon);
+	for (int j = 0; j < 3; j++) {
+		rob[j]->Draw(dxCommon);
+	}
 	player->ParticleDraw(dxCommon->GetCmdList());
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	for (int i = 0; i < 9; i++) {
@@ -56,6 +65,8 @@ void DebugScene::Draw(DirectXCommon* dxCommon)
 
 void DebugScene::Finalize()
 {
-	rob->Finalize();
+	for (int j = 0; j < 3; j++) {
+		rob[j]->Finalize();
+	}
 	player->Finalize();
 }

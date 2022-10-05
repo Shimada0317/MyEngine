@@ -271,7 +271,7 @@ void Object3d::Update()
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
 	if (isBillboard) {
-		const XMMATRIX& matBillboard = camera->GetBillboardMatrix();
+	const XMMATRIX& matBillboard = camera->GetBillboardMatrix();
 
 		matWorld = XMMatrixIdentity();
 		matWorld *= matScale; // ワールド行列にスケーリングを反映

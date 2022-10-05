@@ -119,8 +119,6 @@ void Player::Update(Bullet* bull[], int& Remaining)
 
 	
 	Action::GetInstance()->PlayerMove3d(position);
-	Eye_pos.x = position.m128_f32[0];
-	Eye_pos.y = position.m128_f32[1];
 
 	const float kMoveLimitX = 4;
 	const float kMoveLimitY = 2;

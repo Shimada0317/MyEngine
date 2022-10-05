@@ -39,7 +39,7 @@ public://ÉÅÉìÉoïœêî
 
 	void Finalize() override;
 private:
-	std::unique_ptr<Robot>rob;
+	std::unique_ptr<Robot>rob[3];
 	std::unique_ptr<Body>bob;
 	std::unique_ptr<Head>head;
 	std::unique_ptr<Object3d> bo = nullptr;
@@ -52,9 +52,11 @@ private:
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 
+	XMVECTOR allpos[3];
+
 	DebugCamera* camera = nullptr;
 
-	XMVECTOR allpos = { 1.0f,1.0f,1.0f };
+	//XMVECTOR allpos = { 1.0f,1.0f,1.0f };
 	XMFLOAT3 Eye_pos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Target_pos = { 0.0f,0.0f,0.0f };
 	bool arive = true;
