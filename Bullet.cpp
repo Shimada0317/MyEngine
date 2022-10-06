@@ -130,7 +130,7 @@ void Bullet::TriggerOn()
 
 void Bullet::ShotAfter(XMVECTOR baclplayerpos, XMVECTOR playerPos,int& remaining)
 {
-	float speedm = 0.1;
+	float speedm = 5.1;
 
 
 	if (Trigger == true) {
