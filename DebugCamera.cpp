@@ -34,8 +34,8 @@ void DebugCamera::Update()
 		XMVECTOR vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
 
 		// ベクトルを回転
-		vTargetEye = XMVector3Transform(vTargetEye, matRot);
-		vUp = XMVector3Transform(vUp, matRot);
+		//vTargetEye = XMVector3Transform(vTargetEye, matRot);
+		//vUp = XMVector3Transform(vUp, matRot);
 
 		// 注視点からずらした位置に視点座標を決定
 		const XMFLOAT3& target = GetTarget();
