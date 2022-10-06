@@ -192,6 +192,7 @@ void Object3d::CreateGraphicsPipeline()
 	}
 }
 
+
 void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
@@ -209,6 +210,7 @@ void Object3d::PostDraw()
 	// コマンドリストを解除
 	Object3d::cmdList = nullptr;
 }
+
 
 std::unique_ptr<Object3d> Object3d::Create(ObjModel* model)
 {

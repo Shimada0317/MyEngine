@@ -1,16 +1,17 @@
 ﻿#pragma once
-
 #include <Windows.h>
 #include <wrl.h>
 #include <d3d12.h>
 #include <DirectXMath.h>
 #include <d3dx12.h>
+
 #include <string>
 
 #include "ObjModel.h"
 #include "Camera.h"
 #include "LightGroup.h"
 #include<memory>
+
 
 /// <summary>
 /// 3Dオブジェクト
@@ -40,10 +41,12 @@ public: // サブクラス
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0
 	{
+
 		//XMFLOAT4 color;
 		XMMATRIX viewproj;    // ビュープロジェクション行列
 		XMMATRIX world; // ワールド行列
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
+
 	};
 
 public: // 静的メンバ関数
@@ -120,6 +123,7 @@ public: // メンバ関数
 	void Draw();
 
 	/// <summary>
+
 	/// 座標の取得
 	/// </summary>
 	/// <returns>座標</returns>
@@ -127,6 +131,9 @@ public: // メンバ関数
 
 	/// <summary>
 	/// 回転の取得
+
+	/// モデル作成
+
 	/// </summary>
 	/// <returns>回転</returns>
 	const XMFLOAT3& GetRotation() { return rotation; }

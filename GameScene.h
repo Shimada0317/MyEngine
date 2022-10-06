@@ -21,10 +21,10 @@ using namespace std;
 
 class GameScene:public BaseScene
 {
-private: // エイリアス
-// Microsoft::WRL::を省略
+private: // 繧ｨ繧､繝ｪ繧｢繧ｹ
+// Microsoft::WRL::繧堤怐逡･
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
+	// DirectX::繧堤怐逡･
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -32,7 +32,7 @@ private: // エイリアス
 private:
 	
 
-public://メンバ変数
+public://繝｡繝ｳ繝仙､画焚
 
 	GameScene(SceneManager* sceneManager_);
 
@@ -74,9 +74,12 @@ private:
 
 	DebugCamera* camera = nullptr;
 
+
 	XMFLOAT3 cameraEye = {0.0f,0.0f,-10};
 	XMFLOAT3 cameraTarget = {0.0f,1.0f,0.0f};
 	float cameradistance = 20.0f;
+
+
 
 	XMVECTOR pos = { 0,0,0 };
 
@@ -84,8 +87,7 @@ private:
 	XMFLOAT3 ground_scl = { 5,5,50 };
 	XMFLOAT3 ground_rot = { 0,90,0 };
 
-	XMFLOAT3 obj_rot = { 0,90,0 };
-	XMVECTOR obj_pos = { 0,-4,0 };
+
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 

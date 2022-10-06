@@ -1,3 +1,4 @@
+
 //#include "GameScene.h"
 //#include<cassert>
 //#include <sstream>
@@ -21,12 +22,12 @@
 //	
 //
 //	
-//	////�X�v���C�g�̓ǂݍ���
+//	////スプライトの読み込み
 //	Sprite::LoadTexture(1, L"Resources/background.png");
 //	
 //	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 //
-//	//���f���̓ǂݍ���
+//	//モデルの読み込み
 //
 //	playermodel = ObjModel::CreateFromOBJ("skydome");
 //	sphere = Object3d::Create();
@@ -39,7 +40,7 @@
 //	groundObj->SetModel(ground);
 //	
 //
-//	//���f�������w�肵�ăt�@�C���ǂݍ���
+//	//モデル名を指定してファイル読み込み
 //	//model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
 //
 //	//FbxObject3d::SetDevice(dxComon->GetDev());
@@ -96,12 +97,12 @@
 //void GameScene::ObjDraw(DirectXCommon* dxCommon)
 //{
 //
-//	////�I�u�W�F�N�g�O����
+//	////オブジェクト前処理
 //	Object3d::PreDraw(dxCommon->GetCmdList());
 //	sphere->Draw();
 //	groundObj->Draw();
 //	////human3d->Draw();
-//	////�I�u�W�F�N�g�㏈��
+//	////オブジェクト後処理
 //	mid->Draw(dxCommon->GetCmdList());
 //	Object3d::PostDraw();
 //
@@ -131,7 +132,7 @@
 //
 //	//postEffect->Draw(dxCommon->GetCmdList());
 //	ImgDraw();
-//	//�`��㏈��
+//	//描画後処理
 //	dxCommon->PostDraw();
 //}
 //
@@ -149,3 +150,4 @@
 //	delete Object;
 //	delete model;
 //}
+
