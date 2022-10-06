@@ -117,7 +117,11 @@ void Player::Update(Bullet* bull[], int& Remaining)
 
 	
 	Action::GetInstance()->PlayerMove3d(position);
-
+	if (Input::GetInstance()->PushKey(DIK_Z)) {
+		Eye_pos.x += 0.1f;
+	}
+	camera->MoveEyeVector(position);
+	
 	const float kMoveLimitX = 4;
 	const float kMoveLimitY = 2;
 

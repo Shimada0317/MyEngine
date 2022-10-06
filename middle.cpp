@@ -22,71 +22,35 @@ void middle::Initialize()
 	player->Initalize();
 
 
-//	//プレイヤー(レティクル)の読み込み
-//	player = std::make_unique<Player>();
-//	player->Initalize();
-//	playerPos = player->GetPosition();
-//	playerRot = player->GetRotation();
-//	backplayer = playerPos;
-//
-//	rob = std::make_unique<Robot>();
-//	rob->Initialize();
-//
-//	//弾の読み込み
-//	for (int j = 0; j < 9; j++) {
-//		bull[j] = std::make_unique<Bullet>();
-//		bull[j]->Initialize();
-//
-//		retime[j] = true;
-//		fire[j] = false;
-//		bullPos[j] = bull[j]->GetPosition();
-//		bullScl = bull[j]->GetScl();
-//		lost = bull[j]->GetLost();
-//		debug[j] = 0;
-//		speed[j] = 0.5f;
-//	}
-//	//敵の読み込み
-//	for (int i = 0; i < MAXENEMY; i++) {
-//		enemy[i] = std::make_unique<Enemy>();
-//		enemy[i]->Initalize();
-//		enemyPos[i] = enemy[i]->GetPosition();
-//		enemyPos[i].m128_f32[0] + i*0.1f;
-//		enemy[i]->SetPosition(enemyPos[i]);
-//		enemyScl = enemy[i]->GetScl();
-//		life[i] = enemy[i]->GetLife();
-//		stop[i] = false;
-//		spown[i] = false;
-//	}
-//
-//	////スプライトの読み込み
-//	for (int i = 0; i < 9; i++) {
-//
-//		Sprite::LoadTexture(i, L"Resources/bullet.png");
-//		bulletHUD[i] = Sprite::SpriteCreate(i, { 10.0f,10.0f });
-//	}
-//
-//	Sprite::LoadTexture(10, L"Resources/reload.png");
-//	Reload = Sprite::SpriteCreate(10, { 10.0f,10.0f }, { 1.0f,1.0f,1.0f,1.0f });
-//
-//	Sprite::LoadTexture(11, L"Resources/wave.png");
-//	wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
-//
-//	Sprite::LoadTexture(17, L"Resources/five.png");
-//	maxcount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
-//
-//	Sprite::LoadTexture(12, L"Resources/slash.png");
-//	slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
-//
-//	Sprite::LoadTexture(13, L"Resources/one.png");
-//	Sprite::LoadTexture(14, L"Resources/two.png");
-//	Sprite::LoadTexture(15, L"Resources/three.png");
-//	Sprite::LoadTexture(16, L"Resources/four.png");
-//	for (int i = 0; i < 5; i++) {
-//		changecount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
-//	}
-//	//LoadEnemyPopData();
-//	//UpdateEnemyPopCommands();
-//	oldpatern = patern;
+	////スプライトの読み込み
+	for (int i = 0; i < 9; i++) {
+
+		Sprite::LoadTexture(i, L"Resources/bullet.png");
+		bulletHUD[i] = Sprite::SpriteCreate(i, { 10.0f,10.0f });
+	}
+
+	Sprite::LoadTexture(10, L"Resources/reload.png");
+	Reload = Sprite::SpriteCreate(10, { 10.0f,10.0f }, { 1.0f,1.0f,1.0f,1.0f });
+
+	Sprite::LoadTexture(11, L"Resources/wave.png");
+	wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
+
+	Sprite::LoadTexture(17, L"Resources/five.png");
+	maxcount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
+
+	Sprite::LoadTexture(12, L"Resources/slash.png");
+	slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
+
+	Sprite::LoadTexture(13, L"Resources/one.png");
+	Sprite::LoadTexture(14, L"Resources/two.png");
+	Sprite::LoadTexture(15, L"Resources/three.png");
+	Sprite::LoadTexture(16, L"Resources/four.png");
+	for (int i = 0; i < 5; i++) {
+		changecount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
+	}
+	//LoadEnemyPopData();
+	//UpdateEnemyPopCommands();
+	oldpatern = patern;
 }
 //
 void middle::SetPSR()
@@ -95,64 +59,40 @@ void middle::SetPSR()
 		rob[i]->SetPosition(allpos[i]);
 	}
 
-//
-//	//HUDのポジションセット
-//	for (int i = 0; i < 9; i++) {
-//		bulletHUD[i]->SetSize({ spSiz });
-//		bulletHUD[i]->SetPosition({ spPos.x,spPos.y + 32 * i });
-//	}
-//	//リロードの文字
-//	Reload->SetSize({ 128,64 });
-//	Reload->SetPosition({ 1140,300 });
-//	//左下のwaveの文字
-//	wave->SetSize({ 256,128 });
-//	wave->SetPosition({ 0,600 });
-//	//waveの最大数
-//	maxcount->SetSize({ 80,80 });
-//	maxcount->SetPosition({ 320, 630 });
-//	//waveの最大値と数字の間の/←これ
-//	slash->SetSize({ 80,80 });
-//	slash->SetPosition({ 280,630 });
-//	//変動するカウンター
-//	for (int i = 0; i < 5; i++) {
-//		changecount[i]->SetSize({ 80,80 });
-//		changecount[i]->SetPosition({ 240,630 });
-//	}
-//
-//	//プレイヤーのポジションセット
-//	if (moveTime == false) {
-//		playerPos = player->GetPosition();
-//	}
-//	else {
-//		player->SetPosition(playerPos);
-//	}
-//
-//	backplayer.m128_f32[0] = -playerPos.m128_f32[0]/32;
-//	backplayer.m128_f32[1] = playerPos.m128_f32[1]/32;
-//	backplayer.m128_f32[2] = playerPos.m128_f32[2]-5;
-//	player->SetRotation(playerRot);
-//	//弾のポジションセット
-//	for (int j = 0; j < 9; j++) {
-//		bull[j]->SetPosition(bullPos[j]);
-//		bull[j]->SetScl(bullScl);
-//		bull[j]->SetLost(lost);
-//	}
-//	//敵のポジションセット
-//	for (int i = 0; i < MAXENEMY; i++) {
-//		if (life[i] <= 0) {
-//			enemyPos[i] = enemy[i]->GetPosition();
-//			enemyPos[i].m128_f32[0] + i;
-//
-//			enemy[i]->SetPosition(enemyPos[i]);
-//			enemy[i]->SetScl(enemyScl);
-//			life[i] = enemy[i]->GetLife();
-//		}
-//	}
-//
-//	startPos.z = playerPos.m128_f32[2] - 1;
-//}
-//
-//
+
+	//HUDのポジションセット
+	for (int i = 0; i < 9; i++) {
+		bulletHUD[i]->SetSize({ spSiz });
+		bulletHUD[i]->SetPosition({ spPos.x,spPos.y + 32 * i });
+	}
+	//リロードの文字
+	Reload->SetSize({ 128,64 });
+	Reload->SetPosition({ 1140,300 });
+	//左下のwaveの文字
+	wave->SetSize({ 256,128 });
+	wave->SetPosition({ 0,600 });
+	//waveの最大数
+	maxcount->SetSize({ 80,80 });
+	maxcount->SetPosition({ 320, 630 });
+	//waveの最大値と数字の間の/←これ
+	slash->SetSize({ 80,80 });
+	slash->SetPosition({ 280,630 });
+	//変動するカウンター
+	for (int i = 0; i < 5; i++) {
+		changecount[i]->SetSize({ 80,80 });
+		changecount[i]->SetPosition({ 240,630 });
+	}
+
+	//プレイヤーのポジションセット
+	if (moveTime == false) {
+		playerPos = player->GetPosition();
+	}
+	else {
+		player->SetPosition(playerPos);
+	}
+
+}
+
 //void middle::AllUpdate()
 //{
 //	//プレイヤーの更新
@@ -170,8 +110,8 @@ void middle::SetPSR()
 //	for (int j = 0; j < 9; j++) {
 //		bull[j]->Update();
 //	}
-}
-//
+//}
+
 void middle::Update()
 {
 
