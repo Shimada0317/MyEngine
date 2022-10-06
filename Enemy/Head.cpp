@@ -3,9 +3,7 @@
 void Head::Initialize()
 {
 	headModel = ObjModel::CreateFromOBJ("Head");
-	Head = Object3d::Create();
-	Head->SetModel(headModel);
-	
+	Head = Object3d::Create(headModel);
 }
 
 void Head::SetPRS(const XMVECTOR& bodyPos,Bullet* bull)

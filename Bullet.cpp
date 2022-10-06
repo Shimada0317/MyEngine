@@ -8,8 +8,7 @@ void Bullet::Initialize()
 	bulModel = new ObjModel;
 
 	bulModel = ObjModel::CreateFromOBJ("bullet");
-	bullet = Object3d::Create();
-	bullet->SetModel(bulModel);
+	bullet = Object3d::Create(bulModel);
 	mat = bullet->GetMatrix();
 }
 
