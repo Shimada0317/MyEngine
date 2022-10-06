@@ -17,11 +17,11 @@ private:
 public:
 	void Initialize();
 
-	void SetPRS(XMVECTOR allPos,Bullet* bull);
+	void SetPRS(const XMVECTOR& allPos,Bullet* bull);
 
-	void Update(bool& arive,XMVECTOR allPos,Bullet* bull,int& Hp);
+	void Update(bool& arive,const XMVECTOR& allPos,Bullet* bull,int& Hp);
 
-	void Draw(bool& arive);
+	void Draw(const bool& arive);
 
 	void Finalize();
 private:

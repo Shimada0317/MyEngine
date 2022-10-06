@@ -7,7 +7,7 @@ void RightArm::Initialize()
 	RArm->SetModel(RArmModel);
 }
 
-void RightArm::SetPRS(XMVECTOR bodyPos, Bullet* bull)
+void RightArm::SetPRS(const XMVECTOR& bodyPos, Bullet* bull)
 {
 	RArmPos = bodyPos;
 	RArmPos.m128_f32[0] = bodyPos.m128_f32[0] + 0.8;
@@ -22,7 +22,7 @@ void RightArm::SetPRS(XMVECTOR bodyPos, Bullet* bull)
 	RArm->SetScale(RArmScl);
 }
 
-void RightArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp)
+void RightArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 {
 	if (arive == true) {
 		SetPRS(bodyPos, bull);
@@ -43,7 +43,7 @@ void RightArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp)
 	RArm->Update();
 }
 
-void RightArm::Draw(bool arive)
+void RightArm::Draw(const bool& arive)
 {
 	if (arive == true) {
 		RArm->Draw();
@@ -56,7 +56,7 @@ void RightArm::Finalize()
 	delete RArmModel;
 }
 
-void RightArm::Attack(float attackT)
+void RightArm::Attack(const float& attackT)
 {
 	if (attackT >= 10) {
 		if (attack == false) {

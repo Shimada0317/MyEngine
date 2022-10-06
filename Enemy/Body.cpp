@@ -8,7 +8,7 @@ void Body::Initialize()
 
 }
 
-void Body::SetPRS(XMVECTOR allPos,Bullet* bull)
+void Body::SetPRS(const XMVECTOR& allPos,Bullet* bull)
 {
 
 	BullPos = bull->GetPosition();
@@ -21,7 +21,7 @@ void Body::SetPRS(XMVECTOR allPos,Bullet* bull)
 	body->SetScale(BodyScl);
 }
 
-void Body::Update(bool& arive,XMVECTOR allPos,Bullet* bull,int& Hp)
+void Body::Update(bool& arive,const XMVECTOR& allPos,Bullet* bull,int& Hp)
 {
 
 	if (arive == true) {
@@ -45,7 +45,7 @@ void Body::Update(bool& arive,XMVECTOR allPos,Bullet* bull,int& Hp)
 	}
 }
 
-void Body::Draw(bool& arive)
+void Body::Draw(const bool& arive)
 {
 	if (arive == true) {
 		body->Draw();

@@ -135,22 +135,22 @@ public: // メンバ関数
 	/// 座標の設定
 	/// </summary>
 	/// <param name="position">座標</param>
-	void SetPosition(XMVECTOR position) { this->position = position; }
+	void SetPosition(const XMVECTOR& position) { this->position = position; }
 
-	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
+	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
 
-	void SetMatrix(XMMATRIX mat) { this->matWorld = mat; }
+	void SetMatrix(const XMMATRIX& mat) { this->matWorld = mat; }
 
 	const XMMATRIX& GetMatrix() { return matWorld; }
 
-	void SetMatrixR(XMMATRIX matrot) { this->matRot = matrot; }
+	void SetMatrixR(const XMMATRIX& matrot) { this->matRot = matrot; }
 
 	const XMMATRIX& GetMatrixR() { return matRot; }
 	/// <summary>
 	/// スケールの設定
 	/// </summary>
 	/// <param name="position">スケール</param>
-	void SetScale(XMFLOAT3 scale) { this->scale = scale; }
+	void SetScale(const XMFLOAT3& scale) { this->scale = scale; }
 
 	/// <summary>
 	/// モデルのセット

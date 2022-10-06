@@ -45,24 +45,24 @@ public:
 
 	const XMVECTOR& GetPosition() { return position; }
 
-	void SetPosition(XMVECTOR position) { this->position = position; }
+	void SetPosition(const XMVECTOR& position) { this->position = position; }
 
 	const XMFLOAT3& GetRotation() { return rotation; }
 
-	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
+	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
 
 	const XMFLOAT3& GetScl() { return scale; }
 
-	void SetScl(XMFLOAT3 scale) { this->scale = scale; }
+	void SetScl(const XMFLOAT3& scale) { this->scale = scale; }
 
 
 	const XMFLOAT2& GetRetPosition() { return retpos; }
 
-	void SetRetPosition(XMFLOAT2 position) { this->retpos = position; }
+	void SetRetPosition(const XMFLOAT2& position) { this->retpos = position; }
 
 	const XMFLOAT2& GetRetSiz() { return retsize; }
 
-	void SetRetSiz(XMFLOAT2 scale) { this->retsize = scale; }
+	void SetRetSiz(const XMFLOAT2& scale) { this->retsize = scale; }
 
 	XMVECTOR GetWorldPosition();
 private:

@@ -4,7 +4,7 @@
 #include<DirectXMath.h>
 #include"Texture.h"
 
-const int MAX = 2;
+const int MAX = 20;
 
 class ObjParticle
 {

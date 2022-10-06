@@ -8,7 +8,7 @@ void Head::Initialize()
 	
 }
 
-void Head::SetPRS(XMVECTOR bodyPos,Bullet* bull)
+void Head::SetPRS(const XMVECTOR& bodyPos,Bullet* bull)
 {
 
 	bullPos = bull->GetPosition();
@@ -23,7 +23,7 @@ void Head::SetPRS(XMVECTOR bodyPos,Bullet* bull)
 	Head->SetScale(HeadScl);
 }
 
-void Head::Update(bool& arive,XMVECTOR bodyPos,Bullet* bull,int& Hp)
+void Head::Update(bool& arive,const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 {
 	if (arive == true) {
 		//SetPRS(bodyPos);
@@ -40,7 +40,7 @@ void Head::Update(bool& arive,XMVECTOR bodyPos,Bullet* bull,int& Hp)
 	Head->Update();
 }
 
-void Head::Draw(bool& arive)
+void Head::Draw(const bool& arive)
 {
 	if (arive == true) {
 		Head->Draw();

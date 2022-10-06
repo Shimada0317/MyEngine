@@ -14,15 +14,15 @@ private:
 public:
 	void Initialize();
 
-	void SetPRS(XMVECTOR bodyPos,Bullet* bull);
+	void SetPRS(const XMVECTOR& bodyPos,Bullet* bull);
 
-	void Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp);
+	void Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp);
 
-	void Draw(bool& arive);
+	void Draw(const bool& arive);
 
 	void Finalize();
 
-	void Attack(float attackT);
+	void Attack(const float& attackT);
 private:
 	std::unique_ptr<Object3d> LArm;
 	ObjModel* LArmModel = nullptr;

@@ -7,7 +7,7 @@ void LeftArm::Initialize()
 	LArm->SetModel(LArmModel);
 }
 
-void LeftArm::SetPRS(XMVECTOR bodyPos,Bullet* bull)
+void LeftArm::SetPRS(const XMVECTOR& bodyPos,Bullet* bull)
 {
 	LArmPos = bodyPos;
 	LArmPos.m128_f32[0] = bodyPos.m128_f32[0] - 0.8f;
@@ -21,7 +21,7 @@ void LeftArm::SetPRS(XMVECTOR bodyPos,Bullet* bull)
 	LArm->SetRotation(LArmRot);
 }
 
-void LeftArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp)
+void LeftArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 {
 	if (arive == true) {
 		SetPRS(bodyPos,bull);
@@ -41,7 +41,7 @@ void LeftArm::Update(bool& arive, XMVECTOR bodyPos,Bullet* bull,int& Hp)
 	LArm->Update();
 }
 
-void LeftArm::Draw(bool& arive)
+void LeftArm::Draw(const bool& arive)
 {
 	if (arive == true) {
 		LArm->Draw();
@@ -54,7 +54,7 @@ void LeftArm::Finalize()
 	delete LArmModel;
 }
 
-void LeftArm::Attack(float attackT)
+void LeftArm::Attack(const float& attackT)
 {
 	if (attackT >= 10) {
 		if (attack == false) {
