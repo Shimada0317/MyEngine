@@ -23,16 +23,23 @@ void DirectXCommon::Initialize(WinApp* winApp) {
 	InitializeDepthBuffer();
 	//フェンスの初期化
 	InitializeFence();
+	//imgui初期化
+	if (!initializeImg()) {
+		assert(0);
+	}
+
 }
 
 void DirectXCommon::InitializeDevice() {
 	HRESULT result;
 	//デバッグレイヤーをオンに
-	ID3D12Debug* debugContoroller;
+	ID3D12Debug1* debugContoroller;
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugContoroller))))
 	{
 		debugContoroller->EnableDebugLayer();
+		//debugContoroller->SetEnableGPUBasedValidation(TRUE);
 	}
+
 
 	//対応レベルの配列
 	D3D_FEATURE_LEVEL levels[] =
@@ -86,6 +93,34 @@ void DirectXCommon::InitializeDevice() {
 			break;
 		}
 	}
+
+	ID3D12InfoQueue* infoQueue;
+	if (SUCCEEDED(dev->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
+	/*	infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_CORRUPTION, true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_ERROR, true);
+		infoQueue->SetBreakOnSeverity(D3D12_MESSAGE_SEVERITY_WARNING, true);*/
+		infoQueue->Release();
+	}
+
+	ID3D12DebugDevice* pdebug = NULL;
+	if (SUCCEEDED(dev->QueryInterface(&pdebug))) {
+		pdebug->ReportLiveDeviceObjects(D3D12_RLDO_DETAIL|D3D12_RLDO_IGNORE_INTERNAL);
+		pdebug->Release();
+	}
+
+	D3D12_MESSAGE_ID denyIds[] = {
+
+		D3D12_MESSAGE_ID_RESOURCE_BARRIER_MISMATCHING_COMMAND_LIST_TYPE
+	};
+
+	D3D12_MESSAGE_SEVERITY severities[] = { D3D12_MESSAGE_SEVERITY_INFO };
+	D3D12_INFO_QUEUE_FILTER filter{};
+	filter.DenyList.NumIDs = _countof(denyIds);
+	filter.DenyList.pIDList = denyIds;
+	filter.DenyList.NumSeverities = _countof(severities);
+	filter.DenyList.pSeverityList = severities;
+
+	infoQueue->PushStorageFilter(&filter);
 }
 
 void DirectXCommon::InitializeCommand()
@@ -106,6 +141,52 @@ void DirectXCommon::InitializeCommand()
 	D3D12_COMMAND_QUEUE_DESC cmdQueueDesc{};
 
 	dev->CreateCommandQueue(&cmdQueueDesc, IID_PPV_ARGS(&cmdQueue));
+}
+
+bool DirectXCommon::initializeImg()
+{
+	HRESULT result = S_FALSE;
+
+	D3D12_DESCRIPTOR_HEAP_DESC heapDesc{};
+	heapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV;
+	heapDesc.NumDescriptors = 1;
+	heapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE;
+	result = dev->CreateDescriptorHeap(&heapDesc, IID_PPV_ARGS(&DescriptorHeapImg));
+	if (FAILED(result)) {
+		assert(0);
+		return false;
+	}
+
+	//スワップチェーンの情報取得
+	DXGI_SWAP_CHAIN_DESC swDesc = {};
+	result = swapchain->GetDesc(&swDesc);
+	if (FAILED(result)) {
+		assert(0);
+		return false;
+	}
+
+	if (ImGui::CreateContext() == nullptr) {
+		assert(0);
+		return false;
+	}
+
+	if (!ImGui_ImplWin32_Init(winApp->GetHwnd())) {
+		assert(0);
+		return false;
+	}
+	if (!ImGui_ImplDX12_Init(
+		GetDev(),
+		swDesc.BufferCount,
+		swDesc.BufferDesc.Format,
+		DescriptorHeapImg.Get(),
+		DescriptorHeapImg->GetCPUDescriptorHandleForHeapStart(),
+		DescriptorHeapImg->GetGPUDescriptorHandleForHeapStart()
+	)) {
+		assert(0);
+		return false;
+	}
+
+	return true;
 }
 
 void DirectXCommon::InitializeSwapchain()
@@ -211,7 +292,7 @@ void DirectXCommon::PreDraw()
 	cmdList->OMSetRenderTargets(1, &rtvH, false, &dsvH);
 
 	//画面クリア　描画色の指定
-	float clearColor[] = { 0.1f,0.1f,0.5f,1.0f };
+	float clearColor[] = { 0.0f,0.6f,0.4f,1.0f };
 	//レンダーターゲット　クリア
 	cmdList->ClearRenderTargetView(rtvH, clearColor, 0, nullptr);
 	//深度バッファ　クリア
@@ -221,10 +302,21 @@ void DirectXCommon::PreDraw()
 	//シザー短形の設定
 	cmdList->RSSetScissorRects(1, &CD3DX12_RECT(0, 0, WinApp::window_width, WinApp::window_height));
 
+	//imgui
+	ImGui_ImplDX12_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
 }
 
 void DirectXCommon::PostDraw()
 {
+	//imgui描画
+	ImGui::Render();
+	ID3D12DescriptorHeap* ppHeaps[] = { DescriptorHeapImg.Get() };
+	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(), cmdList.Get());
+
 	UINT bbIndex = swapchain->GetCurrentBackBufferIndex();
 
 	cmdList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(backBuffers[bbIndex].Get(),

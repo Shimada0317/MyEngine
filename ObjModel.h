@@ -1,100 +1,107 @@
 #pragma once
-#include <Windows.h>
-#include <wrl.h>
-#include <d3d12.h>
-#include <DirectXMath.h>
-#include <d3dx12.h>
-#include<string>
 
-using namespace std;
-using namespace DirectX;
-using namespace Microsoft::WRL;
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include "Mesh.h"
 
+/// <summary>
+/// モデルデータ
+/// </summary>
 class ObjModel
 {
-public: // サブクラス
-// 頂点データ構造体
-	struct VertexPosNormalUv
-	{
-		DirectX::XMFLOAT3 pos; // xyz座標
-		DirectX::XMFLOAT3 normal; // 法線ベクトル
-		DirectX::XMFLOAT2 uv;  // uv座標
-	};
+private: // エイリアス
+	// Microsoft::WRL::を省略
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::を省略
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
 
-	struct Material
-	{
-		std::string name;
-		DirectX::XMFLOAT3 ambient;
-		DirectX::XMFLOAT3 diffuse;
-		DirectX::XMFLOAT3 specular;
-		float alpha;
-		std::string textureFilename;
-		//コンストラクト
-		Material() {
-			ambient = { 0.3f,0.3f,0.3f };
-			diffuse = { 0.0f,0.0f,0.0f };
-			specular = { 0.0f,0.0f,0.0f };
-			alpha = 1.0f;
-		}
-	};
+private:
+	static const std::string baseDirectory;
 
-	struct ConstBufferDataB1
-	{
-		DirectX::XMFLOAT3 ambient;//アンビエント
-		float pad1;//パディング
-		DirectX::XMFLOAT3 diffuse;//ディフューズ
-		float pad2;//パディング
-		DirectX::XMFLOAT3 specular;//スペキュラー
-		float alpha;//アルファ
-	};
-public:
-	//OBJファイル読み込み
-	static ObjModel* LoadFromObJ(const std::string& modelname);
-	static void SetDev(ID3D12Device* dev) { ObjModel::dev = dev; }
-private://メンバ変数
-	//インデックス配列
-	std::vector<unsigned short> indices;
-	// 頂点バッファ
-	ID3D12Resource* vertBuff;
-	// インデックスバッファ
-	ID3D12Resource* indexBuff;
-	// 頂点バッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vbView;
-	// インデックスバッファビュー
-	D3D12_INDEX_BUFFER_VIEW ibView;
-	// 頂点データ配列
-	//static VertexPosNormalUv vertices[vertexCount];
-	std::vector<VertexPosNormalUv> vertices;
-	//定数バッファ
-	Microsoft::WRL::ComPtr<ID3D12Resource>constBuffB1;
-	//マテリアル
-	Material material;
+private: // 静的メンバ変数
+	// デバイス
+	static ID3D12Device* device;
 	// デスクリプタサイズ
-	UINT descriptorHandleIncrementSize;
+	static UINT descriptorHandleIncrementSize;
+
+public: // 静的メンバ関数
+
+	/// <summary>
+	/// 静的初期化
+	/// </summary>
+	/// <param name="device">デバイス</param>
+	static void StaticInitialize(ID3D12Device* device);
+
+	/// <summary>
+	/// OBJファイルからメッシュ生成
+	/// </summary>
+	/// <param name="modelname">モデル名</param>
+	/// <param name="modelname">エッジ平滑化フラグ</param>
+	/// <returns>生成されたモデル</returns>
+	static ObjModel* CreateFromOBJ(const std::string& modelname, bool smoothing = false);
+
+public: // メンバ関数
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
+	~ObjModel();
+
+	/// <summary>
+	/// 初期化
+	/// </summary>
+	/// <param name="modelname">モデル名</param>
+	/// <param name="modelname">エッジ平滑化フラグ</param>
+	void Initialize(const std::string& modelname, bool smoothing);
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="cmdList">命令発行先コマンドリスト</param>
+	void Draw(ID3D12GraphicsCommandList* cmdList);
+
+private: // メンバ変数
+	// 名前
+	std::string name;
+	// メッシュコンテナ
+	std::vector<Mesh*> meshes;
+	// マテリアルコンテナ
+	std::unordered_map<std::string, Material*> materials;
+	// デフォルトマテリアル
+	Material* defaultMaterial = nullptr;
 	// デスクリプタヒープ
 	ComPtr<ID3D12DescriptorHeap> descHeap;
-	// シェーダリソースビューのハンドル(CPU)
-	CD3DX12_CPU_DESCRIPTOR_HANDLE cpuDescHandleSRV;
-	// シェーダリソースビューのハンドル(CPU)
-	CD3DX12_GPU_DESCRIPTOR_HANDLE gpuDescHandleSRV;
-	// テクスチャバッファ
-	ComPtr<ID3D12Resource> texbuff;
 
-private://非公開のメンバ関数
-	void LoadFromOBJInternal(const std::string&  modelname);
-public://メンバ関数
-	//マテリアル読み込み
+private: // メンバ関数
+	/// <summary>
+	/// モデル読み込み
+	/// </summary>
+	/// <param name="modelname">モデル名</param>
+	/// <param name="modelname">エッジ平滑化フラグ</param>
+	void LoadModel(const std::string& modelname, bool smoothing);
+
+	/// <summary>
+	/// マテリアル読み込み
+	/// </summary>
 	void LoadMaterial(const std::string& directoryPath, const std::string& filename);
-	//テクスチャ読み込み
-	bool LoadTexture(const std::string& directoryPath, const std::string& filename);
-	//デスクリプタヒープの初期化
-	void InitializeDescriptorHeap();
-	//各種バッファ生成
-	void CreateBuffers();
-	//描画
-	void Draw(ID3D12GraphicsCommandList* cmdList, UINT rootParamIndexMaterial);
-private://静的メンバ変数
-	//デバイス
-	static ID3D12Device* dev;
+
+	/// <summary>
+	/// マテリアル登録
+	/// </summary>
+	void AddMaterial(Material* material);
+
+	/// <summary>
+	/// デスクリプタヒープの生成
+	/// </summary>
+	void CreateDescriptorHeap();
+
+	/// <summary>
+	/// テクスチャ読み込み
+	/// </summary>
+	void LoadTextures();
+
 };
 

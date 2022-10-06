@@ -4,6 +4,8 @@
 class WinApp
 {
 public:
+	static WinApp* GetInstance();
+
 	//‰Šú‰»
 	void Initialize();
 	//XV

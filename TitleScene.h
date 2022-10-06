@@ -9,6 +9,13 @@
 #include"Object3d.h"
 #include"ObjModel.h"
 #include"Input.h"
+#include"ParticleManager.h"
+#include"Player.h"
+#include"Bullet.h"
+#include"middle.h"
+#include"PostEffect.h"
+#include"Robot.h"
+#include<memory>
 
 class TitleScene :public BaseScene
 {
@@ -39,20 +46,18 @@ private:
 
 	DirectXCommon* dxCommon = nullptr;
 
-	ObjModel* playermodel = nullptr;
-	ObjModel* ramieru = nullptr;
-	ObjModel* human = nullptr;
-
-	Object3d* player3d = nullptr;
-	Object3d* ramieru3d = nullptr;
-	Object3d* human3d = nullptr;
+	std::unique_ptr<Robot>enemy;
 
 	Sprite* sprite = nullptr;
 	Sprite* title = nullptr;
 
+	ParticleManager* particle = nullptr;
+	PostEffect* post = nullptr;
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
-
+	XMFLOAT2 retsize = { 1280.0f,720.0f };
+	XMFLOAT2 retpos = { 0.0f,0.0f };
+	POINT pos;
 };
 

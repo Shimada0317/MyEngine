@@ -35,6 +35,19 @@ void Input::Initialize(WinApp* winApp)
 	result = devkeyboard->SetCooperativeLevel(
 		winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
+
+	//
+	ComPtr<IDirectInput8> click = nullptr;
+	result = DirectInput8Create(
+		winApp->GetHinstance(), DIRECTINPUT_VERSION, IID_IDirectInput8, (void**)&click, nullptr);
+
+	result = click->CreateDevice(GUID_SysMouse, &Onclick, NULL);
+	result = Onclick->SetDataFormat(&c_dfDIMouse);
+	result = Onclick->SetCooperativeLevel(
+		winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
+
+	
+
 }
 
 void Input::Update() 
@@ -43,13 +56,19 @@ void Input::Update()
 
 	memcpy(keyPre, key, sizeof(key));
 
-;
 	//キーボード情報の取得開始
 	result = devkeyboard->Acquire();
 
+	result = Onclick->Acquire();
+
 	//BYTE key[256] = {};
+	result = devkeyboard->Acquire();
+
 	result = devkeyboard->GetDeviceState(sizeof(key), key);
 
+	result = Onclick->GetDeviceState(sizeof(DIMOUSESTATE), &cli);
+
+	
 }
 
 bool Input::PushKey(BYTE keyNumber)
@@ -68,3 +87,22 @@ bool Input::TriggerKey(BYTE keyNumber)
 	}
 	return false;
 }
+
+bool Input::PushClick(BYTE click)
+{
+	if (cli.rgbButtons[click]&(0x80)) {
+		return true;
+	}
+	return false;
+}
+
+Input::MousePos Input::GetMouseMove()
+{
+	MousePos tmp;
+	tmp.lX = cli.lX;
+	tmp.lY = cli.lY;
+
+	return tmp;
+}
+
+

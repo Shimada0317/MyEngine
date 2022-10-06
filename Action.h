@@ -16,18 +16,29 @@ private: // エイリアス
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+	using XMVECTOR = DirectX::XMVECTOR;
+private:
+	Action();
+	
+	~Action();
 
 public:
+	Action(const Action&) = delete;
+
+	Action& operator=(const Action&) = delete;
+
 	static Action* GetInstance();
 
-	void PlayerMove3d(XMFLOAT3 &position,float Speed);
+	void PlayerMove3d(XMVECTOR &position);
 
 	void PlayerJump(XMFLOAT3& position,bool& JumpFlag);
 
-	void PlayerMove2d(XMFLOAT2 position, float Speed);
+	void PlayerMove2d(XMFLOAT2 &position, float Speed);
 
 
-	void Gunshot(bool alive, bool havegun, int bullet,bool shot);
+	void Gunshot(int bullet,bool& shot);
+
+	bool Shot(int bullet, bool& shot);
 private:
 	float JumpPosition = 0;
 };

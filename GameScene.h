@@ -10,13 +10,21 @@
 #include"FbxObject3d.h"
 #include"DebugCamera.h"
 #include"PostEffect.h"
+#include"ParticleManager.h"
+#include"Light.h"
+#include"middle.h"
+#include"ClearScene.h"
+
+#include<memory>
+
+using namespace std;
 
 class GameScene:public BaseScene
 {
-private: // エイリアス
-// Microsoft::WRL::を省略
+private: // 繧ｨ繧､繝ｪ繧｢繧ｹ
+// Microsoft::WRL::繧堤怐逡･
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
+	// DirectX::繧堤怐逡･
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -24,7 +32,7 @@ private: // エイリアス
 private:
 	
 
-public://メンバ変数
+public://繝｡繝ｳ繝仙､画焚
 
 	GameScene(SceneManager* sceneManager_);
 
@@ -32,11 +40,17 @@ public://メンバ変数
 
 	void SetPosSclRot();
 
+	void AllUpdate();
+
 	void Update() override;
 
 	void ObjDraw(DirectXCommon* dxCommon);
 
 	void SpriteDraw(DirectXCommon* dxCommon);
+
+	void ImgDraw();
+
+	void PostEffectDraw(DirectXCommon* dxCommon);
 
 	void Draw(DirectXCommon* dxCommon)override;
 
@@ -46,14 +60,11 @@ private:
 	DirectXCommon* dxCommon = nullptr;
 
 	ObjModel* playermodel = nullptr;
-	ObjModel* ramieru = nullptr;
 	ObjModel* ground = nullptr;
+	ObjModel* p = nullptr;
 
-	Object3d* sphere = nullptr;
-	Object3d* ramieru3d = nullptr;
-	Object3d* groundObj = nullptr;
-
-	WinApp* winApp = nullptr;
+	unique_ptr <Object3d> sphere;
+	unique_ptr <Object3d> groundObj;
 
 	FbxModel* model = nullptr;
 	FbxObject3d* Object = nullptr;
@@ -63,27 +74,34 @@ private:
 
 	DebugCamera* camera = nullptr;
 
-	XMFLOAT3 cameraEye = {0,0,90};
-	XMFLOAT3 cameraTarget = {0,2.5f,0};
-	float cameradistance = 8.0f;
 
-	XMFLOAT3 pos = { 0,0,0 };
+	XMFLOAT3 cameraEye = {0.0f,0.0f,-10};
+	XMFLOAT3 cameraTarget = {0.0f,1.0f,0.0f};
+	float cameradistance = 20.0f;
 
-	XMFLOAT3 ramieru_pos = { 0,0,1 };
-	XMFLOAT3 ramieru_rot = { 0,0,0 };
-	XMFLOAT3 ramieru_scl = { 0.5f,0.5f,0.5f };
 
-	XMFLOAT3 ground_pos = { 0,-1,0 };
-	XMFLOAT3 ground_scl = { 10,10,10 };
+
+	XMVECTOR pos = { 0,0,0 };
+
+	XMVECTOR ground_pos = { 0,-1,5 };
+	XMFLOAT3 ground_scl = { 5,5,50 };
 	XMFLOAT3 ground_rot = { 0,90,0 };
 
-	XMFLOAT3 obj_rot = { 0,90,0 };
-	XMFLOAT3 obj_pos = { 0,0,0 };
+
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 
 	PostEffect* postEffect = nullptr;
 
 	bool JumpFlag = false;
+
+
+	Light* light = nullptr;
+
+	bool change = false;
+
+	unique_ptr <middle> mid = nullptr;
+
+	int patern = 0;
 };
 

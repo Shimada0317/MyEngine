@@ -1,5 +1,13 @@
 #include "Action.h"
 
+Action::Action()
+{
+}
+
+Action::~Action()
+{
+}
+
 Action* Action::GetInstance()
 {
 	static Action instance;
@@ -7,19 +15,21 @@ Action* Action::GetInstance()
 	return &instance;
 }
 
-void Action::PlayerMove3d(XMFLOAT3 &position, float Speed)
+void Action::PlayerMove3d(XMVECTOR &position)
 {
+	XMVECTOR move = { 0.1f,0.1f,0.1f };
+
 	if (Input::GetInstance()->PushKey(DIK_UP)) {
-		position.z += Speed;
+		position.m128_f32[1] += move.m128_f32[1];
 	}
 	else if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-		position.z -= Speed;
+		position.m128_f32[1] -= move.m128_f32[1];
 	}
 	else if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-		position.x += Speed;
+		position.m128_f32[0] += move.m128_f32[0];
 	}
 	else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		position.x -= Speed;
+		position.m128_f32[0] -= move.m128_f32[0];
 	}
 }
 
@@ -37,7 +47,7 @@ void Action::PlayerJump(XMFLOAT3& position,bool& JumpFlag)
 
 }
 
-void Action::PlayerMove2d(XMFLOAT2 position, float Speed)
+void Action::PlayerMove2d(XMFLOAT2 &position, float Speed)
 {
 	if (Input::GetInstance()->TriggerKey(DIK_UP)) {
 		position.y += Speed;
@@ -53,12 +63,27 @@ void Action::PlayerMove2d(XMFLOAT2 position, float Speed)
 	}
 }
 
-void Action::Gunshot(bool alive, bool havegun, int Remainigbullet, bool shot)
+void Action::Gunshot(int Remainigbullet, bool& shot)
 {
-	if (alive != true)return;
-	if (havegun != true)return;
-	if (Remainigbullet < 0)return;
-	shot = true;
+ 	if (Input::GetInstance()->PushClick(0)||Input::GetInstance()->PushKey(DIK_SPACE)) {
+		shot = true;
+	}
+
+}
+
+bool Action::Shot(int bullet, bool& shot)
+{
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+		if (bullet > 0) {
+			shot = true;
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+
+	
 }
 
 

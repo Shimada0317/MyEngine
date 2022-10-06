@@ -1,156 +1,153 @@
-#include "GameScene.h"
-#include<cassert>
-#include <sstream>
-#include <iomanip>
-#include"Action.h"
-#include"SceneManager.h"
-#include"FbxLoader.h"
-#include"FbxObject3d.h"
 
-using namespace DirectX;
+//#include "GameScene.h"
+//#include<cassert>
+//#include <sstream>
+//#include <iomanip>
+//#include"Action.h"
+//#include"SceneManager.h"
+//#include"FbxLoader.h"
+//#include"FbxObject3d.h"
+//
+//
+//using namespace DirectX;
+//
+//GameScene::GameScene(SceneManager* sceneManager_)
+//	:BaseScene(sceneManager_)
+//{
+//
+//}
+//
+//void GameScene::Initialize(DirectXCommon* dxComon)
+//{
+//	
+//
+//	
+//	////ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®èª­ã¿è¾¼ã¿
+//	Sprite::LoadTexture(1, L"Resources/background.png");
+//	
+//	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
+//
+//	//ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
+//
+//	playermodel = ObjModel::CreateFromOBJ("skydome");
+//	sphere = Object3d::Create();
+//	sphere->SetModel(playermodel);
+//
+//
+//	ground = ObjModel::CreateFromOBJ("city");
+//	groundObj = Object3d::Create();
+//
+//	groundObj->SetModel(ground);
+//	
+//
+//	//ãƒ¢ãƒ‡ãƒ«åã‚’æŒ‡å®šã—ã¦ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
+//	//model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
+//
+//	//FbxObject3d::SetDevice(dxComon->GetDev());
+//	//FbxObject3d::SetCamera(camera);
+//	//FbxObject3d::CreateGraphicPipeline();
+//
+//	//Object = new FbxObject3d;
+//	//Object->Initialize();
+//	//Object->SetModel(model);
+//
+//
+//	mid =std::make_unique <middle>();
+//	mid->Initialize();
+//	patern = mid->GetPatern();
+//
+//	light = Light::Create();
+//
+//}
+//
+//void GameScene::SetPosSclRot()
+//{
+//
+//	sphere->SetRotation({ 0,0,0 });
+//	sphere->SetPosition( pos );
+//	sphere->SetScale({ 4.0f,4.0f,4.0f });
+//
+//
+//
+//	groundObj->SetPosition( ground_pos );
+//	groundObj->SetScale({ ground_scl });
+//
+//	title->SetSize({ screen_size });
+//	patern = mid->GetPatern();
+//};
+//
+//void GameScene::AllUpdate()
+//{
+//	sphere->Update();
+//	groundObj->Update();
+//	mid->Update();
+//}
+//
+//void GameScene::Update()
+//{
+//	if (patern == 5) {
+//		BaseScene* scene_ = new ClearScene(sceneManager_);
+//		sceneManager_->SetNextScene(scene_);
+//	}
+//
+//	SetPosSclRot();
+//	AllUpdate();
+//}
+//
+//void GameScene::ObjDraw(DirectXCommon* dxCommon)
+//{
+//
+//	////ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‰å‡¦ç†
+//	Object3d::PreDraw(dxCommon->GetCmdList());
+//	sphere->Draw();
+//	groundObj->Draw();
+//	////human3d->Draw();
+//	////ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå¾Œå‡¦ç†
+//	mid->Draw(dxCommon->GetCmdList());
+//	Object3d::PostDraw();
+//
+//}
+//
+//void GameScene::SpriteDraw(DirectXCommon* dxCommon)
+//{
+//	Sprite::PreDraw(dxCommon->GetCmdList());
+//	//title->Draw();
+//	mid->SpriteDraw();
+//	Sprite::PostDraw();
+//}
+//
+//void GameScene::ImgDraw()
+//{
+//	//mid->ImGuiDraw();
+//}
+//
+//void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
+//{
+//	dxCommon->PreDraw();
+//	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+//	ObjDraw(dxCommon);
+//	SpriteDraw(dxCommon);
+//	//postEffect->PostDrawScene(dxCommon->GetCmdList());
+//
+//
+//	//postEffect->Draw(dxCommon->GetCmdList());
+//	ImgDraw();
+//	//æç”»å¾Œå‡¦ç†
+//	dxCommon->PostDraw();
+//}
+//
+//void GameScene::Draw(DirectXCommon* dxCommon)
+//{
+//	PostEffectDraw(dxCommon);
+//}
+//
+//void GameScene::Finalize()
+//{
+//	delete title;
+//	//delete sphere;
+//	delete dxCommon;
+//	delete light;
+//	delete Object;
+//	delete model;
+//}
 
-GameScene::GameScene(SceneManager* sceneManager_)
-	:BaseScene(sceneManager_)
-{
-
-}
-
-void GameScene::Initialize(DirectXCommon* dxComon)
-{
-	
-	//Sprite::LoadTexture(100, L"Resources/background.png");
-	postEffect = new PostEffect();
-	postEffect->Initialize();
-
-	camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
-	Object3d::SetCamera(camera);
-	
-	////ƒXƒvƒ‰ƒCƒg‚Ì“Ç‚Ýž‚Ý
-	Sprite::LoadTexture(1, L"Resources/background.png");
-	
-	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
-
-	
-	//postEffect->InitializeSprite();
-
-	//ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
-	playermodel = ObjModel::LoadFromObJ("skydome");
-	sphere = Object3d::Create();
-	sphere->SetModel(playermodel);
-
-	ramieru = ObjModel::LoadFromObJ("ramieru");
-	ramieru3d = Object3d::Create();
-	ramieru3d->SetModel(ramieru);
-
-	ground = ObjModel::LoadFromObJ("ground");
-	groundObj = Object3d::Create();
-	groundObj->SetModel(ground);
-	
-	
-
-	//ƒ‚ƒfƒ‹–¼‚ðŽw’è‚µ‚Äƒtƒ@ƒCƒ‹“Ç‚Ýž‚Ý
-	model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
-
-	FbxObject3d::SetDevice(dxComon->GetDev());
-	FbxObject3d::SetCamera(camera);
-	FbxObject3d::CreateGraphicPipeline();
-
-	Object = new FbxObject3d;
-	Object->Initialize();
-	Object->SetModel(model);
-
-}
-
-void GameScene::SetPosSclRot()
-{
-	//ƒvƒŒƒCƒ„[
-	sphere->SetRotation({ 0,0,0 });
-	sphere->SetPosition({ pos });
-	sphere->SetScale({4.0f,4.0f,4.0f});
-
-
-	camera->SetDistance({ cameradistance });
-	camera->SetEye({ cameraEye });
-	camera->SetTarget({ cameraTarget });
-
-	ramieru3d->SetRotation({ ramieru_rot });
-	ramieru3d->SetPosition({ ramieru_pos });
-	ramieru3d->SetScale({ ramieru_scl });
-
-	groundObj->SetPosition({ ground_pos });
-	groundObj->SetScale({ ground_scl });
-
-	Object->SetRotation({ obj_rot });
-	Object->SetPosition({ obj_pos });
-
-	title->SetSize({ screen_size });
-}
-
-void GameScene::Update()
-{
-	//DirectX–ˆƒtƒŒ[ƒ€ˆ— ‚±‚±‚©‚ç
-	
-
-	if (Input::GetInstance()->PushKey(DIK_1)) {
-		Object->PlayAnimation();
-	}
-
-	//Action::GetInstance()->PlayerMove3d(cameraEye, 0.5f);
-	Action::GetInstance()->PlayerMove3d(obj_pos, 0.02f);
-	Action::GetInstance()->PlayerJump(ramieru_pos,JumpFlag);
-
-	SetPosSclRot();
-	camera->Update();
-	ramieru3d->Update();
-	sphere->Update();
-	Object->Update();
-	groundObj->Update();
-	
-
-}
-
-void GameScene::ObjDraw(DirectXCommon* dxCommon)
-{
-	//ƒIƒuƒWƒFƒNƒg‘Oˆ—
-	Object3d::PreDraw();
-	//sphere->Draw();
-	groundObj->Draw();
-	ramieru3d->Draw();
-	//human3d->Draw();
-	//ƒIƒuƒWƒFƒNƒgŒãˆ—
-	Object3d::PostDraw();
-	Object->Draw(dxCommon->GetCmdList());
-}
-
-void GameScene::SpriteDraw(DirectXCommon* dxCommon)
-{
-	Sprite::PreDraw(dxCommon->GetCmdList());
-	title->Draw();
-	Sprite::PostDraw();
-}
-
-
-
-void GameScene::Draw(DirectXCommon* dxCommon)
-{
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
-	//SpriteDraw(dxCommon);
-	ObjDraw(dxCommon);
-	postEffect->PostDrawScene(dxCommon->GetCmdList());
-	//•`‰æ‘Oˆ—
-	dxCommon->PreDraw();
-	postEffect->Draw(dxCommon->GetCmdList());
-	//•`‰æŒãˆ—
-	dxCommon->PostDraw();
-}
-
-void GameScene::Finalize()
-{
-	delete title;
-	delete sphere;
-	delete groundObj;
-	delete ramieru3d;
-	//delete sphere;
-	delete winApp;
-	delete dxCommon;
-}

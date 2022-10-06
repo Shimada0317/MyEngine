@@ -1,8 +1,14 @@
 #include "WinApp.h"
 #include<Windows.h>
+#include"imgui/imgui_impl_win32.h"
+
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT WinApp::WidowProck(HWND hwnd, UINT msg, WPARAM wparm, LPARAM lparam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparm, lparam)) {
+		return 1;
+	}
 	//メッセージで分岐
 	switch (msg)
 	{
@@ -10,7 +16,16 @@ LRESULT WinApp::WidowProck(HWND hwnd, UINT msg, WPARAM wparm, LPARAM lparam)
 		PostQuitMessage(0);//OSに対して、アプリの終了を伝える
 		return 0;
 	}
+
+
 	return DefWindowProc(hwnd, msg, wparm, lparam);//標準の処理を行う
+}
+
+WinApp* WinApp::GetInstance()
+{
+	static WinApp instance;
+
+	return &instance;
 }
 
 void WinApp::Initialize()
