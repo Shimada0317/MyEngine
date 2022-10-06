@@ -3,8 +3,7 @@
 void RightArm::Initialize()
 {
 	RArmModel = ObjModel::CreateFromOBJ("Arm");
-	RArm = Object3d::Create();
-	RArm->SetModel(RArmModel);
+	RArm = Object3d::Create(RArmModel);
 }
 
 void RightArm::SetPRS(const XMVECTOR& bodyPos, Bullet* bull)

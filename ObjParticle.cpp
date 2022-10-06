@@ -20,10 +20,8 @@ void ObjParticle::Initialize()
 	worm = ObjModel::CreateFromOBJ("Worm");
 	for (int i = 0; i < MAX; i++) {
 
-		particle[i] = Object3d::Create();
-		particle[i]->SetModel(model);
-		Worm[i] = Object3d::Create();
-		Worm[i]->SetModel(worm);
+		particle[i] = Object3d::Create(model);
+		Worm[i] = Object3d::Create(worm);
 		InitializeState(i);
 		particle[i]->SetPosition(position[i]);
 		particle[i]->SetScale(scale[i]);

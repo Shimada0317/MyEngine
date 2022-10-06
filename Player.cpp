@@ -10,9 +10,7 @@ void Player::Initalize()
 	Object3d::SetCamera(camera);
 
 	playerModel = ObjModel::CreateFromOBJ("mark");
-	player = Object3d::Create();
-	player->SetModel(playerModel);
-
+	player = Object3d::Create(playerModel);
 
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();

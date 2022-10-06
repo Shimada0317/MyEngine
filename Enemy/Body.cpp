@@ -3,9 +3,7 @@
 void Body::Initialize()
 {
 	bodyModel = ObjModel::CreateFromOBJ("body");
-	body = Object3d::Create();
-	body->SetModel(bodyModel);
-
+	body = Object3d::Create(bodyModel);
 }
 
 void Body::SetPRS(const XMVECTOR& allPos,Bullet* bull)

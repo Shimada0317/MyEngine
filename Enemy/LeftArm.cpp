@@ -3,8 +3,7 @@
 void LeftArm::Initialize()
 {
 	LArmModel = ObjModel::CreateFromOBJ("Arm");
-	LArm = Object3d::Create();
-	LArm->SetModel(LArmModel);
+	LArm = Object3d::Create(LArmModel);
 }
 
 void LeftArm::SetPRS(const XMVECTOR& bodyPos,Bullet* bull)
