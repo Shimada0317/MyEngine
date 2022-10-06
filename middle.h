@@ -26,7 +26,7 @@ public:
 
 	void Update();
 
-	void Draw(ID3D12GraphicsCommandList* cmdList);
+	void Draw(DirectXCommon* dxCommon);
 
 	void SpriteDraw();
 
@@ -45,13 +45,13 @@ public:
 	const int& GetPatern() { return patern; }
 private:
 	
-	unique_ptr <Player> player;
-	unique_ptr <Bullet> bull[9];
+	//unique_ptr <Player> player;
+	//unique_ptr <Bullet> bull[9];
 	unique_ptr <Enemy> enemy[MAXENEMY];
 
 	unique_ptr<Enemy>tst;
 
-	unique_ptr<Robot>rob;
+	//]unique_ptr<Robot>rob;
 	
 	Sprite* bulletHUD[9];
 	Sprite* Reload = nullptr;
@@ -89,7 +89,7 @@ private:
 	Input* input = nullptr;
 	bool moveTime = false;
 
-	bool arive = false;
+	//bool arive = false;
 
 	float mouseX = 0;
 	float mouseY = 0;
@@ -106,7 +106,7 @@ private:
 	bool lost = false;
 	int life[MAXENEMY];
 	//リロード機能
-	int Remaining = 0;
+	//int Remaining = 0;
 	bool ReloadFlag = false;
 	int ReloadTime = 0;
 	int ans = 0;
@@ -137,5 +137,30 @@ private:
 	//待機コマンド
 	bool waitF = false;
 	int waitTimer = 0;
+
+	//DebugSceneのやつを持ってきた
+	std::unique_ptr<Robot>rob[3];
+	std::unique_ptr<Body>bob;
+	std::unique_ptr<Head>head;
+	std::unique_ptr<Object3d> bo = nullptr;
+	std::unique_ptr<Player>player;
+	Bullet* bull[9];
+
+	ObjModel* bomodel = nullptr;
+
+	XMVECTOR position = { 0.0f,0.0f,0.1f };
+	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
+
+	XMVECTOR allpos[3];
+
+	DebugCamera* camera = nullptr;
+
+	//XMVECTOR allpos = { 1.0f,1.0f,1.0f };
+	XMFLOAT3 Eye_pos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 Target_pos = { 0.0f,0.0f,0.0f };
+	bool arive = true;
+
+	int Remaining = 0.0f;
 };
 

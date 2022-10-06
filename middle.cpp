@@ -1,11 +1,27 @@
-//#include "middle.h"
-//#include"imgui/imgui.h"
-//#include<fstream>
+#include "middle.h"
+#include"imgui/imgui.h"
+#include<fstream>
 //
 ////セーブ
 //
-//void middle::Initialize()
-//{
+void middle::Initialize()
+{
+
+	//camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
+	//Object3d::SetCamera(camera);
+	for (int i = 0; i < 9; i++) {
+		bull[i] = new Bullet();
+		bull[i]->Initialize();
+	}
+	for (int i = 0; i < 3; i++) {
+		rob[i] = std::make_unique<Robot>();
+		rob[i]->Initialize();
+		allpos[i] = { 0.0f + i * 1.0f,0.0f,10.0f };
+	}
+	player = std::make_unique<Player>();
+	player->Initalize();
+
+
 //	//プレイヤー(レティクル)の読み込み
 //	player = std::make_unique<Player>();
 //	player->Initalize();
@@ -71,10 +87,14 @@
 //	//LoadEnemyPopData();
 //	//UpdateEnemyPopCommands();
 //	oldpatern = patern;
-//}
+}
 //
-//void middle::SetPSR()
-//{
+void middle::SetPSR()
+{
+	for (int i = 0; i < 3; i++) {
+		rob[i]->SetPosition(allpos[i]);
+	}
+
 //
 //	//HUDのポジションセット
 //	for (int i = 0; i < 9; i++) {
@@ -150,10 +170,22 @@
 //	for (int j = 0; j < 9; j++) {
 //		bull[j]->Update();
 //	}
-//}
+}
 //
-//void middle::Update()
-//{
+void middle::Update()
+{
+
+	SetPSR();
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 3; j++) {
+			rob[j]->Update(bull[i]);
+			//break;
+		}
+		//break;
+	}
+
+	player->Update(bull, Remaining);
+	//camera->Update();
 //
 //	for (int i = 0; i < MAXENEMY; i++) {
 //		if (life[i] > 0) {
@@ -272,10 +304,20 @@
 //	SetPSR();
 //
 //	AllUpdate();
-//}
+}
 //
-//void middle::Draw(ID3D12GraphicsCommandList* cmdList)
-//{
+void middle::Draw(DirectXCommon* dxCommon)
+{
+	for (int j = 0; j < 3; j++) {
+		rob[j]->Draw(dxCommon);
+	}
+	player->ParticleDraw(dxCommon->GetCmdList());
+	Object3d::PreDraw(dxCommon->GetCmdList());
+	for (int i = 0; i < 9; i++) {
+		bull[i]->Draw();
+	}
+	player->ObjDraw();
+	Object3d::PostDraw();
 //	for (int j = 0; j < 9; j++) {
 //		bull[j]->Draw();
 //	}
@@ -319,7 +361,7 @@
 //	slash->Draw();
 //	//bulletHUD[i]->Draw();
 //
-//}
+}
 //
 //void middle::ImGuiDraw()
 //{
@@ -389,10 +431,14 @@
 //	enemy[1]->ImGuiDraw();
 //}
 //
-//void middle::Fainalize()
-//{
-//	delete[] bulletHUD;
-//}
+void middle::Fainalize()
+{
+	for (int j = 0; j < 3; j++) {
+		rob[j]->Finalize();
+	}
+	player->Finalize();
+	//delete[] bulletHUD;
+}
 //
 //void middle::Fire()
 //{

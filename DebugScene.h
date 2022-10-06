@@ -9,6 +9,7 @@
 #include"ObjModel.h"
 #include"ParticleManager.h"
 #include"Player.h"
+#include"middle.h"
 #include<memory>
 
 class DebugScene :
@@ -62,6 +63,8 @@ private:
 	bool arive = true;
 
 	int Remaining = 0.0f;
+
+	std::unique_ptr<middle>mid;
 };
 
 
