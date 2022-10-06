@@ -17,10 +17,19 @@ void DebugCamera::Update()
 	float angleX = 0;
 	float angleY = 0;
 
+	if (Input::GetInstance()->PushKey(DIK_Z)) {
+		angleX += 0.1f;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_Z)) {
+		angleY += 0.1f;
+	}
+
+
 	if (dirty || viewDirty) {
 		// 追加回転分の回転行列を生成
 		XMMATRIX matRotNew = XMMatrixIdentity();
-		matRotNew *= XMMatrixRotationX(-angleX);
+		matRotNew *= XMMatrixRotationX(angleX);
 		matRotNew *= XMMatrixRotationY(-angleY);
 		// 累積の回転行列を合成
 		// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為
@@ -34,13 +43,13 @@ void DebugCamera::Update()
 		XMVECTOR vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
 
 		// ベクトルを回転
-		//vTargetEye = XMVector3Transform(vTargetEye, matRot);
-		//vUp = XMVector3Transform(vUp, matRot);
+		vTargetEye = XMVector3Transform(vTargetEye, matRot);
+		vUp = XMVector3Transform(vUp, matRot);
 
 		// 注視点からずらした位置に視点座標を決定
 		const XMFLOAT3& target = GetTarget();
-		const XMFLOAT3& eye = GetEye();
-		SetEye({ eye.x+target.x + vTargetEye.m128_f32[0], eye.y+target.y + vTargetEye.m128_f32[1], eye.z+target.z + vTargetEye.m128_f32[2] });
+		//const XMFLOAT3& eye = GetEye();
+		SetEye({target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1], target.z + vTargetEye.m128_f32[2] });
 		SetUp({ vUp.m128_f32[0], vUp.m128_f32[1],vUp.m128_f32[2] });
 	}
 
