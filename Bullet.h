@@ -96,4 +96,9 @@ private:
 	bool fire = false;
 	bool move = false;
 	bool Trigger = false;
+
+	//Reload
+	bool ReloadFlag = false;
+	int ReloadTime = 0;
+	int ans = 0;
 };

@@ -118,54 +118,15 @@ void middle::Update()
 	SetPSR();
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 3; j++) {
-			rob[j]->Update(bull[i]);
+			rob[j]->Update(bull[i],patern);
 			//break;
 		}
 		//break;
 	}
 
 	player->Update(bull, Remaining);
-	//camera->Update();
-//
-//	for (int i = 0; i < MAXENEMY; i++) {
-//		if (life[i] > 0) {
-//			for (int j = 0; j < 9; j++) {
-//				if (Collision::Player2Other(bullPos[j], bullScl, enemyPos[i], enemyScl)) {
-//					lost = true;
-//					shot[j] = false;
-//					bullPos[j].m128_f32[2] = -10;
-//					speed[j] = 0;
-//					life[i] -= 1;
-//					enemy[i]->SetLife(life[i]);
-//					stop[i] = true;
-//					if (life[i] <= 0) {
-//						count = true;
-//					}
-//				}
-//				else {
-//					lost = false;
-//					enemy[i]->GetSpeed();
-//				}
-//				if (Collision::HeadShot(bullPos[j], bullScl, enemyPos[i], enemyScl)) {
-//					life[i] -= 3;
-//					lost = true;
-//					shot[j] = false;
-//					bullPos[j].m128_f32[2] = -10;
-//					speed[j] = 0;
-//					enemy[i]->SetLife(life[i]);
-//					stop[i] = true;
-//					if (life[i] <= 0) {
-//						count = true;
-//					}
-//				}
-//
-//				else {
-//					lost = false;
-//					enemy[i]->GetSpeed();
-//				}
-//			}
-//		}
-//	}
+
+
 //	//ìGÇì|ÇµÇΩéûÅAhitÉJÉEÉìÉgÇè„Ç∞ÇÈ
 //	if (count == true) {
 //		hit += 1;
@@ -195,50 +156,9 @@ void middle::Update()
 //	}
 //
 //
-//	if (Remaining < 8 && ReloadFlag == false) {
-//		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-//		Remaining += 1;
-//			/*for (int i = 0; i < 9; i++) {
-//				if (shot[i] == false) {
-//					bullPos[i] = playerPos;
-//					shot[i] = true;
-//					break;
-//				}
-//			}
-//		}*/
-//			for (int i = 0; i < 9; i++) {
-//				if (shot[i] == false) {
-//					bullPos[i].m128_f32[0] = backplayer.m128_f32[0];
-//					bullPos[i].m128_f32[1] = backplayer.m128_f32[1];
-//					bullPos[i].m128_f32[2] = backplayer.m128_f32[2];
-//					shot[i] = true;
-//					fire[i] = true;
-//					break;
-//				}
-//			}
-//		}
-//	}
-//
-//	Fire();
-//
-//	if (Remaining > 0) {
-//		if (Input::GetInstance()->PushKey(DIK_R)) {
-//			ReloadFlag = true;
-//		}
-//	}
-//
-//
-//	if (ReloadFlag == true) {
-//		ReloadTime += 1;
-//		ans = ReloadTime % 10;
-//		if (ans == 0) {
-//			Remaining -= 1;
-//			if (Remaining == 0) {
-//				ReloadFlag = false;
-//				ReloadTime = 0;
-//			}
-//		}
-//	}
+
+
+
 //
 //
 //	SetPSR();
@@ -267,40 +187,40 @@ void middle::Draw(DirectXCommon* dxCommon)
 //	}
 //	player->ObjDraw();
 //	//rob->Draw();
-//}
+}
 //
-//void middle::SpriteDraw()
-//{
-//	for (int i = Remaining; i < 8; i++) {
-//		bulletHUD[i]->Draw();
-//	}
-//
-//	if (Remaining == 8) {
-//		Reload->Draw();
-//	}
-//
-//	if (patern == 0) {
-//		changecount[0]->Draw();
-//	}
-//	else if (patern == 1) {
-//		changecount[1]->Draw();
-//	}
-//	else if (patern == 2) {
-//		changecount[2]->Draw();
-//	}
-//	else if (patern == 3) {
-//		changecount[3]->Draw();
-//	}
-//	else if (patern == 4) {
-//		changecount[4]->Draw();
-//	}
-//
-//	maxcount->Draw();
-//
-//	wave->Draw();
-//	slash->Draw();
-//	//bulletHUD[i]->Draw();
-//
+void middle::SpriteDraw()
+{
+	for (int i = Remaining; i < 8; i++) {
+		bulletHUD[i]->Draw();
+	}
+
+	if (Remaining == 8) {
+		Reload->Draw();
+	}
+
+	if (patern == 0) {
+		changecount[0]->Draw();
+	}
+	else if (patern == 1) {
+		changecount[1]->Draw();
+	}
+	else if (patern == 2) {
+		changecount[2]->Draw();
+	}
+	else if (patern == 3) {
+		changecount[3]->Draw();
+	}
+	else if (patern == 4) {
+		changecount[4]->Draw();
+	}
+
+	maxcount->Draw();
+
+	wave->Draw();
+	slash->Draw();
+	//bulletHUD[i]->Draw();
+
 }
 //
 //void middle::ImGuiDraw()
@@ -380,37 +300,7 @@ void middle::Fainalize()
 	//delete[] bulletHUD;
 }
 //
-//void middle::Fire()
-//{
-//	for (int i = 0; i < 9; i++) {
-//		if (shot[i] == true) {
-//			if (fire[i] == true) {
-//				//í«îˆÇÃéÆÇÃìríÜ
-//				float vx = (backplayer.m128_f32[0] - playerPos.m128_f32[0]);
-//				float vy = (backplayer.m128_f32[1] - playerPos.m128_f32[1]);
-//				float vz = (backplayer.m128_f32[2] - playerPos.m128_f32[2]);
-//				float v2x = pow(vx, 2);
-//				float v2y = pow(vy, 2);
-//				float v2z = pow(vz, 2);
-//				float l = sqrtf(v2x + v2y + v2z);
-//				v3x = (vx / l) * speedm;
-//				v3y = (vy / l) * speedm;
-//				v3z = (vz / l) * speedm;
-//				fire[i] = false;
-//			}
-//			bullPos[i].m128_f32[0] -= v3x;
-//			bullPos[i].m128_f32[1] -= v3y;
-//			bullPos[i].m128_f32[2] -= v3z;
-//			//í«îˆëOÇÃèÛë‘
-//			/*verosity_ = { 0, 0, bullSpeed, 1 };
-//			bullPos[i].m128_f32[2] += verosity_.m128_f32[2];*/
-//		}
-//		if (bullPos[i].m128_f32[2] >= 30 + playerPos.m128_f32[2]) {
-//			bullPos[i].m128_f32[2] = -10;
-//			shot[i] = false;
-//		}
-//	}
-//}
+
 //
 //void middle::LoadEnemyPopData()
 //{

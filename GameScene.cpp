@@ -113,7 +113,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	//title->Draw();
-	//mid->SpriteDraw();
+	mid->SpriteDraw();
 	Sprite::PostDraw();
 }
 
