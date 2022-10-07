@@ -7,6 +7,7 @@
 #include"SceneManager.h"
 #include"FbxLoader.h"
 #include"FbxObject3d.h"
+#include"DebugScene.h"
 
 
 using namespace DirectX;
@@ -85,10 +86,10 @@ void GameScene::AllUpdate()
 
 void GameScene::Update()
 {
-	/*if (patern == 5) {
-		BaseScene* scene_ = new ClearScene(sceneManager_);
+	if (Input::GetInstance()->TriggerKey(DIK_K)) {
+		BaseScene* scene_ = new DebugScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
-	}*/
+	}
 
 	SetPosSclRot();
 	AllUpdate();

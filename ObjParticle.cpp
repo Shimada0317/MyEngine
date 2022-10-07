@@ -21,7 +21,7 @@ void ObjParticle::Initialize()
 	for (int i = 0; i < MAX; i++) {
 
 		particle[i] = Object3d::Create(model);
-		Worm[i] = Object3d::Create(worm);
+		Worm[i] = Object3d::Create(model);
 		InitializeState(i);
 		particle[i]->SetPosition(position[i]);
 		particle[i]->SetScale(scale[i]);
@@ -134,4 +134,5 @@ void ObjParticle::Finalize()
 		particle[i].reset();
 	}
 	delete model;
+	delete worm;
 }
