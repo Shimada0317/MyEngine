@@ -77,13 +77,13 @@ void Player::Effect()
 void Player::Update(Bullet* bull[], int& Remaining)
 {
 
-	if (Remaining < BULL - 1) {
+	if (Remaining < BULL - 1 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			Remaining += 1;
 			oldPos = position;
 			time = 0.0f;
 			particle = true;
-			for(int i=0;i<BULL;i++){
+			for (int i = 0; i < BULL; i++) {
 				if (bull[i]->CheckOk()) {
 					bull[i]->TriggerOn();
 					break;
@@ -112,16 +112,27 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {
-		Remaining = 0;
+		ReloadFlag = true;
 	}
 
-	
+	if (ReloadFlag == true) {
+		ReloadTime += 1;
+		ans = ReloadTime % 10;
+		if (ans == 0) {
+			Remaining -= 1;
+			if (Remaining == 0) {
+				ReloadFlag = false;
+				ReloadTime = 0;
+			}
+		}
+	}
+
 	Action::GetInstance()->PlayerMove3d(position);
 	if (Input::GetInstance()->PushKey(DIK_Z)) {
 		Eye_pos.x += 0.1f;
 	}
 	camera->MoveEyeVector(position);
-	
+
 	const float kMoveLimitX = 4;
 	const float kMoveLimitY = 2;
 

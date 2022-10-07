@@ -106,5 +106,10 @@ private:
 	int fire = 0;
 
 	int Hp = 5;
+
+	//Reload
+	bool ReloadFlag = false;
+	int ReloadTime = 0;
+	int ans = 0;
 };
 
