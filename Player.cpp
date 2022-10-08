@@ -128,9 +128,9 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	}
 
 	Action::GetInstance()->PlayerMove3d(position);
-	if (Input::GetInstance()->PushKey(DIK_Z)) {
-		Eye_pos.x += 0.1f;
-	}
+//	if (Input::GetInstance()->PushKey(DIK_Z)) {
+//		Eye_pos.x += 0.1f;
+//	}
 	camera->MoveEyeVector(position);
 
 	const float kMoveLimitX = 4;
@@ -140,6 +140,14 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	position.m128_f32[0] = min(position.m128_f32[0], +kMoveLimitX);
 	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
+
+	if (Input::GetInstance()->PushKey(DIK_O)) {
+		position.m128_f32[2] += 0.1f;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_Z)) {
+		rotation.y += 0.1f;
+	}
 
 	//Attack();
 
