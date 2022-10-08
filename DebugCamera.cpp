@@ -17,9 +17,9 @@ void DebugCamera::Update()
 	float angleX = 0;
 	float angleY = 0;
 
-	if (Input::GetInstance()->PushKey(DIK_Z)) {
+	/*if (Input::GetInstance()->PushKey(DIK_Z)) {
 		angleX += 0.1f;
-	}
+	}*/
 
 	if (Input::GetInstance()->PushKey(DIK_Z)) {
 		angleY += 0.1f;
@@ -29,8 +29,8 @@ void DebugCamera::Update()
 	if (dirty || viewDirty) {
 		// 追加回転分の回転行列を生成
 		XMMATRIX matRotNew = XMMatrixIdentity();
-		matRotNew *= XMMatrixRotationX(angleX);
-		matRotNew *= XMMatrixRotationY(-angleY);
+		matRotNew *= XMMatrixRotationX(XMConvertToRadians(angleX));
+		matRotNew *= XMMatrixRotationY(XMConvertToRadians(- angleY));
 		// 累積の回転行列を合成
 		// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為
 		// クォータニオンを使用する方が望ましい
