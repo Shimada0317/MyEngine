@@ -113,7 +113,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update();
+	void Update(const XMVECTOR velocity={0,0,0});
 
 	
 
