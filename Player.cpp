@@ -77,21 +77,37 @@ void Player::Effect()
 void Player::Update(Bullet* bull[], int& Remaining)
 {
 
-	if (Remaining < BULL - 1 && ReloadFlag == false) {
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			Remaining += 1;
-			oldPos = position;
-			time = 0.0f;
-			particle = true;
-			for (int i = 0; i < BULL; i++) {
-				if (bull[i]->CheckOk()) {
-					bull[i]->TriggerOn();
-					break;
-				}
-			}
+	//if (Remaining < BULL - 1 && ReloadFlag == false) {
+	//	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+	//		Remaining += 1;
+	//		oldPos = position;
+	//		time = 0.0f;
+	//		particle = true;
+	//		for (int i = 0; i < BULL; i++) {
+	//			if (bull[i]->CheckOk()) {
+	//				bull[i]->TriggerOn();
+	//				break;
+	//			}
+	//		}
 
+	//	}
+	//}
+
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		const float kBulletSpeed = 0.01f;
+		XMVECTOR velocity = { 0, 0, kBulletSpeed };
+		mat = player->GetMatrix();
+		velocity = XMVector3TransformNormal(velocity, mat);
+		for
+			(int i = 0; i < BULL; i++) {
+			if (bull[i]->CheckOk()) {
+				bull[i]->TriggerOn();
+				bull[i]->Test(position, velocity);
+				break;
+			}
 		}
 	}
+
 	for (int i = 0; i < BULL; i++) {
 		bull[i]->ShotBefore(backPlayerPos);
 		//break;
@@ -128,9 +144,9 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	}
 
 	Action::GetInstance()->PlayerMove3d(position);
-//	if (Input::GetInstance()->PushKey(DIK_Z)) {
-//		Eye_pos.x += 0.1f;
-//	}
+	//	if (Input::GetInstance()->PushKey(DIK_Z)) {
+	//		Eye_pos.x += 0.1f;
+	//	}
 	camera->MoveEyeVector(position);
 
 	const float kMoveLimitX = 4;
@@ -145,8 +161,8 @@ void Player::Update(Bullet* bull[], int& Remaining)
 		position.m128_f32[2] += 0.1f;
 	}
 
-	if (Input::GetInstance()->PushKey(DIK_Z)) {
-		rotation.y += 0.1f;
+	if (Input::GetInstance()->TriggerKey(DIK_Z)) {
+		rotation.y += 90.0f;
 	}
 
 	//Attack();
@@ -155,13 +171,15 @@ void Player::Update(Bullet* bull[], int& Remaining)
 		bullet->Update();
 	}*/
 
+	for (int i = 0; i < 9; i++) {
+		bull[i]->Update();
+	}
+
 	//MouthContoroll();
 	Set();
 	camera->Update();
 	player->Update();
-	for (int i = 0; i < BULL; i++) {
-		bull[i]->Update();
-	}
+
 	part->Update(color);
 }
 
@@ -225,7 +243,6 @@ void Player::Attack()
 		const float kBulletSpeed = 0.01f;
 		XMVECTOR velocity = { 0, 0, kBulletSpeed,0 };
 		velocity = XMVector3TransformCoord(velocity, mat);
-
 		/*	newBullet = std::make_unique<Bullet>();
 			newBullet->Initialize();
 			newBullet->Stanby(position,velocity);

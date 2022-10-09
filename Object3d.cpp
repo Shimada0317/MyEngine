@@ -251,7 +251,7 @@ bool Object3d::Initialize()
 	return true;
 }
 
-void Object3d::Update()
+void Object3d::Update(const XMVECTOR velocity)
 {
 	assert(camera);
 
@@ -272,15 +272,15 @@ void Object3d::Update()
 	matWorld *= matRot; // ワールド行列に回転を反映
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
-	if (isBillboard) {
-	const XMMATRIX& matBillboard = camera->GetBillboardMatrix();
+	//if (isBillboard) {
+	//const XMMATRIX& matBillboard = camera->GetBillboardMatrix();
 
-		matWorld = XMMatrixIdentity();
-		matWorld *= matScale; // ワールド行列にスケーリングを反映
-		matWorld *= matRot; // ワールド行列に回転を反映
-		matWorld *= matBillboard;
-		matWorld *= matTrans; // ワールド行列に平行移動を反映
-	}
+	//	matWorld = XMMatrixIdentity();
+	//	matWorld *= matScale; // ワールド行列にスケーリングを反映
+	//	matWorld *= matRot; // ワールド行列に回転を反映
+	//	matWorld *= matBillboard;
+	//	matWorld *= matTrans; // ワールド行列に平行移動を反映
+	//}
 
 	// 親オブジェクトがあれば
 	if (parent != nullptr) {

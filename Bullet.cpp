@@ -92,7 +92,11 @@ void Bullet::debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed, bool& d)
 	}
 }
 
-
+void Bullet::Test(const XMVECTOR& position, const XMVECTOR& velocity)
+{
+	pos = position;
+	velocity_ = velocity;
+}
 
 void Bullet::Set()
 {
@@ -102,7 +106,7 @@ void Bullet::Set()
 	mat = bullet->GetMatrix();
 }
 
-void Bullet::ShotBefore(XMVECTOR startPos)
+void Bullet::ShotBefore(const XMVECTOR& startPos)
 {
 
 	if (Trigger == false) {
@@ -128,7 +132,7 @@ void Bullet::TriggerOn()
 	Trigger = true;
 }
 
-void Bullet::ShotAfter(XMVECTOR baclplayerpos, XMVECTOR playerPos,int& remaining)
+void Bullet::ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerPos,int& remaining)
 {
 	float speedm = 5.1;
 
@@ -174,9 +178,11 @@ void Bullet::Update()
 {
 	//pos.m128_f32[0] += velocity_.m128_f32[0];
 	//pos.m128_f32[1] += velocity_.m128_f32[1];
+	/*pos += velocity_;
+
+	rot.x++;*/
 	pos += velocity_;
 
-	rot.x++;
 	Set();
 	bullet->Update();
 }

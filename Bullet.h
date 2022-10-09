@@ -34,16 +34,17 @@ public:
 
 	void debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed,bool& d);
 
+	void Test(const XMVECTOR& position, const XMVECTOR& velocity);
 
 	void Set();
 
-	void ShotBefore(XMVECTOR startPos);
+	void ShotBefore(const XMVECTOR& startPos);
 
 	bool CheckOk();
 
 	void TriggerOn();
 
-	void ShotAfter(XMVECTOR baclplayerpos, XMVECTOR playerpos,int& remaining);
+	void ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerpos,int& remaining);
 
 	void Hit();
 	
