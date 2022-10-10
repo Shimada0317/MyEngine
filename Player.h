@@ -78,7 +78,7 @@ private:
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
 
-	XMVECTOR position = { 0.0f,0.0f,0.1f };
+	XMVECTOR position = { 0.0f,0.0f,0.0f };
 	XMVECTOR backPlayerPos{ 0.0f,0.0f,0.0f };
 	XMVECTOR oldPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };

@@ -94,7 +94,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	//}
 
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		const float kBulletSpeed = 0.01f;
+		const float kBulletSpeed =1.1f;
 		XMVECTOR velocity = { 0, 0, kBulletSpeed };
 		mat = player->GetMatrix();
 		velocity = XMVector3TransformNormal(velocity, mat);
@@ -122,10 +122,10 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	else {
 		time = 4.0f;
 	}
-	for (int i = 0; i < BULL; i++) {
-		bull[i]->ShotAfter(backPlayerPos, position, Remaining);
-		//break;
-	}
+	//for (int i = 0; i < BULL; i++) {
+	//	bull[i]->ShotAfter(backPlayerPos, position, Remaining);
+	//	//break;
+	//}
 
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {
 		ReloadFlag = true;
