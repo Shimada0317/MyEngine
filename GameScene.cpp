@@ -86,10 +86,11 @@ void GameScene::AllUpdate()
 
 void GameScene::Update()
 {
-	if (Input::GetInstance()->TriggerKey(DIK_K)) {
-		BaseScene* scene_ = new DebugScene(sceneManager_);
-		sceneManager_->SetNextScene(scene_);
-	}
+	//if (Input::GetInstance()->TriggerKey(DIK_K)) {
+	//	BaseScene* scene_ = new DebugScene(sceneManager_);
+	//	sceneManager_->SetNextScene(scene_);
+	//}
+
 
 	SetPosSclRot();
 	AllUpdate();

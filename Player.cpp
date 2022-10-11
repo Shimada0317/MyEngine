@@ -58,11 +58,19 @@ void Player::Set()
 		}
 		break;
 	}
-
+	if (patern == true) {
+		position = player->GetPosition();
+	}
 	player->SetPosition({ position });
 	player->SetRotation({ rotation });
 	player->SetScale({ scale });
-
+	Target_pos = camera->GetTarget();
+	if (ver == 1) {
+		Target_pos.x += 0.11f;
+	}
+	else if (ver == 2) {
+		Target_pos.z -= position.m128_f32[2] + 100;
+	}
 	camera->SetTarget({ Target_pos.x,Target_pos.y,position.m128_f32[2] });
 	camera->SetEye({ Eye_pos });
 	camera->SetDistance(5);
@@ -92,22 +100,25 @@ void Player::Update(Bullet* bull[], int& Remaining)
 
 	//	}
 	//}
-
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		const float kBulletSpeed =1.1f;
-		XMVECTOR velocity = { 0, 0, kBulletSpeed };
-		mat = player->GetMatrix();
-		velocity = XMVector3TransformNormal(velocity, mat);
-		for
-			(int i = 0; i < BULL; i++) {
-			if (bull[i]->CheckOk()) {
-				bull[i]->TriggerOn();
-				bull[i]->Test(position, velocity);
-				break;
+	if (Remaining < BULL - 1 && ReloadFlag == false) {
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			const float kBulletSpeed = 1.1f;
+			XMVECTOR velocity = { 0, 0, kBulletSpeed };
+			mat = player->GetMatrix();
+			velocity = XMVector3TransformNormal(velocity, mat);
+			Remaining += 1;
+			oldPos = position;
+			time = 0.0f;
+			particle = true;
+			for (int i = 0; i < BULL; i++) {
+				if (bull[i]->CheckOk()) {
+					bull[i]->TriggerOn();
+					bull[i]->Test(position, velocity);
+					break;
+				}
 			}
 		}
 	}
-
 	for (int i = 0; i < BULL; i++) {
 		bull[i]->ShotBefore(backPlayerPos);
 		//break;
@@ -126,6 +137,10 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	//	bull[i]->ShotAfter(backPlayerPos, position, Remaining);
 	//	//break;
 	//}
+
+	if (Input::GetInstance()->PushKey(DIK_L)) {
+		position.m128_f32[2] += 0.1f;
+	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {
 		ReloadFlag = true;
@@ -147,7 +162,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	//	if (Input::GetInstance()->PushKey(DIK_Z)) {
 	//		Eye_pos.x += 0.1f;
 	//	}
-	camera->MoveEyeVector(position);
+	//camera->MoveEyeVector(position);
 
 	const float kMoveLimitX = 4;
 	const float kMoveLimitY = 2;
@@ -157,12 +172,58 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
 
-	if (Input::GetInstance()->PushKey(DIK_O)) {
-		position.m128_f32[2] += 0.1f;
+	if (patern == false) {
+		if (Input::GetInstance()->TriggerKey(DIK_O)) {
+			patern = true;
+		}
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_Z)) {
-		rotation.y += 90.0f;
+	else {
+		if (Input::GetInstance()->TriggerKey(DIK_O)) {
+			patern = false;
+		}
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_Z)) {
+		rotation.y += 0.1f;
+	}
+
+	if (patern == true) {
+		const float kBulletSpeed = 1.1f;
+		vel = { 0, 0, kBulletSpeed };
+		mat = player->GetMatrix();
+		vel = XMVector3TransformNormal(vel, mat);
+	}
+
+	if (ver == 0) {
+		if (position.m128_f32[2] >= 50) {
+			rotation.y += 0.1f;
+			if (rotation.y >= 90) {
+				rotation.y = 90;
+				chan = true;
+				ver = 1;
+			}
+		}
+	}
+	else if (ver == 1) {
+		if (position.m128_f32[2] >= 100) {
+			rotation.y = 180;
+			chan = true;
+			ver = 2;
+		}
+	}
+	else if (ver == 2) {
+		if (position.m128_f32[2] >= 150) {
+			rotation.y = 270;
+			ver = 3;
+		}
+	}
+	else if (ver == 3) {
+		if (position.m128_f32[2] >= 200) {
+			rotation.y = 0;
+			position.m128_f32[2] = 0.0f;
+			//ver = 0;
+		}
 	}
 
 	//Attack();
@@ -174,12 +235,15 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Update();
 	}
-
 	//MouthContoroll();
 	Set();
+	if (chan == true) {
+		camera->Patern(ver,chan);
+		chan = false;
+	}
+	camera->SetVel(vel);
 	camera->Update();
-	player->Update();
-
+	player->Update(vel);
 	part->Update(color);
 }
 

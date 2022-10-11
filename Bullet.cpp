@@ -182,6 +182,11 @@ void Bullet::Update()
 
 	rot.x++;*/
 	pos += velocity_;
+	ShotT += 0.1f;
+	if (ShotT >= 30) {
+		Trigger = false;
+		ShotT = 0;
+	}
 
 	Set();
 	bullet->Update();

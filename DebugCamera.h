@@ -18,6 +18,10 @@ public:
 	/// <param name="input">“ü—Í</param>
 	DebugCamera(int window_width, int window_height);
 
+	void Patern(const int patern,const bool& chan );
+
+	void SetVel(const XMVECTOR vel);
+
 	// XV
 	void Update() override;
 
@@ -34,6 +38,11 @@ private:
 	float scaleX = 1.0f;
 	float scaleY = 1.0f;
 	// ‰ñ“]s—ñ
+	float angX = 0;
+	float angY = 0;
+
 	XMMATRIX matRot = DirectX::XMMatrixIdentity();
+
+	XMVECTOR velo;
 };
 

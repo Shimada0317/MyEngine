@@ -111,5 +111,13 @@ private:
 	bool ReloadFlag = false;
 	int ReloadTime = 0;
 	int ans = 0;
+
+
+	XMVECTOR vel;
+
+	bool patern = false;
+	int ver = 0;
+
+	bool chan = false;
 };
 
