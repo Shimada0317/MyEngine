@@ -100,6 +100,6 @@ private:
 
 	//Reload
 	bool ReloadFlag = false;
-	int ReloadTime = 0;
+	float ShotT = 0;
 	int ans = 0;
 };

@@ -16,6 +16,7 @@ Camera::Camera(int window_width, int window_height)
 	matViewProjection = matView * matProjection;
 }
 
+
 void Camera::Update()
 {
 	if (viewDirty || projectionDirty) {

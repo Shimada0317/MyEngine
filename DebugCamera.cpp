@@ -11,18 +11,36 @@ DebugCamera::DebugCamera(int window_width, int window_height)
 	scaleY = 1.0f / (float)window_height;
 }
 
+void DebugCamera::Patern(const int patern,const bool& chan)
+{
+	if(patern==1){
+		angY -= 0.1f;
+		if (angY <= -90) {
+			angY = -90;
+		}
+	}
+	
+}
+
+void DebugCamera::SetVel(const XMVECTOR vel)
+{
+	velo = vel;
+}
+
 void DebugCamera::Update()
 {
 	bool dirty = false;
 	float angleX = 0;
 	float angleY = 0;
 
+	angleY = angY;
+	angY = 0;
 	/*if (Input::GetInstance()->PushKey(DIK_Z)) {
 		angleX += 0.1f;
 	}*/
 
 	if (Input::GetInstance()->PushKey(DIK_Z)) {
-		angleY += 0.1f;
+		angleY -= 0.1f;
 	}
 
 
@@ -42,12 +60,17 @@ void DebugCamera::Update()
 		XMVECTOR vTargetEye = { 0.0f, 0.0f, -distance, 1.0f };
 		XMVECTOR vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
 
+
 		// ベクトルを回転
 		vTargetEye = XMVector3Transform(vTargetEye, matRot);
 		vUp = XMVector3Transform(vUp, matRot);
 
 		// 注視点からずらした位置に視点座標を決定
-		const XMFLOAT3& target = GetTarget();
+		XMFLOAT3 target = GetTarget();
+
+		target.x += velo.m128_f32[0];
+		target.y += velo.m128_f32[1];
+		target.z += velo.m128_f32[2];
 		//const XMFLOAT3& eye = GetEye();
 		SetEye({target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1], target.z + vTargetEye.m128_f32[2] });
 		SetUp({ vUp.m128_f32[0], vUp.m128_f32[1],vUp.m128_f32[2] });
