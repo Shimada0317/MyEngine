@@ -11,6 +11,7 @@
 #include<vector>
 #include"Bullet.h"
 #include"ParticleManager.h"
+#include"RailCamera.h"
 
 #include<memory>
 #include<list>
@@ -77,6 +78,7 @@ private:
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
 	DebugCamera* camera = nullptr;
+	RailCamera* cam;
 
 	XMVECTOR position = { 0.0f,0.0f,0.0f };
 	XMVECTOR backPlayerPos{ 0.0f,0.0f,0.0f };

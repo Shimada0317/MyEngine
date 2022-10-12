@@ -2,54 +2,86 @@
 
 using namespace DirectX;
 
-RailCamera::RailCamera(int window_width, int window_height)
-{
-	aspectRatio = (float)window_width / window_height;
-
-	//ビュー行列の計算
-	UpdateViewMatrix();
-
-	// 射影行列の計算
-	UpdateProjectionMatrix();
-
-	// ビュープロジェクションの合成
-	matViewProjection = matView * matProjection;
-}
 
 RailCamera::~RailCamera()
 {
 }
 
-void RailCamera::Initialize()
+void RailCamera::Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot)
 {
-	// ビュー行列更新
-	UpdateViewMatrix();
-	// ビュー行列更新
-	UpdateProjectionMatrix();
-	// ビュープロジェクションの合成
-	matViewProjection = matView * matProjection;
+	target = { 0.0f,0.0f,-1.0f };
+	eye = { 0,1,0 };
+
+	debugModel = ObjModel::CreateFromOBJ("Gear");
+	debug = Object3d::Create(debugModel);
+
+
+	position = Pos;
+	rotation = Rot;
+	matRot = XMMatrixIdentity();
+	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
+	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
+	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
+	matTrans = XMMatrixTranslation(position.m128_f32[0], position.m128_f32[1], position.m128_f32[2]);
+	matWorld = XMMatrixIdentity();
+	matWorld *= matRot;
+	matWorld *= matTrans;
+
+	//ビュープロジェクションの初期化
+	matViewProjection = XMMatrixIdentity();
 }
 
-void RailCamera::Update()
-{
 
-	target.z += 0.1f;
-	// ビュー行列更新
+
+void RailCamera::Update(const XMVECTOR& vel , const XMFLOAT3& rot )
+{
+	position += vel;
+	rotation.x += rot.x;
+	rotation.y += rot.y;
+	rotation.z += rot.z;
+	matRot = XMMatrixIdentity();
+	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
+	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
+	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
+	matTrans = XMMatrixTranslation(position.m128_f32[0], position.m128_f32[1], position.m128_f32[2]);
+	matWorld = XMMatrixIdentity();
+	matWorld *= matRot;
+	matWorld *= matTrans;
+
 	UpdateViewMatrix();
-	// ビュー行列更新
-	UpdateProjectionMatrix();
-	// ビュープロジェクションの合成
+
 	matViewProjection = matView * matProjection;
+
+	eyePosition = XMVector3TransformNormal(eyePosition, matWorld);
+	//ワールド前方ベクトル
+	XMVECTOR forward = { 0, 0, 1 };
+	//レールカメラの回転を反映
+	forward = XMVector3TransformNormal(forward, matWorld);
+		//視点から前方に適当な距離進んだ位置が注視点
+	forward = eyePosition + forward;
+	//ワールド上方ベクトル
+	XMVECTOR up = { 0,1,0 };
+	//レールカメラの回転を反映(レールカメラの上方ベクトル)
+	up = XMVector3TransformNormal(up, matRot);
+	//ビュープロジェクションを更新
+	matViewProjection *= matWorld;
+	debug->SetPosition(position);
+	debug->Update();
+}
+
+void RailCamera::Draw()
+{
+	debug->Draw();
 }
 
 void RailCamera::UpdateViewMatrix()
 {
 	// 視点座標
-	XMVECTOR eyePosition = XMLoadFloat3(&eye);
+	eyePosition = XMLoadFloat3(&eye);
 	// 注視点座標
-	XMVECTOR targetPosition = XMLoadFloat3(&target);
+	targetPosition = XMLoadFloat3(&target);
 	// （仮の）上方向
-	XMVECTOR upVector = XMLoadFloat3(&up);
+	upVector = XMLoadFloat3(&up);
 
 	// カメラZ軸（視線方向）
 	XMVECTOR cameraAxisZ = XMVectorSubtract(targetPosition, eyePosition);
@@ -96,6 +128,7 @@ void RailCamera::UpdateViewMatrix()
 	XMVECTOR translation = XMVectorSet(tX.m128_f32[0], tY.m128_f32[1], tZ.m128_f32[2], 1.0f);
 	// ビュー行列に平行移動成分を設定
 	matView.r[3] = translation;
+
 }
 
 void RailCamera::UpdateProjectionMatrix()
@@ -107,3 +140,5 @@ void RailCamera::UpdateProjectionMatrix()
 		0.1f, 1000.0f
 	);
 }
+
+

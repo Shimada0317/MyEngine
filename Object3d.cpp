@@ -192,6 +192,12 @@ void Object3d::CreateGraphicsPipeline()
 	}
 }
 
+Object3d::~Object3d()
+{
+	//delete model;
+	//delete parent;
+}
+
 
 void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
 {
@@ -287,6 +293,12 @@ void Object3d::Update(const XMVECTOR velocity)
 		// 親オブジェクトのワールド行列を掛ける
 		matWorld *= parent->matWorld;
 	}
+
+	//if (cameraParent != nullptr) {
+	//	XMMATRIX par = cameraP->GetWorld();
+	//	matWorld *= par;
+
+	//}
 
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
 	const XMFLOAT3& cameraPos = camera->GetEye();

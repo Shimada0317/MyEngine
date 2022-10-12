@@ -35,9 +35,6 @@ void DebugCamera::Update()
 
 	angleY = angY;
 	angY = 0;
-	/*if (Input::GetInstance()->PushKey(DIK_Z)) {
-		angleX += 0.1f;
-	}*/
 
 	if (Input::GetInstance()->PushKey(DIK_Z)) {
 		angleY -= 0.1f;
@@ -68,9 +65,9 @@ void DebugCamera::Update()
 		// 注視点からずらした位置に視点座標を決定
 		XMFLOAT3 target = GetTarget();
 
-		target.x += velo.m128_f32[0];
-		target.y += velo.m128_f32[1];
-		target.z += velo.m128_f32[2];
+	//	target.x += velo.m128_f32[0];
+	//	target.y += velo.m128_f32[1];
+	//	target.z += velo.m128_f32[2];
 		//const XMFLOAT3& eye = GetEye();
 		SetEye({target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1], target.z + vTargetEye.m128_f32[2] });
 		SetUp({ vUp.m128_f32[0], vUp.m128_f32[1],vUp.m128_f32[2] });
