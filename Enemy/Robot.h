@@ -24,7 +24,7 @@ public:
 
 	void AllUpdate(Bullet* bull);
 
-	void Update(Bullet* bull,int& count);
+	void Update(Bullet* bull,bool& arive);
 
 	void Draw(DirectXCommon* dxCommon);
 

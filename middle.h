@@ -101,7 +101,6 @@ private:
 	int next = 0;
 	bool retime[9];
 	bool reshot = false;
-	bool spown[MAXENEMY];
 
 	bool lost = false;
 	int life[MAXENEMY];
@@ -162,5 +161,9 @@ private:
 	bool arive = true;
 
 	int Remaining = 0;
+
+	bool all[3];
+	bool go = false;
+	bool move = false;
 };
 

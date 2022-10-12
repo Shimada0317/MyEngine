@@ -9,11 +9,11 @@ RailCamera::~RailCamera()
 
 void RailCamera::Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot)
 {
-	target = { 0.0f,0.0f,-1.0f };
+	//target = { 0.0f,0.0f,-1.0f };
 	eye = { 0,1,0 };
 
-	debugModel = ObjModel::CreateFromOBJ("Gear");
-	debug = Object3d::Create(debugModel);
+	//debugModel = ObjModel::CreateFromOBJ("Gear");
+	//debug = Object3d::Create(debugModel);
 
 
 	position = Pos;
@@ -33,7 +33,7 @@ void RailCamera::Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot)
 
 
 
-void RailCamera::Update(const XMVECTOR& vel , const XMFLOAT3& rot )
+void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* NormalCam)
 {
 	position += vel;
 	rotation.x += rot.x;
@@ -50,28 +50,37 @@ void RailCamera::Update(const XMVECTOR& vel , const XMFLOAT3& rot )
 
 	UpdateViewMatrix();
 
+	UpdateProjectionMatrix();
+
 	matViewProjection = matView * matProjection;
 
-	eyePosition = XMVector3TransformNormal(eyePosition, matWorld);
+	XMFLOAT3 target = {0.0f,0.0f,0.0f};
+	//eye = XMVector3TransformNormal(eyePosition, matWorld);
 	//ワールド前方ベクトル
 	XMVECTOR forward = { 0, 0, 1 };
 	//レールカメラの回転を反映
 	forward = XMVector3TransformNormal(forward, matWorld);
-		//視点から前方に適当な距離進んだ位置が注視点
-	forward = eyePosition + forward;
+	//視点から前方に適当な距離進んだ位置が注視点
+	target.x = eye.x + forward.m128_f32[0];
+	target.y = eye.y + forward.m128_f32[1];
+	target.z = eye.z + forward.m128_f32[2];
 	//ワールド上方ベクトル
 	XMVECTOR up = { 0,1,0 };
 	//レールカメラの回転を反映(レールカメラの上方ベクトル)
-	up = XMVector3TransformNormal(up, matRot);
+	up = XMVector3TransformNormal(up, matWorld);
+	XMFLOAT3 upp = { up.m128_f32[0],up.m128_f32[1],up.m128_f32[2] };
+
 	//ビュープロジェクションを更新
-	matViewProjection *= matWorld;
-	debug->SetPosition(position);
-	debug->Update();
+	NormalCam->SetTarget(target);
+	NormalCam->SetUp(upp);
+	NormalCam->SetWorld(matWorld);
+	//debug->SetPosition(position);
+	//debug->Update();
 }
 
 void RailCamera::Draw()
 {
-	debug->Draw();
+	//debug->Draw();
 }
 
 void RailCamera::UpdateViewMatrix()

@@ -34,9 +34,7 @@ public:
 
 	void Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot);
 
-	void UpdateWorld();
-
-	void Update(const XMVECTOR& vel={0.0f,0.0f,0.0f},const XMFLOAT3& rot={0.0f,0.0f,0.0f});
+	void Update(const XMVECTOR& vel,const XMFLOAT3& rot,Camera* NormalCam);
 
 	void Draw();
 
@@ -47,8 +45,8 @@ public:
 private:
 	Camera* camera = nullptr;
 
-	std::unique_ptr<Object3d> debug;
-	ObjModel* debugModel;
+	//std::unique_ptr<Object3d> debug;
+	//ObjModel* debugModel;
 
 	XMMATRIX world;
 
@@ -83,4 +81,3 @@ private:
 	XMVECTOR upVector;
 
 };
-

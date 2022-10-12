@@ -17,6 +17,7 @@ void middle::Initialize()
 		rob[i] = std::make_unique<Robot>();
 		rob[i]->Initialize();
 		allpos[i] = { 0.0f + i * 1.0f,0.0f,10.0f };
+		all[i] = true;
 	}
 	player = std::make_unique<Player>();
 	player->Initalize();
@@ -118,52 +119,67 @@ void middle::Update()
 	SetPSR();
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 3; j++) {
-			rob[j]->Update(bull[i],patern);
+			rob[j]->Update(bull[i], all[j]);
 			//break;
 		}
 		//break;
 	}
+	if (move == false) {
+		if (all[0] == false && all[1] == false && all[2] == false) {
+			go = true;
+			move = true;
+		}
+	}
+	if (go == true) {
+		patern += 1;
+		if (move == false) {
+			for (int i = 0; i < 3; i++) {
+				all[i] = true;
+			}
+		}
+		go = false;
+	}
 
-	player->Update(bull, Remaining);
-
-
-//	//敵を倒した時、hitカウントを上げる
-//	if (count == true) {
-//		hit += 1;
-//		count = false;
-//	}
-//
-//	//hitカウントがMAXENEMYになった時、ウェーブを進める
-//	if (hit >= MAXENEMY) {
-//		patern += 1;
-//		cammove = 0.1f;
-//		hit = 0;
-//		moveTime = true;
-//	}
-//	//waveが進むごとにカメラも奥に進む
-//	if (patern != 0) {
-//		playerPos.m128_f32[2] += cammove;
-//		life[1] -= 3;
-//		life[0] -= 3;
-//		if (playerPos.m128_f32[2] >= 10 * patern && patern > oldpatern) {
-//			for (int i = 0; i < MAXENEMY; i++) {
-//				spown[i] = true;
-//			}
-//			moveTime = false;
-//			cammove = 0;
-//			oldpatern = patern;
-//		}
-//	}
-//
-//
+	player->Update(bull, Remaining,move);
 
 
+	//	//敵を倒した時、hitカウントを上げる
+	//	if (count == true) {
+	//		hit += 1;
+	//		count = false;
+	//	}
+	//
+	//	//hitカウントがMAXENEMYになった時、ウェーブを進める
+	//	if (hit >= MAXENEMY) {
+	//		patern += 1;
+	//		cammove = 0.1f;
+	//		hit = 0;
+	//		moveTime = true;
+	//	}
+	//	//waveが進むごとにカメラも奥に進む
+	//	if (patern != 0) {
+	//		playerPos.m128_f32[2] += cammove;
+	//		life[1] -= 3;
+	//		life[0] -= 3;
+	//		if (playerPos.m128_f32[2] >= 10 * patern && patern > oldpatern) {
+	//			for (int i = 0; i < MAXENEMY; i++) {
+	//				spown[i] = true;
+	//			}
+	//			moveTime = false;
+	//			cammove = 0;
+	//			oldpatern = patern;
+	//		}
+	//	}
+	//
+	//
 
-//
-//
-//	SetPSR();
-//
-//	AllUpdate();
+
+
+	//
+	//
+	//	SetPSR();
+	//
+	//	AllUpdate();
 }
 //
 void middle::Draw(DirectXCommon* dxCommon)
@@ -178,15 +194,15 @@ void middle::Draw(DirectXCommon* dxCommon)
 	}
 	player->ObjDraw();
 	Object3d::PostDraw();
-//	for (int j = 0; j < 9; j++) {
-//		bull[j]->Draw();
-//	}
-//	for (int i = 0; i < MAXENEMY; i++) {
-//		enemy[i]->Draw();
-//
-//	}
-//	player->ObjDraw();
-//	//rob->Draw();
+	//	for (int j = 0; j < 9; j++) {
+	//		bull[j]->Draw();
+	//	}
+	//	for (int i = 0; i < MAXENEMY; i++) {
+	//		enemy[i]->Draw();
+	//
+	//	}
+	//	player->ObjDraw();
+	//	//rob->Draw();
 }
 //
 void middle::SpriteDraw()

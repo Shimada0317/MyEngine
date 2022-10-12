@@ -40,7 +40,7 @@ void Robot::AllUpdate(Bullet* bull)
 	}
 }
 
-void Robot::Update(Bullet* bull,int& count)
+void Robot::Update(Bullet* bull,bool& all)
 {
 	//Action::GetInstance()->PlayerMove3d(allPos);
 
@@ -80,9 +80,10 @@ void Robot::Update(Bullet* bull,int& count)
 	if (Hp <= 0) {
 		for (int i = 0; i < 4; i++) {
 			arive[i] = false;
+			all = false;
 		}
-		count += 1;
 	}
+
 	
 	SetPRS(bull);
 	AllUpdate(bull);
