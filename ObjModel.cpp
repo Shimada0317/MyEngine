@@ -42,6 +42,7 @@ ObjModel::~ObjModel()
 	for (auto m : materials) {
 		delete m.second;
 	}
+
 	materials.clear();
 }
 

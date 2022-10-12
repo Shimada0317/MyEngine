@@ -1,6 +1,11 @@
 #include "ObjParticle.h"
 #include<time.h>
 
+ObjParticle::~ObjParticle()
+{
+
+}
+
 void ObjParticle::InitializeState(int i)
 {
 	//for (int i = 0; i < MAX; i++) {

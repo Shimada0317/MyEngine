@@ -18,6 +18,8 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 	using XMVECTOR = DirectX::XMVECTOR;
 public:
+	~ObjParticle();
+
 	void InitializeState(int i);
 
 	void Initialize();

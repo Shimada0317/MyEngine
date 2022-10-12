@@ -109,6 +109,9 @@ private: // 静的メンバ変数
 	static LightGroup* lightGroup;
 
 public: // メンバ関数
+	
+	~Object3d();
+	
 	bool Initialize();
 	/// <summary>
 	/// 毎フレーム処理
@@ -185,6 +188,9 @@ private: // メンバ変数
 	XMMATRIX matWorld;
 	// 親オブジェクト
 	Object3d* parent = nullptr;
+	//カメラ親オブジェクト
+//	Camera* cameraParent = nullptr;
+//	RailCamera* cameraP = nullptr;
 	// モデル
 	ObjModel* model = nullptr;
 	// ビルボード

@@ -25,6 +25,8 @@ void Player::Initalize()
 	backPlayerPos.m128_f32[1] = position.m128_f32[1] / 32;
 	backPlayerPos.m128_f32[2] = position.m128_f32[2] - 5;
 
+	cam = new RailCamera();
+	cam->Initialize(position,rotation);
 
 };
 
@@ -71,6 +73,10 @@ void Player::Set()
 	else if (ver == 2) {
 		Target_pos.z -= position.m128_f32[2] + 100;
 	}
+
+	Target_pos=cam->GetTarget();
+	Eye_pos = cam->Getye();
+
 	camera->SetTarget({ Target_pos.x,Target_pos.y,position.m128_f32[2] });
 	camera->SetEye({ Eye_pos });
 	camera->SetDistance(5);
@@ -84,7 +90,8 @@ void Player::Effect()
 
 void Player::Update(Bullet* bull[], int& Remaining)
 {
-
+	XMVECTOR veloc = { 0.0f,0.0f,0.1f };
+	cam->Update(veloc,rotation);
 	//if (Remaining < BULL - 1 && ReloadFlag == false) {
 	//	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 	//		Remaining += 1;
@@ -101,8 +108,8 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	//	}
 	//}
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
-		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-			const float kBulletSpeed = 1.1f;
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			const float kBulletSpeed = 20.0f;
 			XMVECTOR velocity = { 0, 0, kBulletSpeed };
 			mat = player->GetMatrix();
 			velocity = XMVector3TransformNormal(velocity, mat);
@@ -195,6 +202,11 @@ void Player::Update(Bullet* bull[], int& Remaining)
 		vel = XMVector3TransformNormal(vel, mat);
 	}
 
+	/*const float kBulletSpeed = 1.1f;
+	vel = { 0, 0, kBulletSpeed };
+	mat = player->GetMatrix();
+	vel = XMVector3TransformNormal(vel, mat);*/
+
 	if (ver == 0) {
 		if (position.m128_f32[2] >= 50) {
 			rotation.y += 0.1f;
@@ -241,7 +253,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 		camera->Patern(ver,chan);
 		chan = false;
 	}
-	camera->SetVel(vel);
+//	camera->SetVel(vel);
 	camera->Update();
 	player->Update(vel);
 	part->Update(color);
@@ -269,7 +281,7 @@ void Player::ObjDraw()
 	//for (int i = 0; i < BULL; i++) {
 
 	//}
-
+	cam->Draw();
 	player->Draw();
 }
 

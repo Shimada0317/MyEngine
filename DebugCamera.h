@@ -2,6 +2,7 @@
 #include "Camera.h"
 #include "Input.h"
 
+
 /// <summary>
 /// デバッグ用カメラ
 /// </summary>
@@ -24,6 +25,8 @@ public:
 
 	// 更新
 	void Update() override;
+
+	void Draw();
 
 	void SetDistance(float distance) {
 		this->distance = distance; viewDirty = true;
