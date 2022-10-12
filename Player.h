@@ -28,7 +28,7 @@ public:
 
 	void Effect();
 
-	void Update(Bullet* bull[], int& Remaining);
+	void Update(Bullet* bull[], int& Remaining,bool& move);
 
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
 
@@ -77,7 +77,7 @@ private:
 
 	Input* input = nullptr;
 	DebugText* debugtext = nullptr;
-	DebugCamera* camera = nullptr;
+	Camera* camera = nullptr;
 	RailCamera* cam;
 
 	XMVECTOR position = { 0.0f,0.0f,0.0f };
@@ -121,5 +121,7 @@ private:
 	int ver = 0;
 
 	bool chan = false;
+
+	float kBulletSpeed=0;
 };
 

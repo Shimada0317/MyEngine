@@ -23,6 +23,8 @@ public:
 
 	void SetVel(const XMVECTOR vel);
 
+	void Angle(const XMFLOAT3 ang);
+
 	// 更新
 	void Update() override;
 
@@ -34,7 +36,7 @@ public:
 
 private:
 	// 入力クラスのポインタ
-	Input* input;
+
 	// カメラ注視点までの距離
 	float distance = 20;
 	// スケーリング

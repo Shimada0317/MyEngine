@@ -254,6 +254,7 @@ bool Object3d::Initialize()
 		nullptr,
 		IID_PPV_ARGS(&constBuffB0));
 
+
 	return true;
 }
 
@@ -263,7 +264,7 @@ void Object3d::Update(const XMVECTOR velocity)
 
 	HRESULT result;
 
-	position += velocity;
+	//position += velocity;
 	// スケール、回転、平行移動行列の計算
 	matScale = XMMatrixScaling(scale.x, scale.y, scale.z);
 	matRot = XMMatrixIdentity();
@@ -294,14 +295,13 @@ void Object3d::Update(const XMVECTOR velocity)
 		matWorld *= parent->matWorld;
 	}
 
-	//if (cameraParent != nullptr) {
-	//	XMMATRIX par = cameraP->GetWorld();
-	//	matWorld *= par;
-
-	//}
+	if (cameraParent != nullptr) {
+		XMMATRIX par = cameraParent->GetWorld();
+		matWorld *= par;
+	}
 
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
-	const XMFLOAT3& cameraPos = camera->GetEye();
+	XMFLOAT3 cameraPos = camera->GetEye();
 
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;

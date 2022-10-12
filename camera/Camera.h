@@ -115,6 +115,14 @@ public: // メンバ関数
 		return up;
 	}
 
+	const XMMATRIX& GetWorld() {
+		return matWorld;
+	}
+
+	void SetWorld(const XMMATRIX& matworld) {
+		this->matWorld = matworld;
+	}
+
 	/// <summary>
 	/// 上方向ベクトルの設定
 	/// </summary>
@@ -147,6 +155,9 @@ protected: // メンバ変数
 	XMMATRIX matProjection = DirectX::XMMatrixIdentity();
 	// ビュー射影行列
 	XMMATRIX matViewProjection = DirectX::XMMatrixIdentity();
+
+	//ワールド
+	XMMATRIX matWorld = DirectX::XMMatrixIdentity();
 	// ビュー行列ダーティフラグ
 	bool viewDirty = false;
 	// 射影行列ダーティフラグ

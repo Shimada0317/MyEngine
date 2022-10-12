@@ -8,7 +8,8 @@
 #include <string>
 
 #include "ObjModel.h"
-#include "Camera.h"
+#include "RailCamera.h"
+#include"DebugCamera.h"
 #include "LightGroup.h"
 #include<memory>
 
@@ -174,6 +175,8 @@ public: // メンバ関数
 	/// <param name="isBillboard">ビルボードか</param>
 	void SetBillboard(bool isBillboard) { this->isBillboard = isBillboard; }
 
+	void SetParent(Camera* cameraP) { this->cameraParent = cameraP; }
+
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色
@@ -189,8 +192,7 @@ private: // メンバ変数
 	// 親オブジェクト
 	Object3d* parent = nullptr;
 	//カメラ親オブジェクト
-//	Camera* cameraParent = nullptr;
-//	RailCamera* cameraP = nullptr;
+	Camera* cameraParent = nullptr;
 	// モデル
 	ObjModel* model = nullptr;
 	// ビルボード

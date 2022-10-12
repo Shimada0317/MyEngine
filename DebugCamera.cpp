@@ -27,51 +27,48 @@ void DebugCamera::SetVel(const XMVECTOR vel)
 	velo = vel;
 }
 
+void DebugCamera::Angle(const XMFLOAT3 ang)
+{
+	angX = ang.x;
+	angY = ang.y;
+}
+
 void DebugCamera::Update()
 {
 	bool dirty = false;
 	float angleX = 0;
 	float angleY = 0;
-
-	angleY = angY;
-	angY = 0;
-
-	if (Input::GetInstance()->PushKey(DIK_Z)) {
-		angleY -= 0.1f;
-	}
+	//angleX = angX;
+	//angleY = angY;
 
 
-	if (dirty || viewDirty) {
-		// 追加回転分の回転行列を生成
-		XMMATRIX matRotNew = XMMatrixIdentity();
-		matRotNew *= XMMatrixRotationX(XMConvertToRadians(angleX));
-		matRotNew *= XMMatrixRotationY(XMConvertToRadians(- angleY));
-		// 累積の回転行列を合成
-		// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為
-		// クォータニオンを使用する方が望ましい
-		matRot = matRotNew * matRot;
 
-		
+	//if (dirty || viewDirty) {
+	//	// 追加回転分の回転行列を生成
+	//	XMMATRIX matRotNew = XMMatrixIdentity();
+	//	matRotNew *= XMMatrixRotationX(XMConvertToRadians(angleX));
+	//	matRotNew *= XMMatrixRotationY(XMConvertToRadians(- angleY));
+	//	// 累積の回転行列を合成
+	//	// ※回転行列を累積していくと、誤差でスケーリングがかかる危険がある為
+	//	// クォータニオンを使用する方が望ましい
+	//	matRot = matRotNew * matRot;
 
-		// 注視点から視点へのベクトルと、上方向ベクトル
-		XMVECTOR vTargetEye = { 0.0f, 0.0f, -distance, 1.0f };
-		XMVECTOR vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
+	//	// 注視点から視点へのベクトルと、上方向ベクトル
+	//	XMVECTOR vTargetEye = { 0.0f, 0.0f, -distance, 1.0f };
+	//	XMVECTOR vUp = { 0.0f, 1.0f, 0.0f, 0.0f };
 
 
-		// ベクトルを回転
-		vTargetEye = XMVector3Transform(vTargetEye, matRot);
-		vUp = XMVector3Transform(vUp, matRot);
+	//	// ベクトルを回転
+	//	vTargetEye = XMVector3Transform(vTargetEye, matRot);
+	//	vUp = XMVector3Transform(vUp, matRot);
 
-		// 注視点からずらした位置に視点座標を決定
-		XMFLOAT3 target = GetTarget();
+	//	// 注視点からずらした位置に視点座標を決定
+	//	XMFLOAT3 target = GetTarget();
 
-	//	target.x += velo.m128_f32[0];
-	//	target.y += velo.m128_f32[1];
-	//	target.z += velo.m128_f32[2];
-		//const XMFLOAT3& eye = GetEye();
-		SetEye({target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1], target.z + vTargetEye.m128_f32[2] });
-		SetUp({ vUp.m128_f32[0], vUp.m128_f32[1],vUp.m128_f32[2] });
-	}
+	//	//const XMFLOAT3& eye = GetEye();
+	//	SetEye({target.x + vTargetEye.m128_f32[0], target.y + vTargetEye.m128_f32[1], target.z + vTargetEye.m128_f32[2] });
+	//	//SetUp({ vUp.m128_f32[0], vUp.m128_f32[1],vUp.m128_f32[2] });
+	//}
 
 	Camera::Update();
 }

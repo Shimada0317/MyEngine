@@ -14,6 +14,8 @@ Camera::Camera(int window_width, int window_height)
 
 	// ビュープロジェクションの合成
 	matViewProjection = matView * matProjection;
+
+	matWorld = DirectX::XMMatrixIdentity();
 }
 
 
