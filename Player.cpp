@@ -29,8 +29,8 @@ void Player::Initalize()
 	cam->Initialize(position,rotation);
 
 	player->SetParent(camera);
-	Eye_pos = cam->Getye();
-	Target_pos = cam->GetTarget();
+//	Eye_pos = cam->Getye();
+	//Target_pos = cam->GetTarget();
 };
 
 void Player::Set()
@@ -65,11 +65,14 @@ void Player::Set()
 	}
 	/*if (patern == true) {
 		position = player->GetPosition();
-	}
+	}*/
 	player->SetPosition({ position });
-	player->SetRotation({ rotation });
-	player->SetScale({ scale });*/
+	//player->SetRotation({ rotation });
+	player->SetScale({ scale });
 
+
+	//Eye_pos=camera->GetEye();
+	player->SetParent(camera);
 }
 
 void Player::Effect()
@@ -78,23 +81,9 @@ void Player::Effect()
 
 void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 {
-	XMVECTOR veloc = { 0.0f,0.0f,0.1f };
 	
-	//if (Remaining < BULL - 1 && ReloadFlag == false) {
-	//	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-	//		Remaining += 1;
-	//		oldPos = position;
-	//		time = 0.0f;
-	//		particle = true;
-	//		for (int i = 0; i < BULL; i++) {
-	//			if (bull[i]->CheckOk()) {
-	//				bull[i]->TriggerOn();
-	//				break;
-	//			}
-	//		}
-
-	//	}
-	//}
+	
+	//弾の発射前
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			const float kBulletSpeed = 20.0f;
@@ -114,10 +103,12 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 			}
 		}
 	}
+	//発射後
 	for (int i = 0; i < BULL; i++) {
 		bull[i]->ShotBefore(backPlayerPos);
 		//break;
 	}
+	//撃った時のパーティクル
 	if (particle == true) {
 		time += 0.4f;
 		if (time >= 3.0f) {
@@ -128,16 +119,8 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 	else {
 		time = 4.0f;
 	}
-	//for (int i = 0; i < BULL; i++) {
-	//	bull[i]->ShotAfter(backPlayerPos, position, Remaining);
-	//	//break;
-	//}
 
-	if (Input::GetInstance()->PushKey(DIK_6)) {
-		Eye_pos.x -= 0.1f;
-	}
-	camera->SetTarget({ Eye_pos});
-
+	//リロード
 	if (Input::GetInstance()->TriggerKey(DIK_R)) {
 		ReloadFlag = true;
 	}
@@ -153,12 +136,8 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 			}
 		}
 	}
-
+	//プレイヤーの移動
 	Action::GetInstance()->PlayerMove3d(position);
-	//	if (Input::GetInstance()->PushKey(DIK_Z)) {
-	//		Eye_pos.x += 0.1f;
-	//	}
-	//camera->MoveEyeVector(position);
 
 	const float kMoveLimitX = 4;
 	const float kMoveLimitY = 2;
@@ -168,49 +147,37 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
 
+	//敵をすべて倒した時に進む(キー入力でデバッグ中)
 	if (patern == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_O)) {
 			patern = true;
 		}
 	}
-
 	else {
 		if (Input::GetInstance()->TriggerKey(DIK_O)) {
 			patern = false;
 		}
 	}
-
-	if (Input::GetInstance()->PushKey(DIK_Z)) {
-		rotation.z += 0.1f;
+	//プレイヤーの回転
+	if (Input::GetInstance()->TriggerKey(DIK_A)) {
+		rotation.y ++;
 	}
-
+	//敵をすべて倒した時
 	if (patern == true) {
-		kBulletSpeed = 1.1f;
+
+		veloc = { 0.0f,0.0f,0.0001f };
+		kBulletSpeed = 0.1f;
 		vel = { 0, 0, kBulletSpeed };
 		mat = player->GetMatrix();
-		vel = XMVector3TransformNormal(vel, mat);
 	}
 
-	/*const float kBulletSpeed = 1.1f;
-	vel = { 0, 0, kBulletSpeed };
-	mat = player->GetMatrix();
-	vel = XMVector3TransformNormal(vel, mat);*/
-
+	vel = XMVector3TransformNormal(vel, mat);
 	
-
-	//Attack();
-
-	/*for (std::unique_ptr<Bullet>& bullet : bullets_) {
-		bullet->Update();
-	}*/
 
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Update();
 	}
-	//MouthContoroll();
-	Set();
 	if (chan == true) {
-		//camera->Patern(ver,chan);
 		chan = false;
 	}
 
@@ -218,21 +185,19 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 		patern = true;
 	}
 
-
-	//camera->SetVel(vel);
-	//camera->Angle(rotation);
+	Set();
 	cam->Update(vel, rotation, camera);
-	
+	camera->Update();
 	player->SetParent(camera);
 	player->Update();
-	part->Update(color);
+//	part->Update(color);
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
 	ParticleManager::PreDraw(cmdeList);
 	if (particle == true) {
-		part->Draw();
+		//part->Draw();
 	}
 	ParticleManager::PostDraw();
 }
@@ -246,10 +211,6 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void Player::ObjDraw()
 {
-
-	//for (int i = 0; i < BULL; i++) {
-
-	//}
 	cam->Draw();
 	player->Draw();
 }

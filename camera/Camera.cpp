@@ -37,6 +37,7 @@ void Camera::Update()
 		}
 		// ビュープロジェクションの合成
 		matViewProjection = matView * matProjection;
+
 	}
 }
 

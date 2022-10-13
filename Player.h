@@ -123,5 +123,7 @@ private:
 	bool chan = false;
 
 	float kBulletSpeed=0;
+
+	XMVECTOR veloc = { 0.0f,0.0f,0.0f };
 };
 

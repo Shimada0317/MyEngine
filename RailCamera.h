@@ -67,7 +67,7 @@ private:
 	// 上方向ベクトル
 	XMFLOAT3 up = { 0, 1, 0 };
 	//注視点　　
-	XMFLOAT3 eye = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 eye = { 0.0f,0.0f,-5.0f };
 
 	XMFLOAT3 target = { 0.0f,0.0f,0.0f };
 
@@ -79,5 +79,7 @@ private:
 	XMVECTOR targetPosition;
 	// （仮の）上方向
 	XMVECTOR upVector;
+
+	
 
 };
