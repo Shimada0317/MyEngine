@@ -84,6 +84,11 @@ void Robot::Update(Bullet* bull,bool& all)
 		}
 	}
 
+	if (all == false) {
+		Hp = 50;
+		time = 0.0f;
+	}
+
 	
 	SetPRS(bull);
 	AllUpdate(bull);

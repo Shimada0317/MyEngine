@@ -70,7 +70,7 @@ void Player::Set()
 	//player->SetRotation({ rotation });
 	player->SetScale({ scale });
 
-
+	mat = player->GetMatrix();
 	//Eye_pos=camera->GetEye();
 	player->SetParent(camera);
 }
@@ -88,8 +88,9 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 			const float kBulletSpeed = 20.0f;
 			XMVECTOR velocity = { 0, 0, kBulletSpeed };
-			mat = player->GetMatrix();
+			
 			velocity = XMVector3TransformNormal(velocity, mat);
+			playerWorldPos = XMVector3Transform(playerWorldPos, mat);
 			Remaining += 1;
 			oldPos = position;
 			time = 0.0f;
@@ -97,7 +98,7 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 			for (int i = 0; i < BULL; i++) {
 				if (bull[i]->CheckOk()) {
 					bull[i]->TriggerOn();
-					bull[i]->Test(position, velocity);
+					bull[i]->Test(playerWorldPos, velocity);
 					break;
 				}
 			}
@@ -121,7 +122,7 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 	}
 
 	//ƒŠƒ[ƒh
-	if (Input::GetInstance()->TriggerKey(DIK_R)) {
+	if (Input::GetInstance()->TriggerKey(DIK_R)&&Remaining!=0) {
 		ReloadFlag = true;
 	}
 
@@ -163,12 +164,24 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 		rotation.y ++;
 	}
 	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž
-	if (patern == true) {
 
-		veloc = { 0.0f,0.0f,0.0001f };
-		kBulletSpeed = 0.1f;
+	if (move == true) {
+		patern = true;
+	}
+
+	if (patern == true) {
+		kBulletSpeed = 1.1f;
 		vel = { 0, 0, kBulletSpeed };
-		mat = player->GetMatrix();
+		movetimer += 0.1f;
+		if (movetimer >= 25) {
+			move = false;
+			patern = false;
+			movetimer = 0.0f;
+		}
+	}
+	else if (patern == false) {
+		kBulletSpeed = 0.0f;
+		vel = { 0, 0, kBulletSpeed };
 	}
 
 	vel = XMVector3TransformNormal(vel, mat);
@@ -177,18 +190,10 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Update();
 	}
-	if (chan == true) {
-		chan = false;
-	}
-
-	if (move == true) {
-		patern = true;
-	}
 
 	Set();
 	cam->Update(vel, rotation, camera);
 	camera->Update();
-	player->SetParent(camera);
 	player->Update();
 //	part->Update(color);
 }

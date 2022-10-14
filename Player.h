@@ -83,6 +83,7 @@ private:
 	XMVECTOR position = { 0.0f,0.0f,0.0f };
 	XMVECTOR backPlayerPos{ 0.0f,0.0f,0.0f };
 	XMVECTOR oldPos = { 0.0f,0.0f,0.0f };
+	XMVECTOR playerWorldPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 	XMMATRIX mat;
@@ -104,8 +105,6 @@ private:
 
 	float time = 0.0f;
 	bool particle = false;
-	bool shot = false;
-	int fire = 0;
 
 	int Hp = 5;
 
@@ -114,16 +113,13 @@ private:
 	int ReloadTime = 0;
 	int ans = 0;
 
-
 	XMVECTOR vel;
-
 	bool patern = false;
 	int ver = 0;
-
 	bool chan = false;
-
 	float kBulletSpeed=0;
-
 	XMVECTOR veloc = { 0.0f,0.0f,0.0f };
+	//“®‚¢‚½‚Æ‚«‚Ìtimer
+	float movetimer = 0.0f;
 };
 

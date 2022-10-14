@@ -11,28 +11,6 @@ DebugCamera::DebugCamera(int window_width, int window_height)
 	scaleY = 1.0f / (float)window_height;
 }
 
-void DebugCamera::Patern(const int patern,const bool& chan)
-{
-	if(patern==1){
-		angY -= 0.1f;
-		if (angY <= -90) {
-			angY = -90;
-		}
-	}
-	
-}
-
-void DebugCamera::SetVel(const XMVECTOR vel)
-{
-	velo = vel;
-}
-
-void DebugCamera::Angle(const XMFLOAT3 ang)
-{
-	angX = ang.x;
-	angY = ang.y;
-}
-
 void DebugCamera::Update()
 {
 	bool dirty = false;

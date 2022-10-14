@@ -124,15 +124,17 @@ void middle::Update()
 		}
 		//break;
 	}
-	if (move == false) {
-		if (all[0] == false && all[1] == false && all[2] == false) {
-			go = true;
-			move = true;
-		}
+
+
+	if (all[0] == false && all[1] == false && all[2] == false) {
+		go = true;
+		move = true;
 	}
-	if (go == true) {
+
+
+	if (go == true && move == true) {
 		patern += 1;
-		if (move == false) {
+		if (move == true) {
 			for (int i = 0; i < 3; i++) {
 				all[i] = true;
 			}
@@ -140,7 +142,7 @@ void middle::Update()
 		go = false;
 	}
 
-	player->Update(bull, Remaining,move);
+	player->Update(bull, Remaining, move);
 
 
 	//	//“G‚ð“|‚µ‚½ŽžAhitƒJƒEƒ“ƒg‚ðã‚°‚é
@@ -194,15 +196,7 @@ void middle::Draw(DirectXCommon* dxCommon)
 	}
 	player->ObjDraw();
 	Object3d::PostDraw();
-	//	for (int j = 0; j < 9; j++) {
-	//		bull[j]->Draw();
-	//	}
-	//	for (int i = 0; i < MAXENEMY; i++) {
-	//		enemy[i]->Draw();
-	//
-	//	}
-	//	player->ObjDraw();
-	//	//rob->Draw();
+
 }
 //
 void middle::SpriteDraw()
