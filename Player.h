@@ -56,6 +56,7 @@ public:
 
 	void SetScl(const XMFLOAT3& scale) { this->scale = scale; }
 
+	const XMMATRIX& GetMat() { return mat; }
 
 	const XMFLOAT2& GetRetPosition() { return retpos; }
 

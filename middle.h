@@ -165,5 +165,7 @@ private:
 	bool all[3];
 	bool go = false;
 	bool move = false;
+
+	XMMATRIX playerMat;
 };
 

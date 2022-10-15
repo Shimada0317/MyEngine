@@ -16,7 +16,7 @@ void middle::Initialize()
 	for (int i = 0; i < 3; i++) {
 		rob[i] = std::make_unique<Robot>();
 		rob[i]->Initialize();
-		allpos[i] = { 0.0f + i * 1.0f,0.0f,10.0f };
+		//allpos[i] = { 0.0f + i * 1.0f,0.0f,10.0f };
 		all[i] = true;
 	}
 	player = std::make_unique<Player>();
@@ -52,14 +52,14 @@ void middle::Initialize()
 	//LoadEnemyPopData();
 	//UpdateEnemyPopCommands();
 	oldpatern = patern;
+
+	playerMat = player->GetMat();
 }
 //
 void middle::SetPSR()
 {
-	for (int i = 0; i < 3; i++) {
-		rob[i]->SetPosition(allpos[i]);
-	}
 
+	playerMat = player->GetMat();
 
 	//HUDのポジションセット
 	for (int i = 0; i < 9; i++) {
@@ -84,13 +84,7 @@ void middle::SetPSR()
 		changecount[i]->SetPosition({ 240,630 });
 	}
 
-	//プレイヤーのポジションセット
-	if (moveTime == false) {
-		playerPos = player->GetPosition();
-	}
-	else {
-		player->SetPosition(playerPos);
-	}
+
 
 }
 
@@ -117,15 +111,18 @@ void middle::Update()
 {
 
 	SetPSR();
+
+
+
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 3; j++) {
-			rob[j]->Update(bull[i], all[j]);
+			rob[j]->Update(bull[i], all[j],playerMat);
 			//break;
 		}
 		//break;
 	}
 
-
+	//敵をすべて倒した時に進む
 	if (all[0] == false && all[1] == false && all[2] == false) {
 		go = true;
 		move = true;
@@ -142,44 +139,11 @@ void middle::Update()
 		go = false;
 	}
 
+	
+
 	player->Update(bull, Remaining, move);
 
-
-	//	//敵を倒した時、hitカウントを上げる
-	//	if (count == true) {
-	//		hit += 1;
-	//		count = false;
-	//	}
-	//
-	//	//hitカウントがMAXENEMYになった時、ウェーブを進める
-	//	if (hit >= MAXENEMY) {
-	//		patern += 1;
-	//		cammove = 0.1f;
-	//		hit = 0;
-	//		moveTime = true;
-	//	}
-	//	//waveが進むごとにカメラも奥に進む
-	//	if (patern != 0) {
-	//		playerPos.m128_f32[2] += cammove;
-	//		life[1] -= 3;
-	//		life[0] -= 3;
-	//		if (playerPos.m128_f32[2] >= 10 * patern && patern > oldpatern) {
-	//			for (int i = 0; i < MAXENEMY; i++) {
-	//				spown[i] = true;
-	//			}
-	//			moveTime = false;
-	//			cammove = 0;
-	//			oldpatern = patern;
-	//		}
-	//	}
-	//
-	//
-
-
-
-	//
-	//
-	//	SetPSR();
+		SetPSR();
 	//
 	//	AllUpdate();
 }

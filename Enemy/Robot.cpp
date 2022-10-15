@@ -21,7 +21,7 @@ void Robot::Initialize()
 	OldHp = Hp;
 }
 
-void Robot::SetPRS(Bullet* bull)
+void Robot::SetPRS(const XMMATRIX& player)
 {
 	OldHp = Hp;
 
@@ -29,68 +29,62 @@ void Robot::SetPRS(Bullet* bull)
 
 void Robot::AllUpdate(Bullet* bull)
 {
-	head->Update(arive[0], allPos,bull,Hp);
-	RArm->Update(arive[1], allPos,bull,Hp);
-	LArm->Update(arive[2], allPos,bull,Hp);
-	body->Update(arive[3], allPos,bull,Hp);
+	head->Update(arive[0], allPos, bull, Hp);
+	RArm->Update(arive[1], allPos, bull, Hp);
+	LArm->Update(arive[2], allPos, bull, Hp);
+	body->Update(arive[3], allPos, bull, Hp);
 	part->Set(allPos);
 	part->Update();
 	if (arive[0] == false && arive[1] == false && arive[2] == false && arive[3] == false) {
-		time += 0.1f;
+
 	}
 }
 
-void Robot::Update(Bullet* bull,bool& all)
+void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player)
 {
-	//Action::GetInstance()->PlayerMove3d(allPos);
+	playerPos = XMVector3TransformNormal(playerPos, player);
 
+	if (action == 0) {
+		SpownEnemy(player);
+		action = 1;
+	}
+	//ダメージを受けたとき
 	if (OldHp > Hp) {
 		part->Effect();
-		
+
 	}
 
-	if (Input::GetInstance()->PushKey(DIK_0)) {
-		for (int i = 0; i < 4; i++) {
-			arive[i] = true;
-			Hp = 50;
-			time = 0.0f;
+	//生きているとき
+	if (all == true && action == 1 && Hp >= 0) {
+		allPos.m128_f32[2] = allPos.m128_f32[2] - speed;
+		//プレイヤーの前まで来たとき
+		if (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 3.0f) {
+			speed = 0;
+			attackT += 0.5f;
+			RArm->Attack(attackT);
+			LArm->Attack(attackT);
+			if (attackT >= 10.0f) {
+				attackT = 0.0f;
+			}
 		}
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_1)) {
-		arive[1] = false;
-	}
-	if (Input::GetInstance()->PushKey(DIK_2)) {
-		arive[2] = false;
-	}
-	if (Input::GetInstance()->PushKey(DIK_3)) {
-		arive[3] = false;
-	}
-
-
-	attackT += 0.5f;
-
-	RArm->Attack(attackT);
-	LArm->Attack(attackT);
-
-	if (attackT >= 10.0f) {
-		attackT = 0.0f;
-	}
-
-	if (Hp <= 0) {
-		for (int i = 0; i < 4; i++) {
-			arive[i] = false;
+		//生きているときにHPが0になったら
+		if (Hp <= 0) {
 			all = false;
+			action = 2;
+			for (int i = 0; i < 4; i++) {
+				arive[i] = false;
+			}
 		}
 	}
 
-	if (all == false) {
+	//死んだ直後
+	if (action == 2 && all == true) {
 		Hp = 50;
-		time = 0.0f;
+		OldHp = Hp;
+		action = 0;
 	}
 
-	
-	SetPRS(bull);
+	SetPRS(player);
 	AllUpdate(bull);
 }
 
@@ -117,4 +111,11 @@ void Robot::Finalize()
 	LArm->Finalize();
 	RArm->Finalize();
 	part->Finalize();
+}
+
+void Robot::SpownEnemy(const XMMATRIX& player)
+{
+
+	allPos = XMVector3Transform(allPos, player);
+	allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
 }

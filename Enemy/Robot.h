@@ -20,11 +20,11 @@ public:
 
 	void Initialize();
 
-	void SetPRS(Bullet* bull);
+	void SetPRS(const XMMATRIX& player);
 
 	void AllUpdate(Bullet* bull);
 
-	void Update(Bullet* bull,bool& arive);
+	void Update(Bullet* bull,bool& arive, const XMMATRIX& player);
 
 	void Draw(DirectXCommon* dxCommon);
 
@@ -33,6 +33,8 @@ public:
 	void Finalize();
 
 	void SetPosition(XMVECTOR allPos) { this->allPos = allPos; }
+
+	void SpownEnemy(const XMMATRIX& player);
 private:
 	std::unique_ptr<Head> head;
 	std::unique_ptr<RightArm> RArm;
@@ -40,7 +42,7 @@ private:
 	std::unique_ptr<Body>body;
 	std::unique_ptr<ObjParticle>part;
 
-	XMVECTOR allPos = { 0.0f,0.0f,10.0f };
+	XMVECTOR allPos = { 0.0f,0.0f,1.0f };
 
 	bool arive[4];
 	float attackT = 0.0f;
@@ -49,5 +51,13 @@ private:
 	int OldHp = 0;
 
 	XMFLOAT4 color = { 1,0,0,0.1f };
+
+	XMVECTOR playerPos;
+
+	int action = 0;
+
+	bool oldArive;
+
+	float speed = 0.005f;
 };
 
