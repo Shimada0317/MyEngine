@@ -163,8 +163,10 @@ private:
 	int Remaining = 0;
 
 	bool all[3];
-	bool go = false;
+	bool waveCount = false;
 	bool move = false;
+	bool oldmove = false;
+	bool spown = true;
 
 	XMMATRIX playerMat;
 };

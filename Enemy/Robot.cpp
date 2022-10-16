@@ -40,14 +40,10 @@ void Robot::AllUpdate(Bullet* bull)
 	}
 }
 
-void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player)
+void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player,bool& spown)
 {
 	playerPos = XMVector3TransformNormal(playerPos, player);
 
-	if (action == 0) {
-		SpownEnemy(player);
-		action = 1;
-	}
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
 	if (OldHp > Hp) {
 		part->Effect();
@@ -77,12 +73,6 @@ void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player)
 		}
 	}
 
-	//Ž€‚ñ‚¾’¼Œã
-	if (action == 2 && all == true) {
-		Hp = 50;
-		OldHp = Hp;
-		action = 0;
-	}
 
 	SetPRS(player);
 	AllUpdate(bull);
@@ -115,7 +105,12 @@ void Robot::Finalize()
 
 void Robot::SpownEnemy(const XMMATRIX& player)
 {
-
+	Hp = 50;
+	OldHp = Hp;
+	for (int i = 0; i < 4; i++) {
+		arive[i] = true;
+	}
 	allPos = XMVector3Transform(allPos, player);
 	allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
+	action = 1;
 }

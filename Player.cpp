@@ -79,7 +79,7 @@ void Player::Effect()
 {
 }
 
-void Player::Update(Bullet* bull[], int& Remaining,bool& move)
+void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 {
 	
 	
@@ -176,6 +176,7 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move)
 		if (movetimer >= 25) {
 			move = false;
 			patern = false;
+			spown = true;
 			movetimer = 0.0f;
 		}
 	}

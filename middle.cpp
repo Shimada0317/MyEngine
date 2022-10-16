@@ -113,41 +113,43 @@ void middle::Update()
 	SetPSR();
 
 
-
-	for (int i = 0; i < 9; i++) {
-		for (int j = 0; j < 3; j++) {
-			rob[j]->Update(bull[i], all[j],playerMat);
-			//break;
-		}
-		//break;
-	}
-
 	//敵をすべて倒した時に進む
 	if (all[0] == false && all[1] == false && all[2] == false) {
-		go = true;
 		move = true;
+		patern += 1;
 	}
 
 
-	if (go == true && move == true) {
-		patern += 1;
-		if (move == true) {
-			for (int i = 0; i < 3; i++) {
-				all[i] = true;
+	if (move == true) {
+		for (int i = 0; i < 3; i++) {
+			all[i] = true;
+		}
+	}
+
+	//座標の設定
+	SetPSR();
+
+
+	//プレイヤーの更新処理
+	player->Update(bull, Remaining, move, spown);
+
+	if (spown == true) {
+		for (int i = 0; i < 3; i++) {
+			rob[i]->SpownEnemy(playerMat);
+			if (i == 2) {
+				spown = false;
 			}
 		}
-		go = false;
 	}
 
-	
-
-	player->Update(bull, Remaining, move);
-
-		SetPSR();
-	//
-	//	AllUpdate();
+	//敵の更新処理
+	for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 3; j++) {
+			rob[j]->Update(bull[i], all[j], playerMat, spown);
+		}
+	}
 }
-//
+
 void middle::Draw(DirectXCommon* dxCommon)
 {
 	for (int j = 0; j < 3; j++) {

@@ -24,7 +24,7 @@ public:
 
 	void AllUpdate(Bullet* bull);
 
-	void Update(Bullet* bull,bool& arive, const XMMATRIX& player);
+	void Update(Bullet* bull,bool& arive, const XMMATRIX& player,bool& spown);
 
 	void Draw(DirectXCommon* dxCommon);
 
