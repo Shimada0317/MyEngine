@@ -151,6 +151,8 @@ private:
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 
+	int playerHp;
+
 	XMVECTOR allpos[3];
 
 	DebugCamera* camera = nullptr;
@@ -169,5 +171,7 @@ private:
 	bool spown = true;
 
 	XMMATRIX playerMat;
+	int rad;
+	int oldrand[3];
 };
 

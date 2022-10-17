@@ -24,7 +24,7 @@ public:
 
 	void AllUpdate(Bullet* bull);
 
-	void Update(Bullet* bull,bool& arive, const XMMATRIX& player,bool& spown);
+	void Update(Bullet* bull,bool& arive, const XMMATRIX& player,bool& spown,int& playerHp);
 
 	void Draw(DirectXCommon* dxCommon);
 
@@ -34,7 +34,7 @@ public:
 
 	void SetPosition(XMVECTOR allPos) { this->allPos = allPos; }
 
-	void SpownEnemy(const XMMATRIX& player);
+	void SpownEnemy(const XMMATRIX& player,int rad);
 private:
 	std::unique_ptr<Head> head;
 	std::unique_ptr<RightArm> RArm;

@@ -28,7 +28,7 @@ private:
 	ObjModel* RArmModel = nullptr;
 
 	XMVECTOR RArmPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 RArmScl = { 0.3f,0.4f,0.3f };
+	XMFLOAT3 RArmScl = { 0.2f,0.2f,0.2f };
 	XMFLOAT3 RArmRot = { 90.0f,0.0f,0.0f };
 
 	XMVECTOR bullPos = { 0.0f,0.0f,0.0f };

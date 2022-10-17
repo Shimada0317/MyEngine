@@ -34,6 +34,10 @@ void RightArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 		}
 	}
 
+	else if (arive == false) {
+		RArmRot.x=0.0f;
+	}
+
 	if (HitCount >= 3) {
 		HitCount = 0;
 		arive = false;

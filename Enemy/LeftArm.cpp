@@ -31,7 +31,9 @@ void LeftArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 			bull->SetTrigger(Hit);
 		}
 	}
-
+	else if (arive == false) {
+		LArmRot.x = 0.0f;
+	}
 	if (HitCount >= 3) {
 		HitCount = 0;
 		arive = false;

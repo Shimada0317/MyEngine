@@ -81,15 +81,13 @@ void Player::Effect()
 
 void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 {
-	
-	
 	//’e‚Ì”­ŽË‘O
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			const float kBulletSpeed = 20.0f;
+			const float kBulletSpeed = 15.0f;
 			XMVECTOR velocity = { 0, 0, kBulletSpeed };
-			
 			velocity = XMVector3TransformNormal(velocity, mat);
+			playerWorldPos = { 0.0f,0.0f,0.0f };
 			playerWorldPos = XMVector3Transform(playerWorldPos, mat);
 			Remaining += 1;
 			oldPos = position;
@@ -120,7 +118,6 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 	else {
 		time = 4.0f;
 	}
-
 	//ƒŠƒ[ƒh
 	if (Input::GetInstance()->TriggerKey(DIK_R)&&Remaining!=0) {
 		ReloadFlag = true;
@@ -160,7 +157,7 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 		}
 	}
 	//ƒvƒŒƒCƒ„[‚Ì‰ñ“]
-	if (Input::GetInstance()->TriggerKey(DIK_A)) {
+	if (Input::GetInstance()->PushKey(DIK_A)) {
 		rotation.y ++;
 	}
 	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž
@@ -176,14 +173,17 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 		if (movetimer >= 25) {
 			move = false;
 			patern = false;
-			spown = true;
+			waveCount += 1;
 			movetimer = 0.0f;
+			spown = true;
 		}
 	}
 	else if (patern == false) {
 		kBulletSpeed = 0.0f;
 		vel = { 0, 0, kBulletSpeed };
 	}
+
+	
 
 	vel = XMVector3TransformNormal(vel, mat);
 	
@@ -218,7 +218,9 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 void Player::ObjDraw()
 {
 	cam->Draw();
-	player->Draw();
+	if (Hp >= 0) {
+		player->Draw();
+	}
 }
 
 void Player::ImGuiDraw()

@@ -35,14 +35,12 @@ void Robot::AllUpdate(Bullet* bull)
 	body->Update(arive[3], allPos, bull, Hp);
 	part->Set(allPos);
 	part->Update();
-	if (arive[0] == false && arive[1] == false && arive[2] == false && arive[3] == false) {
-
-	}
 }
 
-void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player,bool& spown)
+void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown, int& playerHp)
 {
-	playerPos = XMVector3TransformNormal(playerPos, player);
+	playerPos = { 0.0f,0.0f,0.0f };
+	playerPos = XMVector3Transform(playerPos, player);
 
 	//ダメージを受けたとき
 	if (OldHp > Hp) {
@@ -51,28 +49,29 @@ void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player,bool& spown)
 	}
 
 	//生きているとき
-	if (all == true && action == 1 && Hp >= 0) {
+	if (all == true  && Hp > 0) {
 		allPos.m128_f32[2] = allPos.m128_f32[2] - speed;
 		//プレイヤーの前まで来たとき
-		if (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 3.0f) {
+		if (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 4.0f) {
 			speed = 0;
 			attackT += 0.5f;
 			RArm->Attack(attackT);
 			LArm->Attack(attackT);
-			if (attackT >= 10.0f) {
+			if (attackT >= 30.0f) {
 				attackT = 0.0f;
-			}
-		}
-		//生きているときにHPが0になったら
-		if (Hp <= 0) {
-			all = false;
-			action = 2;
-			for (int i = 0; i < 4; i++) {
-				arive[i] = false;
+				//playerHp -= 1;
 			}
 		}
 	}
 
+	//生きているときにHPが0になったら
+	if (Hp <= 0) {
+		Hp = 50;
+		all = false;
+		for (int i = 0; i < 4; i++) {
+			arive[i] = false;
+		}
+	}
 
 	SetPRS(player);
 	AllUpdate(bull);
@@ -103,14 +102,38 @@ void Robot::Finalize()
 	part->Finalize();
 }
 
-void Robot::SpownEnemy(const XMMATRIX& player)
+void Robot::SpownEnemy(const XMMATRIX& player,int random)
 {
+
 	Hp = 50;
 	OldHp = Hp;
+	int rad = (rand() % 4 );
+	
+
+	float radX = (float)rad;
 	for (int i = 0; i < 4; i++) {
 		arive[i] = true;
 	}
+	allPos = { 0.0f,0.0f,0.0f };
 	allPos = XMVector3Transform(allPos, player);
+	allPos.m128_f32[0] = 0.0f;
+	allPos.m128_f32[1] = 0.0f;
+	if (rad == 0) {
+		allPos.m128_f32[0] = -2.0f;
+	}
+	else if (rad == 1) {
+		allPos.m128_f32[0] = -1.0f;
+	}
+	else if (rad == 2) {
+		allPos.m128_f32[0] = 0.0f;
+	}
+	else if(rad == 3) {
+		allPos.m128_f32[0] = 1.0f;
+	}
+	else {
+		allPos.m128_f32[0] = 2.0f;
+	}
+	allPos.m128_f32[0] = radX;
 	allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
-	action = 1;
+	speed = 0.005f;
 }

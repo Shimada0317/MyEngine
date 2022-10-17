@@ -66,6 +66,10 @@ public:
 
 	void SetRetSiz(const XMFLOAT2& scale) { this->retsize = scale; }
 
+	void SetHp(int& HP) { this->Hp = HP; }
+
+	int GetHp() { return Hp; }
+
 	XMVECTOR GetWorldPosition();
 private:
 	float OffsetX = 0.0f;
@@ -122,5 +126,6 @@ private:
 	XMVECTOR veloc = { 0.0f,0.0f,0.0f };
 	//“®‚¢‚½‚Æ‚«‚Ìtimer
 	float movetimer = 0.0f;
+	int waveCount = 0;
 };
 

@@ -54,6 +54,7 @@ void middle::Initialize()
 	oldpatern = patern;
 
 	playerMat = player->GetMat();
+	playerHp = player->GetHp();
 }
 //
 void middle::SetPSR()
@@ -84,8 +85,19 @@ void middle::SetPSR()
 		changecount[i]->SetPosition({ 240,630 });
 	}
 
+	
+	player->SetHp(playerHp);
 
-
+	for (int i = 0; i < 3; i++) {
+		rad = (rand() % 4);
+		oldrand[i] = rad;
+	}
+	for (int i = 0; i < 3; i++) {
+		if (oldrand[0] == oldrand[1] == oldrand[2]) {
+			rad = (rand() % 4);
+			oldrand[i] = rad;
+		}
+	}
 }
 
 //void middle::AllUpdate()
@@ -130,12 +142,10 @@ void middle::Update()
 	SetPSR();
 
 
-	//プレイヤーの更新処理
-	player->Update(bull, Remaining, move, spown);
-
+	
 	if (spown == true) {
 		for (int i = 0; i < 3; i++) {
-			rob[i]->SpownEnemy(playerMat);
+			rob[i]->SpownEnemy(playerMat,oldrand[i]);
 			if (i == 2) {
 				spown = false;
 			}
@@ -145,9 +155,12 @@ void middle::Update()
 	//敵の更新処理
 	for (int i = 0; i < 9; i++) {
 		for (int j = 0; j < 3; j++) {
-			rob[j]->Update(bull[i], all[j], playerMat, spown);
+			rob[j]->Update(bull[i], all[j], playerMat, spown,playerHp);
 		}
 	}
+
+	//プレイヤーの更新処理
+	player->Update(bull, Remaining, move, spown);
 }
 
 void middle::Draw(DirectXCommon* dxCommon)
