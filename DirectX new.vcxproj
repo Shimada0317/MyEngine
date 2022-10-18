@@ -162,6 +162,7 @@
     <ClCompile Include="Action.cpp" />
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="BaseScene.cpp" />
+    <ClCompile Include="BothArms.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="ClearScene.cpp" />
@@ -425,6 +426,7 @@
     <ClInclude Include="3d\FbxObject3d.h" />
     <ClInclude Include="Action.h" />
     <ClInclude Include="Audio.h" />
+    <ClInclude Include="BothArms.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="ClearScene.h" />

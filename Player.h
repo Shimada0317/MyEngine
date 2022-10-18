@@ -72,6 +72,8 @@ public:
 
 	XMVECTOR GetWorldPosition();
 private:
+	
+
 	float OffsetX = 0.0f;
 	float OffsetY = 0.0f;
 	//プレイヤーオブジェクトとモデル

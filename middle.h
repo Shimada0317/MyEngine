@@ -18,6 +18,8 @@ const int MAXENEMY = 5;
 class middle
 {
 public: 
+	~middle();
+
 	void Initialize();
 
 	void SetPSR();
@@ -43,6 +45,8 @@ public:
 	void SetPatern(int patern) { this->patern = patern; }
 
 	const int& GetPatern() { return patern; }
+
+	int GetHp() { return playerHp; }
 private:
 	
 	//unique_ptr <Player> player;
@@ -59,6 +63,7 @@ private:
 	Sprite* maxcount = nullptr;
 	Sprite* slash = nullptr;
 	Sprite* changecount[5];
+	Sprite* LifeCount[5];
 	//プレイヤーのステータス
 	XMVECTOR playerPos = { 0,0,0 };
 	XMVECTOR backplayer = { 0,0,-5 };

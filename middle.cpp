@@ -1,11 +1,23 @@
 #include "middle.h"
 #include"imgui/imgui.h"
 #include<fstream>
+middle::~middle()
+{
+	delete[] bull;
+}
 //
 ////ÉZÅ[Éu
 //
 void middle::Initialize()
 {
+	Sprite::LoadTexture(10, L"Resources/reload.png");
+	Sprite::LoadTexture(11, L"Resources/wave.png");
+	Sprite::LoadTexture(12, L"Resources/slash.png");
+	Sprite::LoadTexture(13, L"Resources/one.png");
+	Sprite::LoadTexture(14, L"Resources/two.png");
+	Sprite::LoadTexture(15, L"Resources/three.png");
+	Sprite::LoadTexture(16, L"Resources/four.png");
+	Sprite::LoadTexture(17, L"Resources/five.png");
 
 	//camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 	//Object3d::SetCamera(camera);
@@ -30,24 +42,15 @@ void middle::Initialize()
 		bulletHUD[i] = Sprite::SpriteCreate(i, { 10.0f,10.0f });
 	}
 
-	Sprite::LoadTexture(10, L"Resources/reload.png");
 	Reload = Sprite::SpriteCreate(10, { 10.0f,10.0f }, { 1.0f,1.0f,1.0f,1.0f });
-
-	Sprite::LoadTexture(11, L"Resources/wave.png");
 	wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
-
-	Sprite::LoadTexture(17, L"Resources/five.png");
-	maxcount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
-
-	Sprite::LoadTexture(12, L"Resources/slash.png");
 	slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
-
-	Sprite::LoadTexture(13, L"Resources/one.png");
-	Sprite::LoadTexture(14, L"Resources/two.png");
-	Sprite::LoadTexture(15, L"Resources/three.png");
-	Sprite::LoadTexture(16, L"Resources/four.png");
+	maxcount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
 	for (int i = 0; i < 5; i++) {
 		changecount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
+	}
+	for (int i = 0; i < 5; i++) {
+		LifeCount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
 	//LoadEnemyPopData();
 	//UpdateEnemyPopCommands();
@@ -83,6 +86,8 @@ void middle::SetPSR()
 	for (int i = 0; i < 5; i++) {
 		changecount[i]->SetSize({ 80,80 });
 		changecount[i]->SetPosition({ 240,630 });
+		LifeCount[i]->SetSize({ 80,80 });
+		LifeCount[i]->SetPosition({ 480,630 });
 	}
 
 	
@@ -202,6 +207,22 @@ void middle::SpriteDraw()
 	}
 	else if (patern == 4) {
 		changecount[4]->Draw();
+	}
+
+	if (playerHp == 1) {
+		LifeCount[0]->Draw();
+	}
+	else if (playerHp == 2) {
+		LifeCount[1]->Draw();
+	}
+	else if (playerHp == 3) {
+		LifeCount[2]->Draw();
+	}
+	else if (playerHp == 4) {
+		LifeCount[3]->Draw();
+	}
+	else if (playerHp == 5) {
+		LifeCount[4]->Draw();
 	}
 
 	maxcount->Draw();

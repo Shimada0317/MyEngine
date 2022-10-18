@@ -1,5 +1,10 @@
 #include "Head.h"
 
+Head::~Head()
+{
+
+}
+
 void Head::Initialize()
 {
 	headModel = ObjModel::CreateFromOBJ("Head");

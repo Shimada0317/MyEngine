@@ -1,21 +1,28 @@
 #include "Robot.h"
 #include"Action.h"
 
+Robot::~Robot()
+{
+
+}
+
 void Robot::Initialize()
 {
 	head = std::make_unique<Head>();
 	body = std::make_unique<Body>();
-	LArm = std::make_unique<LeftArm>();
-	RArm = std::make_unique<RightArm>();
+	/*LArm = std::make_unique<LeftArm>();
+	RArm = std::make_unique<RightArm>();*/
+	Arms = std::make_unique<BothArms>();
 	part = std::make_unique<ObjParticle>();
 
 	head->Initialize();
 	body->Initialize();
-	LArm->Initialize();
-	RArm->Initialize();
+	/*LArm->Initialize();
+	RArm->Initialize();*/
+	Arms->Initialize();
 	part->Initialize();
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 3; i++) {
 		arive[i] = true;
 	}
 	OldHp = Hp;
@@ -30,9 +37,10 @@ void Robot::SetPRS(const XMMATRIX& player)
 void Robot::AllUpdate(Bullet* bull)
 {
 	head->Update(arive[0], allPos, bull, Hp);
-	RArm->Update(arive[1], allPos, bull, Hp);
-	LArm->Update(arive[2], allPos, bull, Hp);
-	body->Update(arive[3], allPos, bull, Hp);
+	//RArm->Update(arive[1], allPos, bull, Hp);
+	//LArm->Update(arive[2], allPos, bull, Hp);
+	Arms->Update(arive[1], allPos, bull, Hp);
+	body->Update(arive[2], allPos, bull, Hp);
 	part->Set(allPos);
 	part->Update();
 }
@@ -54,13 +62,14 @@ void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 		//プレイヤーの前まで来たとき
 		if (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 4.0f) {
 			speed = 0;
-			attackT += 0.5f;
-			RArm->Attack(attackT);
-			LArm->Attack(attackT);
-			if (attackT >= 30.0f) {
-				attackT = 0.0f;
-				//playerHp -= 1;
-			}
+			attackT += 0.1f;
+			/*RArm->Attack(attackT);
+			LArm->Attack(attackT);*/
+			Arms->Attack(attackT);
+		}
+		if (attackT >= 160.0f) {
+			attackT = 0.0f;
+			playerHp -= 1;
 		}
 	}
 
@@ -68,8 +77,9 @@ void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	if (Hp <= 0) {
 		Hp = 50;
 		all = false;
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 3; i++) {
 			arive[i] = false;
+			allPos = { 0.0f,0.0f,1000000.0f };
 		}
 	}
 
@@ -81,9 +91,10 @@ void Robot::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	head->Draw(arive[0]);
-	RArm->Draw(arive[1]);
-	LArm->Draw(arive[2]);
-	body->Draw(arive[3]);
+	/*RArm->Draw(arive[1]);
+	LArm->Draw(arive[2]);*/
+	Arms->Draw(arive[1]);
+	body->Draw(arive[2]);
 	part->Draw();
 	Object3d::PostDraw();
 }
@@ -93,12 +104,18 @@ void Robot::ParticleDraw(DirectXCommon* dxCommon)
 
 }
 
+void Robot::AttackAction()
+{
+
+}
+
 void Robot::Finalize()
 {
 	head->Finalize();
 	body->Finalize();
-	LArm->Finalize();
-	RArm->Finalize();
+	Arms->Finalize();
+	//LArm->Finalize();
+	//RArm->Finalize();
 	part->Finalize();
 }
 
@@ -111,7 +128,7 @@ void Robot::SpownEnemy(const XMMATRIX& player,int random)
 	
 
 	float radX = (float)rad;
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 3; i++) {
 		arive[i] = true;
 	}
 	allPos = { 0.0f,0.0f,0.0f };

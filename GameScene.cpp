@@ -7,6 +7,7 @@
 #include"SceneManager.h"
 #include"FbxLoader.h"
 #include"FbxObject3d.h"
+#include"ClearScene.h"
 #include"DebugScene.h"
 
 
@@ -58,7 +59,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	patern = mid->GetPatern();
 
 	light = Light::Create();
-
+	playerHp = mid->GetHp();
 }
 
 void GameScene::SetPosSclRot()
@@ -75,6 +76,7 @@ void GameScene::SetPosSclRot()
 
 	title->SetSize({ screen_size });
 	patern = mid->GetPatern();
+	playerHp = mid->GetHp();
 };
 
 void GameScene::AllUpdate()
@@ -86,10 +88,10 @@ void GameScene::AllUpdate()
 
 void GameScene::Update()
 {
-	//if (Input::GetInstance()->TriggerKey(DIK_K)) {
-	//	BaseScene* scene_ = new DebugScene(sceneManager_);
-	//	sceneManager_->SetNextScene(scene_);
-	//}
+	if (playerHp<=0) {
+		BaseScene* scene_ = new ClearScene(sceneManager_);
+		sceneManager_->SetNextScene(scene_);
+	}
 
 
 	SetPosSclRot();
@@ -145,11 +147,6 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 
 void GameScene::Finalize()
 {
-	delete title;
-	//delete sphere;
-	delete dxCommon;
-	delete light;
-	delete Object;
-	delete model;
+
 }
 

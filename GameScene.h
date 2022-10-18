@@ -103,5 +103,6 @@ private:
 	unique_ptr <middle> mid = nullptr;
 
 	int patern = 0;
+	int playerHp;
 };
 

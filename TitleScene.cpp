@@ -16,7 +16,7 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
 	////スプライトの読み込み
-	Sprite::LoadTexture(1, L"Resources/tst1.png");
+	Sprite::LoadTexture(1, L"Resources/tst.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 }
 
