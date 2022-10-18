@@ -56,8 +56,8 @@ private:
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
-	XMFLOAT2 retsize = { 1280.0f,720.0f };
-	XMFLOAT2 retpos = { 0.0f,0.0f };
+	XMFLOAT2 titlesize = { 1280.0f,720.0f };
+	XMFLOAT2 titlepos = { 0.0f,0.0f };
 	POINT pos;
 };
 
