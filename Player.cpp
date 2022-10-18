@@ -48,8 +48,8 @@ void Player::Set()
 	for (int i = 0; i < 100; i++) {
 		const float rnd_pos = 1.0f;
  		XMFLOAT3 pos{};
-		pos.x = playerWorldPos.m128_f32[0]+oldPos.m128_f32[0];
-		pos.y = playerWorldPos.m128_f32[1]+oldPos.m128_f32[1];
+		pos.x = position.m128_f32[0];
+		pos.y = position.m128_f32[1];
 		pos.z = playerWorldPos.m128_f32[2];
 		//pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		//pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;

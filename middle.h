@@ -64,6 +64,7 @@ private:
 	Sprite* slash = nullptr;
 	Sprite* changecount[5];
 	Sprite* LifeCount[5];
+	Sprite* HpBer;
 	//プレイヤーのステータス
 	XMVECTOR playerPos = { 0,0,0 };
 	XMVECTOR backplayer = { 0,0,-5 };

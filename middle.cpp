@@ -20,7 +20,7 @@ void middle::Initialize()
 	Sprite::LoadTexture(15, L"Resources/three.png");
 	Sprite::LoadTexture(16, L"Resources/four.png");
 	Sprite::LoadTexture(17, L"Resources/five.png");
-
+	Sprite::LoadTexture(18, L"Resources/Hpber.png");
 	//camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 	//Object3d::SetCamera(camera);
 	for (int i = 0; i < 9; i++) {
@@ -48,6 +48,7 @@ void middle::Initialize()
 	wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
 	slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
 	maxcount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
+	HpBer = Sprite::SpriteCreate(18, { 10.0f,10.0f });
 	for (int i = 0; i < 5; i++) {
 		changecount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
@@ -89,10 +90,11 @@ void middle::SetPSR()
 		changecount[i]->SetSize({ 80,80 });
 		changecount[i]->SetPosition({ 240,630 });
 		LifeCount[i]->SetSize({ 80,80 });
-		LifeCount[i]->SetPosition({ 480,630 });
+		LifeCount[i]->SetPosition({ 1200,630 });
 	}
-
-	
+	//Hpƒo[
+	HpBer->SetSize({ 128,64 });
+	HpBer->SetPosition({ 1070,650 });
 	player->SetHp(playerHp);
 
 	for (int i = 0; i < 3; i++) {
@@ -226,7 +228,7 @@ void middle::SpriteDraw()
 	else if (playerHp == 5) {
 		LifeCount[4]->Draw();
 	}
-
+	HpBer->Draw();
 	maxcount->Draw();
 
 	wave->Draw();
@@ -237,7 +239,7 @@ void middle::SpriteDraw()
 //
 void middle::ImGuiDraw()
 {
-	player->ImGuiDraw();
+	//player->ImGuiDraw();
 
 
 }
