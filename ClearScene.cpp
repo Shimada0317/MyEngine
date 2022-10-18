@@ -9,7 +9,7 @@ ClearScene::ClearScene(SceneManager* sceneManager_)
 
 void ClearScene::Initialize(DirectXCommon* dxComon)
 {
-	Sprite::LoadTexture(100, L"Resources/Clear.png");
+	Sprite::LoadTexture(100, L"Resources/title.png");
 	Clear = Sprite::SpriteCreate(100, { 1.0f,1.0f });
 }
 
