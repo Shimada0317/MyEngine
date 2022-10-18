@@ -70,7 +70,7 @@ void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 				AttackChanse = Attackrand;
 				AttackTime = 0;
 			}
-			if (AttackChanse >= 7) {
+			if (AttackChanse >= 9) {
 				AttackFase = true;
 			}
 			if (AttackFase == true) {

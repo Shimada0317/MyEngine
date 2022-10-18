@@ -29,11 +29,14 @@ void TitleScene::SetPosSclRot()
 void TitleScene::Update()
 {
 	//DirectX毎フレーム処理 ここから
-
-	if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
-		//シーン切り替え
-		BaseScene* scene_ = new GameScene(sceneManager_);
-		sceneManager_->SetNextScene(scene_);
+	timer += 1;
+	if (timer >= 10) {
+		if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+			//シーン切り替え
+			BaseScene* scene_ = new GameScene(sceneManager_);
+			sceneManager_->SetNextScene(scene_);
+			timer = 0;
+		}
 	}
 	SetPosSclRot();
 }

@@ -8,6 +8,7 @@
 #include"FbxLoader.h"
 #include"FbxObject3d.h"
 #include"ClearScene.h"
+#include"GameOverScene.h"
 #include"DebugScene.h"
 
 
@@ -89,10 +90,14 @@ void GameScene::AllUpdate()
 void GameScene::Update()
 {
 	if (playerHp<=0) {
-		BaseScene* scene_ = new ClearScene(sceneManager_);
+		BaseScene* scene_ = new GameOverScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
 	}
 
+	if (patern >= 5) {
+		BaseScene* scene_ = new ClearScene(sceneManager_);
+		sceneManager_->SetNextScene(scene_);
+	}
 
 	SetPosSclRot();
 	AllUpdate();

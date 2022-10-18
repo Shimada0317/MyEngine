@@ -1,23 +1,11 @@
 #pragma once
-
-#pragma once
-
 #include"BaseScene.h"
 #include "DirectXCommon.h"
+#include"Sprite.h"
 #include <DirectXMath.h>
-#include "Sprite.h"
-#include"Object3d.h"
-#include"ObjModel.h"
-#include"Input.h"
-#include"ParticleManager.h"
-#include"Player.h"
-#include"Bullet.h"
-#include"middle.h"
-#include"PostEffect.h"
-#include"Robot.h"
 #include<memory>
 
-class TitleScene :public BaseScene
+class GameOverScene :public BaseScene
 {
 private: // エイリアス
 // Microsoft::WRL::を省略
@@ -31,7 +19,7 @@ private:
 	static const int debugTextNumber = 0;
 
 public://メンバ変数
-	TitleScene(SceneManager* sceneManager_);
+	GameOverScene(SceneManager* sceneManager_);
 
 	void Initialize(DirectXCommon* dxComon) override;
 
@@ -43,21 +31,8 @@ public://メンバ変数
 
 	void Finalize() override;
 private:
-
-	DirectXCommon* dxCommon = nullptr;
-
-	Sprite* sprite = nullptr;
-	Sprite* title = nullptr;
-
-	ParticleManager* particle = nullptr;
-	PostEffect* post = nullptr;
-
-	XMFLOAT3 ramieru_pos = { 0,0,0 };
-
-	XMFLOAT2 titlesize = { 1280.0f,720.0f };
-	XMFLOAT2 titlepos = { 0.0f,0.0f };
-	POINT pos;
-
-	int timer = 0;
+	Sprite* GameOver = nullptr;
+	XMFLOAT2 size = { 1280.0f,720.0f };
+	XMFLOAT2 pos = { 0.0f,0.0f };
 };
 

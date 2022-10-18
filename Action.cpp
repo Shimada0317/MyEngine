@@ -17,7 +17,7 @@ Action* Action::GetInstance()
 
 void Action::PlayerMove3d(XMVECTOR &position)
 {
-	XMVECTOR move = { 0.01f,0.01f,0.1f };
+	XMVECTOR move = { 0.05f,0.05f,0.5f };
 
 	if (Input::GetInstance()->PushKey(DIK_UP)) {
 		position.m128_f32[1] += move.m128_f32[1];

@@ -21,10 +21,11 @@ void ClearScene::SetPosSclRot()
 
 void ClearScene::Update()
 {
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+	if (Input::GetInstance()->PushKey(DIK_RETURN)) {
 		BaseScene* scene_ = new TitleScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
 	}
+	SetPosSclRot();
 }
 
 void ClearScene::Draw(DirectXCommon* dxCommon)
