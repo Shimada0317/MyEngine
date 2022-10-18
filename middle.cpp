@@ -3,7 +3,9 @@
 #include<fstream>
 middle::~middle()
 {
-	delete[] bull;
+	for (int i = 0; i < 9; i++) {
+		delete bull[i];
+	}
 }
 //
 ////ƒZ[ƒu
@@ -233,74 +235,13 @@ void middle::SpriteDraw()
 
 }
 //
-//void middle::ImGuiDraw()
-//{
-//	player->ImGuiDraw();
-//	float r = Remaining;
-//	float p = patern;
-//	float a = ans;
-//	float t = ReloadTime;
-//	float ow = oldpatern;
-//
-//	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
-//	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
-//	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
-//	ImGui::Begin("mouth");
-//	ImGui::Checkbox("shot", &shot[0]);
-//	ImGui::Checkbox("stop", &stop[0]);
-//	ImGui::Checkbox("stop", &stop[1]);
-//	ImGui::SliderFloat("ReloadTimer", &t, -100.0f, 100.0f);
-//	ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
-//	ImGui::SliderFloat("Remaining", &a, -100.0f, 100.0f);
-//	if (ImGui::TreeNode("playerSts")) {
-//
-//		ImGui::SliderFloat("Rot.x", &playerRot.x, -100.0f, 100.0f);
-//		ImGui::SliderFloat("Rot.y", &playerRot.y, -100.0f, 100.0f);
-//		ImGui::SliderFloat("Rot.z", &playerRot.z, -100.0f, 100.0f);
-//
-//		ImGui::TreePop();
-//	}
-//	if (ImGui::TreeNode("EnePos")) {
-//
-//		ImGui::SliderFloat("EnePos.x", &enemyPos[0].m128_f32[0], -100.0f, 100.0f);
-//		ImGui::SliderFloat("EnePos.y", &enemyPos[0].m128_f32[1], -100.0f, 100.0f);
-//		ImGui::SliderFloat("EnePos.z", &enemyPos[0].m128_f32[2], -100.0f, 100.0f);
-//		ImGui::SliderFloat("EnePos.x", &enemyPos[1].m128_f32[0], -100.0f, 100.0f);
-//		ImGui::SliderFloat("EnePos.y", &enemyPos[1].m128_f32[1], -100.0f, 100.0f);
-//		ImGui::SliderFloat("EnePos.z", &enemyPos[1].m128_f32[2], -100.0f, 100.0f);
-//		ImGui::TreePop();
-//	}
-//
-//	if (ImGui::TreeNode("bulletHUD")) {
-//		ImGui::Checkbox("shot", &shot[0]);
-//		ImGui::Checkbox("shot", &shot[1]);
-//		ImGui::Checkbox("shot", &shot[2]);
-//		ImGui::Checkbox("shot", &shot[3]);
-//		ImGui::Checkbox("shot", &shot[4]);
-//		ImGui::Checkbox("shot", &shot[5]);
-//		ImGui::Checkbox("shot", &shot[6]);
-//		ImGui::Checkbox("shot", &shot[7]);
-//		ImGui::Checkbox("shot", &shot[8]);
-//		ImGui::TreePop();
-//	}
-//
-//	if (ImGui::TreeNode("other")) {
-//		ImGui::SliderFloat("speed", &speed[0], -100.0f, 100.0f);
-//		ImGui::SliderFloat("Remaining", &r, -100.0f, 100.0f);
-//		ImGui::SliderFloat("hit", &hit, -100.0f, 100.0f);
-//		ImGui::SliderFloat("patern", &p, -100.0f, 100.0f);
-//		ImGui::SliderFloat("oldpatern", &ow, -100.0f, 100.0f);
-//		ImGui::Checkbox("count", &count);
-//		ImGui::TreePop();
-//	}
-//
-//	ImGui::End();
-//	ImGui::PopStyleColor();
-//	ImGui::PopStyleColor();
-//	enemy[0]->ImGuiDraw();
-//	enemy[1]->ImGuiDraw();
-//}
-//
+void middle::ImGuiDraw()
+{
+	player->ImGuiDraw();
+
+
+}
+
 void middle::Fainalize()
 {
 	for (int j = 0; j < 3; j++) {

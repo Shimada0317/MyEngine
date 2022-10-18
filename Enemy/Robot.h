@@ -62,7 +62,9 @@ private:
 	int action = 0;
 
 	bool oldArive;
-
+	int AttackChanse = 10;
+	bool AttackFase = false;
+	float AttackTime = 0;
 	float speed = 0.005f;
 };
 

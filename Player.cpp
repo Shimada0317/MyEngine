@@ -35,16 +35,22 @@ void Player::Initalize()
 
 void Player::Set()
 {
+	const float BulletSpeed = 15.0f;
+	velocity = { 0, 0, BulletSpeed };
+	velocity = XMVector3TransformNormal(velocity, mat);
+	playerWorldPos = { 0.0f,0.0f,0.0f };
+	playerWorldPos = XMVector3Transform(position, mat);
+
 	backPlayerPos.m128_f32[0] = -position.m128_f32[0] / 32;
 	backPlayerPos.m128_f32[1] = position.m128_f32[1] / 32;
-	backPlayerPos.m128_f32[2] = position.m128_f32[2] - 5;
+	backPlayerPos.m128_f32[2] = playerWorldPos.m128_f32[2] - 5;
 
 	for (int i = 0; i < 100; i++) {
 		const float rnd_pos = 1.0f;
-		XMFLOAT3 pos{};
-		pos.x = oldPos.m128_f32[0];
-		pos.y = oldPos.m128_f32[1];
-		pos.z = oldPos.m128_f32[2];
+ 		XMFLOAT3 pos{};
+		pos.x = playerWorldPos.m128_f32[0]+oldPos.m128_f32[0];
+		pos.y = playerWorldPos.m128_f32[1]+oldPos.m128_f32[1];
+		pos.z = playerWorldPos.m128_f32[2];
 		//pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		//pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		//pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
@@ -81,22 +87,19 @@ void Player::Effect()
 
 void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 {
+	oldPos = position;
+
 	//弾の発射前
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			const float kBulletSpeed = 15.0f;
-			XMVECTOR velocity = { 0, 0, kBulletSpeed };
-			velocity = XMVector3TransformNormal(velocity, mat);
-			playerWorldPos = { 0.0f,0.0f,0.0f };
-			playerWorldPos = XMVector3Transform(playerWorldPos, mat);
+			
 			Remaining += 1;
-			oldPos = position;
 			time = 0.0f;
 			particle = true;
 			for (int i = 0; i < BULL; i++) {
 				if (bull[i]->CheckOk()) {
+					bull[i]->ShotBefore(backPlayerPos, velocity);
 					bull[i]->TriggerOn();
-					bull[i]->Test(playerWorldPos, velocity);
 					break;
 				}
 			}
@@ -104,7 +107,7 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 	}
 	//発射後
 	for (int i = 0; i < BULL; i++) {
-		bull[i]->ShotBefore(backPlayerPos);
+		bull[i]->ShotAfter(backPlayerPos,position,playerWorldPos,Remaining);
 		//break;
 	}
 	//撃った時のパーティクル
@@ -203,7 +206,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
 	ParticleManager::PreDraw(cmdeList);
 	if (particle == true) {
-		//part->Draw();
+		part->Draw();
 	}
 	ParticleManager::PostDraw();
 }
@@ -232,11 +235,16 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("position")) {
+		ImGui::SliderFloat("pos.z", &playerWorldPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &position.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &position.m128_f32[0], -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
 
-		ImGui::SliderFloat("rot.y", &rotation.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("target.x", &Target_pos.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("target.y", &Target_pos.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("Eye_pos.x", &Eye_pos.x, -100.0f, 100.0f);
+	if (ImGui::TreeNode("backposition")) {
+		ImGui::SliderFloat("pos.z", &backPlayerPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &backPlayerPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &backPlayerPos.m128_f32[0], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

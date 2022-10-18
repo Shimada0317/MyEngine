@@ -23,7 +23,7 @@ public:
 
 	void Finalize();
 
-	void Attack(const float& attackT);
+	void Attack(float& attackT,bool& AttackFase,int& playerHp);
 private:
 	std::unique_ptr<Object3d> LArm;
 	std::unique_ptr<Object3d> RArm;

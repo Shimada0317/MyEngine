@@ -1,6 +1,11 @@
 #include "Bullet.h"
 #include"imgui/imgui.h"
 
+Bullet::~Bullet()
+{
+	delete bulModel;
+}
+
 void Bullet::Initialize()
 {
 
@@ -94,8 +99,11 @@ void Bullet::debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed, bool& d)
 
 void Bullet::Test(const XMVECTOR& position, const XMVECTOR& velocity)
 {
-	pos = position;
-	velocity_ = velocity;
+	if (Trigger == false) {
+		pos = position;
+		fire = true;
+	}
+	
 }
 
 void Bullet::Set()
@@ -106,7 +114,7 @@ void Bullet::Set()
 	mat = bullet->GetMatrix();
 }
 
-void Bullet::ShotBefore(const XMVECTOR& startPos)
+void Bullet::ShotBefore(const XMVECTOR& startPos, const XMVECTOR& velocity)
 {
 
 	if (Trigger == false) {
@@ -115,7 +123,7 @@ void Bullet::ShotBefore(const XMVECTOR& startPos)
 		pos.m128_f32[2] = startPos.m128_f32[2];
 		fire = true;
 	}
-
+	velocity_ = velocity;
 }
 
 bool Bullet::CheckOk()
@@ -132,9 +140,9 @@ void Bullet::TriggerOn()
 	Trigger = true;
 }
 
-void Bullet::ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerPos,int& remaining)
+void Bullet::ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerPos, const XMVECTOR& PlayerWorldPos,int& remaining)
 {
-	float speedm = 5.1;
+	float speedm = 1.5;
 
 
 	if (Trigger == true) {
@@ -142,27 +150,27 @@ void Bullet::ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerPos,
 			//’Ç”ö‚ÌŽ®‚Ì“r’†
 			float vx = (baclplayerpos.m128_f32[0] - playerPos.m128_f32[0]);
 			float vy = (baclplayerpos.m128_f32[1] - playerPos.m128_f32[1]);
-			float vz = (baclplayerpos.m128_f32[2] - playerPos.m128_f32[2]);
+			float vz = (baclplayerpos.m128_f32[2] - PlayerWorldPos.m128_f32[2]);
 			float v2x = pow(vx, 2);
 			float v2y = pow(vy, 2);
 			float v2z = pow(vz, 2);
 			float l = sqrtf(v2x + v2y + v2z);
-			v3x = (vx / l) * speedm;
-			v3y = (vy / l) * speedm;
-			v3z = (vz / l) * speedm;
+			v3x = (vx / l) * velocity_.m128_f32[2];
+			v3y = (vy / l) * velocity_.m128_f32[2];
+			v3z = (vz / l) * velocity_.m128_f32[2];
 			//remaining += 1;
 			fire = false;
 		}
 	}
 
 	pos.m128_f32[0] -= v3x;
-	pos.m128_f32[1] -= v3y;
+	pos.m128_f32[1] -= (v3y / 3);
 	pos.m128_f32[2] -= v3z;
 
 	//’Ç”ö‘O‚Ìó‘Ô
 	/*verosity_ = { 0, 0, bullSpeed, 1 };
 	bullPos[i].m128_f32[2] += verosity_.m128_f32[2];*/
-	if (pos.m128_f32[2] >= 30 + playerPos.m128_f32[2]) {
+	if (pos.m128_f32[2] >= 30 + PlayerWorldPos.m128_f32[2]) {
 		pos.m128_f32[2] = -10;
 		Trigger = false;
 	}
@@ -181,7 +189,7 @@ void Bullet::Update()
 	/*pos += velocity_;
 
 	rot.x++;*/
-	pos += velocity_;
+//	pos += velocity_;
 	ShotT += 1.0f;
 	if (ShotT >= 30) {
 		Trigger = false;

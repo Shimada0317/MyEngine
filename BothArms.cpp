@@ -34,7 +34,7 @@ void BothArms::Update(bool& arive, const XMVECTOR& bodyPos, Bullet* bull, int& H
 {
 	if (arive == true) {
 		SetPRS(bodyPos, bull);
-		if (Collision::ArmHit(LArmPos, ArmScl, bullPos, bullScl)|| Collision::ArmHit(RArmPos, ArmScl, bullPos, bullScl)) {
+		if (Collision::ArmHit(LArmPos, ArmScl, bullPos, bullScl) || Collision::ArmHit(RArmPos, ArmScl, bullPos, bullScl)) {
 			Hp -= 10;
 			HitCount += 1;
 			Hit = false;
@@ -42,7 +42,7 @@ void BothArms::Update(bool& arive, const XMVECTOR& bodyPos, Bullet* bull, int& H
 		}
 	}
 	else if (arive == false) {
-		ArmRot.x = 0.0f;
+		ArmRot.x = 90.0f;
 	}
 	if (HitCount >= 3) {
 		HitCount = 0;
@@ -64,14 +64,14 @@ void BothArms::Finalize()
 {
 }
 
-void BothArms::Attack(const float& attackT)
+void BothArms::Attack(float& attackT,bool& AttackFase,int& playerHp)
 {
-	if (attackT >= 10) {
-		if (attack == false) {
-			ArmRot.x += 10.0f / 20;
-			if (ArmRot.x >= 160.0f) {
-				attack = true;
-			}
+
+	if (attackT >= 10 && attack == false) {
+		ArmRot.x += 0.1f;
+		//attackT = 0.0f;
+		if (ArmRot.x >= 160.0f) {
+			attack = true;
 		}
 	}
 	if (attack == true) {
@@ -79,6 +79,9 @@ void BothArms::Attack(const float& attackT)
 		if (ArmRot.x <= 90.0f) {
 			ArmRot.x = 90.0f;
 			attack = false;
+			AttackFase = false;
+			attackT = 0;
+			//playerHp -= 1;
 		}
 	}
 }

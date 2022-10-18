@@ -122,7 +122,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 void GameScene::ImgDraw()
 {
-	//mid->ImGuiDraw();
+	mid->ImGuiDraw();
 }
 
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
@@ -147,6 +147,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 
 void GameScene::Finalize()
 {
-
+	delete ground;
+	delete playermodel;
 }
 

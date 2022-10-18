@@ -125,6 +125,7 @@ private:
 	int ver = 0;
 	bool chan = false;
 	float kBulletSpeed=0;
+	XMVECTOR velocity = { 0.0f,0.0f,0.0f };
 	XMVECTOR veloc = { 0.0f,0.0f,0.0f };
 	//“®‚¢‚½‚Æ‚«‚Ìtimer
 	float movetimer = 0.0f;

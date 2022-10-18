@@ -57,19 +57,26 @@ void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	}
 
 	//生きているとき
-	if (all == true  && Hp > 0) {
+	if (all == true && Hp > 0) {
 		allPos.m128_f32[2] = allPos.m128_f32[2] - speed;
 		//プレイヤーの前まで来たとき
 		if (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 4.0f) {
 			speed = 0;
-			attackT += 0.1f;
-			/*RArm->Attack(attackT);
-			LArm->Attack(attackT);*/
-			Arms->Attack(attackT);
-		}
-		if (attackT >= 160.0f) {
-			attackT = 0.0f;
-			playerHp -= 1;
+			if (AttackTime != true) {
+				AttackTime += 0.1f;
+			}
+			if (AttackTime >= 20) {
+				int Attackrand = (rand() % 10);
+				AttackChanse = Attackrand;
+				AttackTime = 0;
+			}
+			if (AttackChanse >= 7) {
+				AttackFase = true;
+			}
+			if (AttackFase == true) {
+				attackT += 0.1f;
+				Arms->Attack(attackT, AttackFase, playerHp);
+			}
 		}
 	}
 
@@ -119,13 +126,13 @@ void Robot::Finalize()
 	part->Finalize();
 }
 
-void Robot::SpownEnemy(const XMMATRIX& player,int random)
+void Robot::SpownEnemy(const XMMATRIX& player, int random)
 {
 
 	Hp = 50;
 	OldHp = Hp;
-	int rad = (rand() % 4 );
-	
+	int rad = (rand() % 4);
+
 
 	float radX = (float)rad;
 	for (int i = 0; i < 3; i++) {
@@ -136,19 +143,19 @@ void Robot::SpownEnemy(const XMMATRIX& player,int random)
 	allPos.m128_f32[0] = 0.0f;
 	allPos.m128_f32[1] = 0.0f;
 	if (rad == 0) {
-		allPos.m128_f32[0] = -2.0f;
+		allPos.m128_f32[0] = -6.0f;
 	}
 	else if (rad == 1) {
-		allPos.m128_f32[0] = -1.0f;
+		allPos.m128_f32[0] = -3.0f;
 	}
 	else if (rad == 2) {
 		allPos.m128_f32[0] = 0.0f;
 	}
-	else if(rad == 3) {
-		allPos.m128_f32[0] = 1.0f;
+	else if (rad == 3) {
+		allPos.m128_f32[0] = 3.0f;
 	}
 	else {
-		allPos.m128_f32[0] = 2.0f;
+		allPos.m128_f32[0] = 6.0f;
 	}
 	allPos.m128_f32[0] = radX;
 	allPos.m128_f32[2] = allPos.m128_f32[2] + 15;

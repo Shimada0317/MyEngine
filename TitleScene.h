@@ -46,8 +46,6 @@ private:
 
 	DirectXCommon* dxCommon = nullptr;
 
-	std::unique_ptr<Robot>enemy;
-
 	Sprite* sprite = nullptr;
 	Sprite* title = nullptr;
 

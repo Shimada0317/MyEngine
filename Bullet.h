@@ -24,6 +24,8 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 	using XMVECTOR = DirectX::XMVECTOR;
 public:
+	~Bullet();
+
 	void Initialize();
 
 	void Stanby(const XMVECTOR& playerPos,const XMVECTOR& vel);
@@ -38,13 +40,13 @@ public:
 
 	void Set();
 
-	void ShotBefore(const XMVECTOR& startPos);
+	void ShotBefore(const XMVECTOR& startPos, const XMVECTOR& velocity);
 
 	bool CheckOk();
 
 	void TriggerOn();
 
-	void ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerpos,int& remaining);
+	void ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerpos,const XMVECTOR&PlayerWorldPos,int& remaining);
 
 	void Hit();
 	
