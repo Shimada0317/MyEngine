@@ -58,21 +58,30 @@ public:
 
 	void Finalize();
 
+#pragma region Get
+	// 座標のゲット
 	const XMVECTOR& GetPosition() { return pos; }
-
-	void SetPosition(XMVECTOR position) { this->pos = position; }
-
+	//角度のゲット
 	const XMFLOAT3& GetRotation() { return rot; }
-
-	void SetRotation(XMFLOAT3 rotation) { this->rot = rotation; }
-
+	//スケールのゲット
 	const XMFLOAT3& GetScl() { return scl; }
+	//発射フラグのゲット
+	bool GetTrigger() { return Trigger; }
+#pragma endregion
 
-	void SetScl(XMFLOAT3 scale) { this->scl = scale; }
-
-	const bool& GetTrigger() { return Trigger; }
-
+#pragma region Set
+	//座標のセット
+	void SetPosition(XMVECTOR position) { this->pos = position; }
+	//角度のセット
+	void SetRotation(XMFLOAT3 rotation) { this->rot = rotation; }
+	//スケールのセット
+	void SetScl(const XMFLOAT3& scale) { this->scl = scale; }
+	//発射フラグのセット
 	void SetTrigger(bool Trigger) { this->Trigger = Trigger; }
+#pragma endregion
+
+	
+	
 private:
 	std::unique_ptr<Object3d> bullet;
 	ObjModel* bulModel = nullptr;

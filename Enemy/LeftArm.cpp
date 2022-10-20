@@ -42,7 +42,7 @@ void LeftArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 	LArm->Update();
 }
 
-void LeftArm::Draw(const bool& arive)
+void LeftArm::Draw(bool arive)
 {
 	if (arive == true) {
 		LArm->Draw();
@@ -55,7 +55,7 @@ void LeftArm::Finalize()
 	delete LArmModel;
 }
 
-void LeftArm::Attack(const float& attackT)
+void LeftArm::Attack(float attackT)
 {
 	if (attackT >= 10) {
 		if (attack == false) {

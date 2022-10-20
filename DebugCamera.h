@@ -19,7 +19,7 @@ public:
 	/// <param name="input">“ü—Í</param>
 	DebugCamera(int window_width, int window_height);
 
-	void Patern(const int patern,const bool& chan );
+	void Patern(const int patern,bool chan );
 
 	void SetVel(const XMVECTOR vel);
 

@@ -40,7 +40,7 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	//rotation = {0,0,0};
 
 	eye = { 0,1,-5 };
-
+	rotation = { 0.0f,0.0f,0.0f };
 	rotation.x = rot.x;
 	rotation.y = rot.y;
 	rotation.z = rot.z;
@@ -51,6 +51,7 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
 	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
 	matRot *= XMMatrixRotationZ(XMConvertToRadians(rotation.z));
+	matTrans = XMMatrixIdentity();
 	matTrans = XMMatrixTranslation(position.m128_f32[0], position.m128_f32[1], position.m128_f32[2]);
 	matWorld = XMMatrixIdentity();
 	matWorld *= matRot;
@@ -77,7 +78,7 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	//ワールド上方ベクトル
 	XMVECTOR up = { 0,1,0 };
 	//レールカメラの回転を反映(レールカメラの上方ベクトル)
-	up = XMVector3Transform(up, matWorld);
+	up = XMVector3TransformNormal(up, matWorld);
 	XMFLOAT3 upp = { up.m128_f32[0],up.m128_f32[1],up.m128_f32[2] };
 	eye = { eye2.m128_f32[0],eye2.m128_f32[1],eye2.m128_f32[2]};
 
@@ -87,6 +88,7 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	NormalCam->SetTarget(target);
 	NormalCam->SetUp(upp);
 	NormalCam->SetEye(eye);
+	//プレイヤーにワールド座標を送る
 	NormalCam->SetWorld(matWorld);
 	//debug->SetPosition(position);
 	//debug->Update();

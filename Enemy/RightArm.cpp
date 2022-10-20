@@ -46,7 +46,7 @@ void RightArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 	RArm->Update();
 }
 
-void RightArm::Draw(const bool& arive)
+void RightArm::Draw(bool arive)
 {
 	if (arive == true) {
 		RArm->Draw();
@@ -59,7 +59,7 @@ void RightArm::Finalize()
 	delete RArmModel;
 }
 
-void RightArm::Attack(const float& attackT)
+void RightArm::Attack(float attackT)
 {
 	if (attackT >= 10) {
 		if (attack == false) {

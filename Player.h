@@ -44,33 +44,32 @@ public:
 
 	void MouthContoroll();
 
+#pragma region Get
+	//三次元座標
 	const XMVECTOR& GetPosition() { return position; }
+	//角度
+	const XMFLOAT3& GetRotation() { return rotation; }
+	//スケール
+	const XMFLOAT3& GetScl() { return scale; }
+	//行列
+	const XMMATRIX& GetMat() { return mat; }
+	//二次元座標
+	const XMFLOAT2& GetRetPosition() { return retpos; }
+	//二次元スケール
+	const XMFLOAT2& GetRetSiz() { return retsize; }
+	//Hp
+	int GetHp() { return Hp; }
+#pragma endregion
+
+#pragma region Set
 
 	void SetPosition(const XMVECTOR& position) { this->position = position; }
-
-	const XMFLOAT3& GetRotation() { return rotation; }
-
 	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
-
-	const XMFLOAT3& GetScl() { return scale; }
-
 	void SetScl(const XMFLOAT3& scale) { this->scale = scale; }
-
-	const XMMATRIX& GetMat() { return mat; }
-
-	const XMFLOAT2& GetRetPosition() { return retpos; }
-
 	void SetRetPosition(const XMFLOAT2& position) { this->retpos = position; }
-
-	const XMFLOAT2& GetRetSiz() { return retsize; }
-
 	void SetRetSiz(const XMFLOAT2& scale) { this->retsize = scale; }
-
-	void SetHp(int& HP) { this->Hp = HP; }
-
-	int GetHp() { return Hp; }
-
-	XMVECTOR GetWorldPosition();
+	void SetHp(int HP) { this->Hp = HP; }
+#pragma endregion
 private:
 	
 
@@ -97,7 +96,7 @@ private:
 	//カメラ
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 Eye_pos = {0.0f,0.0f,0.0f};
+	XMFLOAT3 Eye_rot = {0.0f,0.0f,0.0f};
 	XMFLOAT3 Target_pos = {0.0f,0.0f,0.0f};
 	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
 

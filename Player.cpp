@@ -77,7 +77,7 @@ void Player::Set()
 	player->SetScale({ scale });
 
 	mat = player->GetMatrix();
-	//Eye_pos=camera->GetEye();
+	//Eye_rot=camera->GetEye();
 	player->SetParent(camera);
 }
 
@@ -139,29 +139,28 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 	}
 	//プレイヤーの移動
 	Action::GetInstance()->PlayerMove3d(position);
-
 	const float kMoveLimitX = 4;
-	const float kMoveLimitY = 2;
+	const float kMoveLimitY = 3;
 
 	position.m128_f32[0] = max(position.m128_f32[0], -kMoveLimitX);
 	position.m128_f32[0] = min(position.m128_f32[0], +kMoveLimitX);
-	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY);
+	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY+3);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
 
 	//敵をすべて倒した時に進む(キー入力でデバッグ中)
-	if (patern == false) {
-		if (Input::GetInstance()->TriggerKey(DIK_O)) {
-			patern = true;
-		}
-	}
-	else {
-		if (Input::GetInstance()->TriggerKey(DIK_O)) {
-			patern = false;
-		}
-	}
-	//プレイヤーの回転
+	//if (patern == false) {
+	//	if (Input::GetInstance()->TriggerKey(DIK_O)) {
+	//		patern = true;
+	//	}
+	//}
+	//else {
+	//	if (Input::GetInstance()->TriggerKey(DIK_O)) {
+	//		patern = false;
+	//	}
+	//}
+	////プレイヤーの回転
 	if (Input::GetInstance()->PushKey(DIK_A)) {
-		rotation.y ++;
+		Eye_rot.y ++;
 	}
 	//敵をすべて倒した時
 
@@ -185,7 +184,10 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 		kBulletSpeed = 0.0f;
 		vel = { 0, 0, kBulletSpeed };
 	}
-
+	if (Input::GetInstance()->PushKey(DIK_O)) {
+		kBulletSpeed = 1.1f;
+		vel = { 0, 0, kBulletSpeed };
+	}
 	
 
 	vel = XMVector3TransformNormal(vel, mat);
@@ -196,7 +198,7 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 	}
 
 	Set();
-	cam->Update(vel, rotation, camera);
+	cam->Update(vel, Eye_rot, camera);
 	camera->Update();
 	player->Update();
 //	part->Update(color);
@@ -293,7 +295,7 @@ void Player::MouthContoroll()
 	//ビューポート行列
 	XMMATRIX matViewport = { WinApp::window_width / 2,0,0,0  ,0,-WinApp::window_height / 2,0,0    ,0,0,1,0   ,WinApp::window_width / 2 + OffsetX,WinApp::window_height / 2 + OffsetY,0,1 };
 	//ビュー、プロジェクション、ビューポート3つの行列の乗算
-	XMMATRIX matVPV = XMMatrixLookAtLH(XMLoadFloat3(&Eye_pos), XMLoadFloat3(&cameraTarget), XMLoadFloat3(&up)) * matProjection * matViewport;
+	XMMATRIX matVPV = XMMatrixLookAtLH(XMLoadFloat3(&Eye_rot), XMLoadFloat3(&cameraTarget), XMLoadFloat3(&up)) * matProjection * matViewport;
 
 	XMMATRIX matIverserVPV = XMMatrixInverse(nullptr, matVPV);
 
@@ -312,14 +314,4 @@ void Player::MouthContoroll()
 	//pos=posNear+mouseDirection
 }
 
-XMVECTOR Player::GetWorldPosition()
-{
-	XMVECTOR worldPos;
 
-	worldPos.m128_f32[0] = position.m128_f32[0];
-	worldPos.m128_f32[1] = position.m128_f32[1];
-	worldPos.m128_f32[2] = position.m128_f32[2];
-	worldPos.m128_f32[3] = 1;
-
-	return worldPos;
-}

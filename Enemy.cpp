@@ -120,15 +120,3 @@ void Enemy::Active(bool& StopT, XMVECTOR positionP)
 
 }
 
-XMVECTOR Enemy::GetWorldPos()
-{
-	XMVECTOR worldPos;
-
-	worldPos.m128_f32[0] = position.m128_f32[0];
-	worldPos.m128_f32[1] = position.m128_f32[1];
-	worldPos.m128_f32[2] = position.m128_f32[2];
-	worldPos.m128_f32[3] = 1;
-
-	return worldPos;
-}
-

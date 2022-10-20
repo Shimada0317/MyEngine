@@ -43,7 +43,7 @@ void Head::Update(bool& arive,const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 	Head->Update();
 }
 
-void Head::Draw(const bool& arive)
+void Head::Draw(bool arive)
 {
 	if (arive == true) {
 		Head->Draw();

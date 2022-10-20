@@ -40,19 +40,19 @@ public:
 
 	void SetScl(XMFLOAT3 scale) { this->scale = scale; }
 
-	const bool& GetArive() { return arive; }
+	bool GetArive() { return arive; }
 
 	void SetArive(bool arive) { this->arive = arive; }
 
-	const int& GetLife() { return life; }
+	int GetLife() { return life; }
 
 	void SetLife(int life) { this->life = life; }
 
-	XMVECTOR GetWorldPos();
+	const XMVECTOR& GetWorldPos();
 
 	void SetSpeed(float speed) { this->speed = speed; }
 
-	const float& GetSpeed() { return speed; }
+	float GetSpeed() { return speed; }
 
 	void SetTime(float time) { this->stopT = time; }
 

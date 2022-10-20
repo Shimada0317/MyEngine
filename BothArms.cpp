@@ -52,7 +52,7 @@ void BothArms::Update(bool& arive, const XMVECTOR& bodyPos, Bullet* bull, int& H
 	RArm->Update();
 }
 
-void BothArms::Draw(const bool& arive)
+void BothArms::Draw(bool arive)
 {
 	if (arive == true) {
 		RArm->Draw();

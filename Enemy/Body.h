@@ -21,7 +21,7 @@ public:
 
 	void Update(bool& arive,const XMVECTOR& allPos,Bullet* bull,int& Hp);
 
-	void Draw(const bool& arive);
+	void Draw(bool arive);
 
 	void Finalize();
 private:

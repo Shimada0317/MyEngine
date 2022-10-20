@@ -18,11 +18,11 @@ public:
 
 	void Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp);
 
-	void Draw(const bool& arive);
+	void Draw(bool arive);
 
 	void Finalize();
 
-	void Attack(const float& attackT);
+	void Attack(float attackT);
 private:
 	std::unique_ptr<Object3d> RArm;
 	ObjModel* RArmModel = nullptr;
