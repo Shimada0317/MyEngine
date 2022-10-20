@@ -31,6 +31,9 @@
     <Filter Include="ソース ファイル\Enemy">
       <UniqueIdentifier>{7e15da26-04ba-4ad0-8932-e395c28fb8c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{dcc180e0-6be2-4ed6-903c-2cd22eefebf8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Input.cpp">
