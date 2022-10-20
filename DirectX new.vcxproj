@@ -123,7 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(SolutionDir)Quaternion;$(SolutionDir)Matrix4;$(SolutionDir)Vector3;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -141,7 +141,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(SolutionDir)Quaternion;$(SolutionDir)Matrix4;$(SolutionDir)Vector3;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(ProjectDir)Enemy</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
