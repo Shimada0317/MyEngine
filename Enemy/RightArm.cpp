@@ -1,5 +1,10 @@
 #include "RightArm.h"
 
+RightArm::~RightArm()
+{
+	delete RArmModel;
+}
+
 void RightArm::Initialize()
 {
 	RArmModel = ObjModel::CreateFromOBJ("Arm");

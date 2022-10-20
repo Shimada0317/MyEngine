@@ -39,4 +39,5 @@ void GameOverScene::Draw(DirectXCommon* dxCommon)
 
 void GameOverScene::Finalize()
 {
+	delete GameOver;
 }

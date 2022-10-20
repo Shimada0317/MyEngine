@@ -3,7 +3,8 @@
 
 ObjParticle::~ObjParticle()
 {
-
+	delete model;
+	delete worm;
 }
 
 void ObjParticle::InitializeState(int i)

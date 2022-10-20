@@ -1,5 +1,10 @@
 #include "Body.h"
 
+Body::~Body()
+{
+	delete bodyModel;
+}
+
 void Body::Initialize()
 {
 	bodyModel = ObjModel::CreateFromOBJ("body");

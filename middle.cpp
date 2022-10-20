@@ -6,6 +6,9 @@ middle::~middle()
 	for (int i = 0; i < 9; i++) {
 		delete bull[i];
 	}
+	for (int i = 0; i < 3; i++) {
+		rob[i].reset();
+	}
 }
 //
 ////ƒZ[ƒu

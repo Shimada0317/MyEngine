@@ -154,5 +154,6 @@ void GameScene::Finalize()
 {
 	delete ground;
 	delete playermodel;
+	mid.reset();
 }
 

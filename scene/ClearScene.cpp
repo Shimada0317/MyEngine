@@ -39,4 +39,5 @@ void ClearScene::Draw(DirectXCommon* dxCommon)
 
 void ClearScene::Finalize()
 {
+	delete Clear;
 }

@@ -12,6 +12,8 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMVECTOR = DirectX::XMVECTOR;
 public:
+	~RightArm();
+
 	void Initialize();
 
 	void SetPRS(const XMVECTOR& bodyPos,Bullet* bull);

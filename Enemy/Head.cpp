@@ -2,7 +2,7 @@
 
 Head::~Head()
 {
-
+	delete headModel;
 }
 
 void Head::Initialize()

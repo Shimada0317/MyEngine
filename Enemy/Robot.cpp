@@ -3,7 +3,10 @@
 
 Robot::~Robot()
 {
-
+	head.reset();
+	body.reset();
+	Arms.reset();
+	part.reset();
 }
 
 void Robot::Initialize()
@@ -118,12 +121,7 @@ void Robot::AttackAction()
 
 void Robot::Finalize()
 {
-	head->Finalize();
-	body->Finalize();
-	Arms->Finalize();
-	//LArm->Finalize();
-	//RArm->Finalize();
-	part->Finalize();
+
 }
 
 void Robot::SpownEnemy(const XMMATRIX& player, int random)

@@ -1,5 +1,10 @@
 #include "BothArms.h"
 
+BothArms::~BothArms()
+{
+	delete ArmModel;
+}
+
 void BothArms::Initialize()
 {
 	ArmModel = ObjModel::CreateFromOBJ("Arm");

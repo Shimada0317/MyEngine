@@ -61,4 +61,5 @@ void TitleScene::Finalize()
 {
 	delete title;
 	delete dxCommon;
+	delete title;
 }
