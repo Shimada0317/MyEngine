@@ -162,14 +162,14 @@
     <ClCompile Include="Action.cpp" />
     <ClCompile Include="Audio.cpp" />
     <ClCompile Include="BaseScene.cpp" />
-    <ClCompile Include="BothArms.cpp" />
+    <ClCompile Include="Enemy\BothArms.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
     <ClCompile Include="scene\ClearScene.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionPrimitive.cpp" />
     <ClCompile Include="Contoroller.cpp" />
-    <ClCompile Include="DebugCamera.cpp" />
+    <ClCompile Include="camera\DebugCamera.cpp" />
     <ClCompile Include="scene\DebugScene.cpp" />
     <ClCompile Include="DebugText.cpp" />
     <ClCompile Include="DirectXCommon.cpp" />
@@ -193,8 +193,8 @@
     <ClCompile Include="light\Light.cpp" />
     <ClCompile Include="light\LightGroup.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Material.cpp" />
-    <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="3d\Material.cpp" />
+    <ClCompile Include="3d\Mesh.cpp" />
     <ClCompile Include="middle.cpp" />
     <ClCompile Include="3d\ObjModel.cpp" />
     <ClCompile Include="BaseClassIUDF.cpp" />
@@ -204,11 +204,11 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PostEffect.cpp" />
-    <ClCompile Include="RailCamera.cpp" />
+    <ClCompile Include="camera\RailCamera.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TextureModel.cpp" />
-    <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="scene\TitleScene.cpp" />
     <ClCompile Include="Wepon.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
@@ -427,14 +427,14 @@
     <ClInclude Include="3d\FbxObject3d.h" />
     <ClInclude Include="Action.h" />
     <ClInclude Include="Audio.h" />
-    <ClInclude Include="BothArms.h" />
+    <ClInclude Include="Enemy\BothArms.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="scene\ClearScene.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionPrimitive.h" />
     <ClInclude Include="Contoroller.h" />
-    <ClInclude Include="DebugCamera.h" />
+    <ClInclude Include="camera\DebugCamera.h" />
     <ClInclude Include="scene\DebugScene.h" />
     <ClInclude Include="DebugText.h" />
     <ClInclude Include="DirectXCommon.h" />
@@ -460,8 +460,8 @@
     <ClInclude Include="light\DirectionalLight.h" />
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="light\LightGroup.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="3d\Material.h" />
+    <ClInclude Include="3d\Mesh.h" />
     <ClInclude Include="middle.h" />
     <ClInclude Include="3d\ObjModel.h" />
     <ClInclude Include="BaseClassIUDF.h" />
@@ -471,11 +471,11 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="PostEffect.h" />
-    <ClInclude Include="RailCamera.h" />
+    <ClInclude Include="camera\RailCamera.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TextureModel.h" />
-    <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="scene\TitleScene.h" />
     <ClInclude Include="Wepon.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>
