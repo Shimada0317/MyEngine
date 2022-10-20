@@ -3,6 +3,7 @@
 #include <d3dx12.h>
 #include <d3dcompiler.h>
 #include <DirectXTex.h>
+#include "Sprite.h"
 
 
 #pragma comment(lib, "d3dcompiler.lib")
@@ -347,6 +348,8 @@ Sprite* Sprite::SpriteCreate(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, 
 
 	return sprite;
 }
+
+
 
 Sprite::Sprite(UINT texNumber, XMFLOAT2 position,XMFLOAT2 size, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool isFlipX, bool isFlipY)
 {

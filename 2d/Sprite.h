@@ -71,9 +71,6 @@ public://ƒƒ“ƒoŠÖ”
 
 	//‰Šú‰»
 	bool InitializeSprite();
-	//XV
-	void Update(Sprite& sprite);
-
 	//bool SpriteCreateGraaphicsPipeline(ID3D12Device* dev);
 	//‰ñ“]
 	void SetRotation(float rotation);

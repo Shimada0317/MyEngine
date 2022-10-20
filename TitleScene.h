@@ -46,10 +46,8 @@ private:
 
 	DirectXCommon* dxCommon = nullptr;
 
-	Sprite* sprite = nullptr;
 	Sprite* title = nullptr;
 
-	ParticleManager* particle = nullptr;
 	PostEffect* post = nullptr;
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
