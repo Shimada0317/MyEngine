@@ -17,7 +17,6 @@ void Robot::Initialize()
 	RArm = std::make_unique<RightArm>();*/
 	Arms = std::make_unique<BothArms>();
 	part = std::make_unique<ObjParticle>();
-
 	head->Initialize();
 	body->Initialize();
 	/*LArm->Initialize();
@@ -44,19 +43,30 @@ void Robot::AllUpdate(Bullet* bull)
 	//LArm->Update(arive[2], allPos, bull, Hp);
 	Arms->Update(arive[1], allPos, bull, Hp);
 	body->Update(arive[2], allPos, bull, Hp);
-	part->Set(allPos);
-	part->Update();
+	part->Update(allPos);
+	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
+		patrticle->Update(allPos);
+	}
 }
 
 void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown, int& playerHp)
 {
+	particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
+		return particle->IsDelete();
+
+		});
+
+
 	playerPos = { 0.0f,0.0f,0.0f };
 	playerPos = XMVector3Transform(playerPos, player);
 
 	//É_ÉÅÅ[ÉWÇéÛÇØÇΩÇ∆Ç´
 	if (OldHp > Hp) {
-		part->Effect();
-
+		//part->Effect();
+		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
+		newparticle->Initialize();
+ 		particle_.push_back(std::move(newparticle));
+		OldHp = Hp;
 	}
 
 	//ê∂Ç´ÇƒÇ¢ÇÈÇ∆Ç´
@@ -85,7 +95,7 @@ void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 
 	//ê∂Ç´ÇƒÇ¢ÇÈÇ∆Ç´Ç…HPÇ™0Ç…Ç»Ç¡ÇΩÇÁ
 	if (Hp <= 0) {
-		Hp = 50;
+		Hp = 1;
 		all = false;
 		for (int i = 0; i < 3; i++) {
 			arive[i] = false;
@@ -105,7 +115,10 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	LArm->Draw(arive[2]);*/
 	Arms->Draw(arive[1]);
 	body->Draw(arive[2]);
-	part->Draw();
+	//part->Draw();
+	for (std::unique_ptr<ObjParticle>& particle : particle_) {
+		particle->Draw();
+	}
 	Object3d::PostDraw();
 }
 

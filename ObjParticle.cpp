@@ -7,6 +7,10 @@ ObjParticle::~ObjParticle()
 	delete worm;
 }
 
+void ObjParticle::Fast()
+{
+}
+
 void ObjParticle::InitializeState(int i)
 {
 	//for (int i = 0; i < MAX; i++) {
@@ -89,12 +93,12 @@ void ObjParticle::Set(XMVECTOR& enemyPos)
 	}
 }
 
-void ObjParticle::Update()
+void ObjParticle::Update(XMVECTOR& enemyPos)
 {
+	Set(enemyPos);
+	Effect();
 
 	for (int i = 0; i < MAX; i++) {
-		
-		if (effect[i] == true) {
 			rotation.x += 0.5f/20;
 			position[i].m128_f32[1] +=numY[i]/20;
 			position[i].m128_f32[0] += numX[i]/20;
@@ -110,9 +114,11 @@ void ObjParticle::Update()
 				effect[i] = false;
 				break;
 			}
-		}
 		particle[i]->Update();
 		Worm[i]->Update();
+	}
+	if (--deleteTime_ <= 0) {
+		delete_ = true;
 	}
 }
 
@@ -127,10 +133,10 @@ void ObjParticle::Effect()
 void ObjParticle::Draw()
 {
 	for (int i = 0; i < MAX; i++) {
-		if (effect[i] == true) {
+
 			particle[i]->Draw();
 			Worm[i]->Draw();
-		}
+		
 	}
 }
 

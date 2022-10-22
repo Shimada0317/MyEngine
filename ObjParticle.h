@@ -20,25 +20,30 @@ private: // エイリアス
 public:
 	~ObjParticle();
 
+	void Fast();
+
 	void InitializeState(int i);
 
 	void Initialize();
 
 	void Set(XMVECTOR& enemyPos);
 
-	void Update();
+	void Update(XMVECTOR& enemyPos);
 
 	void Effect();
 
 	void Draw();
 
 	void Finalize();
+
+	bool IsDelete()const { return delete_; }
 private:
 	ObjModel* model = nullptr;
 	ObjModel* worm;
 	std::unique_ptr<Object3d>Worm[MAX];
 	std::unique_ptr<Object3d> particle[MAX];
 	std::unique_ptr<Texture>par[MAX];
+	
 
 	XMVECTOR position[MAX];
 	XMFLOAT3 rotation = { 90,0,0 };
@@ -57,6 +62,8 @@ private:
 	float scalenumY = 0;
 	float wnumX[MAX];
 	float wnumY[MAX];
-
+	static const int32_t StopTime = 60 * 5;
+	int32_t deleteTime_ = StopTime;
+	bool delete_ = false;
 };
 

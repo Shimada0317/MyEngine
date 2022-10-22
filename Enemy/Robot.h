@@ -8,6 +8,7 @@
 #include"DirectXCommon.h"
 #include<DirectXMath.h>
 #include<memory>
+#include<list>
 
 
 class Robot
@@ -46,6 +47,8 @@ private:
 	std::unique_ptr<BothArms>Arms;
 	std::unique_ptr<Body>body;
 	std::unique_ptr<ObjParticle>part;
+	std::list<std::unique_ptr<ObjParticle>>particle_;
+
 
 	XMVECTOR allPos = { 0.0f,0.0f,1.0f };
 

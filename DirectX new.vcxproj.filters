@@ -34,6 +34,24 @@
     <Filter Include="ソース ファイル\scene">
       <UniqueIdentifier>{dcc180e0-6be2-4ed6-903c-2cd22eefebf8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\2d">
+      <UniqueIdentifier>{b57bb0be-6dcd-4575-979d-09daac9c62de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\3d">
+      <UniqueIdentifier>{9e697bc8-87c3-4b45-8e2d-b447c05552d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\camera">
+      <UniqueIdentifier>{d58a96aa-5e67-43ed-8198-8928442881d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Enemy">
+      <UniqueIdentifier>{8406a0ff-1b46-4089-bcfb-e7b7407243cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\light">
+      <UniqueIdentifier>{40453d57-a6e4-4451-af34-afde425b6675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\scene">
+      <UniqueIdentifier>{8ec30830-f5e0-4448-9f34-02ca90080cbe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Input.cpp">
@@ -46,15 +64,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="WinApp.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\Object3d.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="scene\GameScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="3d\ObjModel.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Contoroller.cpp">
@@ -78,16 +87,10 @@
     <ClCompile Include="BaseClassIUDF.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scene\TitleScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="BaseScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="camera\DebugCamera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="PostEffect.cpp">
@@ -122,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="camera\RailCamera.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="ParticleManager.cpp">
       <Filter>ソース ファイル</Filter>
@@ -171,9 +171,6 @@
     <ClCompile Include="middle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scene\ClearScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="ObjParticle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -192,16 +189,40 @@
     <ClCompile Include="Enemy\Robot.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="scene\DebugScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Wepon.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Enemy\BothArms.cpp">
       <Filter>ソース ファイル\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="3d\Object3d.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="3d\ObjModel.cpp">
+      <Filter>ソース ファイル\3d</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\ClearScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\DebugScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
     <ClCompile Include="scene\GameOverScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\GameScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\TitleScene.cpp">
+      <Filter>ソース ファイル\scene</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\DebugCamera.cpp">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="camera\RailCamera.cpp">
+      <Filter>ソース ファイル\camera</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -260,15 +281,6 @@
     <ClInclude Include="DirectXCommon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="3d\Object3d.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scene\GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\ObjModel.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Contoroller.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -290,16 +302,10 @@
     <ClInclude Include="BaseClassIUDF.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scene\TitleScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="BaseScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="SceneManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="camera\DebugCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="PostEffect.h">
@@ -338,9 +344,6 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="camera\RailCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="ParticleManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -356,32 +359,8 @@
     <ClInclude Include="Enemy.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="3d\FbxModel.h">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\FbxObject3d.h">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="2d\Sprite.h">
-      <Filter>ソース ファイル\2d</Filter>
-    </ClInclude>
-    <ClInclude Include="camera\Camera.h">
-      <Filter>ソース ファイル\camera</Filter>
-    </ClInclude>
-    <ClInclude Include="3d\FbxLoader.h">
-      <Filter>ソース ファイル\3d</Filter>
-    </ClInclude>
     <ClInclude Include="PointLight.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="light\Light.h">
-      <Filter>ソース ファイル\light</Filter>
-    </ClInclude>
-    <ClInclude Include="light\LightGroup.h">
-      <Filter>ソース ファイル\light</Filter>
-    </ClInclude>
-    <ClInclude Include="light\DirectionalLight.h">
-      <Filter>ソース ファイル\light</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -389,37 +368,82 @@
     <ClInclude Include="middle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scene\ClearScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="ObjParticle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="2d\Sprite.h">
+      <Filter>ヘッダー ファイル\2d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\FbxLoader.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\FbxModel.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\FbxObject3d.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\Object3d.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\Camera.h">
+      <Filter>ヘッダー ファイル\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\DebugCamera.h">
+      <Filter>ヘッダー ファイル\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="camera\RailCamera.h">
+      <Filter>ヘッダー ファイル\camera</Filter>
+    </ClInclude>
+    <ClInclude Include="3d\ObjModel.h">
+      <Filter>ヘッダー ファイル\3d</Filter>
+    </ClInclude>
     <ClInclude Include="Enemy\Body.h">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy\RightArm.h">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy\LeftArm.h">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy\Head.h">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="scene\DebugScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy\Robot.h">
-      <Filter>ソース ファイル\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Wepon.h">
-      <Filter>ソース ファイル\Enemy</Filter>
+      <Filter>ヘッダー ファイル\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Enemy\BothArms.h">
-      <Filter>ソース ファイル\Enemy</Filter>
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Head.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\LeftArm.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\RightArm.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy\Robot.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Wepon.h">
+      <Filter>ヘッダー ファイル\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="light\Light.h">
+      <Filter>ヘッダー ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\LightGroup.h">
+      <Filter>ヘッダー ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="light\DirectionalLight.h">
+      <Filter>ヘッダー ファイル\light</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\ClearScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\DebugScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
     <ClInclude Include="scene\GameOverScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\GameScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="scene\TitleScene.h">
+      <Filter>ヘッダー ファイル\scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
