@@ -10,6 +10,7 @@
 #include"ClearScene.h"
 #include"GameOverScene.h"
 #include"DebugScene.h"
+#include"ModelManager.h"
 
 
 using namespace DirectX;
@@ -23,7 +24,7 @@ GameScene::GameScene(SceneManager* sceneManager_)
 void GameScene::Initialize(DirectXCommon* dxComon)
 {
 	
-
+	ModelManager::GetInstance()->Initialize();
 	
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/background.png");
@@ -155,5 +156,6 @@ void GameScene::Finalize()
 	delete ground;
 	delete playermodel;
 	mid.reset();
+	ModelManager::GetInstance()->Finalize();
 }
 

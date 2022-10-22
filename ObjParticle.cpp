@@ -3,8 +3,8 @@
 
 ObjParticle::~ObjParticle()
 {
-	delete model;
-	delete worm;
+	//delete model;
+	//delete worm;
 }
 
 void ObjParticle::Fast()
@@ -26,11 +26,11 @@ void ObjParticle::InitializeState(int i)
 
 void ObjParticle::Initialize()
 {
-	model = ObjModel::CreateFromOBJ("Gear");
-	worm = ObjModel::CreateFromOBJ("Worm");
+	//worm = ObjModel::CreateFromOBJ("Worm");
+	//model = ObjModel::CreateFromOBJ("Gear");
 	for (int i = 0; i < MAX; i++) {
-		particle[i] = Object3d::Create(model);
-		Worm[i] = Object3d::Create(worm);
+		Worm[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(0));
+		particle[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(1));
 
 		InitializeState(i);
 		particle[i]->SetPosition(position[i]);

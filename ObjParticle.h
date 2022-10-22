@@ -1,6 +1,7 @@
 #pragma once
 #include"Object3d.h"
 #include"ObjModel.h"
+#include"ModelManager.h"
 #include<DirectXMath.h>
 #include"Texture.h"
 
@@ -43,7 +44,6 @@ private:
 	std::unique_ptr<Object3d>Worm[MAX];
 	std::unique_ptr<Object3d> particle[MAX];
 	std::unique_ptr<Texture>par[MAX];
-	
 
 	XMVECTOR position[MAX];
 	XMFLOAT3 rotation = { 90,0,0 };

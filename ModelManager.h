@@ -1,13 +1,17 @@
 #pragma once
+#include"ObjModel.h"
+#include<vector>
 
+using namespace std;
 
 class ModelManager final
 {
 private:
-	//コンストラクタをprivateにする
-	ModelManager();
 	//デストラクタをprivateにする
-	~ModelManager();
+	~ModelManager() = default;
+	//コンストラクタをprivateにする
+	ModelManager()=default;
+	
 public:
 	//コピーコンストラクタを無効にする
 	ModelManager(const ModelManager& model) = delete;
@@ -15,5 +19,16 @@ public:
 	ModelManager& operator=(const ModelManager& model) = delete;
 
 	static ModelManager* GetInstance();
+
+	void Initialize();
+
+	void Finalize();
+
+	void CallModel(const std::string& ObjModelname);
+
+	ObjModel* GetModel(int number) { return model_[number]; }
+private:
+	vector<ObjModel*> model_;
+	vector<int> contena;
 };
 
