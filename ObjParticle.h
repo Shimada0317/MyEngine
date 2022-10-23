@@ -62,7 +62,7 @@ private:
 	float scalenumY = 0;
 	float wnumX[MAX];
 	float wnumY[MAX];
-	static const int32_t StopTime = 60 * 5;
+	static const int32_t StopTime = 80 * 5;
 	int32_t deleteTime_ = StopTime;
 	bool delete_ = false;
 };

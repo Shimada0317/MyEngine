@@ -111,7 +111,6 @@ void ObjParticle::Update(XMVECTOR& enemyPos)
 				scale[i].x = 0.0f;
 				scale[i].y = 0.0f;
 				scale[i].z = 0.0f;
-				effect[i] = false;
 				break;
 			}
 		particle[i]->Update();

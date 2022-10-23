@@ -32,7 +32,7 @@ void Robot::Initialize()
 
 void Robot::SetPRS(const XMMATRIX& player)
 {
-	OldHp = Hp;
+	
 
 }
 

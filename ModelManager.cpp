@@ -1,5 +1,11 @@
 #include "ModelManager.h"
 
+ModelManager::~ModelManager()
+{
+    model_.clear();
+    model_.shrink_to_fit();
+}
+
 ModelManager* ModelManager::GetInstance()
 {
 
@@ -15,8 +21,7 @@ void ModelManager::Initialize()
 
 void ModelManager::Finalize()
 {
-    model_.clear();
-    model_.shrink_to_fit();
+   
 }
 
 void ModelManager::CallModel(const std::string& ObjModelname)

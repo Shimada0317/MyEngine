@@ -8,7 +8,7 @@ class ModelManager final
 {
 private:
 	//デストラクタをprivateにする
-	~ModelManager() = default;
+	~ModelManager();
 	//コンストラクタをprivateにする
 	ModelManager()=default;
 	
