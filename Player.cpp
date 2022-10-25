@@ -15,11 +15,6 @@ void Player::Initalize()
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 
-	//for (int i = 0; i < BULL; i++) {
-
-		//bull->Initialize();
-	//}
-
 	part = ParticleManager::Create();
 	backPlayerPos.m128_f32[0] = -position.m128_f32[0] / 32;
 	backPlayerPos.m128_f32[1] = position.m128_f32[1] / 32;
@@ -29,8 +24,6 @@ void Player::Initalize()
 	cam->Initialize(position,rotation);
 
 	player->SetParent(camera);
-//	Eye_pos = cam->Getye();
-	//Target_pos = cam->GetTarget();
 };
 
 void Player::Set()
@@ -147,23 +140,12 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY+3);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
 
-	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž‚Éi‚Þ(ƒL[“ü—Í‚ÅƒfƒoƒbƒO’†)
-	//if (patern == false) {
-	//	if (Input::GetInstance()->TriggerKey(DIK_O)) {
-	//		patern = true;
-	//	}
-	//}
-	//else {
-	//	if (Input::GetInstance()->TriggerKey(DIK_O)) {
-	//		patern = false;
-	//	}
-	//}
-	////ƒvƒŒƒCƒ„[‚Ì‰ñ“]
+	//ƒvƒŒƒCƒ„[‚Ì‰ñ“]
 	if (Input::GetInstance()->PushKey(DIK_A)) {
 		Eye_rot.y ++;
 	}
-	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž
 
+	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž
 	if (move == true) {
 		patern = true;
 	}
@@ -189,10 +171,8 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 		vel = { 0, 0, kBulletSpeed };
 	}
 	
-
 	vel = XMVector3TransformNormal(vel, mat);
 	
-
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Update();
 	}
@@ -201,7 +181,6 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 	cam->Update(vel, Eye_rot, camera);
 	camera->Update();
 	player->Update();
-//	part->Update(color);
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
@@ -235,6 +214,13 @@ void Player::ImGuiDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plyer");
+
+	if (ImGui::TreeNode("mat")) {
+		ImGui::SliderFloat("mat.z", &mat.r[2].m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("mat.y", &mat.r[1].m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("mat.x", &mat.r[0].m128_f32[0], -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
 
 	if (ImGui::TreeNode("position")) {
 		ImGui::SliderFloat("pos.z", &playerWorldPos.m128_f32[2], -100.0f, 100.0f);

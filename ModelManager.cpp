@@ -2,8 +2,10 @@
 
 ModelManager::~ModelManager()
 {
+    for (ObjModel* modelMa : model_) {
+        delete modelMa;
+    }
     model_.clear();
-    model_.shrink_to_fit();
 }
 
 ModelManager* ModelManager::GetInstance()

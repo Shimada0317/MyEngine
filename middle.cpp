@@ -242,7 +242,7 @@ void middle::SpriteDraw()
 //
 void middle::ImGuiDraw()
 {
-	//player->ImGuiDraw();
+	player->ImGuiDraw();
 
 
 }

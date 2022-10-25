@@ -27,10 +27,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	ModelManager::GetInstance()->Initialize();
 	
 	////スプライトの読み込み
-	Sprite::LoadTexture(1, L"Resources/background.png");
-	
-	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
+	
 	//モデルの読み込み
 
 	playermodel = ObjModel::CreateFromOBJ("skydome");
@@ -76,7 +74,6 @@ void GameScene::SetPosSclRot()
 	groundObj->SetPosition( ground_pos );
 	groundObj->SetScale({ ground_scl });
 
-	title->SetSize({ screen_size });
 	patern = mid->GetPatern();
 	playerHp = mid->GetHp();
 };
@@ -121,7 +118,6 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	//title->Draw();
 	mid->SpriteDraw();
 	Sprite::PostDraw();
 }
@@ -156,6 +152,5 @@ void GameScene::Finalize()
 	delete ground;
 	delete playermodel;
 	mid.reset();
-	ModelManager::GetInstance()->Finalize();
 }
 

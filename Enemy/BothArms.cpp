@@ -86,7 +86,7 @@ void BothArms::Attack(float& attackT,bool& AttackFase,int& playerHp)
 			attack = false;
 			AttackFase = false;
 			attackT = 0;
-			playerHp -= 1;
+			//playerHp -= 1;
 		}
 	}
 }
