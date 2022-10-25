@@ -66,9 +66,6 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	//レールカメラの回転を反映
 	forward = XMVector3TransformNormal(forward, matWorld);
 	//視点から前方に適当な距離進んだ位置が注視点
-	//target.x = eye.x + forward.m128_f32[0];
-	//target.y = eye.y + forward.m128_f32[1];
-	//target.z = eye.z + forward.m128_f32[2];
 	target.x = eye2.m128_f32[0] + forward.m128_f32[0];
 	target.y = eye2.m128_f32[1] + forward.m128_f32[1];
 	target.z = eye2.m128_f32[2] + forward.m128_f32[2];

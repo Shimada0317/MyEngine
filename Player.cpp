@@ -154,6 +154,12 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 		kBulletSpeed = 1.1f;
 		vel = { 0, 0, kBulletSpeed };
 		movetimer += 0.1f;
+		if (waveCount == 1) {
+			Eye_rot.y++;
+			if (Eye_rot.y >= 90) {
+				Eye_rot.y = 90;
+			}
+		}
 		if (movetimer >= 25) {
 			move = false;
 			patern = false;
@@ -162,6 +168,8 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 			spown = true;
 		}
 	}
+
+	
 	else if (patern == false) {
 		kBulletSpeed = 0.0f;
 		vel = { 0, 0, kBulletSpeed };
@@ -209,6 +217,7 @@ void Player::ObjDraw()
 
 void Player::ImGuiDraw()
 {
+	float a = waveCount;
 
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
@@ -219,6 +228,7 @@ void Player::ImGuiDraw()
 		ImGui::SliderFloat("mat.z", &mat.r[2].m128_f32[2], -100.0f, 100.0f);
 		ImGui::SliderFloat("mat.y", &mat.r[1].m128_f32[1], -100.0f, 100.0f);
 		ImGui::SliderFloat("mat.x", &mat.r[0].m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("mat.x", &a, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
