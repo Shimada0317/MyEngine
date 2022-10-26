@@ -28,11 +28,13 @@ public:
 
 	void Effect();
 
-	void Update(Bullet* bull[], int& Remaining,bool& move,bool& spown);
+	void Update(Bullet* bull[], int& Remaining);
 
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
 
 	void Draw(ID3D12GraphicsCommandList* cmdList);
+
+	void PlayerMove(bool& move,int patern,bool& spown);
 
 	void ObjDraw();
 
@@ -91,7 +93,7 @@ private:
 	XMVECTOR oldPos = { 0.0f,0.0f,0.0f };
 	XMVECTOR playerWorldPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
+	XMFLOAT3 scale = { 0.3f,0.3f,0.3f };
 	XMMATRIX mat;
 	//ÉJÉÅÉâ
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
@@ -120,7 +122,7 @@ private:
 	int ans = 0;
 
 	XMVECTOR vel;
-	bool patern = false;
+	bool Action = false;
 	int ver = 0;
 	bool chan = false;
 	float kBulletSpeed=0;

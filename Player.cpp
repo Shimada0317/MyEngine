@@ -21,7 +21,7 @@ void Player::Initalize()
 	backPlayerPos.m128_f32[2] = position.m128_f32[2] - 5;
 
 	cam = new RailCamera();
-	cam->Initialize(position,rotation);
+	cam->Initialize(position, rotation);
 
 	player->SetParent(camera);
 };
@@ -34,15 +34,15 @@ void Player::Set()
 	playerWorldPos = { 0.0f,0.0f,0.0f };
 	playerWorldPos = XMVector3Transform(position, mat);
 
-	backPlayerPos.m128_f32[0] = -position.m128_f32[0] / 32;
-	backPlayerPos.m128_f32[1] = position.m128_f32[1] / 32;
+	backPlayerPos.m128_f32[0] = -playerWorldPos.m128_f32[0] / 32;
+	backPlayerPos.m128_f32[1] = playerWorldPos.m128_f32[1] / 32;
 	backPlayerPos.m128_f32[2] = playerWorldPos.m128_f32[2] - 5;
 
 	for (int i = 0; i < 100; i++) {
 		const float rnd_pos = 1.0f;
- 		XMFLOAT3 pos{};
-		pos.x = position.m128_f32[0];
-		pos.y = position.m128_f32[1];
+		XMFLOAT3 pos{};
+		pos.x = playerWorldPos.m128_f32[0];
+		pos.y = playerWorldPos.m128_f32[1];
 		pos.z = playerWorldPos.m128_f32[2];
 		//pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		//pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
@@ -78,14 +78,14 @@ void Player::Effect()
 {
 }
 
-void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
+void Player::Update(Bullet* bull[], int& Remaining)
 {
 	oldPos = position;
 
 	//’e‚Ì”­ŽË‘O
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
 		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			
+
 			Remaining += 1;
 			time = 0.0f;
 			particle = true;
@@ -100,7 +100,7 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 	}
 	//”­ŽËŒã
 	for (int i = 0; i < BULL; i++) {
-		bull[i]->ShotAfter(backPlayerPos,position,playerWorldPos,Remaining);
+		bull[i]->ShotAfter(backPlayerPos, position, playerWorldPos, Remaining);
 		//break;
 	}
 	//Œ‚‚Á‚½Žž‚Ìƒp[ƒeƒBƒNƒ‹
@@ -115,7 +115,7 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 		time = 4.0f;
 	}
 	//ƒŠƒ[ƒh
-	if (Input::GetInstance()->TriggerKey(DIK_R)&&Remaining!=0) {
+	if (Input::GetInstance()->TriggerKey(DIK_R) && Remaining != 0) {
 		ReloadFlag = true;
 	}
 
@@ -137,40 +137,18 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 
 	position.m128_f32[0] = max(position.m128_f32[0], -kMoveLimitX);
 	position.m128_f32[0] = min(position.m128_f32[0], +kMoveLimitX);
-	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY+3);
+	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY + 3);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
 
 	//ƒvƒŒƒCƒ„[‚Ì‰ñ“]
 	if (Input::GetInstance()->PushKey(DIK_A)) {
-		Eye_rot.y ++;
+		Eye_rot.y++;
 	}
 
-	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž
-	if (move == true) {
-		patern = true;
-	}
 
-	if (patern == true) {
-		kBulletSpeed = 1.1f;
-		vel = { 0, 0, kBulletSpeed };
-		movetimer += 0.1f;
-		if (waveCount == 1) {
-			Eye_rot.y++;
-			if (Eye_rot.y >= 90) {
-				Eye_rot.y = 90;
-			}
-		}
-		if (movetimer >= 25) {
-			move = false;
-			patern = false;
-			waveCount += 1;
-			movetimer = 0.0f;
-			spown = true;
-		}
-	}
 
-	
-	else if (patern == false) {
+
+	else if (Action == false) {
 		kBulletSpeed = 0.0f;
 		vel = { 0, 0, kBulletSpeed };
 	}
@@ -178,9 +156,9 @@ void Player::Update(Bullet* bull[], int& Remaining,bool& move,bool& spown)
 		kBulletSpeed = 1.1f;
 		vel = { 0, 0, kBulletSpeed };
 	}
-	
+
 	vel = XMVector3TransformNormal(vel, mat);
-	
+
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Update();
 	}
@@ -205,6 +183,117 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 
 
 
+}
+
+void Player::PlayerMove(bool& move, int patern, bool& spown)
+{
+
+	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž
+	if (move == true) {
+		Action = true;
+	}
+
+	if (Action == true) {
+		kBulletSpeed = 0.5f;
+		if (patern == 1) {
+			vel = { 0, 0, kBulletSpeed };
+			if (playerWorldPos.m128_f32[2] >= 20) {
+				move = false;
+				Action = false;
+				waveCount += 1;
+				movetimer = 0.0f;
+				spown = true;
+			}
+		}
+		else if (patern == 2) {
+			vel = { 0, 0, kBulletSpeed };
+			if (playerWorldPos.m128_f32[2] >= 40) {
+				move = false;
+				Action = false;
+				waveCount += 1;
+				movetimer = 0.0f;
+				spown = true;
+			}
+		}
+		else if (patern == 3) {
+			Eye_rot.y += 3;
+			if (Eye_rot.y >= 90) {
+				Eye_rot.y = 90;
+				vel = { 0, 0, kBulletSpeed };
+			}
+			if (playerWorldPos.m128_f32[0] >= 20) {
+				move = false;
+				Action = false;
+				waveCount += 1;
+				movetimer = 0.0f;
+				spown = true;
+			}
+		}
+		else if (patern == 4) {
+			vel = { 0, 0, kBulletSpeed };
+			if (playerWorldPos.m128_f32[0] >= 40) {
+				move = false;
+				Action = false;
+				waveCount += 1;
+				movetimer = 0.0f;
+				spown = true;
+			}
+		}
+		else if (patern == 5) {
+			Eye_rot.y += 3;
+			if (Eye_rot.y >= 180) {
+				Eye_rot.y = 180;
+				vel = { 0, 0, kBulletSpeed };
+			}
+			if (playerWorldPos.m128_f32[2] <= 20) {
+				move = false;
+				Action = false;
+				waveCount += 1;
+				movetimer = 0.0f;
+				spown = true;
+			}
+		}
+		else if (patern == 6) {
+			vel = { 0, 0, kBulletSpeed };
+			if (playerWorldPos.m128_f32[2] <= 0) {
+				move = false;
+				Action = false;
+				waveCount += 1;
+				movetimer = 0.0f;
+				spown = true;
+			}
+		}
+		else if (patern == 7) {
+			Eye_rot.y += 3;
+			if (Eye_rot.y >= 270) {
+				Eye_rot.y = 270;
+				vel = { 0, 0, kBulletSpeed };
+			}
+			if (playerWorldPos.m128_f32[0] <= 20) {
+				move = false;
+				Action = false;
+				waveCount += 1;
+				movetimer = 0.0f;
+				spown = true;
+			}
+		}
+		else if (patern == 8) {
+			vel = { 0, 0, kBulletSpeed };
+			if (playerWorldPos.m128_f32[0] <= 0) {
+				kBulletSpeed = 0.0f;
+				vel = { 0, 0, kBulletSpeed };
+				Eye_rot.y += 3;
+				if (Eye_rot.y >= 360) {
+					Eye_rot.y = 360;
+					move = false;
+					Action = false;
+					waveCount += 1;
+					movetimer = 0.0f;
+					spown = true;
+				}
+			}
+		}
+	}
 }
 
 void Player::ObjDraw()
@@ -232,17 +321,17 @@ void Player::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("position")) {
-		ImGui::SliderFloat("pos.z", &playerWorldPos.m128_f32[2], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &position.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.x", &position.m128_f32[0], -100.0f, 100.0f);
+	if (ImGui::TreeNode("backPlayer")) {
+		ImGui::SliderFloat("pos.x", &backPlayerPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &backPlayerPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &backPlayerPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("backposition")) {
-		ImGui::SliderFloat("pos.z", &backPlayerPos.m128_f32[2], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &backPlayerPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.x", &backPlayerPos.m128_f32[0], -100.0f, 100.0f);
+	if (ImGui::TreeNode("playerWorldPos")) {
+		ImGui::SliderFloat("pos.x", &playerWorldPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &playerWorldPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &playerWorldPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

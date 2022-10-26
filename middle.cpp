@@ -170,9 +170,9 @@ void middle::Update()
 			rob[j]->Update(bull[i], all[j], playerMat, spown,playerHp);
 		}
 	}
-
+	player->PlayerMove(move, patern, spown);
 	//プレイヤーの更新処理
-	player->Update(bull, Remaining, move, spown);
+	player->Update(bull, Remaining);
 }
 
 void middle::Draw(DirectXCommon* dxCommon)

@@ -92,10 +92,10 @@ void GameScene::Update()
 		sceneManager_->SetNextScene(scene_);
 	}
 
-	if (patern >= 5) {
+	/*if (patern >= 5) {
 		BaseScene* scene_ = new ClearScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
-	}
+	}*/
 
 	SetPosSclRot();
 	AllUpdate();

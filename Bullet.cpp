@@ -148,8 +148,8 @@ void Bullet::ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerPos,
 	if (Trigger == true) {
 		if (fire == true) {
 			//’Ç”ö‚ÌŽ®‚Ì“r’†
-			float vx = (baclplayerpos.m128_f32[0] - playerPos.m128_f32[0]);
-			float vy = (baclplayerpos.m128_f32[1] - playerPos.m128_f32[1]);
+			float vx = (baclplayerpos.m128_f32[0] - PlayerWorldPos.m128_f32[0]);
+			float vy = (baclplayerpos.m128_f32[1] - PlayerWorldPos.m128_f32[1]);
 			float vz = (baclplayerpos.m128_f32[2] - PlayerWorldPos.m128_f32[2]);
 			float v2x = pow(vx, 2);
 			float v2y = pow(vy, 2);
