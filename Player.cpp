@@ -12,13 +12,13 @@ void Player::Initalize()
 	playerModel = ObjModel::CreateFromOBJ("mark");
 	player = Object3d::Create(playerModel);
 
+	gunModel = ObjModel::CreateFromOBJ("gun");
+	gun = Object3d::Create(gunModel);
+
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
 
 	part = ParticleManager::Create();
-	backPlayerPos.m128_f32[0] = -position.m128_f32[0] / 32;
-	backPlayerPos.m128_f32[1] = position.m128_f32[1] / 32;
-	backPlayerPos.m128_f32[2] = position.m128_f32[2] - 5;
 
 	cam = new RailCamera();
 	cam->Initialize(position, rotation);
@@ -34,9 +34,13 @@ void Player::Set()
 	playerWorldPos = { 0.0f,0.0f,0.0f };
 	playerWorldPos = XMVector3Transform(position, mat);
 
-	backPlayerPos.m128_f32[0] = -playerWorldPos.m128_f32[0] / 32;
-	backPlayerPos.m128_f32[1] = playerWorldPos.m128_f32[1] / 32;
-	backPlayerPos.m128_f32[2] = playerWorldPos.m128_f32[2] - 5;
+ 	gunmat = gun->GetMatrix();
+	gunWorldPos = { 0.0f,0.0f,0.0f };
+	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
+	gunWorldPos.m128_f32[0] = gunmat.r[3].m128_f32[0];
+	gunWorldPos.m128_f32[1] = gunmat.r[3].m128_f32[1];
+	gunWorldPos.m128_f32[2] = gunmat.r[3].m128_f32[2];
+
 
 	for (int i = 0; i < 100; i++) {
 		const float rnd_pos = 1.0f;
@@ -72,6 +76,10 @@ void Player::Set()
 	mat = player->GetMatrix();
 	//Eye_rot=camera->GetEye();
 	player->SetParent(camera);
+	gun->SetRotation(gunRot);
+	gun->SetScale(gunScal);
+	gun->SetParent(camera);
+	gun->SetPosition(gunPos);
 }
 
 void Player::Effect()
@@ -91,7 +99,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 			particle = true;
 			for (int i = 0; i < BULL; i++) {
 				if (bull[i]->CheckOk()) {
-					bull[i]->ShotBefore(backPlayerPos, velocity);
+					bull[i]->Test(gunWorldPos, playerWorldPos);
 					bull[i]->TriggerOn();
 					break;
 				}
@@ -100,7 +108,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	}
 	//発射後
 	for (int i = 0; i < BULL; i++) {
-		bull[i]->ShotAfter(backPlayerPos, position, playerWorldPos, Remaining);
+		//bull[i]->ShotAfter(backPlayerPos, position, playerWorldPos, Remaining);
 		//break;
 	}
 	//撃った時のパーティクル
@@ -167,6 +175,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	cam->Update(vel, Eye_rot, camera);
 	camera->Update();
 	player->Update();
+	gun->Update();
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
@@ -301,6 +310,7 @@ void Player::ObjDraw()
 	cam->Draw();
 	if (Hp >= 0) {
 		player->Draw();
+		gun->Draw();
 	}
 }
 
@@ -314,24 +324,26 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("mat")) {
-		ImGui::SliderFloat("mat.z", &mat.r[2].m128_f32[2], -100.0f, 100.0f);
-		ImGui::SliderFloat("mat.y", &mat.r[1].m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("mat.x", &mat.r[0].m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("mat.z", &mat.r[3].m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("mat.y", &mat.r[3].m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("mat.x", &mat.r[3].m128_f32[0], -100.0f, 100.0f);
 		ImGui::SliderFloat("mat.x", &a, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("backPlayer")) {
-		ImGui::SliderFloat("pos.x", &backPlayerPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &backPlayerPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &backPlayerPos.m128_f32[2], -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
+	
 
 	if (ImGui::TreeNode("playerWorldPos")) {
 		ImGui::SliderFloat("pos.x", &playerWorldPos.m128_f32[0], -100.0f, 100.0f);
 		ImGui::SliderFloat("pos.y", &playerWorldPos.m128_f32[1], -100.0f, 100.0f);
 		ImGui::SliderFloat("pos.z", &playerWorldPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("gunpos")) {
+		ImGui::SliderFloat("pos.x", &gunWorldPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &gunWorldPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &gunWorldPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

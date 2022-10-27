@@ -72,10 +72,10 @@
     <ClCompile Include="Audio.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Collision.cpp">
+    <ClCompile Include="Collision\Collision.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CollisionPrimitive.cpp">
+    <ClCompile Include="Collision\CollisionPrimitive.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="DebugText.cpp">
@@ -84,13 +84,13 @@
     <ClCompile Include="Framework.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BaseClassIUDF.cpp">
+    <ClCompile Include="scene\BaseClassIUDF.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
+    <ClCompile Include="scene\SceneManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BaseScene.cpp">
+    <ClCompile Include="scene\BaseScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="PostEffect.cpp">
@@ -171,7 +171,7 @@
     <ClCompile Include="middle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ObjParticle.cpp">
+    <ClCompile Include="3d\ObjParticle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Enemy\Body.cpp">
@@ -222,7 +222,7 @@
     <ClCompile Include="camera\RailCamera.cpp">
       <Filter>ソース ファイル\camera</Filter>
     </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
+    <ClCompile Include="3d\ModelManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -287,10 +287,10 @@
     <ClInclude Include="Audio.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Collision.h">
+    <ClInclude Include="Collision\Collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CollisionPrimitive.h">
+    <ClInclude Include="Collision\CollisionPrimitive.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="DebugText.h">
@@ -299,13 +299,13 @@
     <ClInclude Include="Framework.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="BaseClassIUDF.h">
+    <ClInclude Include="scene\BaseClassIUDF.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="BaseScene.h">
+    <ClInclude Include="scene\BaseScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SceneManager.h">
+    <ClInclude Include="scene\SceneManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="PostEffect.h">
@@ -368,7 +368,7 @@
     <ClInclude Include="middle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ObjParticle.h">
+    <ClInclude Include="3d\ObjParticle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="2d\Sprite.h">
@@ -443,7 +443,7 @@
     <ClInclude Include="scene\TitleScene.h">
       <Filter>ヘッダー ファイル\scene</Filter>
     </ClInclude>
-    <ClInclude Include="ModelManager.h">
+    <ClInclude Include="3d\ModelManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

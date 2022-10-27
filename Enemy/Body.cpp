@@ -26,7 +26,7 @@ void Body::SetPRS(const XMVECTOR& allPos,Bullet* bull)
 
 void Body::Update(bool& arive,const XMVECTOR& allPos,Bullet* bull,int& Hp)
 {
-
+	Hit = bull->GetTrigger();
 	if (arive == true) {
 
 
@@ -40,7 +40,7 @@ void Body::Update(bool& arive,const XMVECTOR& allPos,Bullet* bull,int& Hp)
 
 
 
-		if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)) {
+		if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)&&Hit==true) {
 			Hp -= 10;
 			Hit = false;
 			bull->SetTrigger(Hit);

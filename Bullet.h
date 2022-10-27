@@ -36,7 +36,7 @@ public:
 
 	void debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed,bool& d);
 
-	void Test(const XMVECTOR& position, const XMVECTOR& velocity);
+	void Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos);
 
 	void Set();
 
