@@ -71,7 +71,7 @@ void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 
 	//生きているとき
 	if (all == true && Hp > 0) {
-		allPos.m128_f32[2] = allPos.m128_f32[2] - speed;
+		//allPos.m128_f32[2] = allPos.m128_f32[2] - speed;
 		//プレイヤーの前まで来たとき
 		if (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 4.0f) {
 			speed = 0;
@@ -139,7 +139,7 @@ void Robot::Finalize()
 
 }
 
-void Robot::SpownEnemy(const XMMATRIX& player, int random)
+void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 {
 
 	Hp = 50;
@@ -153,24 +153,68 @@ void Robot::SpownEnemy(const XMMATRIX& player, int random)
 	}
 	allPos = { 0.0f,0.0f,0.0f };
 	allPos = XMVector3Transform(allPos, player);
-	allPos.m128_f32[0] = 0.0f;
-	allPos.m128_f32[1] = 0.0f;
-	if (rad == 0) {
-		allPos.m128_f32[0] = -6.0f;
-	}
-	else if (rad == 1) {
-		allPos.m128_f32[0] = -3.0f;
-	}
-	else if (rad == 2) {
+	if (patern <= 2) {
 		allPos.m128_f32[0] = 0.0f;
+		allPos.m128_f32[1] = 0.0f;
+		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
 	}
-	else if (rad == 3) {
-		allPos.m128_f32[0] = 3.0f;
+	else if (patern == 3 || patern == 4) {
+		allPos.m128_f32[1] = 0.0f;
+		allPos.m128_f32[0] = allPos.m128_f32[0] + 15;
+		//allPos.m128_f32[2] = 40;
 	}
-	else {
-		allPos.m128_f32[0] = 6.0f;
+	else if (patern >= 5 && patern <= 6) {
+		allPos.m128_f32[1] = 0.0f;
+		allPos.m128_f32[2] = allPos.m128_f32[2] - 15;
 	}
-	allPos.m128_f32[0] = radX;
-	allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
+	else if (patern == 7 ) {
+		allPos.m128_f32[1] = 0.0f;
+		allPos.m128_f32[0] = allPos.m128_f32[0] - 15;
+	}
+	else if (patern == 8) {
+		allPos.m128_f32[0] = 0.0f;
+		allPos.m128_f32[1] = 0.0f;
+		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
+	}
+	//if (patern <= 3) {
+	//	allPos.m128_f32[0] = 0.0f;
+	//	allPos.m128_f32[1] = 0.0f;
+	//	if (rad == 0) {
+	//		allPos.m128_f32[0] = -6.0f;
+	//	}
+	//	else if (rad == 1) {
+	//		allPos.m128_f32[0] = -3.0f;
+	//	}
+	//	else if (rad == 2) {
+	//		allPos.m128_f32[0] = 0.0f;
+	//	}
+	//	else if (rad == 3) {
+	//		allPos.m128_f32[0] = 3.0f;
+	//	}
+	//	else {
+	//		allPos.m128_f32[0] = 6.0f;
+	//	}
+	//	allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
+	//}
+	//else if (patern > 3 && patern <= 5) {
+	//	allPos.m128_f32[2] = 40.0f;
+	//	allPos.m128_f32[1] = 0.0f;
+	//	if (rad == 0) {
+	//		allPos.m128_f32[2] -= 6.0f;
+	//	}
+	//	else if (rad == 1) {
+	//		allPos.m128_f32[2] -= 3.0f;
+	//	}
+	//	else if (rad == 2) {
+	//		allPos.m128_f32[2] = 0.0f;
+	//	}
+	//	else if (rad == 3) {
+	//		allPos.m128_f32[2] += 3.0f;
+	//	}
+	//	else {
+	//		allPos.m128_f32[2] += 6.0f;
+	//	}
+	//	allPos.m128_f32[0] = allPos.m128_f32[0] + 15;
+	//}
 	speed = 0.005f;
 }

@@ -100,16 +100,7 @@ void middle::SetPSR()
 	HpBer->SetPosition({ 1070,650 });
 	player->SetHp(playerHp);
 
-	for (int i = 0; i < 3; i++) {
-		rad = (rand() % 4);
-		oldrand[i] = rad;
-	}
-	for (int i = 0; i < 3; i++) {
-		if (oldrand[0] == oldrand[1] == oldrand[2]) {
-			rad = (rand() % 4);
-			oldrand[i] = rad;
-		}
-	}
+
 }
 
 //void middle::AllUpdate()
@@ -157,7 +148,7 @@ void middle::Update()
 	
 	if (spown == true) {
 		for (int i = 0; i < 3; i++) {
-			rob[i]->SpownEnemy(playerMat,oldrand[i]);
+			rob[i]->SpownEnemy(playerMat,patern);
 			if (i == 2) {
 				spown = false;
 			}

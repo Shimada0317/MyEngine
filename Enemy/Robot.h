@@ -39,7 +39,7 @@ public:
 
 	void SetPosition(XMVECTOR allPos) { this->allPos = allPos; }
 
-	void SpownEnemy(const XMMATRIX& player,int rad);
+	void SpownEnemy(const XMMATRIX& player,int patern);
 private:
 	std::unique_ptr<Head> head;
 	/*std::unique_ptr<RightArm> RArm;

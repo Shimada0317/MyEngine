@@ -32,15 +32,12 @@ void Player::Set()
 	velocity = { 0, 0, BulletSpeed };
 	velocity = XMVector3TransformNormal(velocity, mat);
 	playerWorldPos = { 0.0f,0.0f,0.0f };
-	playerWorldPos = XMVector3Transform(position, mat);
+	playerWorldPos = XMVector3Transform(playerWorldPos, mat);
 
  	gunmat = gun->GetMatrix();
 	gunWorldPos = { 0.0f,0.0f,0.0f };
 	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
-	gunWorldPos.m128_f32[0] = gunmat.r[3].m128_f32[0];
-	gunWorldPos.m128_f32[1] = gunmat.r[3].m128_f32[1];
-	gunWorldPos.m128_f32[2] = gunmat.r[3].m128_f32[2];
-
+	
 
 	for (int i = 0; i < 100; i++) {
 		const float rnd_pos = 1.0f;
@@ -106,11 +103,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 			}
 		}
 	}
-	//発射後
-	for (int i = 0; i < BULL; i++) {
-		//bull[i]->ShotAfter(backPlayerPos, position, playerWorldPos, Remaining);
-		//break;
-	}
+
 	//撃った時のパーティクル
 	if (particle == true) {
 		time += 0.4f;
@@ -344,6 +337,14 @@ void Player::ImGuiDraw()
 		ImGui::SliderFloat("pos.x", &gunWorldPos.m128_f32[0], -100.0f, 100.0f);
 		ImGui::SliderFloat("pos.y", &gunWorldPos.m128_f32[1], -100.0f, 100.0f);
 		ImGui::SliderFloat("pos.z", &gunWorldPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
+
+
+	if (ImGui::TreeNode("gunpos")) {
+		ImGui::SliderFloat("pos.x", &gunPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &gunPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &gunPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

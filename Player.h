@@ -97,7 +97,7 @@ private:
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.3f,0.3f,0.3f };
 	XMVECTOR gunPos = { 0.0f,0.0f,-6.0f };
-	XMFLOAT3 gunRot = { 90.0f,0.0f,0.0f };
+	XMFLOAT3 gunRot = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 gunScal={0.3f,0.3f,0.3f};
 	//ÉèÅ[ÉãÉh
 	XMVECTOR playerWorldPos = { 0.0f,0.0f,0.0f };

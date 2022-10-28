@@ -106,14 +106,18 @@ void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos)
 		pos.m128_f32[0] = GWorldPos.m128_f32[0];
 		pos.m128_f32[1] = GWorldPos.m128_f32[1];
 		pos.m128_f32[2] = GWorldPos.m128_f32[2];
+
+		oldpos.m128_f32[0] = PWorldPos.m128_f32[0];
+		oldpos.m128_f32[1] = PWorldPos.m128_f32[1];
+		oldpos.m128_f32[2] = PWorldPos.m128_f32[2];
 		fire = true;
 	}
 	XMVECTOR vec = PWorldPos -GWorldPos;
 	vec = XMVector3Normalize(vec);
 	vec *= kBullSpeed;
-	velocity_.m128_f32[0] = vec.m128_f32[0] / 3;
-	velocity_.m128_f32[1] = vec.m128_f32[1] / 3;
-	velocity_.m128_f32[2] = vec.m128_f32[2] / 2;
+	velocity_.m128_f32[0] = vec.m128_f32[0];
+	velocity_.m128_f32[1] = vec.m128_f32[1]/2;
+	velocity_.m128_f32[2] = vec.m128_f32[2];
 }
 
 void Bullet::Set()
@@ -194,12 +198,17 @@ void Bullet::Hit()
 void Bullet::Update()
 {
 
+	//pos += velocity_;
+	//if (pos.m128_f32[2] >= oldpos.m128_f32[2]) {
+	//	velocity_ = { 0.0f,0.0f,0.0f };
+	//	pos = oldpos;
+	//}
+
 	pos += velocity_;
-//	pos += velocity_;
 	ShotT += 1.0f;
 	if (ShotT >= 60) {
 		Trigger = false;
-		ShotT = 0;
+		//ShotT = 0;
 	}
 
 
