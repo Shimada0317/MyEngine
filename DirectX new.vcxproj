@@ -174,7 +174,7 @@
     <ClCompile Include="scene\DebugScene.cpp" />
     <ClCompile Include="GameEngine\DebugText.cpp" />
     <ClCompile Include="GameEngine\DirectXCommon.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Application\Enemy.cpp" />
     <ClCompile Include="Application\Enemy\Body.cpp" />
     <ClCompile Include="Application\Enemy\Head.cpp" />
     <ClCompile Include="Application\Enemy\LeftArm.cpp" />
@@ -440,7 +440,7 @@
     <ClInclude Include="scene\DebugScene.h" />
     <ClInclude Include="GameEngine\DebugText.h" />
     <ClInclude Include="GameEngine\DirectXCommon.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Application\Enemy.h" />
     <ClInclude Include="Application\Enemy\Body.h" />
     <ClInclude Include="Application\Enemy\Head.h" />
     <ClInclude Include="Application\Enemy\LeftArm.h" />
