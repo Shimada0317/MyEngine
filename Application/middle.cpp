@@ -246,9 +246,8 @@ void middle::Fainalize()
 	player->Finalize();
 	//delete[] bulletHUD;
 }
-//
 
-//
+
 //void middle::LoadEnemyPopData()
 //{
 //	//ファイルオープン

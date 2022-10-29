@@ -123,7 +123,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(ProjectDir)Enemy;$(ProjectDir)scene;$(ProjectDir)Collision</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d;$(SolutionDir)camera;$(SolutionDir)light;$(ProjectDir)scene;$(ProjectDir)Application;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Action;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Player;$(ProjectDir)Application\Wepon</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -141,7 +141,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(SolutionDir)3d;$(SolutionDir)2d;$(SolutionDir)camera;$(SolutionDir)light;$(ProjectDir)Enemy;$(ProjectDir)scene;$(ProjectDir)Collision</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d;$(SolutionDir)camera;$(SolutionDir)light;$(ProjectDir)scene;$(ProjectDir)Application;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Action;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Player;$(ProjectDir)Application\Wepon</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -155,32 +155,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="2d\Sprite.cpp" />
-    <ClCompile Include="3d\FbxLoader.cpp" />
-    <ClCompile Include="3d\FbxModel.cpp" />
-    <ClCompile Include="3d\FbxObject3d.cpp" />
-    <ClCompile Include="Action.cpp" />
-    <ClCompile Include="Audio.cpp" />
+    <ClCompile Include="GameEngine\2d\Sprite.cpp" />
+    <ClCompile Include="GameEngine\3d\FbxLoader.cpp" />
+    <ClCompile Include="GameEngine\3d\FbxModel.cpp" />
+    <ClCompile Include="GameEngine\3d\FbxObject3d.cpp" />
+    <ClCompile Include="Application\Action\Action.cpp" />
+    <ClCompile Include="GameEngine\Audio.cpp" />
     <ClCompile Include="scene\BaseScene.cpp" />
-    <ClCompile Include="Enemy\BothArms.cpp" />
-    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Application\Enemy\BothArms.cpp" />
+    <ClCompile Include="Application\Bullet\Bullet.cpp" />
     <ClCompile Include="camera\Camera.cpp" />
-    <ClCompile Include="3d\ModelManager.cpp" />
+    <ClCompile Include="GameEngine\3d\ModelManager.cpp" />
     <ClCompile Include="scene\ClearScene.cpp" />
-    <ClCompile Include="Collision\Collision.cpp" />
-    <ClCompile Include="Collision\CollisionPrimitive.cpp" />
-    <ClCompile Include="Contoroller.cpp" />
+    <ClCompile Include="Application\Collision\Collision.cpp" />
+    <ClCompile Include="Application\Collision\CollisionPrimitive.cpp" />
+    <ClCompile Include="GameEngine\Contoroller.cpp" />
     <ClCompile Include="camera\DebugCamera.cpp" />
     <ClCompile Include="scene\DebugScene.cpp" />
-    <ClCompile Include="DebugText.cpp" />
-    <ClCompile Include="DirectXCommon.cpp" />
+    <ClCompile Include="GameEngine\DebugText.cpp" />
+    <ClCompile Include="GameEngine\DirectXCommon.cpp" />
     <ClCompile Include="Enemy.cpp" />
-    <ClCompile Include="Enemy\Body.cpp" />
-    <ClCompile Include="Enemy\Head.cpp" />
-    <ClCompile Include="Enemy\LeftArm.cpp" />
-    <ClCompile Include="Enemy\RightArm.cpp" />
-    <ClCompile Include="Enemy\Robot.cpp" />
-    <ClCompile Include="Framework.cpp" />
+    <ClCompile Include="Application\Enemy\Body.cpp" />
+    <ClCompile Include="Application\Enemy\Head.cpp" />
+    <ClCompile Include="Application\Enemy\LeftArm.cpp" />
+    <ClCompile Include="Application\Enemy\RightArm.cpp" />
+    <ClCompile Include="Application\Enemy\Robot.cpp" />
+    <ClCompile Include="GameEngine\Framework.cpp" />
     <ClCompile Include="scene\GameOverScene.cpp" />
     <ClCompile Include="scene\GameScene.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
@@ -190,28 +190,28 @@
     <ClCompile Include="imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="GameEngine\Input.cpp" />
     <ClCompile Include="light\Light.cpp" />
     <ClCompile Include="light\LightGroup.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="3d\Material.cpp" />
-    <ClCompile Include="3d\Mesh.cpp" />
-    <ClCompile Include="middle.cpp" />
-    <ClCompile Include="3d\ObjModel.cpp" />
+    <ClCompile Include="GameEngine\3d\Material.cpp" />
+    <ClCompile Include="GameEngine\3d\Mesh.cpp" />
+    <ClCompile Include="Application\middle.cpp" />
+    <ClCompile Include="GameEngine\3d\ObjModel.cpp" />
     <ClCompile Include="scene\BaseClassIUDF.cpp" />
-    <ClCompile Include="3d\Object3d.cpp" />
-    <ClCompile Include="3d\ObjParticle.cpp" />
-    <ClCompile Include="ParticleManager.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PointLight.cpp" />
-    <ClCompile Include="PostEffect.cpp" />
+    <ClCompile Include="GameEngine\3d\Object3d.cpp" />
+    <ClCompile Include="GameEngine\3d\ObjParticle.cpp" />
+    <ClCompile Include="GameEngine\ParticleManager.cpp" />
+    <ClCompile Include="Application\Player\Player.cpp" />
+    <ClCompile Include="GameEngine\PointLight.cpp" />
+    <ClCompile Include="GameEngine\PostEffect.cpp" />
     <ClCompile Include="camera\RailCamera.cpp" />
     <ClCompile Include="scene\SceneManager.cpp" />
-    <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="TextureModel.cpp" />
+    <ClCompile Include="GameEngine\Texture.cpp" />
+    <ClCompile Include="GameEngine\TextureModel.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
-    <ClCompile Include="Wepon.cpp" />
-    <ClCompile Include="WinApp.cpp" />
+    <ClCompile Include="Application\Wepon\Wepon.cpp" />
+    <ClCompile Include="GameEngine\WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="DirectXTex\DirectXTex_Desktop_2019_Win10.vcxproj">
@@ -422,31 +422,31 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="2d\Sprite.h" />
-    <ClInclude Include="3d\FbxLoader.h" />
-    <ClInclude Include="3d\FbxModel.h" />
-    <ClInclude Include="3d\FbxObject3d.h" />
-    <ClInclude Include="Action.h" />
-    <ClInclude Include="Audio.h" />
-    <ClInclude Include="Enemy\BothArms.h" />
-    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="GameEngine\2d\Sprite.h" />
+    <ClInclude Include="GameEngine\3d\FbxLoader.h" />
+    <ClInclude Include="GameEngine\3d\FbxModel.h" />
+    <ClInclude Include="GameEngine\3d\FbxObject3d.h" />
+    <ClInclude Include="Application\Action\Action.h" />
+    <ClInclude Include="GameEngine\Audio.h" />
+    <ClInclude Include="Application\Enemy\BothArms.h" />
+    <ClInclude Include="Application\Bullet\Bullet.h" />
     <ClInclude Include="camera\Camera.h" />
-    <ClInclude Include="3d\ModelManager.h" />
+    <ClInclude Include="GameEngine\3d\ModelManager.h" />
     <ClInclude Include="scene\ClearScene.h" />
-    <ClInclude Include="Collision\Collision.h" />
-    <ClInclude Include="Collision\CollisionPrimitive.h" />
-    <ClInclude Include="Contoroller.h" />
+    <ClInclude Include="Application\Collision\Collision.h" />
+    <ClInclude Include="Application\Collision\CollisionPrimitive.h" />
+    <ClInclude Include="GameEngine\Contoroller.h" />
     <ClInclude Include="camera\DebugCamera.h" />
     <ClInclude Include="scene\DebugScene.h" />
-    <ClInclude Include="DebugText.h" />
-    <ClInclude Include="DirectXCommon.h" />
+    <ClInclude Include="GameEngine\DebugText.h" />
+    <ClInclude Include="GameEngine\DirectXCommon.h" />
     <ClInclude Include="Enemy.h" />
-    <ClInclude Include="Enemy\Body.h" />
-    <ClInclude Include="Enemy\Head.h" />
-    <ClInclude Include="Enemy\LeftArm.h" />
-    <ClInclude Include="Enemy\RightArm.h" />
-    <ClInclude Include="Enemy\Robot.h" />
-    <ClInclude Include="Framework.h" />
+    <ClInclude Include="Application\Enemy\Body.h" />
+    <ClInclude Include="Application\Enemy\Head.h" />
+    <ClInclude Include="Application\Enemy\LeftArm.h" />
+    <ClInclude Include="Application\Enemy\RightArm.h" />
+    <ClInclude Include="Application\Enemy\Robot.h" />
+    <ClInclude Include="GameEngine\Framework.h" />
     <ClInclude Include="scene\GameOverScene.h" />
     <ClInclude Include="scene\GameScene.h" />
     <ClInclude Include="imgui\imconfig.h" />
@@ -457,29 +457,29 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
-    <ClInclude Include="Input.h" />
+    <ClInclude Include="GameEngine\Input.h" />
     <ClInclude Include="scene\BaseScene.h" />
     <ClInclude Include="light\DirectionalLight.h" />
     <ClInclude Include="light\Light.h" />
     <ClInclude Include="light\LightGroup.h" />
-    <ClInclude Include="3d\Material.h" />
-    <ClInclude Include="3d\Mesh.h" />
-    <ClInclude Include="middle.h" />
-    <ClInclude Include="3d\ObjModel.h" />
+    <ClInclude Include="GameEngine\3d\Material.h" />
+    <ClInclude Include="GameEngine\3d\Mesh.h" />
+    <ClInclude Include="Application\middle.h" />
+    <ClInclude Include="GameEngine\3d\ObjModel.h" />
     <ClInclude Include="scene\BaseClassIUDF.h" />
-    <ClInclude Include="3d\Object3d.h" />
-    <ClInclude Include="3d\ObjParticle.h" />
-    <ClInclude Include="ParticleManager.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PointLight.h" />
-    <ClInclude Include="PostEffect.h" />
+    <ClInclude Include="GameEngine\3d\Object3d.h" />
+    <ClInclude Include="GameEngine\3d\ObjParticle.h" />
+    <ClInclude Include="GameEngine\ParticleManager.h" />
+    <ClInclude Include="Application\Player\Player.h" />
+    <ClInclude Include="GameEngine\PointLight.h" />
+    <ClInclude Include="GameEngine\PostEffect.h" />
     <ClInclude Include="camera\RailCamera.h" />
     <ClInclude Include="scene\SceneManager.h" />
-    <ClInclude Include="Texture.h" />
-    <ClInclude Include="TextureModel.h" />
+    <ClInclude Include="GameEngine\Texture.h" />
+    <ClInclude Include="GameEngine\TextureModel.h" />
     <ClInclude Include="scene\TitleScene.h" />
-    <ClInclude Include="Wepon.h" />
-    <ClInclude Include="WinApp.h" />
+    <ClInclude Include="Application\Wepon\Wepon.h" />
+    <ClInclude Include="GameEngine\WinApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
