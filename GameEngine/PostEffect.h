@@ -23,6 +23,8 @@ public:
     ///</summary>
     PostEffect();
 
+    ~PostEffect();
+
     ///<summary>
     ///パイプライン生成
     ///</summary>

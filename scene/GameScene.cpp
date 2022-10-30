@@ -42,18 +42,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	groundObj->SetModel(ground);
 	
 
-	//モデル名を指定してファイル読み込み
-	//model = FbxLoader::GetInstance()->LoadModelFromFile("boneTest");
-
-	//FbxObject3d::SetDevice(dxComon->GetDev());
-	//FbxObject3d::SetCamera(camera);
-	//FbxObject3d::CreateGraphicPipeline();
-
-	//Object = new FbxObject3d;
-	//Object->Initialize();
-	//Object->SetModel(model);
-
-
 	mid =std::make_unique <middle>();
 	mid->Initialize();
 	patern = mid->GetPatern();

@@ -25,6 +25,10 @@ PostEffect::PostEffect()
 {
 }
 
+PostEffect::~PostEffect()
+{
+}
+
 void PostEffect::CreatePipeline()
 {
 #pragma region シェーダ読み込み
@@ -363,9 +367,9 @@ void PostEffect::Initialize()
 
 void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 {
-	this->matWorld = XMMatrixIdentity();
+	/*this->matWorld = XMMatrixIdentity();
 	this->matWorld *= XMMatrixRotationZ(XMConvertToRadians(rotation));
-	this->matWorld *= XMMatrixTranslation(position.x, position.y, 0.0f);
+	this->matWorld *= XMMatrixTranslation(position.x, position.y, 0.0f);*/
 
 	ConstBufferData* constMap = nullptr;
 	HRESULT result = this->constBuff->Map(0, nullptr, (void**)&constMap);
