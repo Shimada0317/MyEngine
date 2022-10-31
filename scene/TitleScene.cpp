@@ -15,9 +15,13 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
+	post = new PostEffect();
+	post->Initialize();
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/tst.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
+
+	
 }
 
 void TitleScene::SetPosSclRot()
@@ -28,6 +32,8 @@ void TitleScene::SetPosSclRot()
 
 void TitleScene::Update()
 {
+	Action::GetInstance()->PlayerMove2d(titlesize,1.0f);
+
 	//DirectX毎フレーム処理 ここから
 	timer += 1;
 	if (timer >= 10) {
@@ -43,17 +49,15 @@ void TitleScene::Update()
 
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
+	post->PreDrawScene(dxCommon->GetCmdList());
+
+	post->PostDrawScene(dxCommon->GetCmdList());
+	
 	dxCommon->PreDraw();
-	//post->PreDrawScene(dxCommon->GetCmdList());
+	post->Draw(dxCommon->GetCmdList());
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	title->Draw();
 	Sprite::PostDraw();
-
-
-	// 
-	//post->PostDrawScene(dxCommon->GetCmdList());
-	
-	//post->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 }
 

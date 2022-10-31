@@ -48,16 +48,16 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	light = Light::Create();
 	playerHp = mid->GetHp();
+
+	postEffect = new PostEffect();
+	postEffect->Initialize();
 }
 
 void GameScene::SetPosSclRot()
 {
-
 	sphere->SetRotation({ 0,0,0 });
 	sphere->SetPosition( pos );
 	sphere->SetScale({ 4.0f,4.0f,4.0f });
-
-
 
 	groundObj->SetPosition( ground_pos );
 	groundObj->SetScale({ ground_scl });
@@ -117,14 +117,14 @@ void GameScene::ImgDraw()
 
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 {
-	dxCommon->PreDraw();
-	//postEffect->PreDrawScene(dxCommon->GetCmdList());
+	
+	postEffect->PreDrawScene(dxCommon->GetCmdList());
 	ObjDraw(dxCommon);
 	SpriteDraw(dxCommon);
-	//postEffect->PostDrawScene(dxCommon->GetCmdList());
+	postEffect->PostDrawScene(dxCommon->GetCmdList());
 
-
-	//postEffect->Draw(dxCommon->GetCmdList());
+	dxCommon->PreDraw();
+	postEffect->Draw(dxCommon->GetCmdList());
 	ImgDraw();
 	//描画後処理
 	dxCommon->PostDraw();
@@ -140,5 +140,6 @@ void GameScene::Finalize()
 	delete ground;
 	delete playermodel;
 	mid.reset();
+	delete postEffect;
 }
 
