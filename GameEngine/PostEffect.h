@@ -4,6 +4,7 @@
 #include<wrl.h>
 #include<d3d12.h>
 #include<d3dx12.h>
+#include"DirectXCommon.h"
 
 class PostEffect :
     public Sprite
@@ -29,6 +30,20 @@ public:
     ///パイプライン生成
     ///</summary>
     void CreatePipeline();
+
+    void CreateVertBuff();
+
+    void CreateConstBuff();
+
+    void CreateTexBuff();
+
+    void SRVDesc();
+
+    void RTVDesc();
+
+    void DepthBuff();
+
+    void DSVDesc();
 
     ///<summary>
     ///初期化
@@ -68,8 +83,10 @@ private:
     ComPtr<ID3D12PipelineState> pipelineState;
     //ルートシグネチャ
     ComPtr<ID3D12RootSignature> rootSignature;
+
 private://静的メンバ変数
     //画面クリアカラー
     static const float clearColor[4];
+
 };
 
