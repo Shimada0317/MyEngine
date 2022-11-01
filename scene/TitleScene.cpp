@@ -15,8 +15,10 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
-	post = new PostEffect();
-	post->Initialize();
+	Sprite::LoadTexture(100, L"Resources/white1x1.png");
+
+	npost = new NewPostEffect();
+	npost->InitializeSprite();
 
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/tst.png");
@@ -50,19 +52,22 @@ void TitleScene::Update()
 
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
-	post->PreDrawScene(dxCommon->GetCmdList());
+	dxCommon->PreDraw();
+
+	npost->Draw(dxCommon->GetCmdList());
+//	post->PreDrawScene(dxCommon->GetCmdList());
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	title->Draw();
 	Sprite::PostDraw();
-	post->PostDrawScene(dxCommon->GetCmdList());
+	//post->PostDrawScene(dxCommon->GetCmdList());
 	
-	dxCommon->PreDraw();
 	post->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 }
 
 void TitleScene::Finalize()
 {
+	delete npost;
 	delete title;
 	delete dxCommon;
 }
