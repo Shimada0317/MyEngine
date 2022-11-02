@@ -180,6 +180,7 @@ void NewPostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 
 	//ID3D12DescriptorHeap* ppHeaps[] = { descHeap.Get() };
 
+
 	ID3D12DescriptorHeap* ppHeaps[] = { descHeapSRV.Get() };
 
 	cmdList->SetDescriptorHeaps(_countof(ppHeaps), ppHeaps);

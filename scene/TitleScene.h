@@ -15,7 +15,7 @@
 #include"middle.h"
 #include"PostEffect.h"
 #include"Robot.h"
-#include"NewPostEffect.h"
+#include"PostEffect.h"
 #include<memory>
 
 class TitleScene :public BaseScene
@@ -50,11 +50,10 @@ private:
 	Sprite* title = nullptr;
 
 	PostEffect* post = nullptr;
-	NewPostEffect* npost = nullptr;
 
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
-	XMFLOAT2 titlesize = { 1.0f,1.0f };
+	XMFLOAT2 titlesize = { 1280.0f,720.0f };
 	XMFLOAT2 titlepos = { 0.0f,0.0f };
 	POINT pos;
 

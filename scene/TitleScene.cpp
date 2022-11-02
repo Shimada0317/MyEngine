@@ -19,9 +19,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(1, L"Resources/tst.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
-	Sprite::LoadTexture(100, L"Resources/white1x1.png");
-	npost = new NewPostEffect();
-	npost->Initilaize();
+	//Sprite::LoadTexture(100, L"Resources/white1x1.png");
+	post = new PostEffect();
+	post->Initialize();
 }
 
 void TitleScene::SetPosSclRot()
@@ -50,20 +50,19 @@ void TitleScene::Update()
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
 
-	npost->PreDrawScene(dxCommon->GetCmdList());
+	post->PreDrawScene(dxCommon->GetCmdList());
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	title->Draw();
 	Sprite::PostDraw();
-	npost->PostDrawScene(dxCommon->GetCmdList());
+	post->PostDrawScene(dxCommon->GetCmdList());
 	
 	dxCommon->PreDraw();
-	npost->Draw(dxCommon->GetCmdList());
+	post->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 }
 
 void TitleScene::Finalize()
 {
-	delete npost;
 	delete title;
 	delete dxCommon;
 }
