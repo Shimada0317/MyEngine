@@ -20,55 +20,7 @@ NewPostEffect::NewPostEffect()
 {
 }
 
-void NewPostEffect::Initilaize()
-{
-	HRESULT result;
 
-	Sprite::InitializeSprite();
-
-	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
-		DXGI_FORMAT_R8G8B8A8_UNORM,
-		WinApp::window_width,
-		(UINT)WinApp::window_height,
-		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
-	);
-
-	result = dev->CreateCommittedResource(
-		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK,
-			D3D12_MEMORY_POOL_L0),
-		D3D12_HEAP_FLAG_NONE,
-		&texresDesc,
-		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
-		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM,clearColor),
-		IID_PPV_ARGS(&texBuff));
-
-	assert(SUCCEEDED(result));
-
-
-	{
-		const UINT pixelCount = WinApp::window_width * WinApp::window_height;
-
-		const UINT rowPitch = sizeof(UINT) * WinApp::window_width;
-
-		const UINT depthPitch = rowPitch * WinApp::window_height;
-
-		UINT* img = new UINT[pixelCount];
-		for (int i = 0; i < pixelCount; i++) { img[i] = 0xff0000ff; }
-
-		result = texBuff->WriteToSubresource(0, nullptr,
-			img, rowPitch, depthPitch);
-		assert(SUCCEEDED(result));
-		delete[] img;
-	}
-
-	SRVDescHeap();
-
-	RTVDescHeap();
-
-	DepthBuff();
-
-	DSVDescHeap();
-}
 
 void NewPostEffect::SRVDescHeap()
 {
@@ -150,11 +102,58 @@ void NewPostEffect::DSVDescHeap()
 
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
 	dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
-	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE1DARRAY;
+	dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
 	dev->CreateDepthStencilView(depthBuff.Get(),
 		&dsvDesc,
 		descHeapDSV->GetCPUDescriptorHandleForHeapStart());
 
+}
+
+void NewPostEffect::Initilaize()
+{
+	HRESULT result;
+
+	Sprite::InitializeSprite();
+
+	CD3DX12_RESOURCE_DESC texresDesc = CD3DX12_RESOURCE_DESC::Tex2D(
+		DXGI_FORMAT_R8G8B8A8_UNORM,
+		WinApp::window_width,
+		(UINT)WinApp::window_height,
+		1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET
+	);
+
+	result = dev->CreateCommittedResource(
+		&CD3DX12_HEAP_PROPERTIES(D3D12_CPU_PAGE_PROPERTY_WRITE_BACK,
+			D3D12_MEMORY_POOL_L0),
+		D3D12_HEAP_FLAG_NONE,
+		&texresDesc,
+		D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE,
+		&CD3DX12_CLEAR_VALUE(DXGI_FORMAT_R8G8B8A8_UNORM, clearColor),
+		IID_PPV_ARGS(&texBuff));
+	assert(SUCCEEDED(result));
+	{
+		const UINT pixelCount = WinApp::window_width * WinApp::window_height;
+
+		const UINT rowPitch = sizeof(UINT) * WinApp::window_width;
+
+		const UINT depthPitch = rowPitch * WinApp::window_height;
+
+		UINT* img = new UINT[pixelCount];
+		for (int i = 0; i < pixelCount; i++) { img[i] = 0xff0000ff; }
+
+		result = texBuff->WriteToSubresource(0, nullptr,
+			img, rowPitch, depthPitch);
+		assert(SUCCEEDED(result));
+		delete[] img;
+	}
+
+	SRVDescHeap();
+
+	RTVDescHeap();
+
+	DepthBuff();
+
+	DSVDescHeap();
 }
 
 void NewPostEffect::Draw(ID3D12GraphicsCommandList* cmdList)

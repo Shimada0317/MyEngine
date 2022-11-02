@@ -292,7 +292,7 @@ void DirectXCommon::PreDraw()
 	cmdList->OMSetRenderTargets(1, &rtvH, false, &dsvH);
 
 	//画面クリア　描画色の指定
-	float clearColor[] = { 0.0f,0.6f,0.4f,1.0f };
+	float clearColor[] = { 0.0f,0.0f,0.6f,1.0f };
 	//レンダーターゲット　クリア
 	cmdList->ClearRenderTargetView(rtvH, clearColor, 0, nullptr);
 	//深度バッファ　クリア
