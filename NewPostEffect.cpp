@@ -116,7 +116,7 @@ void NewPostEffect::DepthBuff()
 	//深度バッファリソース設定
 	CD3DX12_RESOURCE_DESC depthResDesc =
 		CD3DX12_RESOURCE_DESC::Tex2D(
-			DXGI_FORMAT_R32_FLOAT,
+			DXGI_FORMAT_D32_FLOAT,
 			WinApp::window_width,
 			WinApp::window_height,
 			1, 0,
