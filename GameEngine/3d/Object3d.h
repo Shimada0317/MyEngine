@@ -43,7 +43,7 @@ public: // サブクラス
 	struct ConstBufferDataB0
 	{
 
-		//XMFLOAT4 color;
+		XMFLOAT4 color;
 		XMMATRIX viewproj;    // ビュープロジェクション行列
 		XMMATRIX world; // ワールド行列
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
@@ -117,7 +117,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update(const XMVECTOR velocity={0,0,0});
+	void Update(const XMVECTOR velocity={0,0,0},const XMFLOAT4 color={1,1,1,1});
 
 	
 
