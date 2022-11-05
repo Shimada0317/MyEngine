@@ -116,7 +116,7 @@ void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos)
 	vec = XMVector3Normalize(vec);
 	vec *= kBullSpeed;
 	velocity_.m128_f32[0] = vec.m128_f32[0];
-	velocity_.m128_f32[1] = vec.m128_f32[1]/2;
+	velocity_.m128_f32[1] = vec.m128_f32[1];
 	velocity_.m128_f32[2] = vec.m128_f32[2];
 }
 
@@ -177,7 +177,7 @@ void Bullet::ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerPos,
 	}
 
 	pos.m128_f32[0] -= v3x;
-	pos.m128_f32[1] -= (v3y / 3);
+	pos.m128_f32[1] -= v3y;
 	pos.m128_f32[2] -= v3z;
 
 	//’Ç”ö‘O‚Ìó‘Ô
@@ -205,6 +205,7 @@ void Bullet::Update()
 	//}
 
 	pos += velocity_;
+	//pos.m128_f32[1] -= 0.04f;
 	ShotT += 1.0f;
 	if (ShotT >= 60) {
 		Trigger = false;

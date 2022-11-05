@@ -228,7 +228,7 @@ void middle::SpriteDraw()
 	wave->Draw();
 	slash->Draw();
 	//bulletHUD[i]->Draw();
-
+	player->SpriteDraw();
 }
 //
 void middle::ImGuiDraw()

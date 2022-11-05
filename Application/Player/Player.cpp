@@ -20,6 +20,9 @@ void Player::Initalize()
 
 	part = ParticleManager::Create();
 
+	Sprite::LoadTexture(200, L"Resources/mark.png");
+	spriteRet.reset(Sprite::SpriteCreate(200, retpos, spCol, anc));
+
 	cam = new RailCamera();
 	cam->Initialize(position, rotation);
 
@@ -37,7 +40,7 @@ void Player::Set()
  	gunmat = gun->GetMatrix();
 	gunWorldPos = { 0.0f,0.0f,0.0f };
 	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
-	
+	gunWorldPos.m128_f32[1] = playerWorldPos.m128_f32[1];
 
 	for (int i = 0; i < 100; i++) {
 		const float rnd_pos = 1.0f;
@@ -147,8 +150,6 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	}
 
 
-
-
 	else if (Action == false) {
 		kBulletSpeed = 0.0f;
 		vel = { 0, 0, kBulletSpeed };
@@ -164,6 +165,8 @@ void Player::Update(Bullet* bull[], int& Remaining)
 		bull[i]->Update();
 	}
 
+
+	ReteicleHaiti();
 	Set();
 	cam->Update(vel, Eye_rot, camera);
 	camera->Update();
@@ -185,6 +188,11 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 
 
 
+}
+
+void Player::SpriteDraw()
+{
+	spriteRet->Draw();
 }
 
 void Player::PlayerMove(bool& move, int patern, bool& spown)
@@ -359,6 +367,29 @@ void Player::Finalize()
 	delete playerModel;
 }
 
+void Player::ChangeViewPort()
+{
+	matViewPort.r[0].m128_f32[0] = WinApp::window_width / 2;
+	matViewPort.r[0].m128_f32[1] = 0;
+	matViewPort.r[0].m128_f32[2] = 0;
+	matViewPort.r[0].m128_f32[3] = 0;
+
+	matViewPort.r[1].m128_f32[0] = 0;
+	matViewPort.r[1].m128_f32[1] = -(WinApp::window_height / 2);
+	matViewPort.r[1].m128_f32[2] = 0;
+	matViewPort.r[1].m128_f32[3] = 0;
+
+	matViewPort.r[2].m128_f32[0] = 0;
+	matViewPort.r[2].m128_f32[1] = 0;
+	matViewPort.r[2].m128_f32[2] = 1;
+	matViewPort.r[2].m128_f32[3] = 0;
+
+	matViewPort.r[3].m128_f32[0] = WinApp::window_width/2+offset.m128_f32[0];
+	matViewPort.r[3].m128_f32[1] = WinApp::window_height/2+offset.m128_f32[1];
+	matViewPort.r[3].m128_f32[2] = 0;
+	matViewPort.r[3].m128_f32[3] = 1;
+}
+
 void Player::Attack()
 {
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
@@ -369,6 +400,35 @@ void Player::Attack()
 			newBullet->Initialize();
 			newBullet->Stanby(position,velocity);
 			bullets_.push_back(std::move(newBullet));*/
+	}
+}
+
+void Player::ReteicleHaiti()
+{
+	const float kDistancePlayerTo3DReticle = 50.0f;
+
+	offset = { 0,0,1.0f };
+
+	offset = XMVector3TransformNormal(offset, mat);
+
+	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
+
+
+
+	{
+		XMVECTOR positionRet = playerWorldPos;
+
+		ChangeViewPort();
+
+		XMMATRIX matVP = matViewPort;
+
+		XMMATRIX GetViewPro = camera->GetViewProjectionMatrix();
+
+		XMMATRIX matViewProjectionViewport = GetViewPro * matVP;
+
+		positionRet = XMVector3TransformCoord(positionRet, matViewProjectionViewport);
+
+		spriteRet->SetPosition({ positionRet.m128_f32[0],positionRet.m128_f32[1] });
 	}
 }
 

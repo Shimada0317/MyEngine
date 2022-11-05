@@ -34,6 +34,8 @@ public:
 
 	void Draw(ID3D12GraphicsCommandList* cmdList);
 
+	void SpriteDraw();
+
 	void PlayerMove(bool& move,int patern,bool& spown);
 
 	void ObjDraw();
@@ -42,7 +44,11 @@ public:
 
 	void Finalize();
 
+	void ChangeViewPort();
+
 	void Attack();
+
+	void ReteicleHaiti();
 
 	void MouthContoroll();
 
@@ -81,6 +87,8 @@ private:
 	std::unique_ptr<Object3d> player;
 	ObjModel* playerModel = nullptr;
 
+	std::unique_ptr<Sprite> spriteRet;
+
 	std::unique_ptr<Object3d> gun;
 	ObjModel* gunModel = nullptr;
 	//発砲時のエフェクト
@@ -104,6 +112,8 @@ private:
 	XMMATRIX mat;
 	XMVECTOR gunWorldPos = { 0.0f,0.0f,-5.0f };
 	XMMATRIX gunmat;
+	//ビューポート
+	XMMATRIX matViewPort;
 	//カメラ
 	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
 	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };
@@ -112,13 +122,15 @@ private:
 	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
 
 	XMFLOAT4 color = { 1,1,1,1 };
-
-	XMFLOAT2 retpos = { 0.0f,0.0f };
+	XMFLOAT4 spCol = { 1,1,1,1 };
+	XMFLOAT2 anc = { 0.5f,0.5f };
+	XMFLOAT2 retpos = { 640.0f,360.0f };
 	XMFLOAT2 retsize = { 64.0f,64.0f };
 
 	POINT pos;
 	WinApp* winapp = nullptr;
 
+	XMVECTOR offset = { 0,0,1.0f };
 
 	float time = 0.0f;
 	bool particle = false;

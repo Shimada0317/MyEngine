@@ -36,11 +36,15 @@ void Head::Update(bool& arive,const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 			Hp -= 25;
 			Hit = false;
 			bull->SetTrigger(Hit);
+			HitColor = { 1,0,0,1 };
 		}
+	}
+	else {
+		HitColor = { 1,1,1,1 };
 	}
 
 
-	Head->Update();
+	Head->Update(HitColor);
 }
 
 void Head::Draw(bool arive)

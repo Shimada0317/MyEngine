@@ -36,16 +36,17 @@ void Body::Update(bool& arive,const XMVECTOR& allPos,Bullet* bull,int& Hp)
 
 		SetPRS(allPos, bull);
 
-		body->Update();
-
-
-
 		if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)&&Hit==true) {
 			Hp -= 10;
 			Hit = false;
 			bull->SetTrigger(Hit);
+			HItColor = { 1,0,0,1 };
 		}
 	}
+	else {
+		HItColor = { 1,1,1,1 };
+	}
+	body->Update(HItColor);
 }
 
 void Body::Draw(bool arive)
