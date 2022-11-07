@@ -44,7 +44,7 @@ public:
 
 	void Finalize();
 
-	void ChangeViewPort();
+	void ChangeViewPort(XMMATRIX& mat);
 
 	void Attack();
 
@@ -127,7 +127,6 @@ private:
 	XMFLOAT2 retpos = { 640.0f,360.0f };
 	XMFLOAT2 retsize = { 64.0f,64.0f };
 
-	POINT pos;
 	WinApp* winapp = nullptr;
 
 	XMVECTOR offset = { 0,0,1.0f };

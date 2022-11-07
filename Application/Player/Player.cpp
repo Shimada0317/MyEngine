@@ -69,7 +69,7 @@ void Player::Set()
 	/*if (patern == true) {
 		position = player->GetPosition();
 	}*/
-	player->SetPosition({ position });
+	//player->SetPosition({ position });
 	//player->SetRotation({ rotation });
 	player->SetScale({ scale });
 
@@ -166,7 +166,8 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	}
 
 
-	ReteicleHaiti();
+	//ReteicleHaiti();
+	MouthContoroll();
 	Set();
 	cam->Update(vel, Eye_rot, camera);
 	camera->Update();
@@ -356,6 +357,8 @@ void Player::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
+
+
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
@@ -367,7 +370,7 @@ void Player::Finalize()
 	delete playerModel;
 }
 
-void Player::ChangeViewPort()
+void Player::ChangeViewPort(XMMATRIX& matViewPort)
 {
 	matViewPort.r[0].m128_f32[0] = WinApp::window_width / 2;
 	matViewPort.r[0].m128_f32[1] = 0;
@@ -418,7 +421,7 @@ void Player::ReteicleHaiti()
 	{
 		XMVECTOR positionRet = playerWorldPos;
 
-		ChangeViewPort();
+		ChangeViewPort(matViewPort);
 
 		XMMATRIX matVP = matViewPort;
 
@@ -434,40 +437,49 @@ void Player::ReteicleHaiti()
 
 void Player::MouthContoroll()
 {
+	POINT mousePosition;
 
-	GetCursorPos(&pos);
+	GetCursorPos(&mousePosition);
 
 	HWND hwnd = WinApp::GetInstance()->GetHwnd();
 
-	ScreenToClient(hwnd, &pos);
+	ScreenToClient(hwnd, &mousePosition);
 
-	retpos.x = pos.x;
-	retpos.y = pos.y;
+	
+	retpos.x = mousePosition.x;
+	retpos.y = mousePosition.y;
 
-	//プロジェクション行列
-	XMMATRIX matProjection = XMMatrixPerspectiveFovLH(
-		XMConvertToRadians(60.0f),
-		(float)WinApp::window_width / WinApp::window_height,
-		0.1f, 1000.0f
-	);
+	spriteRet->SetPosition(retpos);
+	
 	//ビューポート行列
-	XMMATRIX matViewport = { WinApp::window_width / 2,0,0,0  ,0,-WinApp::window_height / 2,0,0    ,0,0,1,0   ,WinApp::window_width / 2 + OffsetX,WinApp::window_height / 2 + OffsetY,0,1 };
+	XMMATRIX matViewport;
+
+	ChangeViewPort(matViewport);
+
+	XMMATRIX ViewPro = camera->GetViewProjectionMatrix();
+
 	//ビュー、プロジェクション、ビューポート3つの行列の乗算
-	XMMATRIX matVPV = XMMatrixLookAtLH(XMLoadFloat3(&Eye_rot), XMLoadFloat3(&cameraTarget), XMLoadFloat3(&up)) * matProjection * matViewport;
+	XMMATRIX matVPV = ViewPro * matViewport;
 
 	XMMATRIX matIverserVPV = XMMatrixInverse(nullptr, matVPV);
 
 
-	XMVECTOR posNear = { pos.x, pos.y, 0,1 };
-	XMVECTOR posFar = { pos.x,pos.y,1,1 };
+	XMVECTOR posNear = {retpos.x,retpos.y, 0,1 };
+	XMVECTOR posFar = { retpos.x, retpos.y,1,1 };
 
 	posNear = XMVector3TransformCoord(posNear, matIverserVPV);
 	posFar = XMVector3TransformCoord(posFar, matIverserVPV);
 
-	XMVECTOR mouseDirection = posNear + posFar;
+	XMVECTOR mouseDirection = posNear - posFar;
 	mouseDirection = XMVector3Normalize(mouseDirection);
 
 	const float kDistanceTestObject = 10;
+
+	XMVECTOR positionRet =playerWorldPos;
+
+	positionRet = posNear - mouseDirection*kDistanceTestObject;
+
+	player->SetPosition(positionRet);
 
 	//pos=posNear+mouseDirection
 }
