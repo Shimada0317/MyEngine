@@ -27,16 +27,28 @@ void Mouse::Initialize(WinApp* winApp)
 
 void Mouse::Update()
 {
-	HRESULT result;
+	clipre = cli;
+	HRESULT result= Onclick->GetDeviceState(sizeof(DIMOUSESTATE), &cli);
 
-	result = Onclick->Acquire();
+	if (FAILED(result)) {
+		Onclick->Acquire();
+		Onclick->GetDeviceState(sizeof(DIMOUSESTATE), &cli);
 
-	result = Onclick->GetDeviceState(sizeof(DIMOUSESTATE), &cli);
+
+	}
+
+	//memcpy(cliPre, cli, sizeof(cli));
+
+//	result = Onclick->Acquire();
+
+
+
+
 }
 
 bool Mouse::PushClick(BYTE click)
 {
-	if (cli.rgbButtons[click] & (0x80)) {
+	if (!(clipre.rgbButtons[click]&(0x80))&&(cli.rgbButtons[click]&(0x80))) {
 		return true;
 	}
 
@@ -105,3 +117,4 @@ void Mouse::Mousemove(const XMMATRIX& ViewPro, const XMMATRIX& viewPort, const X
 	//player->SetPosition(positionRet);
 
 }
+	

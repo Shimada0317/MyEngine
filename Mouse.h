@@ -52,7 +52,7 @@ private:
 	BYTE keyPre[256] = {};
 
 	DIMOUSESTATE2 cli = {};
-	DIMOUSESTATE2 clepre = {};
+	DIMOUSESTATE2 clipre = {};
 
 	POINT pos;
 

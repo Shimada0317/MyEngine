@@ -93,7 +93,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 
 	//’e‚Ì”­ŽË‘O
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
-		if (Input::GetInstance()->PushClick(1)) {
+		if (Mouse::GetInstance()->PushClick(0)) {
 
 			Remaining += 1;
 			time = 0.0f;
@@ -113,14 +113,13 @@ void Player::Update(Bullet* bull[], int& Remaining)
 		time += 0.4f;
 		if (time >= 3.0f) {
 			particle = false;
-
 		}
 	}
 	else {
 		time = 4.0f;
 	}
 	//ƒŠƒ[ƒh
-	if (Input::GetInstance()->TriggerKey(DIK_R) && Remaining != 0) {
+	if (Mouse::GetInstance()->PushClick(1) && Remaining != 0) {
 		ReloadFlag = true;
 	}
 

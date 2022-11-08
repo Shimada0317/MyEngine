@@ -96,6 +96,7 @@ private:
 	ParticleManager* part;
 
 	Input* input = nullptr;
+	Mouse* mouse = nullptr;
 	DebugText* debugtext = nullptr;
 	Camera* camera = nullptr;
 	RailCamera* cam;

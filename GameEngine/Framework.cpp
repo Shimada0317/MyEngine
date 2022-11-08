@@ -60,6 +60,7 @@ void Framework::Update()
 	}
 	//DirectX毎フレーム処理 ここから
 	input->Update();
+	mouse->Update();
 
 	//シーンの更新
 	sceneManager_->Update(dxCommon);
