@@ -146,13 +146,18 @@ void Player::Update(Bullet* bull[], int& Remaining)
 
 	//ƒvƒŒƒCƒ„[‚Ì‰ñ“]
 	if (Input::GetInstance()->PushKey(DIK_A)) {
-		Eye_rot.y++;
 	}
+	if (Input::GetInstance()->PushKey(DIK_S)) {
+	}
+	
+	
+
 
 
 	else if (Action == false) {
 		kBulletSpeed = 0.0f;
 		vel = { 0, 0, kBulletSpeed };
+		Eye_rot.x = 0;
 	}
 	if (Input::GetInstance()->PushKey(DIK_O)) {
 		kBulletSpeed = 1.1f;
@@ -167,7 +172,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 
 
 	//ReteicleHaiti();
-	MouthContoroll();
+//	MouthContoroll();
 	Set();
 	cam->Update(vel, Eye_rot, camera);
 	camera->Update();
@@ -206,6 +211,18 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 
 	if (Action == true) {
 		kBulletSpeed = 0.5f;
+		if (shake == 0) {
+			Eye_rot.x += 0.05f;
+			if (Eye_rot.x >= 0.5f) {
+				shake = 1;
+			}
+		}
+		if (shake == 1) {
+			Eye_rot.x -= 0.05f;
+			if (Eye_rot.x <= -0.5f) {
+				shake = 0;
+			}
+		}
 		if (patern == 1) {
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] >= 20) {
@@ -450,6 +467,7 @@ void Player::MouthContoroll()
 	XMVECTOR positionRet = playerWorldPos;
 
 	Mouse::GetInstance()->Mousemove(ViewPro, matViewport, retpos, positionRet);
+
 
 	player->SetPosition(positionRet);
 

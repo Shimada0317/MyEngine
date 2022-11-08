@@ -153,5 +153,8 @@ private:
 	//“®‚¢‚½‚Æ‚«‚Ìtimer
 	float movetimer = 0.0f;
 	int waveCount = 0;
+
+	//cam
+	int shake = 0;
 };
 

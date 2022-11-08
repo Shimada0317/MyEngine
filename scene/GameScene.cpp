@@ -75,10 +75,10 @@ void GameScene::AllUpdate()
 
 void GameScene::Update()
 {
-	if (Input::GetInstance()->PushKey(DIK_A)) {
+	/*if (Input::GetInstance()->PushKey(DIK_A)) {
 		BaseScene* scene_ = new GameOverScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
-	}
+	}*/
 
 	/*if (patern >= 5) {
 		BaseScene* scene_ = new ClearScene(sceneManager_);

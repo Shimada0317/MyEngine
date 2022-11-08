@@ -38,7 +38,7 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	position += vel;
 
 
-	eye = { 0,1,-5 };
+	eye = { 0,1.5,-5 };
 	rotation = { 0.0f,0.0f,0.0f };
 	rotation.x = rot.x+rotation.x;
 	rotation.y = rot.y+rotation.y;
