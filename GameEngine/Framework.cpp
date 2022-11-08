@@ -28,6 +28,8 @@ void Framework::Initialize()
 	dxCommon->Initialize(winApp);
 	input = Input::GetInstance();
 	input->Initialize(winApp);
+	mouse = Mouse::GetInstance();
+	mouse->Initialize(winApp);
 	audio = new Audio();
 	audio->StaticInitialize();
 	camera = new DebugCamera(WinApp::window_width,WinApp::window_height);

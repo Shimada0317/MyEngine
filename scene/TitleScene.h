@@ -51,6 +51,8 @@ private:
 
 	PostEffect* post = nullptr;
 
+	Player* pl = nullptr;
+
 	XMFLOAT3 ramieru_pos = { 0,0,0 };
 
 	XMFLOAT2 titlesize = { 1280.0f,720.0f };

@@ -22,6 +22,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	//Sprite::LoadTexture(100, L"Resources/white1x1.png");
 	post = new PostEffect();
 	post->Initialize();
+
 }
 
 void TitleScene::SetPosSclRot()
@@ -65,4 +66,5 @@ void TitleScene::Finalize()
 {
 	delete title;
 	delete dxCommon;
+	delete post;
 }

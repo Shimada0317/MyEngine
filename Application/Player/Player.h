@@ -12,6 +12,7 @@
 #include"Bullet.h"
 #include"ParticleManager.h"
 #include"RailCamera.h"
+#include"Mouse.h"
 
 #include<memory>
 #include<list>

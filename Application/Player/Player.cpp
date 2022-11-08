@@ -27,6 +27,7 @@ void Player::Initalize()
 	cam->Initialize(position, rotation);
 
 	player->SetParent(camera);
+
 };
 
 void Player::Set()
@@ -69,7 +70,7 @@ void Player::Set()
 	/*if (patern == true) {
 		position = player->GetPosition();
 	}*/
-	//player->SetPosition({ position });
+	player->SetPosition({ position });
 	//player->SetRotation({ rotation });
 	player->SetScale({ scale });
 
@@ -92,7 +93,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 
 	//弾の発射前
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		if (Input::GetInstance()->PushClick(1)) {
 
 			Remaining += 1;
 			time = 0.0f;
@@ -437,47 +438,19 @@ void Player::ReteicleHaiti()
 
 void Player::MouthContoroll()
 {
-	POINT mousePosition;
-
-	GetCursorPos(&mousePosition);
-
-	HWND hwnd = WinApp::GetInstance()->GetHwnd();
-
-	ScreenToClient(hwnd, &mousePosition);
-
-	
-	retpos.x = mousePosition.x;
-	retpos.y = mousePosition.y;
+	Mouse::GetInstance()->MouseMoveSprite(retpos);
 
 	spriteRet->SetPosition(retpos);
-	
-	//ビューポート行列
+
 	XMMATRIX matViewport;
 
 	ChangeViewPort(matViewport);
 
 	XMMATRIX ViewPro = camera->GetViewProjectionMatrix();
 
-	//ビュー、プロジェクション、ビューポート3つの行列の乗算
-	XMMATRIX matVPV = ViewPro * matViewport;
+	XMVECTOR positionRet = playerWorldPos;
 
-	XMMATRIX matIverserVPV = XMMatrixInverse(nullptr, matVPV);
-
-
-	XMVECTOR posNear = {retpos.x,retpos.y, 0,1 };
-	XMVECTOR posFar = { retpos.x, retpos.y,1,1 };
-
-	posNear = XMVector3TransformCoord(posNear, matIverserVPV);
-	posFar = XMVector3TransformCoord(posFar, matIverserVPV);
-
-	XMVECTOR mouseDirection = posNear - posFar;
-	mouseDirection = XMVector3Normalize(mouseDirection);
-
-	const float kDistanceTestObject = 10;
-
-	XMVECTOR positionRet =playerWorldPos;
-
-	positionRet = posNear - mouseDirection*kDistanceTestObject;
+	Mouse::GetInstance()->Mousemove(ViewPro, matViewport, retpos, positionRet);
 
 	player->SetPosition(positionRet);
 

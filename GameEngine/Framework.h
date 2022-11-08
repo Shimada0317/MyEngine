@@ -13,6 +13,7 @@
 #include"ParticleManager.h"
 #include"Texture.h"
 #include"Light.h"
+#include"Mouse.h"
 
 /// <summary>
 /// フレームワーク
@@ -54,6 +55,7 @@ protected:
 	DirectXCommon* dxCommon = nullptr;
 	WinApp* winApp = nullptr;
 	Input* input = nullptr;
+	Mouse* mouse = nullptr;
 	GameScene* gamescene = nullptr;
 	Audio* audio = nullptr;
 	SceneManager* sceneManager_ = nullptr;

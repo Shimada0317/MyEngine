@@ -75,7 +75,7 @@ void GameScene::AllUpdate()
 
 void GameScene::Update()
 {
-	if (playerHp<=0) {
+	if (Input::GetInstance()->PushKey(DIK_A)) {
 		BaseScene* scene_ = new GameOverScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
 	}
