@@ -34,13 +34,13 @@ public:
 
 	void Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot);
 
-	void Update(const XMVECTOR& vel,const XMFLOAT3& rot,Camera* NormalCam);
+	void Updata(const XMVECTOR& vel,const XMFLOAT3& rot,Camera* NormalCam);
 
 	void Draw();
 
-	void UpdateViewMatrix();
+	void UpdataViewMatrix();
 
-	void UpdateProjectionMatrix();
+	void UpdataProjectionMatrix();
 
 private:
 	Camera* camera = nullptr;

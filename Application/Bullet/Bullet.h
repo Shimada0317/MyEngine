@@ -50,7 +50,7 @@ public:
 
 	void Hit();
 	
-	void Update();
+	void Updata();
 
 	void Draw();
 

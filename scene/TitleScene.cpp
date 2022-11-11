@@ -31,7 +31,7 @@ void TitleScene::SetPosSclRot()
 	title->SetPosition({ titlepos });
 }
 
-void TitleScene::Update()
+void TitleScene::Updata()
 {
 	Action::GetInstance()->PlayerMove2d(titlesize,1.0f);
 

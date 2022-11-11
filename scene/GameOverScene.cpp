@@ -19,7 +19,7 @@ void GameOverScene::SetPosSclRot()
 	GameOver->SetPosition({ pos });
 }
 
-void GameOverScene::Update()
+void GameOverScene::Updata()
 {
 	if (Input::GetInstance()->PushKey(DIK_RETURN)) {
 		BaseScene* scene_ = new TitleScene(sceneManager_);

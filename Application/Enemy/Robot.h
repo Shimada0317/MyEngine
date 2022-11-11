@@ -25,19 +25,21 @@ public:
 
 	void SetPRS(const XMMATRIX& player);
 
-	void AllUpdate(Bullet* bull);
+	void AllUpdata(Bullet* bull);
 
-	void Update(Bullet* bull,bool& arive, const XMMATRIX& player,bool& spown,int& playerHp);
+	void Updata(Bullet* bull,bool& arive, const XMMATRIX& player,bool& spown,int& playerHp);
 
 	void Draw(DirectXCommon* dxCommon);
 
 	void ParticleDraw(DirectXCommon* dxCommon);
 
-	void AttackAction();
+	void TrackPlayer();
 
 	void Finalize();
 
 	void SetPosition(XMVECTOR allPos) { this->allPos = allPos; }
+
+	void SetRotation(XMFLOAT3 allRot) { this->allRot = allRot; }
 
 	void SpownEnemy(const XMMATRIX& player,int patern);
 private:
@@ -51,6 +53,7 @@ private:
 
 
 	XMVECTOR allPos = { 0.0f,0.0f,1.0f };
+	XMFLOAT3 allRot = { 0.0f,0.0f,0.0f };
 
 	bool arive[3];
 	float attackT = 0.0f;

@@ -7,10 +7,10 @@ Camera::Camera(int window_width, int window_height)
 	aspectRatio = (float)window_width / window_height;
 
 	//ビュー行列の計算
-	UpdateViewMatrix();
+	UpdataViewMatrix();
 
 	// 射影行列の計算
-	UpdateProjectionMatrix();
+	UpdataProjectionMatrix();
 
 	// ビュープロジェクションの合成
 	matViewProjection = matView * matProjection;
@@ -19,20 +19,20 @@ Camera::Camera(int window_width, int window_height)
 }
 
 
-void Camera::Update()
+void Camera::Updata()
 {
 	if (viewDirty || projectionDirty) {
 		// 再計算必要なら
 		if (viewDirty) {
 			// ビュー行列更新
-			UpdateViewMatrix();
+			UpdataViewMatrix();
 			viewDirty = false;
 		}
 
 		// 再計算必要なら
 		if (projectionDirty) {
 			// ビュー行列更新
-			UpdateProjectionMatrix();
+			UpdataProjectionMatrix();
 			projectionDirty = false;
 		}
 		// ビュープロジェクションの合成
@@ -41,7 +41,7 @@ void Camera::Update()
 	}
 }
 
-void Camera::UpdateViewMatrix()
+void Camera::UpdataViewMatrix()
 {
 	// 視点座標
 	XMVECTOR eyePosition = XMLoadFloat3(&eye);
@@ -98,7 +98,7 @@ void Camera::UpdateViewMatrix()
 
 }
 
-void Camera::UpdateProjectionMatrix()
+void Camera::UpdataProjectionMatrix()
 {
 	// 透視投影による射影行列の生成
 	matProjection = XMMatrixPerspectiveFovLH(

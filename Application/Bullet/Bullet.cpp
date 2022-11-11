@@ -195,7 +195,7 @@ void Bullet::Hit()
 }
 
 
-void Bullet::Update()
+void Bullet::Updata()
 {
 
 	//pos += velocity_;
@@ -215,7 +215,7 @@ void Bullet::Update()
 
 
 	Set();
-	bullet->Update();
+	bullet->Updata();
 }
 
 void Bullet::Draw()

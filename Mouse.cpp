@@ -25,7 +25,7 @@ void Mouse::Initialize(WinApp* winApp)
 
 }
 
-void Mouse::Update()
+void Mouse::Updata()
 {
 	clipre = cli;
 	HRESULT result= Onclick->GetDeviceState(sizeof(DIMOUSESTATE), &cli);

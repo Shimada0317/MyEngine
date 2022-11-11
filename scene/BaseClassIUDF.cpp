@@ -14,10 +14,10 @@ void BaseClassIUDF::Initialize()
 
 }
 
-void BaseClassIUDF::Update()
+void BaseClassIUDF::Updata()
 {
 	//基底クラスの更新
-	Framework::Update();
+	Framework::Updata();
 
 }
 

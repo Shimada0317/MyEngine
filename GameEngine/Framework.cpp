@@ -9,7 +9,7 @@ void Framework::Run()
 	while (true)//ゲームループ
 	{
 		//更新
-		Update();
+		Updata();
 		if (GetFinish()) {
 			break;
 		}
@@ -51,7 +51,7 @@ void Framework::Initialize()
 
 }
 
-void Framework::Update()
+void Framework::Updata()
 {
 
 	if (winApp->ProcessMessage()) {
@@ -59,11 +59,11 @@ void Framework::Update()
 		return;
 	}
 	//DirectX毎フレーム処理 ここから
-	input->Update();
-	mouse->Update();
+	input->Updata();
+	mouse->Updata();
 
 	//シーンの更新
-	sceneManager_->Update(dxCommon);
+	sceneManager_->Updata(dxCommon);
 }
 
 

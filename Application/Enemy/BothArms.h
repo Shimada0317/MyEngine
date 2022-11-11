@@ -17,13 +17,15 @@ public:
 
 	void Initialize();
 
-	void SetPRS(const XMVECTOR& bodyPos, Bullet* bull);
+	void SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull);
 
-	void Update(bool& arive, const XMVECTOR& bodyPos, Bullet* bull, int& Hp);
+	void Updata(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull, int& Hp);
 
 	void Draw(bool arive);
 
 	void Finalize();
+
+	void RespownSet(const XMFLOAT3& rot);
 
 	void Attack(float& attackT,bool& AttackFase,int& playerHp);
 private:

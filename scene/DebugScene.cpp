@@ -34,7 +34,7 @@ void DebugScene::SetPosSclRot()
 	}*/
 }
 
-void DebugScene::Update()
+void DebugScene::Updata()
 {
 	//SetPosSclRot();
 	//for (int i = 0; i < 9; i++) {
@@ -47,7 +47,7 @@ void DebugScene::Update()
 	//
 	//player->Update(bull,Remaining);
 	//camera->Update();
-	mid->Update();
+	mid->Updata();
 }
 
 void DebugScene::Draw(DirectXCommon* dxCommon)

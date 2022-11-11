@@ -11,7 +11,7 @@ void Head::Initialize()
 	Head = Object3d::Create(headModel);
 }
 
-void Head::SetPRS(const XMVECTOR& bodyPos,Bullet* bull)
+void Head::SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull)
 {
 
 	bullPos = bull->GetPosition();
@@ -20,17 +20,18 @@ void Head::SetPRS(const XMVECTOR& bodyPos,Bullet* bull)
 	
 
 	HeadPos = bodyPos;
+	HeadRot = rotation;
 	HeadPos.m128_f32[1] = bodyPos.m128_f32[1] +1.0f;
 	Head->SetPosition(HeadPos);
 	Head->SetRotation(HeadRot);
 	Head->SetScale(HeadScl);
 }
 
-void Head::Update(bool& arive,const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
+void Head::Updata(bool& arive,const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
 {
 	if (arive == true) {
 		//SetPRS(bodyPos);
-		SetPRS(bodyPos, bull);
+		SetPRS(bodyPos,rotation, bull);
 
 		if (Collision::HeadHit(HeadPos, HeadScl, bullPos, bullScl)) {
 			Hp -= 25;
@@ -44,7 +45,7 @@ void Head::Update(bool& arive,const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 	}
 
 
-	Head->Update(HitColor);
+	Head->Updata(HitColor);
 }
 
 void Head::Draw(bool arive)

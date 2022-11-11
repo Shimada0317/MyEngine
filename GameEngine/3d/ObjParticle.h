@@ -29,7 +29,7 @@ public:
 
 	void Set(XMVECTOR& enemyPos);
 
-	void Update(XMVECTOR& enemyPos);
+	void Updata(XMVECTOR& enemyPos);
 
 	void Effect();
 

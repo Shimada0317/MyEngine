@@ -82,12 +82,11 @@ void Player::Set()
 	gun->SetParent(camera);
 	gun->SetPosition(gunPos);
 }
-
 void Player::Effect()
 {
 }
 
-void Player::Update(Bullet* bull[], int& Remaining)
+void Player::Updata(Bullet* bull[], int& Remaining)
 {
 	oldPos = position;
 
@@ -144,17 +143,7 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY + 3);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
 
-	//ƒvƒŒƒCƒ„[‚Ì‰ñ“]
-	if (Input::GetInstance()->PushKey(DIK_A)) {
-	}
-	if (Input::GetInstance()->PushKey(DIK_S)) {
-	}
-	
-	
-
-
-
-	else if (Action == false) {
+	if (Action == false) {
 		kBulletSpeed = 0.0f;
 		vel = { 0, 0, kBulletSpeed };
 		Eye_rot.x = 0;
@@ -167,17 +156,17 @@ void Player::Update(Bullet* bull[], int& Remaining)
 	vel = XMVector3TransformNormal(vel, mat);
 
 	for (int i = 0; i < 9; i++) {
-		bull[i]->Update();
+		bull[i]->Updata();
 	}
 
 
 	//ReteicleHaiti();
-//	MouthContoroll();
+	//MouthContoroll();
 	Set();
-	cam->Update(vel, Eye_rot, camera);
-	camera->Update();
-	player->Update();
-	gun->Update();
+	cam->Updata(vel, Eye_rot, camera);
+	camera->Updata();
+	player->Updata();
+	gun->Updata();
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)

@@ -36,20 +36,20 @@ void Robot::SetPRS(const XMMATRIX& player)
 
 }
 
-void Robot::AllUpdate(Bullet* bull)
+void Robot::AllUpdata(Bullet* bull)
 {
-	head->Update(arive[0], allPos, bull, Hp);
-	//RArm->Update(arive[1], allPos, bull, Hp);
-	//LArm->Update(arive[2], allPos, bull, Hp);
-	Arms->Update(arive[1], allPos, bull, Hp);
-	body->Update(arive[2], allPos, bull, Hp);
-	part->Update(allPos);
+	head->Updata(arive[0], allPos, allRot, bull, Hp);
+	//RArm->Updata(arive[1], allPos, bull, Hp);
+	//LArm->Updata(arive[2], allPos, bull, Hp);
+	Arms->Updata(arive[1], allPos, allRot, bull, Hp);
+	body->Updata(arive[2], allPos, allRot, bull, Hp);
+	part->Updata(allPos);
 	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
-		patrticle->Update(allPos);
+		patrticle->Updata(allPos);
 	}
 }
 
-void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown, int& playerHp)
+void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown, int& playerHp)
 {
 	particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
@@ -108,7 +108,7 @@ void Robot::Update(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	}
 
 	SetPRS(player);
-	AllUpdate(bull);
+	AllUpdata(bull);
 }
 
 void Robot::Draw(DirectXCommon* dxCommon)
@@ -131,11 +131,6 @@ void Robot::ParticleDraw(DirectXCommon* dxCommon)
 
 }
 
-void Robot::AttackAction()
-{
-
-}
-
 void Robot::Finalize()
 {
 
@@ -146,77 +141,78 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 
 	Hp = 50;
 	OldHp = Hp;
-	int rad = (rand() % 4);
-
-
-	float radX = (float)rad;
+//	int rad = (rand() % 4);
+//
+//
+//	float radX = (float)rad;
 	for (int i = 0; i < 3; i++) {
 		arive[i] = true;
 	}
-	allPos = { 0.0f,0.0f,0.0f };
-	allPos = XMVector3Transform(allPos, player);
-	if (patern <= 2) {
-		allPos.m128_f32[0] = 0.0f;
-		allPos.m128_f32[1] = 0.0f;
-		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
-	}
-	else if (patern == 3 || patern == 4) {
-		allPos.m128_f32[1] = 0.0f;
-		allPos.m128_f32[0] = allPos.m128_f32[0] + 15;
-		//allPos.m128_f32[2] = 40;
-	}
-	else if (patern >= 5 && patern <= 6) {
-		allPos.m128_f32[1] = 0.0f;
-		allPos.m128_f32[2] = allPos.m128_f32[2] - 15;
-	}
-	else if (patern == 7 ) {
-		allPos.m128_f32[1] = 0.0f;
-		allPos.m128_f32[0] = allPos.m128_f32[0] - 15;
-	}
-	else if (patern == 8) {
-		allPos.m128_f32[0] = 0.0f;
-		allPos.m128_f32[1] = 0.0f;
-		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
-	}
-	if (patern <= 3) {
-		allPos.m128_f32[0] = 0.0f;
-		allPos.m128_f32[1] = 0.0f;
-		if (rad == 0) {
-			allPos.m128_f32[0] = -6.0f;
-		}
-		else if (rad == 1) {
-			allPos.m128_f32[0] = -3.0f;
-		}
-		else if (rad == 2) {
-			allPos.m128_f32[0] = 0.0f;
-		}
-		else if (rad == 3) {
-			allPos.m128_f32[0] = 3.0f;
-		}
-		else {
-			allPos.m128_f32[0] = 6.0f;
-		}
-		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
-	}
-	else if (patern > 3 && patern <= 5) {
-		allPos.m128_f32[2] = 40.0f;
-		allPos.m128_f32[1] = 0.0f;
-		if (rad == 0) {
-			allPos.m128_f32[2] -= 6.0f;
-		}
-		else if (rad == 1) {
-			allPos.m128_f32[2] -= 3.0f;
-		}
-		else if (rad == 2) {
-			allPos.m128_f32[2] = 0.0f;
-		}
-		else if (rad == 3) {
-			allPos.m128_f32[2] += 3.0f;
-		}
-		else {
-			allPos.m128_f32[2] += 6.0f;
-		}
-		allPos.m128_f32[0] = allPos.m128_f32[0] + 15;
-	}
+////	allPos = { 0.0f,0.0f,0.0f };
+////	allPos = XMVector3Transform(allPos, player);
+//	if (patern <= 2) {
+//		allPos.m128_f32[0] = 0.0f;
+//		allPos.m128_f32[1] = 0.0f;
+//		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
+//	}
+//	else if (patern == 3 || patern == 4) {
+//		allPos.m128_f32[1] = 0.0f;
+//		allPos.m128_f32[0] = allPos.m128_f32[0] + 15;
+//		//allPos.m128_f32[2] = 40;
+//	}
+//	else if (patern >= 5 && patern <= 6) {
+//		allPos.m128_f32[1] = 0.0f;
+//		allPos.m128_f32[2] = allPos.m128_f32[2] - 15;
+//	}
+//	else if (patern == 7 ) {
+//		allPos.m128_f32[1] = 0.0f;
+//		allPos.m128_f32[0] = allPos.m128_f32[0] - 15;
+//	}
+//	else if (patern == 8) {
+//		allPos.m128_f32[0] = 0.0f;
+//		allPos.m128_f32[1] = 0.0f;
+//		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
+//	}
+//	if (patern <= 3) {
+//		allPos.m128_f32[0] = 0.0f;
+//		allPos.m128_f32[1] = 0.0f;
+//		if (rad == 0) {
+//			allPos.m128_f32[0] = -6.0f;
+//		}
+//		else if (rad == 1) {
+//			allPos.m128_f32[0] = -3.0f;
+//		}
+//		else if (rad == 2) {
+//			allPos.m128_f32[0] = 0.0f;
+//		}
+//		else if (rad == 3) {
+//			allPos.m128_f32[0] = 3.0f;
+//		}
+//		else {
+//			allPos.m128_f32[0] = 6.0f;
+//		}
+//		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
+//	}
+//	else if (patern > 3 && patern <= 5) {
+//		allPos.m128_f32[2] = 40.0f;
+//		allPos.m128_f32[1] = 0.0f;
+//		if (rad == 0) {
+//			allPos.m128_f32[2] -= 6.0f;
+//		}
+//		else if (rad == 1) {
+//			allPos.m128_f32[2] -= 3.0f;
+//		}
+//		else if (rad == 2) {
+//			allPos.m128_f32[2] = 0.0f;
+//		}
+//		else if (rad == 3) {
+//			allPos.m128_f32[2] += 3.0f;
+//		}
+//		else {
+//			allPos.m128_f32[2] += 6.0f;
+//		}
+//		allPos.m128_f32[0] = allPos.m128_f32[0] + 15;
+//	}
+	Arms->RespownSet(allRot);
 	speed = 0.005f;
 }

@@ -26,7 +26,7 @@ public:
 	void Angle(const XMFLOAT3 ang);
 
 	// XV
-	void Update() override;
+	void Updata() override;
 
 	void Draw();
 

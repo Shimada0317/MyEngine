@@ -93,7 +93,7 @@ void ObjParticle::Set(XMVECTOR& enemyPos)
 	}
 }
 
-void ObjParticle::Update(XMVECTOR& enemyPos)
+void ObjParticle::Updata(XMVECTOR& enemyPos)
 {
 	Set(enemyPos);
 	Effect();
@@ -113,8 +113,8 @@ void ObjParticle::Update(XMVECTOR& enemyPos)
 				scale[i].z = 0.0f;
 				break;
 			}
-		particle[i]->Update();
-		Worm[i]->Update();
+		particle[i]->Updata();
+		Worm[i]->Updata();
 	}
 	if (--deleteTime_ <= 0) {
 		delete_ = true;

@@ -20,7 +20,7 @@ void LeftArm::SetPRS(const XMVECTOR& bodyPos,Bullet* bull)
 	LArm->SetRotation(LArmRot);
 }
 
-void LeftArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
+void LeftArm::Updata(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 {
 	if (arive == true) {
 		SetPRS(bodyPos,bull);
@@ -39,7 +39,7 @@ void LeftArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 		arive = false;
 	}
 
-	LArm->Update();
+	LArm->Updata();
 }
 
 void LeftArm::Draw(bool arive)

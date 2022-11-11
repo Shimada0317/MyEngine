@@ -24,9 +24,9 @@ public:
 
 	void SetPSR();
 
-	void AllUpdate();
+	void AllUpdata();
 
-	void Update();
+	void Updata();
 
 	void Draw(DirectXCommon* dxCommon);
 
@@ -36,11 +36,13 @@ public:
 
 	void Fainalize();
 
+	void SetEnemyPos();
+
 	void Fire();
 
 	void LoadEnemyPopData();
 
-	void UpdateEnemyPopCommands();
+	void UpdataEnemyPopCommands();
 public:
 	void SetPatern(int patern) { this->patern = patern; }
 
@@ -82,9 +84,9 @@ private:
 	//敵のステータス
 	XMVECTOR enemyPos[MAXENEMY];
 	XMFLOAT3 enemyScl = { 0,0,0 };
-	XMFLOAT3 enemyRot = { 0,0,0 };
-	XMVECTOR partPos[MAXENEMY];
+	XMFLOAT3 enemyRot[MAXENEMY];
 	XMVECTOR absolutePos = { 0,0,0 };
+
 
 	XMFLOAT2 spSiz = { 64.0f,64.0f };
 	XMFLOAT2 spPos = { 1200.0f,0.0f };

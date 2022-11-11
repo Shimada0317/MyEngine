@@ -19,7 +19,7 @@ void Enemy::Set()
 	enemy->SetScale(scale);
 }
 
-void Enemy::Update(XMVECTOR pos, int wave, int oldwave, bool& StopT, XMVECTOR positionP,bool& spown)
+void Enemy::Updata(XMVECTOR pos, int wave, int oldwave, bool& StopT, XMVECTOR positionP,bool& spown)
 {
 
 	if (life <= 0) {
@@ -45,7 +45,7 @@ void Enemy::Update(XMVECTOR pos, int wave, int oldwave, bool& StopT, XMVECTOR po
 
 	Set();
 
-	enemy->Update();
+	enemy->Updata();
 
 }
 

@@ -66,14 +66,14 @@ void GameScene::SetPosSclRot()
 	playerHp = mid->GetHp();
 };
 
-void GameScene::AllUpdate()
+void GameScene::AllUpdata()
 {
-	sphere->Update();
-	groundObj->Update();
-	mid->Update();
+	sphere->Updata();
+	groundObj->Updata();
+	mid->Updata();
 }
 
-void GameScene::Update()
+void GameScene::Updata()
 {
 	/*if (Input::GetInstance()->PushKey(DIK_A)) {
 		BaseScene* scene_ = new GameOverScene(sceneManager_);
@@ -86,7 +86,7 @@ void GameScene::Update()
 	}*/
 
 	SetPosSclRot();
-	AllUpdate();
+	AllUpdata();
 }
 
 void GameScene::ObjDraw(DirectXCommon* dxCommon)

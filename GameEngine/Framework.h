@@ -40,7 +40,7 @@ public:
 	/// <summary>
 		/// XV
 		/// </summary>
-	virtual void Update();
+	virtual void Updata();
 	/// <summary>
 	/// •`‰æ
 	/// </summary>

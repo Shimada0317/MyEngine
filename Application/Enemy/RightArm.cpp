@@ -26,7 +26,7 @@ void RightArm::SetPRS(const XMVECTOR& bodyPos, Bullet* bull)
 	RArm->SetScale(RArmScl);
 }
 
-void RightArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
+void RightArm::Updata(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 {
 	if (arive == true) {
 		SetPRS(bodyPos, bull);
@@ -48,7 +48,7 @@ void RightArm::Update(bool& arive, const XMVECTOR& bodyPos,Bullet* bull,int& Hp)
 		arive = false;
 	}
 
-	RArm->Update();
+	RArm->Updata();
 }
 
 void RightArm::Draw(bool arive)

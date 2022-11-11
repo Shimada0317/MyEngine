@@ -16,7 +16,7 @@ public://ƒƒ“ƒoŠÖ”
 	//‰Šú‰»
 	void Initialize(WinApp* winApp);
 	//XV
-	void Update();
+	void Updata();
 
 	bool Pushjoys(DIJOYSTATE joys);
 

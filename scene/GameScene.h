@@ -40,9 +40,9 @@ public://メンバ変数
 
 	void SetPosSclRot();
 
-	void AllUpdate();
+	void AllUpdata();
 
-	void Update() override;
+	void Updata() override;
 
 	void ObjDraw(DirectXCommon* dxCommon);
 

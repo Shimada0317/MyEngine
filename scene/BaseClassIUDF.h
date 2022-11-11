@@ -11,7 +11,7 @@ public:
 	/// <summary>
 	/// XV
 	/// </summary>
-	void Update() override;
+	void Updata() override;
 	/// <summary>
 	/// •`‰æ
 	/// </summary>

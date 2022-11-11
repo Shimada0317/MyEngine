@@ -17,7 +17,7 @@ public:
 
 	virtual void Finalize() = 0;
 
-	virtual void Update() = 0;
+	virtual void Updata() = 0;
 
 	virtual void Draw(DirectXCommon* dxCommon) = 0;
 protected:

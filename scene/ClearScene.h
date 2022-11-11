@@ -26,7 +26,7 @@ public://ƒƒ“ƒo•Ï”
 
 	void SetPosSclRot();
 
-	void Update() override;
+	void Updata() override;
 
 	void Draw(DirectXCommon* dxCommon)override;
 

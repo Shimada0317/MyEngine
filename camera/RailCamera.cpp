@@ -33,7 +33,7 @@ void RailCamera::Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot)
 
 
 
-void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* NormalCam)
+void RailCamera::Updata(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* NormalCam)
 {
 	position += vel;
 
@@ -86,7 +86,7 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	//プレイヤーにワールド座標を送る
 	NormalCam->SetWorld(matWorld);
 	//debug->SetPosition(position);
-	//debug->Update();
+	//debug->Updata();
 }
 
 void RailCamera::Draw()
@@ -94,7 +94,7 @@ void RailCamera::Draw()
 	//debug->Draw();
 }
 
-void RailCamera::UpdateViewMatrix()
+void RailCamera::UpdataViewMatrix()
 {
 	// 視点座標
 	eyePosition = XMLoadFloat3(&eye);
@@ -151,7 +151,7 @@ void RailCamera::UpdateViewMatrix()
 
 }
 
-void RailCamera::UpdateProjectionMatrix()
+void RailCamera::UpdataProjectionMatrix()
 {
 	// 透視投影による射影行列の生成
 	matProjection = XMMatrixPerspectiveFovLH(

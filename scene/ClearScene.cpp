@@ -19,7 +19,7 @@ void ClearScene::SetPosSclRot()
 	Clear->SetPosition(retpos);
 }
 
-void ClearScene::Update()
+void ClearScene::Updata()
 {
 	if (Input::GetInstance()->PushKey(DIK_RETURN)) {
 		BaseScene* scene_ = new TitleScene(sceneManager_);

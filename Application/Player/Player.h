@@ -29,7 +29,7 @@ public:
 
 	void Effect();
 
-	void Update(Bullet* bull[], int& Remaining);
+	void Updata(Bullet* bull[], int& Remaining);
 
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
 

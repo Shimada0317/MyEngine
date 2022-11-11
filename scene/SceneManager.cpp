@@ -7,7 +7,7 @@ SceneManager::~SceneManager()
 	delete scene_;
 }
 
-void SceneManager::Update(DirectXCommon* dxComon)
+void SceneManager::Updata(DirectXCommon* dxComon)
 {
 	//ƒV[ƒ“‚ÌØ‚è‘Ö‚¦‚ª‚ ‚é‚È‚ç
 	if (nextscene_) {
@@ -23,7 +23,7 @@ void SceneManager::Update(DirectXCommon* dxComon)
 		scene_->Initialize(dxComon);
 	}
 
-	scene_->Update();
+	scene_->Updata();
 }
 
 void SceneManager::Draw(DirectXCommon* dxCommon)

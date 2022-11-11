@@ -31,17 +31,17 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム更新
 	/// </summary>
-	virtual void Update();
+	virtual void Updata();
 
 	/// <summary>
 	/// ビュー行列を更新
 	/// </summary>
-	void UpdateViewMatrix();
+	void UpdataViewMatrix();
 
 	/// <summary>
 	/// 射影行列を更新
 	/// </summary>
-	void UpdateProjectionMatrix();
+	void UpdataProjectionMatrix();
 
 	/// <summary>
 	/// ビュー行列の取得
