@@ -28,6 +28,7 @@ void Robot::Initialize()
 		arive[i] = true;
 	}
 	OldHp = Hp;
+	dice = true;
 }
 
 void Robot::SetPRS(const XMMATRIX& player)
@@ -71,7 +72,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 
 	//生きているとき
 	if (all == true && Hp > 0) {
-		allPos.m128_f32[2] = allPos.m128_f32[2] - speed;
+		TrackPlayer();
 		//プレイヤーの前まで来たとき
 		if ((allPos.m128_f32[0] <= playerPos.m128_f32[0] + 6.0f && allPos.m128_f32[0] >= playerPos.m128_f32[0] - 6.0f) 
 			&&(allPos.m128_f32[1] <= playerPos.m128_f32[1] + 6.0f && allPos.m128_f32[1]>=playerPos.m128_f32[1]-6.0f)
@@ -129,6 +130,47 @@ void Robot::Draw(DirectXCommon* dxCommon)
 void Robot::ParticleDraw(DirectXCommon* dxCommon)
 {
 
+}
+
+void Robot::TrackPlayer()
+{
+
+	float vx = 0;
+	float vy = 0;
+	float vz = 0;
+	if (dice == true) {
+		patern = (rand() % 2);
+		dice = false;
+	}
+
+
+	if (patern == 0) {
+		vx = (allPos.m128_f32[0] - playerPos.m128_f32[0] - 1);
+		vy = (allPos.m128_f32[1] - playerPos.m128_f32[1]);
+		vz = (allPos.m128_f32[2] - playerPos.m128_f32[2] - 1);
+	}
+	else if (patern == 1) {
+		vx = (allPos.m128_f32[0] - playerPos.m128_f32[0]);
+		vy = (allPos.m128_f32[1] - playerPos.m128_f32[1]);
+		vz = (allPos.m128_f32[2] - playerPos.m128_f32[2]);
+	}
+	else if (patern == 2) {
+		vx = (allPos.m128_f32[0] - playerPos.m128_f32[0] + 1);
+		vy = (allPos.m128_f32[1] - playerPos.m128_f32[1]);
+		vz = (allPos.m128_f32[2] - playerPos.m128_f32[2] + 1);
+	}
+
+	float v2x = pow(vx, 2);
+	float v2y = pow(vy, 2);
+	float v2z = pow(vz, 2);
+	float l = sqrtf(v2x + v2y + v2z);
+	float v3x = (vx / l) * speed;
+	float v3y = (vy / l) * speed;
+	float v3z = (vz / l) * speed;
+	//remaining += 1;
+	allPos.m128_f32[0] -= v3x;
+	//allPos.m128_f32[1] -= v3y;
+	allPos.m128_f32[2] -= v3z;
 }
 
 void Robot::Finalize()
@@ -214,5 +256,6 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 //		allPos.m128_f32[0] = allPos.m128_f32[0] + 15;
 //	}
 	Arms->RespownSet(allRot);
-	speed = 0.005f;
+	speed = 0.0025f;
+	dice = false;
 }

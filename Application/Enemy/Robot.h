@@ -72,5 +72,8 @@ private:
 	bool AttackFase = false;
 	float AttackTime = 0;
 	float speed = 0.005f;
+
+	bool dice = false;
+	int patern=0;
 };
 

@@ -144,7 +144,7 @@ private:
 	int ans = 0;
 
 	XMVECTOR vel;
-	bool Action = false;
+	bool Active = false;
 	int ver = 0;
 	bool chan = false;
 	float kBulletSpeed=0;

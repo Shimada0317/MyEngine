@@ -36,7 +36,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	sphere->SetModel(playermodel);
 
 
-	ground = ObjModel::CreateFromOBJ("city");
+	ground = ObjModel::CreateFromOBJ("Field");
 	groundObj = Object3d::Create();
 
 	groundObj->SetModel(ground);

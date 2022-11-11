@@ -66,9 +66,9 @@ void middle::Initialize()
 	playerMat = player->GetMat();
 	playerHp = player->GetHp();
 
-	enemyPos[0].m128_f32[0] = -2;
+	enemyPos[0].m128_f32[0] = -5;
 	enemyPos[1].m128_f32[0] = 0;
-	enemyPos[2].m128_f32[0] = 2;
+	enemyPos[2].m128_f32[0] = 5;
 
 	enemyPos[0].m128_f32[1] = 0;
 	enemyPos[1].m128_f32[1] = 0;
@@ -273,9 +273,9 @@ void middle::Fainalize()
 void middle::SetEnemyPos()
 {
 	if (patern == 1) {
-		enemyPos[0].m128_f32[0] = -2;
+		enemyPos[0].m128_f32[0] = -5;
 		enemyPos[1].m128_f32[0] = 0;
-		enemyPos[2].m128_f32[0] = 2;
+		enemyPos[2].m128_f32[0] = 5;
 
 		enemyPos[0].m128_f32[1] = 0;
 		enemyPos[1].m128_f32[1] = 0;
@@ -288,9 +288,9 @@ void middle::SetEnemyPos()
 	}
 
 	else if (patern == 2) {
-		enemyPos[0].m128_f32[0] = -2;
+		enemyPos[0].m128_f32[0] = -5;
 		enemyPos[1].m128_f32[0] = 0;
-		enemyPos[2].m128_f32[0] = 2;
+		enemyPos[2].m128_f32[0] = 5;
 
 		enemyPos[0].m128_f32[1] = 0;
 		enemyPos[1].m128_f32[1] = 0;
@@ -311,8 +311,8 @@ void middle::SetEnemyPos()
 		enemyPos[1].m128_f32[1] = 0;
 		enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 46;
-		enemyPos[1].m128_f32[2] = 43;
+		enemyPos[0].m128_f32[2] = 50;
+		enemyPos[1].m128_f32[2] = 45;
 		enemyPos[2].m128_f32[2] = 40;
 
 
@@ -330,16 +330,16 @@ void middle::SetEnemyPos()
 		enemyPos[1].m128_f32[1] = 0;
 		enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 46;
-		enemyPos[1].m128_f32[2] = 43;
+		enemyPos[0].m128_f32[2] = 50;
+		enemyPos[1].m128_f32[2] = 45;
 		enemyPos[2].m128_f32[2] = 40;
 	}
 
 	else if (patern == 5)
 	{
-		enemyPos[0].m128_f32[0] = 44;
+		enemyPos[0].m128_f32[0] = 46;
 		enemyPos[1].m128_f32[0] = 41;
-		enemyPos[2].m128_f32[0] = 38;
+		enemyPos[2].m128_f32[0] = 36;
 
 		enemyPos[0].m128_f32[1] = 0;
 		enemyPos[1].m128_f32[1] = 0;

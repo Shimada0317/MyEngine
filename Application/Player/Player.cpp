@@ -90,6 +90,8 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 {
 	oldPos = position;
 
+
+
 	//’e‚Ì”­ŽË‘O
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
 		if (Mouse::GetInstance()->PushClick(0)) {
@@ -143,7 +145,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY + 3);
 	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
 
-	if (Action == false) {
+	if (Active == false) {
 		kBulletSpeed = 0.0f;
 		vel = { 0, 0, kBulletSpeed };
 		Eye_rot.x = 0;
@@ -195,10 +197,10 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 
 	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž
 	if (move == true) {
-		Action = true;
+		Active = true;
 	}
 
-	if (Action == true) {
+	if (Active == true) {
 		kBulletSpeed = 0.5f;
 		if (shake == 0) {
 			Eye_rot.x += 0.05f;
@@ -216,7 +218,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] >= 20) {
 				move = false;
-				Action = false;
+				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
 				spown = true;
@@ -226,7 +228,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] >= 40) {
 				move = false;
-				Action = false;
+				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
 				spown = true;
@@ -240,7 +242,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 			}
 			if (playerWorldPos.m128_f32[0] >= 20) {
 				move = false;
-				Action = false;
+				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
 				spown = true;
@@ -250,7 +252,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[0] >= 40) {
 				move = false;
-				Action = false;
+				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
 				spown = true;
@@ -264,7 +266,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 			}
 			if (playerWorldPos.m128_f32[2] <= 20) {
 				move = false;
-				Action = false;
+				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
 				spown = true;
@@ -274,7 +276,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] <= 0) {
 				move = false;
-				Action = false;
+				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
 				spown = true;
@@ -288,7 +290,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 			}
 			if (playerWorldPos.m128_f32[0] <= 20) {
 				move = false;
-				Action = false;
+				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
 				spown = true;
@@ -303,7 +305,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				if (Eye_rot.y >= 360) {
 					Eye_rot.y = 360;
 					move = false;
-					Action = false;
+					Active = false;
 					waveCount += 1;
 					movetimer = 0.0f;
 					spown = true;
