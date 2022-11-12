@@ -356,9 +356,9 @@ void middle::SetEnemyPos()
 
 	else if (patern == 6)
 	{
-		enemyPos[0].m128_f32[0] = 44;
+		enemyPos[0].m128_f32[0] = 46;
 		enemyPos[1].m128_f32[0] = 41;
-		enemyPos[2].m128_f32[0] = 38;
+		enemyPos[2].m128_f32[0] = 36;
 
 		enemyPos[0].m128_f32[1] = 0;
 		enemyPos[1].m128_f32[1] = 0;
@@ -379,9 +379,9 @@ void middle::SetEnemyPos()
 		enemyPos[1].m128_f32[1] = 0;
 		enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 1;
+		enemyPos[0].m128_f32[2] = 3;
 		enemyPos[1].m128_f32[2] = -2;
-		enemyPos[2].m128_f32[2] = -5;
+		enemyPos[2].m128_f32[2] = -7;
 
 		enemyRot[0].y = 270;
 		enemyRot[1].y = 270;

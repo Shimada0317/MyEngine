@@ -63,6 +63,8 @@ private:
 
 	XMFLOAT4 color = { 1,0,0,0.1f };
 
+	XMVECTOR TrackPoint = { 0,0,0 };
+
 	XMVECTOR playerPos;
 
 	int action = 0;

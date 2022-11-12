@@ -18,8 +18,8 @@ void BothArms::SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* 
 	Hit = bull->GetTrigger();
 	//‰EŽè
 	RArmPos = bodyPos;
-	RArmPos.m128_f32[1] = bodyPos.m128_f32[1]-0.2f;
-	RArmPos.m128_f32[2] = bodyPos.m128_f32[2] -0.2f;
+	RArmPos.m128_f32[1] = bodyPos.m128_f32[1]+0.2f;
+	RArmPos.m128_f32[2] = bodyPos.m128_f32[2] ;
 	
 	
 

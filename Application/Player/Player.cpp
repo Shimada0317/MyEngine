@@ -71,7 +71,7 @@ void Player::Set()
 		position = player->GetPosition();
 	}*/
 	player->SetPosition({ position });
-	//player->SetRotation({ rotation });
+	player->SetRotation({ rotation });
 	player->SetScale({ scale });
 
 	mat = player->GetMatrix();
@@ -90,8 +90,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 {
 	oldPos = position;
 
-
-
+	
 	//’e‚Ì”­ŽË‘O
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
 		if (Mouse::GetInstance()->PushClick(0)) {
@@ -351,17 +350,9 @@ void Player::ImGuiDraw()
 	}
 
 	if (ImGui::TreeNode("gunpos")) {
-		ImGui::SliderFloat("pos.x", &gunWorldPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &gunWorldPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &gunWorldPos.m128_f32[2], -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-
-	if (ImGui::TreeNode("gunpos")) {
-		ImGui::SliderFloat("pos.x", &gunPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &gunPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &gunPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &vel.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &vel.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &vel.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

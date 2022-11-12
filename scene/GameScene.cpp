@@ -36,7 +36,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	sphere->SetModel(playermodel);
 
 
-	ground = ObjModel::CreateFromOBJ("Field");
+	ground = ObjModel::CreateFromOBJ("city");
 	groundObj = Object3d::Create();
 
 	groundObj->SetModel(ground);
@@ -94,7 +94,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	sphere->Draw();
+	//sphere->Draw();
 	groundObj->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理

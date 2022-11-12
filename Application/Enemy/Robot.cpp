@@ -29,11 +29,12 @@ void Robot::Initialize()
 	}
 	OldHp = Hp;
 	dice = true;
+	TrackPoint.m128_f32[2] = -5;
 }
 
 void Robot::SetPRS(const XMMATRIX& player)
 {
-	
+
 
 }
 
@@ -66,7 +67,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 		//part->Effect();
 		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 		newparticle->Initialize();
- 		particle_.push_back(std::move(newparticle));
+		particle_.push_back(std::move(newparticle));
 		OldHp = Hp;
 	}
 
@@ -74,8 +75,8 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	if (all == true && Hp > 0) {
 		TrackPlayer();
 		//プレイヤーの前まで来たとき
-		if ((allPos.m128_f32[0] <= playerPos.m128_f32[0] + 6.0f && allPos.m128_f32[0] >= playerPos.m128_f32[0] - 6.0f) 
-			&&(allPos.m128_f32[1] <= playerPos.m128_f32[1] + 6.0f && allPos.m128_f32[1]>=playerPos.m128_f32[1]-6.0f)
+		if ((allPos.m128_f32[0] <= playerPos.m128_f32[0] + 6.0f && allPos.m128_f32[0] >= playerPos.m128_f32[0] - 6.0f)
+			&& (allPos.m128_f32[1] <= playerPos.m128_f32[1] + 6.0f && allPos.m128_f32[1] >= playerPos.m128_f32[1] - 6.0f)
 			&& (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 3.0f && allPos.m128_f32[2] >= playerPos.m128_f32[2] - 3.0f)) {
 			speed = 0;
 			if (AttackTime != true) {
@@ -96,7 +97,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 		}
 	}
 	if (Input::GetInstance()->TriggerKey(DIK_O)) {
-		Hp=0;
+		Hp = 0;
 	}
 	//生きているときにHPが0になったら
 	if (Hp <= 0) {
@@ -144,21 +145,11 @@ void Robot::TrackPlayer()
 	}
 
 
-	if (patern == 0) {
-		vx = (allPos.m128_f32[0] - playerPos.m128_f32[0] - 1);
-		vy = (allPos.m128_f32[1] - playerPos.m128_f32[1]);
-		vz = (allPos.m128_f32[2] - playerPos.m128_f32[2] - 1);
-	}
-	else if (patern == 1) {
-		vx = (allPos.m128_f32[0] - playerPos.m128_f32[0]);
-		vy = (allPos.m128_f32[1] - playerPos.m128_f32[1]);
-		vz = (allPos.m128_f32[2] - playerPos.m128_f32[2]);
-	}
-	else if (patern == 2) {
-		vx = (allPos.m128_f32[0] - playerPos.m128_f32[0] + 1);
-		vy = (allPos.m128_f32[1] - playerPos.m128_f32[1]);
-		vz = (allPos.m128_f32[2] - playerPos.m128_f32[2] + 1);
-	}
+
+	vx = (allPos.m128_f32[0] - TrackPoint.m128_f32[0]);
+	vy = (allPos.m128_f32[1] - TrackPoint.m128_f32[1]);
+	vz = (allPos.m128_f32[2] - TrackPoint.m128_f32[2]);
+
 
 	float v2x = pow(vx, 2);
 	float v2y = pow(vy, 2);
@@ -183,78 +174,43 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 
 	Hp = 50;
 	OldHp = Hp;
-//	int rad = (rand() % 4);
-//
-//
-//	float radX = (float)rad;
+	//	int rad = (rand() % 4);
+	//
+	//
+	//	float radX = (float)rad;
 	for (int i = 0; i < 3; i++) {
 		arive[i] = true;
 	}
-////	allPos = { 0.0f,0.0f,0.0f };
-////	allPos = XMVector3Transform(allPos, player);
-//	if (patern <= 2) {
-//		allPos.m128_f32[0] = 0.0f;
-//		allPos.m128_f32[1] = 0.0f;
-//		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
-//	}
-//	else if (patern == 3 || patern == 4) {
-//		allPos.m128_f32[1] = 0.0f;
-//		allPos.m128_f32[0] = allPos.m128_f32[0] + 15;
-//		//allPos.m128_f32[2] = 40;
-//	}
-//	else if (patern >= 5 && patern <= 6) {
-//		allPos.m128_f32[1] = 0.0f;
-//		allPos.m128_f32[2] = allPos.m128_f32[2] - 15;
-//	}
-//	else if (patern == 7 ) {
-//		allPos.m128_f32[1] = 0.0f;
-//		allPos.m128_f32[0] = allPos.m128_f32[0] - 15;
-//	}
-//	else if (patern == 8) {
-//		allPos.m128_f32[0] = 0.0f;
-//		allPos.m128_f32[1] = 0.0f;
-//		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
-//	}
-//	if (patern <= 3) {
-//		allPos.m128_f32[0] = 0.0f;
-//		allPos.m128_f32[1] = 0.0f;
-//		if (rad == 0) {
-//			allPos.m128_f32[0] = -6.0f;
-//		}
-//		else if (rad == 1) {
-//			allPos.m128_f32[0] = -3.0f;
-//		}
-//		else if (rad == 2) {
-//			allPos.m128_f32[0] = 0.0f;
-//		}
-//		else if (rad == 3) {
-//			allPos.m128_f32[0] = 3.0f;
-//		}
-//		else {
-//			allPos.m128_f32[0] = 6.0f;
-//		}
-//		allPos.m128_f32[2] = allPos.m128_f32[2] + 15;
-//	}
-//	else if (patern > 3 && patern <= 5) {
-//		allPos.m128_f32[2] = 40.0f;
-//		allPos.m128_f32[1] = 0.0f;
-//		if (rad == 0) {
-//			allPos.m128_f32[2] -= 6.0f;
-//		}
-//		else if (rad == 1) {
-//			allPos.m128_f32[2] -= 3.0f;
-//		}
-//		else if (rad == 2) {
-//			allPos.m128_f32[2] = 0.0f;
-//		}
-//		else if (rad == 3) {
-//			allPos.m128_f32[2] += 3.0f;
-//		}
-//		else {
-//			allPos.m128_f32[2] += 6.0f;
-//		}
-//		allPos.m128_f32[0] = allPos.m128_f32[0] + 15;
-//	}
+	if (patern == 1) {
+		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] - 5;
+	}
+	else if (patern == 2) {
+		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] - 5;
+	}
+	else if (patern == 3) {
+		TrackPoint.m128_f32[0] = playerPos.m128_f32[0] - 5;
+		TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
+	}
+	else if (patern == 4) {
+		TrackPoint.m128_f32[0] = playerPos.m128_f32[0] - 5;
+		TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
+	}
+	else if (patern == 5) {
+		TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
+		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
+	}
+	else if (patern == 6) {
+		TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
+		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
+	}
+	else if (patern == 7) {
+		TrackPoint.m128_f32[0] = playerPos.m128_f32[0] + 5;
+		TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
+	}
+	else if (patern == 8) {
+
+	}
+
 	Arms->RespownSet(allRot);
 	speed = 0.0025f;
 	dice = false;
