@@ -11,6 +11,7 @@
 #include "RailCamera.h"
 #include"DebugCamera.h"
 #include "LightGroup.h"
+#include"Light.h"
 #include<memory>
 
 
@@ -75,6 +76,10 @@ public: // 静的メンバ関数
 		Object3d::lightGroup = lightGroup;
 	}
 
+	static void SetLight(Light* light) {
+		Object3d::light = light;
+	}
+
 	/// <summary>
 	/// 描画前処理
 	/// </summary>
@@ -109,6 +114,7 @@ private: // 静的メンバ変数
 	// ライト
 	static LightGroup* lightGroup;
 
+	static Light* light;
 public: // メンバ関数
 	
 	~Object3d();
@@ -199,5 +205,6 @@ private: // メンバ変数
 	bool isBillboard = false;
 
 	XMMATRIX matScale, matRot, matTrans;
+
 };
 

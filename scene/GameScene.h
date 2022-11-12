@@ -12,6 +12,7 @@
 #include"PostEffect.h"
 #include"ParticleManager.h"
 #include"Light.h"
+#include"LightGroup.h"
 #include"middle.h"
 #include"ClearScene.h"
 
@@ -83,8 +84,8 @@ private:
 
 	XMVECTOR pos = { 0,0,0 };
 
-	XMVECTOR ground_pos = { 0,-1,5 };
-	XMFLOAT3 ground_scl = { 5,5,50 };
+	XMVECTOR ground_pos = { 15,-1,15 };
+	XMFLOAT3 ground_scl = { 60,80,60 };
 	XMFLOAT3 ground_rot = { 0,0,0 };
 
 
@@ -97,6 +98,8 @@ private:
 
 
 	Light* light = nullptr;
+
+	LightGroup* lightGroup = nullptr;
 
 	bool change = false;
 

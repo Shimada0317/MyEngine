@@ -19,6 +19,7 @@ ID3D12GraphicsCommandList* Object3d::cmdList = nullptr;
 Object3d::PipelineSet Object3d::pipelineSet;
 Camera* Object3d::camera = nullptr;
 LightGroup* Object3d::lightGroup = nullptr;
+Light* Object3d::light = nullptr;
 
 void Object3d::StaticInitialize(ID3D12Device* device, Camera* camera)
 {
@@ -301,7 +302,7 @@ void Object3d::Updata(const XMFLOAT4 color)
 	}
 
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
-	XMFLOAT3 cameraPos = camera->GetEye();
+	const XMFLOAT3& cameraPos = camera->GetEye();
 
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
@@ -332,7 +333,7 @@ void Object3d::Draw()
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
 
 	// ライトの描画
-	//lightGroup->Draw(cmdList, 3);
+	//light->Draw(cmdList, 3);
 
 	// モデル描画
 	model->Draw(cmdList);

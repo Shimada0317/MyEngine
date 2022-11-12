@@ -28,7 +28,9 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	
 	////スプライトの読み込み
 
-	
+	//lightGroup = LightGroup::Create();
+	//Object3d::SetLightGroup(lightGroup);
+
 	//モデルの読み込み
 
 	playermodel = ObjModel::CreateFromOBJ("skydome");
@@ -36,7 +38,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	sphere->SetModel(playermodel);
 
 
-	ground = ObjModel::CreateFromOBJ("city");
+	ground = ObjModel::CreateFromOBJ("Field",true);
 	groundObj = Object3d::Create();
 
 	groundObj->SetModel(ground);
@@ -68,6 +70,7 @@ void GameScene::SetPosSclRot()
 
 void GameScene::AllUpdata()
 {
+	//lightGroup->Update();
 	sphere->Updata();
 	groundObj->Updata();
 	mid->Updata();
@@ -94,7 +97,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	//sphere->Draw();
+	sphere->Draw();
 	groundObj->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理

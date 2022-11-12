@@ -7,7 +7,7 @@ Body::~Body()
 
 void Body::Initialize()
 {
-	bodyModel = ObjModel::CreateFromOBJ("tst2");
+	bodyModel = ObjModel::CreateFromOBJ("tst2",true);
 	body = Object3d::Create(bodyModel);
 }
 
