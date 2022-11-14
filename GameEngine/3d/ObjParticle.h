@@ -65,5 +65,6 @@ private:
 	static const int32_t StopTime = 80 * 5;
 	int32_t deleteTime_ = StopTime;
 	bool delete_ = false;
+	float gravity[MAX];
 };
 

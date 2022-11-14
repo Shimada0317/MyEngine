@@ -71,6 +71,12 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 		OldHp = Hp;
 	}
 
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
+		newparticle->Initialize();
+		particle_.push_back(std::move(newparticle));
+	}
+
 	//¶‚«‚Ä‚¢‚é‚Æ‚«
 	if (all == true && Hp > 0) {
 		TrackPlayer();

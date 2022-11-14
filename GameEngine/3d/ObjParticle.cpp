@@ -20,6 +20,7 @@ void ObjParticle::InitializeState(int i)
 	Wposition[i] = { 0.0f,0.0f,0.0f };
 	wscale[i] = { 0.3f,0.3f,0.3f };
 	effect[i] = false;
+	gravity[i] = 0.4f;
 	//numY[i] = rand() % 1 + 0.2f;
 	//}
 }
@@ -51,14 +52,14 @@ void ObjParticle::Set(XMVECTOR& enemyPos)
 			position[i] = enemyPos;
 			Wposition[i] = enemyPos;
 			int radX = (rand() % 10);
-			int radY = (rand() % 3+1);
+			int radY = (rand() % 3 + 1);
 			int womX = (rand() % 5);
 			int womY = (rand() % 3 + 1);
 			if (radX == 2) {
 				radX = 1;
 				womX = -1;
 			}
-			else if(radX==1) {
+			else if (radX == 1) {
 				radX = -1;
 				womX = 1;
 			}
@@ -72,7 +73,7 @@ void ObjParticle::Set(XMVECTOR& enemyPos)
 			float wpoiX = 0;
 			float wpoiY = 0;
 
-			int rad = (rand() % 10)+5;
+			int rad = (rand() % 10) + 5;
 
 			poiX = (float)radX / rad;
 			poiY = (float)radY / 10;
@@ -83,7 +84,7 @@ void ObjParticle::Set(XMVECTOR& enemyPos)
 			wnumX[i] = wpoiX;
 			wnumY[i] = wpoiY;
 		}
-		
+
 		particle[i]->SetPosition(position[i]);
 		particle[i]->SetScale(scale[i]);
 		particle[i]->SetRotation(rotation);
@@ -99,26 +100,34 @@ void ObjParticle::Updata(XMVECTOR& enemyPos)
 	Effect();
 
 	for (int i = 0; i < MAX; i++) {
-			rotation.x += 0.5f/20;
-			position[i].m128_f32[1] +=numY[i]/20;
-			position[i].m128_f32[0] += numX[i]/20;
-			Wposition[i].m128_f32[0] += wnumX[i]/20;
-			Wposition[i].m128_f32[1] += wnumY[i]/20;
-			scale[i].x -= 0.01f/20;
-			scale[i].y -= 0.01f/20;
-			scale[i].z -= 0.01f/20;
-			if (scale[i].x <=0 && scale[i].y <= 0 && scale[i].z <= 0) {
-				scale[i].x = 0.0f;
-				scale[i].y = 0.0f;
-				scale[i].z = 0.0f;
-				break;
-			}
+		rotation.x += 0.5f / 20;
+		if (position[i].m128_f32[1] >= enemyPos.m128_f32[1] - 0.1f) {
+			position[i].m128_f32[1] += gravity[i] / 15;
+			position[i].m128_f32[0] += numX[i] / 20;
+		}
+		if (Wposition[i].m128_f32[1] >= enemyPos.m128_f32[1] - 0.1f) {
+			Wposition[i].m128_f32[0] += wnumX[i] / 20;
+			Wposition[i].m128_f32[1] += gravity[i] / 10;
+		}
+
+		gravity[i] -= 0.002;
+
+		scale[i].x -= 0.01f/20;
+		scale[i].y -= 0.01f/20;
+		scale[i].z -= 0.01f/20;
+		if (scale[i].x <= 0 && scale[i].y <= 0 && scale[i].z <= 0) {
+			scale[i].x = 0.0f;
+			scale[i].y = 0.0f;
+			scale[i].z = 0.0f;
+			delete_ = true;
+			break;
+		}
 		particle[i]->Updata();
 		Worm[i]->Updata();
 	}
-	if (--deleteTime_ <= 0) {
-		delete_ = true;
-	}
+	//if (--deleteTime_ <= 0) {
+	//	delete_ = true;
+	//}
 }
 
 void ObjParticle::Effect()
@@ -133,9 +142,9 @@ void ObjParticle::Draw()
 {
 	for (int i = 0; i < MAX; i++) {
 
-			particle[i]->Draw();
-			Worm[i]->Draw();
-		
+		particle[i]->Draw();
+		Worm[i]->Draw();
+
 	}
 }
 

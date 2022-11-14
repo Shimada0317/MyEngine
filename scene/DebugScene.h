@@ -7,6 +7,7 @@
 #include"DebugCamera.h"
 #include"Object3d.h"
 #include"ObjModel.h"
+#include"ObjParticle.h"
 #include"ParticleManager.h"
 #include"Player.h"
 #include"middle.h"
@@ -45,6 +46,8 @@ private:
 	std::unique_ptr<Head>head;
 	std::unique_ptr<Object3d> bo = nullptr;
 	std::unique_ptr<Player>player;
+	std::list<std::unique_ptr<ObjParticle>>part;
+
 	Bullet* bull[9];
 
 	ObjModel* bomodel = nullptr;
@@ -57,12 +60,10 @@ private:
 
 	DebugCamera* camera = nullptr;
 
-	//XMVECTOR allpos = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 Eye_pos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 Target_pos = { 0.0f,0.0f,0.0f };
-	bool arive = true;
-
-	int Remaining = 0.0f;
+	bool jump = false;
+	float addgrav = 0.4f;
+	float time = 0.0f;
+	float gravity = 0.0f;
 
 	std::unique_ptr<middle>mid;
 };
