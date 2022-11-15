@@ -56,9 +56,9 @@ void BothArms::Updata(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotat
 
 void BothArms::Draw(bool arive)
 {
-	//if (arive == true) {
+	if (Color.w >= 0) {
 		RArm->Draw();
-	//}
+	}
 }
 
 void BothArms::Finalize()

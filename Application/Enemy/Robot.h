@@ -31,6 +31,8 @@ public:
 
 	void Draw(DirectXCommon* dxCommon);
 
+	void ImgDraw();
+
 	void ParticleDraw(DirectXCommon* dxCommon);
 
 	void TrackPlayer();
@@ -70,7 +72,8 @@ private:
 	int action = 0;
 
 	bool oldArive;
-	int AttackChanse = 10;
+	float AttackChanse = 0;
+	float rad = 0;
 	bool AttackFase = false;
 	float AttackTime = 0;
 	float speed = 0.005f;

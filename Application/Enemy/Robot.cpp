@@ -30,6 +30,7 @@ void Robot::Initialize()
 	OldHp = Hp;
 	dice = true;
 	TrackPoint.m128_f32[2] = -5;
+	
 }
 
 void Robot::SetPRS(const XMMATRIX& player)
@@ -45,9 +46,9 @@ void Robot::AllUpdata(Bullet* bull)
 	//LArm->Updata(arive[2], allPos, bull, Hp);
 	Arms->Updata(arive[1], allPos, allRot, bull, Hp);
 	body->Updata(arive[2], allPos, allRot, bull, Hp);
-	part->Updata(allPos,allRot);
+	part->Updata(allPos, allRot);
 	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
-		patrticle->Updata(allPos,allRot);
+		patrticle->Updata(allPos, allRot);
 	}
 }
 
@@ -71,30 +72,26 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 		OldHp = Hp;
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
-		newparticle->Initialize();
-		particle_.push_back(std::move(newparticle));
-	}
-
 	//生きているとき
 	if (all == true && Hp > 0) {
 		TrackPlayer();
 		//プレイヤーの前まで来たとき
 		if ((allPos.m128_f32[0] <= playerPos.m128_f32[0] + 6.0f && allPos.m128_f32[0] >= playerPos.m128_f32[0] - 6.0f)
 			&& (allPos.m128_f32[1] <= playerPos.m128_f32[1] + 6.0f && allPos.m128_f32[1] >= playerPos.m128_f32[1] - 6.0f)
-			&& (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 3.0f && allPos.m128_f32[2] >= playerPos.m128_f32[2] - 3.0f)) {
+			&& (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 6.0f && allPos.m128_f32[2] >= playerPos.m128_f32[2] - 6.0f)) {
 			speed = 0;
-			if (AttackTime != true) {
-				AttackTime += 0.1f;
-			}
-			if (AttackTime >= 20) {
-				int Attackrand = (rand() % 10);
-				AttackChanse = Attackrand;
-				AttackTime = 0;
-			}
-			if (AttackChanse >= 9) {
-				AttackFase = true;
+			if (AttackFase != true) {
+				AttackTime += 0.01f;
+				if (AttackTime >= 20) {
+					rad = (rand() % 10);
+					AttackChanse = rad;
+					AttackTime = 0;
+					rad = 0;
+				}
+				if (AttackChanse >= 6) {
+					AttackFase = true;
+					AttackChanse = 0;
+				}
 			}
 			if (AttackFase == true) {
 				attackT += 0.1f;
@@ -109,6 +106,8 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	if (Hp <= 0) {
 		Hp = 1;
 		all = false;
+		AttackTime = 0;
+		AttackChanse = 0;
 		for (int i = 0; i < 3; i++) {
 			arive[i] = false;
 			allPos = { 0.0f,0.0f,1000000.0f };
@@ -132,6 +131,23 @@ void Robot::Draw(DirectXCommon* dxCommon)
 		particle->Draw();
 	}
 	Object3d::PostDraw();
+}
+
+void Robot::ImgDraw()
+{
+
+
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Enemy");
+
+
+	ImGui::SliderFloat("Time", &AttackTime, -100.0f, 100.0f);
+	ImGui::SliderFloat("Rand", &AttackChanse, -100.0f, 100.0f);
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 }
 
 void Robot::ParticleDraw(DirectXCommon* dxCommon)
@@ -178,7 +194,7 @@ void Robot::Finalize()
 void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 {
 
-	Hp = 50;
+	Hp = 150;
 	OldHp = Hp;
 	//	int rad = (rand() % 4);
 	//
