@@ -54,6 +54,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	postEffect = new PostEffect();
 	postEffect->Initialize();
+
+	clearT = 0;
 }
 
 void GameScene::SetPosSclRot()
@@ -80,15 +82,20 @@ void GameScene::AllUpdata()
 
 void GameScene::Updata()
 {
-	/*if (Input::GetInstance()->PushKey(DIK_A)) {
+	if (playerHp<=0) {
 		BaseScene* scene_ = new GameOverScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
-	}*/
+	}
 
-	/*if (patern >= 5) {
+	if (patern >= 5) {
+		clearT += 0.1f;
+		
+	}
+
+	if (clearT >= 10) {
 		BaseScene* scene_ = new ClearScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
-	}*/
+	}
 
 	SetPosSclRot();
 	AllUpdata();
@@ -117,7 +124,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 void GameScene::ImgDraw()
 {
-	mid->ImGuiDraw();
+	//mid->ImGuiDraw();
 }
 
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)

@@ -38,7 +38,7 @@ void Player::Set()
 	playerWorldPos = { 0.0f,0.0f,0.0f };
 	playerWorldPos = XMVector3Transform(playerWorldPos, mat);
 
- 	gunmat = gun->GetMatrix();
+	gunmat = gun->GetMatrix();
 	gunWorldPos = { 0.0f,0.0f,0.0f };
 	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
 	gunWorldPos.m128_f32[1] = playerWorldPos.m128_f32[1];
@@ -90,17 +90,17 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 {
 	oldPos = position;
 
-	
+
 	//’e‚Ì”­ŽË‘O
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
-		if (Mouse::GetInstance()->PushClick(0)) {
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 
 			Remaining += 1;
 			time = 0.0f;
 			particle = true;
 			for (int i = 0; i < BULL; i++) {
 				if (bull[i]->CheckOk()) {
-					bull[i]->Test(gunWorldPos, playerWorldPos,Eye_rot);
+					bull[i]->Test(gunWorldPos, playerWorldPos, Eye_rot);
 					bull[i]->TriggerOn();
 					break;
 				}
@@ -119,7 +119,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 		time = 4.0f;
 	}
 	//ƒŠƒ[ƒh
-	if (Mouse::GetInstance()->PushClick(1) && Remaining != 0) {
+	if (Input::GetInstance()->TriggerKey(DIK_R) && Remaining != 0) {
 		ReloadFlag = true;
 	}
 
@@ -149,10 +149,10 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 		vel = { 0, 0, kBulletSpeed };
 		Eye_rot.x = 0;
 	}
-	if (Input::GetInstance()->PushKey(DIK_O)) {
+	/*if (Input::GetInstance()->PushKey(DIK_O)) {
 		kBulletSpeed = 1.1f;
 		vel = { 0, 0, kBulletSpeed };
-	}
+	}*/
 
 	vel = XMVector3TransformNormal(vel, mat);
 
@@ -188,7 +188,7 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void Player::SpriteDraw()
 {
-	spriteRet->Draw();
+	//spriteRet->Draw();
 }
 
 void Player::PlayerMove(bool& move, int patern, bool& spown)
@@ -213,7 +213,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				shake = 0;
 			}
 		}
-		if (patern == 0) {
+		/*if (patern == 1) {
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] >= 20) {
 				move = false;
@@ -222,8 +222,8 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				movetimer = 0.0f;
 				spown = true;
 			}
-		}
-		else if (patern == 1) {
+		}*/
+		if (patern == 1) {
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] >= 40) {
 				move = false;
@@ -239,7 +239,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Eye_rot.y = 90;
 				vel = { 0, 0, kBulletSpeed };
 			}
-			if (playerWorldPos.m128_f32[0] >= 20) {
+			if (playerWorldPos.m128_f32[0] >= 30) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -248,8 +248,10 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 			}
 		}
 		else if (patern == 3) {
+
 			vel = { 0, 0, kBulletSpeed };
-			if (playerWorldPos.m128_f32[0] >= 40) {
+
+			if (playerWorldPos.m128_f32[0] >= 45) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -263,7 +265,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Eye_rot.y = 0;
 				vel = { 0, 0, kBulletSpeed };
 			}
-			if (playerWorldPos.m128_f32[2] >= 60) {
+			if (playerWorldPos.m128_f32[2] >= 70) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -271,8 +273,12 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				spown = true;
 			}
 		}
-		else if (patern == 6) {
-			vel = { 0, 0, kBulletSpeed };
+		else if (patern == 5) {
+			Eye_rot.y -= 3;
+			if (Eye_rot.y <= 0) {
+				Eye_rot.y = 0;
+				vel = { 0, 0, kBulletSpeed };
+			}
 			if (playerWorldPos.m128_f32[2] <= 0) {
 				move = false;
 				Active = false;
@@ -281,7 +287,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				spown = true;
 			}
 		}
-		else if (patern == 7) {
+		else if (patern == 6) {
 			Eye_rot.y -= 3;
 			if (Eye_rot.y >= 270) {
 				Eye_rot.y = 270;
@@ -340,7 +346,7 @@ void Player::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-	
+
 
 	if (ImGui::TreeNode("playerWorldPos")) {
 		ImGui::SliderFloat("pos.x", &playerWorldPos.m128_f32[0], -100.0f, 100.0f);
@@ -386,8 +392,8 @@ void Player::ChangeViewPort(XMMATRIX& matViewPort)
 	matViewPort.r[2].m128_f32[2] = 1;
 	matViewPort.r[2].m128_f32[3] = 0;
 
-	matViewPort.r[3].m128_f32[0] = WinApp::window_width/2+offset.m128_f32[0];
-	matViewPort.r[3].m128_f32[1] = WinApp::window_height/2+offset.m128_f32[1];
+	matViewPort.r[3].m128_f32[0] = WinApp::window_width / 2 + offset.m128_f32[0];
+	matViewPort.r[3].m128_f32[1] = WinApp::window_height / 2 + offset.m128_f32[1];
 	matViewPort.r[3].m128_f32[2] = 0;
 	matViewPort.r[3].m128_f32[3] = 1;
 }

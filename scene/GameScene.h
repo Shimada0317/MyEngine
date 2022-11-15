@@ -107,5 +107,7 @@ private:
 
 	int patern = 0;
 	int playerHp;
+
+	float clearT = 0;
 };
 

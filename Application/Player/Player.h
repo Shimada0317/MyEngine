@@ -156,5 +156,7 @@ private:
 
 	//cam
 	int shake = 0;
+
+	bool right = true;
 };
 

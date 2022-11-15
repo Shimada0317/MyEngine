@@ -174,7 +174,7 @@ private:
 
 	bool all[3];
 	bool waveCount = false;
-	bool move = true;
+	bool move = false;
 	bool oldmove = false;
 	bool spown = true;
 
