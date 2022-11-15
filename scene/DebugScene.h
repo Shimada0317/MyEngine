@@ -10,6 +10,7 @@
 #include"ObjParticle.h"
 #include"ParticleManager.h"
 #include"Player.h"
+#include"Light.h"
 #include"middle.h"
 #include<memory>
 
@@ -49,6 +50,7 @@ private:
 	std::list<std::unique_ptr<ObjParticle>>part;
 
 	Bullet* bull[9];
+	Light* light = nullptr;
 
 	ObjModel* bomodel = nullptr;
 

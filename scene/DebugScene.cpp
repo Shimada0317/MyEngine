@@ -7,7 +7,8 @@ DebugScene::DebugScene(SceneManager* sceneManager_)
 
 void DebugScene::Initialize(DirectXCommon* dxComon)
 {
-
+	light = Light::Create();
+	Object3d::SetLight(light);
 	//mid = std::make_unique<middle>();
 	//mid->Initialize();
 
@@ -33,13 +34,20 @@ void DebugScene::SetPosSclRot()
 {
 
 	bo->SetPosition(position);
+	bo->SetRotation(rotation);
 }
 
 void DebugScene::Updata()
 {
 	SetPosSclRot();
+	XMMATRIX mat = bo->GetMatrix();
+	
+	XMVECTOR pos = XMVector3TransformNormal(position, mat);
 
-	Action::GetInstance()->PlayerMove3d(position);
+	Action::GetInstance()->PlayerMove3d(pos);
+	if (Input::GetInstance()->PushKey(DIK_A)) {
+		rotation.y += 1;
+	}
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		jump = true;
 	

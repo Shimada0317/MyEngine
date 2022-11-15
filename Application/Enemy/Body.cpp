@@ -44,18 +44,22 @@ void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, B
 			bull->SetTrigger(Hit);
 			HItColor = { 1,0,0,1 };
 		}
+		else {
+			HItColor = { 1,1,1,1 };
+		}
 	}
 	else {
-		HItColor = { 1,1,1,1 };
+		HItColor.w -= 0.01f;
 	}
+	
 	body->Updata(HItColor);
 }
 
 void Body::Draw(bool arive)
 {
-	if (arive == true) {
+	//if (arive == true) {
 		body->Draw();
-	}
+	//}
 }
 
 void Body::Finalize()

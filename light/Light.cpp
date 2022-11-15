@@ -12,6 +12,8 @@ void Light::StaticInitialize(ID3D12Device* dev)
 	assert(dev);
 	//静的メンバ変数のセット
 	Light::dev = dev;
+
+	
 }
 
 Light* Light::Create()

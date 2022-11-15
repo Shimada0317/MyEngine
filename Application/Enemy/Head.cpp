@@ -39,20 +39,23 @@ void Head::Updata(bool& arive,const XMVECTOR& bodyPos, const XMFLOAT3 rotation, 
 			bull->SetTrigger(Hit);
 			HitColor = { 1,0,0,1 };
 		}
+		else {
+			HitColor = { 1,1,1,1 };
+		}
 	}
 	else {
-		HitColor = { 1,1,1,1 };
+		HitColor.w -= 0.01f;
 	}
-
+	
 
 	Head->Updata(HitColor);
 }
 
 void Head::Draw(bool arive)
 {
-	if (arive == true) {
+	//if (arive == true) {
 		Head->Draw();
-	}
+	//}
 }
 
 void Head::Finalize()

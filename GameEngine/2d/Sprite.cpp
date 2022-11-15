@@ -1,4 +1,4 @@
-#include "Sprite.h"
+	#include "Sprite.h"
 #include <cassert>
 #include <d3dx12.h>
 #include <d3dcompiler.h>

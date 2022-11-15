@@ -45,9 +45,9 @@ void Robot::AllUpdata(Bullet* bull)
 	//LArm->Updata(arive[2], allPos, bull, Hp);
 	Arms->Updata(arive[1], allPos, allRot, bull, Hp);
 	body->Updata(arive[2], allPos, allRot, bull, Hp);
-	part->Updata(allPos);
+	part->Updata(allPos,allRot);
 	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
-		patrticle->Updata(allPos);
+		patrticle->Updata(allPos,allRot);
 	}
 }
 

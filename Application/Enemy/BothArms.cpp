@@ -39,24 +39,26 @@ void BothArms::Updata(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotat
 
 
 	if (arive == true) {
+		Color = { 1.0f,1.0f,1.0f,1.0f };
 		SetPRS(bodyPos,rotation, bull);
 	}
 	else if (arive == false) {
 		ArmRot.x = 90.0f;
+		Color.w -= 0.01f;
 	}
 	if (HitCount >= 3) {
 		HitCount = 0;
 		arive = false;
 	}
 
-	RArm->Updata();
+	RArm->Updata(Color);
 }
 
 void BothArms::Draw(bool arive)
 {
-	if (arive == true) {
+	//if (arive == true) {
 		RArm->Draw();
-	}
+	//}
 }
 
 void BothArms::Finalize()

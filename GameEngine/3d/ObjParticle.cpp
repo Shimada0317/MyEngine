@@ -44,17 +44,20 @@ void ObjParticle::Initialize()
 	}
 }
 
-void ObjParticle::Set(XMVECTOR& enemyPos)
+void ObjParticle::Set(XMVECTOR& enemyPos, XMFLOAT3& allRot)
 {
 	for (int i = 0; i < MAX; i++) {
 		if (effect[i] == false) {
 			InitializeState(i);
 			position[i] = enemyPos;
 			Wposition[i] = enemyPos;
+			rotation = allRot;
 			int radX = (rand() % 10);
 			int radY = (rand() % 3 + 1);
+			int radZ = (rand() % 10);
 			int womX = (rand() % 5);
 			int womY = (rand() % 3 + 1);
+			int womZ = (rand() % 5);
 			if (radX == 2) {
 				radX = 1;
 				womX = -1;
@@ -67,22 +70,41 @@ void ObjParticle::Set(XMVECTOR& enemyPos)
 				radX = 0;
 				womX = 0;
 			}
+
+			if (radZ == 2) {
+				radZ = 1;
+				womZ = -1;
+			}
+			else if (radZ == 1) {
+				radZ = -1;
+				womZ = 1;
+			}
+			else {
+				radZ = 0;
+				womZ = 0;
+			}
 			float poiX = 0;
 			float poiY = 0;
+			float poiZ = 0;
 
 			float wpoiX = 0;
 			float wpoiY = 0;
+			float wpoiZ = 0;
 
 			int rad = (rand() % 10) + 5;
 
 			poiX = (float)radX / rad;
 			poiY = (float)radY / 10;
+			poiZ = (float)radZ / rad;
 			wpoiX = (float)womX / rad;
 			wpoiY = (float)womY / 10;
+			wpoiZ = (float)womZ / rad;
 			numX[i] = poiX;
 			numY[i] = poiY;
+			numZ[i] = poiZ;
 			wnumX[i] = wpoiX;
 			wnumY[i] = wpoiY;
+			wnumZ[i] = wpoiZ;
 		}
 
 		particle[i]->SetPosition(position[i]);
@@ -94,20 +116,22 @@ void ObjParticle::Set(XMVECTOR& enemyPos)
 	}
 }
 
-void ObjParticle::Updata(XMVECTOR& enemyPos)
+void ObjParticle::Updata(XMVECTOR& enemyPos,XMFLOAT3& allRot)
 {
-	Set(enemyPos);
+	Set(enemyPos,allRot);
 	Effect();
 
 	for (int i = 0; i < MAX; i++) {
 		rotation.x += 0.5f / 20;
 		if (position[i].m128_f32[1] >= enemyPos.m128_f32[1] - 0.1f) {
-			position[i].m128_f32[1] += gravity[i] / 15;
 			position[i].m128_f32[0] += numX[i] / 20;
+			position[i].m128_f32[1] += gravity[i] / 15;
+			position[i].m128_f32[2] += numZ[i] / 20;
 		}
 		if (Wposition[i].m128_f32[1] >= enemyPos.m128_f32[1] - 0.1f) {
 			Wposition[i].m128_f32[0] += wnumX[i] / 20;
 			Wposition[i].m128_f32[1] += gravity[i] / 10;
+			Wposition[i].m128_f32[2] += wnumX[i] / 20;
 		}
 
 		gravity[i] -= 0.002;

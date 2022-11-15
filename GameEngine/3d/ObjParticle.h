@@ -27,9 +27,9 @@ public:
 
 	void Initialize();
 
-	void Set(XMVECTOR& enemyPos);
+	void Set(XMVECTOR& enemyPos,XMFLOAT3& allRot);
 
-	void Updata(XMVECTOR& enemyPos);
+	void Updata(XMVECTOR& enemyPos,XMFLOAT3& allRot);
 
 	void Effect();
 
@@ -58,10 +58,12 @@ private:
 	bool effect[MAX];
 	float numX[MAX];
 	float numY[MAX];
+	float numZ[MAX];
 	float scalenumX = 0;
 	float scalenumY = 0;
 	float wnumX[MAX];
 	float wnumY[MAX];
+	float wnumZ[MAX];
 	static const int32_t StopTime = 80 * 5;
 	int32_t deleteTime_ = StopTime;
 	bool delete_ = false;

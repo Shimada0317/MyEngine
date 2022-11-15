@@ -30,6 +30,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	//lightGroup = LightGroup::Create();
 	//Object3d::SetLightGroup(lightGroup);
+	light = Light::Create();
+	Object3d::SetLight(light);
 
 	//モデルの読み込み
 
@@ -48,7 +50,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	mid->Initialize();
 	patern = mid->GetPatern();
 
-	light = Light::Create();
 	playerHp = mid->GetHp();
 
 	postEffect = new PostEffect();
