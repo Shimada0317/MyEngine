@@ -36,7 +36,7 @@ public:
 
 	void debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed,bool& d);
 
-	void Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos);
+	void Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos, const XMFLOAT3& Eye_Rot);
 
 	void Set();
 
@@ -90,7 +90,7 @@ private:
 	XMVECTOR pos = { 0.0f,0.0f,-100.0f };
 	XMVECTOR oldpos{ 0.0f,0.0f,0.0f };
 	XMFLOAT3 scl = { 0.1f,0.1f,0.1f };
-	XMFLOAT3 rot = { 0.0f,-90.0f,0.0f };
+	XMFLOAT3 rot = { 0.0f,0.0f,0.0f };
 
 	bool shot = false;
 	int rebun = 0;

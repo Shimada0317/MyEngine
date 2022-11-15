@@ -35,8 +35,10 @@ void Head::Updata(bool& arive,const XMVECTOR& bodyPos, const XMFLOAT3 rotation, 
 
 		if (Collision::HeadHit(HeadPos, HeadScl, bullPos, bullScl)) {
 			Hp -= 50;
+			XMVECTOR pos = { 0.0f,1000.0f,0.0f };
 			Hit = false;
 			bull->SetTrigger(Hit);
+			bull->SetPosition(pos);
 			HitColor = { 1,0,0,1 };
 		}
 		else {

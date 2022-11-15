@@ -97,7 +97,7 @@ void Bullet::debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed, bool& d)
 	}
 }
 
-void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos)
+void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos,const XMFLOAT3& Eye_Rot)
 {
 
 	const float kBullSpeed = 1.0f;
@@ -111,6 +111,8 @@ void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos)
 		oldpos.m128_f32[1] = PWorldPos.m128_f32[1];
 		oldpos.m128_f32[2] = PWorldPos.m128_f32[2];
 		fire = true;
+
+		rot = Eye_Rot;
 	}
 	XMVECTOR vec = PWorldPos -GWorldPos;
 	vec = XMVector3Normalize(vec);

@@ -64,7 +64,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	playerPos = XMVector3Transform(playerPos, player);
 
 	//ダメージを受けたとき
-	if (OldHp > Hp) {
+	if (OldHp> Hp) {
 		//part->Effect();
 		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 		newparticle->Initialize();
@@ -76,9 +76,9 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	if (all == true && Hp > 0) {
 		TrackPlayer();
 		//プレイヤーの前まで来たとき
-		if ((allPos.m128_f32[0] <= playerPos.m128_f32[0] + 6.0f && allPos.m128_f32[0] >= playerPos.m128_f32[0] - 6.0f)
-			&& (allPos.m128_f32[1] <= playerPos.m128_f32[1] + 6.0f && allPos.m128_f32[1] >= playerPos.m128_f32[1] - 6.0f)
-			&& (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 6.0f && allPos.m128_f32[2] >= playerPos.m128_f32[2] - 6.0f)) {
+		if ((allPos.m128_f32[0] <= playerPos.m128_f32[0] + 4.0f && allPos.m128_f32[0] >= playerPos.m128_f32[0] - 4.0f)
+			&& (allPos.m128_f32[1] <= playerPos.m128_f32[1] + 4.0f && allPos.m128_f32[1] >= playerPos.m128_f32[1] - 4.0f)
+			&& (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 4.0f && allPos.m128_f32[2] >= playerPos.m128_f32[2] - 4.0f)) {
 			speed = 0;
 			if (AttackFase != true) {
 				AttackTime += 0.01f;
@@ -110,7 +110,6 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 		AttackChanse = 0;
 		for (int i = 0; i < 3; i++) {
 			arive[i] = false;
-			allPos = { 0.0f,0.0f,1000000.0f };
 		}
 	}
 
@@ -136,7 +135,8 @@ void Robot::Draw(DirectXCommon* dxCommon)
 void Robot::ImgDraw()
 {
 
-
+	float a = Hp;
+	float o = OldHp;
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
@@ -145,6 +145,8 @@ void Robot::ImgDraw()
 
 	ImGui::SliderFloat("Time", &AttackTime, -100.0f, 100.0f);
 	ImGui::SliderFloat("Rand", &AttackChanse, -100.0f, 100.0f);
+	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
+	ImGui::SliderFloat("OldHp", &o, -100.0f, 100.0f);
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
@@ -203,7 +205,7 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 	for (int i = 0; i < 3; i++) {
 		arive[i] = true;
 	}
-	if (patern == 1) {
+	/*if (patern == 1) {
 		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] - 5;
 	}
 	else if (patern == 2) {
@@ -231,7 +233,7 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 	}
 	else if (patern == 8) {
 
-	}
+	}*/
 
 	Arms->RespownSet(allRot);
 	speed = 0.0025f;

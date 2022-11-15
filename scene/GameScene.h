@@ -84,8 +84,8 @@ private:
 
 	XMVECTOR pos = { 0,0,0 };
 
-	XMVECTOR ground_pos = { 15,-1,15 };
-	XMFLOAT3 ground_scl = { 60,80,60 };
+	XMVECTOR ground_pos = { 22.5f,-1,40 };
+	XMFLOAT3 ground_scl = { 13,20,16 };
 	XMFLOAT3 ground_rot = { 0,0,0 };
 
 

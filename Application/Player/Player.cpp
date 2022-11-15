@@ -100,7 +100,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 			particle = true;
 			for (int i = 0; i < BULL; i++) {
 				if (bull[i]->CheckOk()) {
-					bull[i]->Test(gunWorldPos, playerWorldPos);
+					bull[i]->Test(gunWorldPos, playerWorldPos,Eye_rot);
 					bull[i]->TriggerOn();
 					break;
 				}
@@ -213,7 +213,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				shake = 0;
 			}
 		}
-		if (patern == 1) {
+		if (patern == 0) {
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] >= 20) {
 				move = false;
@@ -223,7 +223,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				spown = true;
 			}
 		}
-		else if (patern == 2) {
+		else if (patern == 1) {
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] >= 40) {
 				move = false;
@@ -233,7 +233,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				spown = true;
 			}
 		}
-		else if (patern == 3) {
+		else if (patern == 2) {
 			Eye_rot.y += 3;
 			if (Eye_rot.y >= 90) {
 				Eye_rot.y = 90;
@@ -247,7 +247,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				spown = true;
 			}
 		}
-		else if (patern == 4) {
+		else if (patern == 3) {
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[0] >= 40) {
 				move = false;
@@ -257,13 +257,13 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				spown = true;
 			}
 		}
-		else if (patern == 5) {
-			Eye_rot.y += 3;
-			if (Eye_rot.y >= 180) {
-				Eye_rot.y = 180;
+		else if (patern == 4) {
+			Eye_rot.y -= 3;
+			if (Eye_rot.y <= 0) {
+				Eye_rot.y = 0;
 				vel = { 0, 0, kBulletSpeed };
 			}
-			if (playerWorldPos.m128_f32[2] <= 20) {
+			if (playerWorldPos.m128_f32[2] >= 60) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -282,7 +282,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 			}
 		}
 		else if (patern == 7) {
-			Eye_rot.y += 3;
+			Eye_rot.y -= 3;
 			if (Eye_rot.y >= 270) {
 				Eye_rot.y = 270;
 				vel = { 0, 0, kBulletSpeed };
@@ -349,10 +349,10 @@ void Player::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("gunpos")) {
-		ImGui::SliderFloat("pos.x", &vel.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &vel.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &vel.m128_f32[2], -100.0f, 100.0f);
+	if (ImGui::TreeNode("playerRot")) {
+		ImGui::SliderFloat("Rot.x", &Eye_rot.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.y", &Eye_rot.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.z", &Eye_rot.z, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

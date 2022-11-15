@@ -274,121 +274,121 @@ void middle::Fainalize()
 
 void middle::SetEnemyPos()
 {
-	if (patern == 1) {
-		enemyPos[0].m128_f32[0] = -5;
-		enemyPos[1].m128_f32[0] = 0;
-		enemyPos[2].m128_f32[0] = 5;
+	//if (patern == 1) {
+	//	enemyPos[0].m128_f32[0] = -5;
+	//	enemyPos[1].m128_f32[0] = 0;
+	//	enemyPos[2].m128_f32[0] = 5;
 
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 35;
-		enemyPos[1].m128_f32[2] = 35;
-		enemyPos[2].m128_f32[2] = 35;
+	//	enemyPos[0].m128_f32[2] = 35;
+	//	enemyPos[1].m128_f32[2] = 35;
+	//	enemyPos[2].m128_f32[2] = 35;
 
-	}
+	//}
 
-	else if (patern == 2) {
-		enemyPos[0].m128_f32[0] = -5;
-		enemyPos[1].m128_f32[0] = 0;
-		enemyPos[2].m128_f32[0] = 5;
+	//else if (patern == 2) {
+	//	enemyPos[0].m128_f32[0] = -5;
+	//	enemyPos[1].m128_f32[0] = 0;
+	//	enemyPos[2].m128_f32[0] = 5;
 
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 55;
-		enemyPos[1].m128_f32[2] = 55;
-		enemyPos[2].m128_f32[2] = 55;
+	//	enemyPos[0].m128_f32[2] = 55;
+	//	enemyPos[1].m128_f32[2] = 55;
+	//	enemyPos[2].m128_f32[2] = 55;
 
-	}
+	//}
 
-	else if (patern == 3) {
-		enemyPos[0].m128_f32[0] = 40;
-		enemyPos[1].m128_f32[0] = 40;
-		enemyPos[2].m128_f32[0] = 40;
+	//else if (patern == 3) {
+	//	enemyPos[0].m128_f32[0] = 40;
+	//	enemyPos[1].m128_f32[0] = 40;
+	//	enemyPos[2].m128_f32[0] = 40;
 
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 50;
-		enemyPos[1].m128_f32[2] = 45;
-		enemyPos[2].m128_f32[2] = 40;
+	//	enemyPos[0].m128_f32[2] = 37;
+	//	enemyPos[1].m128_f32[2] = 47;
+	//	enemyPos[2].m128_f32[2] = 42;
 
 
-		enemyRot[0].y = 90;
-		enemyRot[1].y = 90;
-		enemyRot[2].y = 90;
-	}
+	//	enemyRot[0].y = 90;
+	//	enemyRot[1].y = 90;
+	//	enemyRot[2].y = 90;
+	//}
 
-	else if (patern == 4) {
-		enemyPos[0].m128_f32[0] = 55;
-		enemyPos[1].m128_f32[0] = 55;
-		enemyPos[2].m128_f32[0] = 55;
+	//else if (patern == 4) {
+	//	enemyPos[0].m128_f32[0] = 55;
+	//	enemyPos[1].m128_f32[0] = 55;
+	//	enemyPos[2].m128_f32[0] = 55;
 
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 50;
-		enemyPos[1].m128_f32[2] = 45;
-		enemyPos[2].m128_f32[2] = 40;
-	}
+	//	enemyPos[0].m128_f32[2] = 37;
+	//	enemyPos[1].m128_f32[2] = 47;
+	//	enemyPos[2].m128_f32[2] = 42;
+	//}
 
-	else if (patern == 5)
-	{
-		enemyPos[0].m128_f32[0] = 46;
-		enemyPos[1].m128_f32[0] = 41;
-		enemyPos[2].m128_f32[0] = 36;
+	//else if (patern == 5)
+	//{
+	//	enemyPos[0].m128_f32[0] = 46;
+	//	enemyPos[1].m128_f32[0] = 41;
+	//	enemyPos[2].m128_f32[0] = 36;
 
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 5;
-		enemyPos[1].m128_f32[2] = 5;
-		enemyPos[2].m128_f32[2] = 5;
+	//	enemyPos[0].m128_f32[2] = 5;
+	//	enemyPos[1].m128_f32[2] = 5;
+	//	enemyPos[2].m128_f32[2] = 5;
 
-		enemyRot[0].y = 180;
-		enemyRot[1].y = 180;
-		enemyRot[2].y = 180;
-	}
+	//	enemyRot[0].y = 180;
+	//	enemyRot[1].y = 180;
+	//	enemyRot[2].y = 180;
+	//}
 
-	else if (patern == 6)
-	{
-		enemyPos[0].m128_f32[0] = 46;
-		enemyPos[1].m128_f32[0] = 41;
-		enemyPos[2].m128_f32[0] = 36;
+	//else if (patern == 6)
+	//{
+	//	enemyPos[0].m128_f32[0] = 46;
+	//	enemyPos[1].m128_f32[0] = 41;
+	//	enemyPos[2].m128_f32[0] = 36;
 
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = -15;
-		enemyPos[1].m128_f32[2] = -15;
-		enemyPos[2].m128_f32[2] = -15;
-	}
+	//	enemyPos[0].m128_f32[2] = -15;
+	//	enemyPos[1].m128_f32[2] = -15;
+	//	enemyPos[2].m128_f32[2] = -15;
+	//}
 
-	else if (patern == 7)
-	{
-		enemyPos[0].m128_f32[0] = 0;
-		enemyPos[1].m128_f32[0] = 0;
-		enemyPos[2].m128_f32[0] = 0;
+	//else if (patern == 7)
+	//{
+	//	enemyPos[0].m128_f32[0] = 0;
+	//	enemyPos[1].m128_f32[0] = 0;
+	//	enemyPos[2].m128_f32[0] = 0;
 
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 3;
-		enemyPos[1].m128_f32[2] = -2;
-		enemyPos[2].m128_f32[2] = -7;
+	//	enemyPos[0].m128_f32[2] = 3;
+	//	enemyPos[1].m128_f32[2] = -2;
+	//	enemyPos[2].m128_f32[2] = -7;
 
-		enemyRot[0].y = 270;
-		enemyRot[1].y = 270;
-		enemyRot[2].y = 270;
-	}
+	//	enemyRot[0].y = 270;
+	//	enemyRot[1].y = 270;
+	//	enemyRot[2].y = 270;
+	//}
 }
 
 

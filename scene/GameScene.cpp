@@ -40,7 +40,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	sphere->SetModel(playermodel);
 
 
-	ground = ObjModel::CreateFromOBJ("Field",true);
+	ground = ObjModel::CreateFromOBJ("Field2",true);
 	groundObj = Object3d::Create();
 
 	groundObj->SetModel(ground);
@@ -64,6 +64,7 @@ void GameScene::SetPosSclRot()
 
 	groundObj->SetPosition( ground_pos );
 	groundObj->SetScale({ ground_scl });
+
 
 	patern = mid->GetPatern();
 	playerHp = mid->GetHp();
