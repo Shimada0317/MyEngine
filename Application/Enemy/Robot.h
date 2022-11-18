@@ -43,6 +43,8 @@ public:
 
 	void SetRotation(XMFLOAT3 allRot) { this->allRot = allRot; }
 
+	const XMVECTOR& GetPosition() { return allPos; }
+
 	void SpownEnemy(const XMMATRIX& player,int patern);
 private:
 	std::unique_ptr<Head> head;
@@ -80,5 +82,8 @@ private:
 
 	bool dice = false;
 	int patern=0;
+
+
+	float l = 0;
 };
 

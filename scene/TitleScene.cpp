@@ -23,6 +23,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	post = new PostEffect();
 	post->Initialize();
 
+
 }
 
 void TitleScene::SetPosSclRot()

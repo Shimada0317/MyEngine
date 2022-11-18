@@ -6,7 +6,7 @@ middle::~middle()
 	for (int i = 0; i < 9; i++) {
 		delete bull[i];
 	}
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < MAXENEMY; i++) {
 		rob[i].reset();
 	}
 }
@@ -30,7 +30,7 @@ void middle::Initialize()
 		bull[i] = new Bullet();
 		bull[i]->Initialize();
 	}
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < MAXENEMY; i++) {
 		rob[i] = std::make_unique<Robot>();
 		rob[i]->Initialize();
 		//enemyPos[i] = rob[i]->GetPosition();
@@ -78,7 +78,18 @@ void middle::Initialize()
 	enemyPos[1].m128_f32[2] = 10;
 	enemyPos[2].m128_f32[2] = 10;
 
-	for (int i = 0; i < 3; i++) {
+	enemyPos[3].m128_f32[0] = -100;
+	enemyPos[3].m128_f32[1] = -100;
+	enemyPos[3].m128_f32[2] = -100;
+
+	enemyPos[4].m128_f32[0] = -100;
+	enemyPos[4].m128_f32[1] = -100;
+	enemyPos[4].m128_f32[2] = -100;
+
+	all[3] = false;
+	all[4] = false;
+
+	for (int i = 0; i < MAXENEMY; i++) {
 		rob[i]->SetPosition({ enemyPos[i] });
 	}
 }
@@ -117,9 +128,9 @@ void middle::SetPSR()
 	HpBer->SetPosition({ 1070,650 });
 	player->SetHp(playerHp);
 
-
-
-
+	for (int i = 0; i < MAXENEMY; i++) {
+		rob[i]->SetRotation({ enemyRot[i] });
+	}
 }
 
 //void middle::AllUpdata()
@@ -148,14 +159,14 @@ void middle::Updata()
 
 
 	//敵をすべて倒した時に進む
-	if (all[0] == false && all[1] == false && all[2] == false) {
+	if (all[0] == false && all[1] == false && all[2] == false && all[3] == false && all[4] == false) {
 		move = true;
 		patern += 1;
 	}
 
 
 	if (move == true) {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < MAXENEMY; i++) {
 			all[i] = true;
 		}
 	}
@@ -163,12 +174,13 @@ void middle::Updata()
 	//座標の設定
 	SetPSR();
 
+	Enemy2Enemy();
 
 
 	if (spown == true) {
 
 		SetEnemyPos();
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < MAXENEMY; i++) {
 			rob[i]->SetPosition({ enemyPos[i] });
 			rob[i]->SetRotation({ enemyRot[i] });
 			rob[i]->SpownEnemy(playerMat, patern);
@@ -176,14 +188,20 @@ void middle::Updata()
 				spown = false;
 			}
 		}
+
 	}
 
-	//敵の更新処理
-	for (int i = 0; i < 9; i++) {
-		for (int j = 0; j < 3; j++) {
-			rob[j]->Updata(bull[i], all[j], playerMat, spown, playerHp);
+	if (spown == false) {
+		//敵の更新処理
+		for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < MAXENEMY; j++) {
+				enemyPos[j] = rob[j]->GetPosition();
+				rob[j]->Updata(bull[i], all[j], playerMat, spown, playerHp);
+			}
 		}
 	}
+
+
 	player->PlayerMove(move, patern, spown);
 	//プレイヤーの更新処理
 	player->Updata(bull, Remaining);
@@ -191,7 +209,7 @@ void middle::Updata()
 
 void middle::Draw(DirectXCommon* dxCommon)
 {
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < MAXENEMY; j++) {
 		rob[j]->Draw(dxCommon);
 	}
 	player->ParticleDraw(dxCommon->GetCmdList());
@@ -265,7 +283,7 @@ void middle::ImGuiDraw()
 
 void middle::Fainalize()
 {
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < MAXENEMY; j++) {
 		rob[j]->Finalize();
 	}
 	player->Finalize();
@@ -287,6 +305,8 @@ void middle::SetEnemyPos()
 		enemyPos[1].m128_f32[2] = 55;
 		enemyPos[2].m128_f32[2] = 55;
 
+		all[3] = false;
+		all[4] = false;
 	}
 
 	else if (patern == 2) {
@@ -307,6 +327,8 @@ void middle::SetEnemyPos()
 		enemyRot[1].y = 90;
 		enemyRot[2].y = 90;
 
+		all[3] = false;
+		all[4] = false;
 	}
 
 	else if (patern == 3) {
@@ -326,24 +348,36 @@ void middle::SetEnemyPos()
 		enemyRot[0].y = 90;
 		enemyRot[1].y = 90;
 		enemyRot[2].y = 90;
+
+		all[3] = false;
+		all[4] = false;
 	}
 
 	else if (patern == 4) {
 		enemyPos[0].m128_f32[0] = 41;
 		enemyPos[1].m128_f32[0] = 46;
 		enemyPos[2].m128_f32[0] = 51;
+		enemyPos[3].m128_f32[0] = 56;
+		enemyPos[4].m128_f32[0] = 61;
 
 		enemyPos[0].m128_f32[1] = 0;
 		enemyPos[1].m128_f32[1] = 0;
 		enemyPos[2].m128_f32[1] = 0;
+		enemyPos[3].m128_f32[1] = 0;
+		enemyPos[4].m128_f32[1] = 0;
+
 
 		enemyPos[0].m128_f32[2] = 85;
 		enemyPos[1].m128_f32[2] = 85;
 		enemyPos[2].m128_f32[2] = 85;
+		enemyPos[3].m128_f32[2] = 85;
+		enemyPos[4].m128_f32[2] = 85;
 
 		enemyRot[0].y = 0;
 		enemyRot[1].y = 0;
 		enemyRot[2].y = 0;
+		enemyRot[3].y = 0;
+		enemyRot[4].y = 0;
 	}
 
 	//else if (patern == 5)
@@ -398,6 +432,49 @@ void middle::SetEnemyPos()
 	//	enemyRot[1].y = 270;
 	//	enemyRot[2].y = 270;
 	//}
+}
+
+void middle::Enemy2Enemy()
+{
+
+
+	for (int i = 0; i < MAXENEMY; i++) {
+		for (int j = 0; j < MAXENEMY; j++) {
+			if (i == j) {
+				j += 1;
+			}
+			if (patern == 2 || patern == 3) {
+				if (enemyPos[i].m128_f32[2] + 0.6f >= enemyPos[j].m128_f32[2] - 1 && enemyPos[i].m128_f32[2] + 0.6f <= enemyPos[j].m128_f32[2] + 1) {
+					enemyPos[i].m128_f32[2] -= 0.3f;
+				}
+				if (enemyPos[i].m128_f32[2] - 0.6f >= enemyPos[j].m128_f32[2] && enemyPos[i].m128_f32[2] - 0.6f <= enemyPos[j].m128_f32[2] + 1) {
+					enemyPos[i].m128_f32[2] += 0.3f;
+				}
+			}
+			else {
+				if (enemyPos[i].m128_f32[0] + 0.6f >= enemyPos[j].m128_f32[0] - 1 && enemyPos[i].m128_f32[0] + 0.6f <= enemyPos[j].m128_f32[0] + 1) {
+					enemyPos[i].m128_f32[0] -= 0.3f;
+				}
+				if (enemyPos[i].m128_f32[0] - 0.6f >= enemyPos[j].m128_f32[0] && enemyPos[i].m128_f32[0] - 0.6f <= enemyPos[j].m128_f32[0] + 1) {
+					enemyPos[i].m128_f32[0] += 0.3f;
+				}
+			}
+		}
+	}
+	for (int i = 0; i < MAXENEMY; i++) {
+		rob[i]->SetPosition(enemyPos[i]);
+	}
+
+	/*if (enemyPos[0].m128_f32[0] >= enemyPos[1].m128_f32[0] || enemyPos[0].m128_f32[0] <= enemyPos[1].m128_f32[0]) {
+		enemyRot[0].y++;
+	}*/
+
+	/*if (enemyPos[0].m128_f32[2] >= 0) {
+		enemyRot[0].y++;
+	}*/
+
+
+
 }
 
 
@@ -482,3 +559,4 @@ void middle::SetEnemyPos()
 //		}
 //	}
 //}
+

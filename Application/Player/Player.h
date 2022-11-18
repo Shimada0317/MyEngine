@@ -101,7 +101,7 @@ private:
 	Camera* camera = nullptr;
 	RailCamera* cam;
 	//ÉçÅ[ÉJÉã
-	XMVECTOR position = { 0.0f,0.0f,2.0f };
+	XMVECTOR position = { 0.0f,0.0f,1.0f };
 	XMVECTOR backPlayerPos{ 0.0f,0.0f,0.0f };
 	XMVECTOR oldPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };

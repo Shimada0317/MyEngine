@@ -237,8 +237,8 @@ bool Collision::BodyHit(XMVECTOR bodyPos, XMFLOAT3 bodyScl, XMVECTOR PlayerPos, 
 
 	float mbx = bodyPos.m128_f32[0] - bodyScl.x/2;
 	float pbx = bodyPos.m128_f32[0] + bodyScl.x/2;
-	float mby = bodyPos.m128_f32[1] - bodyScl.y/2;
-	float pby = bodyPos.m128_f32[1] + bodyScl.y/2;
+	float mby = bodyPos.m128_f32[1] - bodyScl.y;
+	float pby = bodyPos.m128_f32[1] + bodyScl.y;
 	float mbz = bodyPos.m128_f32[2] - bodyScl.z;
 	float pbz = bodyPos.m128_f32[2] + bodyScl.z;
 

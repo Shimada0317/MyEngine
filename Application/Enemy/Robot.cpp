@@ -76,7 +76,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	if (all == true && Hp > 0) {
 		TrackPlayer();
 		//プレイヤーの前まで来たとき
-		if ((allPos.m128_f32[0] <= playerPos.m128_f32[0] + 4.0f && allPos.m128_f32[0] >= playerPos.m128_f32[0] - 4.0f)
+		/*if ((allPos.m128_f32[0] <= playerPos.m128_f32[0] + 4.0f && allPos.m128_f32[0] >= playerPos.m128_f32[0] - 4.0f)
 			&& (allPos.m128_f32[1] <= playerPos.m128_f32[1] + 4.0f && allPos.m128_f32[1] >= playerPos.m128_f32[1] - 4.0f)
 			&& (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 4.0f && allPos.m128_f32[2] >= playerPos.m128_f32[2] - 4.0f)) {
 			speed = 0;
@@ -97,7 +97,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 				attackT += 0.1f;
 				Arms->Attack(attackT, AttackFase, playerHp);
 			}
-		}
+		}*/
 	}
 	//if (Input::GetInstance()->TriggerKey(DIK_O)) {
 	//	Hp = 0;
@@ -141,12 +141,9 @@ void Robot::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Enemy");
-
-
-	ImGui::SliderFloat("Time", &AttackTime, -100.0f, 100.0f);
-	ImGui::SliderFloat("Rand", &AttackChanse, -100.0f, 100.0f);
 	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
-	ImGui::SliderFloat("OldHp", &o, -100.0f, 100.0f);
+	ImGui::SliderFloat("len", &l, -100.0f, 100.0f);
+	ImGui::SliderFloat("PosX", &allPos.m128_f32[0], -100.0f, 100.0f);
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
@@ -170,15 +167,19 @@ void Robot::TrackPlayer()
 
 
 
-	vx = (allPos.m128_f32[0] - TrackPoint.m128_f32[0]);
-	vy = (allPos.m128_f32[1] - TrackPoint.m128_f32[1]);
-	vz = (allPos.m128_f32[2] - TrackPoint.m128_f32[2]);
+	vx = (allPos.m128_f32[0] - playerPos.m128_f32[0]);
+	vy = (allPos.m128_f32[1] - playerPos.m128_f32[1]);
+	vz = (allPos.m128_f32[2] - playerPos.m128_f32[2]);
 
 
 	float v2x = pow(vx, 2);
 	float v2y = pow(vy, 2);
 	float v2z = pow(vz, 2);
-	float l = sqrtf(v2x + v2y + v2z);
+	l = sqrtf(v2x + v2y + v2z);
+	if (l <= 2) {
+		speed = 0;
+	}
+
 	float v3x = (vx / l) * speed;
 	float v3y = (vy / l) * speed;
 	float v3z = (vz / l) * speed;
@@ -213,7 +214,7 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 		TrackPoint.m128_f32[0] = playerPos.m128_f32[0] - 5;
 	}
 	else if (patern == 3) {
-		TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
+		TrackPoint.m128_f32[0] = playerPos.m128_f32[0]-5;
 		TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
 	}
 	else if (patern == 4) {

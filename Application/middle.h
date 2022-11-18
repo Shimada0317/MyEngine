@@ -15,6 +15,7 @@
 
 using namespace std;
 const int MAXENEMY = 5;
+
 class middle
 {
 public: 
@@ -38,7 +39,7 @@ public:
 
 	void SetEnemyPos();
 
-	void Fire();
+	void Enemy2Enemy();
 
 	void LoadEnemyPopData();
 
@@ -146,7 +147,7 @@ private:
 	int waitTimer = 0;
 
 	//DebugScene‚Ì‚â‚Â‚ğ‚Á‚Ä‚«‚½
-	std::unique_ptr<Robot>rob[3];
+	std::unique_ptr<Robot>rob[MAXENEMY];
 	std::unique_ptr<Body>bob;
 	std::unique_ptr<Head>head;
 	std::unique_ptr<Object3d> bo = nullptr;
@@ -172,7 +173,7 @@ private:
 
 	int Remaining = 0;
 
-	bool all[3];
+	bool all[MAXENEMY];
 	bool waveCount = false;
 	bool move = false;
 	bool oldmove = false;
