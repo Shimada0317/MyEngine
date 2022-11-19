@@ -182,5 +182,7 @@ private:
 	XMMATRIX playerMat;
 	int rad;
 	int oldrand[3];
+
+	XMVECTOR TrackPoint[MAXENEMY];
 };
 

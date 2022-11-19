@@ -157,8 +157,10 @@ void Bullet::TriggerOn()
 
 void Bullet::ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerPos, const XMVECTOR& PlayerWorldPos,int& remaining)
 {
-	float speedm = 1.5;
+	
 
+	mat = bullet->GetMatrix();
+	pos = XMVector3Transform(pos, mat);
 
 	if (Trigger == true) {
 		if (fire == true) {

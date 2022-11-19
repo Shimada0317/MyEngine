@@ -43,6 +43,8 @@ public:
 
 	void SetRotation(XMFLOAT3 allRot) { this->allRot = allRot; }
 
+	void SetTrackPoint(XMVECTOR TrackPoint) { this->TrackPoint = TrackPoint; }
+
 	const XMVECTOR& GetPosition() { return allPos; }
 
 	void SpownEnemy(const XMMATRIX& player,int patern);

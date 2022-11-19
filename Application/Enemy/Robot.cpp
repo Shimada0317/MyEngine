@@ -29,7 +29,7 @@ void Robot::Initialize()
 	}
 	OldHp = Hp;
 	dice = true;
-	TrackPoint.m128_f32[2] = -5;
+	TrackPoint.m128_f32[2] = 3;
 	
 }
 
@@ -167,9 +167,9 @@ void Robot::TrackPlayer()
 
 
 
-	vx = (allPos.m128_f32[0] - playerPos.m128_f32[0]);
-	vy = (allPos.m128_f32[1] - playerPos.m128_f32[1]);
-	vz = (allPos.m128_f32[2] - playerPos.m128_f32[2]);
+	vx = (allPos.m128_f32[0] - TrackPoint.m128_f32[0]);
+	vy = (allPos.m128_f32[1] - TrackPoint.m128_f32[1]);
+	vz = (allPos.m128_f32[2] - TrackPoint.m128_f32[2]);
 
 
 	float v2x = pow(vx, 2);
@@ -207,7 +207,7 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 		arive[i] = true;
 	}
 	if (patern == 1) {
-		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] - 5;
+		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
 	}
 	else if (patern == 2) {
 		TrackPoint.m128_f32[2] = playerPos.m128_f32[2];

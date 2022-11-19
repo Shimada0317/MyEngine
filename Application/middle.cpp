@@ -26,6 +26,11 @@ void middle::Initialize()
 	Sprite::LoadTexture(18, L"Resources/Hpber.png");
 	//camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 	//Object3d::SetCamera(camera);
+	player = std::make_unique<Player>();
+	player->Initalize();
+
+	playerPos = player->GetPosition();
+
 	for (int i = 0; i < 9; i++) {
 		bull[i] = new Bullet();
 		bull[i]->Initialize();
@@ -36,9 +41,10 @@ void middle::Initialize()
 		//enemyPos[i] = rob[i]->GetPosition();
 		//allpos[i] = { 0.0f + i * 1.0f,0.0f,10.0f };
 		all[i] = true;
+		TrackPoint[i] = playerPos;
+	
 	}
-	player = std::make_unique<Player>();
-	player->Initalize();
+	
 
 
 	////スプライトの読み込み
@@ -75,8 +81,13 @@ void middle::Initialize()
 	enemyPos[2].m128_f32[1] = 0;
 
 	enemyPos[0].m128_f32[2] = 10;
-	enemyPos[1].m128_f32[2] = 10;
-	enemyPos[2].m128_f32[2] = 10;
+	enemyPos[1].m128_f32[2] = 7;
+	enemyPos[2].m128_f32[2] = 3;
+
+	TrackPoint[0].m128_f32[0] = -1.2;
+	TrackPoint[1].m128_f32[0] = 0;
+	TrackPoint[2].m128_f32[0] = +1.2;
+
 
 	enemyPos[3].m128_f32[0] = -100;
 	enemyPos[3].m128_f32[1] = -100;
@@ -91,6 +102,7 @@ void middle::Initialize()
 
 	for (int i = 0; i < MAXENEMY; i++) {
 		rob[i]->SetPosition({ enemyPos[i] });
+		rob[i]->SetTrackPoint(TrackPoint[i]);
 	}
 }
 //

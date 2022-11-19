@@ -18,16 +18,21 @@ void Body::SetPRS(const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull)
 	BullScl = bull->GetScl();
 	Hit = bull->GetTrigger();
 
+
 	BodyPos = allPos;
 	BodyRot = rotation;
 
 	body->SetPosition(BodyPos);
 	body->SetRotation(BodyRot);
 	body->SetScale(BodyScl);
+	BodyMat=body->GetMatrix();
 }
 
 void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
 {
+	
+	BodyPos = XMVector3Transform(BodyPos, BodyMat);
+
 	Hit = bull->GetTrigger();
 	if (arive == true) {
 
@@ -39,7 +44,7 @@ void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, B
 		SetPRS(allPos ,rotation,bull);
 
 		if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)&&Hit==true) {
-			Hp -= 20;
+ 			Hp -= 20;
 			Hit = false;
 			bull->SetTrigger(Hit);
 			HItColor = { 1,0,0,1 };

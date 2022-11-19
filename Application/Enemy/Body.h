@@ -38,6 +38,9 @@ private:
 	XMFLOAT3 BullScl = { 0.0f,0.0f,0.0f };
 	XMFLOAT4 HItColor = { 1,1,1,1 };
 
+
+	XMMATRIX BodyMat;
+	XMMATRIX otherMat;
 	bool Hit = false;
 };
 
