@@ -99,9 +99,9 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 			}
 		}*/
 	}
-	//if (Input::GetInstance()->TriggerKey(DIK_O)) {
-	//	Hp = 0;
-	//}
+	if (Input::GetInstance()->TriggerKey(DIK_O)) {
+		Hp = 0;
+	}
 	//¶‚«‚Ä‚¢‚é‚Æ‚«‚ÉHP‚ª0‚É‚È‚Á‚½‚ç
 	if (Hp <= 0) {
 		Hp = 1;
@@ -207,23 +207,23 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 		arive[i] = true;
 	}
 	if (patern == 1) {
-		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
+		//TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
 	}
 	else if (patern == 2) {
-		TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
-		TrackPoint.m128_f32[0] = playerPos.m128_f32[0] - 5;
+	//	TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
+	//	TrackPoint.m128_f32[0] = playerPos.m128_f32[0] - 5;
 	}
 	else if (patern == 3) {
-		TrackPoint.m128_f32[0] = playerPos.m128_f32[0]-5;
-		TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
+		//TrackPoint.m128_f32[0] = playerPos.m128_f32[0]-5;
+		//TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
 	}
 	else if (patern == 4) {
-		TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
-		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] - 5;
+		//TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
+		//TrackPoint.m128_f32[2] = playerPos.m128_f32[2] - 5;
 	}
 	else if (patern == 5) {
-		TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
-		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
+		//TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
+		//TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
 	}
 	/*else if (patern == 6) {
 		TrackPoint.m128_f32[0] = playerPos.m128_f32[0];

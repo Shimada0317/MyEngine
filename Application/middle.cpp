@@ -42,9 +42,9 @@ void middle::Initialize()
 		//allpos[i] = { 0.0f + i * 1.0f,0.0f,10.0f };
 		all[i] = true;
 		TrackPoint[i] = playerPos;
-	
+
 	}
-	
+
 
 
 	////スプライトの読み込み
@@ -81,8 +81,8 @@ void middle::Initialize()
 	enemyPos[2].m128_f32[1] = 0;
 
 	enemyPos[0].m128_f32[2] = 10;
-	enemyPos[1].m128_f32[2] = 7;
-	enemyPos[2].m128_f32[2] = 3;
+	enemyPos[1].m128_f32[2] = 10;
+	enemyPos[2].m128_f32[2] = 10;
 
 	TrackPoint[0].m128_f32[0] = -1.2;
 	TrackPoint[1].m128_f32[0] = 0;
@@ -139,6 +139,7 @@ void middle::SetPSR()
 	HpBer->SetSize({ 128,64 });
 	HpBer->SetPosition({ 1070,650 });
 	player->SetHp(playerHp);
+	playerPos = player->GetPosition();
 
 	for (int i = 0; i < MAXENEMY; i++) {
 		rob[i]->SetRotation({ enemyRot[i] });
@@ -186,7 +187,7 @@ void middle::Updata()
 	//座標の設定
 	SetPSR();
 
-	Enemy2Enemy();
+	//Enemy2Enemy();
 
 
 	if (spown == true) {
@@ -313,9 +314,20 @@ void middle::SetEnemyPos()
 		enemyPos[1].m128_f32[1] = 0;
 		enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 55;
-		enemyPos[1].m128_f32[2] = 55;
-		enemyPos[2].m128_f32[2] = 55;
+		enemyPos[0].m128_f32[2] = 50;
+		enemyPos[1].m128_f32[2] = 50;
+		enemyPos[2].m128_f32[2] = 50;
+
+		for (int i = 0; i < MAXENEMY; i++) {
+			//TrackPoint[i] = playerPos;
+			TrackPoint[i].m128_f32[0] = 0;
+			TrackPoint[i].m128_f32[1] = 0;
+			TrackPoint[i].m128_f32[2] = 40;
+			TrackPoint[0].m128_f32[0] = -1.2;
+			TrackPoint[1].m128_f32[0] = 0;
+			TrackPoint[2].m128_f32[0] = +1.2;
+		}
+
 
 		all[3] = false;
 		all[4] = false;
@@ -330,14 +342,24 @@ void middle::SetEnemyPos()
 		enemyPos[1].m128_f32[1] = 0;
 		enemyPos[2].m128_f32[1] = 0;
 
-		enemyPos[0].m128_f32[2] = 35;
-		enemyPos[1].m128_f32[2] = 40;
-		enemyPos[2].m128_f32[2] = 45;
-
+		enemyPos[0].m128_f32[2] = 34;
+		enemyPos[1].m128_f32[2] = 39;
+		enemyPos[2].m128_f32[2] = 44;
 
 		enemyRot[0].y = 90;
 		enemyRot[1].y = 90;
 		enemyRot[2].y = 90;
+
+		for (int i = 0; i < MAXENEMY; i++) {
+			//TrackPoint[i] = playerPos;
+			TrackPoint[i].m128_f32[0] = 30;
+			TrackPoint[i].m128_f32[1] = 0;
+			TrackPoint[i].m128_f32[2] = 39;
+
+			TrackPoint[0].m128_f32[2] = 38;
+			TrackPoint[1].m128_f32[2] = 39.5f;
+			TrackPoint[2].m128_f32[2] = 41;
+		}
 
 		all[3] = false;
 		all[4] = false;
@@ -361,16 +383,28 @@ void middle::SetEnemyPos()
 		enemyRot[1].y = 90;
 		enemyRot[2].y = 90;
 
+		for (int i = 0; i < MAXENEMY; i++) {
+			//TrackPoint[i] = playerPos;
+			TrackPoint[i].m128_f32[0] = 45;
+			TrackPoint[i].m128_f32[1] = 0;
+			TrackPoint[i].m128_f32[2] = 39;
+
+			TrackPoint[0].m128_f32[2] = 38;
+			TrackPoint[1].m128_f32[2] = 39.5f;
+			TrackPoint[2].m128_f32[2] = 41;
+		}
+
+
 		all[3] = false;
 		all[4] = false;
 	}
 
 	else if (patern == 4) {
 		enemyPos[0].m128_f32[0] = 41;
-		enemyPos[1].m128_f32[0] = 46;
-		enemyPos[2].m128_f32[0] = 51;
-		enemyPos[3].m128_f32[0] = 56;
-		enemyPos[4].m128_f32[0] = 61;
+		enemyPos[1].m128_f32[0] = 44;
+		enemyPos[2].m128_f32[0] = 46;
+		enemyPos[3].m128_f32[0] = 48;
+		enemyPos[4].m128_f32[0] = 51;
 
 		enemyPos[0].m128_f32[1] = 0;
 		enemyPos[1].m128_f32[1] = 0;
@@ -380,9 +414,9 @@ void middle::SetEnemyPos()
 
 
 		enemyPos[0].m128_f32[2] = 85;
-		enemyPos[1].m128_f32[2] = 85;
+		enemyPos[1].m128_f32[2] = 90;
 		enemyPos[2].m128_f32[2] = 85;
-		enemyPos[3].m128_f32[2] = 85;
+		enemyPos[3].m128_f32[2] = 90;
 		enemyPos[4].m128_f32[2] = 85;
 
 		enemyRot[0].y = 0;
@@ -390,6 +424,24 @@ void middle::SetEnemyPos()
 		enemyRot[2].y = 0;
 		enemyRot[3].y = 0;
 		enemyRot[4].y = 0;
+
+		for (int i = 0; i < MAXENEMY; i++) {
+			//TrackPoint[i] = playerPos;
+			TrackPoint[i].m128_f32[0] = 44;
+			TrackPoint[i].m128_f32[1] = 0;
+			TrackPoint[i].m128_f32[2] = 70;
+
+			TrackPoint[0].m128_f32[0] = 40;
+			TrackPoint[1].m128_f32[0] = 42;
+			TrackPoint[2].m128_f32[0] = 44;
+			TrackPoint[3].m128_f32[0] = 46;
+			TrackPoint[4].m128_f32[0] = 48;
+
+		}
+	}
+
+	for (int i = 0; i < MAXENEMY; i++) {
+		rob[i]->SetTrackPoint(TrackPoint[i]);
 	}
 
 	//else if (patern == 5)

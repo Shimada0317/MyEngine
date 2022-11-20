@@ -34,7 +34,7 @@ void WinApp::Initialize()
 	//WNDCLASSEX w{};
 	w.cbSize = sizeof(WNDCLASSEX);
 	w.lpfnWndProc = (WNDPROC)WidowProck;//ウィンドウプロシージャを設定
-	w.lpszClassName = L"DirectXGame";//ウィンドウクラス名
+	w.lpszClassName = L"ROBSHOOTING";//ウィンドウクラス名
 	w.hInstance = GetModuleHandle(nullptr);//ウィンドウハンドル
 	w.hCursor = LoadCursor(NULL, IDC_ARROW);//カーソル指定
 
