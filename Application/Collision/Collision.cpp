@@ -175,7 +175,7 @@ bool Collision::CheckRay2Triangle(const Ray& ray, const Triangle& trieangle, flo
 }
 
 
-void Collision::CheckPlayer2Enemy(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Enemyposition, XMFLOAT3 Enemyscale,int PlayerHp,int PlayerLevel)
+void Collision::CheckPlayer2Enemy(XMFLOAT3 Playerposition, XMFLOAT3 Playerscale, XMFLOAT3 Enemyposition, XMFLOAT3 Enemyscale, int PlayerHp, int PlayerLevel)
 {
 	/*const int attack = 5;
 	if (Player2Other(Playerposition, Playerscale, Enemyposition, Enemyscale) == true) {
@@ -199,7 +199,7 @@ bool Collision::Player2Other(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVE
 	float z = Playerposition.m128_f32[2] - Otherposition.m128_f32[2];
 
 	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
-	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z)/4;
+	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z) / 4;
 
 	float length = sqrt(x * x + y * y + z * z);
 
@@ -235,54 +235,49 @@ bool Collision::HeadShot(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVECTOR
 bool Collision::BodyHit(XMVECTOR bodyPos, XMFLOAT3 bodyScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl)
 {
 
-	float mbx = bodyPos.m128_f32[0] - bodyScl.x/3;
-	float pbx = bodyPos.m128_f32[0] + bodyScl.x/3;
+	float mbx = bodyPos.m128_f32[0] - bodyScl.x;
+	float pbx = bodyPos.m128_f32[0] + bodyScl.x;
 	float mby = bodyPos.m128_f32[1] - bodyScl.y;
 	float pby = bodyPos.m128_f32[1] + bodyScl.y;
 	float mbz = bodyPos.m128_f32[2] - bodyScl.z;
 	float pbz = bodyPos.m128_f32[2] + bodyScl.z;
 
-	float mpx = PlayerPos.m128_f32[0] - playerScl.x/2;
-	float ppx = PlayerPos.m128_f32[0] + playerScl.x/2;
-	float mpy = PlayerPos.m128_f32[1] - playerScl.y/2;
-	float ppy = PlayerPos.m128_f32[1] + playerScl.y/2;
-	float mpz = PlayerPos.m128_f32[2] - playerScl.z/2;
-	float ppz = PlayerPos.m128_f32[2] + playerScl.z/2;
+	float mpx = PlayerPos.m128_f32[0] - playerScl.x / 2;
+	float ppx = PlayerPos.m128_f32[0] + playerScl.x / 2;
+	float mpy = PlayerPos.m128_f32[1] - playerScl.y / 2;
+	float ppy = PlayerPos.m128_f32[1] + playerScl.y / 2;
+	float mpz = PlayerPos.m128_f32[2] - playerScl.z / 2;
+	float ppz = PlayerPos.m128_f32[2] + playerScl.z / 2;
 
 	/*if ((mbx <= ppx && mpx >= pbx || mby <= ppy && mby >= ppy) && mbz <= ppz) {
 		return true;
 	}*/
 
-	if (mbx <= ppx && mpx <= pbx ) {
+	if ((mbx <= ppx && mpx <= pbx) && (mby <= ppy && mpy <= pby) && (mbz <= ppz && mpz <= pbz)) {
 		return true;
 	}
-	else if (mby <= ppy && mpy <= pby) {
-		return true;
-	}
-	else if (mbz <= ppz && mpz <= pbz) {
-		return true;
-	}
+
 
 	return false;
 }
 
 bool Collision::HeadHit(XMVECTOR headPos, XMFLOAT3 headScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl)
 {
-	float mbx = headPos.m128_f32[0] - headScl.x ;
-	float pbx = headPos.m128_f32[0] + headScl.x ;
-	float mby = headPos.m128_f32[1] - headScl.y ;
-	float pby = headPos.m128_f32[1] + headScl.y ;
-	float mbz = headPos.m128_f32[2] - headScl.z*3;
-	float pbz = headPos.m128_f32[2] + headScl.z*3;
+	float mbx = headPos.m128_f32[0] - headScl.x;
+	float pbx = headPos.m128_f32[0] + headScl.x;
+	float mby = headPos.m128_f32[1] - headScl.y;
+	float pby = headPos.m128_f32[1] + headScl.y;
+	float mbz = headPos.m128_f32[2] - headScl.z;
+	float pbz = headPos.m128_f32[2] + headScl.z;
 
-	float mpx = PlayerPos.m128_f32[0] - playerScl.x / 4;
-	float ppx = PlayerPos.m128_f32[0] + playerScl.x / 4;
-	float mpy = PlayerPos.m128_f32[1] - playerScl.y / 4;
-	float ppy = PlayerPos.m128_f32[1] + playerScl.y / 4;
-	float mpz = PlayerPos.m128_f32[2] - playerScl.z/4;
-	float ppz = PlayerPos.m128_f32[2] + playerScl.z/4;
+	float mpx = PlayerPos.m128_f32[0] - playerScl.x / 2;
+	float ppx = PlayerPos.m128_f32[0] + playerScl.x / 2;
+	float mpy = PlayerPos.m128_f32[1] - playerScl.y / 2;
+	float ppy = PlayerPos.m128_f32[1] + playerScl.y / 2;
+	float mpz = PlayerPos.m128_f32[2] - playerScl.z / 2;
+	float ppz = PlayerPos.m128_f32[2] + playerScl.z / 2;
 
-	if ((mbx <= ppx && mpx <= pbx && mby <= ppy && mpy <= pby) && (mbz <= ppz&&mpz<=pbz)) {
+	if ((mbx <= ppx && mpx <= pbx && mby <= ppy && mpy <= pby) && (mbz <= ppz && mpz <= pbz)) {
 		return true;
 	}
 
@@ -291,8 +286,8 @@ bool Collision::HeadHit(XMVECTOR headPos, XMFLOAT3 headScl, XMVECTOR PlayerPos, 
 
 bool Collision::ArmHit(XMVECTOR armPos, XMFLOAT3 armScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl)
 {
-	float max = armPos.m128_f32[0] - armScl.x/4;
-	float pax = armPos.m128_f32[0] + armScl.x/4;
+	float max = armPos.m128_f32[0] - armScl.x / 4;
+	float pax = armPos.m128_f32[0] + armScl.x / 4;
 	float may = armPos.m128_f32[1] - armScl.y;
 	float pay = armPos.m128_f32[1] + armScl.y;
 	float maz = armPos.m128_f32[2] - armScl.z;

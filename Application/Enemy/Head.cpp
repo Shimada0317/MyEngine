@@ -33,7 +33,7 @@ void Head::Updata(bool& arive,const XMVECTOR& bodyPos, const XMFLOAT3 rotation, 
 		//SetPRS(bodyPos);
 		SetPRS(bodyPos,rotation, bull);
 
-		/*if (Collision::HeadHit(HeadPos, HeadScl, bullPos, bullScl)) {
+		if (Collision::HeadHit(HeadPos, HeadScl, bullPos, bullScl)) {
 			Hp -= 50;
 			XMVECTOR pos = { 0.0f,1000.0f,0.0f };
 			Hit = false;
@@ -43,7 +43,7 @@ void Head::Updata(bool& arive,const XMVECTOR& bodyPos, const XMFLOAT3 rotation, 
 		}
 		else {
 			HitColor = { 1,1,1,1 };
-		}*/
+		}
 	}
 	else {
 		HitColor.w -= 0.01f;

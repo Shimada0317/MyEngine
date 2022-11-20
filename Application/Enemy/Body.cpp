@@ -22,16 +22,16 @@ void Body::SetPRS(const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull)
 	BodyPos = allPos;
 	BodyRot = rotation;
 
-
 	body->SetPosition(BodyPos);
 	body->SetRotation(BodyRot);
 	body->SetScale(BodyScl);
-	BodyMat=body->GetMatrix();
+	
 }
 
 void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
 {
-	
+	BodyMat = body->GetMatrix();
+	BodyPos = XMVector3Transform(BodyPos, BodyMat);
 	
 
 	Hit = bull->GetTrigger();
