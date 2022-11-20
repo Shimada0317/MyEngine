@@ -59,7 +59,6 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 
 		});
 
-
 	playerPos = { 0.0f,0.0f,0.0f };
 	playerPos = XMVector3Transform(playerPos, player);
 
@@ -120,7 +119,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 void Robot::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	head->Draw(arive[0]);
+//	head->Draw(arive[0]);
 	/*RArm->Draw(arive[1]);
 	LArm->Draw(arive[2]);*/
 	Arms->Draw(arive[1]);

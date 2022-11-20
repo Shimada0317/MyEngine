@@ -253,7 +253,13 @@ bool Collision::BodyHit(XMVECTOR bodyPos, XMFLOAT3 bodyScl, XMVECTOR PlayerPos, 
 		return true;
 	}*/
 
-	if ((mbx <= ppx && mpx <= pbx && mby <= ppy && mpy<=pby) && (mbz <= ppz&&mpz<=pbz)) {
+	if (mbx <= ppx && mpx <= pbx ) {
+		return true;
+	}
+	else if (mby <= ppy && mpy <= pby) {
+		return true;
+	}
+	else if (mbz <= ppz && mpz <= pbz) {
 		return true;
 	}
 

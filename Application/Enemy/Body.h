@@ -26,6 +26,8 @@ public:
 	void Draw(bool arive);
 
 	void Finalize();
+
+	const XMVECTOR& GetPos() { return BodyPos; }
 private:
 	std::unique_ptr<Object3d> body;
 	ObjModel* bodyModel = nullptr;
