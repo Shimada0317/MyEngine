@@ -149,10 +149,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 		vel = { 0, 0, kBulletSpeed };
 		Eye_rot.x = 0;
 	}
-	/*if (Input::GetInstance()->PushKey(DIK_O)) {
-		kBulletSpeed = 1.1f;
-		vel = { 0, 0, kBulletSpeed };
-	}*/
+
 
 	vel = XMVector3TransformNormal(vel, mat);
 

@@ -71,24 +71,30 @@ void BothArms::RespownSet(const XMFLOAT3& rot)
 	RArm->SetRotation(ArmRot);
 }
 
-void BothArms::Attack(float& attackT,bool& AttackFase,int& playerHp)
+void BothArms::Attack(float& attackT,bool& AttackFase,int& playerHp, const bool& arive)
 {
-
-	if (attackT >= 10 && attack == false) {
-		ArmRot.x += 0.05f;
-		//attackT = 0.0f;
-		if (ArmRot.x >= 40.0f) {
-			attack = true;
+	if (arive == true) {
+		if (attackT >= 10 && attack == false) {
+			ArmRot.x += 0.05f;
+			//attackT = 0.0f;
+			if (ArmRot.x >= 40.0f) {
+				attack = true;
+			}
+		}
+		if (attack == true) {
+			ArmRot.x -= 1.0f;
+			if (ArmRot.x <= 0.0f) {
+				ArmRot.x = 0.0f;
+				attack = false;
+				AttackFase = false;
+				attackT = 0;
+				playerHp -= 1;
+			}
 		}
 	}
-	if (attack == true) {
-		ArmRot.x -= 1.0f;
-		if (ArmRot.x <= 0.0f) {
-			ArmRot.x = 0.0f;
-			attack = false;
-			AttackFase = false;
-			attackT = 0;
-			playerHp -= 1;
-		}
+
+	else {
+		attack = false;
+		ArmRot.x = 0.0f;
 	}
 }

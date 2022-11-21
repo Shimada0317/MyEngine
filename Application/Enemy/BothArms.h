@@ -27,7 +27,7 @@ public:
 
 	void RespownSet(const XMFLOAT3& rot);
 
-	void Attack(float& attackT,bool& AttackFase,int& playerHp);
+	void Attack(float& attackT,bool& AttackFase,int& playerHp,const bool& arive);
 private:
 	std::unique_ptr<Object3d> LArm;
 	std::unique_ptr<Object3d> RArm;

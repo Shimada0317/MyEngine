@@ -334,23 +334,25 @@ void middle::SetEnemyPos()
 	}
 
 	else if (patern == 2) {
-		enemyPos[0].m128_f32[0] = 45;
+		enemyPos[0].m128_f32[0] = 43;
 		enemyPos[1].m128_f32[0] = 45;
-		enemyPos[2].m128_f32[0] = 45;
+		enemyPos[2].m128_f32[0] = 42;
+		enemyPos[3].m128_f32[0] = 38;
 
 		enemyPos[0].m128_f32[1] = 0;
 		enemyPos[1].m128_f32[1] = 0;
 		enemyPos[2].m128_f32[1] = 0;
+		enemyPos[3].m128_f32[1] = 0;
 
 		enemyPos[0].m128_f32[2] = 34;
 		enemyPos[1].m128_f32[2] = 39;
 		enemyPos[2].m128_f32[2] = 44;
+		enemyPos[3].m128_f32[2] = 47;
 
-		enemyRot[0].y = 90;
-		enemyRot[1].y = 90;
-		enemyRot[2].y = 90;
+		
 
 		for (int i = 0; i < MAXENEMY; i++) {
+			enemyRot[i].y = 90;
 			//TrackPoint[i] = playerPos;
 			TrackPoint[i].m128_f32[0] = 30;
 			TrackPoint[i].m128_f32[1] = 0;
@@ -359,9 +361,9 @@ void middle::SetEnemyPos()
 			TrackPoint[0].m128_f32[2] = 38;
 			TrackPoint[1].m128_f32[2] = 39.5f;
 			TrackPoint[2].m128_f32[2] = 41;
+			TrackPoint[3].m128_f32[2] = 43.5f;
 		}
 
-		all[3] = false;
 		all[4] = false;
 	}
 

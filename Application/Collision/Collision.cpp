@@ -263,10 +263,10 @@ bool Collision::BodyHit(XMVECTOR bodyPos, XMFLOAT3 bodyScl, XMVECTOR PlayerPos, 
 
 bool Collision::HeadHit(XMVECTOR headPos, XMFLOAT3 headScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl)
 {
-	float mbx = headPos.m128_f32[0] - headScl.x;
-	float pbx = headPos.m128_f32[0] + headScl.x;
+	float mbx = headPos.m128_f32[0] - headScl.x*1.5f;
+	float pbx = headPos.m128_f32[0] + headScl.x*1.5f;
 	float mby = headPos.m128_f32[1] - headScl.y;
-	float pby = headPos.m128_f32[1] + headScl.y;
+	float pby = headPos.m128_f32[1] + headScl.y*1.2f;
 	float mbz = headPos.m128_f32[2] - headScl.z;
 	float pbz = headPos.m128_f32[2] + headScl.z;
 

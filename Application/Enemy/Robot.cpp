@@ -30,7 +30,7 @@ void Robot::Initialize()
 	OldHp = Hp;
 	dice = true;
 	TrackPoint.m128_f32[2] = 3;
-	
+
 }
 
 void Robot::SetPRS(const XMMATRIX& player)
@@ -64,7 +64,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	playerPos = XMVector3Transform(playerPos, player);
 
 	//ダメージを受けたとき
-	if (OldHp> Hp) {
+	if (OldHp > Hp) {
 		//part->Effect();
 		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 		newparticle->Initialize();
@@ -75,10 +75,9 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	//生きているとき
 	if (all == true && Hp > 0) {
 		TrackPlayer();
-		//プレイヤーの前まで来たとき
-		/*if ((allPos.m128_f32[0] <= playerPos.m128_f32[0] + 4.0f && allPos.m128_f32[0] >= playerPos.m128_f32[0] - 4.0f)
-			&& (allPos.m128_f32[1] <= playerPos.m128_f32[1] + 4.0f && allPos.m128_f32[1] >= playerPos.m128_f32[1] - 4.0f)
-			&& (allPos.m128_f32[2] <= playerPos.m128_f32[2] + 4.0f && allPos.m128_f32[2] >= playerPos.m128_f32[2] - 4.0f)) {
+
+		if (l <= 2) {
+			//プレイヤーの前まで来たとき
 			speed = 0;
 			if (AttackFase != true) {
 				AttackTime += 0.01f;
@@ -88,16 +87,21 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 					AttackTime = 0;
 					rad = 0;
 				}
-				if (AttackChanse >= 6) {
+				if (AttackChanse >= 2) {
 					AttackFase = true;
 					AttackChanse = 0;
 				}
 			}
 			if (AttackFase == true) {
 				attackT += 0.1f;
-				Arms->Attack(attackT, AttackFase, playerHp);
+				Arms->Attack(attackT, AttackFase, playerHp,all);
 			}
-		}*/
+
+		}
+	}
+	else {
+		AttackFase = false;
+		TrackPoint.m128_f32[1] = 100;
 	}
 	if (Input::GetInstance()->TriggerKey(DIK_O)) {
 		Hp = 0;
@@ -105,9 +109,11 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	//生きているときにHPが0になったら
 	if (Hp <= 0) {
 		Hp = 1;
+
 		all = false;
 		AttackTime = 0;
 		AttackChanse = 0;
+		rad = 0;
 		for (int i = 0; i < 3; i++) {
 			arive[i] = false;
 		}
@@ -141,6 +147,7 @@ void Robot::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Enemy");
+	ImGui::Checkbox("Att", &AttackFase);
 	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
 	ImGui::SliderFloat("len", &l, -100.0f, 100.0f);
 	ImGui::SliderFloat("PosX", &allPos.m128_f32[0], -100.0f, 100.0f);
@@ -176,9 +183,6 @@ void Robot::TrackPlayer()
 	float v2y = pow(vy, 2);
 	float v2z = pow(vz, 2);
 	l = sqrtf(v2x + v2y + v2z);
-	if (l <= 2) {
-		speed = 0;
-	}
 
 	float v3x = (vx / l) * speed;
 	float v3y = (vy / l) * speed;
@@ -210,8 +214,8 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 		//TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
 	}
 	else if (patern == 2) {
-	//	TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
-	//	TrackPoint.m128_f32[0] = playerPos.m128_f32[0] - 5;
+		//	TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
+		//	TrackPoint.m128_f32[0] = playerPos.m128_f32[0] - 5;
 	}
 	else if (patern == 3) {
 		//TrackPoint.m128_f32[0] = playerPos.m128_f32[0]-5;
