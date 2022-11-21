@@ -81,13 +81,13 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 			speed = 0;
 			if (AttackFase != true) {
 				AttackTime += 0.01f;
-				if (AttackTime >= 20) {
+				if (AttackTime >= 12) {
 					rad = (rand() % 10);
 					AttackChanse = rad;
 					AttackTime = 0;
 					rad = 0;
 				}
-				if (AttackChanse >= 2) {
+				if (AttackChanse >= 1) {
 					AttackFase = true;
 					AttackChanse = 0;
 				}
@@ -212,6 +212,6 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 	}
 
 	Arms->RespownSet(allRot);
-	speed = 0.0035f;
+	speed = 0.005f;
 	dice = false;
 }
