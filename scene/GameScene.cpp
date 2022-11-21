@@ -51,10 +51,11 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	patern = mid->GetPatern();
 
 	playerHp = mid->GetHp();
+	oldHp = playerHp;
 
 	postEffect = new PostEffect();
 	postEffect->Initialize();
-
+	
 	clearT = 0;
 }
 
@@ -70,6 +71,7 @@ void GameScene::SetPosSclRot()
 
 	patern = mid->GetPatern();
 	playerHp = mid->GetHp();
+	
 };
 
 void GameScene::AllUpdata()
@@ -82,6 +84,24 @@ void GameScene::AllUpdata()
 
 void GameScene::Updata()
 {
+	if (oldHp > playerHp) {
+		post = true;
+		oldHp = playerHp;
+	}
+	if (post == true) {
+		col.x=0.7f;
+		if (col.x >= 0.5f) {
+			post = false;
+		}
+	}
+	if (post == false) {
+		col.x -= 0.1f;
+		if (col.x <= 0) {
+			col.x = 0;
+		}
+	}
+
+
 	if (playerHp<=0) {
 		BaseScene* scene_ = new GameOverScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
@@ -98,6 +118,7 @@ void GameScene::Updata()
 	}
 
 	SetPosSclRot();
+	postEffect->Update(col);
 	AllUpdata();
 }
 

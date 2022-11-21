@@ -104,7 +104,7 @@ void middle::Initialize()
 		all[i] = false;
 	}
 }
-//
+
 void middle::SetPSR()
 {
 

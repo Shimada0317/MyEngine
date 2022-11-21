@@ -376,7 +376,7 @@ void PostEffect::Initialize()
 	CreatePipeline();
 }
 
-void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
+void PostEffect::Update(const XMFLOAT4& col)
 {
 	this->matWorld = XMMatrixIdentity();
 	this->matWorld *= XMMatrixRotationZ(XMConvertToRadians(rotation));
@@ -386,11 +386,15 @@ void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
 	HRESULT result = this->constBuff->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result))
 	{
-		constMap->color = this->color;
+		constMap->color = col;
 		constMap->mat = XMMatrixIdentity();
 		this->constBuff->Unmap(0, nullptr);
 	}
+}
 
+void PostEffect::Draw(ID3D12GraphicsCommandList* cmdList)
+{
+	
 	//パイプラインステートの設定
 	cmdList->SetPipelineState(pipelineState.Get());
 

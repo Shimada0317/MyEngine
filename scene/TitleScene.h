@@ -60,5 +60,7 @@ private:
 	POINT pos;
 
 	int timer = 0;
+
+	XMFLOAT4 col = { 0.0f,1.0f,1.0f,1.0f };
 };
 

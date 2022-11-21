@@ -107,7 +107,11 @@ private:
 
 	int patern = 0;
 	int playerHp;
+	int oldHp;
+	bool post = false;
 
 	float clearT = 0;
+
+	XMFLOAT4 col = { 0.0f,1.0f,1.0f,1.0f };
 };
 

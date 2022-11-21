@@ -103,10 +103,6 @@ private:
 	float mouseX = 0;
 	float mouseY = 0;
 	//“G‚Ì•Ï”
-	float moveSpeed = 0.1f;
-	bool shot [9];
-	int debug[9];
-	float speed[9];
 	int next = 0;
 	bool retime[9];
 	bool reshot = false;

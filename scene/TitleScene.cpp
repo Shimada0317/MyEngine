@@ -47,6 +47,7 @@ void TitleScene::Updata()
 		}
 	}
 	SetPosSclRot();
+	post->Update(col);
 }
 
 void TitleScene::Draw(DirectXCommon* dxCommon)

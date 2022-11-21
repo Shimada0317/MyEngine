@@ -19,6 +19,12 @@ private: // エイリアス
     using XMMATRIX = DirectX::XMMATRIX;
 
 public:
+    struct  ConstD
+    {
+        XMFLOAT4 col;//色
+    };
+
+public:
     ///<summary>
     ///コンストラクタ
     ///</summary>
@@ -50,6 +56,8 @@ public:
     ///</summary>
     void Initialize();
 
+    void Update(const XMFLOAT4& col);
+
     ///<summary>
     ///描画
     ///</summary>
@@ -67,6 +75,10 @@ public:
    ///</summary>
    ///<param name="cmdList">コマンドリスト</param>
    void PostDrawScene(ID3D12GraphicsCommandList* cmdList);
+
+   void SetCol(const XMFLOAT4& col) { this->color = col; }
+
+   
 
 private:
     //テクスチャバッファ
@@ -87,6 +99,8 @@ private:
 private://静的メンバ変数
     //画面クリアカラー
     static const float clearColor[4];
+
+    XMFLOAT4 color={0.0f,1.0f,1.0f,1.0f};
 
 };
 
