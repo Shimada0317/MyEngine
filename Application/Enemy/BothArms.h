@@ -42,6 +42,8 @@ private:
 	XMFLOAT3 bullScl = { 0.0f,0.0f,0.0f };
 	XMFLOAT4 Color = { 1.0f,1.0f,1.0f,1.0f };
 
+
+
 	bool attack = false;
 	int HitCount = 0;
 	bool Hit = false;

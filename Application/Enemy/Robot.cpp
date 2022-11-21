@@ -94,6 +94,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 			}
 			if (AttackFase == true) {
 				attackT += 0.1f;
+
 				Arms->Attack(attackT, AttackFase, playerHp,all);
 			}
 
@@ -103,6 +104,8 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 		AttackFase = false;
 		TrackPoint.m128_f32[1] = 100;
 	}
+
+	
 	
 	//¶‚«‚Ä‚¢‚é‚Æ‚«‚ÉHP‚ª0‚É‚È‚Á‚½‚ç
 	if (Hp <= 0) {

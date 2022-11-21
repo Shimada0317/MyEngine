@@ -79,6 +79,7 @@ private:
 	float AttackChanse = 0;
 	float rad = 0;
 	bool AttackFase = false;
+	bool shake = false;
 	float AttackTime = 0;
 	float speed = 0.005f;
 
