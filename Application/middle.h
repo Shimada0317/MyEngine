@@ -132,7 +132,7 @@ private:
 	bool stop[MAXENEMY];
 
 	float hit = 0;
-	int patern = 0;
+	int patern = -1;
 	int oldpatern = 0;
 	float cammove = 0.1f;
 	bool count = false;
@@ -177,7 +177,7 @@ private:
 	bool waveCount = false;
 	bool move = false;
 	bool oldmove = false;
-	bool spown = true;
+	bool spown = false;
 
 	XMMATRIX playerMat;
 	int rad;

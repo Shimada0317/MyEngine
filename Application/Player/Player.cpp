@@ -88,8 +88,6 @@ void Player::Effect()
 
 void Player::Updata(Bullet* bull[], int& Remaining)
 {
-	oldPos = position;
-
 
 	//’e‚Ì”­ŽË‘O
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
@@ -210,7 +208,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				shake = 0;
 			}
 		}
-		/*if (patern == 1) {
+		if (patern == 0) {
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] >= 20) {
 				move = false;
@@ -219,8 +217,8 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				movetimer = 0.0f;
 				spown = true;
 			}
-		}*/
-		if (patern == 1) {
+		}
+		else if (patern == 1) {
 			vel = { 0, 0, kBulletSpeed };
 			if (playerWorldPos.m128_f32[2] >= 40) {
 				move = false;

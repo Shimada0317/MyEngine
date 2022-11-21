@@ -100,7 +100,7 @@ void Bullet::debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed, bool& d)
 void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos,const XMFLOAT3& Eye_Rot)
 {
 
-	const float kBullSpeed = 1.0f;
+	const float kBullSpeed = 0.7f;
 	if (Trigger == false) {
 		ShotT = 0;
 		pos.m128_f32[0] = GWorldPos.m128_f32[0];

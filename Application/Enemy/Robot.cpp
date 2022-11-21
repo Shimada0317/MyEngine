@@ -210,38 +210,8 @@ void Robot::SpownEnemy(const XMMATRIX& player, int patern)
 	for (int i = 0; i < 3; i++) {
 		arive[i] = true;
 	}
-	if (patern == 1) {
-		//TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
-	}
-	else if (patern == 2) {
-		//	TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
-		//	TrackPoint.m128_f32[0] = playerPos.m128_f32[0] - 5;
-	}
-	else if (patern == 3) {
-		//TrackPoint.m128_f32[0] = playerPos.m128_f32[0]-5;
-		//TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
-	}
-	else if (patern == 4) {
-		//TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
-		//TrackPoint.m128_f32[2] = playerPos.m128_f32[2] - 5;
-	}
-	else if (patern == 5) {
-		//TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
-		//TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
-	}
-	/*else if (patern == 6) {
-		TrackPoint.m128_f32[0] = playerPos.m128_f32[0];
-		TrackPoint.m128_f32[2] = playerPos.m128_f32[2] + 5;
-	}
-	else if (patern == 7) {
-		TrackPoint.m128_f32[0] = playerPos.m128_f32[0] + 5;
-		TrackPoint.m128_f32[2] = playerPos.m128_f32[2];
-	}
-	else if (patern == 8) {
-
-	}*/
 
 	Arms->RespownSet(allRot);
-	speed = 0.0025f;
+	speed = 0.0035f;
 	dice = false;
 }

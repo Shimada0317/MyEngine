@@ -45,11 +45,8 @@ void middle::Initialize()
 
 	}
 
-
-
 	////スプライトの読み込み
 	for (int i = 0; i < 9; i++) {
-
 		Sprite::LoadTexture(i, L"Resources/bullet.png");
 		bulletHUD[i] = Sprite::SpriteCreate(i, { 10.0f,10.0f });
 	}
@@ -101,8 +98,10 @@ void middle::Initialize()
 	all[4] = false;
 
 	for (int i = 0; i < MAXENEMY; i++) {
+		enemyPos[i].m128_f32[2] = -100;
 		rob[i]->SetPosition({ enemyPos[i] });
 		rob[i]->SetTrackPoint(TrackPoint[i]);
+		all[i] = false;
 	}
 }
 //
@@ -141,42 +140,21 @@ void middle::SetPSR()
 	player->SetHp(playerHp);
 	playerPos = player->GetPosition();
 
-	for (int i = 0; i < MAXENEMY; i++) {
+	for (int i = 0; i < MAXENEMY; i++) {   
 		rob[i]->SetRotation({ enemyRot[i] });
 	}
 }
-
-//void middle::AllUpdata()
-//{
-//	//プレイヤーの更新
-//	player->Updata(bull);
-//	rob->Updata(bull);
-//
-//	//敵の更新
-//	for (int i = 0; i < MAXENEMY; i++) {
-//
-//		enemy[i]->Updata(playerPos, patern, oldpatern, stop[i], playerPos, spown[i]);
-//		enemyPos[i] = enemy[i]->GetPosition();
-//		
-//	}
-//	//弾の更新
-//	for (int j = 0; j < 9; j++) {
-//		bull[j]->Updata();
-//	}
-//}
 
 void middle::Updata()
 {
 
 	SetPSR();
 
-
 	//敵をすべて倒した時に進む
 	if (all[0] == false && all[1] == false && all[2] == false && all[3] == false && all[4] == false) {
 		move = true;
 		patern += 1;
 	}
-
 
 	if (move == true) {
 		for (int i = 0; i < MAXENEMY; i++) {
@@ -187,11 +165,7 @@ void middle::Updata()
 	//座標の設定
 	SetPSR();
 
-	//Enemy2Enemy();
-
-
 	if (spown == true) {
-
 		SetEnemyPos();
 		for (int i = 0; i < MAXENEMY; i++) {
 			rob[i]->SetPosition({ enemyPos[i] });
@@ -201,7 +175,6 @@ void middle::Updata()
 				spown = false;
 			}
 		}
-
 	}
 
 	if (spown == false) {
@@ -287,11 +260,11 @@ void middle::SpriteDraw()
 //
 void middle::ImGuiDraw()
 {
-	player->ImGuiDraw();
+	/*player->ImGuiDraw();
 
 	rob[0]->ImgDraw();
 	rob[1]->ImgDraw();
-	rob[2]->ImgDraw();
+	rob[2]->ImgDraw();*/
 }
 
 void middle::Fainalize()
@@ -305,7 +278,35 @@ void middle::Fainalize()
 
 void middle::SetEnemyPos()
 {
-	if (patern == 1) {
+	if (patern == 0) {
+		enemyPos[0].m128_f32[0] = -5;
+		enemyPos[1].m128_f32[0] = 0;
+		enemyPos[2].m128_f32[0] = 5;
+
+		enemyPos[0].m128_f32[1] = 0;
+		enemyPos[1].m128_f32[1] = 0;
+		enemyPos[2].m128_f32[1] = 0;
+
+		enemyPos[0].m128_f32[2] = 30;
+		enemyPos[1].m128_f32[2] = 30;
+		enemyPos[2].m128_f32[2] = 30;
+
+		for (int i = 0; i < MAXENEMY; i++) {
+			//TrackPoint[i] = playerPos;
+			TrackPoint[i].m128_f32[0] = 0;
+			TrackPoint[i].m128_f32[1] = 0;
+			TrackPoint[i].m128_f32[2] = 20;
+			TrackPoint[0].m128_f32[0] = -1.2;
+			TrackPoint[1].m128_f32[0] = 0;
+			TrackPoint[2].m128_f32[0] = +1.2;
+		}
+
+
+		all[3] = false;
+		all[4] = false;
+	}
+
+	else if (patern == 1) {
 		enemyPos[0].m128_f32[0] = -5;
 		enemyPos[1].m128_f32[0] = 0;
 		enemyPos[2].m128_f32[0] = 5;
