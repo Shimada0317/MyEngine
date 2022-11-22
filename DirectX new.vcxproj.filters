@@ -236,9 +236,6 @@
     <None Include="Resources\shaders\Basic.hlsli" />
     <None Include="Resources\shaders\Sprite.hlsli" />
     <None Include="Resources\shaders\FBX.hlsli" />
-    <None Include="Resources\shaders\PostEffectTest.hlsli">
-      <Filter>リソース ファイル</Filter>
-    </None>
     <None Include="Resources\shaders\Particle.hlsli" />
     <None Include="Resources\shaders\Texture.hlsli" />
     <None Include="Resources\shaders\Obj.hlsli" />
@@ -248,6 +245,7 @@
       <Filter>ソース ファイル</Filter>
     </None>
     <None Include="Resources\shaders\toonL.hlsli" />
+    <None Include="Resources\shaders\PostEffectTest.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resources\shaders\BasicPS.hlsl" />
@@ -256,12 +254,6 @@
     <FxCompile Include="Resources\shaders\SpriteVS.hlsl" />
     <FxCompile Include="Resources\shaders\FBXPS.hlsl" />
     <FxCompile Include="Resources\shaders\FBXVS.hlsl" />
-    <FxCompile Include="Resources\shaders\PostEffectTestPS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl">
-      <Filter>リソース ファイル</Filter>
-    </FxCompile>
     <FxCompile Include="Resources\shaders\ParticleVS.hlsl" />
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl" />
     <FxCompile Include="Resources\shaders\ParticleGS.hlsl" />
@@ -276,6 +268,8 @@
     <FxCompile Include="Resources\shaders\LightPS.hlsl" />
     <FxCompile Include="Resources\shaders\toonPS.hlsl" />
     <FxCompile Include="Resources\shaders\toonVS.hlsl" />
+    <FxCompile Include="Resources\shaders\PostEffectTestPS.hlsl" />
+    <FxCompile Include="Resources\shaders\PostEffectTestVS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngine\Input.h">
