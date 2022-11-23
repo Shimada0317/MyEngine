@@ -44,7 +44,6 @@ void RailCamera::Updata(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	rotation.y = rot.y+rotation.y;
 	rotation.z = rot.z+rotation.z;
 
-
 	matRot = XMMatrixIdentity();
 	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
 	matRot *= XMMatrixRotationY(XMConvertToRadians(rotation.y));
@@ -65,6 +64,7 @@ void RailCamera::Updata(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	XMVECTOR forward = { 0, 0, 1 };
 	//レールカメラの回転を反映
 	forward = XMVector3TransformNormal(forward, matWorld);
+
 	//視点から前方に適当な距離進んだ位置が注視点
 	target.x = eye2.m128_f32[0] + forward.m128_f32[0];
 	target.y = eye2.m128_f32[1] + forward.m128_f32[1];
@@ -76,7 +76,6 @@ void RailCamera::Updata(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	up = XMVector3TransformNormal(up, matWorld);
 	XMFLOAT3 upp = { up.m128_f32[0],up.m128_f32[1],up.m128_f32[2] };
 	eye = { eye2.m128_f32[0],eye2.m128_f32[1],eye2.m128_f32[2]};
-
 
 
 	//ビュープロジェクションを更新

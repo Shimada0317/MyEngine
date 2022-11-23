@@ -1,4 +1,5 @@
 #include "Mouse.h"
+
 using namespace DirectX;
 
 Mouse* Mouse::GetInstance()
@@ -70,49 +71,33 @@ void Mouse::MouseMoveSprite(XMFLOAT2& spritePos)
 	spritePos.y = mousePosition.y;
 }
 
-void Mouse::Mousemove(const XMMATRIX& ViewPro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet)
+void Mouse::Mousemove(const XMMATRIX& View, const XMMATRIX& Pro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet)
 {
-	/*POINT mousePosition;
 
-	GetCursorPos(&mousePosition);
-
-	HWND hwnd = winApp->GetHwnd();
-
-	ScreenToClient(hwnd, &mousePosition);
-
-
-	retpos.x = mousePosition.x;
-	retpos.y = mousePosition.y;
-
-	spriteRet->SetPosition(retpos);*/
-
-	//ビューポート行列
-	//XMMATRIX matViewport;
-
-	//ChangeViewPort(matViewport);
-
-	//XMMATRIX ViewPro = camera->GetViewProjectionMatrix();
+	XMVECTOR posNear = { spritePos.x,spritePos.y, 0 };
+	XMVECTOR posFar = { spritePos.x, spritePos.y,1 };
 
 	//ビュー、プロジェクション、ビューポート3つの行列の乗算
-	XMMATRIX matVPV = ViewPro * viewPort;
+	//XMMATRIX matVPV = View * Pro * viewPort;
+	XMMATRIX InverseviewPort= XMMatrixInverse(nullptr, viewPort);
 
-	XMMATRIX matIverserVPV = XMMatrixInverse(nullptr, matVPV);
+	XMMATRIX InversePro= XMMatrixInverse(nullptr, Pro);
 
+	XMMATRIX InverseView= XMMatrixInverse(nullptr, View);
 
-	XMVECTOR posNear = { spritePos.x,spritePos.y, 0,1 };
-	XMVECTOR posFar = { spritePos.x, spritePos.y,1,1 };
+	XMMATRIX mataa = View* Pro * viewPort;
 
-	posNear = XMVector3TransformCoord(posNear, matIverserVPV);
-	posFar = XMVector3TransformCoord(posFar, matIverserVPV);
+	XMMATRIX Inversemataa = XMMatrixInverse(nullptr, mataa);
+
+	posNear = XMVector3TransformCoord(posNear, Inversemataa);
+	posFar = XMVector3TransformCoord(posFar,Inversemataa);
 
 	XMVECTOR mouseDirection = posNear - posFar;
 	mouseDirection = XMVector3Normalize(mouseDirection);
 
 	const float kDistanceTestObject = 10;
 
-	
-
-	positionRet = posNear - mouseDirection * kDistanceTestObject;
+	positionRet = posNear - mouseDirection * kDistanceTestObject ;
 
 	//player->SetPosition(positionRet);
 

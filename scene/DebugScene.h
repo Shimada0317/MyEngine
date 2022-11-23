@@ -12,6 +12,7 @@
 #include"Player.h"
 #include"Light.h"
 #include"middle.h"
+#include"Mouse.h"
 #include<memory>
 
 class DebugScene :
@@ -40,6 +41,10 @@ public://ÉÅÉìÉoïœêî
 
 	void Draw(DirectXCommon* dxCommon)override;
 
+	void ChangeViewPort(XMMATRIX& mat);
+
+	void MouthContoroll();
+
 	void Finalize() override;
 private:
 	std::unique_ptr<Robot>rob[3];
@@ -48,19 +53,33 @@ private:
 	std::unique_ptr<Object3d> bo = nullptr;
 	std::unique_ptr<Player>player;
 	std::list<std::unique_ptr<ObjParticle>>part;
+	std::unique_ptr<Sprite> spriteRet;
 
+	Camera* camera = nullptr;
+
+	RailCamera* cam;
+	XMVECTOR vel = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 Eye_rot = { 0.0f,0.0f,0.0f };
+	float kBulletSpeed = 0;
 	Bullet* bull[9];
 	Light* light = nullptr;
 
 	ObjModel* bomodel = nullptr;
+	int Remaining = 2;
 
 	XMVECTOR position = { 0.0f,0.0f,0.1f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 
-	XMVECTOR allpos[3];
+	XMFLOAT4 color = { 1,1,1,1 };
+	XMFLOAT4 spCol = { 1,1,1,1 };
+	XMFLOAT2 anc = { 0.5f,0.5f };
+	XMFLOAT2 retpos = { 640.0f,360.0f };
+	XMFLOAT2 retsize = { 64.0f,64.0f };
 
-	DebugCamera* camera = nullptr;
+	XMVECTOR allpos[3];
+	XMVECTOR offset = { 0,0,1.0f };
+	XMVECTOR velocity = { 0.0f,0.0f,0.0f };
 
 	bool jump = false;
 	float addgrav = 0.4f;
@@ -68,6 +87,10 @@ private:
 	float gravity = 0.0f;
 
 	std::unique_ptr<middle>mid;
+
+	//ÉèÅ[ÉãÉh
+	XMVECTOR playerWorldPos = { 0.0f,0.0f,0.0f };
+	XMMATRIX mat;
 };
 
 

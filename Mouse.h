@@ -38,7 +38,7 @@ public://ƒƒ“ƒoŠÖ”
 
 	void MouseMoveSprite(XMFLOAT2& spritePos);
 
-	void Mousemove(const XMMATRIX& viewPro,const XMMATRIX& viewPort,const XMFLOAT2& spritePos,XMVECTOR& positionRet);
+	void Mousemove(const XMMATRIX& view,const XMMATRIX& Pro,const XMMATRIX& viewPort,const XMFLOAT2& spritePos,XMVECTOR& positionRet);
 
 	MousePos& GetPosition() { this->pos; }
 

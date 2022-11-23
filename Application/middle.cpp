@@ -260,9 +260,9 @@ void middle::SpriteDraw()
 //
 void middle::ImGuiDraw()
 {
-	/*player->ImGuiDraw();
+	player->ImGuiDraw();
 
-	rob[0]->ImgDraw();
+	/*rob[0]->ImgDraw();
 	rob[1]->ImgDraw();
 	rob[2]->ImgDraw();*/
 }

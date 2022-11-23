@@ -9,11 +9,14 @@ void Player::Initalize()
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(camera);
 
-	playerModel = ObjModel::CreateFromOBJ("mark");
+	playerModel = ObjModel::CreateFromOBJ("block0");
 	player = Object3d::Create(playerModel);
 
 	gunModel = ObjModel::CreateFromOBJ("gun");
 	gun = Object3d::Create(gunModel);
+
+	reticleModel = ObjModel::CreateFromOBJ("block0");
+	reticle = Object3d::Create(reticleModel);
 
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
@@ -26,7 +29,7 @@ void Player::Initalize()
 	cam = new RailCamera();
 	cam->Initialize(position, rotation);
 
-	player->SetParent(camera);
+	//player->SetParent(camera);
 
 };
 
@@ -70,17 +73,18 @@ void Player::Set()
 	/*if (patern == true) {
 		position = player->GetPosition();
 	}*/
-	player->SetPosition({ position });
+	//player->SetPosition({ position });
 	player->SetRotation({ rotation });
 	player->SetScale({ scale });
 
 	mat = player->GetMatrix();
 	//Eye_rot=camera->GetEye();
-	player->SetParent(camera);
+	//player->SetParent(camera);
 	gun->SetRotation(gunRot);
 	gun->SetScale(gunScal);
 	gun->SetParent(camera);
 	gun->SetPosition(gunPos);
+
 }
 void Player::Effect()
 {
@@ -149,6 +153,8 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 	}
 
 
+	
+
 	vel = XMVector3TransformNormal(vel, mat);
 
 	for (int i = 0; i < 9; i++) {
@@ -157,7 +163,8 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 
 
 	//ReteicleHaiti();
-	//MouthContoroll();
+	MouthContoroll();
+	
 	Set();
 	cam->Updata(vel, Eye_rot, camera);
 	camera->Updata();
@@ -183,11 +190,16 @@ void Player::Draw(ID3D12GraphicsCommandList* cmdList)
 
 void Player::SpriteDraw()
 {
-	//spriteRet->Draw();
+	spriteRet->Draw();
 }
 
 void Player::PlayerMove(bool& move, int patern, bool& spown)
 {
+	XMMATRIX camMat = cam->GetWorld();
+	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
+
+	camvec = XMVector3Transform(camvec, camMat);
+
 
 	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž
 	if (move == true) {
@@ -208,9 +220,10 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				shake = 0;
 			}
 		}
+
 		if (patern == 0) {
 			vel = { 0, 0, kBulletSpeed };
-			if (playerWorldPos.m128_f32[2] >= 20) {
+			if (camvec.m128_f32[2] >= 20) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -220,7 +233,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 		}
 		else if (patern == 1) {
 			vel = { 0, 0, kBulletSpeed };
-			if (playerWorldPos.m128_f32[2] >= 40) {
+			if (camvec.m128_f32[2] >= 40) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -234,7 +247,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Eye_rot.y = 90;
 				vel = { 0, 0, kBulletSpeed };
 			}
-			if (playerWorldPos.m128_f32[0] >= 30) {
+			if (camvec.m128_f32[0] >= 30) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -246,7 +259,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 
 			vel = { 0, 0, kBulletSpeed };
 
-			if (playerWorldPos.m128_f32[0] >= 45) {
+			if (camvec.m128_f32[0] >= 45) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -260,7 +273,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Eye_rot.y = 0;
 				vel = { 0, 0, kBulletSpeed };
 			}
-			if (playerWorldPos.m128_f32[2] >= 70) {
+			if (camvec.m128_f32[2] >= 70) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -274,7 +287,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Eye_rot.y = 0;
 				vel = { 0, 0, kBulletSpeed };
 			}
-			if (playerWorldPos.m128_f32[2] <= 0) {
+			if (camvec.m128_f32[2] <= 0) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -288,7 +301,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Eye_rot.y = 270;
 				vel = { 0, 0, kBulletSpeed };
 			}
-			if (playerWorldPos.m128_f32[0] <= 20) {
+			if (camvec.m128_f32[0] <= 20) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -298,7 +311,7 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 		}
 		else if (patern == 8) {
 			vel = { 0, 0, kBulletSpeed };
-			if (playerWorldPos.m128_f32[0] <= 0) {
+			if (camvec.m128_f32[0] <= 0) {
 				kBulletSpeed = 0.0f;
 				vel = { 0, 0, kBulletSpeed };
 				Eye_rot.y += 3;
@@ -333,10 +346,10 @@ void Player::ImGuiDraw()
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plyer");
 
-	if (ImGui::TreeNode("mat")) {
-		ImGui::SliderFloat("mat.z", &mat.r[3].m128_f32[2], -100.0f, 100.0f);
-		ImGui::SliderFloat("mat.y", &mat.r[3].m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("mat.x", &mat.r[3].m128_f32[0], -100.0f, 100.0f);
+	if (ImGui::TreeNode("LoacalPos")) {
+		ImGui::SliderFloat("pos.x", &position.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &position.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &position.m128_f32[2], -100.0f, 100.0f);
 		ImGui::SliderFloat("mat.x", &a, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
@@ -445,12 +458,12 @@ void Player::MouthContoroll()
 
 	ChangeViewPort(matViewport);
 
-	XMMATRIX ViewPro = camera->GetViewProjectionMatrix();
+	XMMATRIX View = camera->GetViewMatrix();
+	XMMATRIX Pro = camera->GetProjectionMatrix();
 
 	XMVECTOR positionRet = playerWorldPos;
 
-	Mouse::GetInstance()->Mousemove(ViewPro, matViewport, retpos, positionRet);
-
+	Mouse::GetInstance()->Mousemove(View,Pro, matViewport, retpos, positionRet);
 
 	player->SetPosition(positionRet);
 

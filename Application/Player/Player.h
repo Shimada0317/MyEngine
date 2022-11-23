@@ -92,6 +92,9 @@ private:
 
 	std::unique_ptr<Object3d> gun;
 	ObjModel* gunModel = nullptr;
+
+	std::unique_ptr<Object3d> reticle;
+	ObjModel* reticleModel = nullptr;
 	//発砲時のエフェクト
 	ParticleManager* part;
 
@@ -101,7 +104,7 @@ private:
 	Camera* camera = nullptr;
 	RailCamera* cam;
 	//ローカル
-	XMVECTOR position = { 0.0f,0.0f,1.0f };
+	XMVECTOR position = { 0.0f,0.0f,0.0f };
 	XMVECTOR backPlayerPos{ 0.0f,0.0f,0.0f };
 	XMVECTOR oldPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };

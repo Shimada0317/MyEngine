@@ -105,6 +105,9 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 		TrackPoint.m128_f32[1] = 100;
 	}
 
+	if (Input::GetInstance()->TriggerKey(DIK_O)) {
+		Hp = 0;
+	}
 	
 	
 	//¶‚«‚Ä‚¢‚é‚Æ‚«‚ÉHP‚ª0‚É‚È‚Á‚½‚ç
