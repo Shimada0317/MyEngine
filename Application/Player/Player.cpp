@@ -168,9 +168,6 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 		Eye_rot.x = 0;
 	}
 
-
-	
-
 	vel = XMVector3TransformNormal(vel, playermat);
 
 	for (int i = 0; i < 9; i++) {
@@ -260,8 +257,10 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 		}
 		else if (patern == 2) {
 			Eye_rot.y += 3;
+			rotation.y -= 3;
 			if (Eye_rot.y >= 90) {
 				Eye_rot.y = 90;
+				rotation.y = -90;
 				vel = { 0, 0, kBulletSpeed };
 			}
 			if (camvec.m128_f32[0] >= 30) {
@@ -286,7 +285,9 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 		}
 		else if (patern == 4) {
 			Eye_rot.y -= 3;
+			rotation.y += 3;
 			if (Eye_rot.y <= 0) {
+				rotation.y = 0;
 				Eye_rot.y = 0;
 				vel = { 0, 0, kBulletSpeed };
 			}

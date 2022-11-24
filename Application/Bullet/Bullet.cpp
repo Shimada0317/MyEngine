@@ -201,22 +201,11 @@ void Bullet::Hit()
 
 void Bullet::Updata()
 {
-
-	//pos += velocity_;
-	//if (pos.m128_f32[2] >= oldpos.m128_f32[2]) {
-	//	velocity_ = { 0.0f,0.0f,0.0f };
-	//	pos = oldpos;
-	//}
-
 	pos += velocity_;
-	//pos.m128_f32[1] -= 0.04f;
 	ShotT += 1.0f;
 	if (ShotT >= 60) {
 		Trigger = false;
-		//ShotT = 0;
 	}
-
-
 
 	Set();
 	bullet->Updata();

@@ -64,8 +64,11 @@ private:
 	ObjModel* ground = nullptr;
 	ObjModel* p = nullptr;
 
+	ObjModel* worldmodel = nullptr;
+
 	unique_ptr <Object3d> sphere;
 	unique_ptr <Object3d> groundObj;
+	unique_ptr <Object3d >world;
 
 	FbxModel* model = nullptr;
 	FbxObject3d* Object = nullptr;
@@ -83,11 +86,13 @@ private:
 
 
 	XMVECTOR pos = { 0,0,0 };
-
+	//フィールド
 	XMVECTOR ground_pos = { 22.5f,-1,40 };
 	XMFLOAT3 ground_scl = { 13,20,16 };
 	XMFLOAT3 ground_rot = { 0,0,0 };
-
+	//足場
+	XMVECTOR worldPos = { 0.0f,-1.1f,0.0f };
+	XMFLOAT3 worldScl = { 100,100,100 };
 
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };

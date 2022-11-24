@@ -41,10 +41,10 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 
 	ground = ObjModel::CreateFromOBJ("Field2",true);
-	groundObj = Object3d::Create();
+	groundObj = Object3d::Create(ground);
 
-	groundObj->SetModel(ground);
-	
+	worldmodel = ObjModel::CreateFromOBJ("world", true);
+	world = Object3d::Create(worldmodel);
 
 	mid =std::make_unique <middle>();
 	mid->Initialize();
@@ -68,6 +68,8 @@ void GameScene::SetPosSclRot()
 	groundObj->SetPosition( ground_pos );
 	groundObj->SetScale({ ground_scl });
 
+	world->SetPosition(worldPos);
+	world->SetScale(worldScl);
 
 	patern = mid->GetPatern();
 	playerHp = mid->GetHp();
@@ -79,6 +81,7 @@ void GameScene::AllUpdata()
 	//lightGroup->Update();
 	sphere->Updata();
 	groundObj->Updata();
+	world->Updata();
 	mid->Updata();
 }
 
@@ -107,7 +110,7 @@ void GameScene::Updata()
 		sceneManager_->SetNextScene(scene_);
 	}
 
-	if (patern >= 5) {
+	if (patern >= 10) {
 		clearT += 0.1f;
 		
 	}
@@ -129,6 +132,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	sphere->Draw();
 	groundObj->Draw();
+	world->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
 	Object3d::PostDraw();
@@ -172,6 +176,7 @@ void GameScene::Finalize()
 {
 	delete ground;
 	delete playermodel;
+	delete worldmodel;
 	mid.reset();
 	delete postEffect;
 }

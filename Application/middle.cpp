@@ -218,22 +218,6 @@ void middle::SpriteDraw()
 		Reload->Draw();
 	}
 
-	if (patern == 0) {
-		changecount[0]->Draw();
-	}
-	else if (patern == 1) {
-		changecount[1]->Draw();
-	}
-	else if (patern == 2) {
-		changecount[2]->Draw();
-	}
-	else if (patern == 3) {
-		changecount[3]->Draw();
-	}
-	else if (patern == 4) {
-		changecount[4]->Draw();
-	}
-
 	if (playerHp == 1) {
 		LifeCount[0]->Draw();
 	}
@@ -250,11 +234,7 @@ void middle::SpriteDraw()
 		LifeCount[4]->Draw();
 	}
 	HpBer->Draw();
-	maxcount->Draw();
 
-	wave->Draw();
-	slash->Draw();
-	//bulletHUD[i]->Draw();
 	player->SpriteDraw();
 }
 //
