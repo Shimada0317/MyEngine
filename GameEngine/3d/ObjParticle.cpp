@@ -16,7 +16,7 @@ void ObjParticle::InitializeState(int i)
 	//for (int i = 0; i < MAX; i++) {
 	position[i] = { 0.0f,0.0f,0.0f };
 	position[i].m128_f32[0] = 0.1f * i;
-	scale[i] = { 0.3f,0.3f,0.3f };
+	scale[i] = { 0.2f,0.2f,0.2f };
 	Wposition[i] = { 0.0f,0.0f,0.0f };
 	wscale[i] = { 0.3f,0.3f,0.3f };
 	effect[i] = false;
@@ -136,9 +136,9 @@ void ObjParticle::Updata(XMVECTOR& enemyPos,XMFLOAT3& allRot)
 
 		gravity[i] -= 0.002;
 
-		scale[i].x -= 0.01f/20;
-		scale[i].y -= 0.01f/20;
-		scale[i].z -= 0.01f/20;
+		scale[i].x -= 0.01f/30;
+		scale[i].y -= 0.01f/30;
+		scale[i].z -= 0.01f/30;
 		if (scale[i].x <= 0 && scale[i].y <= 0 && scale[i].z <= 0) {
 			scale[i].x = 0.0f;
 			scale[i].y = 0.0f;

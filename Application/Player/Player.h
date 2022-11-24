@@ -85,8 +85,8 @@ private:
 	float OffsetX = 0.0f;
 	float OffsetY = 0.0f;
 	//プレイヤーオブジェクトとモデル
-	std::unique_ptr<Object3d> player;
-	ObjModel* playerModel = nullptr;
+	std::unique_ptr<Object3d> Track;
+	ObjModel* TrackModel = nullptr;
 
 	std::unique_ptr<Sprite> spriteRet;
 
@@ -95,6 +95,9 @@ private:
 
 	std::unique_ptr<Object3d> reticle;
 	ObjModel* reticleModel = nullptr;
+
+	std::unique_ptr<Object3d> player;
+	ObjModel* playerModel = nullptr;
 	//発砲時のエフェクト
 	ParticleManager* part;
 
@@ -104,19 +107,25 @@ private:
 	Camera* camera = nullptr;
 	RailCamera* cam;
 	//ローカル
-	XMVECTOR position = { 0.0f,0.0f,0.0f };
-	XMVECTOR backPlayerPos{ 0.0f,0.0f,0.0f };
-	XMVECTOR oldPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 scale = { 0.3f,0.3f,0.3f };
-	XMVECTOR gunPos = { 0.0f,0.0f,-6.0f };
-	XMFLOAT3 gunRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 gunScal={0.3f,0.3f,0.3f};
+		//レティクルObj
+		XMVECTOR position = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 scale = { 0.3f,0.3f,0.3f };
+		//発射台Obj
+		XMVECTOR gunPos = { 0.0f,0.0f,-6.0f };
+		XMFLOAT3 gunRot = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 gunScal={0.3f,0.3f,0.3f};
+		//プレイヤーObj
+		XMVECTOR playerPos = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 playerRot = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 playerScl = { 0.3f,0.3f,0.3f };
 	//ワールド
-	XMVECTOR playerWorldPos = { 0.0f,0.0f,0.0f };
+	XMVECTOR TrackWorldPos = { 0.0f,0.0f,0.0f };
 	XMMATRIX mat;
 	XMVECTOR gunWorldPos = { 0.0f,0.0f,-5.0f };
 	XMMATRIX gunmat;
+	XMVECTOR playerWorldPos = { 0.0f,0.0f,-0.1f };
+	XMMATRIX playermat;
 	//ビューポート
 	XMMATRIX matViewPort;
 	//カメラ

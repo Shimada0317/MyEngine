@@ -9,14 +9,17 @@ void Player::Initalize()
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(camera);
 
-	playerModel = ObjModel::CreateFromOBJ("block0");
-	player = Object3d::Create(playerModel);
+	TrackModel = ObjModel::CreateFromOBJ("block0");
+	Track = Object3d::Create(TrackModel);
 
 	gunModel = ObjModel::CreateFromOBJ("gun");
 	gun = Object3d::Create(gunModel);
 
 	reticleModel = ObjModel::CreateFromOBJ("block0");
 	reticle = Object3d::Create(reticleModel);
+
+	playerModel = ObjModel::CreateFromOBJ("block0");
+	player = Object3d::Create(playerModel);
 
 	input = Input::GetInstance();
 	debugtext = DebugText::GetInstance();
@@ -29,7 +32,7 @@ void Player::Initalize()
 	cam = new RailCamera();
 	cam->Initialize(position, rotation);
 
-	//player->SetParent(camera);
+	player->SetParent(camera);
 
 };
 
@@ -38,20 +41,24 @@ void Player::Set()
 	const float BulletSpeed = 15.0f;
 	velocity = { 0, 0, BulletSpeed };
 	velocity = XMVector3TransformNormal(velocity, mat);
-	playerWorldPos = { 0.0f,0.0f,0.0f };
-	playerWorldPos = XMVector3Transform(playerWorldPos, mat);
+	TrackWorldPos = { 0.0f,0.0f,2.0f };
+	TrackWorldPos = XMVector3Transform(TrackWorldPos, mat);
 
 	gunmat = gun->GetMatrix();
 	gunWorldPos = { 0.0f,0.0f,0.0f };
 	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
-	gunWorldPos.m128_f32[1] = playerWorldPos.m128_f32[1];
+	gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
+
+	playermat = player->GetMatrix();
+	playerWorldPos = { 0.0f,0.0f,0.0f };
+	playerWorldPos = XMVector3Transform(playerWorldPos, playermat);
 
 	for (int i = 0; i < 100; i++) {
 		const float rnd_pos = 1.0f;
 		XMFLOAT3 pos{};
-		pos.x = playerWorldPos.m128_f32[0];
-		pos.y = playerWorldPos.m128_f32[1];
-		pos.z = playerWorldPos.m128_f32[2];
+		pos.x = TrackWorldPos.m128_f32[0];
+		pos.y = TrackWorldPos.m128_f32[1];
+		pos.z = TrackWorldPos.m128_f32[2];
 		//pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		//pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 		//pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
@@ -74,10 +81,19 @@ void Player::Set()
 		position = player->GetPosition();
 	}*/
 	//player->SetPosition({ position });
-	player->SetRotation({ rotation });
-	player->SetScale({ scale });
 
-	mat = player->GetMatrix();
+	//レティクルObj
+	Track->SetRotation({ rotation });
+	Track->SetScale({ scale });
+	mat = Track->GetMatrix();
+
+	//プレイヤーObj
+	player->SetRotation(playerRot);
+	player->SetPosition(playerPos);
+	player->SetScale(playerScl);
+	player->SetParent(camera);
+	
+
 	//Eye_rot=camera->GetEye();
 	//player->SetParent(camera);
 	gun->SetRotation(gunRot);
@@ -95,14 +111,14 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 
 	//弾の発射前
 	if (Remaining < BULL - 1 && ReloadFlag == false) {
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		if (Input::GetInstance()->TriggerKey(DIK_SPACE)||Mouse::GetInstance()->PushClick(0)) {
 
 			Remaining += 1;
 			time = 0.0f;
 			particle = true;
 			for (int i = 0; i < BULL; i++) {
 				if (bull[i]->CheckOk()) {
-					bull[i]->Test(gunWorldPos, playerWorldPos, Eye_rot);
+					bull[i]->Test(gunWorldPos, TrackWorldPos, Eye_rot);
 					bull[i]->TriggerOn();
 					break;
 				}
@@ -121,7 +137,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 		time = 4.0f;
 	}
 	//リロード
-	if (Input::GetInstance()->TriggerKey(DIK_R) && Remaining != 0) {
+	if ((Input::GetInstance()->TriggerKey(DIK_R)||Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
 		ReloadFlag = true;
 	}
 
@@ -155,7 +171,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 
 	
 
-	vel = XMVector3TransformNormal(vel, mat);
+	vel = XMVector3TransformNormal(vel, playermat);
 
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Updata();
@@ -168,6 +184,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 	Set();
 	cam->Updata(vel, Eye_rot, camera);
 	camera->Updata();
+	Track->Updata();
 	player->Updata();
 	gun->Updata();
 }
@@ -332,7 +349,7 @@ void Player::ObjDraw()
 {
 	cam->Draw();
 	if (Hp >= 0) {
-		player->Draw();
+		Track->Draw();
 		gun->Draw();
 	}
 }
@@ -356,10 +373,10 @@ void Player::ImGuiDraw()
 
 
 
-	if (ImGui::TreeNode("playerWorldPos")) {
-		ImGui::SliderFloat("pos.x", &playerWorldPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &playerWorldPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &playerWorldPos.m128_f32[2], -100.0f, 100.0f);
+	if (ImGui::TreeNode("TrackWorldPos")) {
+		ImGui::SliderFloat("pos.x", &TrackWorldPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &TrackWorldPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &TrackWorldPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
@@ -380,7 +397,7 @@ void Player::ImGuiDraw()
 void Player::Finalize()
 {
 	delete camera;
-	delete playerModel;
+	delete TrackModel;
 }
 
 void Player::ChangeViewPort(XMMATRIX& matViewPort)
@@ -432,7 +449,7 @@ void Player::ReteicleHaiti()
 
 
 	{
-		XMVECTOR positionRet = playerWorldPos;
+		XMVECTOR positionRet = TrackWorldPos;
 
 		ChangeViewPort(matViewPort);
 
@@ -461,11 +478,11 @@ void Player::MouthContoroll()
 	XMMATRIX View = camera->GetViewMatrix();
 	XMMATRIX Pro = camera->GetProjectionMatrix();
 
-	XMVECTOR positionRet = playerWorldPos;
+	XMVECTOR positionRet = TrackWorldPos;
 
 	Mouse::GetInstance()->Mousemove(View,Pro, matViewport, retpos, positionRet);
 
-	player->SetPosition(positionRet);
+	Track->SetPosition(positionRet);
 
 	//pos=posNear+mouseDirection
 }
