@@ -21,9 +21,6 @@ void Player::Initalize()
 	playerModel = ObjModel::CreateFromOBJ("block0");
 	player = Object3d::Create(playerModel);
 
-	input = Input::GetInstance();
-	debugtext = DebugText::GetInstance();
-
 	part = ParticleManager::Create();
 
 	Sprite::LoadTexture(200, L"Resources/mark.png");
@@ -95,9 +92,6 @@ void Player::Set()
 	gun->SetParent(camera);
 	gun->SetPosition(gunPos);
 
-}
-void Player::Effect()
-{
 }
 
 void Player::Updata(Bullet* bull[], int& Remaining)
@@ -187,13 +181,6 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 		part->Draw();
 	}
 	ParticleManager::PostDraw();
-}
-
-void Player::Draw(ID3D12GraphicsCommandList* cmdList)
-{
-
-
-
 }
 
 void Player::SpriteDraw()
@@ -416,15 +403,6 @@ void Player::ChangeViewPort(XMMATRIX& matViewPort)
 	matViewPort.r[3].m128_f32[1] = WinApp::window_height / 2 + offset.m128_f32[1];
 	matViewPort.r[3].m128_f32[2] = 0;
 	matViewPort.r[3].m128_f32[3] = 1;
-}
-
-void Player::Attack()
-{
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		const float kBulletSpeed = 0.01f;
-		XMVECTOR velocity = { 0, 0, kBulletSpeed,0 };
-		velocity = XMVector3TransformCoord(velocity, mat);
-	}
 }
 
 void Player::ReteicleHaiti()

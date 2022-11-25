@@ -27,13 +27,9 @@ public:
 
 	void Set();
 
-	void Effect();
-
 	void Updata(Bullet* bull[], int& Remaining);
 
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
-
-	void Draw(ID3D12GraphicsCommandList* cmdList);
 
 	void SpriteDraw();
 
@@ -46,8 +42,6 @@ public:
 	void Finalize();
 
 	void ChangeViewPort(XMMATRIX& mat);
-
-	void Attack();
 
 	void ReteicleHaiti();
 
@@ -80,10 +74,7 @@ public:
 	void SetHp(int HP) { this->Hp = HP; }
 #pragma endregion
 private:
-	
 
-	float OffsetX = 0.0f;
-	float OffsetY = 0.0f;
 	//プレイヤーオブジェクトとモデル
 	std::unique_ptr<Object3d> Track;
 	ObjModel* TrackModel = nullptr;
@@ -101,9 +92,7 @@ private:
 	//発砲時のエフェクト
 	ParticleManager* part;
 
-	Input* input = nullptr;
 	Mouse* mouse = nullptr;
-	DebugText* debugtext = nullptr;
 	Camera* camera = nullptr;
 	RailCamera* cam;
 	//ローカル
@@ -120,36 +109,31 @@ private:
 		XMFLOAT3 playerRot = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 playerScl = { 0.3f,0.3f,0.3f };
 	//ワールド
-	XMVECTOR TrackWorldPos = { 0.0f,0.0f,0.0f };
-	XMMATRIX mat;
-	XMVECTOR gunWorldPos = { 0.0f,0.0f,-5.0f };
-	XMMATRIX gunmat;
-	XMVECTOR playerWorldPos = { 0.0f,0.0f,-0.1f };
-	XMMATRIX playermat;
+		//レティクル
+		XMVECTOR TrackWorldPos = { 0.0f,0.0f,0.0f };
+		XMMATRIX mat;
+		//発射台
+		XMVECTOR gunWorldPos = { 0.0f,0.0f,-5.0f };
+		XMMATRIX gunmat;
+		//プレイヤー
+		XMVECTOR playerWorldPos = { 0.0f,0.0f,-0.1f };
+		XMMATRIX playermat;
 	//ビューポート
 	XMMATRIX matViewPort;
 	//カメラ
-	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
-	XMFLOAT3 camerapos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Eye_rot = {0.0f,0.0f,0.0f};
 	XMFLOAT3 Target_pos = {0.0f,0.0f,0.0f};
 	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
-
-	XMFLOAT4 color = { 1,1,1,1 };
+	//スプライト
 	XMFLOAT4 spCol = { 1,1,1,1 };
 	XMFLOAT2 anc = { 0.5f,0.5f };
 	XMFLOAT2 retpos = { 640.0f,360.0f };
 	XMFLOAT2 retsize = { 64.0f,64.0f };
 
-	WinApp* winapp = nullptr;
-
 	XMVECTOR offset = { 0,0,1.0f };
-
 	float time = 0.0f;
 	bool particle = false;
-
 	int Hp = 5;
-
 	//Reload
 	bool ReloadFlag = false;
 	int ReloadTime = 0;
@@ -161,7 +145,6 @@ private:
 	bool chan = false;
 	float kBulletSpeed=0;
 	XMVECTOR velocity = { 0.0f,0.0f,0.0f };
-	XMVECTOR veloc = { 0.0f,0.0f,0.0f };
 	//動いたときのtimer
 	float movetimer = 0.0f;
 	int waveCount = 0;
@@ -169,6 +152,5 @@ private:
 	//cam
 	int shake = 0;
 
-	bool right = true;
 };
 
