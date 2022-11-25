@@ -77,10 +77,6 @@ void Player::Set()
 		}
 		break;
 	}
-	/*if (patern == true) {
-		position = player->GetPosition();
-	}*/
-	//player->SetPosition({ position });
 
 	//ƒŒƒeƒBƒNƒ‹Obj
 	Track->SetRotation({ rotation });
@@ -94,8 +90,6 @@ void Player::Set()
 	player->SetParent(camera);
 	
 
-	//Eye_rot=camera->GetEye();
-	//player->SetParent(camera);
 	gun->SetRotation(gunRot);
 	gun->SetScale(gunScal);
 	gun->SetParent(camera);
@@ -430,10 +424,6 @@ void Player::Attack()
 		const float kBulletSpeed = 0.01f;
 		XMVECTOR velocity = { 0, 0, kBulletSpeed,0 };
 		velocity = XMVector3TransformCoord(velocity, mat);
-		/*	newBullet = std::make_unique<Bullet>();
-			newBullet->Initialize();
-			newBullet->Stanby(position,velocity);
-			bullets_.push_back(std::move(newBullet));*/
 	}
 }
 
@@ -484,8 +474,6 @@ void Player::MouthContoroll()
 	Mouse::GetInstance()->Mousemove(View,Pro, matViewport, retpos, positionRet);
 
 	Track->SetPosition(positionRet);
-
-	//pos=posNear+mouseDirection
 }
 
 
