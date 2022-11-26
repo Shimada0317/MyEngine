@@ -40,9 +40,9 @@ void RailCamera::Updata(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 
 	eye = { 0,1.5,-5 };
 	rotation = { 0.0f,0.0f,0.0f };
-	rotation.x = rot.x+rotation.x;
-	rotation.y = rot.y+rotation.y;
-	rotation.z = rot.z+rotation.z;
+	rotation.x = rot.x;
+	rotation.y = rot.y;
+	rotation.z = rot.z;
 
 	matRot = XMMatrixIdentity();
 	matRot *= XMMatrixRotationX(XMConvertToRadians(rotation.x));
