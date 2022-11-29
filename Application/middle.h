@@ -140,7 +140,9 @@ private:
 	std::stringstream enemyPopCommands;
 	//待機コマンド
 	bool waitF = false;
-	int waitTimer = 0;
+	int waitT = 0;
+
+	int ENE = 0;
 
 	//DebugSceneのやつを持ってきた
 	std::unique_ptr<Robot>rob[MAXENEMY];
@@ -180,5 +182,7 @@ private:
 	int oldrand[3];
 
 	XMVECTOR TrackPoint[MAXENEMY];
+
+
 };
 

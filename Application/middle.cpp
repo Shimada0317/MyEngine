@@ -242,9 +242,9 @@ void middle::ImGuiDraw()
 {
 	player->ImGuiDraw();
 
-	/*rob[0]->ImgDraw();
+	rob[0]->ImgDraw();
 	rob[1]->ImgDraw();
-	rob[2]->ImgDraw();*/
+	rob[2]->ImgDraw();
 }
 
 void middle::Fainalize()
@@ -258,178 +258,181 @@ void middle::Fainalize()
 
 void middle::SetEnemyPos()
 {
-	if (patern == 0) {
-		enemyPos[0].m128_f32[0] = -5;
-		enemyPos[1].m128_f32[0] = 0;
-		enemyPos[2].m128_f32[0] = 5;
+	LoadEnemyPopData();
+	UpdataEnemyPopCommands();
 
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
+	//if (patern == 0) {
+	//	enemyPos[0].m128_f32[0] = -5;
+	//	enemyPos[1].m128_f32[0] = 0;
+	//	enemyPos[2].m128_f32[0] = 5;
 
-		enemyPos[0].m128_f32[2] = 30;
-		enemyPos[1].m128_f32[2] = 30;
-		enemyPos[2].m128_f32[2] = 30;
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
 
-		for (int i = 0; i < MAXENEMY; i++) {
-			//TrackPoint[i] = playerPos;
-			TrackPoint[i].m128_f32[0] = 0;
-			TrackPoint[i].m128_f32[1] = 0;
-			TrackPoint[i].m128_f32[2] = 20;
-			TrackPoint[0].m128_f32[0] = -1.2;
-			TrackPoint[1].m128_f32[0] = 0;
-			TrackPoint[2].m128_f32[0] = +1.2;
-		}
+	//	enemyPos[0].m128_f32[2] = 30;
+	//	enemyPos[1].m128_f32[2] = 30;
+	//	enemyPos[2].m128_f32[2] = 30;
 
-
-		all[3] = false;
-		all[4] = false;
-	}
-
-	else if (patern == 1) {
-		enemyPos[0].m128_f32[0] = -3.5f;
-		enemyPos[1].m128_f32[0] = -3.5f;
-		enemyPos[2].m128_f32[0] = 3.5f;
-		enemyPos[3].m128_f32[0] = 3.5f;
-
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
-		enemyPos[3].m128_f32[1] = 0;
-
-		enemyPos[0].m128_f32[2] = 50;
-		enemyPos[1].m128_f32[2] = 55;
-		enemyPos[2].m128_f32[2] = 55;
-		enemyPos[3].m128_f32[2] = 50;
+	//	for (int i = 0; i < MAXENEMY; i++) {
+	//		//TrackPoint[i] = playerPos;
+	//		TrackPoint[i].m128_f32[0] = 0;
+	//		TrackPoint[i].m128_f32[1] = 0;
+	//		TrackPoint[i].m128_f32[2] = 20;
+	//		TrackPoint[0].m128_f32[0] = -1.2;
+	//		TrackPoint[1].m128_f32[0] = 0;
+	//		TrackPoint[2].m128_f32[0] = +1.2;
+	//	}
 
 
-		for (int i = 0; i < MAXENEMY; i++) {
-			//TrackPoint[i] = playerPos;
-			TrackPoint[i].m128_f32[0] = 0;
-			TrackPoint[i].m128_f32[1] = 0;
-			TrackPoint[i].m128_f32[2] = 40;
-			TrackPoint[0].m128_f32[0] = -2.6;
-			TrackPoint[1].m128_f32[0] = -0.5f;
-			TrackPoint[2].m128_f32[0] = +0.5;
-			TrackPoint[3].m128_f32[0] = +2.6;
-		}
+	//	all[3] = false;
+	//	all[4] = false;
+	//}
+
+	//else if (patern == 1) {
+	//	enemyPos[0].m128_f32[0] = -3.5f;
+	//	enemyPos[1].m128_f32[0] = -3.5f;
+	//	enemyPos[2].m128_f32[0] = 3.5f;
+	//	enemyPos[3].m128_f32[0] = 3.5f;
+
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[3].m128_f32[1] = 0;
+
+	//	enemyPos[0].m128_f32[2] = 50;
+	//	enemyPos[1].m128_f32[2] = 55;
+	//	enemyPos[2].m128_f32[2] = 55;
+	//	enemyPos[3].m128_f32[2] = 50;
 
 
-		all[4] = false;
-	}
-
-	else if (patern == 2) {
-		enemyPos[0].m128_f32[0] = 43;
-		enemyPos[1].m128_f32[0] = 45;
-		enemyPos[2].m128_f32[0] = 42;
-		enemyPos[3].m128_f32[0] = 38;
-
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
-		enemyPos[3].m128_f32[1] = 0;
-
-		enemyPos[0].m128_f32[2] = 34;
-		enemyPos[1].m128_f32[2] = 39;
-		enemyPos[2].m128_f32[2] = 44;
-		enemyPos[3].m128_f32[2] = 47;
-
-		
-
-		for (int i = 0; i < MAXENEMY; i++) {
-			enemyRot[i].y = 90;
-			//TrackPoint[i] = playerPos;
-			TrackPoint[i].m128_f32[0] = 30;
-			TrackPoint[i].m128_f32[1] = 0;
-			TrackPoint[i].m128_f32[2] = 39;
-
-			TrackPoint[0].m128_f32[2] = 38;
-			TrackPoint[1].m128_f32[2] = 39.5f;
-			TrackPoint[2].m128_f32[2] = 41;
-			TrackPoint[3].m128_f32[2] = 43.5f;
-		}
-
-		all[4] = false;
-	}
-
-	else if (patern == 3) {
-		enemyPos[0].m128_f32[0] = 55;
-		enemyPos[1].m128_f32[0] = 55;
-		enemyPos[2].m128_f32[0] = 55;
-
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
-
-		enemyPos[0].m128_f32[2] = 35;
-		enemyPos[1].m128_f32[2] = 40;
-		enemyPos[2].m128_f32[2] = 45;
+	//	for (int i = 0; i < MAXENEMY; i++) {
+	//		//TrackPoint[i] = playerPos;
+	//		TrackPoint[i].m128_f32[0] = 0;
+	//		TrackPoint[i].m128_f32[1] = 0;
+	//		TrackPoint[i].m128_f32[2] = 40;
+	//		TrackPoint[0].m128_f32[0] = -2.6;
+	//		TrackPoint[1].m128_f32[0] = -0.5f;
+	//		TrackPoint[2].m128_f32[0] = +0.5;
+	//		TrackPoint[3].m128_f32[0] = +2.6;
+	//	}
 
 
-		enemyRot[0].y = 90;
-		enemyRot[1].y = 90;
-		enemyRot[2].y = 90;
+	//	all[4] = false;
+	//}
 
-		for (int i = 0; i < MAXENEMY; i++) {
-			//TrackPoint[i] = playerPos;
-			TrackPoint[i].m128_f32[0] = 45;
-			TrackPoint[i].m128_f32[1] = 0;
-			TrackPoint[i].m128_f32[2] = 39;
+	//else if (patern == 2) {
+	//	enemyPos[0].m128_f32[0] = 43;
+	//	enemyPos[1].m128_f32[0] = 45;
+	//	enemyPos[2].m128_f32[0] = 42;
+	//	enemyPos[3].m128_f32[0] = 38;
 
-			TrackPoint[0].m128_f32[2] = 38;
-			TrackPoint[1].m128_f32[2] = 39.5f;
-			TrackPoint[2].m128_f32[2] = 41;
-		}
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[3].m128_f32[1] = 0;
+
+	//	enemyPos[0].m128_f32[2] = 34;
+	//	enemyPos[1].m128_f32[2] = 39;
+	//	enemyPos[2].m128_f32[2] = 44;
+	//	enemyPos[3].m128_f32[2] = 47;
+
+	//	
+
+	//	for (int i = 0; i < MAXENEMY; i++) {
+	//		enemyRot[i].y = 90;
+	//		//TrackPoint[i] = playerPos;
+	//		TrackPoint[i].m128_f32[0] = 30;
+	//		TrackPoint[i].m128_f32[1] = 0;
+	//		TrackPoint[i].m128_f32[2] = 39;
+
+	//		TrackPoint[0].m128_f32[2] = 38;
+	//		TrackPoint[1].m128_f32[2] = 39.5f;
+	//		TrackPoint[2].m128_f32[2] = 41;
+	//		TrackPoint[3].m128_f32[2] = 43.5f;
+	//	}
+
+	//	all[4] = false;
+	//}
+
+	//else if (patern == 3) {
+	//	enemyPos[0].m128_f32[0] = 55;
+	//	enemyPos[1].m128_f32[0] = 55;
+	//	enemyPos[2].m128_f32[0] = 55;
+
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
+
+	//	enemyPos[0].m128_f32[2] = 35;
+	//	enemyPos[1].m128_f32[2] = 40;
+	//	enemyPos[2].m128_f32[2] = 45;
 
 
-		all[3] = false;
-		all[4] = false;
-	}
+	//	enemyRot[0].y = 90;
+	//	enemyRot[1].y = 90;
+	//	enemyRot[2].y = 90;
 
-	else if (patern == 4) {
-		enemyPos[0].m128_f32[0] = 41;
-		enemyPos[1].m128_f32[0] = 44;
-		enemyPos[2].m128_f32[0] = 46;
-		enemyPos[3].m128_f32[0] = 48;
-		enemyPos[4].m128_f32[0] = 51;
+	//	for (int i = 0; i < MAXENEMY; i++) {
+	//		//TrackPoint[i] = playerPos;
+	//		TrackPoint[i].m128_f32[0] = 45;
+	//		TrackPoint[i].m128_f32[1] = 0;
+	//		TrackPoint[i].m128_f32[2] = 39;
 
-		enemyPos[0].m128_f32[1] = 0;
-		enemyPos[1].m128_f32[1] = 0;
-		enemyPos[2].m128_f32[1] = 0;
-		enemyPos[3].m128_f32[1] = 0;
-		enemyPos[4].m128_f32[1] = 0;
+	//		TrackPoint[0].m128_f32[2] = 38;
+	//		TrackPoint[1].m128_f32[2] = 39.5f;
+	//		TrackPoint[2].m128_f32[2] = 41;
+	//	}
 
 
-		enemyPos[0].m128_f32[2] = 85;
-		enemyPos[1].m128_f32[2] = 90;
-		enemyPos[2].m128_f32[2] = 85;
-		enemyPos[3].m128_f32[2] = 90;
-		enemyPos[4].m128_f32[2] = 85;
+	//	all[3] = false;
+	//	all[4] = false;
+	//}
 
-		enemyRot[0].y = 0;
-		enemyRot[1].y = 0;
-		enemyRot[2].y = 0;
-		enemyRot[3].y = 0;
-		enemyRot[4].y = 0;
+	//else if (patern == 4) {
+	//	enemyPos[0].m128_f32[0] = 41;
+	//	enemyPos[1].m128_f32[0] = 44;
+	//	enemyPos[2].m128_f32[0] = 46;
+	//	enemyPos[3].m128_f32[0] = 48;
+	//	enemyPos[4].m128_f32[0] = 51;
 
-		for (int i = 0; i < MAXENEMY; i++) {
-			//TrackPoint[i] = playerPos;
-			TrackPoint[i].m128_f32[0] = 44;
-			TrackPoint[i].m128_f32[1] = 0;
-			TrackPoint[i].m128_f32[2] = 70;
+	//	enemyPos[0].m128_f32[1] = 0;
+	//	enemyPos[1].m128_f32[1] = 0;
+	//	enemyPos[2].m128_f32[1] = 0;
+	//	enemyPos[3].m128_f32[1] = 0;
+	//	enemyPos[4].m128_f32[1] = 0;
 
-			TrackPoint[0].m128_f32[0] = 40;
-			TrackPoint[1].m128_f32[0] = 42;
-			TrackPoint[2].m128_f32[0] = 44;
-			TrackPoint[3].m128_f32[0] = 46;
-			TrackPoint[4].m128_f32[0] = 48;
 
-		}
-	}
+	//	enemyPos[0].m128_f32[2] = 85;
+	//	enemyPos[1].m128_f32[2] = 90;
+	//	enemyPos[2].m128_f32[2] = 85;
+	//	enemyPos[3].m128_f32[2] = 90;
+	//	enemyPos[4].m128_f32[2] = 85;
 
-	for (int i = 0; i < MAXENEMY; i++) {
-		rob[i]->SetTrackPoint(TrackPoint[i]);
-	}
+	//	enemyRot[0].y = 0;
+	//	enemyRot[1].y = 0;
+	//	enemyRot[2].y = 0;
+	//	enemyRot[3].y = 0;
+	//	enemyRot[4].y = 0;
+
+	//	for (int i = 0; i < MAXENEMY; i++) {
+	//		//TrackPoint[i] = playerPos;
+	//		TrackPoint[i].m128_f32[0] = 44;
+	//		TrackPoint[i].m128_f32[1] = 0;
+	//		TrackPoint[i].m128_f32[2] = 70;
+
+	//		TrackPoint[0].m128_f32[0] = 40;
+	//		TrackPoint[1].m128_f32[0] = 42;
+	//		TrackPoint[2].m128_f32[0] = 44;
+	//		TrackPoint[3].m128_f32[0] = 46;
+	//		TrackPoint[4].m128_f32[0] = 48;
+
+	//	}
+	//}
+
+	//for (int i = 0; i < MAXENEMY; i++) {
+	//	rob[i]->SetTrackPoint(TrackPoint[i]);
+	//}
 
 	//else if (patern == 5)
 	//{
@@ -528,86 +531,111 @@ void middle::Enemy2Enemy()
 
 }
 
+void middle::LoadEnemyPopData()
+{
+	std::ifstream file;
+	file.open("Resources/enemyPop.csv");
+	assert(file.is_open());
 
-//void middle::LoadEnemyPopData()
-//{
-//	//ファイルオープン
-//	std::ifstream file;
-//	file.open("Resources/enemyPop.csv");
-//	assert(file.is_open());
-//	//ファイル内容を文字列ストリームにコピー
-//	enemyPopCommands << file.rdbuf();
-//
-//	//ファイルクローズ
-//	file.close();
-//}
-//
-//void middle::UpdataEnemyPopCommands()
-//{
-//	//待機処理
-//	if (waitF == true) {
-//		waitTimer--;
-//		if (waitTimer <= 0) {
-//			waitF = false;
-//		}
-//		return;
-//	}
-//
-//	//1行分の文字列を入れる変数
-//	std::string line;
-//
-//	//コマンド実行ループ
-//	while (getline(enemyPopCommands, line))
-//	{
-//		//1行分の文字列をストリームに変換して解析しやすくする
-//		std::istringstream line_stream(line);
-//
-//		std::string word;
-//		//,区切りで行の先頭文字列を取得
-//		getline(line_stream, word, ',');
-//
-//		//"//"から始まる行はコメント
-//		if (word.find("//") == 0) {
-//			//コメント行を飛ばす
-//			continue;
-//		}
-//		if (word.find("POP") == 0) {
-//			//x座標
-//			getline(line_stream, word, ',');
-//			float x = (float)std::atof(word.c_str());
-//
-//			//y座標
-//			getline(line_stream, word, ',');
-//			float y = (float)std::atof(word.c_str());
-//
-//			//x座標
-//			getline(line_stream, word, ',');
-//			float z = (float)std::atof(word.c_str());
-//
-//
-//			//敵を発生させる
-//			enemyPos[0].m128_f32[0] = x;
-//			enemyPos[0].m128_f32[1] = y;
-//			enemyPos[0].m128_f32[2] = z;
-//			XMVECTOR o{ x,y,z };
-//			tst = make_unique<Enemy>();
-//			tst->SetPosition(o);
-//		}
-//
-//		//WAITコマンド
-//		else if (word.find("WAIT") == 0) {
-//			getline(line_stream, word, ',');
-//
-//			//待ち時間
-//			int32_t waitTime = atoi(word.c_str());
-//
-//			//待機時間
-//			waitF = true;
-//			waitTimer = waitTime;
-//
-//			//コマンドを抜ける
-//			break;
-//		}
-//	}
-//}
+	enemyPopCommands << file.rdbuf();
 
+
+	file.close();
+}
+
+void middle::UpdataEnemyPopCommands()
+{
+	//待機処理
+	if (waitF == true) {
+		waitT--;
+		if (waitT <= 0) {
+			waitF = false;
+		}
+		return;
+	}
+	ENE = 0;
+	std::string line;
+	while (getline(enemyPopCommands,line))
+	{
+		std::istringstream line_stram(line);
+
+		std::string word;
+
+		getline(line_stram, word, ',');
+
+		if (word.find("//") == 0) {
+			continue;
+		}
+		//WAITコマンド
+		if (word.find("ARIVE") == 0) {
+			getline(line_stram, word, ',');
+
+			//待ち時間
+			int Arive = atoi(word.c_str());
+			if(Arive==1){
+				all[ENE] = true;
+			}
+			else {
+				all[ENE] = false;
+			}
+			
+
+			//コマンドループ
+			//break;
+		}
+		else if (word.find("POP") == 0) {
+
+			getline(line_stram, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			getline(line_stram, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			getline(line_stram, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+			enemyPos[ENE].m128_f32[0] = x;
+			enemyPos[ENE].m128_f32[1] = y;
+			enemyPos[ENE].m128_f32[2] = z;
+
+			rob[ENE]->SetPosition(enemyPos[ENE]);
+		}
+		
+		else if (word.find("TRACK") == 0) {
+
+			getline(line_stram, word, ',');
+			float x = (float)std::atof(word.c_str());
+
+			getline(line_stram, word, ',');
+			float y = (float)std::atof(word.c_str());
+
+			getline(line_stram, word, ',');
+			float z = (float)std::atof(word.c_str());
+
+			TrackPoint[ENE].m128_f32[0] = x;
+			TrackPoint[ENE].m128_f32[1] = y;
+			TrackPoint[ENE].m128_f32[2] = z;
+
+			rob[ENE]->SetTrackPoint(TrackPoint[ENE]);
+
+		}
+
+		
+		else if (word.find("COUNT") == 0) {
+			getline(line_stram, word, ',');
+
+			//待ち時間
+			int count = atoi(word.c_str());
+
+			ENE = count;
+
+			//コマンドループ
+			//break;
+		}
+		else if (word.find("END") == 0) {
+			getline(line_stram, word, ',');
+
+			break;
+		}
+	}
+}
