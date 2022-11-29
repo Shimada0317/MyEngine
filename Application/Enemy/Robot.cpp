@@ -154,7 +154,7 @@ void Robot::ImgDraw()
 	ImGui::Checkbox("Att", &AttackFase);
 	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
 	ImGui::SliderFloat("len", &l, -100.0f, 100.0f);
-	ImGui::SliderFloat("PosX", &allPos.m128_f32[0], -100.0f, 100.0f);
+	ImGui::SliderFloat("PosZ", &allPos.m128_f32[2], -100.0f, 100.0f);
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
