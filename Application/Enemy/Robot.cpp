@@ -25,12 +25,26 @@ void Robot::Initialize()
 	part->Initialize();
 
 	for (int i = 0; i < 3; i++) {
-		arive[i] = true;
+		Partarive[i] = true;
 	}
 	OldHp = Hp;
 	dice = true;
 	TrackPoint.m128_f32[2] = 3;
 
+}
+
+void Robot::Spown(bool arive)
+{
+	Myarive = arive;
+	Hp = 150;
+	OldHp = Hp;
+
+	for (int i = 0; i < 3; i++) {
+		Partarive[i] = true;
+	}
+	Arms->RespownSet(allRot);
+	speed = 0.005f;
+	dice = false;
 }
 
 void Robot::SetPRS(const XMMATRIX& player)
@@ -41,18 +55,18 @@ void Robot::SetPRS(const XMMATRIX& player)
 
 void Robot::AllUpdata(Bullet* bull)
 {
-	head->Updata(arive[0], allPos, allRot, bull, Hp);
+	head->Updata(Partarive[0], allPos, allRot, bull, Hp);
 	//RArm->Updata(arive[1], allPos, bull, Hp);
 	//LArm->Updata(arive[2], allPos, bull, Hp);
-	Arms->Updata(arive[1], allPos, allRot, bull, Hp);
-	body->Updata(arive[2], allPos, allRot, bull, Hp);
+	Arms->Updata(Partarive[1], allPos, allRot, bull, Hp);
+	body->Updata(Partarive[2], allPos, allRot, bull, Hp);
 	part->Updata(allPos, allRot);
 	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
 		patrticle->Updata(allPos, allRot);
 	}
 }
 
-void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown, int& playerHp)
+void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playerHp)
 {
 	particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
@@ -73,7 +87,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	}
 
 	//¶‚«‚Ä‚¢‚é‚Æ‚«
-	if (all == true && Hp > 0) {
+	if (Myarive == true && Hp > 0) {
 		TrackPlayer();
 
 		if (l <= 2) {
@@ -95,7 +109,7 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 			if (AttackFase == true) {
 				attackT += 0.1f;
 
-				Arms->Attack(attackT, AttackFase, playerHp,all);
+				Arms->Attack(attackT, AttackFase, playerHp,Myarive);
 			}
 
 		}
@@ -114,12 +128,13 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 	if (Hp <= 0) {
 		Hp = 1;
 
-		all = false;
+		Myarive = false;
+		isDead_ = true;
 		AttackTime = 0;
 		AttackChanse = 0;
 		rad = 0;
 		for (int i = 0; i < 3; i++) {
-			arive[i] = false;
+			Partarive[i] = false;
 		}
 	}
 
@@ -130,11 +145,11 @@ void Robot::Updata(Bullet* bull, bool& all, const XMMATRIX& player, bool& spown,
 void Robot::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	head->Draw(arive[0]);
+	head->Draw(Partarive[0]);
 	/*RArm->Draw(arive[1]);
 	LArm->Draw(arive[2]);*/
-	Arms->Draw(arive[1]);
-	body->Draw(arive[2]);
+	Arms->Draw(Partarive[1]);
+	body->Draw(Partarive[2]);
 	//part->Draw();
 	for (std::unique_ptr<ObjParticle>& particle : particle_) {
 		particle->Draw();
@@ -200,22 +215,4 @@ void Robot::TrackPlayer()
 void Robot::Finalize()
 {
 
-}
-
-void Robot::SpownEnemy(const XMMATRIX& player, int patern)
-{
-
-	Hp = 150;
-	OldHp = Hp;
-	//	int rad = (rand() % 4);
-	//
-	//
-	//	float radX = (float)rad;
-	for (int i = 0; i < 3; i++) {
-		arive[i] = true;
-	}
-
-	Arms->RespownSet(allRot);
-	speed = 0.005f;
-	dice = false;
 }

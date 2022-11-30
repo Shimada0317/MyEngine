@@ -14,7 +14,7 @@
 #include<memory>
 
 using namespace std;
-const int MAXENEMY = 5;
+const int MAXENEMY = 10;
 
 class middle
 {
@@ -128,7 +128,7 @@ private:
 	bool stop[MAXENEMY];
 
 	float hit = 0;
-	int patern = -1;
+	int patern = 0;
 	int oldpatern = 0;
 	float cammove = 0.1f;
 	bool count = false;
@@ -145,12 +145,14 @@ private:
 	int ENE = 0;
 
 	//DebugScene‚Ì‚â‚Â‚ğ‚Á‚Ä‚«‚½
-	std::unique_ptr<Robot>rob[MAXENEMY];
+	std::list<std::unique_ptr<Robot>>rob;
 	std::unique_ptr<Body>bob;
 	std::unique_ptr<Head>head;
 	std::unique_ptr<Object3d> bo = nullptr;
 	std::unique_ptr<Player>player;
 	Bullet* bull[9];
+
+	bool a = true;
 
 	ObjModel* bomodel = nullptr;
 

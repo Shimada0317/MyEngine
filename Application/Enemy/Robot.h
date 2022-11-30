@@ -23,11 +23,13 @@ public:
 
 	void Initialize();
 
+	void Spown(bool arive);
+
 	void SetPRS(const XMMATRIX& player);
 
 	void AllUpdata(Bullet* bull);
 
-	void Updata(Bullet* bull,bool& arive, const XMMATRIX& player,bool& spown,int& playerHp);
+	void Updata(Bullet* bull, const XMMATRIX& player,bool& spown,int& playerHp);
 
 	void Draw(DirectXCommon* dxCommon);
 
@@ -47,7 +49,8 @@ public:
 
 	const XMVECTOR& GetPosition() { return allPos; }
 
-	void SpownEnemy(const XMMATRIX& player,int patern);
+	bool IsDead() const { return isDead_; }
+
 private:
 	std::unique_ptr<Head> head;
 	/*std::unique_ptr<RightArm> RArm;
@@ -58,10 +61,11 @@ private:
 	std::list<std::unique_ptr<ObjParticle>>particle_;
 
 
-	XMVECTOR allPos = { 0.0f,0.0f,1.0f };
+	XMVECTOR allPos = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 allRot = { 0.0f,0.0f,0.0f };
 
-	bool arive[3];
+	bool Partarive[3];
+	bool Myarive = false;
 	float attackT = 0.0f;
 	float time = 0.0f;
 	int Hp = 50;
@@ -82,6 +86,8 @@ private:
 	bool shake = false;
 	float AttackTime = 0;
 	float speed = 0.005f;
+
+	bool isDead_ = false;
 
 	bool dice = false;
 	int patern=0;

@@ -188,7 +188,7 @@ void Player::SpriteDraw()
 	spriteRet->Draw();
 }
 
-void Player::PlayerMove(bool& move, int patern, bool& spown)
+void Player::PlayerMove(bool& move, int patern)
 {
 	XMMATRIX camMat = cam->GetWorld();
 	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
@@ -223,7 +223,6 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
-				spown = true;
 			}
 		}
 		else if (patern == 1) {
@@ -233,7 +232,6 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
-				spown = true;
 			}
 		}
 		else if (patern == 2) {
@@ -249,7 +247,6 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
-				spown = true;
 			}
 		}
 		else if (patern == 3) {
@@ -261,7 +258,6 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
-				spown = true;
 			}
 		}
 		else if (patern == 4) {
@@ -277,7 +273,6 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
-				spown = true;
 			}
 		}
 		else if (patern == 5) {
@@ -291,7 +286,6 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
-				spown = true;
 			}
 		}
 		else if (patern == 6) {
@@ -305,7 +299,6 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
-				spown = true;
 			}
 		}
 		else if (patern == 8) {
@@ -320,7 +313,6 @@ void Player::PlayerMove(bool& move, int patern, bool& spown)
 					Active = false;
 					waveCount += 1;
 					movetimer = 0.0f;
-					spown = true;
 				}
 			}
 		}

@@ -6,9 +6,6 @@ middle::~middle()
 	for (int i = 0; i < 9; i++) {
 		delete bull[i];
 	}
-	for (int i = 0; i < MAXENEMY; i++) {
-		rob[i].reset();
-	}
 }
 //
 ////セーブ
@@ -35,15 +32,7 @@ void middle::Initialize()
 		bull[i] = new Bullet();
 		bull[i]->Initialize();
 	}
-	for (int i = 0; i < MAXENEMY; i++) {
-		rob[i] = std::make_unique<Robot>();
-		rob[i]->Initialize();
-		//enemyPos[i] = rob[i]->GetPosition();
-		//allpos[i] = { 0.0f + i * 1.0f,0.0f,10.0f };
-		all[i] = true;
-		TrackPoint[i] = playerPos;
 
-	}
 
 	////スプライトの読み込み
 	for (int i = 0; i < 9; i++) {
@@ -62,47 +51,15 @@ void middle::Initialize()
 	for (int i = 0; i < 5; i++) {
 		LifeCount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
-	//LoadEnemyPopData();
-	//UpdataEnemyPopCommands();
+
+	LoadEnemyPopData();
+	UpdataEnemyPopCommands();
+
+
 	oldpatern = patern;
 
 	playerMat = player->GetMat();
 	playerHp = player->GetHp();
-
-	enemyPos[0].m128_f32[0] = -5;
-	enemyPos[1].m128_f32[0] = 0;
-	enemyPos[2].m128_f32[0] = 5;
-
-	enemyPos[0].m128_f32[1] = 0;
-	enemyPos[1].m128_f32[1] = 0;
-	enemyPos[2].m128_f32[1] = 0;
-
-	enemyPos[0].m128_f32[2] = 10;
-	enemyPos[1].m128_f32[2] = 10;
-	enemyPos[2].m128_f32[2] = 10;
-
-	TrackPoint[0].m128_f32[0] = -1.2;
-	TrackPoint[1].m128_f32[0] = 0;
-	TrackPoint[2].m128_f32[0] = +1.2;
-
-
-	enemyPos[3].m128_f32[0] = -100;
-	enemyPos[3].m128_f32[1] = -100;
-	enemyPos[3].m128_f32[2] = -100;
-
-	enemyPos[4].m128_f32[0] = -100;
-	enemyPos[4].m128_f32[1] = -100;
-	enemyPos[4].m128_f32[2] = -100;
-
-	all[3] = false;
-	all[4] = false;
-
-	for (int i = 0; i < MAXENEMY; i++) {
-		enemyPos[i].m128_f32[2] = -100;
-		rob[i]->SetPosition({ enemyPos[i] });
-		rob[i]->SetTrackPoint(TrackPoint[i]);
-		all[i] = false;
-	}
 }
 
 void middle::SetPSR()
@@ -140,9 +97,9 @@ void middle::SetPSR()
 	player->SetHp(playerHp);
 	playerPos = player->GetPosition();
 
-	for (int i = 0; i < MAXENEMY; i++) {   
+	/*for (int i = 0; i < MAXENEMY; i++) {
 		rob[i]->SetRotation({ enemyRot[i] });
-	}
+	}*/
 }
 
 void middle::Updata()
@@ -150,11 +107,22 @@ void middle::Updata()
 
 	SetPSR();
 
-	//敵をすべて倒した時に進む
-	if (all[0] == false && all[1] == false && all[2] == false && all[3] == false && all[4] == false) {
+
+	rob.remove_if([](std::unique_ptr<Robot>& robot) {
+		return robot->IsDead();
+		});
+
+	if (rob.empty()) {
 		move = true;
 		patern += 1;
 	}
+
+	
+	//敵をすべて倒した時に進む
+	/*if (all[0] == false && all[1] == false && all[2] == false && all[3] == false && all[4] == false) {
+		move = true;
+		patern += 1;
+	}*/
 
 	if (move == true) {
 		for (int i = 0; i < MAXENEMY; i++) {
@@ -165,38 +133,32 @@ void middle::Updata()
 	//座標の設定
 	SetPSR();
 
+	
+
 	if (spown == true) {
-		SetEnemyPos();
-		for (int i = 0; i < MAXENEMY; i++) {
-			rob[i]->SetPosition({ enemyPos[i] });
-			rob[i]->SetRotation({ enemyRot[i] });
-			rob[i]->SpownEnemy(playerMat, patern);
-			if (i == 2) {
-				spown = false;
-			}
-		}
+		UpdataEnemyPopCommands();
 	}
 
 	if (spown == false) {
 		//敵の更新処理
-		for (int i = 0; i < 9; i++) {
-			for (int j = 0; j < MAXENEMY; j++) {
-				enemyPos[j] = rob[j]->GetPosition();
-				rob[j]->Updata(bull[i], all[j], playerMat, spown, playerHp);
+		for (std::unique_ptr<Robot>& Robot : rob) {
+ 			for (int i = 0; i < 9; i++) {
+				//enemyPos[j] = rob[j]->GetPosition();
+				Robot->Updata(bull[i], playerMat, spown, playerHp);
 			}
 		}
 	}
 
 
-	player->PlayerMove(move, patern, spown);
+	player->PlayerMove(move, patern);
 	//プレイヤーの更新処理
 	player->Updata(bull, Remaining);
 }
 
 void middle::Draw(DirectXCommon* dxCommon)
 {
-	for (int j = 0; j < MAXENEMY; j++) {
-		rob[j]->Draw(dxCommon);
+	for (std::unique_ptr<Robot>& robot : rob) {
+		robot->Draw(dxCommon);
 	}
 	player->ParticleDraw(dxCommon->GetCmdList());
 	Object3d::PreDraw(dxCommon->GetCmdList());
@@ -242,24 +204,20 @@ void middle::ImGuiDraw()
 {
 	player->ImGuiDraw();
 
-	rob[0]->ImgDraw();
-	rob[1]->ImgDraw();
-	rob[2]->ImgDraw();
+
 }
 
 void middle::Fainalize()
 {
-	for (int j = 0; j < MAXENEMY; j++) {
-		rob[j]->Finalize();
-	}
+
 	player->Finalize();
 	//delete[] bulletHUD;
 }
 
 void middle::SetEnemyPos()
 {
-	LoadEnemyPopData();
-	UpdataEnemyPopCommands();
+	//LoadEnemyPopData();
+	//UpdataEnemyPopCommands();
 
 	if (patern == 0) {
 		enemyPos[0].m128_f32[0] = -5;
@@ -337,7 +295,7 @@ void middle::SetEnemyPos()
 		enemyPos[2].m128_f32[2] = 44;
 		enemyPos[3].m128_f32[2] = 47;
 
-		
+
 
 		for (int i = 0; i < MAXENEMY; i++) {
 			enemyRot[i].y = 90;
@@ -431,7 +389,7 @@ void middle::SetEnemyPos()
 	}
 
 	for (int i = 0; i < MAXENEMY; i++) {
-		rob[i]->SetTrackPoint(TrackPoint[i]);
+		//rob[i]->SetTrackPoint(TrackPoint[i]);
 	}
 
 	/*else if (patern == 5)
@@ -488,53 +446,10 @@ void middle::SetEnemyPos()
 	//}
 }
 
-void middle::Enemy2Enemy()
-{
-
-
-	for (int i = 0; i < MAXENEMY; i++) {
-		for (int j = 0; j < MAXENEMY; j++) {
-			if (i == j) {
-				j += 1;
-			}
-			if (patern == 2 || patern == 3) {
-				if (enemyPos[i].m128_f32[2] + 0.6f >= enemyPos[j].m128_f32[2] - 1 && enemyPos[i].m128_f32[2] + 0.6f <= enemyPos[j].m128_f32[2] + 1) {
-					enemyPos[i].m128_f32[2] -= 0.3f;
-				}
-				if (enemyPos[i].m128_f32[2] - 0.6f >= enemyPos[j].m128_f32[2] && enemyPos[i].m128_f32[2] - 0.6f <= enemyPos[j].m128_f32[2] + 1) {
-					enemyPos[i].m128_f32[2] += 0.3f;
-				}
-			}
-			else {
-				if (enemyPos[i].m128_f32[0] + 0.6f >= enemyPos[j].m128_f32[0] - 1 && enemyPos[i].m128_f32[0] + 0.6f <= enemyPos[j].m128_f32[0] + 1) {
-					enemyPos[i].m128_f32[0] -= 0.3f;
-				}
-				if (enemyPos[i].m128_f32[0] - 0.6f >= enemyPos[j].m128_f32[0] && enemyPos[i].m128_f32[0] - 0.6f <= enemyPos[j].m128_f32[0] + 1) {
-					enemyPos[i].m128_f32[0] += 0.3f;
-				}
-			}
-		}
-	}
-	for (int i = 0; i < MAXENEMY; i++) {
-		rob[i]->SetPosition(enemyPos[i]);
-	}
-
-	/*if (enemyPos[0].m128_f32[0] >= enemyPos[1].m128_f32[0] || enemyPos[0].m128_f32[0] <= enemyPos[1].m128_f32[0]) {
-		enemyRot[0].y++;
-	}*/
-
-	/*if (enemyPos[0].m128_f32[2] >= 0) {
-		enemyRot[0].y++;
-	}*/
-
-
-
-}
-
 void middle::LoadEnemyPopData()
 {
 	std::ifstream file;
-	file.open("Resources/enemyPop.csv");
+	file.open("Resources/LoadEnemy.csv");
 	assert(file.is_open());
 
 	enemyPopCommands << file.rdbuf();
@@ -555,8 +470,19 @@ void middle::UpdataEnemyPopCommands()
 	}
 	ENE = 0;
 	std::string line;
-	while (getline(enemyPopCommands,line))
+
+	XMVECTOR POP = { 0.0f,0.0f,0.0f };
+	XMVECTOR TRACK = { 0.0f,0.0f,0.0f };
+	bool ari = false;
+	int count = 0;
+
+	bool POPSkip = false;
+	bool TRACKSkip = false;
+	bool ARIVESkip = false;
+
+	while (getline(enemyPopCommands, line))
 	{
+
 		std::istringstream line_stram(line);
 
 		std::string word;
@@ -566,77 +492,91 @@ void middle::UpdataEnemyPopCommands()
 		if (word.find("//") == 0) {
 			continue;
 		}
-		//WAITコマンド
-		if (word.find("ARIVE") == 0) {
+
+		if (word.find("WAVE") == 0) {
 			getline(line_stram, word, ',');
 
-			//待ち時間
-			int Arive = atoi(word.c_str());
-			if(Arive==1){
-				all[ENE] = true;
+			//WAVEの要素
+			count = atoi(word.c_str());
+		}
+		if (patern == count) {
+			//WAITコマンド
+			if (word.find("ARIVE") == 0) {
+				getline(line_stram, word, ',');
+
+				//待ち時間
+				int Arive = atoi(word.c_str());
+				if (Arive == 1) {
+					ari = true;
+				}
+				else {
+					ari = false;
+				}
+
+				ARIVESkip = true;
 			}
-			else {
-				all[ENE] = false;
+			else if (word.find("POP") == 0) {
+
+				getline(line_stram, word, ',');
+				float x = (float)std::atof(word.c_str());
+
+				getline(line_stram, word, ',');
+				float y = (float)std::atof(word.c_str());
+
+				getline(line_stram, word, ',');
+				float z = (float)std::atof(word.c_str());
+
+				POP.m128_f32[0] = x;
+				POP.m128_f32[1] = y;
+				POP.m128_f32[2] = z;
+
+				POPSkip = true;
 			}
-			
 
-			//コマンドループ
-			//break;
-		}
-		else if (word.find("POP") == 0) {
+			else if (word.find("TRACK") == 0) {
 
-			getline(line_stram, word, ',');
-			float x = (float)std::atof(word.c_str());
+				getline(line_stram, word, ',');
+				float x = (float)std::atof(word.c_str());
 
-			getline(line_stram, word, ',');
-			float y = (float)std::atof(word.c_str());
+				getline(line_stram, word, ',');
+				float y = (float)std::atof(word.c_str());
 
-			getline(line_stram, word, ',');
-			float z = (float)std::atof(word.c_str());
+				getline(line_stram, word, ',');
+				float z = (float)std::atof(word.c_str());
 
-			enemyPos[ENE].m128_f32[0] = x;
-			enemyPos[ENE].m128_f32[1] = y;
-			enemyPos[ENE].m128_f32[2] = z;
+				TRACK.m128_f32[0] = x;
+				TRACK.m128_f32[1] = y;
+				TRACK.m128_f32[2] = z;
 
-			rob[ENE]->SetPosition(enemyPos[ENE]);
-		}
-		
-		else if (word.find("TRACK") == 0) {
+				TRACKSkip = true;
+			}
 
-			getline(line_stram, word, ',');
-			float x = (float)std::atof(word.c_str());
+			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
+				std::unique_ptr<Robot> newRobot = std::make_unique<Robot>();
+				newRobot->Initialize();
+				newRobot->SetPosition(POP);
+				newRobot->SetTrackPoint(TRACK);
+				newRobot->Spown(ari);
+				rob.push_back(std::move(newRobot));
 
-			getline(line_stram, word, ',');
-			float y = (float)std::atof(word.c_str());
-
-			getline(line_stram, word, ',');
-			float z = (float)std::atof(word.c_str());
-
-			TrackPoint[ENE].m128_f32[0] = x;
-			TrackPoint[ENE].m128_f32[1] = y;
-			TrackPoint[ENE].m128_f32[2] = z;
-
-			rob[ENE]->SetTrackPoint(TrackPoint[ENE]);
-
+				POPSkip = false;
+				TRACKSkip = false;
+				ARIVESkip = false;
+			}
 		}
 
-		
-		else if (word.find("COUNT") == 0) {
-			getline(line_stram, word, ',');
-
-			//待ち時間
-			int count = atoi(word.c_str());
-
-			ENE = count;
-
-			//コマンドループ
-			//break;
+		else if (patern < count) {
+			break;
 		}
-		else if (word.find("END") == 0) {
+
+		if (word.find("END") == 0) {
 			getline(line_stram, word, ',');
 
 			break;
 		}
-		
+
 	}
+	int i = 0;
+
+
 }

@@ -33,7 +33,7 @@ public:
 
 	void SpriteDraw();
 
-	void PlayerMove(bool& move,int patern,bool& spown);
+	void PlayerMove(bool& move,int patern);
 
 	void ObjDraw();
 

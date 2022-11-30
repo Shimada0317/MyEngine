@@ -28,28 +28,14 @@ public:
 
 	void Initialize();
 
-	void Stanby(const XMVECTOR& playerPos,const XMVECTOR& vel);
-
-	void bun(XMVECTOR& pos, XMVECTOR position, float& speed, bool& shot, int& Remaining,bool& retime);
-
-	void Shot(XMVECTOR& pos, XMFLOAT2 position, int speed, bool& shot);
-
-	void debug(XMFLOAT3& pos, XMFLOAT3 posiiton, int speed,bool& d);
-
 	void Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos, const XMFLOAT3& Eye_Rot);
 
 	void Set();
-
-	void ShotBefore(const XMVECTOR& startPos, const XMVECTOR& velocity);
 
 	bool CheckOk();
 
 	void TriggerOn();
 
-	void ShotAfter(const XMVECTOR& baclplayerpos, const XMVECTOR& playerpos,const XMVECTOR&PlayerWorldPos,int& remaining);
-
-	void Hit();
-	
 	void Updata();
 
 	void Draw();
