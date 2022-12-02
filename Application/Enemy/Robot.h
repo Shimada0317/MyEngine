@@ -21,7 +21,7 @@ private:
 public:
 	~Robot();
 
-	void Initialize();
+	void Initialize(const XMFLOAT3& allRot);
 
 	void AllUpdata(Bullet* bull);
 

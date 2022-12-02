@@ -9,7 +9,7 @@ Robot::~Robot()
 	part.reset();
 }
 
-void Robot::Initialize()
+void Robot::Initialize(const XMFLOAT3& AllRot)
 {
 	head = std::make_unique<Head>();
 	body = std::make_unique<Body>();
@@ -24,7 +24,7 @@ void Robot::Initialize()
 	Arms->Initialize();
 	part->Initialize();
 
-	Arms->RespownSet(allRot);
+	Arms->RespownSet(AllRot);
 
 	for (int i = 0; i < 3; i++) {
 		Partarive[i] = true;
@@ -32,6 +32,7 @@ void Robot::Initialize()
 	Hp = 150;
 	OldHp = Hp;
 	Myarive = true;
+	allRot = AllRot;
 }
 
 void Robot::AllUpdata(Bullet* bull)

@@ -593,10 +593,10 @@ void middle::UpdataEnemyPopCommands()
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				std::unique_ptr<Robot> newRobot = std::make_unique<Robot>();
-				newRobot->Initialize();
+				newRobot->Initialize(ROTATION);
 				newRobot->SetPosition(POSITION);
 				newRobot->SetTrackPoint(TRACK);
-				newRobot->SetRotation(ROTATION);
+				//newRobot->SetRotation(ROTATION);
 				rob.push_back(std::move(newRobot));
 
 				POPSkip = false;
