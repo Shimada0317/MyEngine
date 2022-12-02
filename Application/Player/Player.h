@@ -48,6 +48,7 @@ public:
 	void MouthContoroll();
 
 #pragma region Get
+	const bool& GetFinish() { return Finish; }
 	//ŽOŽŸŒ³À•W
 	const XMVECTOR& GetPosition() { return position; }
 	//Šp“x
@@ -72,6 +73,7 @@ public:
 	void SetRetPosition(const XMFLOAT2& position) { this->retpos = position; }
 	void SetRetSiz(const XMFLOAT2& scale) { this->retsize = scale; }
 	void SetHp(int HP) { this->Hp = HP; }
+	void SetFinish(const bool& finish) { this->Finish = finish; }
 #pragma endregion
 private:
 
@@ -151,6 +153,8 @@ private:
 
 	//cam
 	int shake = 0;
+
+	bool Finish = false;
 
 };
 

@@ -23,10 +23,6 @@ public:
 
 	void Initialize();
 
-	void Spown(bool arive);
-
-	void SetPRS(const XMMATRIX& player);
-
 	void AllUpdata(Bullet* bull);
 
 	void Updata(Bullet* bull, const XMMATRIX& player,bool& spown,int& playerHp);

@@ -28,6 +28,8 @@ public:
 	void Finalize();
 
 	const XMVECTOR& GetPos() { return BodyPos; }
+
+	const XMFLOAT4& GetCol() { return HItColor; }
 private:
 	std::unique_ptr<Object3d> body;
 	ObjModel* bodyModel = nullptr;

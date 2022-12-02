@@ -1,5 +1,6 @@
 #include "middle.h"
-#include"imgui/imgui.h"
+#include "imgui/imgui.h"
+#include"imgui/imconfig.h"
 #include<fstream>
 middle::~middle()
 {
@@ -53,10 +54,7 @@ void middle::Initialize()
 	}
 
 	LoadEnemyPopData();
-	UpdataEnemyPopCommands();
-
-
-	oldpatern = patern;
+	//UpdataEnemyPopCommands();
 
 	playerMat = player->GetMat();
 	playerHp = player->GetHp();
@@ -114,40 +112,51 @@ void middle::Updata()
 
 	if (rob.empty()) {
 		move = true;
-		patern += 1;
 	}
 
-	
+	finish = player->GetFinish();
+	if (finish == true) {
+		move = false;
+	}
+	if (move == false && finish == true) {
+		UpdataEnemyPopCommands();
+		patern += 1;
+		finish = false;
+		player->SetFinish(finish);
+	}
+
+
 	//敵をすべて倒した時に進む
 	/*if (all[0] == false && all[1] == false && all[2] == false && all[3] == false && all[4] == false) {
 		move = true;
 		patern += 1;
 	}*/
 
-	if (move == true) {
-		for (int i = 0; i < MAXENEMY; i++) {
-			all[i] = true;
-		}
-	}
 
 	//座標の設定
 	SetPSR();
+	//if (finish == true) {
+	//	move = false;
+	//}
 
-	
+	//
 
-	if (spown == true) {
-		UpdataEnemyPopCommands();
-	}
+	//if (move==false) {
+	//	//UpdataEnemyPopCommands();
+	//	finish = false;
+	//	patern += 1;
+	//	player->SetFinish(finish);
+	//}
 
-	if (spown == false) {
-		//敵の更新処理
-		for (std::unique_ptr<Robot>& Robot : rob) {
- 			for (int i = 0; i < 9; i++) {
-				//enemyPos[j] = rob[j]->GetPosition();
-				Robot->Updata(bull[i], playerMat, spown, playerHp);
-			}
+
+	//敵の更新処理
+	for (std::unique_ptr<Robot>& Robot : rob) {
+		for (int i = 0; i < 9; i++) {
+			//enemyPos[j] = rob[j]->GetPosition();
+			Robot->Updata(bull[i], playerMat, spown, playerHp);
 		}
 	}
+
 
 
 	player->PlayerMove(move, patern);
@@ -203,7 +212,18 @@ void middle::SpriteDraw()
 void middle::ImGuiDraw()
 {
 	player->ImGuiDraw();
+	float a = patern;
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Plyer");
+	ImGui::Checkbox("move", &move);
+	ImGui::Checkbox("finish", &finish);
+	ImGui::SliderFloat("patern", &a, -100.0f, 100.0f);
 
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 
 }
 
@@ -471,8 +491,9 @@ void middle::UpdataEnemyPopCommands()
 	ENE = 0;
 	std::string line;
 
-	XMVECTOR POP = { 0.0f,0.0f,0.0f };
+	XMVECTOR POSITION = { 0.0f,0.0f,0.0f };
 	XMVECTOR TRACK = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 ROTATION = { 0.0f,0.0f,0.0f };
 	bool ari = false;
 	int count = 0;
 
@@ -500,22 +521,7 @@ void middle::UpdataEnemyPopCommands()
 			count = atoi(word.c_str());
 		}
 		if (patern == count) {
-			//WAITコマンド
-			if (word.find("ARIVE") == 0) {
-				getline(line_stram, word, ',');
-
-				//待ち時間
-				int Arive = atoi(word.c_str());
-				if (Arive == 1) {
-					ari = true;
-				}
-				else {
-					ari = false;
-				}
-
-				ARIVESkip = true;
-			}
-			else if (word.find("POP") == 0) {
+			if (word.find("ROTATION") == 0) {
 
 				getline(line_stram, word, ',');
 				float x = (float)std::atof(word.c_str());
@@ -526,13 +532,31 @@ void middle::UpdataEnemyPopCommands()
 				getline(line_stram, word, ',');
 				float z = (float)std::atof(word.c_str());
 
-				POP.m128_f32[0] = x;
-				POP.m128_f32[1] = y;
-				POP.m128_f32[2] = z;
+				ROTATION.x = x;
+				ROTATION.y = y;
+				ROTATION.z = z;
 
 				POPSkip = true;
 			}
+			//座標取得
+			else if (word.find("POSITION") == 0) {
 
+				getline(line_stram, word, ',');
+				float x = (float)std::atof(word.c_str());
+
+				getline(line_stram, word, ',');
+				float y = (float)std::atof(word.c_str());
+
+				getline(line_stram, word, ',');
+				float z = (float)std::atof(word.c_str());
+
+				POSITION.m128_f32[0] = x;
+				POSITION.m128_f32[1] = y;
+				POSITION.m128_f32[2] = z;
+
+				POPSkip = true;
+			}
+			//追尾先の座標取得
 			else if (word.find("TRACK") == 0) {
 
 				getline(line_stram, word, ',');
@@ -551,12 +575,28 @@ void middle::UpdataEnemyPopCommands()
 				TRACKSkip = true;
 			}
 
+			//
+			else if (word.find("ARIVE") == 0) {
+				getline(line_stram, word, ',');
+
+				//待ち時間
+				int Arive = atoi(word.c_str());
+				if (Arive == 1) {
+					ari = true;
+				}
+				else {
+					ari = false;
+				}
+
+				ARIVESkip = true;
+			}
+
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				std::unique_ptr<Robot> newRobot = std::make_unique<Robot>();
 				newRobot->Initialize();
-				newRobot->SetPosition(POP);
+				newRobot->SetPosition(POSITION);
 				newRobot->SetTrackPoint(TRACK);
-				newRobot->Spown(ari);
+				newRobot->SetRotation(ROTATION);
 				rob.push_back(std::move(newRobot));
 
 				POPSkip = false;
@@ -565,7 +605,8 @@ void middle::UpdataEnemyPopCommands()
 			}
 		}
 
-		else if (patern < count) {
+		if (patern < count) {
+			//patern += 1;
 			break;
 		}
 

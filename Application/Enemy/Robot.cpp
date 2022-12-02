@@ -24,33 +24,14 @@ void Robot::Initialize()
 	Arms->Initialize();
 	part->Initialize();
 
+	Arms->RespownSet(allRot);
+
 	for (int i = 0; i < 3; i++) {
 		Partarive[i] = true;
 	}
-	OldHp = Hp;
-	dice = true;
-	TrackPoint.m128_f32[2] = 3;
-
-}
-
-void Robot::Spown(bool arive)
-{
-	Myarive = arive;
 	Hp = 150;
 	OldHp = Hp;
-
-	for (int i = 0; i < 3; i++) {
-		Partarive[i] = true;
-	}
-	Arms->RespownSet(allRot);
-	speed = 0.005f;
-	dice = false;
-}
-
-void Robot::SetPRS(const XMMATRIX& player)
-{
-
-
+	Myarive = true;
 }
 
 void Robot::AllUpdata(Bullet* bull)
@@ -126,19 +107,23 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 	
 	//ê∂Ç´ÇƒÇ¢ÇÈÇ∆Ç´Ç…HPÇ™0Ç…Ç»Ç¡ÇΩÇÁ
 	if (Hp <= 0) {
-		Hp = 1;
+		Hp = 0;
 
 		Myarive = false;
-		isDead_ = true;
+		//isDead_ = true;
 		AttackTime = 0;
 		AttackChanse = 0;
 		rad = 0;
 		for (int i = 0; i < 3; i++) {
 			Partarive[i] = false;
 		}
+		XMFLOAT4 col = body->GetCol();
+		if (col.w <=  0&&particle_.empty()) {
+			isDead_ = true;
+		}
+
 	}
 
-	SetPRS(player);
 	AllUpdata(bull);
 }
 
@@ -186,12 +171,6 @@ void Robot::TrackPlayer()
 	float vx = 0;
 	float vy = 0;
 	float vz = 0;
-	if (dice == true) {
-		patern = (rand() % 2);
-		dice = false;
-	}
-
-
 
 	vx = (allPos.m128_f32[0] - TrackPoint.m128_f32[0]);
 	vy = (allPos.m128_f32[1] - TrackPoint.m128_f32[1]);

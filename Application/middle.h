@@ -185,6 +185,8 @@ private:
 
 	XMVECTOR TrackPoint[MAXENEMY];
 
+	bool finish = false;
+
 
 };
 

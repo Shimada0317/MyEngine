@@ -200,7 +200,7 @@ void Player::PlayerMove(bool& move, int patern)
 	if (move == true) {
 		Active = true;
 	}
-
+	
 	if (Active == true) {
 		kBulletSpeed = 0.5f;
 		if (shake == 0) {
@@ -223,6 +223,7 @@ void Player::PlayerMove(bool& move, int patern)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
+				Finish = true;
 			}
 		}
 		else if (patern == 1) {
@@ -232,6 +233,7 @@ void Player::PlayerMove(bool& move, int patern)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
+				Finish = true;
 			}
 		}
 		else if (patern == 2) {
@@ -247,6 +249,7 @@ void Player::PlayerMove(bool& move, int patern)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
+				Finish = true;
 			}
 		}
 		else if (patern == 3) {
@@ -258,6 +261,7 @@ void Player::PlayerMove(bool& move, int patern)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
+				Finish = true;
 			}
 		}
 		else if (patern == 4) {
@@ -273,6 +277,7 @@ void Player::PlayerMove(bool& move, int patern)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
+				Finish = true;
 			}
 		}
 		else if (patern == 5) {
@@ -286,6 +291,7 @@ void Player::PlayerMove(bool& move, int patern)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
+				Finish = true;
 			}
 		}
 		else if (patern == 6) {
@@ -299,6 +305,7 @@ void Player::PlayerMove(bool& move, int patern)
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
+				Finish = true;
 			}
 		}
 		else if (patern == 8) {
@@ -313,6 +320,7 @@ void Player::PlayerMove(bool& move, int patern)
 					Active = false;
 					waveCount += 1;
 					movetimer = 0.0f;
+					Finish = true;
 				}
 			}
 		}

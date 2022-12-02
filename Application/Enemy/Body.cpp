@@ -56,7 +56,9 @@ void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, B
 	}
 	else {
 		HItColor.w -= 0.01f;
-		
+		if (HItColor.w <= 0) {
+			HItColor.w = 0;
+		}
 	}
 	
 	body->Updata(HItColor);
