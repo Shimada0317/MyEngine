@@ -24,6 +24,8 @@ public:
 
 	void Draw(bool arive);
 
+	void Motion(const float& rot);
+
 	void Finalize();
 
 	const XMFLOAT3& GetScl() { return HeadScl; }

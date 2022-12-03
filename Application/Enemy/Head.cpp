@@ -60,6 +60,12 @@ void Head::Draw(bool arive)
 	}
 }
 
+void Head::Motion(const float& rot)
+{
+	HeadRot.y += rot;
+
+}
+
 void Head::Finalize()
 {
 	Head.reset();

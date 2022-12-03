@@ -73,6 +73,7 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 		TrackPlayer();
 
 		if (l <= 2) {
+			Motion();
 			//プレイヤーの前まで来たとき
 			speed = 0;
 			if (AttackFase != true) {
@@ -194,8 +195,56 @@ void Robot::TrackPlayer()
 
 void Robot::Motion()
 {
+	XMFLOAT3 SclPlus = { 0.00001f,0.00001f,0.00001f };
 
-	
+	XMFLOAT3 bodyScl = body->GetScl();
+	XMFLOAT3 headScl = head->GetScl();
+	XMFLOAT3 armScl = Arms->GetScl();
+	float rot = 5.0f;
+
+		MotionTime += 0.001f;
+
+	if (MotionChange == true) {
+
+		bodyScl.x += SclPlus.x;
+		bodyScl.y += SclPlus.y;
+		bodyScl.z += SclPlus.z;
+
+		headScl.x += SclPlus.x;
+		headScl.y += SclPlus.y;
+		headScl.z += SclPlus.z;
+
+		armScl.x += SclPlus.x;
+		armScl.y += SclPlus.y;
+		armScl.z += SclPlus.z;
+		if (MotionTime >= 1) {
+			MotionChange = false;
+			MotionTime = 0.0f;
+		}
+	}
+	else {
+		bodyScl.x -= SclPlus.x;
+		bodyScl.y -= SclPlus.y;
+		bodyScl.z -= SclPlus.z;
+
+		headScl.x -= SclPlus.x;
+		headScl.y -= SclPlus.y;
+		headScl.z -= SclPlus.z;
+
+		armScl.x -= SclPlus.x;
+		armScl.y -= SclPlus.y;
+		armScl.z -= SclPlus.z;
+		if (MotionTime >= 1) {
+			MotionChange = true;
+			MotionTime = 0.0f;
+		}
+	}
+
+	body->SetScl(bodyScl);
+	head->SetScl(headScl);
+	Arms->SetScl(armScl);
+
+	head->Motion(rot);
 
 }
 

@@ -92,5 +92,8 @@ private:
 
 
 	float l = 0;
+
+	float MotionTime = 0.0f;
+	bool MotionChange = true;
 };
 
