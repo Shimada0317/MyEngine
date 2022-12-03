@@ -35,6 +35,8 @@ public:
 
 	void TrackPlayer();
 
+	void Motion();
+		
 	void Finalize();
 
 	void SetPosition(XMVECTOR allPos) { this->allPos = allPos; }

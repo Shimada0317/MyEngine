@@ -25,6 +25,10 @@ public:
 	void Draw(bool arive);
 
 	void Finalize();
+
+	const XMFLOAT3& GetScl() { return HeadScl; }
+
+	void SetScl(XMFLOAT3 scl) { this->HeadScl = scl; }
 private:
 	std::unique_ptr<Object3d> Head;
 	ObjModel* headModel = nullptr;

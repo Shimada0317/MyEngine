@@ -192,6 +192,13 @@ void Robot::TrackPlayer()
 	allPos.m128_f32[2] -= v3z;
 }
 
+void Robot::Motion()
+{
+
+	
+
+}
+
 void Robot::Finalize()
 {
 

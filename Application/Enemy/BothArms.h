@@ -28,6 +28,10 @@ public:
 	void RespownSet(const XMFLOAT3& rot);
 
 	void Attack(float& attackT,bool& AttackFase,int& playerHp,const bool& arive);
+
+	const XMFLOAT3& GetScl() { return ArmScl; }
+
+	void SetScl(XMFLOAT3 scl) { this->ArmScl = scl; }
 private:
 	std::unique_ptr<Object3d> LArm;
 	std::unique_ptr<Object3d> RArm;

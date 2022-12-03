@@ -30,6 +30,10 @@ public:
 	const XMVECTOR& GetPos() { return BodyPos; }
 
 	const XMFLOAT4& GetCol() { return HItColor; }
+
+	const XMFLOAT3& GetScl() { return BodyScl; }
+
+	void SetScl(XMFLOAT3 scl) { this->BodyScl = scl; }
 private:
 	std::unique_ptr<Object3d> body;
 	ObjModel* bodyModel = nullptr;
