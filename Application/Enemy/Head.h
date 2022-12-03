@@ -16,7 +16,7 @@ private:
 public:
 	~Head();
 
-	void Initialize();
+	void Initialize(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotation);
 
 	void SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation,Bullet* bull);
 

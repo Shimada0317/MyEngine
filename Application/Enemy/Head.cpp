@@ -5,10 +5,18 @@ Head::~Head()
 	delete headModel;
 }
 
-void Head::Initialize()
+void Head::Initialize(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotation)
 {
 	headModel = ObjModel::CreateFromOBJ("Head");
 	Head = Object3d::Create(headModel);
+
+	
+	HeadPos = bodyPos;
+	HeadRot = rotation;
+	HeadPos.m128_f32[1] = bodyPos.m128_f32[1] +1.0f;
+	Head->SetPosition(HeadPos);
+	Head->SetRotation(HeadRot);
+	Head->SetScale(HeadScl);
 }
 
 void Head::SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull)
@@ -20,10 +28,10 @@ void Head::SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull
 	
 
 	HeadPos = bodyPos;
-	HeadRot = rotation;
+
 	HeadPos.m128_f32[1] = bodyPos.m128_f32[1] +1.0f;
 	Head->SetPosition(HeadPos);
-	Head->SetRotation(HeadRot);
+
 	Head->SetScale(HeadScl);
 }
 
@@ -63,7 +71,7 @@ void Head::Draw(bool arive)
 void Head::Motion(const float& rot)
 {
 	HeadRot.y += rot;
-
+	Head->SetRotation(HeadRot);
 }
 
 void Head::Finalize()

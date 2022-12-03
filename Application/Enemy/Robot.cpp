@@ -17,7 +17,7 @@ void Robot::Initialize(const XMFLOAT3& AllRot)
 	RArm = std::make_unique<RightArm>();*/
 	Arms = std::make_unique<BothArms>();
 	part = std::make_unique<ObjParticle>();
-	head->Initialize();
+	head->Initialize(Partarive[0],allPos,allRot);
 	body->Initialize();
 	/*LArm->Initialize();
 	RArm->Initialize();*/
@@ -200,7 +200,7 @@ void Robot::Motion()
 	XMFLOAT3 bodyScl = body->GetScl();
 	XMFLOAT3 headScl = head->GetScl();
 	XMFLOAT3 armScl = Arms->GetScl();
-	float rot = 5.0f;
+	float rot = 0.1f;
 
 		MotionTime += 0.001f;
 
