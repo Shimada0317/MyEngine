@@ -49,5 +49,9 @@ private:
 	XMMATRIX HeadMat;
 
 	bool Hit = false;
+
+	bool radChange = true;
+
+	float MotionRad = 0;
 };
 

@@ -17,6 +17,8 @@ void Head::Initialize(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotat
 	Head->SetPosition(HeadPos);
 	Head->SetRotation(HeadRot);
 	Head->SetScale(HeadScl);
+
+	MotionRad = (rand() % 2);
 }
 
 void Head::SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull)
@@ -70,7 +72,42 @@ void Head::Draw(bool arive)
 
 void Head::Motion(const float& rot)
 {
-	HeadRot.y += rot;
+
+	if (MotionRad == 0) {
+		if (radChange == true) {
+			HeadRot.x += rot;
+			//HeadRot.x += rot;
+		}
+		else {
+			HeadRot.x -= rot;
+			//HeadRot.z -= rot;
+		}
+		if (HeadRot.x >= 10) {
+			radChange = false;
+		}
+		else if (HeadRot.x <= -10) {
+			radChange = true;
+		}
+	}
+
+	if (MotionRad == 1) {
+		if (radChange == true) {
+			//HeadRot.x += rot;
+			HeadRot.z += rot;
+		}
+		else {
+			//HeadRot.x -= rot;
+			HeadRot.z -= rot;
+		}
+		if (HeadRot.z >= 10) {
+			radChange = false;
+		}
+		else if (HeadRot.z <= -10) {
+			radChange = true;
+		}
+	}
+
+
 	Head->SetRotation(HeadRot);
 }
 

@@ -84,7 +84,7 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 					AttackTime = 0;
 					rad = 0;
 				}
-				if (AttackChanse >= 1) {
+				if (AttackChanse >= 3) {
 					AttackFase = true;
 					AttackChanse = 0;
 				}
@@ -200,7 +200,7 @@ void Robot::Motion()
 	XMFLOAT3 bodyScl = body->GetScl();
 	XMFLOAT3 headScl = head->GetScl();
 	XMFLOAT3 armScl = Arms->GetScl();
-	float rot = 0.1f;
+	float rot = 0.05f;
 
 		MotionTime += 0.001f;
 
