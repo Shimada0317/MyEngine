@@ -33,6 +33,8 @@ public:
 
 	void SpriteDraw();
 
+	void CameraWork();
+
 	void PlayerMove(bool& move,int patern);
 
 	void ObjDraw();
@@ -61,6 +63,8 @@ public:
 	const XMFLOAT2& GetRetPosition() { return retpos; }
 	//二次元スケール
 	const XMFLOAT2& GetRetSiz() { return retsize; }
+
+	const bool& GetCamWork() { return CamWork; }
 	//Hp
 	int GetHp() { return Hp; }
 #pragma endregion
@@ -82,6 +86,8 @@ private:
 	ObjModel* TrackModel = nullptr;
 
 	std::unique_ptr<Sprite> spriteRet;
+	std::unique_ptr<Sprite> curtain;
+	std::unique_ptr<Sprite> curtain2;
 
 	std::unique_ptr<Object3d> gun;
 	ObjModel* gunModel = nullptr;
@@ -91,6 +97,10 @@ private:
 
 	std::unique_ptr<Object3d> player;
 	ObjModel* playerModel = nullptr;
+
+	std::unique_ptr<Object3d> elevetor;
+	ObjModel* eleModel = nullptr;
+
 	//発砲時のエフェクト
 	ParticleManager* part;
 
@@ -132,6 +142,11 @@ private:
 	XMFLOAT2 retpos = { 640.0f,360.0f };
 	XMFLOAT2 retsize = { 64.0f,64.0f };
 
+	XMFLOAT2 curtainPos = { 0.0f,-100.0f };
+	XMFLOAT2 curtainSiz = { 1280.0f,100.0f };
+
+	XMFLOAT2 curtainPos2 = { 0.0f,720.0f };
+
 	XMVECTOR offset = { 0,0,1.0f };
 	float time = 0.0f;
 	bool particle = false;
@@ -156,5 +171,8 @@ private:
 
 	bool Finish = false;
 
+	bool CamWork = false;
+
+	bool a = false;
 };
 

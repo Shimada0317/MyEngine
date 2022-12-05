@@ -26,6 +26,12 @@ void Player::Initalize()
 	Sprite::LoadTexture(200, L"Resources/mark.png");
 	spriteRet.reset(Sprite::SpriteCreate(200, retpos, spCol, anc));
 
+	Sprite::LoadTexture(300, L"Resources/curtain.png");
+	curtain.reset(Sprite::SpriteCreate(300, curtainPos));
+	curtain2.reset(Sprite::SpriteCreate(300, curtainPos2));
+	curtain->SetSize(curtainSiz);
+	curtain2->SetSize(curtainSiz);
+
 	cam = new RailCamera();
 	cam->Initialize(position, rotation);
 
@@ -47,7 +53,7 @@ void Player::Set()
 	gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
 
 	playermat = player->GetMatrix();
-	playerWorldPos = { 0.0f,0.0f,0.0f };
+	playerWorldPos = { -10.0f,0.0f,-20.0f };
 	playerWorldPos = XMVector3Transform(playerWorldPos, playermat);
 
 	for (int i = 0; i < 100; i++) {
@@ -97,74 +103,56 @@ void Player::Set()
 void Player::Updata(Bullet* bull[], int& Remaining)
 {
 
-	//弾の発射前
-	if (Remaining < BULL - 1 && ReloadFlag == false) {
-		if (Input::GetInstance()->TriggerKey(DIK_SPACE)||Mouse::GetInstance()->PushClick(0)) {
+	if (CamWork == true) {
+		//弾の発射前
+		if (Remaining < BULL - 1 && ReloadFlag == false) {
+			if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Mouse::GetInstance()->PushClick(0)) {
 
-			Remaining += 1;
-			time = 0.0f;
-			particle = true;
-			for (int i = 0; i < BULL; i++) {
-				if (bull[i]->CheckOk()) {
-					bull[i]->Test(gunWorldPos, TrackWorldPos, Eye_rot);
-					bull[i]->TriggerOn();
-					break;
+				Remaining += 1;
+				time = 0.0f;
+				particle = true;
+				for (int i = 0; i < BULL; i++) {
+					if (bull[i]->CheckOk()) {
+						bull[i]->Test(gunWorldPos, TrackWorldPos, Eye_rot);
+						bull[i]->TriggerOn();
+						break;
+					}
+				}
+			}
+		}
+
+		//リロード
+		if ((Input::GetInstance()->TriggerKey(DIK_R) || Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
+			ReloadFlag = true;
+		}
+
+		if (ReloadFlag == true) {
+			ReloadTime += 1;
+			ans = ReloadTime % 10;
+			if (ans == 0) {
+				Remaining -= 1;
+				if (Remaining == 0) {
+					ReloadFlag = false;
+					ReloadTime = 0;
 				}
 			}
 		}
 	}
-
-	//撃った時のパーティクル
-	if (particle == true) {
-		time += 0.4f;
-		if (time >= 3.0f) {
-			particle = false;
+		if (Active == false) {
+			kBulletSpeed = 0.0f;
+			vel = { 0, 0, kBulletSpeed };
+			//Eye_rot.x = 0;
 		}
-	}
-	else {
-		time = 4.0f;
-	}
-	//リロード
-	if ((Input::GetInstance()->TriggerKey(DIK_R)||Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
-		ReloadFlag = true;
-	}
 
-	if (ReloadFlag == true) {
-		ReloadTime += 1;
-		ans = ReloadTime % 10;
-		if (ans == 0) {
-			Remaining -= 1;
-			if (Remaining == 0) {
-				ReloadFlag = false;
-				ReloadTime = 0;
-			}
+		vel = XMVector3TransformNormal(vel, playermat);
+
+		for (int i = 0; i < 9; i++) {
+			bull[i]->Updata();
 		}
-	}
-	//プレイヤーの移動
-	Action::GetInstance()->PlayerMove3d(position);
-	const float kMoveLimitX = 4;
-	const float kMoveLimitY = 3;
 
-	position.m128_f32[0] = max(position.m128_f32[0], -kMoveLimitX);
-	position.m128_f32[0] = min(position.m128_f32[0], +kMoveLimitX);
-	position.m128_f32[1] = max(position.m128_f32[1], -kMoveLimitY + 3);
-	position.m128_f32[1] = min(position.m128_f32[1], +kMoveLimitY);
+		MouthContoroll();
 
-	if (Active == false) {
-		kBulletSpeed = 0.0f;
-		vel = { 0, 0, kBulletSpeed };
-		Eye_rot.x = 0;
-	}
-
-	vel = XMVector3TransformNormal(vel, playermat);
-
-	for (int i = 0; i < 9; i++) {
-		bull[i]->Updata();
-	}
-
-
-	//ReteicleHaiti();
-	MouthContoroll();
+		CameraWork();
 	
 	Set();
 	cam->Updata(vel, Eye_rot, camera);
@@ -185,7 +173,89 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 
 void Player::SpriteDraw()
 {
-	spriteRet->Draw();
+	if (CamWork == true) {
+		spriteRet->Draw();
+	}
+	else {
+		curtain->Draw();
+		curtain2->Draw();
+	}
+}
+
+void Player::CameraWork()
+{
+	if (CamWork == false) {
+		if (Input::GetInstance()->PushKey(DIK_A)) {
+			vel = { -0.1f,0.0f,0.0f };
+		}
+		if (Input::GetInstance()->PushKey(DIK_D)) {
+			vel = { 0.1f,0.0f,0.0f };
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_W)) {
+			vel = { 0.0f,0.0f,0.1f };
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_S)) {
+			vel = { 0.0f,0.0f,-0.1f };
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_Q)) {
+			vel = { 0.0f,0.1f,0.0f };
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_E)) {
+			vel = { 0.0f,-0.1f,0.0f };
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+			Eye_rot.y += 1.1f;
+		}
+		if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+			Eye_rot.y -= 1.1f;
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_UP)) {
+			Eye_rot.x += 1.1f;
+		}
+
+		if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+			Eye_rot.x -= 1.1f;
+		}
+
+		if (Input::GetInstance()->TriggerKey(DIK_C)) {
+			a = true;
+		}
+
+		if (a == false) {
+			curtainPos.y += 4;
+			curtainPos2.y -= 4;
+
+			if (curtainPos.y >= 0) {
+				curtainPos.y = 0;
+			}
+
+			if (curtainPos2.y <= 620) {
+				curtainPos2.y = 620;
+			}
+		}
+
+		else {
+			curtainPos.y -= 4;
+			curtainPos2.y += 4;
+
+			if (curtainPos.y <= -100) {
+				curtainPos.y = -100;
+			}
+
+			if (curtainPos2.y >= 720) {
+				curtainPos2.y = 720;
+				CamWork = true;
+			}
+		}
+		curtain->SetPosition(curtainPos);
+		curtain2->SetPosition(curtainPos2);
+	}
 }
 
 void Player::PlayerMove(bool& move, int patern)
@@ -286,7 +356,7 @@ void Player::PlayerMove(bool& move, int patern)
 				Eye_rot.y = 0;
 				vel = { 0, 0, kBulletSpeed };
 			}
-			if (camvec.m128_f32[2] <= 0) {
+			if (camvec.m128_f32[2] >= 90) {
 				move = false;
 				Active = false;
 				waveCount += 1;
@@ -295,33 +365,14 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 		else if (patern == 6) {
-			Eye_rot.y -= 3;
-			if (Eye_rot.y >= 270) {
-				Eye_rot.y = 270;
-				vel = { 0, 0, kBulletSpeed };
-			}
-			if (camvec.m128_f32[0] <= 20) {
+			if (camvec.m128_f32[2] <= 20) {
 				move = false;
 				Active = false;
 				waveCount += 1;
 				movetimer = 0.0f;
 				Finish = true;
-			}
-		}
-		else if (patern == 8) {
-			vel = { 0, 0, kBulletSpeed };
-			if (camvec.m128_f32[0] <= 0) {
-				kBulletSpeed = 0.0f;
-				vel = { 0, 0, kBulletSpeed };
-				Eye_rot.y += 3;
-				if (Eye_rot.y >= 360) {
-					Eye_rot.y = 360;
-					move = false;
-					Active = false;
-					waveCount += 1;
-					movetimer = 0.0f;
-					Finish = true;
-				}
+				CamWork = false;
+				a = false;
 			}
 		}
 	}
@@ -329,8 +380,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 void Player::ObjDraw()
 {
-	cam->Draw();
-	if (Hp >= 0) {
+	if (Hp >= 0&&CamWork==true) {
 		Track->Draw();
 		gun->Draw();
 	}

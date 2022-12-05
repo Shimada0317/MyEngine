@@ -70,13 +70,13 @@ private:
 	unique_ptr <Object3d> groundObj;
 	unique_ptr <Object3d >world;
 
+
 	FbxModel* model = nullptr;
 	FbxObject3d* Object = nullptr;
 
 	Sprite* sprite = nullptr;
 	Sprite* title = nullptr;
 
-	DebugCamera* camera = nullptr;
 
 
 	XMFLOAT3 cameraEye = {0.0f,0.0f,-10};
@@ -93,7 +93,6 @@ private:
 	//足場
 	XMVECTOR worldPos = { 0.0f,-1.1f,0.0f };
 	XMFLOAT3 worldScl = { 100,100,100 };
-
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 

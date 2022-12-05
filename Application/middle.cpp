@@ -24,6 +24,7 @@ void middle::Initialize()
 	Sprite::LoadTexture(18, L"Resources/Hpber.png");
 	//camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
 	//Object3d::SetCamera(camera);
+
 	player = std::make_unique<Player>();
 	player->Initalize();
 
@@ -58,11 +59,13 @@ void middle::Initialize()
 
 	playerMat = player->GetMat();
 	playerHp = player->GetHp();
+
+	getCamWorkF = player->GetCamWork();
 }
 
 void middle::SetPSR()
 {
-
+	getCamWorkF = player->GetCamWork();
 	playerMat = player->GetMat();
 
 	//HUDのポジションセット
@@ -105,7 +108,6 @@ void middle::Updata()
 
 	SetPSR();
 
-
 	rob.remove_if([](std::unique_ptr<Robot>& robot) {
 		return robot->IsDead();
 		});
@@ -125,41 +127,19 @@ void middle::Updata()
 		player->SetFinish(finish);
 	}
 
-
-	//敵をすべて倒した時に進む
-	/*if (all[0] == false && all[1] == false && all[2] == false && all[3] == false && all[4] == false) {
-		move = true;
-		patern += 1;
-	}*/
-
-
 	//座標の設定
 	SetPSR();
-	//if (finish == true) {
-	//	move = false;
-	//}
-
-	//
-
-	//if (move==false) {
-	//	//UpdataEnemyPopCommands();
-	//	finish = false;
-	//	patern += 1;
-	//	player->SetFinish(finish);
-	//}
-
 
 	//敵の更新処理
 	for (std::unique_ptr<Robot>& Robot : rob) {
 		for (int i = 0; i < 9; i++) {
-			//enemyPos[j] = rob[j]->GetPosition();
 			Robot->Updata(bull[i], playerMat, spown, playerHp);
 		}
 	}
 
-
-
-	player->PlayerMove(move, patern);
+	if (getCamWorkF == true) {
+		player->PlayerMove(move, patern);
+	}
 	//プレイヤーの更新処理
 	player->Updata(bull, Remaining);
 }
@@ -181,30 +161,33 @@ void middle::Draw(DirectXCommon* dxCommon)
 //
 void middle::SpriteDraw()
 {
-	for (int i = Remaining; i < 8; i++) {
-		bulletHUD[i]->Draw();
-	}
+	if (getCamWorkF == true) {
 
-	if (Remaining == 8) {
-		Reload->Draw();
-	}
+		for (int i = Remaining; i < 8; i++) {
+			bulletHUD[i]->Draw();
+		}
 
-	if (playerHp == 1) {
-		LifeCount[0]->Draw();
+		if (Remaining == 8) {
+			Reload->Draw();
+		}
+
+		if (playerHp == 1) {
+			LifeCount[0]->Draw();
+		}
+		else if (playerHp == 2) {
+			LifeCount[1]->Draw();
+		}
+		else if (playerHp == 3) {
+			LifeCount[2]->Draw();
+		}
+		else if (playerHp == 4) {
+			LifeCount[3]->Draw();
+		}
+		else if (playerHp == 5) {
+			LifeCount[4]->Draw();
+		}
+		HpBer->Draw();
 	}
-	else if (playerHp == 2) {
-		LifeCount[1]->Draw();
-	}
-	else if (playerHp == 3) {
-		LifeCount[2]->Draw();
-	}
-	else if (playerHp == 4) {
-		LifeCount[3]->Draw();
-	}
-	else if (playerHp == 5) {
-		LifeCount[4]->Draw();
-	}
-	HpBer->Draw();
 
 	player->SpriteDraw();
 }

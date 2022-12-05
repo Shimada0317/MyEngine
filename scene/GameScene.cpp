@@ -23,7 +23,6 @@ GameScene::GameScene(SceneManager* sceneManager_)
 
 void GameScene::Initialize(DirectXCommon* dxComon)
 {
-	
 	ModelManager::GetInstance()->Initialize();
 	
 	////スプライトの読み込み

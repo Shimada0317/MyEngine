@@ -25,8 +25,6 @@ public:
 
 	void SetPSR();
 
-	void AllUpdata();
-
 	void Updata();
 
 	void Draw(DirectXCommon* dxCommon);
@@ -187,6 +185,8 @@ private:
 
 	bool finish = false;
 
+	bool start = false;
 
+	bool getCamWorkF = false;
 };
 
