@@ -45,6 +45,9 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	worldmodel = ObjModel::CreateFromOBJ("world", true);
 	world = Object3d::Create(worldmodel);
 
+	startModel = ObjModel::CreateFromOBJ("bil", true);
+	Start = Object3d::Create(startModel);
+
 	mid =std::make_unique <middle>();
 	mid->Initialize();
 	patern = mid->GetPatern();
@@ -73,6 +76,9 @@ void GameScene::SetPosSclRot()
 	patern = mid->GetPatern();
 	playerHp = mid->GetHp();
 	
+	Start->SetPosition(start_pos);
+	Start->SetScale(start_scl);
+	Start->SetRotation({ 0.0f,180.0f,0.0f });
 };
 
 void GameScene::AllUpdata()
@@ -81,6 +87,7 @@ void GameScene::AllUpdata()
 	sphere->Updata();
 	groundObj->Updata();
 	world->Updata();
+	Start->Updata();
 	mid->Updata();
 }
 
@@ -132,6 +139,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	sphere->Draw();
 	groundObj->Draw();
 	world->Draw();
+	Start->Draw();
 	////human3d->Draw();
 	////オブジェクト後処理
 	Object3d::PostDraw();

@@ -28,6 +28,10 @@ void Player::Initalize()
 
 	Sprite::LoadTexture(300, L"Resources/curtain.png");
 	curtain.reset(Sprite::SpriteCreate(300, curtainPos));
+
+	Sprite::LoadTexture(301, L"Resources/window.png");
+	window.reset(Sprite::SpriteCreate(301, windowPos));
+
 	curtain2.reset(Sprite::SpriteCreate(300, curtainPos2));
 	curtain->SetSize(curtainSiz);
 	curtain2->SetSize(curtainSiz);
@@ -185,14 +189,14 @@ void Player::SpriteDraw()
 
 void Player::CameraWork()
 {
-	if (CamWork == false) {
+	if (CamWork == false && start == false) {
 
 		if (stanby == false) {
 			Eye_rot.y = 180;
 		}
 		else if (stanby == true && act == 0) {
 			Eye_rot.y -= 2;
-			
+
 			if (Eye_rot.y <= 0) {
 				Eye_rot.y = 0;
 				actTime += 0.5f;
@@ -208,102 +212,106 @@ void Player::CameraWork()
 			}
 		}
 		if (act == 1) {
-			Eye_rot.x -= 0.7f;
-			vel = { 0.0f,-0.3f,0.0f };
+		
+			actTime += 0.35f;
+			vel = { 0.0f,0.3f,0.4f };
+			if (actTime >= 5) {
+				vel = { 0.0f,-0.3f,0.0f };
+				Eye_rot.x -= 0.7f;
+			}
 			if (Eye_rot.x <= 0.0f) {
 				Eye_rot.x = 0.0f;
 			}
-			if (playerWorldPos.m128_f32[1] <= 0) {
+			if (playerWorldPos.m128_f32[1] <= 0.3f) {
 				vel = { 0.0f,0.0f,0.0f };
+				position.m128_f32[1] = 0.0f;
 				a = true;
 			}
 		}
-		
 
-
-		if (Input::GetInstance()->PushKey(DIK_A)) {
-			vel = { -0.1f,0.0f,0.0f };
-		}
-		if (Input::GetInstance()->PushKey(DIK_D)) {
-			vel = { 0.1f,0.0f,0.0f };
-		}
-
-		if (Input::GetInstance()->PushKey(DIK_W)) {
-			vel = { 0.0f,0.0f,0.1f };
-		}
-
-		if (Input::GetInstance()->PushKey(DIK_S)) {
-			vel = { 0.0f,0.0f,-0.1f };
-		}
-
-		if (Input::GetInstance()->PushKey(DIK_Q)) {
-			vel = { 0.0f,0.1f,0.0f };
-		}
-
-		if (Input::GetInstance()->PushKey(DIK_E)) {
-			vel = { 0.0f,-0.1f,0.0f };
-		}
-
-		if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-			Eye_rot.y += 1.1f;
-		}
-		if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-			Eye_rot.y -= 1.1f;
-		}
-
-		if (Input::GetInstance()->PushKey(DIK_UP)) {
-			Eye_rot.x += 1.1f;
-		}
-
-		if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-			Eye_rot.x -= 1.1f;
-		}
-
-		if (Input::GetInstance()->TriggerKey(DIK_C) && stanby == true) {
-			a = true;
-			act = 100;
-			Eye_rot.x = 0.0f;
-			Eye_rot.y = 0;
-			position.m128_f32[0] = 0.0f;
-			position.m128_f32[1] = 0.0f;
-			position.m128_f32[2] = 0.0f;
-			cam->Initialize(position, Eye_rot);
-		}
-
-		if (Input::GetInstance()->TriggerKey(DIK_V)) {
-			stanby = true;
-
-		}
-
-		if (a == false) {
-			curtainPos.y += 4;
-			curtainPos2.y -= 4;
-
-			if (curtainPos.y >= 0) {
-				curtainPos.y = 0;
-			}
-
-			if (curtainPos2.y <= 620) {
-				curtainPos2.y = 620;
-			}
-		}
-
-		else {
-			curtainPos.y -= 4;
-			curtainPos2.y += 4;
-
-			if (curtainPos.y <= -100) {
-				curtainPos.y = -100;
-			}
-
-			if (curtainPos2.y >= 720) {
-				curtainPos2.y = 720;
-				CamWork = true;
-			}
-		}
-		curtain->SetPosition(curtainPos);
-		curtain2->SetPosition(curtainPos2);
 	}
+
+	if (Input::GetInstance()->PushKey(DIK_A)) {
+		vel = { -0.5f,0.0f,0.0f };
+	}
+	if (Input::GetInstance()->PushKey(DIK_D)) {
+		vel = { 0.5f,0.0f,0.0f };
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_W)) {
+		vel = { 0.0f,0.0f,0.5f };
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_S)) {
+		vel = { 0.0f,0.0f,-0.5f };
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_Q)) {
+		vel = { 0.0f,0.5f,0.0f };
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_E)) {
+		vel = { 0.0f,-0.5f,0.0f };
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+		Eye_rot.y += 5.1f;
+	}
+	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+		Eye_rot.y -= 5.1f;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_UP)) {
+		Eye_rot.x += 5.1f;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+		Eye_rot.x -= 5.1f;
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_C) && stanby == true) {
+		a = true;
+		act = 100;
+		Eye_rot.x = 0;
+		Eye_rot.y = 0;
+		position = { 0.0f,0.0f,0.0f };
+		cam->Initialize(position, Eye_rot);
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_V)) {
+		stanby = true;
+
+	}
+
+	if (a == false) {
+		curtainPos.y += 4;
+		curtainPos2.y -= 4;
+
+		if (curtainPos.y >= 0) {
+			curtainPos.y = 0;
+		}
+
+		if (curtainPos2.y <= 620) {
+			curtainPos2.y = 620;
+		}
+	}
+
+	else {
+		curtainPos.y -= 4;
+		curtainPos2.y += 4;
+
+		if (curtainPos.y <= -100) {
+			curtainPos.y = -100;
+		}
+
+		if (curtainPos2.y >= 720) {
+			curtainPos2.y = 720;
+			CamWork = true;
+			start = true;
+		}
+	}
+	curtain->SetPosition(curtainPos);
+	curtain2->SetPosition(curtainPos2);
 }
 
 void Player::PlayerMove(bool& move, int patern)
@@ -420,6 +428,7 @@ void Player::PlayerMove(bool& move, int patern)
 			Finish = true;
 			CamWork = false;
 			a = false;
+			act = 0;
 
 		}
 	}

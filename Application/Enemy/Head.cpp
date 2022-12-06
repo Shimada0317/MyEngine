@@ -93,16 +93,16 @@ void Head::Motion(const float& rot)
 	if (MotionRad == 1) {
 		if (radChange == true) {
 			//HeadRot.x += rot;
-			HeadRot.z += rot;
+			HeadRot.y += rot;
 		}
 		else {
 			//HeadRot.x -= rot;
-			HeadRot.z -= rot;
+			HeadRot.y -= rot;
 		}
-		if (HeadRot.z >= 10) {
+		if (HeadRot.y >= 10) {
 			radChange = false;
 		}
-		else if (HeadRot.z <= -10) {
+		else if (HeadRot.y <= -10) {
 			radChange = true;
 		}
 	}

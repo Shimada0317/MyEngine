@@ -88,6 +88,7 @@ private:
 	std::unique_ptr<Sprite> spriteRet;
 	std::unique_ptr<Sprite> curtain;
 	std::unique_ptr<Sprite> curtain2;
+	std::unique_ptr<Sprite> window;
 
 	std::unique_ptr<Object3d> gun;
 	ObjModel* gunModel = nullptr;
@@ -109,7 +110,7 @@ private:
 	RailCamera* cam;
 	//ローカル
 		//レティクルObj
-		XMVECTOR position = { 0.0f,40.0f,0.0f };
+		XMVECTOR position = { 0.0f,55.0f,0.0f };
 		XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 scale = { 0.3f,0.3f,0.3f };
 		//発射台Obj
@@ -147,6 +148,8 @@ private:
 
 	XMFLOAT2 curtainPos2 = { 0.0f,720.0f };
 
+	XMFLOAT2 windowPos = { 0.0f,0.0f };
+
 	XMVECTOR offset = { 0,0,1.0f };
 	float time = 0.0f;
 	bool particle = false;
@@ -177,5 +180,7 @@ private:
 	bool stanby = false;
 	int act = 0;
 	float actTime = 0.0f;
+
+	bool start = false;
 };
 
