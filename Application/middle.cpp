@@ -65,7 +65,7 @@ void middle::Initialize()
 
 void middle::SetPSR()
 {
-	getCamWorkF = player->GetCamWork();
+	
 	playerMat = player->GetMat();
 
 	//HUDのポジションセット
@@ -106,40 +106,42 @@ void middle::SetPSR()
 void middle::Updata()
 {
 
-	SetPSR();
+	getCamWorkF = player->GetCamWork();
+	if (getCamWorkF == true) {
 
-	rob.remove_if([](std::unique_ptr<Robot>& robot) {
-		return robot->IsDead();
-		});
+		rob.remove_if([](std::unique_ptr<Robot>& robot) {
+			return robot->IsDead();
+			});
 
-	if (rob.empty()) {
-		move = true;
+		if (rob.empty()) {
+			move = true;
+		}
+
+		finish = player->GetFinish();
+		if (finish == true) {
+			move = false;
+		}
+		if (move == false && finish == true) {
+			UpdataEnemyPopCommands();
+			patern += 1;
+			finish = false;
+			player->SetFinish(finish);
+		}
+
+
+
+		//敵の更新処理
+		for (std::unique_ptr<Robot>& Robot : rob) {
+			for (int i = 0; i < 9; i++) {
+				Robot->Updata(bull[i], playerMat, spown, playerHp);
+			}
+		}
+
 	}
 
-	finish = player->GetFinish();
-	if (finish == true) {
-		move = false;
-	}
-	if (move == false && finish == true) {
-		UpdataEnemyPopCommands();
-		patern += 1;
-		finish = false;
-		player->SetFinish(finish);
-	}
-
+	player->PlayerMove(move, patern);
 	//座標の設定
 	SetPSR();
-
-	//敵の更新処理
-	for (std::unique_ptr<Robot>& Robot : rob) {
-		for (int i = 0; i < 9; i++) {
-			Robot->Updata(bull[i], playerMat, spown, playerHp);
-		}
-	}
-
-	if (getCamWorkF == true) {
-		player->PlayerMove(move, patern);
-	}
 	//プレイヤーの更新処理
 	player->Updata(bull, Remaining);
 }

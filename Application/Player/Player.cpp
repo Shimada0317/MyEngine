@@ -37,6 +37,7 @@ void Player::Initalize()
 
 	player->SetParent(camera);
 
+
 };
 
 void Player::Set()
@@ -91,7 +92,7 @@ void Player::Set()
 	player->SetPosition(playerPos);
 	player->SetScale(playerScl);
 	player->SetParent(camera);
-	
+
 
 	gun->SetRotation(gunRot);
 	gun->SetScale(gunScal);
@@ -138,22 +139,22 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 			}
 		}
 	}
-		if (Active == false) {
-			kBulletSpeed = 0.0f;
-			vel = { 0, 0, kBulletSpeed };
-			//Eye_rot.x = 0;
-		}
+	if (Active == false) {
+		kBulletSpeed = 0.0f;
+		vel = { 0, 0, kBulletSpeed };
+		//Eye_rot.x = 0;
+	}
 
-		vel = XMVector3TransformNormal(vel, playermat);
+	vel = XMVector3TransformNormal(vel, playermat);
 
-		for (int i = 0; i < 9; i++) {
-			bull[i]->Updata();
-		}
+	for (int i = 0; i < 9; i++) {
+		bull[i]->Updata();
+	}
 
-		MouthContoroll();
+	MouthContoroll();
 
-		CameraWork();
-	
+	CameraWork();
+
 	Set();
 	cam->Updata(vel, Eye_rot, camera);
 	camera->Updata();
@@ -185,6 +186,41 @@ void Player::SpriteDraw()
 void Player::CameraWork()
 {
 	if (CamWork == false) {
+
+		if (stanby == false) {
+			Eye_rot.y = 180;
+		}
+		else if (stanby == true && act == 0) {
+			Eye_rot.y -= 2;
+			
+			if (Eye_rot.y <= 0) {
+				Eye_rot.y = 0;
+				actTime += 0.5f;
+				if (actTime > 5) {
+					actTime = 5.0f;
+					Eye_rot.x += 1.0f;
+				}
+			}
+			if (Eye_rot.x >= 90) {
+				actTime = 0.0f;
+				Eye_rot.x = 90;
+				act = 1;
+			}
+		}
+		if (act == 1) {
+			Eye_rot.x -= 0.7f;
+			vel = { 0.0f,-0.3f,0.0f };
+			if (Eye_rot.x <= 0.0f) {
+				Eye_rot.x = 0.0f;
+			}
+			if (playerWorldPos.m128_f32[1] <= 0) {
+				vel = { 0.0f,0.0f,0.0f };
+				a = true;
+			}
+		}
+		
+
+
 		if (Input::GetInstance()->PushKey(DIK_A)) {
 			vel = { -0.1f,0.0f,0.0f };
 		}
@@ -223,8 +259,20 @@ void Player::CameraWork()
 			Eye_rot.x -= 1.1f;
 		}
 
-		if (Input::GetInstance()->TriggerKey(DIK_C)) {
+		if (Input::GetInstance()->TriggerKey(DIK_C) && stanby == true) {
 			a = true;
+			act = 100;
+			Eye_rot.x = 0.0f;
+			Eye_rot.y = 0;
+			position.m128_f32[0] = 0.0f;
+			position.m128_f32[1] = 0.0f;
+			position.m128_f32[2] = 0.0f;
+			cam->Initialize(position, Eye_rot);
+		}
+
+		if (Input::GetInstance()->TriggerKey(DIK_V)) {
+			stanby = true;
+
 		}
 
 		if (a == false) {
@@ -270,7 +318,7 @@ void Player::PlayerMove(bool& move, int patern)
 	if (move == true) {
 		Active = true;
 	}
-	
+
 	if (Active == true) {
 		kBulletSpeed = 0.5f;
 		if (shake == 0) {
@@ -365,22 +413,21 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 		else if (patern == 6) {
-			if (camvec.m128_f32[2] <= 20) {
-				move = false;
-				Active = false;
-				waveCount += 1;
-				movetimer = 0.0f;
-				Finish = true;
-				CamWork = false;
-				a = false;
-			}
+			move = false;
+			Active = false;
+			waveCount += 1;
+			movetimer = 0.0f;
+			Finish = true;
+			CamWork = false;
+			a = false;
+
 		}
 	}
 }
 
 void Player::ObjDraw()
 {
-	if (Hp >= 0&&CamWork==true) {
+	if (Hp >= 0 && CamWork == true) {
 		Track->Draw();
 		gun->Draw();
 	}
@@ -403,14 +450,6 @@ void Player::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-
-
-	if (ImGui::TreeNode("TrackWorldPos")) {
-		ImGui::SliderFloat("pos.x", &TrackWorldPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &TrackWorldPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &TrackWorldPos.m128_f32[2], -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
 
 	if (ImGui::TreeNode("playerRot")) {
 		ImGui::SliderFloat("Rot.x", &Eye_rot.x, -100.0f, 100.0f);
@@ -499,7 +538,7 @@ void Player::MouthContoroll()
 
 	XMVECTOR positionRet = TrackWorldPos;
 
-	Mouse::GetInstance()->Mousemove(View,Pro, matViewport, retpos, positionRet);
+	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet);
 
 	Track->SetPosition(positionRet);
 }

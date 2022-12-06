@@ -109,7 +109,7 @@ private:
 	RailCamera* cam;
 	//ローカル
 		//レティクルObj
-		XMVECTOR position = { 0.0f,0.0f,0.0f };
+		XMVECTOR position = { 0.0f,40.0f,0.0f };
 		XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 scale = { 0.3f,0.3f,0.3f };
 		//発射台Obj
@@ -174,5 +174,8 @@ private:
 	bool CamWork = false;
 
 	bool a = false;
+	bool stanby = false;
+	int act = 0;
+	float actTime = 0.0f;
 };
 
