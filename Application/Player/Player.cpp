@@ -274,7 +274,7 @@ void Player::CameraWork()
 		act = 100;
 		Eye_rot.x = 0;
 		Eye_rot.y = 0;
-		position = { 0.0f,0.0f,0.0f };
+		position = { 0.0f,-0.2f,0.0f };
 		cam->Initialize(position, Eye_rot);
 	}
 
@@ -452,9 +452,9 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("LoacalPos")) {
-		ImGui::SliderFloat("pos.x", &position.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &position.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &position.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &playerWorldPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &playerWorldPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &playerWorldPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::SliderFloat("mat.x", &a, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
