@@ -7,6 +7,8 @@ Robot::~Robot()
 	body.reset();
 	Arms.reset();
 	part.reset();
+	shadow.reset();
+	delete shadowModel;
 }
 
 void Robot::Initialize(const XMFLOAT3& AllRot)
@@ -24,6 +26,10 @@ void Robot::Initialize(const XMFLOAT3& AllRot)
 	Arms->Initialize();
 	part->Initialize();
 
+	shadowModel = ObjModel::CreateFromOBJ("shadow");
+	shadow = Object3d::Create(shadowModel);
+	
+
 	Arms->RespownSet(AllRot);
 
 	for (int i = 0; i < 3; i++) {
@@ -37,12 +43,19 @@ void Robot::Initialize(const XMFLOAT3& AllRot)
 
 void Robot::AllUpdata(Bullet* bull)
 {
+	shadowPos = allPos;
+	shadowPos.m128_f32[1] = allPos.m128_f32[1] - 0.8f;
+	shadow->SetPosition(shadowPos);
+	shadow->SetRotation({ 0.0f,0.0f,0.0f });
+	shadow->SetScale({ 1.0f,1.0f,1.0f });
+
 	head->Updata(Partarive[0], allPos, allRot, bull, Hp);
 	//RArm->Updata(arive[1], allPos, bull, Hp);
 	//LArm->Updata(arive[2], allPos, bull, Hp);
 	Arms->Updata(Partarive[1], allPos, allRot, bull, Hp);
 	body->Updata(Partarive[2], allPos, allRot, bull, Hp);
 	part->Updata(allPos, allRot);
+	shadow->Updata(shadowColor);
 	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
 		patrticle->Updata(allPos, allRot);
 	}
@@ -110,7 +123,7 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 	//¶‚«‚Ä‚¢‚é‚Æ‚«‚ÉHP‚ª0‚É‚È‚Á‚½‚ç
 	if (Hp <= 0) {
 		Hp = 0;
-
+		shadowColor.w = 0.0f;
 		Myarive = false;
 		//isDead_ = true;
 		AttackTime = 0;
@@ -137,6 +150,7 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	LArm->Draw(arive[2]);*/
 	Arms->Draw(Partarive[1]);
 	body->Draw(Partarive[2]);
+	shadow->Draw();
 	//part->Draw();
 	for (std::unique_ptr<ObjParticle>& particle : particle_) {
 		particle->Draw();

@@ -34,6 +34,12 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	//モデルの読み込み
 
+	billsModel = ObjModel::CreateFromOBJ("bills");
+	for (int i = 0; i < BILLS; i++) {
+		bills[i] = Object3d::Create(billsModel);
+	}
+
+
 	playermodel = ObjModel::CreateFromOBJ("skydome");
 	sphere = Object3d::Create();
 	sphere->SetModel(playermodel);
@@ -79,11 +85,30 @@ void GameScene::SetPosSclRot()
 	Start->SetPosition(start_pos);
 	Start->SetScale(start_scl);
 	Start->SetRotation({ 0.0f,180.0f,0.0f });
+
+	for (int i = 0; i < BILLS; i++) {
+		
+		bills[i]->SetScale(billsScl);
+		if (i % 2 == 0) {
+			billsPos = { 100.0f, billsposY,-300.0f + (100 * i/2) };
+			billsRot = { 0.0f,90.0f,0.0f };
+		}
+		else if (i % 2 == 1) {
+			billsPos = { -100.0f, billsposY,-300.0f + (100 * i/2) };
+			billsRot = { 0.0f,270.0f,0.0f };
+		}
+		bills[i]->SetRotation(billsRot);
+		bills[i]->SetPosition(billsPos);
+	}
 };
 
 void GameScene::AllUpdata()
 {
 	//lightGroup->Update();
+	for (int i = 0; i < BILLS; i++) {
+		bills[i]->Updata({ 1.0f,1.0f,1.0f,0.8f });
+	}
+
 	sphere->Updata();
 	groundObj->Updata();
 	world->Updata();
@@ -93,6 +118,11 @@ void GameScene::AllUpdata()
 
 void GameScene::Updata()
 {
+	billsposY += 0.5f;
+	if (billsposY >= 0) {
+		billsposY = 0.0f;
+	}
+
 	if (oldHp > playerHp) {
 		post = true;
 		oldHp = playerHp;
@@ -140,6 +170,10 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	groundObj->Draw();
 	world->Draw();
 	Start->Draw();
+	for (int i = 0; i < BILLS; i++) {
+		bills[i]->Draw();
+	}
+
 	////human3d->Draw();
 	////オブジェクト後処理
 	Object3d::PostDraw();
@@ -184,7 +218,15 @@ void GameScene::Finalize()
 	delete ground;
 	delete playermodel;
 	delete worldmodel;
-	mid.reset();
 	delete postEffect;
+	delete billsModel;
+
+	world.reset();
+	Start.reset();
+	groundObj.reset();
+	for (int i = 0; i < BILLS; i++) {
+		bills[i].reset();
+	}
+	mid.reset();
 }
 

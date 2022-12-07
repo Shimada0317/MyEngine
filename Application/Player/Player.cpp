@@ -4,12 +4,23 @@
 #include"imgui/imconfig.h"
 #include"WinApp.h"
 
+Player::~Player()
+{
+	delete TrackModel;
+	delete gunModel;
+	delete playerModel;
+	
+	Track.reset();
+	gun.reset();
+	player.reset();
+}
+
 void Player::Initalize()
 {
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(camera);
 
-	TrackModel = ObjModel::CreateFromOBJ("block0");
+	TrackModel = ObjModel::CreateFromOBJ("shadow");
 	Track = Object3d::Create(TrackModel);
 
 	gunModel = ObjModel::CreateFromOBJ("gun");

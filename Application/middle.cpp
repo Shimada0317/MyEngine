@@ -602,7 +602,4 @@ void middle::UpdataEnemyPopCommands()
 		}
 
 	}
-	int i = 0;
-
-
 }

@@ -56,6 +56,8 @@ private:
 	std::unique_ptr<BothArms>Arms;
 	std::unique_ptr<Body>body;
 	std::unique_ptr<ObjParticle>part;
+	std::unique_ptr<Object3d> shadow;
+	ObjModel* shadowModel = nullptr;
 	std::list<std::unique_ptr<ObjParticle>>particle_;
 
 
@@ -74,6 +76,10 @@ private:
 	XMVECTOR TrackPoint = { 0,0,0 };
 
 	XMVECTOR playerPos;
+
+	XMVECTOR shadowPos = { 0,0,0 };
+
+	XMFLOAT4 shadowColor = { 0.0f,0.0f,0.0f,0.1f };
 
 	int action = 0;
 
@@ -95,5 +101,6 @@ private:
 
 	float MotionTime = 0.0f;
 	bool MotionChange = true;
+
 };
 

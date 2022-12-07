@@ -22,6 +22,7 @@ const int BULL = 9;
 class Player
 {
 public:
+	~Player();
 
 	void Initalize();
 

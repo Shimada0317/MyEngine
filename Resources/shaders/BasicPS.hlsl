@@ -28,7 +28,7 @@ PSOutput main(VSOutput input)
 
 	float3 light = normalize(float3(1, -1, 1));
 	float diffuse = saturate(dot(-light, input.normal));
-	float brightness = diffuse + 0.3f;
+	float brightness = diffuse + 0.5f;
 	float4 shadecolor = float4(brightness, brightness, brightness, 1.0f);
 
 	output.target0 = shadecolor * texcolor*color;

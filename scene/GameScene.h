@@ -20,6 +20,8 @@
 
 using namespace std;
 
+const int BILLS = 16;
+
 class GameScene:public BaseScene
 {
 private: // エイリアス
@@ -66,11 +68,13 @@ private:
 
 	ObjModel* worldmodel = nullptr;
 	ObjModel* startModel = nullptr;
+	ObjModel* billsModel = nullptr;
 
 	unique_ptr <Object3d> sphere;
 	unique_ptr <Object3d> groundObj;
 	unique_ptr <Object3d >world;
 	unique_ptr<Object3d> Start;
+	unique_ptr<Object3d> bills[BILLS];
 
 
 	FbxModel* model = nullptr;
@@ -85,7 +89,7 @@ private:
 	XMFLOAT3 cameraTarget = {0.0f,1.0f,0.0f};
 	float cameradistance = 20.0f;
 
-	XMVECTOR start_pos = { 0.0f,.0f,-16.5f };
+	XMVECTOR start_pos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 start_scl = { 15.0f,15.0f,15.0f };
 
 	XMVECTOR pos = { 0,0,0 };
@@ -96,6 +100,10 @@ private:
 	//足場
 	XMVECTOR worldPos = { 0.0f,-1.1f,0.0f };
 	XMFLOAT3 worldScl = { 100,100,100 };
+	//ビル群
+	XMFLOAT3 billsScl = { 10.0f,10.0f,10.0f };
+	XMVECTOR billsPos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 billsRot = { 0.0f,90.0f,0.0f };
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 
@@ -120,6 +128,8 @@ private:
 	float clearT = 0;
 
 	XMFLOAT4 col = { 0.0f,1.0f,1.0f,1.0f };
+
+	float billsposY = { -150.0f };
 
 };
 
