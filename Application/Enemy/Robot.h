@@ -101,6 +101,8 @@ private:
 
 	float MotionTime = 0.0f;
 	bool MotionChange = true;
-
+	float RobT = 0.0f;
+	bool slideF = false;
+	float RobS = 0.01f;
 };
 

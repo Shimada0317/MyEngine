@@ -210,7 +210,7 @@ void Player::CameraWork()
 
 			if (Eye_rot.y <= 0) {
 				Eye_rot.y = 0;
-				actTime += 0.5f;
+				actTime += 0.2f;
 				if (actTime > 5) {
 					actTime = 5.0f;
 					Eye_rot.x += 1.0f;
@@ -224,10 +224,10 @@ void Player::CameraWork()
 		}
 		if (act == 1) {
 		
-			actTime += 0.35f;
-			vel = { 0.0f,0.3f,0.4f };
+			actTime += 0.15f;
+			vel = { 0.0f,0.6f,0.4f };
 			if (actTime >= 5) {
-				vel = { 0.0f,-0.3f,0.0f };
+				vel = { 0.0f,-0.6f,0.0f };
 				Eye_rot.x -= 0.7f;
 			}
 			if (Eye_rot.x <= 0.0f) {
@@ -285,7 +285,7 @@ void Player::CameraWork()
 		act = 100;
 		Eye_rot.x = 0;
 		Eye_rot.y = 0;
-		position = { 0.0f,-0.2f,0.0f };
+		position = { 0.0f,-0.7f,0.0f };
 		cam->Initialize(position, Eye_rot);
 	}
 

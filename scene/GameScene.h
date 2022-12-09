@@ -75,6 +75,7 @@ private:
 	unique_ptr <Object3d >world;
 	unique_ptr<Object3d> Start;
 	unique_ptr<Object3d> bills[BILLS];
+	unique_ptr<Object3d> bills1[BILLS];
 
 
 	FbxModel* model = nullptr;
@@ -103,6 +104,7 @@ private:
 	//ビル群
 	XMFLOAT3 billsScl = { 10.0f,10.0f,10.0f };
 	XMVECTOR billsPos = { 0.0f,0.0f,-16.5f };
+	XMVECTOR billsPos1 = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 billsRot = { 0.0f,90.0f,0.0f };
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };

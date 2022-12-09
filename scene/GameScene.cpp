@@ -37,6 +37,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	billsModel = ObjModel::CreateFromOBJ("bills");
 	for (int i = 0; i < BILLS; i++) {
 		bills[i] = Object3d::Create(billsModel);
+		bills1[i] = Object3d::Create(billsModel);
 	}
 
 
@@ -89,16 +90,21 @@ void GameScene::SetPosSclRot()
 	for (int i = 0; i < BILLS; i++) {
 		
 		bills[i]->SetScale(billsScl);
+		bills1[i]->SetScale(billsScl);
 		if (i % 2 == 0) {
 			billsPos = { 100.0f, billsposY,-300.0f + (100 * i/2) };
+			billsPos1 = { 200.0f, billsposY,-300.0f + (100 * i / 2) };
 			billsRot = { 0.0f,90.0f,0.0f };
 		}
 		else if (i % 2 == 1) {
 			billsPos = { -100.0f, billsposY,-300.0f + (100 * i/2) };
+			billsPos1 = { -200.0f, billsposY,-300.0f + (100 * i / 2) };
 			billsRot = { 0.0f,270.0f,0.0f };
 		}
 		bills[i]->SetRotation(billsRot);
 		bills[i]->SetPosition(billsPos);
+		bills1[i]->SetRotation(billsRot);
+		bills1[i]->SetPosition(billsPos1);
 	}
 };
 
@@ -106,7 +112,8 @@ void GameScene::AllUpdata()
 {
 	//lightGroup->Update();
 	for (int i = 0; i < BILLS; i++) {
-		bills[i]->Updata({ 1.0f,1.0f,1.0f,0.8f });
+		bills[i]->Updata({ 1.0f,1.0f,0.7f,0.7f });
+		bills1[i]->Updata({ 1.0f,0.5f,0.0f,0.9f });
 	}
 
 	sphere->Updata();
@@ -172,6 +179,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	Start->Draw();
 	for (int i = 0; i < BILLS; i++) {
 		bills[i]->Draw();
+		bills1[i]->Draw();
 	}
 
 	////human3d->Draw();
@@ -226,6 +234,7 @@ void GameScene::Finalize()
 	groundObj.reset();
 	for (int i = 0; i < BILLS; i++) {
 		bills[i].reset();
+		bills1[i].reset();
 	}
 	mid.reset();
 }

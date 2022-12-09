@@ -22,8 +22,6 @@ void middle::Initialize()
 	Sprite::LoadTexture(16, L"Resources/four.png");
 	Sprite::LoadTexture(17, L"Resources/five.png");
 	Sprite::LoadTexture(18, L"Resources/Hpber.png");
-	//camera = new DebugCamera(WinApp::window_width, WinApp::window_height);
-	//Object3d::SetCamera(camera);
 
 	player = std::make_unique<Player>();
 	player->Initalize();
@@ -34,7 +32,6 @@ void middle::Initialize()
 		bull[i] = new Bullet();
 		bull[i]->Initialize();
 	}
-
 
 	////スプライトの読み込み
 	for (int i = 0; i < 9; i++) {
@@ -53,9 +50,7 @@ void middle::Initialize()
 	for (int i = 0; i < 5; i++) {
 		LifeCount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
-
 	LoadEnemyPopData();
-	//UpdataEnemyPopCommands();
 
 	playerMat = player->GetMat();
 	playerHp = player->GetHp();
@@ -65,7 +60,6 @@ void middle::Initialize()
 
 void middle::SetPSR()
 {
-	
 	playerMat = player->GetMat();
 
 	//HUDのポジションセット
@@ -97,10 +91,6 @@ void middle::SetPSR()
 	HpBer->SetPosition({ 1070,650 });
 	player->SetHp(playerHp);
 	playerPos = player->GetPosition();
-
-	/*for (int i = 0; i < MAXENEMY; i++) {
-		rob[i]->SetRotation({ enemyRot[i] });
-	}*/
 }
 
 void middle::Updata()
@@ -128,15 +118,12 @@ void middle::Updata()
 			player->SetFinish(finish);
 		}
 
-
-
 		//敵の更新処理
 		for (std::unique_ptr<Robot>& Robot : rob) {
 			for (int i = 0; i < 9; i++) {
 				Robot->Updata(bull[i], playerMat, spown, playerHp);
 			}
 		}
-
 	}
 
 	player->PlayerMove(move, patern);
@@ -160,7 +147,7 @@ void middle::Draw(DirectXCommon* dxCommon)
 	Object3d::PostDraw();
 
 }
-//
+
 void middle::SpriteDraw()
 {
 	if (getCamWorkF == true) {
@@ -193,7 +180,7 @@ void middle::SpriteDraw()
 
 	player->SpriteDraw();
 }
-//
+
 void middle::ImGuiDraw()
 {
 	player->ImGuiDraw();

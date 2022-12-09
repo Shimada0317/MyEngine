@@ -84,7 +84,18 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 	//生きているとき
 	if (Myarive == true && Hp > 0) {
 		TrackPlayer();
-
+		allPos.m128_f32[0] += RobS;
+		RobT += 0.1f;
+		if (RobT <= 2&&slideF==false) {
+			RobS = -RobS;
+			RobT = 0;
+			slideF = true;
+		}
+		else if (RobT >= 2 && slideF == true) {
+			RobS = +RobS;
+			RobT = 0;
+			slideF = false;
+		}
 		if (l <= 2) {
 			Motion();
 			//プレイヤーの前まで来たとき
@@ -107,7 +118,6 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 
 				Arms->Attack(attackT, AttackFase, playerHp,Myarive);
 			}
-
 		}
 	}
 	else {
