@@ -21,7 +21,7 @@ private:
 public:
 	~Robot();
 
-	void Initialize(const XMFLOAT3& allRot);
+	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& AllPos,const bool& Step=false);
 
 	void AllUpdata(Bullet* bull);
 
@@ -62,6 +62,7 @@ private:
 
 
 	XMVECTOR allPos = { 0.0f,0.0f,-10.0f };
+	XMVECTOR firstPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 allRot = { 0.0f,0.0f,0.0f };
 
 	bool Partarive[3];
@@ -82,8 +83,6 @@ private:
 	XMFLOAT4 shadowColor = { 0.0f,0.0f,0.0f,0.1f };
 
 	int action = 0;
-
-	bool oldArive;
 	float AttackChanse = 0;
 	float rad = 0;
 	bool AttackFase = false;
@@ -103,6 +102,7 @@ private:
 	bool MotionChange = true;
 	float RobT = 0.0f;
 	bool slideF = false;
-	float RobS = 0.01f;
+	float RobS = 0.001f;
+	bool step = false;
 };
 

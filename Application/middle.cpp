@@ -236,6 +236,7 @@ void middle::UpdataEnemyPopCommands()
 	XMVECTOR TRACK = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 ROTATION = { 0.0f,0.0f,0.0f };
 	bool ari = false;
+	bool step = false;
 	int count = 0;
 
 	bool POPSkip = false;
@@ -316,6 +317,18 @@ void middle::UpdataEnemyPopCommands()
 				TRACKSkip = true;
 			}
 
+			else if (word.find("STEP") == 0) {
+				getline(line_stram, word, ',');
+				int STEP = atoi(word.c_str());
+				if (STEP == 1) {
+					step = true;
+				}
+				else {
+					step = false;
+				}
+
+			}
+
 			//
 			else if (word.find("ARIVE") == 0) {
 				getline(line_stram, word, ',');
@@ -334,8 +347,7 @@ void middle::UpdataEnemyPopCommands()
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				std::unique_ptr<Robot> newRobot = std::make_unique<Robot>();
-				newRobot->Initialize(ROTATION);
-				newRobot->SetPosition(POSITION);
+				newRobot->Initialize(ROTATION,POSITION,step);
 				newRobot->SetTrackPoint(TRACK);
 				//newRobot->SetRotation(ROTATION);
 				rob.push_back(std::move(newRobot));

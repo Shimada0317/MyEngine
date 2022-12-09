@@ -11,7 +11,7 @@ Robot::~Robot()
 	delete shadowModel;
 }
 
-void Robot::Initialize(const XMFLOAT3& AllRot)
+void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos, const bool& Step)
 {
 	head = std::make_unique<Head>();
 	body = std::make_unique<Body>();
@@ -39,6 +39,9 @@ void Robot::Initialize(const XMFLOAT3& AllRot)
 	OldHp = Hp;
 	Myarive = true;
 	allRot = AllRot;
+	step = Step;
+	allPos = AllPos;
+	firstPos = AllPos;
 }
 
 void Robot::AllUpdata(Bullet* bull)
@@ -84,19 +87,8 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 	//生きているとき
 	if (Myarive == true && Hp > 0) {
 		TrackPlayer();
-		allPos.m128_f32[0] += RobS;
-		RobT += 0.1f;
-		if (RobT <= 2&&slideF==false) {
-			RobS = -RobS;
-			RobT = 0;
-			slideF = true;
-		}
-		else if (RobT >= 2 && slideF == true) {
-			RobS = +RobS;
-			RobT = 0;
-			slideF = false;
-		}
 		if (l <= 2) {
+			step = false;
 			Motion();
 			//プレイヤーの前まで来たとき
 			speed = 0;
@@ -119,6 +111,10 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 				Arms->Attack(attackT, AttackFase, playerHp,Myarive);
 			}
 		}
+		else if(l>2) {
+			
+
+		}
 	}
 	else {
 		AttackFase = false;
@@ -135,7 +131,6 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 		Hp = 0;
 		shadowColor.w = 0.0f;
 		Myarive = false;
-		//isDead_ = true;
 		AttackTime = 0;
 		AttackChanse = 0;
 		rad = 0;
@@ -215,6 +210,21 @@ void Robot::TrackPlayer()
 	allPos.m128_f32[0] -= v3x;
 	//allPos.m128_f32[1] -= v3y;
 	allPos.m128_f32[2] -= v3z;
+
+	if (step == true) {
+		allPos.m128_f32[0] += RobS;
+		RobT += 0.01f;
+		if (RobT <= 2 && slideF == false) {
+			RobS = -RobS;
+			RobT = 0;
+			slideF = true;
+		}
+		else if (RobT >= 2 && slideF == true) {
+			RobS = +RobS;
+			RobT = 0;
+			slideF = false;
+		}
+	}
 }
 
 void Robot::Motion()
