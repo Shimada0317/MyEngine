@@ -183,6 +183,10 @@ void middle::SpriteDraw()
 
 void middle::ImGuiDraw()
 {
+
+	for (std::unique_ptr<Robot>& robot : rob) {
+		robot->ImgDraw();
+	}
 	player->ImGuiDraw();
 	float a = patern;
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
