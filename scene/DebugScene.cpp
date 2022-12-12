@@ -19,6 +19,8 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(200, L"Resources/mark.png");
 	spriteRet.reset(Sprite::SpriteCreate(200, retpos, spCol, anc));
 
+	partM = ParticleManager::Create();
+
 	cam = new RailCamera();
 	cam->Initialize(position, rotation);
 
@@ -36,14 +38,40 @@ void DebugScene::SetPosSclRot()
 	bo->SetPosition(position);
 	bo->SetRotation(rotation);
 	bo->SetParent(camera);
+
+
+	for (int i = 0; i < 100; i++) {
+		const float rnd_pos = 100;
+		XMFLOAT3 pos;
+		pos.x = position.m128_f32[0];
+		pos.y = position.m128_f32[1];
+		pos.z = position.m128_f32[2];
+		const float rnd_vel = 0.001f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
+
+		XMFLOAT3 acc{};
+		const float rnd_acc = 0.001f;
+		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+		if (time < 20.0f) {
+			partM->Add(10, pos, vel, acc, 0.5f, 0.0f, time);
+		}
+		break;
+	}
 }
 
 void DebugScene::Updata()
 {
 	SetPosSclRot();
 	XMMATRIX mat = bo->GetMatrix();
-	
+
 	XMVECTOR pos = XMVector3TransformNormal(position, mat);
+
+	if (Input::GetInstance()->PushKey(DIK_1)) {
+		position.m128_f32[0] += 0.01f;
+	}
 
 	Action::GetInstance()->PlayerMove3d(pos);
 	if (Input::GetInstance()->PushKey(DIK_A)) {
@@ -51,7 +79,7 @@ void DebugScene::Updata()
 	}
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		jump = true;
-	
+
 	}
 	if (jump == true) {
 		position.m128_f32[1] = position.m128_f32[1] + addgrav;
@@ -77,12 +105,13 @@ void DebugScene::Updata()
 	//	//break;
 	//}
 	//
-	
+
 
 	MouthContoroll();
 	cam->Updata(vel, Eye_rot, camera);
 	camera->Updata();
 	bo->Updata();
+	partM->Update(color);
 	//camera->Update();
 	//mid->Updata();
 }
@@ -94,6 +123,11 @@ void DebugScene::Draw(DirectXCommon* dxCommon)
 		rob[j]->Draw(dxCommon);
 	}*/
 	//player->ParticleDraw(dxCommon->GetCmdList());
+
+	ParticleManager::PreDraw(dxCommon->GetCmdList());
+	partM->Draw();
+	ParticleManager::PostDraw();
+
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	bo->Draw();
 

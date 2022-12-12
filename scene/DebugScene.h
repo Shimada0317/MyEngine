@@ -13,6 +13,7 @@
 #include"Light.h"
 #include"middle.h"
 #include"Mouse.h"
+#include"Texture.h"
 #include<memory>
 
 class DebugScene :
@@ -55,7 +56,11 @@ private:
 	std::list<std::unique_ptr<ObjParticle>>part;
 	std::unique_ptr<Sprite> spriteRet;
 
+	Texture* tex;
+
 	Camera* camera = nullptr;
+
+	ParticleManager* partM = nullptr;
 
 	RailCamera* cam;
 	XMVECTOR vel = { 0.0f,0.0f,0.0f };

@@ -29,6 +29,10 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos, const boo
 	shadowModel = ObjModel::CreateFromOBJ("shadow");
 	shadow = Object3d::Create(shadowModel);
 	
+	Texture::LoadTexture(100, L"Resources/clush.png");
+	fireTex = Texture::Create(100, Texpos, TexSiz, TexCol);
+	fireTex->CreateNormalTexture();
+	fireTex->Update();
 
 	Arms->RespownSet(AllRot);
 
@@ -149,6 +153,10 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 
 void Robot::Draw(DirectXCommon* dxCommon)
 {
+	Texture::PreDraw(dxCommon->GetCmdList());
+	fireTex->Draw();
+	Texture::PostDraw();
+
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	head->Draw(Partarive[0]);
 	/*RArm->Draw(arive[1]);

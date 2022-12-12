@@ -6,6 +6,8 @@
 #include"Head.h"
 #include"ObjParticle.h"
 #include"DirectXCommon.h"
+#include"Texture.h"
+#include"TextureModel.h"
 #include<DirectXMath.h>
 #include<memory>
 #include<list>
@@ -59,6 +61,12 @@ private:
 	std::unique_ptr<Object3d> shadow;
 	ObjModel* shadowModel = nullptr;
 	std::list<std::unique_ptr<ObjParticle>>particle_;
+
+	Texture* fireTex;
+
+	XMFLOAT3 Texpos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 TexSiz = { 1.0f,1.0f,1.0f };
+	XMFLOAT4 TexCol = { 1.0f,1.0f,1.0f,1.0f };
 
 
 	XMVECTOR allPos = { 0.0f,0.0f,-10.0f };
