@@ -4,6 +4,7 @@
 Bullet::~Bullet()
 {
 	delete bulModel;
+	bullet.reset();
 }
 
 void Bullet::Initialize()

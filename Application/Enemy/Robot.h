@@ -62,12 +62,15 @@ private:
 	ObjModel* shadowModel = nullptr;
 	std::list<std::unique_ptr<ObjParticle>>particle_;
 
+	std::unique_ptr<Object3d> center;
+
 	Texture* fireTex;
 
 	XMFLOAT3 Texpos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 TexSiz = { 1.0f,1.0f,1.0f };
 	XMFLOAT4 TexCol = { 1.0f,1.0f,1.0f,1.0f };
 
+	XMVECTOR alll = { 0.0f,0.0f,0.0f };
 
 	XMVECTOR allPos = { 0.0f,0.0f,-10.0f };
 	XMVECTOR firstPos = { 0.0f,0.0f,0.0f };

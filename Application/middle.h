@@ -53,8 +53,14 @@ private:
 	//unique_ptr <Player> player;
 	//unique_ptr <Bullet> bull[9];
 	unique_ptr <Enemy> enemy[MAXENEMY];
-
 	unique_ptr<Enemy>tst;
+	//ヘリObj
+	unique_ptr<Object3d> heri;
+	unique_ptr<Object3d> Goal;
+	unique_ptr<Object3d> hane;
+	//ヘリモデル
+	ObjModel* heriM;
+	ObjModel* haneM;
 
 	//]unique_ptr<Robot>rob;
 	
@@ -85,7 +91,7 @@ private:
 	XMFLOAT3 enemyScl = { 0,0,0 };
 	XMFLOAT3 enemyRot[MAXENEMY];
 	XMVECTOR absolutePos = { 0,0,0 };
-
+	//ヘリステータス
 
 	XMFLOAT2 spSiz = { 64.0f,64.0f };
 	XMFLOAT2 spPos = { 1200.0f,0.0f };

@@ -207,7 +207,7 @@ void Player::CameraWork()
 		}
 		else if (stanby == true && act == 0) {
 			Eye_rot.y -= 2;
-
+			
 			if (Eye_rot.y <= 0) {
 				Eye_rot.y = 0;
 				actTime += 0.2f;
@@ -242,56 +242,21 @@ void Player::CameraWork()
 
 	}
 
-	if (Input::GetInstance()->PushKey(DIK_A)) {
-		vel = { -0.5f,0.0f,0.0f };
-	}
-	if (Input::GetInstance()->PushKey(DIK_D)) {
-		vel = { 0.5f,0.0f,0.0f };
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_W)) {
-		vel = { 0.0f,0.0f,0.5f };
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_S)) {
-		vel = { 0.0f,0.0f,-0.5f };
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_Q)) {
-		vel = { 0.0f,0.5f,0.0f };
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_E)) {
-		vel = { 0.0f,-0.5f,0.0f };
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-		Eye_rot.y += 5.1f;
-	}
-	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		Eye_rot.y -= 5.1f;
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_UP)) {
-		Eye_rot.x += 5.1f;
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-		Eye_rot.x -= 5.1f;
-	}
-
 	if (Input::GetInstance()->TriggerKey(DIK_C) && stanby == true) {
 		a = true;
 		act = 100;
 		Eye_rot.x = 0;
 		Eye_rot.y = 0;
-		position = { 0.0f,-0.7f,0.0f };
+		position = { 0.0f,-0.7f,13.0f };
 		cam->Initialize(position, Eye_rot);
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_V)) {
-		stanby = true;
-
+	if (stanby == false) {
+		actTime += 0.01f;
+		if (actTime >= 1.0f) {
+			actTime = 0.0f;
+			stanby = true;
+		}
 	}
 
 	if (a == false) {
@@ -432,15 +397,23 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 		else if (patern == 6) {
+			vel = { 0, 0, 0.1 };
+
+			if (camvec.m128_f32[2] >= 92) {
+				vel = { 0,0.05,0.1 };
+				if (camvec.m128_f32[2] >= 97) {
+					vel = { 0.0f,0.0f,0.0f };
+					Active = false;
+				}
+			}
 			move = false;
-			Active = false;
+			CamWork = false;
+			
 			waveCount += 1;
 			movetimer = 0.0f;
-			Finish = true;
-			CamWork = false;
+			//Finish = true;
 			a = false;
 			act = 0;
-
 		}
 	}
 }
@@ -457,15 +430,20 @@ void Player::ImGuiDraw()
 {
 	float a = waveCount;
 
+	XMMATRIX camMat = cam->GetWorld();
+	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
+
+	camvec = XMVector3Transform(camvec, camMat);
+
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("LoacalPos")) {
-		ImGui::SliderFloat("pos.x", &playerWorldPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &playerWorldPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &playerWorldPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &camvec.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &camvec.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &camvec.m128_f32[2], -100.0f, 100.0f);
 		ImGui::SliderFloat("mat.x", &a, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}

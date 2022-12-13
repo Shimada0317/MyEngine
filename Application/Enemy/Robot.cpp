@@ -29,11 +29,9 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos, const boo
 	shadowModel = ObjModel::CreateFromOBJ("shadow");
 	shadow = Object3d::Create(shadowModel);
 	
-	Texture::LoadTexture(100, L"Resources/clush.png");
-	fireTex = Texture::Create(100, Texpos, TexSiz, TexCol);
-	fireTex->CreateNormalTexture();
-	fireTex->Update();
+	center = Object3d::Create(shadowModel);
 
+	XMMATRIX vmat = center->GetMatrix();
 	Arms->RespownSet(AllRot);
 
 	for (int i = 0; i < 3; i++) {
@@ -46,10 +44,21 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos, const boo
 	step = Step;
 	allPos = AllPos;
 	firstPos = AllPos;
+
+
 }
 
 void Robot::AllUpdata(Bullet* bull)
 {
+	//XMMATRIX cmat = XMMatrixIdentity();
+	//XMMATRIX cmat = center->GetMatrix();
+	//center->SetPosition(allPos);
+	//center->SetRotation(allRot);
+	//center->Updata();
+	//alll = XMVector3TransformNormal(allPos, cmat);
+	//center->SetPosition(alll);
+
+
 	shadowPos = allPos;
 	shadowPos.m128_f32[1] = allPos.m128_f32[1] - 0.8f;
 	shadow->SetPosition(shadowPos);
@@ -63,6 +72,9 @@ void Robot::AllUpdata(Bullet* bull)
 	body->Updata(Partarive[2], allPos, allRot, bull, Hp);
 	part->Updata(allPos, allRot);
 	shadow->Updata(shadowColor);
+
+
+
 	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
 		patrticle->Updata(allPos, allRot);
 	}
@@ -153,10 +165,6 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 
 void Robot::Draw(DirectXCommon* dxCommon)
 {
-	Texture::PreDraw(dxCommon->GetCmdList());
-	fireTex->Draw();
-	Texture::PostDraw();
-
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	head->Draw(Partarive[0]);
 	/*RArm->Draw(arive[1]);
@@ -164,6 +172,7 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	Arms->Draw(Partarive[1]);
 	body->Draw(Partarive[2]);
 	shadow->Draw();
+	//center->Draw();
 	//part->Draw();
 	for (std::unique_ptr<ObjParticle>& particle : particle_) {
 		particle->Draw();
@@ -180,10 +189,12 @@ void Robot::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Enemy");
-	ImGui::Checkbox("Att", &AttackFase);
-	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
-	ImGui::SliderFloat("len", &l, -100.0f, 100.0f);
-	ImGui::SliderFloat("PosZ", &allPos.m128_f32[2], -100.0f, 100.0f);
+	//ImGui::Checkbox("Att", &AttackFase);
+//	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
+	//ImGui::SliderFloat("len", &l, -100.0f, 100.0f);
+	ImGui::SliderFloat("PosX", &alll.m128_f32[0], -100.0f, 100.0f);
+	ImGui::SliderFloat("PosY", &alll.m128_f32[1], -100.0f, 100.0f);
+	ImGui::SliderFloat("PosZ", &alll.m128_f32[2], -100.0f, 100.0f);
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();

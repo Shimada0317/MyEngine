@@ -7,6 +7,17 @@ middle::~middle()
 	for (int i = 0; i < 9; i++) {
 		delete bull[i];
 	}
+
+	player.reset();
+	delete Reload;
+	delete wave;
+	delete slash;
+	delete HpBer;
+
+	for (int i = 0; i < 5; i++) {
+		delete changecount[i];
+		delete LifeCount[i];
+	}
 }
 //
 ////ƒZ[ƒu
