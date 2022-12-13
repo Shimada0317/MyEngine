@@ -92,8 +92,7 @@ private:
 	Sprite* title = nullptr;
 
 
-	XMVECTOR heripos = { 0.0f,75.0f,-160.0f };
-	XMFLOAT3 heriscl = { 10.0f,10.0f,10.0f };
+
 
 	XMFLOAT3 cameraEye = {0.0f,0.0f,-10};
 	XMFLOAT3 cameraTarget = {0.0f,1.0f,0.0f};
@@ -116,16 +115,13 @@ private:
 	XMVECTOR billsPos1 = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 billsRot = { 0.0f,90.0f,0.0f };
 	//ヘリ
-	XMVECTOR GoalPos = {45.0f,3.0f,92.0f};
-	XMFLOAT3 GoalScl = { 3.0f,3.0f,3.0f };
+	
 
 	XMFLOAT2 screen_size = { 1280.0f,720.0f };
 
 	PostEffect* postEffect = nullptr;
 
 	bool JumpFlag = false;
-
-	float heriX = 3.1f;
 
 	Light* light = nullptr;
 
@@ -146,10 +142,5 @@ private:
 
 	float billsposY = { -150.0f };
 
-
-	bool backObj = true;
-	float heriY = 0.0f;
-
-	bool move = false;
 };
 

@@ -66,6 +66,8 @@ public:
 	const XMFLOAT2& GetRetSiz() { return retsize; }
 
 	const bool& GetCamWork() { return CamWork; }
+
+	const bool& GetFring() { return Fring; }
 	//Hp
 	int GetHp() { return Hp; }
 #pragma endregion
@@ -152,6 +154,8 @@ private:
 	XMFLOAT2 windowPos = { 0.0f,0.0f };
 
 	XMVECTOR offset = { 0,0,1.0f };
+
+	
 	float time = 0.0f;
 	bool particle = false;
 	int Hp = 5;
@@ -183,5 +187,9 @@ private:
 	float actTime = 0.0f;
 
 	bool start = false;
+
+	bool Fring = false;
+
+	bool Shake = true;
 };
 

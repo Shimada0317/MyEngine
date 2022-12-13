@@ -9,7 +9,7 @@ Player::~Player()
 	delete TrackModel;
 	delete gunModel;
 	delete playerModel;
-	
+
 	Track.reset();
 	gun.reset();
 	player.reset();
@@ -207,7 +207,7 @@ void Player::CameraWork()
 		}
 		else if (stanby == true && act == 0) {
 			Eye_rot.y -= 2;
-			
+
 			if (Eye_rot.y <= 0) {
 				Eye_rot.y = 0;
 				actTime += 0.2f;
@@ -223,7 +223,7 @@ void Player::CameraWork()
 			}
 		}
 		if (act == 1) {
-		
+
 			actTime += 0.15f;
 			vel = { 0.0f,0.6f,0.4f };
 			if (actTime >= 5) {
@@ -305,19 +305,20 @@ void Player::PlayerMove(bool& move, int patern)
 
 	if (Active == true) {
 		kBulletSpeed = 0.5f;
-		if (shake == 0) {
-			Eye_rot.x += 0.05f;
-			if (Eye_rot.x >= 0.5f) {
-				shake = 1;
+		if (Shake == true) {
+			if (shake == 0) {
+				Eye_rot.x += 0.05f;
+				if (Eye_rot.x >= 0.5f) {
+					shake = 1;
+				}
+			}
+			if (shake == 1) {
+				Eye_rot.x -= 0.05f;
+				if (Eye_rot.x <= -0.5f) {
+					shake = 0;
+				}
 			}
 		}
-		if (shake == 1) {
-			Eye_rot.x -= 0.05f;
-			if (Eye_rot.x <= -0.5f) {
-				shake = 0;
-			}
-		}
-
 		if (patern == 0) {
 			vel = { 0, 0, kBulletSpeed };
 			if (camvec.m128_f32[2] >= 20) {
@@ -398,17 +399,20 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 		else if (patern == 6) {
 			vel = { 0, 0, 0.1 };
-
+			Shake = false;
 			if (camvec.m128_f32[2] >= 92) {
 				vel = { 0,0.05,0.1 };
 				if (camvec.m128_f32[2] >= 97) {
 					vel = { 0.0f,0.0f,0.0f };
-					Active = false;
+					Fring = true;
+					if (Fring == true) {
+						vel = { 0.0f,0.334f,0.0f };
+					}
 				}
 			}
 			move = false;
 			CamWork = false;
-			
+
 			waveCount += 1;
 			movetimer = 0.0f;
 			//Finish = true;

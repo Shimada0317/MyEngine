@@ -63,10 +63,20 @@ void middle::Initialize()
 	}
 	LoadEnemyPopData();
 
+	heriM = ObjModel::CreateFromOBJ("heri", true);
+	heri = Object3d::Create(heriM);
+
+	haneM = ObjModel::CreateFromOBJ("hane", true);
+	hane = Object3d::Create(haneM);
+
+	Goal = Object3d::Create(heriM);
+
 	playerMat = player->GetMat();
 	playerHp = player->GetHp();
 
 	getCamWorkF = player->GetCamWork();
+
+	clearT = 0;
 }
 
 void middle::SetPSR()
@@ -102,10 +112,43 @@ void middle::SetPSR()
 	HpBer->SetPosition({ 1070,650 });
 	player->SetHp(playerHp);
 	playerPos = player->GetPosition();
+
+	heri->SetPosition(heripos);
+	heri->SetScale(heriscl);
+	heri->SetRotation({0.0f,180.0f,0.0f});
+
+	hane->SetRotation({ 0.0f,heriY,0.0f });
+	if (startmove == false) {
+		hane->SetPosition(heripos);
+		hane->SetScale(heriscl);
+	}
+	else {
+		hane->SetPosition(GoalPos);
+		hane->SetScale(GoalScl);
+	}
+
+	Goal->SetPosition(GoalPos);
+	Goal->SetScale(GoalScl);
+	Goal->SetRotation({ 0.0f,90.0f,0.0f });
+
+	heri->Updata({ 0.7f,0.7f,0.6f,1.0f });
+	Goal->Updata({ 0.7f,0.7f,0.6f,1.0f });
+	hane->Updata({ 0.0f,0.0f,0.0f,1.0f });
 }
 
 void middle::Updata()
 {
+
+	heripos.m128_f32[2] += heriX;
+
+
+	if (heripos.m128_f32[2] >= 20) {
+		backObj = false;
+		startmove = true;
+	}
+	else {
+		heriY += 15.0f;
+	}
 
 	getCamWorkF = player->GetCamWork();
 	if (getCamWorkF == true) {
@@ -137,6 +180,18 @@ void middle::Updata()
 		}
 	}
 
+	if (patern >= 5) {
+		heriY += 15.0f;
+	}
+
+	if (patern >= 6) {
+		bool fring = player->GetFring();
+		if (fring == true) {
+			GoalPos.m128_f32[1] += 0.1f;
+
+		}
+	}
+
 	player->PlayerMove(move, patern);
 	//À•W‚ÌÝ’è
 	SetPSR();
@@ -153,6 +208,11 @@ void middle::Draw(DirectXCommon* dxCommon)
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Draw();
+	}
+	Goal->Draw();
+	hane->Draw();
+	if (backObj == true) {
+		heri->Draw();
 	}
 	player->ObjDraw();
 	Object3d::PostDraw();

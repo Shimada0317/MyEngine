@@ -47,6 +47,10 @@ public:
 
 	const int& GetPatern() { return patern; }
 
+	void SetGoalPos(const XMVECTOR& goalPos) { this->GoalPos = goalPos; }
+
+	const XMVECTOR& GetGoalPos() { return GoalPos; }
+
 	int GetHp() { return playerHp; }
 private:
 	
@@ -92,6 +96,21 @@ private:
 	XMFLOAT3 enemyRot[MAXENEMY];
 	XMVECTOR absolutePos = { 0,0,0 };
 	//ヘリステータス
+	XMVECTOR GoalPos = { 45.0f,3.0f,92.0f };
+	XMFLOAT3 GoalScl = { 3.0f,3.0f,3.0f };
+
+	XMVECTOR heripos = { 0.0f,75.0f,-160.0f };
+	XMFLOAT3 heriscl = { 10.0f,10.0f,10.0f };
+
+	XMVECTOR start_pos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 start_scl = { 15.0f,15.0f,15.0f };
+
+
+	float heriY = 0.0f;
+	bool move = false;
+	bool backObj = true;
+	float heriX = 3.1f;
+	float clearT = 0;
 
 	XMFLOAT2 spSiz = { 64.0f,64.0f };
 	XMFLOAT2 spPos = { 1200.0f,0.0f };
@@ -179,7 +198,7 @@ private:
 
 	bool all[MAXENEMY];
 	bool waveCount = false;
-	bool move = false;
+	bool startmove = false;
 	bool oldmove = false;
 	bool spown = false;
 

@@ -55,13 +55,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	startModel = ObjModel::CreateFromOBJ("bil", true);
 	Start = Object3d::Create(startModel);
 
-	heriM = ObjModel::CreateFromOBJ("heri", true);
-	heri = Object3d::Create(heriM);
 
-	haneM = ObjModel::CreateFromOBJ("hane", true);
-	hane = Object3d::Create(haneM);
-
-	Goal = Object3d::Create(heriM);
 
 	mid = std::make_unique <middle>();
 	mid->Initialize();
@@ -73,7 +67,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
-	clearT = 0;
+
 }
 
 void GameScene::SetPosSclRot()
@@ -95,24 +89,6 @@ void GameScene::SetPosSclRot()
 	Start->SetScale(start_scl);
 	Start->SetRotation({ 0.0f,180.0f,0.0f });
 
-
-	hane->SetRotation({ 0.0f,heriY,0.0f });
-	if (move == false) {
-		hane->SetPosition(heripos);
-		hane->SetScale(heriscl);
-	}
-	else {
-		hane->SetPosition(GoalPos);
-		hane->SetScale(GoalScl);
-	}
-
-	heri->SetPosition(heripos);
-	heri->SetScale(heriscl);
-	heri->SetRotation({ 10.0f,180.0f,0.0f });
-
-	Goal->SetPosition(GoalPos);
-	Goal->SetScale(GoalScl);
-	Goal->SetRotation({ 0.0f,90.0f,0.0f });
 
 	for (int i = 0; i < BILLS; i++) {
 
@@ -148,20 +124,12 @@ void GameScene::AllUpdata()
 	world->Updata();
 	Start->Updata();
 	mid->Updata();
-	heri->Updata({ 0.7f,0.7f,0.6f,1.0f });
-	Goal->Updata({ 0.7f,0.7f,0.6f,1.0f });
-	hane->Updata({ 0.7f,0.7f,0.6f,1.0f });
+
 }
 
 void GameScene::Updata()
 {
-	heripos.m128_f32[2] += heriX;
-	heriY += 15.0f;
 
-	if (heripos.m128_f32[2] >= 20) {
-		backObj = false;
-		move = true;
-	}
 
 	billsposY += 0.5f;
 	if (billsposY >= 0) {
@@ -191,18 +159,12 @@ void GameScene::Updata()
 		sceneManager_->SetNextScene(scene_);
 	}
 
-	if (patern >= 6) {
-		clearT += 0.1f;
-		if (clearT >= 25) {
-			GoalPos.m128_f32[1] += 0.1f;
-			clearT = 25.0f;
-		}
-	}
+	XMVECTOR GoalPos = mid->GetGoalPos();
 
-	/*if (clearT >= 10) {
+	if (GoalPos.m128_f32[1] >= 100) {
 		BaseScene* scene_ = new ClearScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
-	}*/
+	}
 
 	SetPosSclRot();
 	postEffect->Update(col);
@@ -219,11 +181,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	world->Draw();
 
 	Start->Draw();
-	Goal->Draw();
-	hane->Draw();
-	if (backObj == true) {
-		heri->Draw();
-	}
+
 	for (int i = 0; i < BILLS; i++) {
 		bills[i]->Draw();
 		bills1[i]->Draw();
