@@ -9,6 +9,7 @@
 #include"FbxObject3d.h"
 #include"ClearScene.h"
 #include"GameOverScene.h"
+#include"TitleScene.h"
 #include"DebugScene.h"
 #include"ModelManager.h"
 
@@ -67,6 +68,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 
+	Sprite::LoadTexture(35, L"Resources/Mision.png");
+	Comp = Sprite::SpriteCreate(35, { 0.0f,0.0f });
 
 }
 
@@ -124,7 +127,7 @@ void GameScene::AllUpdata()
 	world->Updata();
 	Start->Updata();
 	mid->Updata();
-
+	postEffect->Update(col);
 }
 
 void GameScene::Updata()
@@ -162,13 +165,20 @@ void GameScene::Updata()
 	XMVECTOR GoalPos = mid->GetGoalPos();
 
 	if (GoalPos.m128_f32[1] >= 100) {
-		BaseScene* scene_ = new ClearScene(sceneManager_);
-		sceneManager_->SetNextScene(scene_);
+		complete = true;
 	}
 
-	SetPosSclRot();
-	postEffect->Update(col);
-	AllUpdata();
+	if (complete == false) {
+		SetPosSclRot();
+		AllUpdata();
+	}
+
+	if (complete == true) {
+		if (Input::GetInstance()->PushClick(0)) {
+			BaseScene* scene_ = new TitleScene(sceneManager_);
+			sceneManager_->SetNextScene(scene_);
+		}
+	}
 }
 
 void GameScene::ObjDraw(DirectXCommon* dxCommon)
@@ -198,6 +208,9 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	mid->SpriteDraw();
+	if (complete == true) {
+		Comp->Draw();
+	}
 	Sprite::PostDraw();
 }
 

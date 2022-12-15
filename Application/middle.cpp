@@ -187,7 +187,7 @@ void middle::Updata()
 	if (patern >= 6) {
 		bool fring = player->GetFring();
 		if (fring == true) {
-			GoalPos.m128_f32[1] += 0.1f;
+			GoalPos.m128_f32[1] += 0.2f;
 
 		}
 	}
@@ -255,22 +255,22 @@ void middle::SpriteDraw()
 void middle::ImGuiDraw()
 {
 
-	for (std::unique_ptr<Robot>& robot : rob) {
-		robot->ImgDraw();
-	}
-	player->ImGuiDraw();
-	float a = patern;
-	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
-	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
-	ImGui::Begin("Plyer");
-	ImGui::Checkbox("move", &move);
-	ImGui::Checkbox("finish", &finish);
-	ImGui::SliderFloat("patern", &a, -100.0f, 100.0f);
+	//for (std::unique_ptr<Robot>& robot : rob) {
+	//	robot->ImgDraw();
+	//}
+	//player->ImGuiDraw();
+	//float a = patern;
+	//ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	//ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
+	//ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	//ImGui::Begin("Plyer");
+	//ImGui::Checkbox("move", &move);
+	//ImGui::Checkbox("finish", &finish);
+	//ImGui::SliderFloat("patern", &a, -100.0f, 100.0f);
 
-	ImGui::End();
-	ImGui::PopStyleColor();
-	ImGui::PopStyleColor();
+	//ImGui::End();
+	//ImGui::PopStyleColor();
+	//ImGui::PopStyleColor();
 
 }
 

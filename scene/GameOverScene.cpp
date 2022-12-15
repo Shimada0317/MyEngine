@@ -21,7 +21,7 @@ void GameOverScene::SetPosSclRot()
 
 void GameOverScene::Updata()
 {
-	if (Input::GetInstance()->PushKey(DIK_RETURN)) {
+	if (Input::GetInstance()->PushClick(0)|| Input::GetInstance()->PushClick(1)) {
 		BaseScene* scene_ = new TitleScene(sceneManager_);
 		sceneManager_->SetNextScene(scene_);
 	}

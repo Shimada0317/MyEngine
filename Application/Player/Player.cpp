@@ -43,6 +43,11 @@ void Player::Initalize()
 	Sprite::LoadTexture(301, L"Resources/window.png");
 	window.reset(Sprite::SpriteCreate(301, windowPos));
 
+	skipPos = curtainPos2;
+
+	Sprite::LoadTexture(302, L"Resources/skip.png");
+	skip.reset(Sprite::SpriteCreate(302, skipPos));
+
 	curtain2.reset(Sprite::SpriteCreate(300, curtainPos2));
 	curtain->SetSize(curtainSiz);
 	curtain2->SetSize(curtainSiz);
@@ -122,7 +127,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 	if (CamWork == true) {
 		//’e‚Ì”­ŽË‘O
 		if (Remaining < BULL - 1 && ReloadFlag == false) {
-			if (Input::GetInstance()->TriggerKey(DIK_SPACE) || Mouse::GetInstance()->PushClick(0)) {
+			if (Mouse::GetInstance()->PushClick(0)) {
 
 				Remaining += 1;
 				time = 0.0f;
@@ -138,7 +143,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 		}
 
 		//ƒŠƒ[ƒh
-		if ((Input::GetInstance()->TriggerKey(DIK_R) || Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
+		if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
 			ReloadFlag = true;
 		}
 
@@ -195,6 +200,7 @@ void Player::SpriteDraw()
 	else {
 		curtain->Draw();
 		curtain2->Draw();
+		skip->Draw();
 	}
 }
 
@@ -242,7 +248,7 @@ void Player::CameraWork()
 
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_C) && stanby == true) {
+	if ((Input::GetInstance()->PushClick(1) || Input::GetInstance()->PushClick(0)) && stanby == true&& CamWork ==false) {
 		a = true;
 		act = 100;
 		Eye_rot.x = 0;
@@ -262,6 +268,7 @@ void Player::CameraWork()
 	if (a == false) {
 		curtainPos.y += 4;
 		curtainPos2.y -= 4;
+		skipPos.y -= 2;
 
 		if (curtainPos.y >= 0) {
 			curtainPos.y = 0;
@@ -270,11 +277,16 @@ void Player::CameraWork()
 		if (curtainPos2.y <= 620) {
 			curtainPos2.y = 620;
 		}
+
+		if (skipPos.y <= 620) {
+			skipPos.y = 620;
+		}
 	}
 
 	else {
 		curtainPos.y -= 4;
 		curtainPos2.y += 4;
+		skipPos.y += 4;
 
 		if (curtainPos.y <= -100) {
 			curtainPos.y = -100;
@@ -285,9 +297,14 @@ void Player::CameraWork()
 			CamWork = true;
 			start = true;
 		}
+
+		if (skipPos.y >= 720) {
+			skipPos.y = 12000;
+		}
 	}
 	curtain->SetPosition(curtainPos);
 	curtain2->SetPosition(curtainPos2);
+	skip->SetPosition(skipPos);
 }
 
 void Player::PlayerMove(bool& move, int patern)
@@ -398,6 +415,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 		else if (patern == 6) {
+			stanby = false;
 			vel = { 0, 0, 0.1 };
 			Shake = false;
 			if (camvec.m128_f32[2] >= 92) {
@@ -406,7 +424,7 @@ void Player::PlayerMove(bool& move, int patern)
 					vel = { 0.0f,0.0f,0.0f };
 					Fring = true;
 					if (Fring == true) {
-						vel = { 0.0f,0.334f,0.0f };
+						vel = { 0.0f,0.670f,0.0f };
 					}
 				}
 			}
@@ -425,7 +443,6 @@ void Player::PlayerMove(bool& move, int patern)
 void Player::ObjDraw()
 {
 	if (Hp >= 0 && CamWork == true) {
-		Track->Draw();
 		gun->Draw();
 	}
 }

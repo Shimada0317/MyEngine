@@ -90,6 +90,7 @@ private:
 
 	Sprite* sprite = nullptr;
 	Sprite* title = nullptr;
+	Sprite* Comp = nullptr;
 
 
 
@@ -141,6 +142,8 @@ private:
 	XMFLOAT4 col = { 0.0f,1.0f,1.0f,1.0f };
 
 	float billsposY = { -150.0f };
-
+	bool complete = false;
+	bool gamestop = false;
+	bool deth = false;
 };
 

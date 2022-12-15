@@ -39,7 +39,7 @@ void TitleScene::Updata()
 	//DirectX毎フレーム処理 ここから
 	timer += 1;
 	if (timer >= 10) {
-		if (Input::GetInstance()->TriggerKey(DIK_RETURN)) {
+		if (Input::GetInstance()->PushClick(0)|| Input::GetInstance()->PushClick(1)) {
 			//シーン切り替え
 			BaseScene* scene_ = new GameScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);

@@ -92,6 +92,7 @@ private:
 	std::unique_ptr<Sprite> curtain;
 	std::unique_ptr<Sprite> curtain2;
 	std::unique_ptr<Sprite> window;
+	std::unique_ptr<Sprite> skip;
 
 	std::unique_ptr<Object3d> gun;
 	ObjModel* gunModel = nullptr;
@@ -152,6 +153,7 @@ private:
 	XMFLOAT2 curtainPos2 = { 0.0f,720.0f };
 
 	XMFLOAT2 windowPos = { 0.0f,0.0f };
+	XMFLOAT2 skipPos = { 1100,720.0f };
 
 	XMVECTOR offset = { 0,0,1.0f };
 
