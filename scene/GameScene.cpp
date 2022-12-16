@@ -42,9 +42,9 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	}
 
 
-	playermodel = ObjModel::CreateFromOBJ("skydome");
+	spheremodel = ObjModel::CreateFromOBJ("skydome");
 	sphere = Object3d::Create();
-	sphere->SetModel(playermodel);
+	sphere->SetModel(spheremodel);
 
 
 	ground = ObjModel::CreateFromOBJ("Field2", true);
@@ -71,6 +71,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(35, L"Resources/Mision.png");
 	Comp = Sprite::SpriteCreate(35, { 0.0f,0.0f });
 
+	Sprite::LoadTexture(36, L"Resources/CONTINUE.png");
+	Conteniu = Sprite::SpriteCreate(36, { 0.0f,0.0f });
 }
 
 void GameScene::SetPosSclRot()
@@ -127,58 +129,72 @@ void GameScene::AllUpdata()
 	world->Updata();
 	Start->Updata();
 	mid->Updata();
-	postEffect->Update(col);
+	
 }
 
 void GameScene::Updata()
 {
-
-
-	billsposY += 0.5f;
-	if (billsposY >= 0) {
-		billsposY = 0.0f;
-	}
-
-	if (oldHp > playerHp) {
-		post = true;
-		oldHp = playerHp;
-	}
-	if (post == true) {
-		col.x = 0.7f;
-		if (col.x >= 0.5f) {
-			post = false;
+	if (playerHp > 0) {
+		//ダメージを食らったたとき
+		if (oldHp > playerHp) {
+			post = true;
+			oldHp = playerHp;
+		}
+		//画面を赤くするフラグが立った時
+		if (post == true) {
+			col.x = 0.7f;
+			if (col.x >= 0.5f) {
+				post = false;
+			}
+		}
+		//画面を赤くするフラグが立っていない時
+		if (post == false) {
+			col.x -= 0.1f;
+			if (col.x <= 0) {
+				col.x = 0;
+			}
 		}
 	}
-	if (post == false) {
-		col.x -= 0.1f;
-		if (col.x <= 0) {
-			col.x = 0;
+	//体力が0になったら
+	else if (playerHp <= 0) {
+		gamestop = true;
+		col.x += 0.01f;
+		if (col.x >= 2.0f) {
+			deth = true;
+			if (Input::GetInstance()->PushClick(0)) {
+				BaseScene* scene_ = new GameOverScene(sceneManager_);
+				sceneManager_->SetNextScene(scene_);
+			}
+			else if (Input::GetInstance()->PushClick(1)) {
+				BaseScene* scene_ = new GameScene(sceneManager_);
+				sceneManager_->SetNextScene(scene_);
+			}
 		}
 	}
 
-
-	if (playerHp <= 0) {
-		BaseScene* scene_ = new GameOverScene(sceneManager_);
-		sceneManager_->SetNextScene(scene_);
+	if (deth == true) {
+		col.x = 0;
 	}
 
 	XMVECTOR GoalPos = mid->GetGoalPos();
-
+	//ゴールに着いたとき
 	if (GoalPos.m128_f32[1] >= 100) {
 		complete = true;
+		gamestop = true;
 	}
-
-	if (complete == false) {
+	//ゴールについていないとき更新を続ける
+	if (gamestop == false) {
 		SetPosSclRot();
 		AllUpdata();
 	}
-
+	//ゴールに着いたらクリア画面を表示
 	if (complete == true) {
 		if (Input::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
 		}
 	}
+	postEffect->Update(col);
 }
 
 void GameScene::ObjDraw(DirectXCommon* dxCommon)
@@ -211,6 +227,9 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 	if (complete == true) {
 		Comp->Draw();
 	}
+	if (deth == true) {
+		Conteniu->Draw();
+	}
 	Sprite::PostDraw();
 }
 
@@ -218,6 +237,7 @@ void GameScene::ImgDraw()
 {
 	mid->ImGuiDraw();
 }
+
 
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 {
@@ -242,7 +262,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 void GameScene::Finalize()
 {
 	delete ground;
-	delete playermodel;
+	delete spheremodel;
 	delete worldmodel;
 	delete postEffect;
 	delete billsModel;

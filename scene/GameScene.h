@@ -62,7 +62,7 @@ private:
 
 	DirectXCommon* dxCommon = nullptr;
 
-	ObjModel* playermodel = nullptr;
+	ObjModel* spheremodel = nullptr;
 	ObjModel* ground = nullptr;
 	ObjModel* p = nullptr;
 
@@ -91,7 +91,7 @@ private:
 	Sprite* sprite = nullptr;
 	Sprite* title = nullptr;
 	Sprite* Comp = nullptr;
-
+	Sprite* Conteniu = nullptr;
 
 
 

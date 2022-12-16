@@ -17,6 +17,12 @@
 #include"Robot.h"
 #include"PostEffect.h"
 #include<memory>
+#include"Light.h"
+#include"Camera.h"
+
+using namespace std;
+
+const int BILL = 16;
 
 class TitleScene :public BaseScene
 {
@@ -45,9 +51,42 @@ public://メンバ変数
 	void Finalize() override;
 private:
 
+	ObjModel* billsModel = nullptr;
+	ObjModel* ground = nullptr;
+	ObjModel* spheremodel = nullptr;
+	ObjModel* worldmodel = nullptr;
+
+	unique_ptr <Object3d> sphere;
+	unique_ptr<Object3d> bills[BILL];
+	unique_ptr<Object3d> bills1[BILL];
+	unique_ptr <Object3d> groundObj;
+	unique_ptr <Object3d >world;
+
+	Camera* camera = nullptr;
+
+	XMVECTOR pos = { 0,0,0 };
+	//フィールド
+	XMVECTOR ground_pos = { 22.5f,-1,40 };
+	XMFLOAT3 ground_scl = { 13,20,16 };
+	XMFLOAT3 ground_rot = { 0,0,0 };
+	//ビル群
+	XMFLOAT3 billsScl = { 10.0f,10.0f,10.0f };
+	XMVECTOR billsPos = { 0.0f,0.0f,-16.5f };
+	XMVECTOR billsPos1 = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 billsRot = { 0.0f,90.0f,0.0f };
+
+
+	XMFLOAT3 camTar= { 0.0f,5.0f,0.0f };
+
+	//足場
+	XMVECTOR worldPos = { 0.0f,-1.1f,0.0f };
+	XMFLOAT3 worldScl = { 100,100,100 };
+
 	DirectXCommon* dxCommon = nullptr;
 
 	Sprite* title = nullptr;
+
+	Light* light = nullptr;
 
 	PostEffect* post = nullptr;
 
@@ -57,7 +96,6 @@ private:
 
 	XMFLOAT2 titlesize = { 1280.0f,720.0f };
 	XMFLOAT2 titlepos = { 0.0f,0.0f };
-	POINT pos;
 
 	int timer = 0;
 
