@@ -82,6 +82,8 @@ private:
 	XMVECTOR worldPos = { 0.0f,-1.1f,0.0f };
 	XMFLOAT3 worldScl = { 100,100,100 };
 
+	XMVECTOR camMove = { 0.0f,0.0f,0.0f };
+
 	DirectXCommon* dxCommon = nullptr;
 
 	Sprite* title = nullptr;

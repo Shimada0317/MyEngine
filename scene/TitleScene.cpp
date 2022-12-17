@@ -15,6 +15,9 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
+	camera = new Camera(WinApp::window_width, WinApp::window_height);
+	Object3d::SetCamera(camera);
+
 	light = Light::Create();
 	Object3d::SetLight(light);
 
@@ -43,13 +46,12 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	post = new PostEffect();
 	post->Initialize();
 
-	camera = new Camera(WinApp::window_width,WinApp::window_height);
 
 }
 
 void TitleScene::SetPosSclRot()
 {
-	camera->SetTarget(camTar);
+	camera->MoveVector(camMove);
 
 	sphere->SetRotation({ 0,0,0 });
 	sphere->SetPosition(pos);
@@ -99,14 +101,36 @@ void TitleScene::Updata()
 			timer = 0;
 		}
 	}
-	SetPosSclRot();
 	post->Update(col);
+	
+	camMove = { 0.0f,0.0f,0.0f };
+	if (Input::GetInstance()->PushKey(DIK_A)) {
+		camMove.m128_f32[0] = -1.0f;
+	}
+	else if (Input::GetInstance()->PushKey(DIK_D)) {
+		camMove.m128_f32[0] = 1.0f;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_S)) {
+		camMove.m128_f32[1] = -1.0f;
+	}
+	else if (Input::GetInstance()->PushKey(DIK_W)) {
+		camMove.m128_f32[1] = 1.0f;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_Q)) {
+		camMove.m128_f32[2] = -1.0f;
+	}
+	else if (Input::GetInstance()->PushKey(DIK_E)) {
+		camMove.m128_f32[2] = 1.0f;
+	}
 
 	for (int i = 0; i < BILLS; i++) {
 		bills[i]->Updata({ 1.0f,1.0f,0.7f,0.7f });
 		bills1[i]->Updata({ 1.0f,0.5f,0.0f,0.9f });
 	}
 
+	SetPosSclRot();
 	sphere->Updata();
 	groundObj->Updata();
 	world->Updata();
@@ -147,4 +171,5 @@ void TitleScene::Finalize()
 	delete title;
 	delete dxCommon;
 	delete post;
+	delete camera;
 }

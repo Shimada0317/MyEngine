@@ -21,24 +21,25 @@ Camera::Camera(int window_width, int window_height)
 
 void Camera::Updata()
 {
-	if (viewDirty || projectionDirty) {
+	//if (viewDirty || projectionDirty) {
 		// 再計算必要なら
-		if (viewDirty) {
+	//	if (viewDirty) {
 			// ビュー行列更新
-			UpdataViewMatrix();
-			viewDirty = false;
-		}
+	UpdataViewMatrix();
+	//		viewDirty = false;
+	//	}
 
 		// 再計算必要なら
-		if (projectionDirty) {
+	//	if (projectionDirty) {
 			// ビュー行列更新
-			UpdataProjectionMatrix();
-			projectionDirty = false;
-		}
+	UpdataProjectionMatrix();
+	//		projectionDirty = false;
+	//	}
 		// ビュープロジェクションの合成
-		matViewProjection = matView * matProjection;
+	matViewProjection = matView * matProjection;
 
-	}
+	//}
+	matWorld = DirectX::XMMatrixIdentity();
 }
 
 void Camera::UpdataViewMatrix()
