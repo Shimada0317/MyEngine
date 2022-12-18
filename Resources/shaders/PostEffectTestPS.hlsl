@@ -7,7 +7,7 @@ float4 main(VSOutput input) :SV_TARGET
 {
 	float4 texcolor = tex.Sample(smp,input.uv); 
 	float4 col = texcolor;
-	col.r = col.r + color.r;
+	col.rgb = col.rgb + color.rgb;
 	return float4 (col.rgb,1);
 }
 

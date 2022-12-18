@@ -46,6 +46,8 @@ public://メンバ変数
 
 	void Updata() override;
 
+	void CameraMove();
+
 	void Draw(DirectXCommon* dxCommon)override;
 
 	void Finalize() override;
@@ -55,12 +57,14 @@ private:
 	ObjModel* ground = nullptr;
 	ObjModel* spheremodel = nullptr;
 	ObjModel* worldmodel = nullptr;
+	ObjModel* startModel = nullptr;
 
 	unique_ptr <Object3d> sphere;
 	unique_ptr<Object3d> bills[BILL];
 	unique_ptr<Object3d> bills1[BILL];
 	unique_ptr <Object3d> groundObj;
 	unique_ptr <Object3d >world;
+	unique_ptr<Object3d> Start;
 
 	Camera* camera = nullptr;
 
@@ -75,18 +79,33 @@ private:
 	XMVECTOR billsPos1 = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 billsRot = { 0.0f,90.0f,0.0f };
 
+	XMVECTOR start_pos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 start_scl = { 15.0f,15.0f,15.0f };
 
-	XMFLOAT3 camTar= { 0.0f,5.0f,0.0f };
+	XMFLOAT3 camTar= { 0.0f,0.0f,0.0f };
+	XMFLOAT3 camEye = { 0.0f,0.0f,0.0f };
 
 	//足場
 	XMVECTOR worldPos = { 0.0f,-1.1f,0.0f };
 	XMFLOAT3 worldScl = { 100,100,100 };
 
 	XMVECTOR camMove = { 0.0f,0.0f,0.0f };
+	XMVECTOR camEyeMove = { 0.0f,0.0f,0.0f };
+
+	//カーソル
+	//スプライト
+	XMFLOAT4 spCol = { 1,1,1,1 };
+	XMFLOAT2 anc = { 0.5f,0.5f };
+	XMFLOAT2 retpos = { 640.0f,360.0f };
+
+	XMFLOAT2 ClickPos = { 380,500 };
 
 	DirectXCommon* dxCommon = nullptr;
 
 	Sprite* title = nullptr;
+	Sprite* cursor = nullptr;
+	Sprite* clickBefore = nullptr;
+	Sprite* clickAfter = nullptr;
 
 	Light* light = nullptr;
 
@@ -101,6 +120,13 @@ private:
 
 	int timer = 0;
 
-	XMFLOAT4 col = { 0.0f,1.0f,1.0f,1.0f };
+	XMFLOAT4 col = { 0.0f,0.0f,0.0f,1.0f };
+
+	bool titleSprite = true;
+
+	bool cameraEyeMove = false;
+	bool cameraChange = false;
+
+	bool cursorIn = false;
 };
 

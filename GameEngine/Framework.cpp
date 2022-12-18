@@ -8,6 +8,9 @@ void Framework::Run()
 	Initialize();
 	while (true)//ゲームループ
 	{
+		if (Input::GetInstance()->TriggerKey(DIK_ESCAPE)) {
+			break;
+		}
 		//更新
 		Updata();
 		if (GetFinish()) {
