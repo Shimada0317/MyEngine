@@ -48,6 +48,8 @@ public://ÉÅÉìÉoïœêî
 
 	void CameraMove();
 
+	void CheckCursorIn(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY);
+
 	void Draw(DirectXCommon* dxCommon)override;
 
 	void Finalize() override;
@@ -98,7 +100,8 @@ private:
 	XMFLOAT2 anc = { 0.5f,0.5f };
 	XMFLOAT2 retpos = { 640.0f,360.0f };
 
-	XMFLOAT2 ClickPos = { 380,500 };
+	XMFLOAT2 ClickPos = { 380,560 };
+	
 
 	DirectXCommon* dxCommon = nullptr;
 
@@ -106,6 +109,9 @@ private:
 	Sprite* cursor = nullptr;
 	Sprite* clickBefore = nullptr;
 	Sprite* clickAfter = nullptr;
+	Sprite* SignalBefore = nullptr;
+	Sprite* SignalAfter = nullptr;
+	Sprite* setumei = nullptr;
 
 	Light* light = nullptr;
 
@@ -128,5 +134,7 @@ private:
 	bool cameraChange = false;
 
 	bool cursorIn = false;
+	bool start = true;
+	bool Sognal = false;
 };
 

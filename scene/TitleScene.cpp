@@ -38,6 +38,15 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(4, L"Resources/Click2.png");
 	clickAfter = Sprite::SpriteCreate(4, ClickPos);
 
+	Sprite::LoadTexture(5, L"Resources/SIGNAL.png");
+	SignalBefore = Sprite::SpriteCreate(5, ClickPos);
+
+	Sprite::LoadTexture(6, L"Resources/SIGNAL2.png");
+	SignalAfter = Sprite::SpriteCreate(6, ClickPos);
+
+	Sprite::LoadTexture(7, L"Resources/setumei.png");
+	setumei = Sprite::SpriteCreate(7, {1280.0f/2.0f,720.0f/2.0f-72.0f},spCol,anc);
+
 
 	billsModel = ObjModel::CreateFromOBJ("bills");
 	for (int i = 0; i < BILLS; i++) {
@@ -119,12 +128,7 @@ void TitleScene::Updata()
 	camMove = { 0.0f,0.0f,0.0f };
 	
 
-	if ((ClickPos.x <= retpos.x && ClickPos.x + 500 >= retpos.x) && (ClickPos.y <= retpos.y && ClickPos.y + 75 >= retpos.y)) {
-		cursorIn = true;
-	}
-	else {
-		cursorIn = false;
-	}
+	CheckCursorIn(retpos, ClickPos, 500, 75);
 
 	timer += 1;
 	if (timer >= 10&&cursorIn==true) {
@@ -135,6 +139,15 @@ void TitleScene::Updata()
 			/*BaseScene* scene_ = new GameScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
 			timer = 0;*/
+		}
+	}
+
+	if (cameraChange == true && cursorIn == true) {
+		if (Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) {
+			//ƒV[ƒ“Ø‚è‘Ö‚¦
+			BaseScene* scene_ = new GameScene(sceneManager_);
+			sceneManager_->SetNextScene(scene_);
+			timer = 0;
 		}
 	}
 
@@ -178,6 +191,16 @@ void TitleScene::CameraMove()
 
 }
 
+void TitleScene::CheckCursorIn(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY)
+{
+	if ((checkPos.x <= cursorPos.x && checkPos.x + radX >= cursorPos.x) && (checkPos.y <= cursorPos.y && checkPos.y + radY >= cursorPos.y)) {
+		cursorIn = true;
+	}
+	else {
+		cursorIn = false;
+	}
+}
+
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
 
@@ -203,7 +226,6 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	if (titleSprite == true) {
 		title->Draw();
 	}
-	cursor->Draw();
 	if (cameraEyeMove == false) {
 		if (cursorIn == false) {
 			clickBefore->Draw();
@@ -212,6 +234,16 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 			clickAfter->Draw();
 		}
 	}
+	else if (cameraChange == true) {
+		setumei->Draw();
+		if (cursorIn == false) {
+			SignalBefore->Draw();
+		}
+		else if (cursorIn == true) {
+			SignalAfter->Draw();
+		}
+	}
+	cursor->Draw();
 	Sprite::PostDraw();
 	post->PostDrawScene(dxCommon->GetCmdList());
 	
