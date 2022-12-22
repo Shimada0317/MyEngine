@@ -161,19 +161,19 @@ void GameScene::Updata()
 		col.x += 0.01f;
 		if (col.x >= 2.0f) {
 			deth = true;
-			if (Input::GetInstance()->PushClick(0)) {
-				BaseScene* scene_ = new GameOverScene(sceneManager_);
-				sceneManager_->SetNextScene(scene_);
-			}
-			else if (Input::GetInstance()->PushClick(1)) {
-				BaseScene* scene_ = new GameScene(sceneManager_);
-				sceneManager_->SetNextScene(scene_);
-			}
 		}
 	}
 
 	if (deth == true) {
 		col.x = 0;
+		if (Input::GetInstance()->PushClick(1)) {
+			BaseScene* scene_ = new TitleScene(sceneManager_);
+			sceneManager_->SetNextScene(scene_);
+		}
+		else if (Input::GetInstance()->PushClick(0)) {
+			BaseScene* scene_ = new GameScene(sceneManager_);
+			sceneManager_->SetNextScene(scene_);
+		}
 	}
 
 	XMVECTOR GoalPos = mid->GetGoalPos();

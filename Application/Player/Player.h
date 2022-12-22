@@ -97,9 +97,6 @@ private:
 	std::unique_ptr<Object3d> gun;
 	ObjModel* gunModel = nullptr;
 
-	std::unique_ptr<Object3d> reticle;
-	ObjModel* reticleModel = nullptr;
-
 	std::unique_ptr<Object3d> player;
 	ObjModel* playerModel = nullptr;
 

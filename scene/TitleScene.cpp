@@ -18,7 +18,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(camera);
 
-	
+
 
 	//camera->SetTarget(camTar);
 
@@ -30,11 +30,11 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
 	Sprite::LoadTexture(2, L"REsources/mark.png");
-	cursor = Sprite::SpriteCreate(2, retpos,spCol,anc);
+	cursor = Sprite::SpriteCreate(2, retpos, spCol, anc);
 
 	Sprite::LoadTexture(3, L"Resources/Click.png");
 	clickBefore = Sprite::SpriteCreate(3, ClickPos);
-	
+
 	Sprite::LoadTexture(4, L"Resources/Click2.png");
 	clickAfter = Sprite::SpriteCreate(4, ClickPos);
 
@@ -44,8 +44,26 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(6, L"Resources/SIGNAL2.png");
 	SignalAfter = Sprite::SpriteCreate(6, ClickPos);
 
-	Sprite::LoadTexture(7, L"Resources/setumei.png");
-	setumei = Sprite::SpriteCreate(7, {1280.0f/2.0f,720.0f/2.0f-72.0f},spCol,anc);
+	Sprite::LoadTexture(7, L"Resources/setumei2.png");
+	setumei = Sprite::SpriteCreate(7, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, spCol, anc);
+
+	Sprite::LoadTexture(8, L"Resources/setumei.png");
+	setumei2 = Sprite::SpriteCreate(8, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, spCol, anc);
+
+	Sprite::LoadTexture(9, L"Resources/setumei3.png");
+	setumei3 = Sprite::SpriteCreate(9, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, spCol, anc);
+
+	Sprite::LoadTexture(10, L"Resources/arrowRight.png");
+	arrowRight = Sprite::SpriteCreate(10, arrowRightPos);
+
+	Sprite::LoadTexture(11, L"Resources/arrowLeft.png");
+	arrowLeft = Sprite::SpriteCreate(11, arrowLeftPos);
+
+	Sprite::LoadTexture(12, L"Resources/arrowRightTrue.png");
+	arrowRightTrue = Sprite::SpriteCreate(12, arrowRightPos);
+
+	Sprite::LoadTexture(13, L"Resources/arrowLeftTrue.png");
+	arrowLeftTrue = Sprite::SpriteCreate(13, arrowLeftPos);
 
 
 	billsModel = ObjModel::CreateFromOBJ("bills");
@@ -70,7 +88,8 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	post = new PostEffect();
 	post->Initialize();
 	camEyeMove = { 0.0f,0.0f,0.0f };
-	
+
+
 }
 
 void TitleScene::SetPosSclRot()
@@ -112,37 +131,70 @@ void TitleScene::SetPosSclRot()
 	Start->SetScale(start_scl);
 	Start->SetRotation({ 0.0f,180.0f,0.0f });
 
+
 	title->SetSize({ titlesize });
 	title->SetPosition({ titlepos });
 
 	cursor->SetPosition({ retpos });
+
+
 }
 
 void TitleScene::Updata()
 {
-	Action::GetInstance()->PlayerMove2d(titlesize,1.0f);
+	Action::GetInstance()->PlayerMove2d(titlesize, 1.0f);
 
 	Mouse::GetInstance()->MouseMoveSprite(retpos);
 	//DirectX毎フレーム処理 ここから
 
 	camMove = { 0.0f,0.0f,0.0f };
-	
+
+	CameraMove();
 
 	CheckCursorIn(retpos, ClickPos, 500, 75);
 
 	timer += 1;
-	if (timer >= 10&&cursorIn==true) {
-		if (Input::GetInstance()->PushClick(0)|| Input::GetInstance()->PushClick(1)) {
+	if (timer >= 10 && cursorIn == true) {
+		if (Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) {
 			titleSprite = false;
 			cameraEyeMove = true;
-			////シーン切り替え
-			/*BaseScene* scene_ = new GameScene(sceneManager_);
-			sceneManager_->SetNextScene(scene_);
-			timer = 0;*/
 		}
 	}
 
-	if (cameraChange == true && cursorIn == true) {
+	if (frees == false) {
+		freesTimer += 0.1f;
+		if (freesTimer >= 1) {
+			freesTimer = 0.0f;
+			frees = true;
+		}
+	}
+
+	if (setumeiSp < 2) {
+		if (NextorBack(retpos, arrowRightPos, 35, 35)) {
+			RightTrueIn = true;
+
+			if ((Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) && frees == true) {
+				setumeiSp += 1;
+				frees = false;
+			}
+		}
+		else {
+			RightTrueIn = false;
+		}
+	}
+	if (setumeiSp > 0) {
+		if (NextorBack(retpos, arrowLeftPos, 35, 35)) {
+			LeftTrueIn = true;
+			if ((Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) && frees == true) {
+				setumeiSp -= 1;
+				frees = false;
+			}
+		}
+		else {
+			LeftTrueIn = false;
+		}
+	}
+	if (cameraChange == true && cursorIn == true && setumeiSp == 2) {
 		if (Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) {
 			//シーン切り替え
 			BaseScene* scene_ = new GameScene(sceneManager_);
@@ -151,12 +203,11 @@ void TitleScene::Updata()
 		}
 	}
 
-	CameraMove();
 
 	for (int i = 0; i < BILLS; i++) {
 		bills[i]->Updata({ 1.0f,1.0f,0.7f,0.7f });
 		bills1[i]->Updata({ 1.0f,0.5f,0.0f,0.9f }
-		
+
 		);
 	}
 
@@ -166,6 +217,7 @@ void TitleScene::Updata()
 	groundObj->Updata();
 	world->Updata();
 	Start->Updata();
+
 	camera->Updata();
 }
 
@@ -201,13 +253,22 @@ void TitleScene::CheckCursorIn(const XMFLOAT2& cursorPos, const XMFLOAT2& checkP
 	}
 }
 
+bool TitleScene::NextorBack(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY)
+{
+	if ((checkPos.x <= cursorPos.x && checkPos.x + radX >= cursorPos.x) && (checkPos.y <= cursorPos.y && checkPos.y + radY >= cursorPos.y)) {
+		return true;
+	}
+
+	return false;
+}
+
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
 
 	post->PreDrawScene(dxCommon->GetCmdList());
-	
-	
-	
+
+
+
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	world->Draw();
 	sphere->Draw();
@@ -217,7 +278,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 		bills1[i]->Draw();
 	}
 	Start->Draw();
-	
+
 	////human3d->Draw();
 	////オブジェクト後処理
 	Object3d::PostDraw();
@@ -234,19 +295,45 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 			clickAfter->Draw();
 		}
 	}
-	else if (cameraChange == true) {
-		setumei->Draw();
-		if (cursorIn == false) {
-			SignalBefore->Draw();
+	else if (cameraChange == true && firework == false) {
+		if (setumeiSp < 2) {
+			if (RightTrueIn == false) {
+				arrowRight->Draw();
+			}
+			else {
+				arrowRightTrue->Draw();
+			}
 		}
-		else if (cursorIn == true) {
-			SignalAfter->Draw();
+		if (setumeiSp > 0) {
+			if (LeftTrueIn == false) {
+				arrowLeft->Draw();
+			}
+			else {
+				arrowLeftTrue->Draw();
+			}
+		}
+		if (setumeiSp == 0) {
+			setumei->Draw();
+		}
+		else if (setumeiSp == 1) {
+			setumei2->Draw();
+		}
+		else if (setumeiSp == 2) {
+			setumei3->Draw();
+		}
+		if (setumeiSp == 2) {
+			if (cursorIn == false) {
+				SignalBefore->Draw();
+			}
+			else if (cursorIn == true) {
+				SignalAfter->Draw();
+			}
 		}
 	}
 	cursor->Draw();
 	Sprite::PostDraw();
 	post->PostDrawScene(dxCommon->GetCmdList());
-	
+
 	dxCommon->PreDraw();
 	post->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
@@ -263,6 +350,16 @@ void TitleScene::Finalize()
 	delete spheremodel;
 	delete worldmodel;
 	delete ground;
+	delete arrowLeft;
+	delete arrowRight;
+	delete arrowLeftTrue;
+	delete arrowRightTrue;
+	delete setumei;
+	delete setumei2;
+	delete setumei3;
+	delete SignalAfter;
+	delete SignalBefore;
+	delete startModel;
 
 	for (int i = 0; i < BILLS; i++) {
 		bills[i].reset();
@@ -271,4 +368,5 @@ void TitleScene::Finalize()
 	sphere.reset();
 	world.reset();
 	groundObj.reset();
+	Start.reset();
 }

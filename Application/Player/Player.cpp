@@ -26,10 +26,7 @@ void Player::Initalize()
 	gunModel = ObjModel::CreateFromOBJ("gun");
 	gun = Object3d::Create(gunModel);
 
-	reticleModel = ObjModel::CreateFromOBJ("block0");
-	reticle = Object3d::Create(reticleModel);
-
-	playerModel = ObjModel::CreateFromOBJ("block0");
+	playerModel = ObjModel::CreateFromOBJ("gun");
 	player = Object3d::Create(playerModel);
 
 	part = ParticleManager::Create();

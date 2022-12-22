@@ -18,6 +18,8 @@
 #include"PostEffect.h"
 #include<memory>
 #include"Light.h"
+#include"Texture.h"
+#include"TextureModel.h"
 #include"Camera.h"
 
 using namespace std;
@@ -49,6 +51,8 @@ public://ÉÅÉìÉoïœêî
 	void CameraMove();
 
 	void CheckCursorIn(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY);
+
+	bool NextorBack(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY);
 
 	void Draw(DirectXCommon* dxCommon)override;
 
@@ -112,6 +116,12 @@ private:
 	Sprite* SignalBefore = nullptr;
 	Sprite* SignalAfter = nullptr;
 	Sprite* setumei = nullptr;
+	Sprite* setumei2 = nullptr;
+	Sprite* setumei3 = nullptr;
+	Sprite* arrowRight = nullptr;
+	Sprite* arrowLeft = nullptr;
+	Sprite* arrowRightTrue = nullptr;
+	Sprite* arrowLeftTrue = nullptr;
 
 	Light* light = nullptr;
 
@@ -123,6 +133,11 @@ private:
 
 	XMFLOAT2 titlesize = { 1280.0f,720.0f };
 	XMFLOAT2 titlepos = { 0.0f,0.0f };
+
+	XMFLOAT2 arrowRightPos = { 1220.0f,300 };
+	XMFLOAT2 arrowLeftPos = { 30.0f,300 };
+
+
 
 	int timer = 0;
 
@@ -136,5 +151,12 @@ private:
 	bool cursorIn = false;
 	bool start = true;
 	bool Sognal = false;
+	bool firework = false;
+	bool RightTrueIn = false;
+	bool LeftTrueIn = false;
+	bool frees = true;
+
+	float freesTimer = 0.0f;
+	int setumeiSp = 0;
 };
 

@@ -45,7 +45,7 @@ void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, B
 		SetPRS(allPos ,rotation,bull);
 
 		if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)&&Hit==true) {
- 			Hp -= 20;
+ 			Hp -= 30;
 			Hit = false;
 			bull->SetTrigger(Hit);
 			HItColor = { 1,0,0,1 };
