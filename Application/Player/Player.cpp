@@ -29,8 +29,6 @@ void Player::Initalize()
 	playerModel = ObjModel::CreateFromOBJ("gun");
 	player = Object3d::Create(playerModel);
 
-	part = ParticleManager::Create();
-
 	Sprite::LoadTexture(200, L"Resources/mark.png");
 	spriteRet.reset(Sprite::SpriteCreate(200, retpos, spCol, anc));
 
@@ -74,31 +72,8 @@ void Player::Set()
 	playerWorldPos = { -10.0f,0.0f,-20.0f };
 	playerWorldPos = XMVector3Transform(playerWorldPos, playermat);
 
-	for (int i = 0; i < 100; i++) {
-		const float rnd_pos = 1.0f;
-		XMFLOAT3 pos{};
-		pos.x = TrackWorldPos.m128_f32[0];
-		pos.y = TrackWorldPos.m128_f32[1];
-		pos.z = TrackWorldPos.m128_f32[2];
-		//pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		//pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
-		//pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
 
-		const float rnd_vel = 0.001f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
-		XMFLOAT3 acc{};
-		const float rnd_acc = 0.001f;
-		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
-		if (time < 20.0f) {
-			part->Add(10, pos, vel, acc, 0.5f, 0.0f, time);
-		}
-		break;
-	}
-
+	
 	//ƒŒƒeƒBƒNƒ‹Obj
 	Track->SetRotation({ rotation });
 	Track->SetScale({ scale });
@@ -178,15 +153,12 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 	Track->Updata();
 	player->Updata();
 	gun->Updata();
+
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
-	ParticleManager::PreDraw(cmdeList);
-	if (particle == true) {
-		part->Draw();
-	}
-	ParticleManager::PostDraw();
+
 }
 
 void Player::SpriteDraw()
@@ -552,7 +524,7 @@ void Player::MouthContoroll()
 	XMMATRIX View = camera->GetViewMatrix();
 	XMMATRIX Pro = camera->GetProjectionMatrix();
 
-	XMVECTOR positionRet = TrackWorldPos;
+	positionRet = TrackWorldPos;
 
 	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet);
 

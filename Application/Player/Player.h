@@ -132,6 +132,7 @@ private:
 		//プレイヤー
 		XMVECTOR playerWorldPos = { 0.0f,0.0f,-0.1f };
 		XMMATRIX playermat;
+		XMVECTOR positionRet;
 	//ビューポート
 	XMMATRIX matViewPort;
 	//カメラ
@@ -156,6 +157,7 @@ private:
 
 	
 	float time = 0.0f;
+	float timeP = 0.0f;
 	bool particle = false;
 	int Hp = 5;
 	//Reload

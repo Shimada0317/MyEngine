@@ -43,10 +43,10 @@ static const uint vnum = 4;
 
 static const float4 offset_array[vnum] =
 {
-	float4(-0.5f,-0.5f,0,0),
-	float4(-0.5f,0.5f,0,0),
-	float4(0.5f,-0.5f,0,0),
-	float4(0.5f,0.5f,0,0),
+	float4(-1.0f,-1.0f,0,0),
+	float4(-1.0f,1.0f,0,0),
+	float4(1.0f,-1.0f,0,0),
+	float4(1.0f,1.0f,0,0),
 };
 
 static const float2 uv_array[vnum] =

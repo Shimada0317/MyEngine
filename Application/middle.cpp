@@ -25,8 +25,6 @@ middle::~middle()
 void middle::Initialize()
 {
 	Sprite::LoadTexture(10, L"Resources/reload.png");
-	Sprite::LoadTexture(11, L"Resources/wave.png");
-	Sprite::LoadTexture(12, L"Resources/slash.png");
 	Sprite::LoadTexture(13, L"Resources/one.png");
 	Sprite::LoadTexture(14, L"Resources/two.png");
 	Sprite::LoadTexture(15, L"Resources/three.png");

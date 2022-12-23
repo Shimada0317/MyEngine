@@ -13,13 +13,16 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(camera);
 
-	bomodel = ObjModel::CreateFromOBJ("mark");
+	bomodel = ObjModel::CreateFromOBJ("shadow");
 	bo = Object3d::Create(bomodel);
 
 	Sprite::LoadTexture(200, L"Resources/mark.png");
 	spriteRet.reset(Sprite::SpriteCreate(200, retpos, spCol, anc));
 
-	partM = ParticleManager::Create();
+	testEn = Object3d::Create(bomodel);
+	testPos = testEn->GetPosition();
+
+	partM = ParticleManager::Create(camera);
 
 	cam = new RailCamera();
 	cam->Initialize(position, rotation);
@@ -39,48 +42,45 @@ void DebugScene::SetPosSclRot()
 	bo->SetRotation(rotation);
 	bo->SetParent(camera);
 
+	XMMATRIX testmat = testEn->GetMatrix();
+	worldTest = XMVector3Transform(testPos, testmat);
+	testEn->SetPosition(testPos);
+	testEn->SetCamera(camera);
 
-	for (int i = 0; i < 100; i++) {
-		const float rnd_pos = 100;
+	for (int i = 0; i < 10; i++) {
+		const float rnd_pos = 0.0f;
 		XMFLOAT3 pos;
-		pos.x = position.m128_f32[0];
-		pos.y = position.m128_f32[1];
-		pos.z = position.m128_f32[2];
-		const float rnd_vel = 0.001f;
+		pos.x = positionRet.m128_f32[0];
+		pos.y = positionRet.m128_f32[1];
+		pos.z = positionRet.m128_f32[2];
+		const float rnd_vel = 0.1f;
 		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel / 2.0f;
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
 		XMFLOAT3 acc{};
-		const float rnd_acc = 0.001f;
-		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
-		if (time < 20.0f) {
-			partM->Add(10, pos, vel, acc, 0.5f, 0.0f, time);
-		}
-		break;
+		const float rnd_acc = 0.0001f;
+		acc.y = 0;
+		//if (Input::GetInstance()->PushClick(1)) {
+		partM->Add(10, pos, vel, acc, 1.0f, 1.0f, time);
+		//}
 	}
+
 }
 
 void DebugScene::Updata()
 {
-	SetPosSclRot();
+	
 	XMMATRIX mat = bo->GetMatrix();
 
 	XMVECTOR pos = XMVector3TransformNormal(position, mat);
+	
 
-	if (Input::GetInstance()->PushKey(DIK_1)) {
-		position.m128_f32[0] += 0.01f;
+	if (Input::GetInstance()->TriggerKey(DIK_A)) {
+		testPos.m128_f32[0] += 0.1f;
 	}
 
-	Action::GetInstance()->PlayerMove3d(pos);
-	if (Input::GetInstance()->PushKey(DIK_A)) {
-		rotation.y += 1;
-	}
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-		jump = true;
-
-	}
 	if (jump == true) {
 		position.m128_f32[1] = position.m128_f32[1] + addgrav;
 		addgrav -= 0.02f;
@@ -107,10 +107,13 @@ void DebugScene::Updata()
 	//
 
 
+	SetPosSclRot();
 	MouthContoroll();
 	cam->Updata(vel, Eye_rot, camera);
 	camera->Updata();
+	
 	bo->Updata();
+	testEn->Updata();
 	partM->Update(color);
 	//camera->Update();
 	//mid->Updata();
@@ -130,7 +133,7 @@ void DebugScene::Draw(DirectXCommon* dxCommon)
 
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	bo->Draw();
-
+	testEn->Draw();
 	Object3d::PostDraw();
 	//mid->Draw(dxCommon);
 	dxCommon->PostDraw();
@@ -172,7 +175,7 @@ void DebugScene::MouthContoroll()
 	XMMATRIX View = camera->GetViewMatrix();
 	XMMATRIX Pro = camera->GetProjectionMatrix();
 
-	XMVECTOR positionRet = playerWorldPos;
+	positionRet = playerWorldPos;
 
 	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet);
 

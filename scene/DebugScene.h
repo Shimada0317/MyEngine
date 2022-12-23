@@ -55,6 +55,7 @@ private:
 	std::unique_ptr<Player>player;
 	std::list<std::unique_ptr<ObjParticle>>part;
 	std::unique_ptr<Sprite> spriteRet;
+	std::unique_ptr<Object3d> testEn;
 
 	Texture* tex;
 
@@ -76,15 +77,22 @@ private:
 	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 
-	XMFLOAT4 color = { 1,1,1,1 };
+	XMFLOAT4 color = { 0.7,0.5,0,1.5 };
 	XMFLOAT4 spCol = { 1,1,1,1 };
 	XMFLOAT2 anc = { 0.5f,0.5f };
 	XMFLOAT2 retpos = { 640.0f,360.0f };
 	XMFLOAT2 retsize = { 64.0f,64.0f };
 
+	XMVECTOR testPos;
+	XMVECTOR worldTest;
+
 	XMVECTOR allpos[3];
 	XMVECTOR offset = { 0,0,1.0f };
 	XMVECTOR velocity = { 0.0f,0.0f,0.0f };
+
+	
+
+	XMVECTOR positionRet = { 0.0f,0.0f,0.0f };
 
 	bool jump = false;
 	float addgrav = 0.4f;

@@ -34,6 +34,8 @@ ParticleManager::VertexPos ParticleManager::vertices[vertexCount];
 //unsigned short ParticleManager::indices[indexCount];
 XMMATRIX ParticleManager::matBillboard = XMMatrixIdentity();
 XMMATRIX ParticleManager::matBillboardY = XMMatrixIdentity();
+Camera* ParticleManager::cam = nullptr;
+
 const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs)
 {
 	XMFLOAT3 result;
@@ -43,12 +45,13 @@ const DirectX::XMFLOAT3 operator+(const DirectX::XMFLOAT3& lhs, const DirectX::X
 	return result;
 }
 
-bool ParticleManager::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
+bool ParticleManager::StaticInitialize(Camera* camera,ID3D12Device* device, int window_width, int window_height)
 {
 	// nullptrチェック
 	assert(device);
 
 	ParticleManager::device = device;
+	ParticleManager::cam = camera;
 
 	// デスクリプタヒープの初期化
 	InitializeDescriptorHeap();
@@ -91,8 +94,9 @@ void ParticleManager::PostDraw()
 	ParticleManager::cmdList = nullptr;
 }
 
-ParticleManager* ParticleManager::Create()
+ParticleManager* ParticleManager::Create(Camera* camera)
 {
+	cam = camera;
 	// 3Dオブジェクトのインスタンスを生成
 	ParticleManager* particleManager = new ParticleManager();
 	if (particleManager == nullptr) {
@@ -386,7 +390,7 @@ bool ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
-		L"Resources/clush.png", WIC_FLAGS_NONE,
+		L"Resources/effect1.png", WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
 		return result;
@@ -628,7 +632,7 @@ void ParticleManager::Update(XMFLOAT4 color)
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);
 	constMap->color = color;
-	constMap->mat = matView * matProjection;
+	constMap->mat = cam->GetViewProjectionMatrix();
 	constMap->matBillboard = matBillboard;
 	constBuff->Unmap(0, nullptr);
 }
