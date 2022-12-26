@@ -104,7 +104,7 @@ private:
 	ObjModel* eleModel = nullptr;
 
 	//発砲時のエフェクト
-	ParticleManager* part;
+	ParticleManager* part = nullptr;
 
 	Mouse* mouse = nullptr;
 	Camera* camera = nullptr;

@@ -53,17 +53,17 @@ void DebugScene::SetPosSclRot()
 		pos.x = positionRet.m128_f32[0];
 		pos.y = positionRet.m128_f32[1];
 		pos.z = positionRet.m128_f32[2];
-		const float rnd_vel = 0.1f;
+		const float rnd_vel = 0.3f;
 		XMFLOAT3 vel{};
 		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
 		XMFLOAT3 acc{};
-		const float rnd_acc = 0.0001f;
-		acc.y = 0;
+
+		acc.y = 0.3;
 		//if (Input::GetInstance()->PushClick(1)) {
-		partM->Add(10, pos, vel, acc, 1.0f, 1.0f, time);
+		partM->Add(10, pos, vel, acc, 1.0f, 0.2f, time);
 		//}
 	}
 

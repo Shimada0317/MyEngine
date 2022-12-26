@@ -25,7 +25,7 @@ CD3DX12_CPU_DESCRIPTOR_HANDLE ParticleManager::cpuDescHandleSRV;
 CD3DX12_GPU_DESCRIPTOR_HANDLE ParticleManager::gpuDescHandleSRV;
 XMMATRIX ParticleManager::matView{};
 XMMATRIX ParticleManager::matProjection{};
-XMFLOAT3 ParticleManager::eye = { 0, 0, -5.0f };
+XMFLOAT3 ParticleManager::eye = { 0, 0, -1.0f };
 XMFLOAT3 ParticleManager::target = { 0, 0, 0 };
 XMFLOAT3 ParticleManager::up = { 0, 1, 0 };
 D3D12_VERTEX_BUFFER_VIEW ParticleManager::vbView{};
@@ -486,15 +486,16 @@ void ParticleManager::CreateModel()
 
 void ParticleManager::UpdateViewMatrix()
 {
-	// ビュー行列の更新
-	//matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
+	XMFLOAT3 ey2 = cam->GetEye();
+	XMFLOAT3 targe2 = cam->GetTarget();
+	XMFLOAT3 up2 = cam->GetUp();
 
 	//視点座標
-	XMVECTOR eyePosition = XMLoadFloat3(&eye);
+	XMVECTOR eyePosition = XMLoadFloat3(&ey2);
 	//注視点座標
-	XMVECTOR targetPosition = XMLoadFloat3(&target);
+	XMVECTOR targetPosition = XMLoadFloat3(&targe2);
 	//(仮の)上方向
-	XMVECTOR upVector = XMLoadFloat3(&up);
+	XMVECTOR upVector = XMLoadFloat3(&up2);
 
 	XMVECTOR cameraAxisZ = XMVectorSubtract(targetPosition, eyePosition);
 
@@ -562,6 +563,8 @@ void ParticleManager::UpdateViewMatrix()
 	matBillboardY.r[1] = ybillCameraAxisY;
 	matBillboardY.r[2] = ybillCameraAxisZ;
 	matBillboardY.r[3] = XMVectorSet(0, 0, 0, 1);
+
+	
 }
 
 bool ParticleManager::Initialize()
@@ -585,7 +588,6 @@ bool ParticleManager::Initialize()
 void ParticleManager::Update(XMFLOAT4 color)
 {
 	HRESULT result;
-
 
 	//寿命が尽きたパーティクルを全削除
 	particles.remove_if(
@@ -628,6 +630,8 @@ void ParticleManager::Update(XMFLOAT4 color)
 		vertBuff->Unmap(0, nullptr);
 	}
 
+
+	UpdateViewMatrix();
 	// 定数バッファへデータ転送
 	ConstBufferData* constMap = nullptr;
 	result = constBuff->Map(0, nullptr, (void**)&constMap);

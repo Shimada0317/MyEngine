@@ -52,7 +52,7 @@ void Player::Initalize()
 
 	player->SetParent(camera);
 
-
+	part = ParticleManager::Create(camera);
 };
 
 void Player::Set()
@@ -91,6 +91,28 @@ void Player::Set()
 	gun->SetParent(camera);
 	gun->SetPosition(gunPos);
 
+	//if (particle == true) {
+		for (int i = 0; i < 10; i++) {
+			const float rnd_pos = 0.0f;
+			XMFLOAT3 pos;
+			pos.x = positionRet.m128_f32[0];
+			pos.y = positionRet.m128_f32[1];
+			pos.z = positionRet.m128_f32[2];
+			const float rnd_vel = 0.3f;
+			XMFLOAT3 vel{};
+			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+			XMFLOAT3 acc{};
+
+			acc.y = 0.3;
+			//if (Input::GetInstance()->PushClick(1)) {
+			part->Add(10, pos, vel, acc, 1.0f, 0.2f, time);
+			//}
+		}
+		particle = false;
+	//}
 }
 
 void Player::Updata(Bullet* bull[], int& Remaining)
@@ -153,12 +175,14 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 	Track->Updata();
 	player->Updata();
 	gun->Updata();
-
+	part->Update({1.7f,0.5f,1,1.5f});
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
-
+	ParticleManager::PreDraw(cmdeList);
+	part->Draw();
+	ParticleManager::PostDraw();
 }
 
 void Player::SpriteDraw()
