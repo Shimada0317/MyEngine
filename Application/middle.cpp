@@ -7,13 +7,11 @@ middle::~middle()
 	for (int i = 0; i < 9; i++) {
 		delete bull[i];
 	}
-
 	player.reset();
 	delete Reload;
 	delete wave;
 	delete slash;
 	delete HpBer;
-
 	for (int i = 0; i < 5; i++) {
 		delete changecount[i];
 		delete LifeCount[i];
@@ -42,7 +40,7 @@ void middle::Initialize()
 		bull[i]->Initialize();
 	}
 
-	////スプライトの読み込み
+	//スプライトの読み込み
 	for (int i = 0; i < 9; i++) {
 		Sprite::LoadTexture(i, L"Resources/bullet.png");
 		bulletHUD[i] = Sprite::SpriteCreate(i, { 10.0f,10.0f });
@@ -136,9 +134,7 @@ void middle::SetPSR()
 
 void middle::Updata()
 {
-
 	heripos.m128_f32[2] += heriX;
-
 
 	if (heripos.m128_f32[2] >= 20) {
 		backObj = false;
@@ -186,7 +182,6 @@ void middle::Updata()
 		bool fring = player->GetFring();
 		if (fring == true) {
 			GoalPos.m128_f32[1] += 0.2f;
-
 		}
 	}
 
@@ -202,7 +197,6 @@ void middle::Draw(DirectXCommon* dxCommon)
 	for (std::unique_ptr<Robot>& robot : rob) {
 		robot->Draw(dxCommon);
 	}
-	player->ParticleDraw(dxCommon->GetCmdList());
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Draw();
@@ -215,6 +209,7 @@ void middle::Draw(DirectXCommon* dxCommon)
 	player->ObjDraw();
 	Object3d::PostDraw();
 
+	player->ParticleDraw(dxCommon->GetCmdList());
 }
 
 void middle::SpriteDraw()
@@ -256,7 +251,7 @@ void middle::ImGuiDraw()
 	//for (std::unique_ptr<Robot>& robot : rob) {
 	//	robot->ImgDraw();
 	//}
-	//player->ImGuiDraw();
+	player->ImGuiDraw();
 	//float a = patern;
 	//ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	//ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));

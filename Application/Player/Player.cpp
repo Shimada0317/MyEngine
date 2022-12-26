@@ -20,7 +20,7 @@ void Player::Initalize()
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(camera);
 
-	TrackModel = ObjModel::CreateFromOBJ("shadow");
+	TrackModel = ObjModel::CreateFromOBJ("tst2");
 	Track = Object3d::Create(TrackModel);
 
 	gunModel = ObjModel::CreateFromOBJ("gun");
@@ -64,7 +64,7 @@ void Player::Set()
 	TrackWorldPos = XMVector3Transform(TrackWorldPos, mat);
 
 	gunmat = gun->GetMatrix();
-	gunWorldPos = { 0.0f,0.0f,0.0f };
+	gunWorldPos = { 0.0f,0.0f,1.9f };
 	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
 	gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
 
@@ -72,8 +72,21 @@ void Player::Set()
 	playerWorldPos = { -10.0f,0.0f,-20.0f };
 	playerWorldPos = XMVector3Transform(playerWorldPos, playermat);
 
-
 	
+	/*if (retpos.x <= 0) {
+		rotation.y = rotation.y  20;
+	}
+
+	if (retpos.x >= 1280) {
+		rotation.y = 20;
+	}
+
+	if (retpos.x == WinApp::window_width) {
+		rotation.y = 0;
+	}*/
+
+	rotation.y = (retpos.x - 640)/10+changeRot;
+
 	//ƒŒƒeƒBƒNƒ‹Obj
 	Track->SetRotation({ rotation });
 	Track->SetScale({ scale });
@@ -91,28 +104,28 @@ void Player::Set()
 	gun->SetParent(camera);
 	gun->SetPosition(gunPos);
 
-	//if (particle == true) {
+	if (particle == true) {
 		for (int i = 0; i < 10; i++) {
 			const float rnd_pos = 0.0f;
 			XMFLOAT3 pos;
 			pos.x = positionRet.m128_f32[0];
 			pos.y = positionRet.m128_f32[1];
 			pos.z = positionRet.m128_f32[2];
-			const float rnd_vel = 0.3f;
+			const float rnd_vel = 0.001f;
 			XMFLOAT3 vel{};
 			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
 			XMFLOAT3 acc{};
-
-			acc.y = 0.3;
+			acc.y = -0.00001;
+			acc.y = -0.00001;
 			//if (Input::GetInstance()->PushClick(1)) {
-			part->Add(10, pos, vel, acc, 1.0f, 0.2f, time);
+			part->Add(10, pos, vel, acc, 0.5f, 0.2f, time);
 			//}
 		}
 		particle = false;
-	//}
+	}
 }
 
 void Player::Updata(Bullet* bull[], int& Remaining)
@@ -175,7 +188,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 	Track->Updata();
 	player->Updata();
 	gun->Updata();
-	part->Update({1.7f,0.5f,1,1.5f});
+	part->Update({1.7f,0.5f,1,0.5f});
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
@@ -354,7 +367,8 @@ void Player::PlayerMove(bool& move, int patern)
 			rotation.y -= 3;
 			if (Eye_rot.y >= 90) {
 				Eye_rot.y = 90;
-				rotation.y = -90;
+				changeRot = -90;
+				rotation.y = changeRot;
 				vel = { 0, 0, kBulletSpeed };
 			}
 			if (camvec.m128_f32[0] >= 30) {
@@ -381,7 +395,8 @@ void Player::PlayerMove(bool& move, int patern)
 			Eye_rot.y -= 3;
 			rotation.y += 3;
 			if (Eye_rot.y <= 0) {
-				rotation.y = 0;
+				changeRot = 0;
+				rotation.y = changeRot;
 				Eye_rot.y = 0;
 				vel = { 0, 0, kBulletSpeed };
 			}
@@ -435,6 +450,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 void Player::ObjDraw()
 {
+	//Track->Draw();
 	if (Hp >= 0 && CamWork == true) {
 		gun->Draw();
 	}
@@ -455,18 +471,24 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("LoacalPos")) {
-		ImGui::SliderFloat("pos.x", &camvec.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &camvec.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &camvec.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &positionRet.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &positionRet.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &positionRet.m128_f32[2], -100.0f, 100.0f);
 		ImGui::SliderFloat("mat.x", &a, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
 
-	if (ImGui::TreeNode("playerRot")) {
-		ImGui::SliderFloat("Rot.x", &Eye_rot.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Rot.y", &Eye_rot.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("Rot.z", &Eye_rot.z, -100.0f, 100.0f);
+	if (ImGui::TreeNode("rotation")) {
+		ImGui::SliderFloat("Rot.x", &rotation.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.y", &rotation.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.z", &rotation.z, -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("retpos")) {
+		ImGui::SliderFloat("retpos.x", &retpos.x, 0.0f, 1280.0f);
+		ImGui::SliderFloat("retpos.y", &retpos.y, 0.0f, 720.0f);
 		ImGui::TreePop();
 	}
 
@@ -553,6 +575,8 @@ void Player::MouthContoroll()
 	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet);
 
 	Track->SetPosition(positionRet);
+
+	
 }
 
 

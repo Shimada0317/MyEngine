@@ -192,5 +192,7 @@ private:
 	bool Fring = false;
 
 	bool Shake = true;
+
+	float changeRot = 0;
 };
 
