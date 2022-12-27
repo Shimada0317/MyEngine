@@ -95,7 +95,7 @@ void Mouse::Mousemove(const XMMATRIX& View, const XMMATRIX& Pro, const XMMATRIX&
 	XMVECTOR mouseDirection = posNear - posFar;
 	mouseDirection = XMVector3Normalize(mouseDirection);
 
-	const float kDistanceTestObject = 6;
+	const float kDistanceTestObject = 11;
 
 	positionRet = posNear - mouseDirection * kDistanceTestObject ;
 

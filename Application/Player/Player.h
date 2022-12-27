@@ -115,7 +115,7 @@ private:
 		XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 scale = { 0.3f,0.3f,0.3f };
 		//発射台Obj
-		XMVECTOR gunPos = { 0.0f,0.0f,-6.0f };
+		XMVECTOR gunPos = { 0.0f,0.0f,-4.0f };
 		XMFLOAT3 gunRot = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 gunScal={0.3f,0.3f,0.3f};
 		//プレイヤーObj
@@ -126,6 +126,8 @@ private:
 		//レティクル
 		XMVECTOR TrackWorldPos = { 0.0f,0.0f,0.0f };
 		XMMATRIX mat;
+
+		XMVECTOR WorldFarPos={0.0f,0.0f,0.0f};
 		//発射台
 		XMVECTOR gunWorldPos = { 0.0f,0.0f,-5.0f };
 		XMMATRIX gunmat;

@@ -64,9 +64,11 @@ void Player::Set()
 	TrackWorldPos = XMVector3Transform(TrackWorldPos, mat);
 
 	gunmat = gun->GetMatrix();
-	gunWorldPos = { 0.0f,0.0f,1.9f };
+	gunWorldPos = { 0.0f,0.0f,0.0f };
 	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
-	gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
+	//gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
+
+	WorldFarPos = TrackWorldPos;
 
 	playermat = player->GetMatrix();
 	playerWorldPos = { -10.0f,0.0f,-20.0f };
@@ -98,7 +100,11 @@ void Player::Set()
 	player->SetScale(playerScl);
 	player->SetParent(camera);
 
+	gunRot.y= (retpos.x - 640) / 10;
+	gunRot.x = (retpos.y - 360) / 50 ;
 
+	//gunPos.m128_f32[0] = -(retpos.x - 640)/300;
+	//gunPos.m128_f32[0] = -(retpos.x - 360) / 300;
 	gun->SetRotation(gunRot);
 	gun->SetScale(gunScal);
 	gun->SetParent(camera);
@@ -108,9 +114,9 @@ void Player::Set()
 		for (int i = 0; i < 10; i++) {
 			const float rnd_pos = 0.0f;
 			XMFLOAT3 pos;
-			pos.x = positionRet.m128_f32[0];
-			pos.y = positionRet.m128_f32[1];
-			pos.z = positionRet.m128_f32[2];
+			pos.x = gunWorldPos.m128_f32[0];
+			pos.y = gunWorldPos.m128_f32[1];
+			pos.z = gunWorldPos.m128_f32[2]+1.5f;
 			const float rnd_vel = 0.001f;
 			XMFLOAT3 vel{};
 			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
@@ -188,7 +194,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 	Track->Updata();
 	player->Updata();
 	gun->Updata();
-	part->Update({1.7f,0.5f,1,0.5f});
+	part->Update({1.7f,0.5f,0,0.5f});
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
@@ -450,7 +456,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 void Player::ObjDraw()
 {
-	//Track->Draw();
+	Track->Draw();
 	if (Hp >= 0 && CamWork == true) {
 		gun->Draw();
 	}
@@ -489,6 +495,20 @@ void Player::ImGuiDraw()
 	if (ImGui::TreeNode("retpos")) {
 		ImGui::SliderFloat("retpos.x", &retpos.x, 0.0f, 1280.0f);
 		ImGui::SliderFloat("retpos.y", &retpos.y, 0.0f, 720.0f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("gunpos")) {
+		ImGui::SliderFloat("gunpos.x", &gunPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.y", &gunPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.z", &gunPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("gunWorldpos")) {
+		ImGui::SliderFloat("gunWordpos.x", &gunWorldPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.y", &gunWorldPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.z", &gunWorldPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

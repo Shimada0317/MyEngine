@@ -31,9 +31,6 @@
     <Filter Include="ソース ファイル\Enemy">
       <UniqueIdentifier>{7e15da26-04ba-4ad0-8932-e395c28fb8c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\scene">
-      <UniqueIdentifier>{dcc180e0-6be2-4ed6-903c-2cd22eefebf8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\2d">
       <UniqueIdentifier>{b57bb0be-6dcd-4575-979d-09daac9c62de}</UniqueIdentifier>
     </Filter>
@@ -51,6 +48,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\scene">
       <UniqueIdentifier>{8ec30830-f5e0-4448-9f34-02ca90080cbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\scene">
+      <UniqueIdentifier>{dcc180e0-6be2-4ed6-903c-2cd22eefebf8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
