@@ -177,7 +177,7 @@ void DebugScene::MouthContoroll()
 
 	positionRet = playerWorldPos;
 
-	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet);
+	//Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet);
 
 
 	bo->SetPosition(positionRet);

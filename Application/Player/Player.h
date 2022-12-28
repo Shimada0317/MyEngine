@@ -28,7 +28,7 @@ public:
 
 	void Set();
 
-	void Updata(Bullet* bull[], int& Remaining);
+	void Updata(Bullet* bull[], int& Remaining,const XMVECTOR enePos[]);
 
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
 
@@ -48,7 +48,7 @@ public:
 
 	void ReteicleHaiti();
 
-	void MouthContoroll();
+	void MouthContoroll(const XMVECTOR enePos[]);
 
 #pragma region Get
 	const bool& GetFinish() { return Finish; }
@@ -196,5 +196,10 @@ private:
 	bool Shake = true;
 
 	float changeRot = 0;
+
+	float Distance = 11;
+
+	float ret2EneDistance[5];
+	int EneCount = 0;
 };
 

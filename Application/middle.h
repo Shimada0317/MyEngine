@@ -91,7 +91,7 @@ private:
 	float v3z=0;
 
 	//敵のステータス
-	XMVECTOR enemyPos[MAXENEMY];
+	XMVECTOR enemyPos[5];
 	XMFLOAT3 enemyScl = { 0,0,0 };
 	XMFLOAT3 enemyRot[MAXENEMY];
 	XMVECTOR absolutePos = { 0,0,0 };
@@ -213,5 +213,7 @@ private:
 	bool start = false;
 
 	bool getCamWorkF = false;
+
+	int CountDistance=0;
 };
 

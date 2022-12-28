@@ -71,7 +71,7 @@ void Mouse::MouseMoveSprite(XMFLOAT2& spritePos)
 	spritePos.y = mousePosition.y;
 }
 
-void Mouse::Mousemove(const XMMATRIX& View, const XMMATRIX& Pro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet)
+void Mouse::Mousemove(const XMMATRIX& View, const XMMATRIX& Pro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet,float Distance=11)
 {
 
 	XMVECTOR posNear = { spritePos.x,spritePos.y, 0 };
@@ -95,7 +95,7 @@ void Mouse::Mousemove(const XMMATRIX& View, const XMMATRIX& Pro, const XMMATRIX&
 	XMVECTOR mouseDirection = posNear - posFar;
 	mouseDirection = XMVector3Normalize(mouseDirection);
 
-	const float kDistanceTestObject = 11;
+	const float kDistanceTestObject = Distance;
 
 	positionRet = posNear - mouseDirection * kDistanceTestObject ;
 

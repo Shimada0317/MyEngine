@@ -63,10 +63,7 @@ void Player::Set()
 	TrackWorldPos = { 0.0f,0.0f,2.0f };
 	TrackWorldPos = XMVector3Transform(TrackWorldPos, mat);
 
-	gunmat = gun->GetMatrix();
-	gunWorldPos = { 0.0f,0.0f,0.0f };
-	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
-	//gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
+	
 
 	WorldFarPos = TrackWorldPos;
 
@@ -88,7 +85,7 @@ void Player::Set()
 	}*/
 
 	rotation.y = (retpos.x - 640)/10+changeRot;
-
+	//rotation.x = -(retpos.y - 360) / 10;
 	//ƒŒƒeƒBƒNƒ‹Obj
 	Track->SetRotation({ rotation });
 	Track->SetScale({ scale });
@@ -103,12 +100,16 @@ void Player::Set()
 	gunRot.y= (retpos.x - 640) / 10;
 	gunRot.x = (retpos.y - 360) / 50 ;
 
-	//gunPos.m128_f32[0] = -(retpos.x - 640)/300;
-	//gunPos.m128_f32[0] = -(retpos.x - 360) / 300;
+	
 	gun->SetRotation(gunRot);
 	gun->SetScale(gunScal);
 	gun->SetParent(camera);
 	gun->SetPosition(gunPos);
+
+	gunmat = gun->GetMatrix();
+	gunWorldPos = { 0.0f,0.0f,0.0f };
+	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
+	//gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
 
 	if (particle == true) {
 		for (int i = 0; i < 10; i++) {
@@ -134,7 +135,7 @@ void Player::Set()
 	}
 }
 
-void Player::Updata(Bullet* bull[], int& Remaining)
+void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[])
 {
 
 	if (CamWork == true) {
@@ -184,7 +185,7 @@ void Player::Updata(Bullet* bull[], int& Remaining)
 		bull[i]->Updata();
 	}
 
-	MouthContoroll();
+	MouthContoroll(enePos);
 
 	CameraWork();
 
@@ -350,6 +351,7 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 		if (patern == 0) {
 			vel = { 0, 0, kBulletSpeed };
+			EneCount = 3;
 			if (camvec.m128_f32[2] >= 20) {
 				move = false;
 				Active = false;
@@ -357,8 +359,12 @@ void Player::PlayerMove(bool& move, int patern)
 				movetimer = 0.0f;
 				Finish = true;
 			}
+			else {
+				Distance = 11;
+			}
 		}
 		else if (patern == 1) {
+			EneCount = 4;
 			vel = { 0, 0, kBulletSpeed };
 			if (camvec.m128_f32[2] >= 40) {
 				move = false;
@@ -367,8 +373,12 @@ void Player::PlayerMove(bool& move, int patern)
 				movetimer = 0.0f;
 				Finish = true;
 			}
+			else {
+				Distance = 11;
+			}
 		}
 		else if (patern == 2) {
+			EneCount = 4;
 			Eye_rot.y += 3;
 			rotation.y -= 3;
 			if (Eye_rot.y >= 90) {
@@ -384,9 +394,12 @@ void Player::PlayerMove(bool& move, int patern)
 				movetimer = 0.0f;
 				Finish = true;
 			}
+			else {
+				Distance = 11;
+			}
 		}
 		else if (patern == 3) {
-
+			EneCount = 3;
 			vel = { 0, 0, kBulletSpeed };
 
 			if (camvec.m128_f32[0] >= 45) {
@@ -396,8 +409,12 @@ void Player::PlayerMove(bool& move, int patern)
 				movetimer = 0.0f;
 				Finish = true;
 			}
+			else {
+				Distance = 11;
+			}
 		}
 		else if (patern == 4) {
+			EneCount = 5;
 			Eye_rot.y -= 3;
 			rotation.y += 3;
 			if (Eye_rot.y <= 0) {
@@ -413,6 +430,9 @@ void Player::PlayerMove(bool& move, int patern)
 				movetimer = 0.0f;
 				Finish = true;
 			}
+			else {
+				Distance = 11;
+			}
 		}
 		else if (patern == 5) {
 			Eye_rot.y -= 3;
@@ -426,6 +446,9 @@ void Player::PlayerMove(bool& move, int patern)
 				waveCount += 1;
 				movetimer = 0.0f;
 				Finish = true;
+			}
+			else {
+				Distance = 11;
 			}
 		}
 		else if (patern == 6) {
@@ -577,7 +600,7 @@ void Player::ReteicleHaiti()
 	}
 }
 
-void Player::MouthContoroll()
+void Player::MouthContoroll(const XMVECTOR enePos[])
 {
 	Mouse::GetInstance()->MouseMoveSprite(retpos);
 
@@ -592,7 +615,17 @@ void Player::MouthContoroll()
 
 	positionRet = TrackWorldPos;
 
-	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet);
+
+	Distance = 11;
+	
+
+	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet,Distance);
+
+	for (int i = 0; i < EneCount; i++) {
+		if ((positionRet.m128_f32[0] >= enePos[i].m128_f32[0] - 0.5f && positionRet.m128_f32[0] <= enePos[i].m128_f32[0] + 0.5f)|| (positionRet.m128_f32[2] >= enePos[i].m128_f32[2] - 0.5f && positionRet.m128_f32[2] <= enePos[i].m128_f32[2] + 0.5f)) {
+			positionRet = enePos[i];
+		}
+	}
 
 	Track->SetPosition(positionRet);
 
