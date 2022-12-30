@@ -63,10 +63,6 @@ void Player::Set()
 	TrackWorldPos = { 0.0f,0.0f,2.0f };
 	TrackWorldPos = XMVector3Transform(TrackWorldPos, mat);
 
-	
-
-	WorldFarPos = TrackWorldPos;
-
 	playermat = player->GetMatrix();
 	playerWorldPos = { -10.0f,0.0f,-20.0f };
 	playerWorldPos = XMVector3Transform(playerWorldPos, playermat);
@@ -535,8 +531,6 @@ void Player::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-
-
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
@@ -581,8 +575,6 @@ void Player::ReteicleHaiti()
 
 	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
 
-
-
 	{
 		XMVECTOR positionRet = TrackWorldPos;
 
@@ -615,17 +607,15 @@ void Player::MouthContoroll(const XMVECTOR enePos[])
 
 	positionRet = TrackWorldPos;
 
-
 	Distance = 11;
 	
-
 	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet,Distance);
 
-	for (int i = 0; i < EneCount; i++) {
+	/*for (int i = 0; i < EneCount; i++) {
 		if ((positionRet.m128_f32[0] >= enePos[i].m128_f32[0] - 0.5f && positionRet.m128_f32[0] <= enePos[i].m128_f32[0] + 0.5f)|| (positionRet.m128_f32[2] >= enePos[i].m128_f32[2] - 0.5f && positionRet.m128_f32[2] <= enePos[i].m128_f32[2] + 0.5f)) {
 			positionRet = enePos[i];
 		}
-	}
+	}*/
 
 	Track->SetPosition(positionRet);
 

@@ -8,6 +8,8 @@
 #include"DirectXCommon.h"
 #include"Texture.h"
 #include"TextureModel.h"
+#include"Sprite.h"
+#include"Camera.h"
 #include<DirectXMath.h>
 #include<memory>
 #include<list>
@@ -21,26 +23,30 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMVECTOR = DirectX::XMVECTOR;
 public:
+	//デストラクタ
 	~Robot();
-
+	//初期化
 	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& AllPos,const bool& Step=false);
-
+	//全て更新
 	void AllUpdata(Bullet* bull);
-
+	//更新内の処理
 	void Updata(Bullet* bull, const XMMATRIX& player,bool& spown,int& playerHp);
-
+	//描画
 	void Draw(DirectXCommon* dxCommon);
-
+	//Img描画
 	void ImgDraw();
-
+	//パーティクル描画
 	void ParticleDraw(DirectXCommon* dxCommon);
-
+	//プレイヤー追尾
 	void TrackPlayer();
-
+	//首振り
 	void Motion();
-		
-	void Finalize();
+	//2D→3D座標
+	void WorldtoScreen();
+	//ビュー変換
+	void ChangeViewPort(XMMATRIX& matViewPort);
 
+public://Getter Setter
 	void SetPosition(XMVECTOR allPos) { this->allPos = allPos; }
 
 	void SetRotation(XMFLOAT3 allRot) { this->allRot = allRot; }
@@ -64,6 +70,8 @@ private:
 
 	std::unique_ptr<Object3d> center;
 
+	std::unique_ptr<Sprite> RockOn;
+
 	Texture* fireTex;
 
 	XMFLOAT3 Texpos = { 0.0f,0.0f,0.0f };
@@ -75,6 +83,20 @@ private:
 	XMVECTOR allPos = { 0.0f,0.0f,-10.0f };
 	XMVECTOR firstPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 allRot = { 0.0f,0.0f,0.0f };
+	//RockOn
+	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
+	XMFLOAT2 RockOnAnc = { 0.5f,0.5f };
+	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
+
+	XMVECTOR offset;
+
+	XMMATRIX vmat;
+	XMMATRIX cmat;
+	XMMATRIX matViewPort;
+
+	XMVECTOR imgpos={0.0f,0.0f,0.0f};
+
+	Camera* camera;
 
 	bool Partarive[3];
 	bool Myarive = false;

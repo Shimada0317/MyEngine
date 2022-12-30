@@ -13,6 +13,7 @@ Robot::~Robot()
 
 void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos, const bool& Step)
 {
+	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	head = std::make_unique<Head>();
 	body = std::make_unique<Body>();
 	/*LArm = std::make_unique<LeftArm>();
@@ -28,10 +29,12 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos, const boo
 
 	shadowModel = ObjModel::CreateFromOBJ("shadow");
 	shadow = Object3d::Create(shadowModel);
+
+	Sprite::LoadTexture(350, L"Resources/CONTINUE.png");
+	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnc));
 	
 	center = Object3d::Create(shadowModel);
 
-	XMMATRIX vmat = center->GetMatrix();
 	Arms->RespownSet(AllRot);
 
 	for (int i = 0; i < 3; i++) {
@@ -43,21 +46,20 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos, const boo
 	allRot = AllRot;
 	step = Step;
 	allPos = AllPos;
-	firstPos = AllPos;
-
-
 }
 
 void Robot::AllUpdata(Bullet* bull)
 {
 	//XMMATRIX cmat = XMMatrixIdentity();
-	//XMMATRIX cmat = center->GetMatrix();
 	//center->SetPosition(allPos);
 	//center->SetRotation(allRot);
-	//center->Updata();
-	//alll = XMVector3TransformNormal(allPos, cmat);
-	//center->SetPosition(alll);
+	
 
+	center->SetScale({ 1.0f,1.0f,1.0f });
+	center->SetRotation({ allRot });
+	cmat = center->GetMatrix();
+	alll = XMVector3TransformNormal(allPos, cmat);
+	center->SetPosition(alll);
 
 	shadowPos = allPos;
 	shadowPos.m128_f32[1] = allPos.m128_f32[1] - 0.8f;
@@ -72,8 +74,9 @@ void Robot::AllUpdata(Bullet* bull)
 	body->Updata(Partarive[2], allPos, allRot, bull, Hp);
 	part->Updata(allPos, allRot);
 	shadow->Updata(shadowColor);
+	center->Updata();
 
-
+	WorldtoScreen();
 
 	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
 		patrticle->Updata(allPos, allRot);
@@ -157,7 +160,7 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 		}
 
 	}
-
+	
 	AllUpdata(bull);
 }
 
@@ -170,12 +173,16 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	Arms->Draw(Partarive[1]);
 	body->Draw(Partarive[2]);
 	shadow->Draw();
-	//center->Draw();
+	center->Draw();
 	//part->Draw();
 	for (std::unique_ptr<ObjParticle>& particle : particle_) {
 		particle->Draw();
 	}
 	Object3d::PostDraw();
+
+	Sprite::PreDraw(dxCommon->GetCmdList());
+	RockOn->Draw();
+	Sprite::PostDraw();
 }
 
 void Robot::ImgDraw()
@@ -190,9 +197,10 @@ void Robot::ImgDraw()
 	//ImGui::Checkbox("Att", &AttackFase);
 //	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
 	//ImGui::SliderFloat("len", &l, -100.0f, 100.0f);
-	ImGui::SliderFloat("PosX", &alll.m128_f32[0], -100.0f, 100.0f);
-	ImGui::SliderFloat("PosY", &alll.m128_f32[1], -100.0f, 100.0f);
-	ImGui::SliderFloat("PosZ", &alll.m128_f32[2], -100.0f, 100.0f);
+	ImGui::SliderFloat("imgPosX", &imgpos.m128_f32[0], -100.0f, 100.0f);
+	ImGui::SliderFloat("imgPosY", &imgpos.m128_f32[1], -100.0f, 100.0f);
+	ImGui::SliderFloat("imgPosZ", &imgpos.m128_f32[2], -100.0f, 100.0f);
+
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
@@ -299,7 +307,51 @@ void Robot::Motion()
 
 }
 
-void Robot::Finalize()
+void Robot::WorldtoScreen()
 {
+	const float kDistancePlayerTo3DReticle = 50.0f;
+	offset = { 0.0,0.0,1.0f };
+	offset = XMVector3TransformNormal(offset, cmat);
+	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
 
+	{
+		XMVECTOR positionRet = alll;
+
+		ChangeViewPort(matViewPort);
+
+		XMMATRIX matVP = matViewPort;
+
+		XMMATRIX GetViewPro = camera->GetViewProjectionMatrix();
+
+		XMMATRIX matViewProjectionViewport = GetViewPro * matVP;
+
+		positionRet = XMVector3TransformCoord(positionRet, matViewProjectionViewport);
+
+		RockOn->SetPosition({ positionRet.m128_f32[0],positionRet.m128_f32[1] });
+
+		imgpos = positionRet;
+	}
+}
+
+void Robot::ChangeViewPort(XMMATRIX& matViewPort)
+{
+	matViewPort.r[0].m128_f32[0] = WinApp::window_width / 2;
+	matViewPort.r[0].m128_f32[1] = 0;
+	matViewPort.r[0].m128_f32[2] = 0;
+	matViewPort.r[0].m128_f32[3] = 0;
+
+	matViewPort.r[1].m128_f32[0] = 0;
+	matViewPort.r[1].m128_f32[1] = -(WinApp::window_height / 2);
+	matViewPort.r[1].m128_f32[2] = 0;
+	matViewPort.r[1].m128_f32[3] = 0;
+
+	matViewPort.r[2].m128_f32[0] = 0;
+	matViewPort.r[2].m128_f32[1] = 0;
+	matViewPort.r[2].m128_f32[2] = 1;
+	matViewPort.r[2].m128_f32[3] = 0;
+
+	matViewPort.r[3].m128_f32[0] = WinApp::window_width / 2 + offset.m128_f32[0];
+	matViewPort.r[3].m128_f32[1] = WinApp::window_height / 2 + offset.m128_f32[1];
+	matViewPort.r[3].m128_f32[2] = 0;
+	matViewPort.r[3].m128_f32[3] = 1;
 }
