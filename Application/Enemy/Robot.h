@@ -26,7 +26,7 @@ public:
 	//デストラクタ
 	~Robot();
 	//初期化
-	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& AllPos,const bool& Step=false);
+	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& AllPos, Camera* came, const bool& Step = false);
 	//全て更新
 	void AllUpdata(Bullet* bull);
 	//更新内の処理
@@ -83,6 +83,7 @@ private:
 	XMVECTOR allPos = { 0.0f,0.0f,-10.0f };
 	XMVECTOR firstPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 allRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 Rot = { 0.0f,0.0f,0.0f };
 	//RockOn
 	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
 	XMFLOAT2 RockOnAnc = { 0.5f,0.5f };

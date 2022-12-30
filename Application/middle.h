@@ -187,8 +187,6 @@ private:
 
 	XMVECTOR allpos[3];
 
-	DebugCamera* camera = nullptr;
-
 	//XMVECTOR allpos = { 1.0f,1.0f,1.0f };
 	XMFLOAT3 Eye_pos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Target_pos = { 0.0f,0.0f,0.0f };
@@ -215,5 +213,7 @@ private:
 	bool getCamWorkF = false;
 
 	int CountDistance=0;
+
+	Camera* camera;
 };
 

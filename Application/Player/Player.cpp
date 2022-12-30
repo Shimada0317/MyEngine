@@ -15,10 +15,10 @@ Player::~Player()
 	player.reset();
 }
 
-void Player::Initalize()
+void Player::Initalize(Camera* came)
 {
-	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	Object3d::SetCamera(camera);
+	
+	Object3d::SetCamera(came);
 
 	TrackModel = ObjModel::CreateFromOBJ("tst2");
 	Track = Object3d::Create(TrackModel);
@@ -50,12 +50,12 @@ void Player::Initalize()
 	cam = new RailCamera();
 	cam->Initialize(position, rotation);
 
-	player->SetParent(camera);
+	player->SetParent(came);
 
-	part = ParticleManager::Create(camera);
+	part = ParticleManager::Create(came);
 };
 
-void Player::Set()
+void Player::Set(Camera* came)
 {
 	const float BulletSpeed = 15.0f;
 	velocity = { 0, 0, BulletSpeed };
@@ -91,7 +91,7 @@ void Player::Set()
 	player->SetRotation(playerRot);
 	player->SetPosition(playerPos);
 	player->SetScale(playerScl);
-	player->SetParent(camera);
+	player->SetParent(came);
 
 	gunRot.y= (retpos.x - 640) / 10;
 	gunRot.x = (retpos.y - 360) / 50 ;
@@ -99,7 +99,7 @@ void Player::Set()
 	
 	gun->SetRotation(gunRot);
 	gun->SetScale(gunScal);
-	gun->SetParent(camera);
+	gun->SetParent(came);
 	gun->SetPosition(gunPos);
 
 	gunmat = gun->GetMatrix();
@@ -131,7 +131,7 @@ void Player::Set()
 	}
 }
 
-void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[])
+void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came)
 {
 
 	if (CamWork == true) {
@@ -181,13 +181,13 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[])
 		bull[i]->Updata();
 	}
 
-	MouthContoroll(enePos);
+	MouthContoroll(enePos,came);
 
 	CameraWork();
 
-	Set();
-	cam->Updata(vel, Eye_rot, camera);
-	camera->Updata();
+	Set(came);
+	cam->Updata(vel, Eye_rot, came);
+
 	Track->Updata();
 	player->Updata();
 	gun->Updata();
@@ -592,7 +592,7 @@ void Player::ReteicleHaiti()
 	}
 }
 
-void Player::MouthContoroll(const XMVECTOR enePos[])
+void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came)
 {
 	Mouse::GetInstance()->MouseMoveSprite(retpos);
 
@@ -602,8 +602,8 @@ void Player::MouthContoroll(const XMVECTOR enePos[])
 
 	ChangeViewPort(matViewport);
 
-	XMMATRIX View = camera->GetViewMatrix();
-	XMMATRIX Pro = camera->GetProjectionMatrix();
+	XMMATRIX View = came->GetViewMatrix();
+	XMMATRIX Pro = came->GetProjectionMatrix();
 
 	positionRet = TrackWorldPos;
 

@@ -11,9 +11,9 @@ Robot::~Robot()
 	delete shadowModel;
 }
 
-void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos, const bool& Step)
+void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos,Camera* came, const bool& Step)
 {
-	camera = new Camera(WinApp::window_width, WinApp::window_height);
+	camera=came;
 	head = std::make_unique<Head>();
 	body = std::make_unique<Body>();
 	/*LArm = std::make_unique<LeftArm>();
@@ -44,8 +44,13 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos, const boo
 	OldHp = Hp;
 	Myarive = true;
 	allRot = AllRot;
+	center->SetRotation(AllRot);
+	cmat = center->GetMatrix();
 	step = Step;
 	allPos = AllPos;
+	alll = XMVector3TransformNormal(allPos, cmat);
+
+	center->SetPosition(alll);
 }
 
 void Robot::AllUpdata(Bullet* bull)
@@ -57,29 +62,30 @@ void Robot::AllUpdata(Bullet* bull)
 
 	center->SetScale({ 1.0f,1.0f,1.0f });
 	center->SetRotation({ allRot });
+	XMMatrixIsIdentity(cmat);
 	cmat = center->GetMatrix();
 	alll = XMVector3TransformNormal(allPos, cmat);
 	center->SetPosition(alll);
 
-	shadowPos = allPos;
-	shadowPos.m128_f32[1] = allPos.m128_f32[1] - 0.8f;
+	shadowPos = alll;
+	shadowPos.m128_f32[1] = alll.m128_f32[1] - 0.8f;
 	shadow->SetPosition(shadowPos);
 	shadow->SetRotation({ 0.0f,0.0f,0.0f });
 	shadow->SetScale({ 1.0f,1.0f,1.0f });
 
-	head->Updata(Partarive[0], allPos, allRot, bull, Hp);
+	head->Updata(Partarive[0], alll, allRot, bull, Hp);
 	//RArm->Updata(arive[1], allPos, bull, Hp);
 	//LArm->Updata(arive[2], allPos, bull, Hp);
-	Arms->Updata(Partarive[1], allPos, allRot, bull, Hp);
-	body->Updata(Partarive[2], allPos, allRot, bull, Hp);
-	part->Updata(allPos, allRot);
+	Arms->Updata(Partarive[1], alll, allRot, bull, Hp);
+	body->Updata(Partarive[2], alll, allRot, bull, Hp);
+	part->Updata(alll, allRot);
 	shadow->Updata(shadowColor);
 	center->Updata();
 
 	WorldtoScreen();
 
 	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
-		patrticle->Updata(allPos, allRot);
+		patrticle->Updata(alll, allRot);
 	}
 }
 
@@ -197,9 +203,13 @@ void Robot::ImgDraw()
 	//ImGui::Checkbox("Att", &AttackFase);
 //	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
 	//ImGui::SliderFloat("len", &l, -100.0f, 100.0f);
-	ImGui::SliderFloat("imgPosX", &imgpos.m128_f32[0], -100.0f, 100.0f);
+	/*ImGui::SliderFloat("imgPosX", &imgpos.m128_f32[0], -100.0f, 100.0f);
 	ImGui::SliderFloat("imgPosY", &imgpos.m128_f32[1], -100.0f, 100.0f);
-	ImGui::SliderFloat("imgPosZ", &imgpos.m128_f32[2], -100.0f, 100.0f);
+	ImGui::SliderFloat("imgPosZ", &imgpos.m128_f32[2], -100.0f, 100.0f);*/
+
+	ImGui::SliderFloat("AllPosX", &allPos.m128_f32[0], -100.0f, 100.0f);
+	ImGui::SliderFloat("AllPosY", &allPos.m128_f32[1], -100.0f, 100.0f);
+	ImGui::SliderFloat("AllPosZ", &allPos.m128_f32[2], -100.0f, 100.0f);
 
 	ImGui::End();
 	ImGui::PopStyleColor();
@@ -321,11 +331,14 @@ void Robot::WorldtoScreen()
 
 		XMMATRIX matVP = matViewPort;
 
-		XMMATRIX GetViewPro = camera->GetViewProjectionMatrix();
+		XMMATRIX View = camera->GetViewMatrix();
+		XMMATRIX Pro = camera->GetProjectionMatrix();
 
-		XMMATRIX matViewProjectionViewport = GetViewPro * matVP;
+		XMMATRIX matViewProjectionViewport = View * Pro * matVP;
 
 		positionRet = XMVector3TransformCoord(positionRet, matViewProjectionViewport);
+
+		//positionRet.m128_f32[1] = 360;
 
 		RockOn->SetPosition({ positionRet.m128_f32[0],positionRet.m128_f32[1] });
 

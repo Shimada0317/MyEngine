@@ -30,8 +30,10 @@ void middle::Initialize()
 	Sprite::LoadTexture(17, L"Resources/five.png");
 	Sprite::LoadTexture(18, L"Resources/Hpber.png");
 
+	camera = new Camera(WinApp::window_width, WinApp::window_height);
+
 	player = std::make_unique<Player>();
-	player->Initalize();
+	player->Initalize(camera);
 
 	playerPos = player->GetPosition();
 
@@ -191,8 +193,9 @@ void middle::Updata()
 	player->PlayerMove(move, patern);
 	//座標の設定
 	SetPSR();
+	camera->Updata();
 	//プレイヤーの更新処理
-	player->Updata(bull, Remaining,enemyPos);
+	player->Updata(bull, Remaining,enemyPos,camera);
 }
 
 void middle::Draw(DirectXCommon* dxCommon)
@@ -426,7 +429,7 @@ void middle::UpdataEnemyPopCommands()
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				std::unique_ptr<Robot> newRobot = std::make_unique<Robot>();
-				newRobot->Initialize(ROTATION,POSITION,step);
+				newRobot->Initialize(ROTATION,POSITION,camera, step);
 				newRobot->SetTrackPoint(TRACK);
 				//newRobot->SetRotation(ROTATION);
 				rob.push_back(std::move(newRobot));

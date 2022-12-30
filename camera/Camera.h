@@ -163,9 +163,9 @@ protected: // メンバ変数
 	// 射影行列ダーティフラグ
 	bool projectionDirty = true;
 	// 視点座標
-	XMFLOAT3 eye = { 0, 100, -5 };
+	XMFLOAT3 eye = { 0, 0, -5 };
 	// 注視点座標
-	XMFLOAT3 target = { 0, 100, 0 };
+	XMFLOAT3 target = { 0, 0, 0 };
 	// 上方向ベクトル
 	XMFLOAT3 up = { 0, 1, 0 };
 	// アスペクト比

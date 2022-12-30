@@ -24,11 +24,11 @@ class Player
 public:
 	~Player();
 
-	void Initalize();
+	void Initalize(Camera* came);
 
-	void Set();
+	void Set(Camera* came);
 
-	void Updata(Bullet* bull[], int& Remaining,const XMVECTOR enePos[]);
+	void Updata(Bullet* bull[], int& Remaining,const XMVECTOR enePos[], Camera* came);
 
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
 
@@ -48,7 +48,7 @@ public:
 
 	void ReteicleHaiti();
 
-	void MouthContoroll(const XMVECTOR enePos[]);
+	void MouthContoroll(const XMVECTOR enePos[], Camera* came);
 
 #pragma region Get
 	const bool& GetFinish() { return Finish; }
