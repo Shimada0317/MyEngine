@@ -600,6 +600,7 @@ void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT
 				positionRet.m128_f32[0] = enePos[i].m128_f32[0];
 				positionRet.m128_f32[2] = enePos[i].m128_f32[2];
 			}
+			positionRet.m128_f32[1] = positionRet.m128_f32[1] - 0.1f;
 		}
 	}
 

@@ -65,7 +65,7 @@ void Robot::AllUpdata(Bullet* bull)
 	
 
 	center->SetScale({ 1.0f,1.0f,1.0f });
-	center->SetRotation({ allRot });
+	//center->SetRotation({ allRot });
 	XMMatrixIsIdentity(cmat);
 	cmat = center->GetMatrix();
 	alll = XMVector3TransformNormal(allPos, cmat);
@@ -203,12 +203,12 @@ void Robot::ImgDraw()
 	//ImGui::Checkbox("Att", &AttackFase);
 //	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
 	//ImGui::SliderFloat("len", &l, -100.0f, 100.0f);
-	ImGui::SliderFloat("imgPosX", &Ene2DPos.x, -100.0f, 100.0f);
-	ImGui::SliderFloat("imgPosY", &Ene2DPos.y, -100.0f, 100.0f);
+	//ImGui::SliderFloat("imgPosX", &Ene2DPos.x, -100.0f, 100.0f);
+	//ImGui::SliderFloat("imgPosY", &Ene2DPos.y, -100.0f, 100.0f);
 
-	/*ImGui::SliderFloat("AllPosX", &alll.m128_f32[0], -100.0f, 100.0f);
+	ImGui::SliderFloat("AllPosX", &alll.m128_f32[0], -100.0f, 100.0f);
 	ImGui::SliderFloat("AllPosY", &alll.m128_f32[1], -100.0f, 100.0f);
-	ImGui::SliderFloat("AllPosZ", &alll.m128_f32[2], -100.0f, 100.0f);*/
+	ImGui::SliderFloat("AllPosZ", &alll.m128_f32[2], -100.0f, 100.0f);
 
 	ImGui::End();
 	ImGui::PopStyleColor();
