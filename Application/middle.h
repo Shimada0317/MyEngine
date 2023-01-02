@@ -92,6 +92,7 @@ private:
 
 	//敵のステータス
 	XMVECTOR enemyPos[5];
+	XMFLOAT2 ene2DPos[5];
 	XMFLOAT3 enemyScl = { 0,0,0 };
 	XMFLOAT3 enemyRot[MAXENEMY];
 	XMVECTOR absolutePos = { 0,0,0 };

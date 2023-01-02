@@ -172,6 +172,7 @@ void middle::Updata()
 		//敵の更新処理
 		for (std::unique_ptr<Robot>& Robot : rob) {
 			enemyPos[CountDistance] = Robot->GetPosition();
+			ene2DPos[CountDistance] = Robot->Get2DPosition();
 			for (int i = 0; i < 9; i++) {
 				Robot->Updata(bull[i], playerMat, spown, playerHp);
 			}
@@ -195,7 +196,7 @@ void middle::Updata()
 	SetPSR();
 	camera->Updata();
 	//プレイヤーの更新処理
-	player->Updata(bull, Remaining,enemyPos,camera);
+	player->Updata(bull, Remaining,enemyPos,camera,ene2DPos);
 }
 
 void middle::Draw(DirectXCommon* dxCommon)

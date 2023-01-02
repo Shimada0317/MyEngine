@@ -120,13 +120,13 @@ void GameScene::AllUpdata()
 {
 	//lightGroup->Update();
 	for (int i = 0; i < BILLS; i++) {
-		bills[i]->Updata({ 1.0f,1.0f,0.7f,0.7f });
+		bills[i]->Updata({ 0.2f,0.2f,0.2f,0.7f });
 		bills1[i]->Updata({ 1.0f,0.5f,0.0f,0.9f });
 	}
 
 	sphere->Updata();
-	groundObj->Updata();
-	world->Updata();
+	groundObj->Updata({ 0.7f,0.7f,0.7f,1.0f });
+	world->Updata({0.1f,0.1f,0.1f,1.0f});
 	Start->Updata();
 	mid->Updata();
 	

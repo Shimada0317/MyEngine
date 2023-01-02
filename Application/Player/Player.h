@@ -28,7 +28,7 @@ public:
 
 	void Set(Camera* came);
 
-	void Updata(Bullet* bull[], int& Remaining,const XMVECTOR enePos[], Camera* came);
+	void Updata(Bullet* bull[], int& Remaining,const XMVECTOR enePos[], Camera* came,const XMFLOAT2 Ene2dPos[]);
 
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
 
@@ -48,7 +48,9 @@ public:
 
 	void ReteicleHaiti();
 
-	void MouthContoroll(const XMVECTOR enePos[], Camera* came);
+	void MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[]);
+
+	void ParticleEfect();
 
 #pragma region Get
 	const bool& GetFinish() { return Finish; }
@@ -201,5 +203,7 @@ private:
 
 	float ret2EneDistance[5];
 	int EneCount = 0;
+
+	int paternCount = 0;
 };
 

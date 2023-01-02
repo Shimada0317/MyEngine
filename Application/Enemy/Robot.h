@@ -53,7 +53,9 @@ public://Getter Setter
 
 	void SetTrackPoint(XMVECTOR TrackPoint) { this->TrackPoint = TrackPoint; }
 
-	const XMVECTOR& GetPosition() { return allPos; }
+	const XMVECTOR& GetPosition() { return alll; }
+
+	const XMFLOAT2& Get2DPosition() { return Ene2DPos; }
 
 	bool IsDead() const { return isDead_; }
 
@@ -88,6 +90,8 @@ private:
 	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
 	XMFLOAT2 RockOnAnc = { 0.5f,0.5f };
 	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
+
+	XMFLOAT2 Ene2DPos = { 0.0f,0.0f };
 
 	XMVECTOR offset;
 

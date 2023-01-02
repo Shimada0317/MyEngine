@@ -17,7 +17,7 @@ Player::~Player()
 
 void Player::Initalize(Camera* came)
 {
-	
+
 	Object3d::SetCamera(came);
 
 	TrackModel = ObjModel::CreateFromOBJ("tst2");
@@ -67,7 +67,7 @@ void Player::Set(Camera* came)
 	playerWorldPos = { -10.0f,0.0f,-20.0f };
 	playerWorldPos = XMVector3Transform(playerWorldPos, playermat);
 
-	
+
 	/*if (retpos.x <= 0) {
 		rotation.y = rotation.y  20;
 	}
@@ -93,10 +93,10 @@ void Player::Set(Camera* came)
 	player->SetScale(playerScl);
 	player->SetParent(came);
 
-	gunRot.y= (retpos.x - 640) / 10;
-	gunRot.x = (retpos.y - 360) / 50 ;
+	gunRot.y = (retpos.x - 640) / 10;
+	gunRot.x = (retpos.y - 360) / 50;
 
-	
+
 	gun->SetRotation(gunRot);
 	gun->SetScale(gunScal);
 	gun->SetParent(came);
@@ -107,31 +107,9 @@ void Player::Set(Camera* came)
 	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
 	//gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
 
-	if (particle == true) {
-		for (int i = 0; i < 10; i++) {
-			const float rnd_pos = 0.0f;
-			XMFLOAT3 pos;
-			pos.x = gunWorldPos.m128_f32[0];
-			pos.y = gunWorldPos.m128_f32[1];
-			pos.z = gunWorldPos.m128_f32[2]+1.5f;
-			const float rnd_vel = 0.001f;
-			XMFLOAT3 vel{};
-			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
-			XMFLOAT3 acc{};
-			acc.y = -0.00001;
-			acc.y = -0.00001;
-			//if (Input::GetInstance()->PushClick(1)) {
-			part->Add(10, pos, vel, acc, 0.5f, 0.2f, time);
-			//}
-		}
-		particle = false;
-	}
 }
 
-void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came)
+void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[])
 {
 
 	if (CamWork == true) {
@@ -151,7 +129,7 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 				}
 			}
 		}
-
+		ParticleEfect();
 		//ƒŠƒ[ƒh
 		if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
 			ReloadFlag = true;
@@ -181,7 +159,7 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 		bull[i]->Updata();
 	}
 
-	MouthContoroll(enePos,came);
+	MouthContoroll(enePos, came, Ene2dPos);
 
 	CameraWork();
 
@@ -191,7 +169,7 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 	Track->Updata();
 	player->Updata();
 	gun->Updata();
-	part->Update({1.7f,0.5f,0,0.5f});
+	part->Update({ 1.7f,0.5f,0,0.5f });
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
@@ -257,7 +235,7 @@ void Player::CameraWork()
 
 	}
 
-	if ((Input::GetInstance()->PushClick(1) || Input::GetInstance()->PushClick(0)) && stanby == true&& CamWork ==false) {
+	if ((Input::GetInstance()->PushClick(1) || Input::GetInstance()->PushClick(0)) && stanby == true && CamWork == false) {
 		a = true;
 		act = 100;
 		Eye_rot.x = 0;
@@ -376,11 +354,11 @@ void Player::PlayerMove(bool& move, int patern)
 		else if (patern == 2) {
 			EneCount = 4;
 			Eye_rot.y += 3;
-			rotation.y -= 3;
+			//rotation.y -= 3;
 			if (Eye_rot.y >= 90) {
 				Eye_rot.y = 90;
 				changeRot = -90;
-				rotation.y = changeRot;
+				//rotation.y = changeRot;
 				vel = { 0, 0, kBulletSpeed };
 			}
 			if (camvec.m128_f32[0] >= 30) {
@@ -412,10 +390,10 @@ void Player::PlayerMove(bool& move, int patern)
 		else if (patern == 4) {
 			EneCount = 5;
 			Eye_rot.y -= 3;
-			rotation.y += 3;
+			//rotation.y += 3;
 			if (Eye_rot.y <= 0) {
 				changeRot = 0;
-				rotation.y = changeRot;
+				//rotation.y = changeRot;
 				Eye_rot.y = 0;
 				vel = { 0, 0, kBulletSpeed };
 			}
@@ -496,9 +474,9 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 
 	if (ImGui::TreeNode("LoacalPos")) {
-		ImGui::SliderFloat("pos.x", &positionRet.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &positionRet.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &positionRet.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &TrackWorldPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &TrackWorldPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &TrackWorldPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::SliderFloat("mat.x", &a, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
@@ -592,7 +570,7 @@ void Player::ReteicleHaiti()
 	}
 }
 
-void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came)
+void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[])
 {
 	Mouse::GetInstance()->MouseMoveSprite(retpos);
 
@@ -608,18 +586,52 @@ void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came)
 	positionRet = TrackWorldPos;
 
 	Distance = 11;
-	
-	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet,Distance);
 
-	/*for (int i = 0; i < EneCount; i++) {
-		if ((positionRet.m128_f32[0] >= enePos[i].m128_f32[0] - 0.5f && positionRet.m128_f32[0] <= enePos[i].m128_f32[0] + 0.5f)|| (positionRet.m128_f32[2] >= enePos[i].m128_f32[2] - 0.5f && positionRet.m128_f32[2] <= enePos[i].m128_f32[2] + 0.5f)) {
-			positionRet = enePos[i];
+	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet, Distance);
+
+
+	for (int i = 0; i < EneCount; i++) {
+		if ((retpos.x >= Ene2dPos[i].x - 16) && (retpos.x <= Ene2dPos[i].x + 16)) {
+			if (paternCount == 2 || paternCount == 3) {
+				positionRet.m128_f32[0] = enePos[i].m128_f32[2];
+				positionRet.m128_f32[2] = enePos[i].m128_f32[0];
+			}
+			else {
+				positionRet.m128_f32[0] = enePos[i].m128_f32[0];
+				positionRet.m128_f32[2] = enePos[i].m128_f32[2];
+			}
 		}
-	}*/
+	}
 
 	Track->SetPosition(positionRet);
 
-	
+
+}
+
+void Player::ParticleEfect()
+{
+	if (particle == true) {
+		for (int i = 0; i < 10; i++) {
+			const float rnd_pos = 0.0f;
+			XMFLOAT3 pos;
+			pos.x = gunWorldPos.m128_f32[0];
+			pos.y = gunWorldPos.m128_f32[1];
+			pos.z = gunWorldPos.m128_f32[2];
+			const float rnd_vel = 0.001f;
+			XMFLOAT3 vel{};
+			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+			XMFLOAT3 acc{};
+			acc.y = -0.00001;
+			acc.y = -0.00001;
+			//if (Input::GetInstance()->PushClick(1)) {
+			part->Add(10, pos, vel, acc, 0.5f, 0.2f, time);
+			//}
+		}
+		particle = false;
+	}
 }
 
 
