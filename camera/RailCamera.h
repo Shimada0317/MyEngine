@@ -79,7 +79,4 @@ private:
 	XMVECTOR targetPosition;
 	// i‰¼‚Ìjã•ûŒü
 	XMVECTOR upVector;
-
-	
-
 };

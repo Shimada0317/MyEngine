@@ -18,10 +18,6 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(camera);
 
-
-
-	//camera->SetTarget(camTar);
-
 	light = Light::Create();
 	Object3d::SetLight(light);
 
@@ -88,8 +84,6 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	post = new PostEffect();
 	post->Initialize();
 	camEyeMove = { 0.0f,0.0f,0.0f };
-
-
 }
 
 void TitleScene::SetPosSclRot()
@@ -196,13 +190,21 @@ void TitleScene::Updata()
 	}
 	if (cameraChange == true && cursorIn == true && setumeiSp == 2) {
 		if (Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) {
+			blackOut = true;
+			
+		}
+	}
+	if (blackOut == true) {
+		col.x -= 0.01f;
+		col.y -= 0.01f;
+		col.z -= 0.01f;
+		col.w -= 0.01f;
+		if (col.w <= 0) {
 			//ƒV[ƒ“Ø‚è‘Ö‚¦
 			BaseScene* scene_ = new GameScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
-			timer = 0;
 		}
 	}
-
 
 	for (int i = 0; i < BILLS; i++) {
 		bills[i]->Updata({ 1.0f,1.0f,0.7f,0.7f });

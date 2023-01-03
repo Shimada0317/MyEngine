@@ -28,7 +28,7 @@ public:
 
 	void Set(Camera* came);
 
-	void Updata(Bullet* bull[], int& Remaining,const XMVECTOR enePos[], Camera* came,const XMFLOAT2 Ene2dPos[]);
+	void Updata(Bullet* bull[], int& Remaining,const XMVECTOR enePos[], Camera* came,const XMFLOAT2 Ene2dPos[],int pat);
 
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
 
@@ -117,7 +117,7 @@ private:
 		XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 scale = { 0.3f,0.3f,0.3f };
 		//発射台Obj
-		XMVECTOR gunPos = { 0.0f,0.0f,-4.0f };
+		XMVECTOR gunPos = { 0.0f,0.0f,-3.0f };
 		XMFLOAT3 gunRot = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 gunScal={0.3f,0.3f,0.3f};
 		//プレイヤーObj
@@ -137,6 +137,8 @@ private:
 		XMVECTOR playerWorldPos = { 0.0f,0.0f,-0.1f };
 		XMMATRIX playermat;
 		XMVECTOR positionRet;
+		//パーティクル
+		XMVECTOR PartPos = { 0.0f,0.0f,2.0f };
 	//ビューポート
 	XMMATRIX matViewPort;
 	//カメラ
@@ -149,10 +151,10 @@ private:
 	XMFLOAT2 retpos = { 640.0f,360.0f };
 	XMFLOAT2 retsize = { 64.0f,64.0f };
 
-	XMFLOAT2 curtainPos = { 0.0f,-100.0f };
+	XMFLOAT2 curtainPos = { 0.0f,0.0f };
 	XMFLOAT2 curtainSiz = { 1280.0f,100.0f };
 
-	XMFLOAT2 curtainPos2 = { 0.0f,720.0f };
+	XMFLOAT2 curtainPos2 = { 0.0f,620.0f };
 
 	XMFLOAT2 windowPos = { 0.0f,0.0f };
 	XMFLOAT2 skipPos = { 1100,720.0f };

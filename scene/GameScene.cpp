@@ -24,6 +24,10 @@ GameScene::GameScene(SceneManager* sceneManager_)
 
 void GameScene::Initialize(DirectXCommon* dxComon)
 {
+	postEffect = new PostEffect();
+	postEffect->Initialize();
+	postEffect->Update(col);
+
 	ModelManager::GetInstance()->Initialize();
 
 	////スプライトの読み込み
@@ -65,14 +69,15 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	playerHp = mid->GetHp();
 	oldHp = playerHp;
 
-	postEffect = new PostEffect();
-	postEffect->Initialize();
+	
 
 	Sprite::LoadTexture(35, L"Resources/Mision.png");
 	Comp = Sprite::SpriteCreate(35, { 0.0f,0.0f });
 
 	Sprite::LoadTexture(36, L"Resources/CONTINUE.png");
 	Conteniu = Sprite::SpriteCreate(36, { 0.0f,0.0f });
+
+	PostEffectDraw(dxComon);
 }
 
 void GameScene::SetPosSclRot()
@@ -134,6 +139,15 @@ void GameScene::AllUpdata()
 
 void GameScene::Updata()
 {
+	if (GameStart == true) {
+		
+	}
+	else if (GameStart == false) {
+		col.x = 0.0f;
+		col.y = 0.0f;
+		col.z = 0.0f;
+		GameStart = true;
+	}
 	if (playerHp > 0) {
 		//ダメージを食らったたとき
 		if (oldHp > playerHp) {

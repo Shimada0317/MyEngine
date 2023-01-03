@@ -32,7 +32,7 @@ void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos,const XMF
 
 		oldpos.m128_f32[0] = PWorldPos.m128_f32[0];
 		oldpos.m128_f32[1] = PWorldPos.m128_f32[1];
-		oldpos.m128_f32[2] = PWorldPos.m128_f32[2];
+		oldpos.m128_f32[2] = PWorldPos.m128_f32[2]+2;
 		fire = true;
 
 		rot = Eye_Rot;

@@ -34,7 +34,7 @@ void middle::Initialize()
 
 	player = std::make_unique<Player>();
 	player->Initalize(camera);
-
+	camera->Updata();
 	playerPos = player->GetPosition();
 
 	for (int i = 0; i < 9; i++) {
@@ -194,9 +194,9 @@ void middle::Updata()
 	player->PlayerMove(move, patern);
 	//座標の設定
 	SetPSR();
-	camera->Updata();
 	//プレイヤーの更新処理
-	player->Updata(bull, Remaining,enemyPos,camera,ene2DPos);
+	player->Updata(bull, Remaining,enemyPos,camera,ene2DPos,patern);
+	camera->Updata();
 }
 
 void middle::Draw(DirectXCommon* dxCommon)

@@ -53,6 +53,8 @@ void Player::Initalize(Camera* came)
 	player->SetParent(came);
 
 	part = ParticleManager::Create(came);
+	Eye_rot.y = 180;
+	cam->Updata(vel, Eye_rot, came);
 };
 
 void Player::Set(Camera* came)
@@ -103,15 +105,17 @@ void Player::Set(Camera* came)
 	gun->SetPosition(gunPos);
 
 	gunmat = gun->GetMatrix();
-	gunWorldPos = { 0.0f,0.0f,0.0f };
-	gunWorldPos = XMVector3Transform(gunWorldPos, gunmat);
+	gunWorldPos = { 0.0f,0.0f,1.0f };
+	gunWorldPos = XMVector3Transform(gunPos, gunmat);
 	//gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
+
+
 
 }
 
-void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[])
+void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[],int pat)
 {
-
+	paternCount = pat;
 	if (CamWork == true) {
 		//’e‚Ì”­ŽË‘O
 		if (Remaining < BULL - 1 && ReloadFlag == false) {
@@ -301,7 +305,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 	camvec = XMVector3Transform(camvec, camMat);
 
-
+	paternCount = patern;
 	//“G‚ð‚·‚×‚Ä“|‚µ‚½Žž
 	if (move == true) {
 		Active = true;
@@ -435,7 +439,7 @@ void Player::PlayerMove(bool& move, int patern)
 					vel = { 0.0f,0.0f,0.0f };
 					Fring = true;
 					if (Fring == true) {
-						vel = { 0.0f,0.670f,0.0f };
+						vel = { 0.0f,0.680f,0.0f };
 					}
 				}
 			}
@@ -468,11 +472,13 @@ void Player::ImGuiDraw()
 
 	camvec = XMVector3Transform(camvec, camMat);
 
+	float paaa = paternCount;
+
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plyer");
-
+	ImGui::SliderFloat("pos.x", &paaa, -100.0f, 100.0f);
 	if (ImGui::TreeNode("LoacalPos")) {
 		ImGui::SliderFloat("pos.x", &TrackWorldPos.m128_f32[0], -100.0f, 100.0f);
 		ImGui::SliderFloat("pos.y", &TrackWorldPos.m128_f32[1], -100.0f, 100.0f);
@@ -592,15 +598,10 @@ void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT
 
 	for (int i = 0; i < EneCount; i++) {
 		if ((retpos.x >= Ene2dPos[i].x - 16) && (retpos.x <= Ene2dPos[i].x + 16)) {
-			if (paternCount == 2 || paternCount == 3) {
-				positionRet.m128_f32[0] = enePos[i].m128_f32[2];
-				positionRet.m128_f32[2] = enePos[i].m128_f32[0];
-			}
-			else {
+			
 				positionRet.m128_f32[0] = enePos[i].m128_f32[0];
 				positionRet.m128_f32[2] = enePos[i].m128_f32[2];
-			}
-			positionRet.m128_f32[1] = positionRet.m128_f32[1] - 0.1f;
+				positionRet.m128_f32[1] = positionRet.m128_f32[1] - 0.1f;
 		}
 	}
 
@@ -615,9 +616,17 @@ void Player::ParticleEfect()
 		for (int i = 0; i < 10; i++) {
 			const float rnd_pos = 0.0f;
 			XMFLOAT3 pos;
-			pos.x = gunWorldPos.m128_f32[0];
-			pos.y = gunWorldPos.m128_f32[1];
-			pos.z = gunWorldPos.m128_f32[2];
+			if (paternCount == 3 || paternCount == 4) {
+				pos.x =gunWorldPos.m128_f32[0]+2.3f;
+				pos.y = gunWorldPos.m128_f32[1];
+				pos.z = gunWorldPos.m128_f32[2];
+			}
+			if(paternCount == 1 || paternCount == 2||paternCount==5) {
+				pos.x = -gunWorldPos.m128_f32[0];
+				pos.y = gunWorldPos.m128_f32[1];
+				pos.z = gunWorldPos.m128_f32[2] + 2.3f;
+			}
+
 			const float rnd_vel = 0.001f;
 			XMFLOAT3 vel{};
 			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;

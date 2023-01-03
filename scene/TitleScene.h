@@ -158,5 +158,7 @@ private:
 
 	float freesTimer = 0.0f;
 	int setumeiSp = 0;
+
+	bool blackOut = false;
 };
 
