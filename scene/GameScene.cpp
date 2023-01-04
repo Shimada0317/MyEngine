@@ -123,61 +123,68 @@ void GameScene::SetPosSclRot()
 
 void GameScene::AllUpdata()
 {
-	//lightGroup->Update();
-	for (int i = 0; i < BILLS; i++) {
-		bills[i]->Updata({ 0.2f,0.2f,0.2f,0.7f });
-		bills1[i]->Updata({ 1.0f,0.5f,0.0f,0.9f });
+	if (GameStart == true) {
+
+		mid->Updata();
 	}
 
-	sphere->Updata();
-	groundObj->Updata({ 0.7f,0.7f,0.7f,1.0f });
-	world->Updata({0.1f,0.1f,0.1f,1.0f});
-	Start->Updata();
-	mid->Updata();
-	
+		//lightGroup->Update();
+		for (int i = 0; i < BILLS; i++) {
+			bills[i]->Updata({ 0.2f,0.2f,0.2f,0.7f });
+			bills1[i]->Updata({ 1.0f,0.5f,0.0f,0.9f });
+		}
+
+		sphere->Updata();
+		groundObj->Updata({ 0.7f,0.7f,0.7f,1.0f });
+		world->Updata({ 0.1f,0.1f,0.1f,1.0f });
+		Start->Updata();
 }
 
 void GameScene::Updata()
 {
+	
+	if (GameStart == false) {
+		col.x += 0.05f;
+		col.y += 0.05f;
+		col.z += 0.05f;
+		if (col.x >= 0.0f) {
+			col.x = 0.0f;
+			col.y = 0.0f;
+			col.z = 0.0f;
+			GameStart = true;
+		}
+	}
 	if (GameStart == true) {
-		
-	}
-	else if (GameStart == false) {
-		col.x = 0.0f;
-		col.y = 0.0f;
-		col.z = 0.0f;
-		GameStart = true;
-	}
-	if (playerHp > 0) {
-		//ダメージを食らったたとき
-		if (oldHp > playerHp) {
-			post = true;
-			oldHp = playerHp;
-		}
-		//画面を赤くするフラグが立った時
-		if (post == true) {
-			col.x = 0.7f;
-			if (col.x >= 0.5f) {
-				post = false;
+		if (playerHp > 0) {
+			//ダメージを食らったたとき
+			if (oldHp > playerHp) {
+				post = true;
+				oldHp = playerHp;
+			}
+			//画面を赤くするフラグが立った時
+			if (post == true) {
+				col.x = 0.7f;
+				if (col.x >= 0.5f) {
+					post = false;
+				}
+			}
+			//画面を赤くするフラグが立っていない時
+			if (post == false) {
+				col.x -= 0.1f;
+				if (col.x <= 0) {
+					col.x = 0;
+				}
 			}
 		}
-		//画面を赤くするフラグが立っていない時
-		if (post == false) {
-			col.x -= 0.1f;
-			if (col.x <= 0) {
-				col.x = 0;
+		//体力が0になったら
+		else if (playerHp <= 0) {
+			gamestop = true;
+			col.x += 0.01f;
+			if (col.x >= 2.0f) {
+				deth = true;
 			}
 		}
 	}
-	//体力が0になったら
-	else if (playerHp <= 0) {
-		gamestop = true;
-		col.x += 0.01f;
-		if (col.x >= 2.0f) {
-			deth = true;
-		}
-	}
-
 	if (deth == true) {
 		col.x = 0;
 		if (Input::GetInstance()->PushClick(1)) {

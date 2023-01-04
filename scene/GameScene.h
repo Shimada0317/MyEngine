@@ -139,7 +139,7 @@ private:
 
 	float clearT = 0;
 
-	XMFLOAT4 col = { -5.0f,-5.0f,-5.0f,0.0f };
+	XMFLOAT4 col = { -1.0f,-1.0f,-1.0f,1.0f };
 
 	float billsposY = { -150.0f };
 	bool complete = false;
