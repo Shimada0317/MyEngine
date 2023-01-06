@@ -65,19 +65,18 @@ bool ParticleManager::StaticInitialize(Camera* camera,ID3D12Device* device, int 
 	// テクスチャ読み込み
 	LoadTexture();
 
-	// モデル生成
-	CreateModel();
+	
 
 	return true;
 }
 
-void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdList)
+void ParticleManager::PreDraw(ID3D12GraphicsCommandList* cmdLists)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
 	assert(ParticleManager::cmdList == nullptr);
 
 	// コマンドリストをセット
-	ParticleManager::cmdList = cmdList;
+	ParticleManager::cmdList = cmdLists;
 
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelinestate.Get());
@@ -96,19 +95,15 @@ void ParticleManager::PostDraw()
 
 ParticleManager* ParticleManager::Create(Camera* camera)
 {
-	cam = camera;
 	// 3Dオブジェクトのインスタンスを生成
-	ParticleManager* particleManager = new ParticleManager();
+	ParticleManager* particleManager = new ParticleManager(camera);
 	if (particleManager == nullptr) {
 		return nullptr;
 	}
 
 	// 初期化
-	if (!particleManager->Initialize()) {
-		delete particleManager;
-		assert(0);
-		return nullptr;
-	}
+	particleManager->Initialize();
+	
 
 	return particleManager;
 }
@@ -153,6 +148,11 @@ void ParticleManager::CameraMoveEyeVector(XMFLOAT3 move)
 	eye_moved.z += move.z;
 
 	SetEye(eye_moved);
+}
+
+ParticleManager::ParticleManager(Camera* camera)
+{
+	cam = camera;
 }
 
 bool ParticleManager::InitializeDescriptorHeap()
@@ -390,7 +390,7 @@ bool ParticleManager::LoadTexture()
 	ScratchImage scratchImg{};
 
 	result = LoadFromWICFile(
-		L"Resources/effect1.png", WIC_FLAGS_NONE,
+		L"Resources/pat.png", WIC_FLAGS_NONE,
 		&metadata, scratchImg);
 	if (FAILED(result)) {
 		return result;
@@ -466,14 +466,6 @@ void ParticleManager::CreateModel()
 	if (FAILED(result)) {
 		assert(0);
 		return;
-	}
-
-	// 頂点バッファへのデータ転送
-	VertexPos* vertMap = nullptr;
-	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
-	if (SUCCEEDED(result)) {
-		memcpy(vertMap, vertices, sizeof(vertices));
-		vertBuff->Unmap(0, nullptr);
 	}
 
 
@@ -567,7 +559,7 @@ void ParticleManager::UpdateViewMatrix()
 	
 }
 
-bool ParticleManager::Initialize()
+void ParticleManager::Initialize()
 {
 	// nullptrチェック
 	assert(device);
@@ -582,7 +574,9 @@ bool ParticleManager::Initialize()
 		nullptr,
 		IID_PPV_ARGS(&constBuff));
 
-	return true;
+	// モデル生成
+	CreateModel();
+
 }
 
 void ParticleManager::Update(XMFLOAT4 color)
@@ -600,17 +594,19 @@ void ParticleManager::Update(XMFLOAT4 color)
 	{
 		//経過フレーム数をカウント
 		it->frame++;
+		float f = (float)it->num_frame / it->frame;
+		
 		//速度に加速度を加算
 		it->velocity = it->velocity + it->accel;
 		//速度による移動
 		it->position = it->position + it->velocity;
 
-		float f = (float)it->num_frame / it->frame;
 
 		it->scale = (it->e_scale - it->s_scale) / f;
 		it->scale += it->s_scale;
 	}
 
+	XMFLOAT3 pa = pas;
 
 	//頂点バッファへデータ転送
 	VertexPos* vertMap = nullptr;
@@ -643,6 +639,9 @@ void ParticleManager::Update(XMFLOAT4 color)
 
 void ParticleManager::Draw()
 {
+
+	UINT drawNum = (UINT)std::distance(particles.begin(), particles.end());
+
 	// nullptrチェック
 	assert(device);
 	assert(ParticleManager::cmdList);
@@ -666,11 +665,8 @@ void ParticleManager::Draw()
 
 void ParticleManager::Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale,float time)
 {
-	if (time <= 1) {
 		particles.emplace_front();
-
 		Particle& p = particles.front();
-
 		p.position = position;
 		p.velocity = velocity;
 		p.accel = accel;
@@ -678,5 +674,6 @@ void ParticleManager::Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOA
 		p.s_scale = start_scale;
 		p.e_scale = end_scale;
 
-	}
+		pas = position;
 }
+

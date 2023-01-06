@@ -53,6 +53,7 @@ void Player::Initalize(Camera* came)
 	player->SetParent(came);
 
 	part = ParticleManager::Create(came);
+	parti = ParticleManager::Create(came);
 	Eye_rot.y = 180;
 	cam->Updata(vel, Eye_rot, came);
 };
@@ -82,7 +83,7 @@ void Player::Set(Camera* came)
 		rotation.y = 0;
 	}*/
 
-	rotation.y = (retpos.x - 640)/10+changeRot;
+	rotation.y = (retpos.x - 640) / 10 + changeRot;
 	//rotation.x = -(retpos.y - 360) / 10;
 	//ƒŒƒeƒBƒNƒ‹Obj
 	Track->SetRotation({ rotation });
@@ -113,7 +114,7 @@ void Player::Set(Camera* came)
 
 }
 
-void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[],int pat)
+void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[], int pat)
 {
 	paternCount = pat;
 	if (CamWork == true) {
@@ -122,7 +123,7 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 			if (Mouse::GetInstance()->PushClick(0)) {
 
 				Remaining += 1;
-				time = 0.0f;
+				//time = 0.0f;
 				particle = true;
 				for (int i = 0; i < BULL; i++) {
 					if (bull[i]->CheckOk()) {
@@ -173,12 +174,14 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 	Track->Updata();
 	player->Updata();
 	gun->Updata();
-	part->Update({ 1.7f,0.5f,0,0.5f });
+	parti->Update({ 1.0f,0.0f,0.0f,0.0f });
+	part->Update({ 0.0f,1.0f,0,0.0f });
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
 	ParticleManager::PreDraw(cmdeList);
+	parti->Draw();
 	part->Draw();
 	ParticleManager::PostDraw();
 }
@@ -598,10 +601,10 @@ void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT
 
 	for (int i = 0; i < EneCount; i++) {
 		if ((retpos.x >= Ene2dPos[i].x - 16) && (retpos.x <= Ene2dPos[i].x + 16)) {
-			
-				positionRet.m128_f32[0] = enePos[i].m128_f32[0];
-				positionRet.m128_f32[2] = enePos[i].m128_f32[2];
-				positionRet.m128_f32[1] = positionRet.m128_f32[1] - 0.1f;
+
+			positionRet.m128_f32[0] = enePos[i].m128_f32[0];
+			positionRet.m128_f32[2] = enePos[i].m128_f32[2];
+			positionRet.m128_f32[1] = positionRet.m128_f32[1] - 0.15f;
 		}
 	}
 
@@ -616,16 +619,19 @@ void Player::ParticleEfect()
 		for (int i = 0; i < 10; i++) {
 			const float rnd_pos = 0.0f;
 			XMFLOAT3 pos;
+			XMFLOAT3 po2;
 			if (paternCount == 3 || paternCount == 4) {
-				pos.x =gunWorldPos.m128_f32[0]+2.3f;
+				pos.x = gunWorldPos.m128_f32[0] + 2.3f;
 				pos.y = gunWorldPos.m128_f32[1];
 				pos.z = gunWorldPos.m128_f32[2];
 			}
-			if(paternCount == 1 || paternCount == 2||paternCount==5) {
+			if (paternCount == 0 || paternCount == 1 || paternCount == 2 || paternCount == 5) {
 				pos.x = -gunWorldPos.m128_f32[0];
 				pos.y = gunWorldPos.m128_f32[1];
 				pos.z = gunWorldPos.m128_f32[2] + 2.3f;
 			}
+			po2 = pos;
+			po2.x = po2.x + 1.0f;
 
 			const float rnd_vel = 0.001f;
 			XMFLOAT3 vel{};
@@ -634,14 +640,16 @@ void Player::ParticleEfect()
 			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
 			XMFLOAT3 acc{};
+			XMFLOAT3 ac2{};
 			acc.y = -0.00001;
 			acc.y = -0.00001;
-			//if (Input::GetInstance()->PushClick(1)) {
-			part->Add(10, pos, vel, acc, 0.5f, 0.2f, time);
-			//}
+
+			parti->Add(10, po2, vel, acc, 1.5f, 0.2f, 1.0f);
+			part->Add(10, pos, vel, acc, 0.5f, 0.2f, 1.0f);
 		}
 		particle = false;
 	}
+
 }
 
 

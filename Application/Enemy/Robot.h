@@ -10,6 +10,7 @@
 #include"TextureModel.h"
 #include"Sprite.h"
 #include"Camera.h"
+#include"ParticleManager.h"
 #include<DirectXMath.h>
 #include<memory>
 #include<list>

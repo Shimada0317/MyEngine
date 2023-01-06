@@ -34,7 +34,7 @@ void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, B
 	BodyPos = XMVector3Transform(BodyPos, BodyMat);
 	
 
-	Hit = bull->GetTrigger();
+	//Hit = bull->GetTrigger();
 	if (arive == true) {
 
 

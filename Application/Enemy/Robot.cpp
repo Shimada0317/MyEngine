@@ -28,7 +28,7 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos,Camera* ca
 	RArm = std::make_unique<RightArm>();*/
 	Arms = std::make_unique<BothArms>();
 	part = std::make_unique<ObjParticle>();
-	head->Initialize(Partarive[0],alll,allRot);
+	head->Initialize(Partarive[0],alll,allRot,came);
 	body->Initialize();
 	/*LArm->Initialize();
 	RArm->Initialize();*/
@@ -185,6 +185,8 @@ void Robot::Draw(DirectXCommon* dxCommon)
 		particle->Draw();
 	}
 	Object3d::PostDraw();
+
+	head->ParticleDraw(dxCommon->GetCmdList());
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	RockOn->Draw();

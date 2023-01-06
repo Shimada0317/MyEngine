@@ -107,6 +107,7 @@ private:
 
 	//発砲時のエフェクト
 	ParticleManager* part = nullptr;
+	ParticleManager* parti = nullptr;
 
 	Mouse* mouse = nullptr;
 	Camera* camera = nullptr;

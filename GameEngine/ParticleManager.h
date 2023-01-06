@@ -37,6 +37,7 @@ public: // サブクラス
 
 	struct Particle
 	{
+
 		using XMFLOAT3 = DirectX::XMFLOAT3;
 
 		XMFLOAT3 position = {};
@@ -56,7 +57,7 @@ public: // サブクラス
 		float e_scale = 0.0f;
 	};
 
-	std::forward_list<Particle>particles;
+
 
 private: // 定数
 	static const int division = 50;					// 分割数
@@ -73,7 +74,7 @@ public: // 静的メンバ関数
 	/// <param name="window_width">画面幅</param>
 	/// <param name="window_height">画面高さ</param>
 	/// <returns>成否</returns>
-	static bool StaticInitialize(Camera* camera,ID3D12Device* device, int window_width, int window_height);
+	static bool StaticInitialize(Camera* camera, ID3D12Device* device, int window_width, int window_height);
 
 	/// <summary>
 	/// 描画前処理
@@ -123,6 +124,9 @@ public: // 静的メンバ関数
 	static void CameraMoveVector(XMFLOAT3 move);
 
 	static void CameraMoveEyeVector(XMFLOAT3 move);
+private:
+	//コンストラクタ
+	ParticleManager(Camera* camera);
 
 private: // 静的メンバ変数
 	// デバイス
@@ -210,7 +214,7 @@ private:// 静的メンバ関数
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
-	bool Initialize();
+	void Initialize();
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
@@ -226,12 +230,17 @@ public: // メンバ関数
 	/// </summary>
 	/// <returns>座標</returns>
 
-	void Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale,float time);
+	void Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale, float time);
+
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 
 	XMFLOAT4 color = { 1,1,1,1 };
+
+	std::forward_list<Particle>particles;
+
+	XMFLOAT3 pas;
 };
 

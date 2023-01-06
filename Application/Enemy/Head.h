@@ -4,6 +4,8 @@
 #include"ObjModel.h"
 #include"Bullet.h"
 #include"Collision.h"
+#include"ParticleManager.h"
+#include"Camera.h"
 
 #include<memory>
 class Head
@@ -16,7 +18,7 @@ private:
 public:
 	~Head();
 
-	void Initialize(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotation);
+	void Initialize(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotation,Camera* camera);
 
 	void SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation,Bullet* bull);
 
@@ -25,6 +27,10 @@ public:
 	void Draw(bool arive);
 
 	void Motion(const float& rot);
+
+	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
+
+	void ParticleEfect();
 
 	void Finalize();
 
@@ -36,6 +42,8 @@ private:
 	ObjModel* headModel = nullptr;
 
 	std::unique_ptr<Bullet>bull;
+
+	ParticleManager* damageEfect;
 
 	XMVECTOR HeadPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 HeadScl = { 0.3f,0.3f,0.3f };
@@ -53,5 +61,7 @@ private:
 	bool radChange = true;
 
 	float MotionRad = 0;
+
+	bool particle = false;
 };
 
