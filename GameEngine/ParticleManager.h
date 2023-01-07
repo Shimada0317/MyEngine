@@ -93,37 +93,6 @@ public: // 静的メンバ関数
 	/// <returns></returns>
 	static ParticleManager* Create(Camera* camera);
 
-	/// <summary>
-	/// 視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
-	static const XMFLOAT3& GetEye() { return eye; }
-
-	/// <summary>
-	/// 視点座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	static void SetEye(XMFLOAT3 eye);
-
-	/// <summary>
-	/// 注視点座標の取得
-	/// </summary>
-	/// <returns>座標</returns>
-	static const XMFLOAT3& GetTarget() { return target; }
-
-	/// <summary>
-	/// 注視点座標の設定
-	/// </summary>
-	/// <param name="position">座標</param>
-	static void SetTarget(XMFLOAT3 target);
-
-	/// <summary>
-	/// ベクトルによる移動
-	/// </summary>
-	/// <param name="move">移動量</param>
-	static void CameraMoveVector(XMFLOAT3 move);
-
-	static void CameraMoveEyeVector(XMFLOAT3 move);
 private:
 	//コンストラクタ
 	ParticleManager(Camera* camera);
@@ -141,10 +110,7 @@ private: // 静的メンバ変数
 	static ComPtr<ID3D12PipelineState> pipelinestate;
 	// デスクリプタヒープ
 	static ComPtr<ID3D12DescriptorHeap> descHeap;
-	// 頂点バッファ
-	static ComPtr<ID3D12Resource> vertBuff;
-	// インデックスバッファ
-	//static ComPtr<ID3D12Resource> indexBuff;
+
 	// テクスチャバッファ
 	static ComPtr<ID3D12Resource> texbuff;
 	// シェーダリソースビューのハンドル(CPU)
@@ -161,8 +127,6 @@ private: // 静的メンバ変数
 	static XMFLOAT3 target;
 	// 上方向ベクトル
 	static XMFLOAT3 up;
-	// 頂点バッファビュー
-	static D3D12_VERTEX_BUFFER_VIEW vbView;
 	// インデックスバッファビュー
 	//static D3D12_INDEX_BUFFER_VIEW ibView;
 	// 頂点データ配列
@@ -204,16 +168,16 @@ private:// 静的メンバ関数
 	static bool LoadTexture();
 
 	/// <summary>
-	/// モデル作成
-	/// </summary>
-	static void CreateModel();
-
-	/// <summary>
 	/// ビュー行列を更新
 	/// </summary>
 	static void UpdateViewMatrix();
 
 public: // メンバ関数
+	/// <summary>
+	/// モデル作成
+	/// </summary>
+	void CreateModel();
+
 	void Initialize();
 	/// <summary>
 	/// 毎フレーム処理
@@ -233,7 +197,12 @@ public: // メンバ関数
 	void Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale, float time);
 
 private: // メンバ変数
-	ComPtr<ID3D12Resource> constBuff; // 定数バッファ
+	 // 定数バッファ
+	ComPtr<ID3D12Resource> constBuff;
+	// 頂点バッファ
+	ComPtr<ID3D12Resource> vertBuff;
+	// 頂点バッファビュー
+	D3D12_VERTEX_BUFFER_VIEW vbView;
 	// ローカルスケール
 	XMFLOAT3 scale = { 1,1,1 };
 

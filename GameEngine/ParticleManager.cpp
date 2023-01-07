@@ -18,7 +18,6 @@ ID3D12GraphicsCommandList* ParticleManager::cmdList = nullptr;
 ComPtr<ID3D12RootSignature> ParticleManager::rootsignature;
 ComPtr<ID3D12PipelineState> ParticleManager::pipelinestate;
 ComPtr<ID3D12DescriptorHeap> ParticleManager::descHeap;
-ComPtr<ID3D12Resource> ParticleManager::vertBuff;
 //ComPtr<ID3D12Resource> ParticleManager::indexBuff;
 ComPtr<ID3D12Resource> ParticleManager::texbuff;
 CD3DX12_CPU_DESCRIPTOR_HANDLE ParticleManager::cpuDescHandleSRV;
@@ -28,7 +27,6 @@ XMMATRIX ParticleManager::matProjection{};
 XMFLOAT3 ParticleManager::eye = { 0, 0, -1.0f };
 XMFLOAT3 ParticleManager::target = { 0, 0, 0 };
 XMFLOAT3 ParticleManager::up = { 0, 1, 0 };
-D3D12_VERTEX_BUFFER_VIEW ParticleManager::vbView{};
 //D3D12_INDEX_BUFFER_VIEW ParticleManager::ibView{};
 ParticleManager::VertexPos ParticleManager::vertices[vertexCount];
 //unsigned short ParticleManager::indices[indexCount];
@@ -108,47 +106,6 @@ ParticleManager* ParticleManager::Create(Camera* camera)
 	return particleManager;
 }
 
-void ParticleManager::SetEye(XMFLOAT3 eye)
-{
-	ParticleManager::eye = eye;
-
-	UpdateViewMatrix();
-}
-
-void ParticleManager::SetTarget(XMFLOAT3 target)
-{
-	ParticleManager::target = target;
-
-	UpdateViewMatrix();
-}
-
-void ParticleManager::CameraMoveVector(XMFLOAT3 move)
-{
-	XMFLOAT3 eye_moved = GetEye();
-	XMFLOAT3 target_moved = GetTarget();
-
-	eye_moved.x += move.x;
-	eye_moved.y += move.y;
-	eye_moved.z += move.z;
-
-	target_moved.x += move.x;
-	target_moved.y += move.y;
-	target_moved.z += move.z;
-
-	SetEye(eye_moved);
-	SetTarget(target_moved);
-}
-
-void ParticleManager::CameraMoveEyeVector(XMFLOAT3 move)
-{
-	XMFLOAT3 eye_moved = GetEye();
-
-	eye_moved.x += move.x;
-	eye_moved.y += move.y;
-	eye_moved.z += move.z;
-
-	SetEye(eye_moved);
-}
 
 ParticleManager::ParticleManager(Camera* camera)
 {
