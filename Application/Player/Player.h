@@ -208,5 +208,9 @@ private:
 	int EneCount = 0;
 
 	int paternCount = 0;
+
+	const float  M_PI = 3.14;
+
+	XMFLOAT3 pos;
 };
 

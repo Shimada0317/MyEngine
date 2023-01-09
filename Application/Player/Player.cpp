@@ -9,6 +9,7 @@ Player::~Player()
 	delete TrackModel;
 	delete gunModel;
 	delete playerModel;
+	delete part;
 
 	Track.reset();
 	gun.reset();
@@ -483,9 +484,9 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 	ImGui::SliderFloat("pos.x", &paaa, -100.0f, 100.0f);
 	if (ImGui::TreeNode("LoacalPos")) {
-		ImGui::SliderFloat("pos.x", &TrackWorldPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &TrackWorldPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &TrackWorldPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.x", &pos.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &pos.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &pos.z, -100.0f, 100.0f);
 		ImGui::SliderFloat("mat.x", &a, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
@@ -618,33 +619,32 @@ void Player::ParticleEfect()
 	if (particle == true) {
 		for (int i = 0; i < 10; i++) {
 			const float rnd_pos = 0.0f;
-			XMFLOAT3 pos;
-			XMFLOAT3 po2;
+			
+			double rad = rotation.y * M_PI / 180;
+			float sinrad = sinf(rad);
+			float cosrad = cosf(rad);
 			if (paternCount == 3 || paternCount == 4) {
 				pos.x = gunWorldPos.m128_f32[0] + 2.3f;
 				pos.y = gunWorldPos.m128_f32[1];
-				pos.z = gunWorldPos.m128_f32[2];
+				pos.z = gunWorldPos.m128_f32[2]-2.8f*cosrad;
 			}
-			if (paternCount == 0 || paternCount == 1 || paternCount == 2 || paternCount == 5) {
-				pos.x = -gunWorldPos.m128_f32[0];
+			else if (paternCount == 0 || paternCount == 1 || paternCount == 2 || paternCount == 5) {
+				pos.x = gunWorldPos.m128_f32[0]+sinrad*2.8f;
 				pos.y = gunWorldPos.m128_f32[1];
 				pos.z = gunWorldPos.m128_f32[2] + 2.3f;
 			}
-			po2 = pos;
-			po2.x = po2.x + 1.0f;
 
 			const float rnd_vel = 0.001f;
 			XMFLOAT3 vel{};
 			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
 			XMFLOAT3 acc{};
 			XMFLOAT3 ac2{};
 			acc.y = -0.00001;
 			acc.y = -0.00001;
 
-			parti->Add(10, po2, vel, acc, 1.5f, 0.2f, 1.0f);
+			parti->Add(10, pos, vel, acc, 0.7f, 0.2f, 1.0f);
 			part->Add(10, pos, vel, acc, 0.5f, 0.2f, 1.0f);
 		}
 		particle = false;
