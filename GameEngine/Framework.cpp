@@ -33,8 +33,6 @@ void Framework::Initialize()
 	input->Initialize(winApp);
 	mouse = Mouse::GetInstance();
 	mouse->Initialize(winApp);
-	audio = new Audio();
-	audio->StaticInitialize();
 	camera = new DebugCamera(WinApp::window_width,WinApp::window_height);
 	//audio->LoadFile("Resources/digitalworld.wav", 0.1);
 	Object3d::StaticInitialize(dxCommon->GetDev(),camera);

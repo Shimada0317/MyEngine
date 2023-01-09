@@ -57,6 +57,9 @@ void Player::Initalize(Camera* came)
 	parti = ParticleManager::Create(came);
 	Eye_rot.y = 180;
 	cam->Updata(vel, Eye_rot, came);
+
+	ShotSound = new Audio();
+	ShotSound->Initialize();
 };
 
 void Player::Set(Camera* came)
@@ -71,21 +74,7 @@ void Player::Set(Camera* came)
 	playerWorldPos = { -10.0f,0.0f,-20.0f };
 	playerWorldPos = XMVector3Transform(playerWorldPos, playermat);
 
-
-	/*if (retpos.x <= 0) {
-		rotation.y = rotation.y  20;
-	}
-
-	if (retpos.x >= 1280) {
-		rotation.y = 20;
-	}
-
-	if (retpos.x == WinApp::window_width) {
-		rotation.y = 0;
-	}*/
-
 	rotation.y = (retpos.x - 640) / 10 + changeRot;
-	//rotation.x = -(retpos.y - 360) / 10;
 	//レティクルObj
 	Track->SetRotation({ rotation });
 	Track->SetScale({ scale });
@@ -109,10 +98,6 @@ void Player::Set(Camera* came)
 	gunmat = gun->GetMatrix();
 	gunWorldPos = { 0.0f,0.0f,1.0f };
 	gunWorldPos = XMVector3Transform(gunPos, gunmat);
-	//gunWorldPos.m128_f32[1] = TrackWorldPos.m128_f32[1];
-
-
-
 }
 
 void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[], int pat)
@@ -122,7 +107,6 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 		//弾の発射前
 		if (Remaining < BULL - 1 && ReloadFlag == false) {
 			if (Mouse::GetInstance()->PushClick(0)) {
-
 				Remaining += 1;
 				//time = 0.0f;
 				particle = true;
@@ -526,7 +510,6 @@ void Player::ImGuiDraw()
 
 void Player::Finalize()
 {
-	delete camera;
 	delete TrackModel;
 }
 
@@ -553,31 +536,10 @@ void Player::ChangeViewPort(XMMATRIX& matViewPort)
 	matViewPort.r[3].m128_f32[3] = 1;
 }
 
-void Player::ReteicleHaiti()
+void Player::SoundEffect()
 {
-	const float kDistancePlayerTo3DReticle = 50.0f;
-
-	offset = { 0,0,1.0f };
-
-	offset = XMVector3TransformNormal(offset, mat);
-
-	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
-
-	{
-		XMVECTOR positionRet = TrackWorldPos;
-
-		ChangeViewPort(matViewPort);
-
-		XMMATRIX matVP = matViewPort;
-
-		XMMATRIX GetViewPro = camera->GetViewProjectionMatrix();
-
-		XMMATRIX matViewProjectionViewport = GetViewPro * matVP;
-
-		positionRet = XMVector3TransformCoord(positionRet, matViewProjectionViewport);
-
-		spriteRet->SetPosition({ positionRet.m128_f32[0],positionRet.m128_f32[1] });
-	}
+	
+	ShotSound->LoadFile("Resources/shot.wav", 0.8f);
 }
 
 void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[])
@@ -648,6 +610,7 @@ void Player::ParticleEfect()
 			part->Add(10, pos, vel, acc, 0.5f, 0.2f, 1.0f);
 		}
 		particle = false;
+		SoundEffect();
 	}
 
 }

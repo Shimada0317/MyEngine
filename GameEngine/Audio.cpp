@@ -4,7 +4,7 @@
 
 #pragma comment(lib,"xaudio2.lib")
 
-bool Audio::StaticInitialize() {
+bool Audio::Initialize() {
 	HRESULT result;
 	result = XAudio2Create(&xAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);
 	if (FAILED(result)) {

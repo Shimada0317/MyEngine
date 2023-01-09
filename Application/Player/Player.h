@@ -9,6 +9,7 @@
 #include"TextureModel.h"
 #include"WinApp.h"
 #include<vector>
+#include"Audio.h"
 #include"Bullet.h"
 #include"ParticleManager.h"
 #include"RailCamera.h"
@@ -46,7 +47,7 @@ public:
 
 	void ChangeViewPort(XMMATRIX& mat);
 
-	void ReteicleHaiti();
+	void SoundEffect();
 
 	void MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[]);
 
@@ -109,8 +110,9 @@ private:
 	ParticleManager* part = nullptr;
 	ParticleManager* parti = nullptr;
 
+	Audio* ShotSound;
+
 	Mouse* mouse = nullptr;
-	Camera* camera = nullptr;
 	RailCamera* cam;
 	//ローカル
 		//レティクルObj

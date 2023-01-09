@@ -58,14 +58,13 @@ public:
 	};
 
 public:
-	bool StaticInitialize();
+	bool Initialize();
 
-	void LoadFile(const char* filename,const float volume);
+	void LoadFile(const char* filename, const float volume);
 
 	void LoopWave(const char* filename, float Volume);
 
-	void Update();
-	
+
 private:
 	ComPtr<IXAudio2> xAudio2;
 	IXAudio2MasteringVoice* masterVoice = nullptr;
