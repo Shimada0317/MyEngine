@@ -182,7 +182,7 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	Arms->Draw(Partarive[1]);
 	body->Draw(Partarive[2]);
 	shadow->Draw();
-	center->Draw();
+	//center->Draw();
 	//part->Draw();
 	for (std::unique_ptr<ObjParticle>& particle : particle_) {
 		particle->Draw();
@@ -192,7 +192,7 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	head->ParticleDraw(dxCommon->GetCmdList());
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	RockOn->Draw();
+	//RockOn->Draw();
 	Sprite::PostDraw();
 }
 

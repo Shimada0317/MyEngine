@@ -111,6 +111,7 @@ private:
 	ParticleManager* parti = nullptr;
 
 	Audio* ShotSound;
+	Audio* reload;
 
 	Mouse* mouse = nullptr;
 	RailCamera* cam;
@@ -201,6 +202,8 @@ private:
 	bool Fring = false;
 
 	bool Shake = true;
+
+	bool reloadSound = true;
 
 	float changeRot = 0;
 

@@ -60,6 +60,9 @@ void Player::Initalize(Camera* came)
 
 	ShotSound = new Audio();
 	ShotSound->Initialize();
+
+	reload = new Audio();
+	reload->Initialize();
 };
 
 void Player::Set(Camera* came)
@@ -122,16 +125,22 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 		ParticleEfect();
 		//ƒŠƒ[ƒh
 		if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
+			if (reloadSound == true) {
+				reload->LoadFile("Resources/reload.wav", 0.8f);
+				reloadSound = false;
+			}
 			ReloadFlag = true;
 		}
 
 		if (ReloadFlag == true) {
+			
 			ReloadTime += 1;
 			ans = ReloadTime % 10;
 			if (ans == 0) {
 				Remaining -= 1;
 				if (Remaining == 0) {
 					ReloadFlag = false;
+					reloadSound = true;
 					ReloadTime = 0;
 				}
 			}
@@ -445,7 +454,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 void Player::ObjDraw()
 {
-	Track->Draw();
+	//Track->Draw();
 	if (Hp >= 0 && CamWork == true) {
 		gun->Draw();
 	}

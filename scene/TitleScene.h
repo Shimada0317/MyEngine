@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include"Audio.h"
 #include"BaseScene.h"
 #include "DirectXCommon.h"
 #include <DirectXMath.h>
@@ -72,6 +73,7 @@ private:
 	unique_ptr <Object3d >world;
 	unique_ptr<Object3d> Start;
 
+	Audio* click = nullptr;
 	Camera* camera = nullptr;
 
 	XMVECTOR pos = { 0,0,0 };
@@ -160,5 +162,7 @@ private:
 	int setumeiSp = 0;
 
 	bool blackOut = false;
+	bool titleF = true;
+	bool clickF = true;
 };
 

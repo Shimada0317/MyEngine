@@ -80,6 +80,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	startModel = ObjModel::CreateFromOBJ("bil", true);
 	Start = Object3d::Create(startModel);
 
+	click = new Audio();
+	click->Initialize();
+
 	//Sprite::LoadTexture(100, L"Resources/white1x1.png");
 	post = new PostEffect();
 	post->Initialize();
@@ -148,10 +151,11 @@ void TitleScene::Updata()
 	CheckCursorIn(retpos, ClickPos, 500, 75);
 
 	timer += 1;
-	if (timer >= 10 && cursorIn == true) {
+	if (timer >= 10 && cursorIn == true && titleF == true) {
 		if (Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) {
 			titleSprite = false;
 			cameraEyeMove = true;
+			titleF = false;
 		}
 	}
 
@@ -160,14 +164,16 @@ void TitleScene::Updata()
 		if (freesTimer >= 1) {
 			freesTimer = 0.0f;
 			frees = true;
+			
 		}
 	}
 
-	if (setumeiSp < 2) {
+	if (setumeiSp < 2 && titleF == false&&cameraChange==true) {
 		if (NextorBack(retpos, arrowRightPos, 35, 35)) {
 			RightTrueIn = true;
 
 			if ((Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) && frees == true) {
+				click->LoadFile("Resources/click.wav", 0.8f);
 				setumeiSp += 1;
 				frees = false;
 			}
@@ -180,6 +186,7 @@ void TitleScene::Updata()
 		if (NextorBack(retpos, arrowLeftPos, 35, 35)) {
 			LeftTrueIn = true;
 			if ((Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) && frees == true) {
+				click->LoadFile("Resources/click.wav", 0.8f);
 				setumeiSp -= 1;
 				frees = false;
 			}
@@ -190,8 +197,12 @@ void TitleScene::Updata()
 	}
 	if (cameraChange == true && cursorIn == true && setumeiSp == 2) {
 		if (Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) {
+			if (clickF == true) {
+				click->LoadFile("Resources/click.wav", 0.8f);
+				clickF = false;
+			}
 			blackOut = true;
-			
+
 		}
 	}
 	if (blackOut == true) {
