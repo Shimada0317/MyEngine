@@ -28,6 +28,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect->Initialize();
 	postEffect->Update(col);
 
+
 	ModelManager::GetInstance()->Initialize();
 
 	////スプライトの読み込み
@@ -158,6 +159,7 @@ void GameScene::Updata()
 		if (playerHp > 0) {
 			//ダメージを食らったたとき
 			if (oldHp > playerHp) {
+				
 				post = true;
 				oldHp = playerHp;
 			}

@@ -2,6 +2,7 @@
 
 #include "DirectXCommon.h"
 #include <DirectXMath.h>
+#include"Audio.h"
 #include "Sprite.h"
 #include"Object3d.h"
 #include"ObjModel.h"
@@ -84,6 +85,7 @@ private:
 	ObjModel* heriM;
 	ObjModel* haneM;
 
+	Audio* clush = nullptr;
 
 	FbxModel* model = nullptr;
 	FbxObject3d* Object = nullptr;

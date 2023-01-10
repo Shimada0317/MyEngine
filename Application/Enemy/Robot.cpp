@@ -35,7 +35,9 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos,Camera* ca
 	Arms->Initialize();
 	part->Initialize();
 
-	
+
+	clush = new Audio();
+	clush->Initialize();
 
 	Sprite::LoadTexture(350, L"Resources/mark.png");
 	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnc));
@@ -109,6 +111,7 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
 	if (OldHp > Hp) {
+		clush->LoadFile("Resources/clush.wav", 1.8f);
 		//part->Effect();
 		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 		newparticle->Initialize();

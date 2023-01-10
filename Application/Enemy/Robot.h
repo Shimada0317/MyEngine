@@ -1,4 +1,5 @@
 #pragma once
+#include"Audio.h"
 #include"Body.h"
 #include"RightArm.h"
 #include"LeftArm.h"
@@ -76,6 +77,8 @@ private:
 	std::unique_ptr<Sprite> RockOn;
 
 	Texture* fireTex;
+
+	Audio* clush;
 
 	XMFLOAT3 Texpos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 TexSiz = { 1.0f,1.0f,1.0f };
