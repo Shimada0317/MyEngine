@@ -75,6 +75,7 @@ private:
 
 	Audio* click = nullptr;
 	Audio* MorseCode = nullptr;
+	Audio* Bgm = nullptr;
 	Camera* camera = nullptr;
 
 	XMVECTOR pos = { 0,0,0 };

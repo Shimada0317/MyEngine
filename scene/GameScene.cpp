@@ -280,6 +280,8 @@ void GameScene::Finalize()
 	delete billsModel;
 	delete heriM;
 	delete startModel;
+	delete Conteniu;
+	delete Comp;
 
 	world.reset();
 	Start.reset();

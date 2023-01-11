@@ -84,6 +84,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	click->Initialize();
 	MorseCode = new Audio();
 	MorseCode->Initialize();
+	Bgm = new Audio();
+	Bgm->Initialize();
+	Bgm->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
 
 	//Sprite::LoadTexture(100, L"Resources/white1x1.png");
 	post = new PostEffect();
@@ -379,6 +382,7 @@ void TitleScene::Finalize()
 	delete click;
 	delete MorseCode;
 	delete cursor;
+	//delete Bgm;
 
 	for (int i = 0; i < BILLS; i++) {
 		bills[i].reset();
