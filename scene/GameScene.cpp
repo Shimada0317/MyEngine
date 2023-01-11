@@ -68,6 +68,10 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Conteniu = Sprite::SpriteCreate(36, { 0.0f,0.0f });
 
 	PostEffectDraw(dxComon);
+
+	bgm = new Audio;
+	bgm->Initialize();
+	bgm->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.5f);
 }
 
 void GameScene::SetPosSclRot()
@@ -282,6 +286,7 @@ void GameScene::Finalize()
 	delete startModel;
 	delete Conteniu;
 	delete Comp;
+	delete bgm;
 
 	world.reset();
 	Start.reset();

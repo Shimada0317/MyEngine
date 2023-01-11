@@ -85,7 +85,7 @@ private:
 	ObjModel* heriM;
 	ObjModel* haneM;
 
-	Audio* clush = nullptr;
+	Audio* bgm = nullptr;
 
 	FbxModel* model = nullptr;
 	FbxObject3d* Object = nullptr;
