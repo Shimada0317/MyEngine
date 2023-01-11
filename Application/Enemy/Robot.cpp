@@ -9,6 +9,7 @@ Robot::~Robot()
 	part.reset();
 	shadow.reset();
 	delete shadowModel;
+	delete clush;
 }
 
 void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos,Camera* came, const bool& Step)
@@ -35,13 +36,11 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos,Camera* ca
 	Arms->Initialize();
 	part->Initialize();
 
-
 	clush = new Audio();
 	clush->Initialize();
 
 	Sprite::LoadTexture(350, L"Resources/mark.png");
 	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnc));
-	
 
 	Arms->RespownSet(AllRot);
 
@@ -55,19 +54,12 @@ void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos,Camera* ca
 	center->SetRotation(AllRot);
 	step = Step;
 
-
 	center->SetPosition(alll);
 }
 
 void Robot::AllUpdata(Bullet* bull)
 {
-	//XMMATRIX cmat = XMMatrixIdentity();
-	//center->SetPosition(allPos);
-	//center->SetRotation(allRot);
-	
-
 	center->SetScale({ 1.0f,1.0f,1.0f });
-	//center->SetRotation({ allRot });
 	XMMatrixIsIdentity(cmat);
 	cmat = center->GetMatrix();
 	alll = XMVector3TransformNormal(allPos, cmat);
@@ -80,8 +72,6 @@ void Robot::AllUpdata(Bullet* bull)
 	shadow->SetScale({ 1.0f,1.0f,1.0f });
 
 	head->Updata(Partarive[0], alll, allRot, bull, Hp);
-	//RArm->Updata(arive[1], allPos, bull, Hp);
-	//LArm->Updata(arive[2], allPos, bull, Hp);
 	Arms->Updata(Partarive[1], alll, allRot, bull, Hp);
 	body->Updata(Partarive[2], alll, allRot, bull, Hp);
 	part->Updata(alll, allRot);
@@ -111,7 +101,7 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
 	if (OldHp > Hp) {
-		clush->LoadFile("Resources/clush.wav", 1.8f);
+		clush->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
 		//part->Effect();
 		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 		newparticle->Initialize();

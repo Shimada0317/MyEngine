@@ -88,14 +88,6 @@ bool Input::TriggerKey(BYTE keyNumber)
 	return false;
 }
 
-bool Input::PushClick(BYTE click)
-{
-	if (cli.rgbButtons[click]&(0x80)) {
-		return true;
-	}
-	return false;
-}
-
 Input::MousePos Input::GetMouseMove()
 {
 	MousePos tmp;

@@ -1,5 +1,6 @@
 #pragma once
 #include"Action.h"
+#include"Audio.h"
 #include"Player.h"
 #include"Bullet.h"
 #include"Enemy.h"
@@ -76,6 +77,8 @@ private:
 	Sprite* changecount[5];
 	Sprite* LifeCount[5];
 	Sprite* HpBer;
+
+	Audio* heriFry = nullptr;
 	//プレイヤーのステータス
 	XMVECTOR playerPos = { 0,0,0 };
 	XMVECTOR backplayer = { 0,0,-5 };

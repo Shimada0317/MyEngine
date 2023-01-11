@@ -28,30 +28,23 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect->Initialize();
 	postEffect->Update(col);
 
-
 	ModelManager::GetInstance()->Initialize();
 
-	////スプライトの読み込み
-
-	//lightGroup = LightGroup::Create();
-	//Object3d::SetLightGroup(lightGroup);
 	light = Light::Create();
 	Object3d::SetLight(light);
 
 	//モデルの読み込み
-
 	billsModel = ObjModel::CreateFromOBJ("bills");
 	for (int i = 0; i < BILLS; i++) {
 		bills[i] = Object3d::Create(billsModel);
 		bills1[i] = Object3d::Create(billsModel);
 	}
 
-
 	spheremodel = ObjModel::CreateFromOBJ("skydome");
 	sphere = Object3d::Create();
 	sphere->SetModel(spheremodel);
 
-
+	////スプライトの読み込み
 	ground = ObjModel::CreateFromOBJ("Field2", true);
 	groundObj = Object3d::Create(ground);
 
@@ -61,16 +54,12 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	startModel = ObjModel::CreateFromOBJ("bil", true);
 	Start = Object3d::Create(startModel);
 
-
-
 	mid = std::make_unique <middle>();
 	mid->Initialize();
 	patern = mid->GetPatern();
 
 	playerHp = mid->GetHp();
 	oldHp = playerHp;
-
-	
 
 	Sprite::LoadTexture(35, L"Resources/Mision.png");
 	Comp = Sprite::SpriteCreate(35, { 0.0f,0.0f });
@@ -189,11 +178,11 @@ void GameScene::Updata()
 	}
 	if (deth == true) {
 		col.x = 0;
-		if (Input::GetInstance()->PushClick(1)) {
+		if (Mouse::GetInstance()->PushClick(1)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
 		}
-		else if (Input::GetInstance()->PushClick(0)) {
+		else if (Mouse::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new GameScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
 		}
@@ -212,7 +201,7 @@ void GameScene::Updata()
 	}
 	//ゴールに着いたらクリア画面を表示
 	if (complete == true) {
-		if (Input::GetInstance()->PushClick(0)) {
+		if (Mouse::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
 		}

@@ -25,7 +25,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(1, L"Resources/start.png");
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
-	Sprite::LoadTexture(2, L"REsources/mark.png");
+	Sprite::LoadTexture(2, L"REsources/mark2.png");
 	cursor = Sprite::SpriteCreate(2, retpos, spCol, anc);
 
 	Sprite::LoadTexture(3, L"Resources/Click.png");
@@ -82,6 +82,8 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 
 	click = new Audio();
 	click->Initialize();
+	MorseCode = new Audio();
+	MorseCode->Initialize();
 
 	//Sprite::LoadTexture(100, L"Resources/white1x1.png");
 	post = new PostEffect();
@@ -152,7 +154,7 @@ void TitleScene::Updata()
 
 	timer += 1;
 	if (timer >= 10 && cursorIn == true && titleF == true) {
-		if (Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) {
+		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			titleSprite = false;
 			cameraEyeMove = true;
 			titleF = false;
@@ -172,8 +174,8 @@ void TitleScene::Updata()
 		if (NextorBack(retpos, arrowRightPos, 35, 35)) {
 			RightTrueIn = true;
 
-			if ((Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) && frees == true) {
-				click->LoadFile("Resources/click.wav", 0.8f);
+			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && frees == true) {
+				click->LoadFile("Resources/Sound/SE/click.wav", 0.8f);
 				setumeiSp += 1;
 				frees = false;
 			}
@@ -185,8 +187,8 @@ void TitleScene::Updata()
 	if (setumeiSp > 0) {
 		if (NextorBack(retpos, arrowLeftPos, 35, 35)) {
 			LeftTrueIn = true;
-			if ((Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) && frees == true) {
-				click->LoadFile("Resources/click.wav", 0.8f);
+			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && frees == true) {
+				click->LoadFile("Resources/Sound/SE/click.wav", 0.8f);
 				setumeiSp -= 1;
 				frees = false;
 			}
@@ -196,9 +198,9 @@ void TitleScene::Updata()
 		}
 	}
 	if (cameraChange == true && cursorIn == true && setumeiSp == 2) {
-		if (Input::GetInstance()->PushClick(0) || Input::GetInstance()->PushClick(1)) {
+		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			if (clickF == true) {
-				click->LoadFile("Resources/click.wav", 0.8f);
+				click->LoadFile("Resources/Sound/SE/MorseCode.wav", volume);
 				clickF = false;
 			}
 			blackOut = true;
@@ -206,6 +208,7 @@ void TitleScene::Updata()
 		}
 	}
 	if (blackOut == true) {
+	
 		col.x -= 0.01f;
 		col.y -= 0.01f;
 		col.z -= 0.01f;
@@ -373,6 +376,9 @@ void TitleScene::Finalize()
 	delete SignalAfter;
 	delete SignalBefore;
 	delete startModel;
+	delete click;
+	delete MorseCode;
+	delete cursor;
 
 	for (int i = 0; i < BILLS; i++) {
 		bills[i].reset();

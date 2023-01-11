@@ -74,6 +74,7 @@ private:
 	unique_ptr<Object3d> Start;
 
 	Audio* click = nullptr;
+	Audio* MorseCode = nullptr;
 	Camera* camera = nullptr;
 
 	XMVECTOR pos = { 0,0,0 };
@@ -159,6 +160,7 @@ private:
 	bool frees = true;
 
 	float freesTimer = 0.0f;
+	float volume = 0.8f;
 	int setumeiSp = 0;
 
 	bool blackOut = false;

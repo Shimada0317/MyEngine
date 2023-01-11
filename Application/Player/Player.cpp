@@ -10,6 +10,8 @@ Player::~Player()
 	delete gunModel;
 	delete playerModel;
 	delete part;
+	delete ShotSound;
+	delete reload;
 
 	Track.reset();
 	gun.reset();
@@ -30,7 +32,7 @@ void Player::Initalize(Camera* came)
 	playerModel = ObjModel::CreateFromOBJ("gun");
 	player = Object3d::Create(playerModel);
 
-	Sprite::LoadTexture(200, L"Resources/mark.png");
+	Sprite::LoadTexture(200, L"Resources/mark2.png");
 	spriteRet.reset(Sprite::SpriteCreate(200, retpos, spCol, anc));
 
 	Sprite::LoadTexture(300, L"Resources/curtain.png");
@@ -126,7 +128,7 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 		//ƒŠƒ[ƒh
 		if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
 			if (reloadSound == true) {
-				reload->LoadFile("Resources/reload.wav", 0.8f);
+				reload->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
 				reloadSound = false;
 			}
 			ReloadFlag = true;
@@ -236,7 +238,7 @@ void Player::CameraWork()
 
 	}
 
-	if ((Input::GetInstance()->PushClick(1) || Input::GetInstance()->PushClick(0)) && stanby == true && CamWork == false) {
+	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanby == true && CamWork == false) {
 		a = true;
 		act = 100;
 		Eye_rot.x = 0;
@@ -436,7 +438,7 @@ void Player::PlayerMove(bool& move, int patern)
 					vel = { 0.0f,0.0f,0.0f };
 					Fring = true;
 					if (Fring == true) {
-						vel = { 0.0f,0.680f,0.0f };
+						vel = { 0.0f,0.674f,0.0f };
 					}
 				}
 			}
@@ -445,7 +447,6 @@ void Player::PlayerMove(bool& move, int patern)
 
 			waveCount += 1;
 			movetimer = 0.0f;
-			//Finish = true;
 			a = false;
 			act = 0;
 		}
@@ -548,7 +549,7 @@ void Player::ChangeViewPort(XMMATRIX& matViewPort)
 void Player::SoundEffect()
 {
 	
-	ShotSound->LoadFile("Resources/shot.wav", 0.8f);
+	ShotSound->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
 }
 
 void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[])
@@ -589,19 +590,21 @@ void Player::ParticleEfect()
 {
 	if (particle == true) {
 		for (int i = 0; i < 10; i++) {
-			const float rnd_pos = 0.0f;
-			
-			double rad = rotation.y * M_PI / 180;
-			float sinrad = sinf(rad);
-			float cosrad = cosf(rad);
+			double radX = rotation.y * M_PI / 180;
+			double radY = gunRot.x * M_PI / 180;
+			float sinradX = sinf(radX);
+			float cosradX = cosf(radX);
+
+			float sinradY = sinf(radY);
+			float cosradY = cosf(radY);
 			if (paternCount == 3 || paternCount == 4) {
 				pos.x = gunWorldPos.m128_f32[0] + 2.3f;
-				pos.y = gunWorldPos.m128_f32[1];
-				pos.z = gunWorldPos.m128_f32[2]-2.8f*cosrad;
+				pos.y = gunWorldPos.m128_f32[1] - sinradY * 3;
+				pos.z = gunWorldPos.m128_f32[2]-2.8f*cosradX;
 			}
 			else if (paternCount == 0 || paternCount == 1 || paternCount == 2 || paternCount == 5) {
-				pos.x = gunWorldPos.m128_f32[0]+sinrad*2.8f;
-				pos.y = gunWorldPos.m128_f32[1];
+				pos.x = gunWorldPos.m128_f32[0]+sinradX*2.8f;
+				pos.y = gunWorldPos.m128_f32[1]-sinradY*3;
 				pos.z = gunWorldPos.m128_f32[2] + 2.3f;
 			}
 

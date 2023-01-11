@@ -75,6 +75,10 @@ void middle::Initialize()
 	getCamWorkF = player->GetCamWork();
 
 	clearT = 0;
+
+	heriFry = new Audio();
+	heriFry->Initialize();
+	heriFry->LoadFile("Resources/Sound/SE/heriFry.wav", 0.8f);
 }
 
 void middle::SetPSR()
@@ -255,10 +259,10 @@ void middle::SpriteDraw()
 void middle::ImGuiDraw()
 {
 
-	for (std::unique_ptr<Robot>& robot : rob) {
+	/*for (std::unique_ptr<Robot>& robot : rob) {
 		robot->ImgDraw();
 	}
-	player->ImGuiDraw();
+	player->ImGuiDraw();*/
 	//float a = patern;
 	//ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	//ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
@@ -279,7 +283,6 @@ void middle::ImGuiDraw()
 	//ImGui::End();
 	//ImGui::PopStyleColor();
 	//ImGui::PopStyleColor();
-
 }
 
 void middle::Fainalize()

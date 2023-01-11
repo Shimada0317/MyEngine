@@ -1,4 +1,5 @@
 #include "Action.h"
+#include"Mouse.h"
 
 Action::Action()
 {
@@ -65,7 +66,7 @@ void Action::PlayerMove2d(XMFLOAT2 &position, float Speed)
 
 void Action::Gunshot(int Remainigbullet, bool& shot)
 {
- 	if (Input::GetInstance()->PushClick(0)||Input::GetInstance()->PushKey(DIK_SPACE)) {
+ 	if (Mouse::GetInstance()->PushClick(0)||Input::GetInstance()->PushKey(DIK_SPACE)) {
 		shot = true;
 	}
 

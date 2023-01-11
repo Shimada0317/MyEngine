@@ -2,6 +2,7 @@
 #include<DirectXMath.h>
 #include"Object3d.h"
 #include"ObjModel.h"
+#include"ParticleManager.h"
 #include"Bullet.h"
 #include<memory>
 

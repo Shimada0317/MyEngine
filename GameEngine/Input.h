@@ -34,8 +34,6 @@ public://ƒƒ“ƒoŠÖ”
 
 	bool TriggerKey(BYTE keyNumber);
 
-	bool PushClick(BYTE click);
-
 	MousePos& GetPosition() {this->pos;}
 
 	MousePos GetMouseMove();
