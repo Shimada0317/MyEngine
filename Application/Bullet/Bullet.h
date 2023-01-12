@@ -28,7 +28,7 @@ public:
 
 	void Initialize();
 
-	void Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos, const XMFLOAT3& Eye_Rot);
+	void Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos, const XMFLOAT3& Eye_Rot,const XMFLOAT3& rot);
 
 	void Set();
 
@@ -64,6 +64,8 @@ public:
 	void SetScl(const XMFLOAT3& scale) { this->scl = scale; }
 	//発射フラグのセット
 	void SetTrigger(bool Trigger) { this->Trigger = Trigger; }
+	//waveカウント
+	void SetCount(int count) { this->count = count; }
 #pragma endregion
 
 	
@@ -99,4 +101,9 @@ private:
 	bool ReloadFlag = false;
 	float ShotT = 0;
 	int ans = 0;
+	//実像時間
+	float time = 0.0f;
+	bool drawF = false;
+	//wav数
+	int count = 0;
 };

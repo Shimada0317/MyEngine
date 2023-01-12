@@ -38,8 +38,12 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	for (int i = 0; i < BILLS; i++) {
 		bills[i] = Object3d::Create(billsModel);
 		bills1[i] = Object3d::Create(billsModel);
+
 	}
 
+	for (int i = 0; i < 5; i++) {
+		FieldBills[i] = Object3d::Create(billsModel);
+	}
 	spheremodel = ObjModel::CreateFromOBJ("skydome");
 	sphere = Object3d::Create();
 	sphere->SetModel(spheremodel);
@@ -71,7 +75,19 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	bgm = new Audio;
 	bgm->Initialize();
-	bgm->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.5f);
+	bgm->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
+
+	FieldBill_pos[0] = {-35.0f,0.0f,20.0f};
+	FieldBill_pos[1] = { -7.0f,-1,80 };
+	FieldBill_pos[2]={37.0,0.0f,-10.0f};
+	FieldBill_pos[3] = { -900.0,0.0f,0.0f };;
+	FieldBill_pos[4] = { -900.0,0.0f,0.0f };;
+
+	FieldBill_Rot[0]={0.0f,270.0f,0.0f};
+	FieldBill_Rot[1]={0.0f,0.0f,0.0f};
+	FieldBill_Rot[2] = { 0.0f,90.0f,0.0f };
+	FieldBill_Rot[3] = { 0.0f,0.0f,0.0f };
+	FieldBill_Rot[4] = { 0.0f,0.0f,0.0f };
 }
 
 void GameScene::SetPosSclRot()
@@ -113,6 +129,12 @@ void GameScene::SetPosSclRot()
 		bills1[i]->SetRotation(billsRot);
 		bills1[i]->SetPosition(billsPos1);
 	}
+
+	for (int i = 0; i < 5; i++) {
+		FieldBills[i]->SetPosition(FieldBill_pos[i]);
+		FieldBills[i]->SetRotation(FieldBill_Rot[i]);
+		FieldBills[i]->SetScale(FieldBill_Scl);
+	}
 };
 
 void GameScene::AllUpdata()
@@ -122,21 +144,25 @@ void GameScene::AllUpdata()
 		mid->Updata();
 	}
 
-		//lightGroup->Update();
-		for (int i = 0; i < BILLS; i++) {
-			bills[i]->Updata({ 0.2f,0.2f,0.2f,0.7f });
-			bills1[i]->Updata({ 1.0f,0.5f,0.0f,0.9f });
-		}
+	for (int i = 0; i < BILLS; i++) {
+		bills[i]->Updata({ 0.4f,0.4f,0.5f,0.9f });
+		bills1[i]->Updata({ 0.2f,0.2f,0.2f,0.9f });
+	}
 
-		sphere->Updata();
-		groundObj->Updata({ 0.7f,0.7f,0.7f,1.0f });
-		world->Updata({ 0.1f,0.1f,0.1f,1.0f });
-		Start->Updata();
+	for (int i = 0; i < 5; i++) {
+		FieldBills[i]->Updata({ 0.2f,0.2f,0.3f,1.0f });
+	}
+
+	sphere->Updata();
+	groundObj->Updata({ 0.7f,0.7f,0.7f,1.0f });
+
+	world->Updata({ 0.7f,0.7f,0.7f,1.0f });
+	Start->Updata();
 }
 
 void GameScene::Updata()
 {
-	
+
 	if (GameStart == false) {
 		col.x += 0.05f;
 		col.y += 0.05f;
@@ -152,7 +178,7 @@ void GameScene::Updata()
 		if (playerHp > 0) {
 			//ダメージを食らったたとき
 			if (oldHp > playerHp) {
-				
+
 				post = true;
 				oldHp = playerHp;
 			}
@@ -219,11 +245,14 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	sphere->Draw();
-	groundObj->Draw();
+	//groundObj->Draw();
 	world->Draw();
 
 	Start->Draw();
 
+	for (int i = 0; i < 5; i++) {
+		FieldBills[i]->Draw();
+	}
 	for (int i = 0; i < BILLS; i++) {
 		bills[i]->Draw();
 		bills1[i]->Draw();
@@ -297,6 +326,9 @@ void GameScene::Finalize()
 	for (int i = 0; i < BILLS; i++) {
 		bills[i].reset();
 		bills1[i].reset();
+	}
+	for (int i = 0; i < 5; i++) {
+		FieldBills[i].reset();
 	}
 	mid.reset();
 }

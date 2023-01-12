@@ -77,6 +77,7 @@ private:
 	unique_ptr<Object3d> Start;
 	unique_ptr<Object3d> bills[BILLS];
 	unique_ptr<Object3d> bills1[BILLS];
+	unique_ptr<Object3d> FieldBills[5];
 	unique_ptr<Object3d> heri;
 	unique_ptr<Object3d> Goal;
 
@@ -106,7 +107,10 @@ private:
 
 	XMVECTOR pos = { 0,0,0 };
 	//フィールド
-	XMVECTOR ground_pos = { 22.5f,-1,40 };
+	XMVECTOR ground_pos = {22.5f,-1,40};
+	XMFLOAT3 FieldBill_Scl = { 6.0f,10.0f,7.0f };
+	XMVECTOR FieldBill_pos[5];
+	XMFLOAT3 FieldBill_Rot[5];
 	XMFLOAT3 ground_scl = { 13,20,16 };
 	XMFLOAT3 ground_rot = { 0,0,0 };
 	//足場

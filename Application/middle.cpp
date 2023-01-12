@@ -347,6 +347,9 @@ void middle::UpdataEnemyPopCommands()
 
 			//WAVE‚Ì—v‘f
 			count = atoi(word.c_str());
+			for (int i = 0; i < 9; i++) {
+				bull[i]->SetCount(count);
+			}
 		}
 		if (patern == count) {
 			if (word.find("ROTATION") == 0) {

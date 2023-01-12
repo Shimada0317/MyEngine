@@ -20,9 +20,10 @@ void Bullet::Initialize()
 
 
 
-void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos,const XMFLOAT3& Eye_Rot)
+void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos,const XMFLOAT3& Eye_Rot, const XMFLOAT3& rotation)
 {
-
+	time = 0.0f;
+	drawF = false;
 	const float kBullSpeed = 0.7f;
 	if (Trigger == false) {
 		ShotT = 0;
@@ -35,7 +36,13 @@ void Bullet::Test(const XMVECTOR& GWorldPos, const XMVECTOR& PWorldPos,const XMF
 		oldpos.m128_f32[2] = PWorldPos.m128_f32[2]+2;
 		fire = true;
 
-		rot = Eye_Rot;
+		rot.x = Eye_Rot.x+rotation.x;
+		rot.y = Eye_Rot.y + rotation.y;
+		rot.z = Eye_Rot.z + rotation.z;
+
+		if (count == 2 || count == 3) {
+			rot.y = Eye_Rot.y + rotation.y+90;
+		}
 	}
 	XMVECTOR vec = PWorldPos -GWorldPos;
 	vec = XMVector3Normalize(vec);
@@ -68,6 +75,11 @@ void Bullet::TriggerOn()
 
 void Bullet::Updata()
 {
+	time += 0.2f;
+	if (time >= 1) {
+		time = 1;
+		drawF = true;
+	}
 	pos += velocity_;
 	ShotT += 1.0f;
 	if (ShotT >= 60) {
@@ -80,7 +92,7 @@ void Bullet::Updata()
 
 void Bullet::Draw()
 {
-	if (Trigger == true) {
+	if (Trigger == true&&drawF==true) {
 		bullet->Draw();
 	}
 

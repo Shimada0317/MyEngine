@@ -117,7 +117,7 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 				particle = true;
 				for (int i = 0; i < BULL; i++) {
 					if (bull[i]->CheckOk()) {
-						bull[i]->Test(gunWorldPos, TrackWorldPos, Eye_rot);
+						bull[i]->Test(gunWorldPos, TrackWorldPos, Eye_rot,rotation);
 						bull[i]->TriggerOn();
 						break;
 					}
@@ -203,7 +203,7 @@ void Player::CameraWork()
 		}
 		else if (stanby == true && act == 0) {
 			Eye_rot.y -= 2;
-
+			//Œã‚ë‚ðŒü‚­
 			if (Eye_rot.y <= 0) {
 				Eye_rot.y = 0;
 				actTime += 0.2f;
@@ -212,6 +212,7 @@ void Player::CameraWork()
 					Eye_rot.x += 1.0f;
 				}
 			}
+			//‰º‚ðŒü‚­
 			if (Eye_rot.x >= 90) {
 				actTime = 0.0f;
 				Eye_rot.x = 90;
@@ -221,7 +222,7 @@ void Player::CameraWork()
 		if (act == 1) {
 
 			actTime += 0.15f;
-			vel = { 0.0f,0.6f,0.4f };
+			vel = { 0.0f,0.67f,0.4f };
 			if (actTime >= 5) {
 				vel = { 0.0f,-0.6f,0.0f };
 				Eye_rot.x -= 0.7f;
@@ -577,7 +578,7 @@ void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT
 
 			positionRet.m128_f32[0] = enePos[i].m128_f32[0];
 			positionRet.m128_f32[2] = enePos[i].m128_f32[2];
-			positionRet.m128_f32[1] = positionRet.m128_f32[1] - 0.15f;
+			positionRet.m128_f32[1] = positionRet.m128_f32[1] - 0.35f;
 		}
 	}
 
