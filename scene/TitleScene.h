@@ -59,60 +59,20 @@ public://メンバ変数
 
 	void Finalize() override;
 private:
-
-	ObjModel* billsModel = nullptr;
-	ObjModel* ground = nullptr;
-	ObjModel* spheremodel = nullptr;
-	ObjModel* worldmodel = nullptr;
-	ObjModel* startModel = nullptr;
-
-	unique_ptr <Object3d> sphere;
-	unique_ptr<Object3d> bills[BILL];
-	unique_ptr<Object3d> bills1[BILL];
-	unique_ptr <Object3d> groundObj;
-	unique_ptr <Object3d >world;
+	//Objモデル
+	ObjModel* BillsModel = nullptr;
+	ObjModel* Ground = nullptr;
+	ObjModel* Spheremodel = nullptr;
+	ObjModel* Worldmodel = nullptr;
+	ObjModel* StartModel = nullptr;
+	//Obj
+	unique_ptr <Object3d> Sphere;
+	unique_ptr<Object3d> Bills[BILL];
+	unique_ptr<Object3d> Bills1[BILL];
+	unique_ptr <Object3d> GroundObj;
+	unique_ptr <Object3d >World;
 	unique_ptr<Object3d> Start;
-
-	Audio* click = nullptr;
-	Audio* MorseCode = nullptr;
-	Audio* Bgm = nullptr;
-	Camera* camera = nullptr;
-
-	XMVECTOR pos = { 0,0,0 };
-	//フィールド
-	XMVECTOR ground_pos = { 22.5f,-1,40 };
-	XMFLOAT3 ground_scl = { 13,20,16 };
-	XMFLOAT3 ground_rot = { 0,0,0 };
-	//ビル群
-	XMFLOAT3 billsScl = { 10.0f,10.0f,10.0f };
-	XMVECTOR billsPos = { 0.0f,0.0f,-16.5f };
-	XMVECTOR billsPos1 = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 billsRot = { 0.0f,90.0f,0.0f };
-
-	XMVECTOR start_pos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 start_scl = { 15.0f,15.0f,15.0f };
-
-	XMFLOAT3 camTar= { 0.0f,0.0f,0.0f };
-	XMFLOAT3 camEye = { 0.0f,0.0f,0.0f };
-
-	//足場
-	XMVECTOR worldPos = { 0.0f,-1.1f,0.0f };
-	XMFLOAT3 worldScl = { 100,100,100 };
-
-	XMVECTOR camMove = { 0.0f,0.0f,0.0f };
-	XMVECTOR camEyeMove = { 0.0f,0.0f,0.0f };
-
-	//カーソル
 	//スプライト
-	XMFLOAT4 spCol = { 1,1,1,1 };
-	XMFLOAT2 anc = { 0.5f,0.5f };
-	XMFLOAT2 retpos = { 640.0f,360.0f };
-
-	XMFLOAT2 ClickPos = { 380,560 };
-	
-
-	DirectXCommon* dxCommon = nullptr;
-
 	Sprite* title = nullptr;
 	Sprite* cursor = nullptr;
 	Sprite* clickBefore = nullptr;
@@ -126,33 +86,58 @@ private:
 	Sprite* arrowLeft = nullptr;
 	Sprite* arrowRightTrue = nullptr;
 	Sprite* arrowLeftTrue = nullptr;
-
+	//その他の機能
 	Light* light = nullptr;
-
 	PostEffect* post = nullptr;
-
-	Player* pl = nullptr;
-
-	XMFLOAT3 ramieru_pos = { 0,0,0 };
-
-	XMFLOAT2 titlesize = { 1280.0f,720.0f };
-	XMFLOAT2 titlepos = { 0.0f,0.0f };
-
-	XMFLOAT2 arrowRightPos = { 1220.0f,300 };
-	XMFLOAT2 arrowLeftPos = { 30.0f,300 };
-
-
-
-	int timer = 0;
-
-	XMFLOAT4 col = { 0.0f,0.0f,0.0f,1.0f };
+	Audio* Click = nullptr;
+	Audio* MorseCode = nullptr;
+	Audio* Bgm = nullptr;
+	Camera* TitleCamera = nullptr;
+	DirectXCommon* dxCommon = nullptr;
+	//球体のステータス
+	XMVECTOR Sphere_Pos = { 0,0,0 };
+	XMFLOAT3 Sphere_Scl = { 4.0f,4.0f,4.0f };
+	XMFLOAT3 Sphere_Rot = { 0,0,0 };
+	//フィールドのステータス
+	XMVECTOR Ground_Pos = { 22.5f,-1,40 };
+	XMFLOAT3 Ground_Scl = { 13,20,16 };
+	XMFLOAT3 Ground_Rot = { 0,0,0 };
+	//ビル群のステータス
+	XMFLOAT3 Bills_Scl = { 10.0f,10.0f,10.0f };
+	XMVECTOR Bills_Pos = { 0.0f,0.0f,-16.5f };
+	XMVECTOR Bills_Pos1 = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 Bills_Rot = { 0.0f,90.0f,0.0f };
+	//カメラの移動先のステータス
+	XMVECTOR Start_Pos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 Start_Scl = { 15.0f,15.0f,15.0f };
+	//カメラのステータス
+	XMFLOAT3 Cam_Target= { 0.0f,0.0f,0.0f };
+	XMFLOAT3 Cam_Eye = { 0.0f,0.0f,0.0f };
+	XMVECTOR Cam_Move = { 0.0f,0.0f,0.0f };
+	XMVECTOR CamEye_Move = { 0.0f,0.0f,0.0f };
+	//足場のステータス
+	XMVECTOR World_Pos = { 0.0f,-1.1f,0.0f };
+	XMFLOAT3 World_Scl = { 100,100,100 };
+	//スプライトのステータス
+	XMFLOAT4 Sprite_Col = { 1,1,1,1 };
+	XMFLOAT2 Anchorpoint = { 0.5f,0.5f };
+	XMFLOAT2 Reticle_Pos = { 640.0f,360.0f };
+	XMFLOAT2 Click_Pos = { 380,560 };
+	//タイトルスプライトのステータス
+	XMFLOAT2 Title_Size = { 1280.0f,720.0f };
+	XMFLOAT2 Title_Pos = { 0.0f,0.0f };
+	//説明の矢印座標
+	XMFLOAT2 ArrowRight_Pos = { 1220.0f,300 };
+	XMFLOAT2 ArrowLeft_Pos = { 30.0f,300 };
+	//ポストエフェクトの色
+	XMFLOAT4 Post_Col = { 0.0f,0.0f,0.0f,1.0f };
 
 	bool titleSprite = true;
 
-	bool cameraEyeMove = false;
-	bool cameraChange = false;
+	bool CameraEyeMove_F = false;
+	bool CameraChange_F = false;
 
-	bool cursorIn = false;
+	bool CursorIn_F = false;
 	bool start = true;
 	bool Sognal = false;
 	bool firework = false;

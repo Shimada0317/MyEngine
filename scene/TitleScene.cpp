@@ -15,8 +15,8 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
-	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	Object3d::SetCamera(camera);
+	TitleCamera = new Camera(WinApp::window_width, WinApp::window_height);
+	Object3d::SetCamera(TitleCamera);
 
 	light = Light::Create();
 	Object3d::SetLight(light);
@@ -26,62 +26,62 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
 
 	Sprite::LoadTexture(2, L"REsources/mark2.png");
-	cursor = Sprite::SpriteCreate(2, retpos, spCol, anc);
+	cursor = Sprite::SpriteCreate(2, Reticle_Pos, Sprite_Col, Anchorpoint);
 
 	Sprite::LoadTexture(3, L"Resources/Click.png");
-	clickBefore = Sprite::SpriteCreate(3, ClickPos);
+	clickBefore = Sprite::SpriteCreate(3, Click_Pos);
 
 	Sprite::LoadTexture(4, L"Resources/Click2.png");
-	clickAfter = Sprite::SpriteCreate(4, ClickPos);
+	clickAfter = Sprite::SpriteCreate(4, Click_Pos);
 
 	Sprite::LoadTexture(5, L"Resources/SIGNAL.png");
-	SignalBefore = Sprite::SpriteCreate(5, ClickPos);
+	SignalBefore = Sprite::SpriteCreate(5, Click_Pos);
 
 	Sprite::LoadTexture(6, L"Resources/SIGNAL2.png");
-	SignalAfter = Sprite::SpriteCreate(6, ClickPos);
+	SignalAfter = Sprite::SpriteCreate(6, Click_Pos);
 
 	Sprite::LoadTexture(7, L"Resources/setumei2.png");
-	setumei = Sprite::SpriteCreate(7, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, spCol, anc);
+	setumei = Sprite::SpriteCreate(7, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, Sprite_Col, Anchorpoint);
 
 	Sprite::LoadTexture(8, L"Resources/setumei.png");
-	setumei2 = Sprite::SpriteCreate(8, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, spCol, anc);
+	setumei2 = Sprite::SpriteCreate(8, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, Sprite_Col, Anchorpoint);
 
 	Sprite::LoadTexture(9, L"Resources/setumei3.png");
-	setumei3 = Sprite::SpriteCreate(9, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, spCol, anc);
+	setumei3 = Sprite::SpriteCreate(9, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, Sprite_Col, Anchorpoint);
 
 	Sprite::LoadTexture(10, L"Resources/arrowRight.png");
-	arrowRight = Sprite::SpriteCreate(10, arrowRightPos);
+	arrowRight = Sprite::SpriteCreate(10, ArrowRight_Pos);
 
 	Sprite::LoadTexture(11, L"Resources/arrowLeft.png");
-	arrowLeft = Sprite::SpriteCreate(11, arrowLeftPos);
+	arrowLeft = Sprite::SpriteCreate(11, ArrowLeft_Pos);
 
 	Sprite::LoadTexture(12, L"Resources/arrowRightTrue.png");
-	arrowRightTrue = Sprite::SpriteCreate(12, arrowRightPos);
+	arrowRightTrue = Sprite::SpriteCreate(12, ArrowRight_Pos);
 
 	Sprite::LoadTexture(13, L"Resources/arrowLeftTrue.png");
-	arrowLeftTrue = Sprite::SpriteCreate(13, arrowLeftPos);
+	arrowLeftTrue = Sprite::SpriteCreate(13, ArrowLeft_Pos);
 
 
-	billsModel = ObjModel::CreateFromOBJ("bills");
+	BillsModel = ObjModel::CreateFromOBJ("Bills");
 	for (int i = 0; i < BILLS; i++) {
-		bills[i] = Object3d::Create(billsModel);
-		bills1[i] = Object3d::Create(billsModel);
+		Bills[i] = Object3d::Create(BillsModel);
+		Bills1[i] = Object3d::Create(BillsModel);
 	}
 
-	spheremodel = ObjModel::CreateFromOBJ("skydome");
-	sphere = Object3d::Create(spheremodel);
+	Spheremodel = ObjModel::CreateFromOBJ("skydome");
+	Sphere = Object3d::Create(Spheremodel);
 
-	worldmodel = ObjModel::CreateFromOBJ("world", true);
-	world = Object3d::Create(worldmodel);
+	Worldmodel = ObjModel::CreateFromOBJ("World", true);
+	World = Object3d::Create(Worldmodel);
 
-	ground = ObjModel::CreateFromOBJ("Field2", true);
-	groundObj = Object3d::Create(ground);
+	Ground = ObjModel::CreateFromOBJ("Field2", true);
+	GroundObj = Object3d::Create(Ground);
 
-	startModel = ObjModel::CreateFromOBJ("bil", true);
-	Start = Object3d::Create(startModel);
+	StartModel = ObjModel::CreateFromOBJ("bil", true);
+	Start = Object3d::Create(StartModel);
 
-	click = new Audio();
-	click->Initialize();
+	Click = new Audio();
+	Click->Initialize();
 	MorseCode = new Audio();
 	MorseCode->Initialize();
 	Bgm = new Audio();
@@ -91,75 +91,74 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	//Sprite::LoadTexture(100, L"Resources/white1x1.png");
 	post = new PostEffect();
 	post->Initialize();
-	camEyeMove = { 0.0f,0.0f,0.0f };
+	 CamEye_Move = { 0.0f,0.0f,0.0f };
 }
 
 void TitleScene::SetPosSclRot()
 {
-	camera->MoveEyeVector(camEyeMove);
-	camera->MoveVector(camMove);
+	TitleCamera->MoveEyeVector( CamEye_Move);
+	TitleCamera->MoveVector(Cam_Move);
 
-	sphere->SetRotation({ 0,0,0 });
-	sphere->SetPosition(pos);
-	sphere->SetScale({ 4.0f,4.0f,4.0f });
+	Sphere->SetRotation(Sphere_Rot);
+	Sphere->SetPosition(Sphere_Pos);
+	Sphere->SetScale(Sphere_Scl);
 
-	groundObj->SetPosition(ground_pos);
-	groundObj->SetScale({ ground_scl });
+	GroundObj->SetPosition(Ground_Pos);
+	GroundObj->SetScale({ Ground_Scl });
 
-	world->SetPosition(worldPos);
-	world->SetScale(worldScl);
+	World->SetPosition(World_Pos);
+	World->SetScale(World_Scl);
 
 	for (int i = 0; i < BILLS; i++) {
 
-		bills[i]->SetScale(billsScl);
-		bills1[i]->SetScale(billsScl);
+		Bills[i]->SetScale(Bills_Scl);
+		Bills1[i]->SetScale(Bills_Scl);
 		if (i % 2 == 0) {
-			billsPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
-			billsPos1 = { 200.0f,0,-300.0f + (100 * i / 2) };
-			billsRot = { 0.0f,90.0f,0.0f };
+			Bills_Pos = { 100.0f, 0,-300.0f + (100 * i / 2) };
+			Bills_Pos1 = { 200.0f,0,-300.0f + (100 * i / 2) };
+			Bills_Rot = { 0.0f,90.0f,0.0f };
 		}
 		else if (i % 2 == 1) {
-			billsPos = { -100.0f,0,-300.0f + (100 * i / 2) };
-			billsPos1 = { -200.0f, 0,-300.0f + (100 * i / 2) };
-			billsRot = { 0.0f,270.0f,0.0f };
+			Bills_Pos = { -100.0f,0,-300.0f + (100 * i / 2) };
+			Bills_Pos1 = { -200.0f, 0,-300.0f + (100 * i / 2) };
+			Bills_Rot = { 0.0f,270.0f,0.0f };
 		}
-		bills[i]->SetRotation(billsRot);
-		bills[i]->SetPosition(billsPos);
-		bills1[i]->SetRotation(billsRot);
-		bills1[i]->SetPosition(billsPos1);
+		Bills[i]->SetRotation(Bills_Rot);
+		Bills[i]->SetPosition(Bills_Pos);
+		Bills1[i]->SetRotation(Bills_Rot);
+		Bills1[i]->SetPosition(Bills_Pos1);
 	}
 
-	Start->SetPosition(start_pos);
-	Start->SetScale(start_scl);
+	Start->SetPosition(Start_Pos);
+	Start->SetScale(Start_Scl);
 	Start->SetRotation({ 0.0f,180.0f,0.0f });
 
 
-	title->SetSize({ titlesize });
-	title->SetPosition({ titlepos });
+	title->SetSize({ Title_Size });
+	title->SetPosition({ Title_Pos });
 
-	cursor->SetPosition({ retpos });
+	cursor->SetPosition({ Reticle_Pos });
 
 
 }
 
 void TitleScene::Updata()
 {
-	Action::GetInstance()->PlayerMove2d(titlesize, 1.0f);
+	Action::GetInstance()->PlayerMove2d(Title_Size, 1.0f);
 
-	Mouse::GetInstance()->MouseMoveSprite(retpos);
+	Mouse::GetInstance()->MouseMoveSprite(Reticle_Pos);
 	//DirectX毎フレーム処理 ここから
 
-	camMove = { 0.0f,0.0f,0.0f };
+	Cam_Move = { 0.0f,0.0f,0.0f };
 
 	CameraMove();
 
-	CheckCursorIn(retpos, ClickPos, 500, 75);
+	CheckCursorIn(Reticle_Pos, Click_Pos, 500, 75);
 
-	timer += 1;
-	if (timer >= 10 && cursorIn == true && titleF == true) {
+	if (CursorIn_F == true && titleF == true) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			titleSprite = false;
-			cameraEyeMove = true;
+			CameraEyeMove_F = true;
 			titleF = false;
 		}
 	}
@@ -173,12 +172,12 @@ void TitleScene::Updata()
 		}
 	}
 
-	if (setumeiSp < 2 && titleF == false&&cameraChange==true) {
-		if (NextorBack(retpos, arrowRightPos, 35, 35)) {
+	if (setumeiSp < 2 && titleF == false&&CameraChange_F==true) {
+		if (NextorBack(Reticle_Pos, ArrowRight_Pos, 35, 35)) {
 			RightTrueIn = true;
 
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && frees == true) {
-				click->LoadFile("Resources/Sound/SE/click.wav", 0.8f);
+				Click->LoadFile("Resources/Sound/SE/Click.wav", volume);
 				setumeiSp += 1;
 				frees = false;
 			}
@@ -188,10 +187,10 @@ void TitleScene::Updata()
 		}
 	}
 	if (setumeiSp > 0) {
-		if (NextorBack(retpos, arrowLeftPos, 35, 35)) {
+		if (NextorBack(Reticle_Pos, ArrowLeft_Pos, 35, 35)) {
 			LeftTrueIn = true;
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && frees == true) {
-				click->LoadFile("Resources/Sound/SE/click.wav", 0.8f);
+				Click->LoadFile("Resources/Sound/SE/Click.wav", volume);
 				setumeiSp -= 1;
 				frees = false;
 			}
@@ -200,10 +199,10 @@ void TitleScene::Updata()
 			LeftTrueIn = false;
 		}
 	}
-	if (cameraChange == true && cursorIn == true && setumeiSp == 2) {
+	if (CameraChange_F == true && CursorIn_F == true && setumeiSp == 2) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			if (clickF == true) {
-				click->LoadFile("Resources/Sound/SE/MorseCode.wav", volume);
+				Click->LoadFile("Resources/Sound/SE/MorseCode.wav", volume);
 				clickF = false;
 			}
 			blackOut = true;
@@ -212,11 +211,11 @@ void TitleScene::Updata()
 	}
 	if (blackOut == true) {
 	
-		col.x -= 0.01f;
-		col.y -= 0.01f;
-		col.z -= 0.01f;
-		col.w -= 0.01f;
-		if (col.w <= 0) {
+		Post_Col.x -= 0.01f;
+		Post_Col.y -= 0.01f;
+		Post_Col.z -= 0.01f;
+		Post_Col.w -= 0.01f;
+		if (Post_Col.w <= 0) {
 			//シーン切り替え
 			BaseScene* scene_ = new GameScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
@@ -224,56 +223,56 @@ void TitleScene::Updata()
 	}
 
 	for (int i = 0; i < BILLS; i++) {
-		bills[i]->Updata({ 0.4f,0.4f,0.5f,1.0f });
-		bills1[i]->Updata({ 0.2f,0.2f,0.2f,0.9f });
+		Bills[i]->Updata({ 0.4f,0.4f,0.5f,1.0f });
+		Bills1[i]->Updata({ 0.2f,0.2f,0.2f,0.9f });
 
 	}
 
-	post->Update(col);
+	post->Update(Post_Col);
 	SetPosSclRot();
-	sphere->Updata();
-	groundObj->Updata();
-	world->Updata();
+	Sphere->Updata();
+	GroundObj->Updata();
+	World->Updata();
 	Start->Updata();
 
-	camera->Updata();
+	TitleCamera->Updata();
 }
 
 
 void TitleScene::CameraMove()
 {
 
-	if (cameraEyeMove == true && cameraChange == false) {
-		if (camEyeMove.m128_f32[0] >= -1.1) {
-			camEyeMove.m128_f32[0] -= 0.01f;
-			camMove.m128_f32[0] += 0.4f;
-			camMove.m128_f32[1] -= 0.4f;
-			camMove.m128_f32[2] -= 0.1f;
+	if (CameraEyeMove_F == true && CameraChange_F == false) {
+		if ( CamEye_Move.m128_f32[0] >= -1.1) {
+			 CamEye_Move.m128_f32[0] -= 0.01f;
+			Cam_Move.m128_f32[0] += 0.4f;
+			Cam_Move.m128_f32[1] -= 0.4f;
+			Cam_Move.m128_f32[2] -= 0.1f;
 		}
 		else {
-			cameraChange = true;
+			CameraChange_F = true;
 		}
 	}
 
-	if (cameraChange == true) {
-		camEyeMove = { 0.0f,0.0f,0.0f };
+	if (CameraChange_F == true) {
+		 CamEye_Move = { 0.0f,0.0f,0.0f };
 	}
 
 }
 
-void TitleScene::CheckCursorIn(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY)
+void TitleScene::CheckCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
 {
-	if ((checkPos.x <= cursorPos.x && checkPos.x + radX >= cursorPos.x) && (checkPos.y <= cursorPos.y && checkPos.y + radY >= cursorPos.y)) {
-		cursorIn = true;
+	if ((check_Pos.x <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && (check_Pos.y <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
+		CursorIn_F = true;
 	}
 	else {
-		cursorIn = false;
+		CursorIn_F = false;
 	}
 }
 
-bool TitleScene::NextorBack(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY)
+bool TitleScene::NextorBack(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
 {
-	if ((checkPos.x <= cursorPos.x && checkPos.x + radX >= cursorPos.x) && (checkPos.y <= cursorPos.y && checkPos.y + radY >= cursorPos.y)) {
+	if ((check_Pos.x <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && (check_Pos.y <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
 		return true;
 	}
 
@@ -282,22 +281,17 @@ bool TitleScene::NextorBack(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos,
 
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
-
 	post->PreDrawScene(dxCommon->GetCmdList());
 
-
-
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	world->Draw();
-	sphere->Draw();
-	//groundObj->Draw();
+	World->Draw();
+	Sphere->Draw();
 	for (int i = 0; i < BILLS; i++) {
-		bills[i]->Draw();
-		bills1[i]->Draw();
+		Bills[i]->Draw();
+		Bills1[i]->Draw();
 	}
 	Start->Draw();
 
-	////human3d->Draw();
 	////オブジェクト後処理
 	Object3d::PostDraw();
 
@@ -305,15 +299,15 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	if (titleSprite == true) {
 		title->Draw();
 	}
-	if (cameraEyeMove == false) {
-		if (cursorIn == false) {
+	if (CameraEyeMove_F == false) {
+		if (CursorIn_F == false) {
 			clickBefore->Draw();
 		}
-		else if (cursorIn == true) {
+		else if (CursorIn_F == true) {
 			clickAfter->Draw();
 		}
 	}
-	else if (cameraChange == true && firework == false) {
+	else if (CameraChange_F == true && firework == false) {
 		if (setumeiSp < 2) {
 			if (RightTrueIn == false) {
 				arrowRight->Draw();
@@ -340,10 +334,10 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 			setumei3->Draw();
 		}
 		if (setumeiSp == 2) {
-			if (cursorIn == false) {
+			if (CursorIn_F == false) {
 				SignalBefore->Draw();
 			}
-			else if (cursorIn == true) {
+			else if (CursorIn_F == true) {
 				SignalAfter->Draw();
 			}
 		}
@@ -362,12 +356,12 @@ void TitleScene::Finalize()
 	delete title;
 	delete dxCommon;
 	delete post;
-	delete camera;
+	delete TitleCamera;
 	delete light;
-	delete billsModel;
-	delete spheremodel;
-	delete worldmodel;
-	delete ground;
+	delete BillsModel;
+	delete Spheremodel;
+	delete Worldmodel;
+	delete Ground;
 	delete arrowLeft;
 	delete arrowRight;
 	delete arrowLeftTrue;
@@ -377,18 +371,18 @@ void TitleScene::Finalize()
 	delete setumei3;
 	delete SignalAfter;
 	delete SignalBefore;
-	delete startModel;
-	delete click;
+	delete StartModel;
+	delete Click;
 	delete MorseCode;
 	delete cursor;
 	delete Bgm;
 
 	for (int i = 0; i < BILLS; i++) {
-		bills[i].reset();
-		bills1[i].reset();
+		Bills[i].reset();
+		Bills1[i].reset();
 	}
-	sphere.reset();
-	world.reset();
-	groundObj.reset();
+	Sphere.reset();
+	World.reset();
+	GroundObj.reset();
 	Start.reset();
 }

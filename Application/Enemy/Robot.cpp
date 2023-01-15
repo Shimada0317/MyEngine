@@ -95,9 +95,7 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 	playerPos = { 0.0f,0.0f,0.0f };
 	playerPos = XMVector3Transform(playerPos, player);
 
-	if (Input::GetInstance()->TriggerKey(DIK_O)) {
-		Hp = 0;
-	}
+
 
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
 	if (OldHp > Hp) {
