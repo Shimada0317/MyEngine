@@ -23,7 +23,7 @@ using namespace std;
 
 const int BILLS = 16;
 
-class GameScene:public BaseScene
+class GameScene :public BaseScene
 {
 private: // エイリアス
 // Microsoft::WRL::を省略
@@ -34,9 +34,9 @@ private: // エイリアス
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
 private:
-	
 
-public://メンバ変数
+
+public://メンバ関数
 
 	GameScene(SceneManager* sceneManager_);
 
@@ -59,99 +59,57 @@ public://メンバ変数
 	void Draw(DirectXCommon* dxCommon)override;
 
 	void Finalize() override;
-private:
-
-	DirectXCommon* dxCommon = nullptr;
-
-	ObjModel* spheremodel = nullptr;
-	ObjModel* ground = nullptr;
-	ObjModel* p = nullptr;
-
-	ObjModel* worldmodel = nullptr;
-	ObjModel* startModel = nullptr;
-	ObjModel* billsModel = nullptr;
-
-	unique_ptr <Object3d> sphere;
-	unique_ptr <Object3d> groundObj;
-	unique_ptr <Object3d >world;
+private://メンバ変数
+	//Objモデル
+	ObjModel* SphereModel = nullptr;
+	ObjModel* WorldModel = nullptr;
+	ObjModel* StartModel = nullptr;
+	ObjModel* BillsModel = nullptr;
+	//Obj
+	unique_ptr <Object3d> Sphere;
+	unique_ptr <Object3d> World;
 	unique_ptr<Object3d> Start;
-	unique_ptr<Object3d> bills[BILLS];
-	unique_ptr<Object3d> bills1[BILLS];
+	unique_ptr<Object3d> Bills[BILLS];
+	unique_ptr<Object3d> Bills1[BILLS];
 	unique_ptr<Object3d> FieldBills[5];
-	unique_ptr<Object3d> heri;
-	unique_ptr<Object3d> Goal;
-
-	unique_ptr<Object3d> hane;
-
-	ObjModel* heriM;
-	ObjModel* haneM;
-
-	Audio* bgm = nullptr;
-
-	FbxModel* model = nullptr;
-	FbxObject3d* Object = nullptr;
-
-	Sprite* sprite = nullptr;
-	Sprite* title = nullptr;
-	Sprite* Comp = nullptr;
+	//スプライト
+	Sprite* Clear = nullptr;
 	Sprite* Conteniu = nullptr;
-
-
-
-	XMFLOAT3 cameraEye = {0.0f,0.0f,-10};
-	XMFLOAT3 cameraTarget = {0.0f,1.0f,0.0f};
-	float cameradistance = 20.0f;
-
-	XMVECTOR start_pos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 start_scl = { 15.0f,15.0f,15.0f };
-
-	XMVECTOR pos = { 0,0,0 };
-	//フィールド
-	XMVECTOR ground_pos = {22.5f,-1,40};
+	//その他の機能
+	Audio* Bgm = nullptr;
+	PostEffect* postEffect = nullptr;
+	Light* light = nullptr;
+	LightGroup* lightGroup = nullptr;
+	unique_ptr <middle> Mid = nullptr;
+	//最初のビルのステータス
+	XMVECTOR Start_Pos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 Start_Scl = { 15.0f,15.0f,15.0f };
+	XMFLOAT3 Start_Rot = { 0.0f,180.0f,0.0f };
+	//天球のステータス
+	XMVECTOR Sphere_Pos = { 0,0,0 };
+	XMFLOAT3 Sphere_Scl = { 4.0f,4.0f,4.0f };
+	XMFLOAT3 Sphere_Rot = { 0,0,0 };
+	//フィールドのステータス
 	XMFLOAT3 FieldBill_Scl = { 6.0f,10.0f,7.0f };
 	XMVECTOR FieldBill_pos[5];
 	XMFLOAT3 FieldBill_Rot[5];
-	XMFLOAT3 ground_scl = { 13,20,16 };
-	XMFLOAT3 ground_rot = { 0,0,0 };
-	//足場
-	XMVECTOR worldPos = { 0.0f,-1.1f,0.0f };
-	XMFLOAT3 worldScl = { 100,100,100 };
-	//ビル群
-	XMFLOAT3 billsScl = { 10.0f,10.0f,10.0f };
-	XMVECTOR billsPos = { 0.0f,0.0f,-16.5f };
-	XMVECTOR billsPos1 = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 billsRot = { 0.0f,90.0f,0.0f };
-	//ヘリ
-	
-
-	XMFLOAT2 screen_size = { 1280.0f,720.0f };
-
-	PostEffect* postEffect = nullptr;
-
-	bool JumpFlag = false;
-
-	Light* light = nullptr;
-
-	LightGroup* lightGroup = nullptr;
-
-	bool change = false;
-
-	unique_ptr <middle> mid = nullptr;
-
-	int patern = 0;
-	int playerHp;
-	int oldHp;
-	bool post = false;
-
-	float clearT = 0;
-
-	XMFLOAT4 col = { -1.0f,-1.0f,-1.0f,1.0f };
-
-	float billsposY = { -150.0f };
-	bool complete = false;
-	bool gamestop = false;
-	bool deth = false;
-
+	//足場のステータス
+	XMVECTOR World_Pos = { 0.0f,-1.1f,0.0f };
+	XMFLOAT3 World_Scl = { 100,100,100 };
+	//ビル群のステータス
+	XMFLOAT3 Bills_Scl = { 10.0f,10.0f,10.0f };
+	XMVECTOR Bills_Pos = { 0.0f,0.0f,-16.5f };
+	XMVECTOR Bills_Pos1 = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 Bills_Rot = { 0.0f,90.0f,0.0f };
+	//その他の変数
+	XMFLOAT4 PostCol = { -1.0f,-1.0f,-1.0f,1.0f };
+	int Patern = 0;
+	int PlayerHp;
+	int OldHp;
+	bool PostEffectOn = false;
+	bool ClearFlag = false;
+	bool StopUpdate = false;
+	bool DethFlag = false;
 	bool GameStart = false;
 };
 

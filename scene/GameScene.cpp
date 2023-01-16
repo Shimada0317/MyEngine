@@ -26,7 +26,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 {
 	postEffect = new PostEffect();
 	postEffect->Initialize();
-	postEffect->Update(col);
+	postEffect->Update(PostCol);
 
 	ModelManager::GetInstance()->Initialize();
 
@@ -34,48 +34,44 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLight(light);
 
 	//モデルの読み込み
-	billsModel = ObjModel::CreateFromOBJ("bills");
+	BillsModel = ObjModel::CreateFromOBJ("Bills");
 	for (int i = 0; i < BILLS; i++) {
-		bills[i] = Object3d::Create(billsModel);
-		bills1[i] = Object3d::Create(billsModel);
+		Bills[i] = Object3d::Create(BillsModel);
+		Bills1[i] = Object3d::Create(BillsModel);
 
 	}
 
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i] = Object3d::Create(billsModel);
+		FieldBills[i] = Object3d::Create(BillsModel);
 	}
-	spheremodel = ObjModel::CreateFromOBJ("skydome");
-	sphere = Object3d::Create();
-	sphere->SetModel(spheremodel);
+	 SphereModel = ObjModel::CreateFromOBJ("skydome");
+	Sphere = Object3d::Create();
+	Sphere->SetModel( SphereModel);
 
-	////スプライトの読み込み
-	ground = ObjModel::CreateFromOBJ("Field2", true);
-	groundObj = Object3d::Create(ground);
+	WorldModel = ObjModel::CreateFromOBJ("World", true);
+	World = Object3d::Create(WorldModel);
 
-	worldmodel = ObjModel::CreateFromOBJ("world", true);
-	world = Object3d::Create(worldmodel);
+	StartModel = ObjModel::CreateFromOBJ("bil", true);
+	Start = Object3d::Create(StartModel);
+	
+	Mid = std::make_unique <middle>();
+	Mid->Initialize();
+	Patern = Mid->GetPatern();
 
-	startModel = ObjModel::CreateFromOBJ("bil", true);
-	Start = Object3d::Create(startModel);
-
-	mid = std::make_unique <middle>();
-	mid->Initialize();
-	patern = mid->GetPatern();
-
-	playerHp = mid->GetHp();
-	oldHp = playerHp;
+	PlayerHp = Mid->GetHp();
+	OldHp = PlayerHp;
 
 	Sprite::LoadTexture(35, L"Resources/Mision.png");
-	Comp = Sprite::SpriteCreate(35, { 0.0f,0.0f });
+	Clear = Sprite::SpriteCreate(35, { 0.0f,0.0f });
 
 	Sprite::LoadTexture(36, L"Resources/CONTINUE.png");
 	Conteniu = Sprite::SpriteCreate(36, { 0.0f,0.0f });
 
 	PostEffectDraw(dxComon);
 
-	bgm = new Audio;
-	bgm->Initialize();
-	bgm->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
+	Bgm = new Audio;
+	Bgm->Initialize();
+	Bgm->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
 
 	FieldBill_pos[0] = {-35.0f,0.0f,20.0f};
 	FieldBill_pos[1] = { -7.0f,-1,80 };
@@ -92,42 +88,39 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 void GameScene::SetPosSclRot()
 {
-	sphere->SetRotation({ 0,0,0 });
-	sphere->SetPosition(pos);
-	sphere->SetScale({ 4.0f,4.0f,4.0f });
+	Sphere->SetRotation(Sphere_Rot);
+	Sphere->SetPosition(Sphere_Pos);
+	Sphere->SetScale(Sphere_Scl);
 
-	groundObj->SetPosition(ground_pos);
-	groundObj->SetScale({ ground_scl });
+	World->SetPosition(World_Pos);
+	World->SetScale(World_Scl);
 
-	world->SetPosition(worldPos);
-	world->SetScale(worldScl);
+	Patern = Mid->GetPatern();
+	PlayerHp = Mid->GetHp();
 
-	patern = mid->GetPatern();
-	playerHp = mid->GetHp();
-
-	Start->SetPosition(start_pos);
-	Start->SetScale(start_scl);
-	Start->SetRotation({ 0.0f,180.0f,0.0f });
+	Start->SetPosition(Start_Pos);
+	Start->SetScale(Start_Scl);
+	Start->SetRotation(Start_Rot);
 
 
 	for (int i = 0; i < BILLS; i++) {
 
-		bills[i]->SetScale(billsScl);
-		bills1[i]->SetScale(billsScl);
+		Bills[i]->SetScale(Bills_Scl);
+		Bills1[i]->SetScale(Bills_Scl);
 		if (i % 2 == 0) {
-			billsPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
-			billsPos1 = { 200.0f,0,-300.0f + (100 * i / 2) };
-			billsRot = { 0.0f,90.0f,0.0f };
+			Bills_Pos = { 100.0f, 0,-300.0f + (100 * i / 2) };
+			Bills_Pos1 = { 200.0f,0,-300.0f + (100 * i / 2) };
+			Bills_Rot = { 0.0f,90.0f,0.0f };
 		}
 		else if (i % 2 == 1) {
-			billsPos = { -100.0f,0,-300.0f + (100 * i / 2) };
-			billsPos1 = { -200.0f, 0,-300.0f + (100 * i / 2) };
-			billsRot = { 0.0f,270.0f,0.0f };
+			Bills_Pos = { -100.0f,0,-300.0f + (100 * i / 2) };
+			Bills_Pos1 = { -200.0f, 0,-300.0f + (100 * i / 2) };
+			Bills_Rot = { 0.0f,270.0f,0.0f };
 		}
-		bills[i]->SetRotation(billsRot);
-		bills[i]->SetPosition(billsPos);
-		bills1[i]->SetRotation(billsRot);
-		bills1[i]->SetPosition(billsPos1);
+		Bills[i]->SetRotation(Bills_Rot);
+		Bills[i]->SetPosition(Bills_Pos);
+		Bills1[i]->SetRotation(Bills_Rot);
+		Bills1[i]->SetPosition(Bills_Pos1);
 	}
 
 	for (int i = 0; i < 5; i++) {
@@ -141,22 +134,21 @@ void GameScene::AllUpdata()
 {
 	if (GameStart == true) {
 
-		mid->Updata();
+		Mid->Updata();
 	}
 
 	for (int i = 0; i < BILLS; i++) {
-		bills[i]->Updata({ 0.4f,0.4f,0.5f,0.9f });
-		bills1[i]->Updata({ 0.2f,0.2f,0.2f,0.9f });
+		Bills[i]->Updata({ 0.4f,0.4f,0.5f,0.9f });
+		Bills1[i]->Updata({ 0.2f,0.2f,0.2f,0.9f });
 	}
 
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i]->Updata({ 0.2f,0.2f,0.3f,1.0f });
 	}
 
-	sphere->Updata();
-	groundObj->Updata({ 0.7f,0.7f,0.7f,1.0f });
+	Sphere->Updata();
 
-	world->Updata({ 0.7f,0.7f,0.7f,1.0f });
+	World->Updata({ 0.7f,0.7f,0.7f,1.0f });
 	Start->Updata();
 }
 
@@ -164,50 +156,49 @@ void GameScene::Updata()
 {
 
 	if (GameStart == false) {
-		col.x += 0.05f;
-		col.y += 0.05f;
-		col.z += 0.05f;
-		if (col.x >= 0.0f) {
-			col.x = 0.0f;
-			col.y = 0.0f;
-			col.z = 0.0f;
+		PostCol.x += 0.05f;
+		PostCol.y += 0.05f;
+		PostCol.z += 0.05f;
+		if (PostCol.x >= 0.0f) {
+			PostCol.x = 0.0f;
+			PostCol.y = 0.0f;
+			PostCol.z = 0.0f;
 			GameStart = true;
 		}
 	}
 	if (GameStart == true) {
-		if (playerHp > 0) {
+		if (PlayerHp > 0) {
 			//ダメージを食らったたとき
-			if (oldHp > playerHp) {
-
-				post = true;
-				oldHp = playerHp;
+			if (OldHp > PlayerHp) {
+				PostEffectOn = true;
+				OldHp = PlayerHp;
 			}
 			//画面を赤くするフラグが立った時
-			if (post == true) {
-				col.x = 0.7f;
-				if (col.x >= 0.5f) {
-					post = false;
+			if (PostEffectOn == true) {
+				PostCol.x = 0.7f;
+				if (PostCol.x >= 0.5f) {
+					PostEffectOn = false;
 				}
 			}
 			//画面を赤くするフラグが立っていない時
-			if (post == false) {
-				col.x -= 0.1f;
-				if (col.x <= 0) {
-					col.x = 0;
+			if (PostEffectOn == false) {
+				PostCol.x -= 0.1f;
+				if (PostCol.x <= 0) {
+					PostCol.x = 0;
 				}
 			}
 		}
 		//体力が0になったら
-		else if (playerHp <= 0) {
-			gamestop = true;
-			col.x += 0.01f;
-			if (col.x >= 2.0f) {
-				deth = true;
+		else if (PlayerHp <= 0) {
+			StopUpdate = true;
+			PostCol.x += 0.01f;
+			if (PostCol.x >= 2.0f) {
+				DethFlag = true;
 			}
 		}
 	}
-	if (deth == true) {
-		col.x = 0;
+	if (DethFlag == true) {
+		PostCol.x = 0;
 		if (Mouse::GetInstance()->PushClick(1)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
@@ -218,25 +209,25 @@ void GameScene::Updata()
 		}
 	}
 
-	XMVECTOR GoalPos = mid->GetGoalPos();
+	XMVECTOR GoalPos = Mid->GetGoalPos();
 	//ゴールに着いたとき
 	if (GoalPos.m128_f32[1] >= 100) {
-		complete = true;
-		gamestop = true;
+		ClearFlag = true;
+		StopUpdate = true;
 	}
 	//ゴールについていないとき更新を続ける
-	if (gamestop == false) {
+	if (StopUpdate == false) {
 		SetPosSclRot();
 		AllUpdata();
 	}
 	//ゴールに着いたらクリア画面を表示
-	if (complete == true) {
+	if (ClearFlag == true) {
 		if (Mouse::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
 		}
 	}
-	postEffect->Update(col);
+	postEffect->Update(PostCol);
 }
 
 void GameScene::ObjDraw(DirectXCommon* dxCommon)
@@ -244,9 +235,8 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	sphere->Draw();
-	//groundObj->Draw();
-	world->Draw();
+	Sphere->Draw();
+	World->Draw();
 
 	Start->Draw();
 
@@ -254,25 +244,25 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 		FieldBills[i]->Draw();
 	}
 	for (int i = 0; i < BILLS; i++) {
-		bills[i]->Draw();
-		bills1[i]->Draw();
+		Bills[i]->Draw();
+		Bills1[i]->Draw();
 	}
 
 	////human3d->Draw();
 	////オブジェクト後処理
 	Object3d::PostDraw();
-	mid->Draw(dxCommon);
+	Mid->Draw(dxCommon);
 
 }
 
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	mid->SpriteDraw();
-	if (complete == true) {
-		Comp->Draw();
+	Mid->SpriteDraw();
+	if (ClearFlag == true) {
+		Clear->Draw();
 	}
-	if (deth == true) {
+	if (DethFlag == true) {
 		Conteniu->Draw();
 	}
 	Sprite::PostDraw();
@@ -280,7 +270,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 void GameScene::ImgDraw()
 {
-	mid->ImGuiDraw();
+	Mid->ImGuiDraw();
 }
 
 
@@ -306,30 +296,26 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 
 void GameScene::Finalize()
 {
-	delete ground;
-	delete spheremodel;
-	delete worldmodel;
+	delete  SphereModel;
+	delete WorldModel;
 	delete postEffect;
-	delete billsModel;
-	delete heriM;
-	delete startModel;
+	delete BillsModel;
+	delete StartModel;
 	delete Conteniu;
-	delete Comp;
-	delete bgm;
+	delete Clear;
+	delete Bgm;
 
-	world.reset();
+	World.reset();
 	Start.reset();
-	groundObj.reset();
-	heri.reset();
-	Goal.reset();
+
 
 	for (int i = 0; i < BILLS; i++) {
-		bills[i].reset();
-		bills1[i].reset();
+		Bills[i].reset();
+		Bills1[i].reset();
 	}
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i].reset();
 	}
-	mid.reset();
+	Mid.reset();
 }
 
