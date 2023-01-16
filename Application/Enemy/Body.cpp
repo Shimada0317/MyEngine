@@ -2,13 +2,13 @@
 
 Body::~Body()
 {
-	delete bodyModel;
+	delete BodyModel;
 }
 
 void Body::Initialize()
 {
-	bodyModel = ObjModel::CreateFromOBJ("tst2",true);
-	body = Object3d::Create(bodyModel);
+	BodyModel = ObjModel::CreateFromOBJ("tst2",true);
+	Body = Object3d::Create(BodyModel);
 }
 
 void Body::SetPRS(const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull)
@@ -18,33 +18,28 @@ void Body::SetPRS(const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull)
 	BullScl = bull->GetScl();
 	Hit = bull->GetTrigger();
 
+	Body_Pos = allPos;
+	Body_Rot = rotation;
 
-	BodyPos = allPos;
-	BodyRot = rotation;
-
-	body->SetPosition(BodyPos);
-	body->SetRotation(BodyRot);
-	body->SetScale(BodyScl);
+	Body->SetPosition(Body_Pos);
+	Body->SetRotation(Body_Rot);
+	Body->SetScale(Body_Scl);
 	
 }
 
 void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
 {
-	BodyMat = body->GetMatrix();
-	BodyPos = XMVector3Transform(BodyPos, BodyMat);
+	BodyMat = Body->GetMatrix();
+	Body_Pos = XMVector3Transform(Body_Pos, BodyMat);
 	
-
-	//Hit = bull->GetTrigger();
 	if (arive == true) {
-
-
 		if (BullPos.m128_f32[2] >= 10) {
 			BullPos.m128_f32[2] = 0;
 		}
 
 		SetPRS(allPos ,rotation,bull);
 
-		if (Collision::BodyHit(BodyPos, BodyScl, BullPos, BullScl)&&Hit==true) {
+		if (Collision::BodyHit(Body_Pos, Body_Scl, BullPos, BullScl)&&Hit==true) {
  			Hp -= 30;
 			Hit = false;
 			bull->SetTrigger(Hit);
@@ -61,19 +56,18 @@ void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, B
 		}
 	}
 	
-	body->Updata(HItColor);
+	Body->Updata(HItColor);
 }
 
 void Body::Draw(bool arive)
 {
 	if (HItColor.w >= 0) {
-		body->Draw();
+		Body->Draw();
 	}
-
 }
 
 void Body::Finalize()
 {
-	body.reset();
-	delete bodyModel;
+	Body.reset();
+	delete BodyModel;
 }

@@ -113,7 +113,6 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 		if (Remaining < BULL - 1 && ReloadFlag == false) {
 			if (Mouse::GetInstance()->PushClick(0)) {
 				Remaining += 1;
-				//time = 0.0f;
 				particle = true;
 				for (int i = 0; i < BULL; i++) {
 					if (bull[i]->CheckOk()) {
@@ -233,14 +232,14 @@ void Player::CameraWork()
 			if (playerWorldPos.m128_f32[1] <= 0.3f) {
 				vel = { 0.0f,0.0f,0.0f };
 				position.m128_f32[1] = 0.0f;
-				a = true;
+				MovieFlag = true;
 			}
 		}
 
 	}
 
 	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanby == true && CamWork == false) {
-		a = true;
+		MovieFlag = true;
 		act = 100;
 		Eye_rot.x = 0;
 		Eye_rot.y = 0;
@@ -256,7 +255,7 @@ void Player::CameraWork()
 		}
 	}
 
-	if (a == false) {
+	if (MovieFlag == false) {
 		curtainPos.y += 4;
 		curtainPos2.y -= 4;
 		skipPos.y -= 2;
@@ -448,7 +447,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 			waveCount += 1;
 			movetimer = 0.0f;
-			a = false;
+			MovieFlag = false;
 			act = 0;
 		}
 	}
@@ -464,7 +463,6 @@ void Player::ObjDraw()
 
 void Player::ImGuiDraw()
 {
-	float a = waveCount;
 
 	XMMATRIX camMat = cam->GetWorld();
 	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
@@ -482,7 +480,6 @@ void Player::ImGuiDraw()
 		ImGui::SliderFloat("pos.x", &pos.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("pos.y", &pos.y, -100.0f, 100.0f);
 		ImGui::SliderFloat("pos.z", &pos.z, -100.0f, 100.0f);
-		ImGui::SliderFloat("mat.x", &a, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

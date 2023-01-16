@@ -27,20 +27,20 @@ public:
 
 	void Finalize();
 
-	const XMVECTOR& GetPos() { return BodyPos; }
+	const XMVECTOR& GetPos() { return Body_Pos; }
 
 	const XMFLOAT4& GetCol() { return HItColor; }
 
-	const XMFLOAT3& GetScl() { return BodyScl; }
+	const XMFLOAT3& GetScl() { return Body_Scl; }
 
-	void SetScl(XMFLOAT3 scl) { this->BodyScl = scl; }
+	void SetScl(XMFLOAT3 scl) { this->Body_Scl = scl; }
 private:
-	std::unique_ptr<Object3d> body;
-	ObjModel* bodyModel = nullptr;
+	std::unique_ptr<Object3d> Body;
+	ObjModel* BodyModel = nullptr;
 
-	XMVECTOR BodyPos = {0.0f,0.0f,0.1f};
-	XMFLOAT3 BodyScl = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 BodyRot = { 0.0f,90.0f,0.0f };
+	XMVECTOR Body_Pos = {0.0f,0.0f,0.1f};
+	XMFLOAT3 Body_Scl = { 1.0f,1.0f,1.0f };
+	XMFLOAT3 Body_Rot = { 0.0f,90.0f,0.0f };
 
 	XMVECTOR BullPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 BullScl = { 0.0f,0.0f,0.0f };
@@ -48,7 +48,6 @@ private:
 
 
 	XMMATRIX BodyMat;
-	XMMATRIX otherMat;
 	bool Hit = false;
 };
 
