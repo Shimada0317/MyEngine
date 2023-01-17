@@ -3,116 +3,106 @@
 
 ObjParticle::~ObjParticle()
 {
-	//delete model;
-	//delete worm;
-}
 
-void ObjParticle::Fast()
-{
 }
 
 void ObjParticle::InitializeState(int i)
 {
-	//for (int i = 0; i < MAX; i++) {
-	position[i] = { 0.0f,0.0f,0.0f };
-	position[i].m128_f32[0] = 0.1f * i;
-	scale[i] = { 0.2f,0.2f,0.2f };
-	Wposition[i] = { 0.0f,0.0f,0.0f };
-	wscale[i] = { 0.3f,0.3f,0.3f };
-	effect[i] = false;
-	gravity[i] = 0.4f;
-	//numY[i] = rand() % 1 + 0.2f;
-	//}
+	Gear_Pos[i] = { 0.0f,0.0f,0.0f };
+	Gear_Pos[i].m128_f32[0] = 0.1f * i;
+	Gear_Scl[i] = { 0.2f,0.2f,0.2f };
+	Worm_Pos[i] = { 0.0f,0.0f,0.0f };
+	Worm_Scl[i] = { 0.3f,0.3f,0.3f };
+	Effect_F[i] = false;
+	Gravity[i] = 0.4f;
 }
 
 void ObjParticle::Initialize()
 {
-	//worm = ObjModel::CreateFromOBJ("Worm");
-	//model = ObjModel::CreateFromOBJ("Gear");
 	for (int i = 0; i < MAX; i++) {
 		Worm[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(0));
-		particle[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(1));
+		Gear[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(1));
 
 		InitializeState(i);
-		particle[i]->SetPosition(position[i]);
-		particle[i]->SetScale(scale[i]);
-		particle[i]->SetRotation(rotation);
-		Worm[i]->SetPosition(Wposition[i]);
-		Worm[i]->SetScale(wscale[i]);
-		Worm[i]->SetRotation(Wrotation);
-		up[i] = { 0.01f,0.01f,0.005f };
+		Gear[i]->SetPosition(Gear_Pos[i]);
+		Gear[i]->SetScale(Gear_Scl[i]);
+		Gear[i]->SetRotation(Gear_Rot);
+		Worm[i]->SetPosition(Worm_Pos[i]);
+		Worm[i]->SetScale(Worm_Scl[i]);
+		Worm[i]->SetRotation(Worm_Rot);
+		Up[i] = { 0.01f,0.01f,0.005f };
 	}
 }
 
 void ObjParticle::Set(XMVECTOR& enemyPos, XMFLOAT3& allRot)
 {
 	for (int i = 0; i < MAX; i++) {
-		if (effect[i] == false) {
+		if (Effect_F[i] == false) {
 			InitializeState(i);
-			position[i] = enemyPos;
-			Wposition[i] = enemyPos;
-			rotation = allRot;
-			int radX = (rand() % 10);
-			int radY = (rand() % 3 + 1);
-			int radZ = (rand() % 10);
-			int womX = (rand() % 5);
-			int womY = (rand() % 3 + 1);
-			int womZ = (rand() % 5);
-			if (radX == 2) {
-				radX = 1;
-				womX = -1;
+			Gear_Pos[i] = enemyPos;
+			Worm_Pos[i] = enemyPos;
+			Gear_Rot = allRot;
+			int gear_radX = (rand() % 10);
+			int gear_radY = (rand() % 3 + 1);
+			int gear_radZ = (rand() % 10);
+			int worm_radX = (rand() % 5);
+			int worm_radY = (rand() % 3 + 1);
+			int worm_radZ = (rand() % 5);
+			if (gear_radX == 2) {
+				gear_radX = 1;
+				worm_radX = -1;
 			}
-			else if (radX == 1) {
-				radX = -1;
-				womX = 1;
-			}
-			else {
-				radX = 0;
-				womX = 0;
-			}
-
-			if (radZ == 2) {
-				radZ = 1;
-				womZ = -1;
-			}
-			else if (radZ == 1) {
-				radZ = -1;
-				womZ = 1;
+			else if (gear_radX == 1) {
+				gear_radX = -1;
+				worm_radX = 1;
 			}
 			else {
-				radZ = 0;
-				womZ = 0;
+				gear_radX = 0;
+				worm_radX = 0;
 			}
-			float poiX = 0;
-			float poiY = 0;
-			float poiZ = 0;
 
-			float wpoiX = 0;
-			float wpoiY = 0;
-			float wpoiZ = 0;
+			if (gear_radZ == 2) {
+				gear_radZ = 1;
+				worm_radZ = -1;
+			}
+			else if (gear_radZ == 1) {
+				gear_radZ = -1;
+				worm_radZ = 1;
+			}
+			else {
+				gear_radZ = 0;
+				worm_radZ = 0;
+			}
+			float gear_posX = 0;
+			float gear_posY = 0;
+			float gear_posZ = 0;
+
+			float worm_posX = 0;
+			float worm_posY = 0;
+			float worm_posZ = 0;
 
 			int rad = (rand() % 10) + 5;
 
-			poiX = (float)radX / rad;
-			poiY = (float)radY / 10;
-			poiZ = (float)radZ / rad;
-			wpoiX = (float)womX / rad;
-			wpoiY = (float)womY / 10;
-			wpoiZ = (float)womZ / rad;
-			numX[i] = poiX;
-			numY[i] = poiY;
-			numZ[i] = poiZ;
-			wnumX[i] = wpoiX;
-			wnumY[i] = wpoiY;
-			wnumZ[i] = wpoiZ;
+			gear_posX = (float)gear_radX / rad;
+			gear_posY = (float)gear_radY / 10;
+			gear_posZ = (float)gear_radZ / rad;
+			worm_posX = (float)worm_radX / rad;
+			worm_posY = (float)worm_radY / 10;
+			worm_posZ = (float)worm_radZ / rad;
+			Gear_NumX[i] = gear_posX;
+			Gear_NumY[i] = gear_posY;
+			Gear_NumZ[i] = gear_posZ;
+			Worm_NumX[i] = worm_posX;
+			Worm_NumY[i] = worm_posY;
+			Worm_NumZ[i] = worm_posZ;
 		}
 
-		particle[i]->SetPosition(position[i]);
-		particle[i]->SetScale(scale[i]);
-		particle[i]->SetRotation(rotation);
-		Worm[i]->SetPosition(Wposition[i]);
-		Worm[i]->SetScale(scale[i]);
-		Worm[i]->SetRotation(rotation);
+		Gear[i]->SetPosition(Gear_Pos[i]);
+		Gear[i]->SetScale(Gear_Scl[i]);
+		Gear[i]->SetRotation(Gear_Rot);
+		Worm[i]->SetPosition(Worm_Pos[i]);
+		Worm[i]->SetScale(Gear_Scl[i]);
+		Worm[i]->SetRotation(Gear_Rot);
 	}
 }
 
@@ -122,61 +112,53 @@ void ObjParticle::Updata(XMVECTOR& enemyPos,XMFLOAT3& allRot)
 	Effect();
 
 	for (int i = 0; i < MAX; i++) {
-		rotation.x += 0.5f / 20;
-		if (position[i].m128_f32[1] >= enemyPos.m128_f32[1] - 0.1f) {
-			position[i].m128_f32[0] += numX[i] / 20;
-			position[i].m128_f32[1] += gravity[i] / 15;
-			position[i].m128_f32[2] += numZ[i] / 20;
+		Gear_Rot.x += 0.5f / 20;
+		if (Gear_Pos[i].m128_f32[1] >= enemyPos.m128_f32[1] - 0.1f) {
+			Gear_Pos[i].m128_f32[0] += Gear_NumX[i] / 20;
+			Gear_Pos[i].m128_f32[1] += Gravity[i] / 15;
+			Gear_Pos[i].m128_f32[2] += Gear_NumZ[i] / 20;
 		}
-		if (Wposition[i].m128_f32[1] >= enemyPos.m128_f32[1] - 0.1f) {
-			Wposition[i].m128_f32[0] += wnumX[i] / 20;
-			Wposition[i].m128_f32[1] += gravity[i] / 10;
-			Wposition[i].m128_f32[2] += wnumX[i] / 20;
+		if (Worm_Pos[i].m128_f32[1] >= enemyPos.m128_f32[1] - 0.1f) {
+			Worm_Pos[i].m128_f32[0] += Worm_NumX[i] / 20;
+			Worm_Pos[i].m128_f32[1] += Gravity[i] / 10;
+			Worm_Pos[i].m128_f32[2] += Worm_NumX[i] / 20;
 		}
 
-		gravity[i] -= 0.002;
+		Gravity[i] -= 0.002;
 
-		scale[i].x -= 0.01f/30;
-		scale[i].y -= 0.01f/30;
-		scale[i].z -= 0.01f/30;
-		if (scale[i].x <= 0 && scale[i].y <= 0 && scale[i].z <= 0) {
-			scale[i].x = 0.0f;
-			scale[i].y = 0.0f;
-			scale[i].z = 0.0f;
-			delete_ = true;
+		Gear_Scl[i].x -= 0.01f/30;
+		Gear_Scl[i].y -= 0.01f/30;
+		Gear_Scl[i].z -= 0.01f/30;
+		if (Gear_Scl[i].x <= 0 && Gear_Scl[i].y <= 0 && Gear_Scl[i].z <= 0) {
+			Gear_Scl[i].x = 0.0f;
+			Gear_Scl[i].y = 0.0f;
+			Gear_Scl[i].z = 0.0f;
+			Delete_ = true;
 			break;
 		}
-		particle[i]->Updata();
+		Gear[i]->Updata();
 		Worm[i]->Updata();
 	}
-	//if (--deleteTime_ <= 0) {
-	//	delete_ = true;
-	//}
 }
 
 void ObjParticle::Effect()
 {
 	for (int i = 0; i < MAX; i++) {
-		effect[i] = true;
-
+		Effect_F[i] = true;
 	}
 }
 
 void ObjParticle::Draw()
 {
 	for (int i = 0; i < MAX; i++) {
-
-		particle[i]->Draw();
+		Gear[i]->Draw();
 		Worm[i]->Draw();
-
 	}
 }
 
 void ObjParticle::Finalize()
 {
 	for (int i = 0; i < MAX; i++) {
-		particle[i].reset();
+		Gear[i].reset();
 	}
-	delete model;
-	delete worm;
 }

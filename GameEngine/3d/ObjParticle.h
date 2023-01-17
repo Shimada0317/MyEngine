@@ -21,8 +21,6 @@ private: // エイリアス
 public:
 	~ObjParticle();
 
-	void Fast();
-
 	void InitializeState(int i);
 
 	void Initialize();
@@ -37,36 +35,33 @@ public:
 
 	void Finalize();
 
-	bool IsDelete()const { return delete_; }
+	bool IsDelete()const { return Delete_; }
 private:
-	ObjModel* model = nullptr;
-	ObjModel* worm;
+
 	std::unique_ptr<Object3d>Worm[MAX];
-	std::unique_ptr<Object3d> particle[MAX];
-	std::unique_ptr<Texture>par[MAX];
+	std::unique_ptr<Object3d> Gear[MAX];
+	//ギアのステータス
+	XMVECTOR Gear_Pos[MAX];
+	XMFLOAT3 Gear_Rot = { 90,0,0 };
+	XMFLOAT3 Gear_Scl[MAX];
+	//芯のステータス
+	XMVECTOR Worm_Pos[MAX];
+	XMFLOAT3 Worm_Rot = { 90.0f,0.0f,0.0f };
+	XMFLOAT3 Worm_Scl[MAX];
 
-	XMVECTOR position[MAX];
-	XMFLOAT3 rotation = { 90,0,0 };
-	XMFLOAT3 scale[MAX];
+	XMFLOAT3 Up[MAX];
 
-	XMVECTOR Wposition[MAX];
-	XMFLOAT3 Wrotation = { 90.0f,0.0f,0.0f };
-	XMFLOAT3 wscale[MAX];
+	bool Effect_F[MAX];
+	float Gear_NumX[MAX];
+	float Gear_NumY[MAX];
+	float Gear_NumZ[MAX];
+	float Scale_NumX = 0;
+	float Scale_NumY = 0;
+	float Worm_NumX[MAX];
+	float Worm_NumY[MAX];
+	float Worm_NumZ[MAX];
 
-	XMFLOAT3 up[MAX];
-	XMVECTOR go = { 0.01f,0.01f,0.01f };
-	bool effect[MAX];
-	float numX[MAX];
-	float numY[MAX];
-	float numZ[MAX];
-	float scalenumX = 0;
-	float scalenumY = 0;
-	float wnumX[MAX];
-	float wnumY[MAX];
-	float wnumZ[MAX];
-	static const int32_t StopTime = 80 * 5;
-	int32_t deleteTime_ = StopTime;
-	bool delete_ = false;
-	float gravity[MAX];
+	bool Delete_ = false;
+	float Gravity[MAX];
 };
 

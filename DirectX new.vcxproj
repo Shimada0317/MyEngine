@@ -98,7 +98,6 @@
     <ClCompile Include="Application\Action\Action.cpp" />
     <ClCompile Include="GameEngine\Audio.cpp" />
     <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="NewPostEffect.cpp" />
     <ClCompile Include="scene\BaseScene.cpp" />
     <ClCompile Include="Application\Enemy\BothArms.cpp" />
     <ClCompile Include="Application\Bullet\Bullet.cpp" />
@@ -312,7 +311,6 @@
     <ClInclude Include="camera\Camera.h" />
     <ClInclude Include="GameEngine\3d\ModelManager.h" />
     <ClInclude Include="Mouse.h" />
-    <ClInclude Include="NewPostEffect.h" />
     <ClInclude Include="scene\ClearScene.h" />
     <ClInclude Include="Application\Collision\Collision.h" />
     <ClInclude Include="Application\Collision\CollisionPrimitive.h" />

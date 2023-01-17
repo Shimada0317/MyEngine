@@ -26,11 +26,11 @@ public:
 
 	~RailCamera();
 
-	const XMFLOAT3& Getye() { return eye; }
+	const XMFLOAT3& Getye() { return Eye; }
 
-	const XMFLOAT3& GetTarget() { return target; }
+	const XMFLOAT3& GetTarget() { return Target; }
 
-	const XMMATRIX& GetWorld() { return matWorld; }
+	const XMMATRIX& GetWorld() { return MatWorld; }
 
 	void Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot);
 
@@ -48,35 +48,35 @@ private:
 	//std::unique_ptr<Object3d> debug;
 	//ObjModel* debugModel;
 
-	XMMATRIX world;
+	XMMATRIX World;
 
 	// ワールド変換行列
-	XMMATRIX matWorld;
+	XMMATRIX MatWorld;
 
-	XMMATRIX matRot, matTrans;
+	XMMATRIX MatRot, MatTrans;
 
-	XMVECTOR position;
-	XMFLOAT3 rotation;
+	XMVECTOR Position;
+	XMFLOAT3 Rotation;
 
 	// ビュー行列
-	XMMATRIX matView = DirectX::XMMatrixIdentity();
+	XMMATRIX MatView = DirectX::XMMatrixIdentity();
 	// 射影行列
-	XMMATRIX matProjection = DirectX::XMMatrixIdentity();
+	XMMATRIX MatProjection = DirectX::XMMatrixIdentity();
 	// ビュー射影行列(ビュープロジェクション)
-	XMMATRIX matViewProjection = DirectX::XMMatrixIdentity();
+	XMMATRIX MatViewProjection = DirectX::XMMatrixIdentity();
 	// 上方向ベクトル
-	XMFLOAT3 up = { 0, 1, 0 };
+	XMFLOAT3 Up = { 0, 1, 0 };
 	//注視点　　
-	XMFLOAT3 eye = { 0.0f,0.0f,-5.0f };
+	XMFLOAT3 Eye = { 0.0f,0.0f,-5.0f };
 
-	XMFLOAT3 target = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 Target = { 0.0f,0.0f,0.0f };
 
 	// アスペクト比
-	float aspectRatio = 1.0f;
+	float AspectRatio = 1.0f;
 
-	XMVECTOR eyePosition;
+	XMVECTOR EyePosition;
 	// 注視点座標
-	XMVECTOR targetPosition;
+	XMVECTOR TargetPosition;
 	// （仮の）上方向
-	XMVECTOR upVector;
+	XMVECTOR UpVector;
 };
