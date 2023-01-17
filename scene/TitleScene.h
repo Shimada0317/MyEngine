@@ -89,8 +89,8 @@ private:
 	//その他の機能
 	Light* light = nullptr;
 	PostEffect* post = nullptr;
-	Audio* Click = nullptr;
-	Audio* MorseCode = nullptr;
+	Audio* Click_SE = nullptr;
+	Audio* MorseCode_SE = nullptr;
 	Audio* Bgm = nullptr;
 	Camera* TitleCamera = nullptr;
 	DirectXCommon* dxCommon = nullptr;
@@ -115,6 +115,9 @@ private:
 	XMFLOAT3 Cam_Eye = { 0.0f,0.0f,0.0f };
 	XMVECTOR Cam_Move = { 0.0f,0.0f,0.0f };
 	XMVECTOR CamEye_Move = { 0.0f,0.0f,0.0f };
+
+	bool CameraEyeMove_F = false;
+	bool CameraChange_F = false;
 	//足場のステータス
 	XMVECTOR World_Pos = { 0.0f,-1.1f,0.0f };
 	XMFLOAT3 World_Scl = { 100,100,100 };
@@ -126,31 +129,28 @@ private:
 	//タイトルスプライトのステータス
 	XMFLOAT2 Title_Size = { 1280.0f,720.0f };
 	XMFLOAT2 Title_Pos = { 0.0f,0.0f };
+	
+	bool TitleSprite_F = true;
 	//説明の矢印座標
 	XMFLOAT2 ArrowRight_Pos = { 1220.0f,300 };
 	XMFLOAT2 ArrowLeft_Pos = { 30.0f,300 };
+	
+	bool RightTrueIn_F = false;
+	bool LeftTrueIn_F = false;
 	//ポストエフェクトの色
 	XMFLOAT4 Post_Col = { 0.0f,0.0f,0.0f,1.0f };
 
-	bool titleSprite = true;
-
-	bool CameraEyeMove_F = false;
-	bool CameraChange_F = false;
-
 	bool CursorIn_F = false;
-	bool start = true;
-	bool Sognal = false;
-	bool firework = false;
-	bool RightTrueIn = false;
-	bool LeftTrueIn = false;
-	bool frees = true;
+	bool CantClick_F = true;
+	bool FadeOut_F = false;
+	bool TitleDisplay_F = true;
+	bool Click_F = true;
 
-	float freesTimer = 0.0f;
+	float CantClickTimer = 0.0f;
 	float volume = 0.8f;
-	int setumeiSp = 0;
 
-	bool blackOut = false;
-	bool titleF = true;
-	bool clickF = true;
+	int SetumeiPage = 0;
+
+	
 };
 

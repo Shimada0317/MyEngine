@@ -1,8 +1,6 @@
 #pragma once
 #include"Audio.h"
 #include"Body.h"
-#include"RightArm.h"
-#include"LeftArm.h"
 #include"BothArms.h"
 #include"Head.h"
 #include"ObjParticle.h"
@@ -63,8 +61,6 @@ public://Getter Setter
 
 private:
 	std::unique_ptr<Head> head;
-	/*std::unique_ptr<RightArm> RArm;
-	std::unique_ptr<LeftArm>LArm;*/
 	std::unique_ptr<BothArms>Arms;
 	std::unique_ptr<Body>body;
 	std::unique_ptr<ObjParticle>part;

@@ -28,40 +28,29 @@ public:
 
 	void Motion(const float& rot);
 
-	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
-
-	void ParticleEfect();
-
 	void Finalize();
 
-	const XMFLOAT3& GetScl() { return HeadScl; }
+	const XMFLOAT3& GetScl() { return Head_Scl; }
 
-	void SetScl(XMFLOAT3 scl) { this->HeadScl = scl; }
+	void SetScl(XMFLOAT3 scl) { this->Head_Scl = scl; }
 private:
 	std::unique_ptr<Object3d> Head;
 	ObjModel* headModel = nullptr;
 
 	std::unique_ptr<Bullet>bull;
-
-	ParticleManager* damageEfect;
-
-	XMVECTOR HeadPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 HeadScl = { 0.3f,0.3f,0.3f };
-	XMFLOAT3 HeadRot = { 0.0f,0.0f,0.0f };
-
-	XMVECTOR bullPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 bullScl = { 0.0f,0.0f,0.0f };
-	XMFLOAT4 HitColor = { 1,1,1,1 };
-
+	//頭のステータス
+	XMVECTOR Head_Pos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 Head_Scl = { 0.3f,0.3f,0.3f };
+	XMFLOAT3 Head_Rot = { 0.0f,0.0f,0.0f };
 	XMMATRIX BullMat;
+	//弾のステータス
+	XMVECTOR Bull_Pos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 Bull_Scl = { 0.0f,0.0f,0.0f };
+	XMFLOAT4 HitColor = { 1,1,1,1 };
 	XMMATRIX HeadMat;
 
-	bool Hit = false;
-
-	bool radChange = true;
-
-	float MotionRad = 0;
-
-	bool particle = false;
+	bool Hit_F = false;
+	bool RotationHead_F = true;
+	float MotionRand = 0;
 };
 

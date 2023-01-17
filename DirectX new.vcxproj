@@ -115,8 +115,6 @@
     <ClCompile Include="Application\Enemy.cpp" />
     <ClCompile Include="Application\Enemy\Body.cpp" />
     <ClCompile Include="Application\Enemy\Head.cpp" />
-    <ClCompile Include="Application\Enemy\LeftArm.cpp" />
-    <ClCompile Include="Application\Enemy\RightArm.cpp" />
     <ClCompile Include="Application\Enemy\Robot.cpp" />
     <ClCompile Include="GameEngine\Framework.cpp" />
     <ClCompile Include="scene\GameOverScene.cpp" />
@@ -148,7 +146,6 @@
     <ClCompile Include="GameEngine\Texture.cpp" />
     <ClCompile Include="GameEngine\TextureModel.cpp" />
     <ClCompile Include="scene\TitleScene.cpp" />
-    <ClCompile Include="Application\Wepon\Wepon.cpp" />
     <ClCompile Include="GameEngine\WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -327,8 +324,6 @@
     <ClInclude Include="Application\Enemy.h" />
     <ClInclude Include="Application\Enemy\Body.h" />
     <ClInclude Include="Application\Enemy\Head.h" />
-    <ClInclude Include="Application\Enemy\LeftArm.h" />
-    <ClInclude Include="Application\Enemy\RightArm.h" />
     <ClInclude Include="Application\Enemy\Robot.h" />
     <ClInclude Include="GameEngine\Framework.h" />
     <ClInclude Include="scene\GameOverScene.h" />
@@ -362,7 +357,6 @@
     <ClInclude Include="GameEngine\Texture.h" />
     <ClInclude Include="GameEngine\TextureModel.h" />
     <ClInclude Include="scene\TitleScene.h" />
-    <ClInclude Include="Application\Wepon\Wepon.h" />
     <ClInclude Include="GameEngine\WinApp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

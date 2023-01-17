@@ -11,14 +11,14 @@ void Body::Initialize()
 	Body = Object3d::Create(BodyModel);
 }
 
-void Body::SetPRS(const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull)
+void Body::SetPRS(const XMVECTOR& allpos, const XMFLOAT3 rotation, Bullet* bull)
 {
 
 	BullPos = bull->GetPosition();
 	BullScl = bull->GetScl();
 	Hit = bull->GetTrigger();
 
-	Body_Pos = allPos;
+	Body_Pos = allpos;
 	Body_Rot = rotation;
 
 	Body->SetPosition(Body_Pos);
@@ -27,7 +27,7 @@ void Body::SetPRS(const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull)
 	
 }
 
-void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
+void Body::Updata(bool& arive,const XMVECTOR& allpos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
 {
 	BodyMat = Body->GetMatrix();
 	Body_Pos = XMVector3Transform(Body_Pos, BodyMat);
@@ -37,7 +37,7 @@ void Body::Updata(bool& arive,const XMVECTOR& allPos, const XMFLOAT3 rotation, B
 			BullPos.m128_f32[2] = 0;
 		}
 
-		SetPRS(allPos ,rotation,bull);
+		SetPRS(allpos ,rotation,bull);
 
 		if (Collision::BodyHit(Body_Pos, Body_Scl, BullPos, BullScl)&&Hit==true) {
  			Hp -= 30;

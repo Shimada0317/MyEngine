@@ -80,15 +80,12 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	StartModel = ObjModel::CreateFromOBJ("bil", true);
 	Start = Object3d::Create(StartModel);
 
-	Click = new Audio();
-	Click->Initialize();
-	MorseCode = new Audio();
-	MorseCode->Initialize();
+	Click_SE = new Audio();
+	Click_SE->Initialize();
 	Bgm = new Audio();
 	Bgm->Initialize();
 	Bgm->LoopWave("Resources/Sound/BGM/title.wav", 0.75f);
 
-	//Sprite::LoadTexture(100, L"Resources/white1x1.png");
 	post = new PostEffect();
 	post->Initialize();
 	 CamEye_Move = { 0.0f,0.0f,0.0f };
@@ -154,62 +151,62 @@ void TitleScene::Updata()
 	CameraMove();
 
 	CheckCursorIn(Reticle_Pos, Click_Pos, 500, 75);
-
-	if (CursorIn_F == true && titleF == true) {
+	//最初のクリック
+	if (CursorIn_F == true && TitleDisplay_F == true) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
-			titleSprite = false;
+			TitleSprite_F = false;
 			CameraEyeMove_F = true;
-			titleF = false;
+			TitleDisplay_F = false;
 		}
 	}
 
-	if (frees == false) {
-		freesTimer += 0.1f;
-		if (freesTimer >= 1) {
-			freesTimer = 0.0f;
-			frees = true;
-			
+	if (CantClick_F == false) {
+		CantClickTimer += 0.1f;
+		if (CantClickTimer >= 1) {
+			CantClickTimer = 0.0f;
+			CantClick_F = true;
 		}
 	}
-
-	if (setumeiSp < 2 && titleF == false&&CameraChange_F==true) {
+	//カメラが移動した後の画面
+	if (SetumeiPage < 2 && TitleDisplay_F == false&&CameraChange_F==true) {
 		if (NextorBack(Reticle_Pos, ArrowRight_Pos, 35, 35)) {
-			RightTrueIn = true;
-
-			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && frees == true) {
-				Click->LoadFile("Resources/Sound/SE/Click.wav", volume);
-				setumeiSp += 1;
-				frees = false;
+			RightTrueIn_F = true;
+			//矢印を押された時
+			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && CantClick_F == true) {
+				Click_SE->LoadFile("Resources/Sound/SE/click.wav", volume);
+				SetumeiPage += 1;
+				CantClick_F = false;
 			}
 		}
 		else {
-			RightTrueIn = false;
+			RightTrueIn_F = false;
 		}
 	}
-	if (setumeiSp > 0) {
+
+	if (SetumeiPage > 0) {
 		if (NextorBack(Reticle_Pos, ArrowLeft_Pos, 35, 35)) {
-			LeftTrueIn = true;
-			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && frees == true) {
-				Click->LoadFile("Resources/Sound/SE/Click.wav", volume);
-				setumeiSp -= 1;
-				frees = false;
+			LeftTrueIn_F = true;
+			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && CantClick_F == true) {
+				Click_SE->LoadFile("Resources/Sound/SE/click.wav", volume);
+				SetumeiPage -= 1;
+				CantClick_F = false;
 			}
 		}
 		else {
-			LeftTrueIn = false;
+			LeftTrueIn_F = false;
 		}
 	}
-	if (CameraChange_F == true && CursorIn_F == true && setumeiSp == 2) {
+	if (CameraChange_F == true && CursorIn_F == true && SetumeiPage == 2) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
-			if (clickF == true) {
-				Click->LoadFile("Resources/Sound/SE/MorseCode.wav", volume);
-				clickF = false;
+			if (Click_F == true) {
+				Click_SE->LoadFile("Resources/Sound/SE/MorseCode.wav", volume);
+				Click_F = false;
 			}
-			blackOut = true;
+			FadeOut_F = true;
 
 		}
 	}
-	if (blackOut == true) {
+	if (FadeOut_F == true) {
 	
 		Post_Col.x -= 0.01f;
 		Post_Col.y -= 0.01f;
@@ -296,7 +293,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	Object3d::PostDraw();
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	if (titleSprite == true) {
+	if (TitleSprite_F == true) {
 		title->Draw();
 	}
 	if (CameraEyeMove_F == false) {
@@ -307,33 +304,33 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 			clickAfter->Draw();
 		}
 	}
-	else if (CameraChange_F == true && firework == false) {
-		if (setumeiSp < 2) {
-			if (RightTrueIn == false) {
+	else if (CameraChange_F == true ) {
+		if (SetumeiPage < 2) {
+			if (RightTrueIn_F == false) {
 				arrowRight->Draw();
 			}
 			else {
 				arrowRightTrue->Draw();
 			}
 		}
-		if (setumeiSp > 0) {
-			if (LeftTrueIn == false) {
+		if (SetumeiPage > 0) {
+			if (LeftTrueIn_F == false) {
 				arrowLeft->Draw();
 			}
 			else {
 				arrowLeftTrue->Draw();
 			}
 		}
-		if (setumeiSp == 0) {
+		if (SetumeiPage == 0) {
 			setumei->Draw();
 		}
-		else if (setumeiSp == 1) {
+		else if (SetumeiPage == 1) {
 			setumei2->Draw();
 		}
-		else if (setumeiSp == 2) {
+		else if (SetumeiPage == 2) {
 			setumei3->Draw();
 		}
-		if (setumeiSp == 2) {
+		if (SetumeiPage == 2) {
 			if (CursorIn_F == false) {
 				SignalBefore->Draw();
 			}
@@ -372,8 +369,7 @@ void TitleScene::Finalize()
 	delete SignalAfter;
 	delete SignalBefore;
 	delete StartModel;
-	delete Click;
-	delete MorseCode;
+	delete Click_SE;
 	delete cursor;
 	delete Bgm;
 

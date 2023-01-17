@@ -24,32 +24,22 @@ public:
 
 	void Draw(bool arive);
 
-	void Finalize();
-
 	void RespownSet(const XMFLOAT3& rot);
 
 	void Attack(float& attackT,bool& AttackFase,int& playerHp,const bool& arive);
 
-	const XMFLOAT3& GetScl() { return ArmScl; }
+	const XMFLOAT3& GetScl() { return Arm_Scl; }
 
-	void SetScl(XMFLOAT3 scl) { this->ArmScl = scl; }
+	void SetScl(XMFLOAT3 scl) { this->Arm_Scl = scl; }
 private:
-	std::unique_ptr<Object3d> LArm;
-	std::unique_ptr<Object3d> RArm;
+	std::unique_ptr<Object3d> Arm;
 	ObjModel* ArmModel = nullptr;
 
-	XMVECTOR LArmPos = { 0.0f,0.0f,0.0f };
-	XMVECTOR RArmPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 ArmScl = { 0.2f,0.2f,0.2f };
-	XMFLOAT3 ArmRot = { 90.0f,0.0f,0.0f };
-
-	XMVECTOR bullPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 bullScl = { 0.0f,0.0f,0.0f };
+	XMVECTOR Arm_Pos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 Arm_Scl = { 0.2f,0.2f,0.2f };
+	XMFLOAT3 Arm_Rot = { 90.0f,0.0f,0.0f };
 	XMFLOAT4 Color = { 1.0f,1.0f,1.0f,1.0f };
 
-
-
-	bool attack = false;
-	int HitCount = 0;
-	bool Hit = false;
+	bool Attack_F = false;
+	bool Hit_F = false;
 };
