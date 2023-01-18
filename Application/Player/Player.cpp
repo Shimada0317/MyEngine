@@ -7,15 +7,15 @@
 Player::~Player()
 {
 	delete TrackModel;
-	delete gunModel;
-	delete playerModel;
-	delete part;
-	delete ShotSound;
-	delete reload;
+	delete GunModel;
+	delete PlayerModel;
+	delete PartGreen;
+	delete Shot_SE;
+	delete Reload_SE;
 
 	Track.reset();
-	gun.reset();
-	player.reset();
+	Gun.reset();
+	Player.reset();
 }
 
 void Player::Initalize(Camera* came)
@@ -26,88 +26,88 @@ void Player::Initalize(Camera* came)
 	TrackModel = ObjModel::CreateFromOBJ("tst2");
 	Track = Object3d::Create(TrackModel);
 
-	gunModel = ObjModel::CreateFromOBJ("gun");
-	gun = Object3d::Create(gunModel);
+	GunModel = ObjModel::CreateFromOBJ("gun");
+	Gun = Object3d::Create(GunModel);
 
-	playerModel = ObjModel::CreateFromOBJ("gun");
-	player = Object3d::Create(playerModel);
+	PlayerModel = ObjModel::CreateFromOBJ("gun");
+	Player = Object3d::Create(PlayerModel);
 
 	Sprite::LoadTexture(200, L"Resources/mark2.png");
-	spriteRet.reset(Sprite::SpriteCreate(200, retpos, spCol, anc));
+	SpriteRet.reset(Sprite::SpriteCreate(200, retpos, spCol, anc));
 
 	Sprite::LoadTexture(300, L"Resources/curtain.png");
-	curtain.reset(Sprite::SpriteCreate(300, curtainPos));
+	Curtain_Up.reset(Sprite::SpriteCreate(300, curtainPos));
 
-	Sprite::LoadTexture(301, L"Resources/window.png");
-	window.reset(Sprite::SpriteCreate(301, windowPos));
+	Sprite::LoadTexture(301, L"Resources/Window.png");
+	Window.reset(Sprite::SpriteCreate(301, windowPos));
 
 	skipPos = curtainPos2;
 
-	Sprite::LoadTexture(302, L"Resources/skip.png");
-	skip.reset(Sprite::SpriteCreate(302, skipPos));
+	Sprite::LoadTexture(302, L"Resources/Skip.png");
+	Skip.reset(Sprite::SpriteCreate(302, skipPos));
 
-	curtain2.reset(Sprite::SpriteCreate(300, curtainPos2));
-	curtain->SetSize(curtainSiz);
-	curtain2->SetSize(curtainSiz);
+	Curtain_Down.reset(Sprite::SpriteCreate(300, curtainPos2));
+	Curtain_Up->SetSize(curtainSiz);
+	Curtain_Down->SetSize(curtainSiz);
 
-	cam = new RailCamera();
-	cam->Initialize(position, rotation);
+	Railcam = new RailCamera();
+	Railcam->Initialize(Ret_Pos, Ret_Rot);
 
-	player->SetParent(came);
+	Player->SetParent(came);
 
-	part = ParticleManager::Create(came);
-	parti = ParticleManager::Create(came);
+	PartGreen = ParticleManager::Create(came);
+	PartRed = ParticleManager::Create(came);
 	Eye_rot.y = 180;
-	cam->Updata(vel, Eye_rot, came);
+	Railcam->Updata(vel, Eye_rot, came);
 
-	ShotSound = new Audio();
-	ShotSound->Initialize();
+	Shot_SE = new Audio();
+	Shot_SE->Initialize();
 
-	reload = new Audio();
-	reload->Initialize();
+	Reload_SE = new Audio();
+	Reload_SE->Initialize();
 };
 
 void Player::Set(Camera* came)
 {
 	const float BulletSpeed = 15.0f;
 	velocity = { 0, 0, BulletSpeed };
-	velocity = XMVector3TransformNormal(velocity, mat);
-	TrackWorldPos = { 0.0f,0.0f,2.0f };
-	TrackWorldPos = XMVector3Transform(TrackWorldPos, mat);
+	velocity = XMVector3TransformNormal(velocity, Track_Mat);
+	TrackWorld_Pos = { 0.0f,0.0f,2.0f };
+	TrackWorld_Pos = XMVector3Transform(TrackWorld_Pos, Track_Mat);
 
-	playermat = player->GetMatrix();
-	playerWorldPos = { -10.0f,0.0f,-20.0f };
-	playerWorldPos = XMVector3Transform(playerWorldPos, playermat);
+	Player_Mat = Player->GetMatrix();
+	PlayerWorld_Pos = { -10.0f,0.0f,-20.0f };
+	PlayerWorld_Pos = XMVector3Transform(PlayerWorld_Pos, Player_Mat);
 
-	rotation.y = (retpos.x - 640) / 10 + changeRot;
+	Ret_Rot.y = (retpos.x - 640) / 10 + ChangeRot;
 	//レティクルObj
-	Track->SetRotation({ rotation });
-	Track->SetScale({ scale });
-	mat = Track->GetMatrix();
+	Track->SetRotation({ Ret_Rot });
+	Track->SetScale({ Ret_Scl });
+	Track_Mat = Track->GetMatrix();
 
 	//プレイヤーObj
-	player->SetRotation(playerRot);
-	player->SetPosition(playerPos);
-	player->SetScale(playerScl);
-	player->SetParent(came);
+	Player->SetRotation(Player_Rot);
+	Player->SetPosition(Player_Pos);
+	Player->SetScale(Player_Scl);
+	Player->SetParent(came);
 
-	gunRot.y = (retpos.x - 640) / 10;
-	gunRot.x = (retpos.y - 360) / 50;
+	Gun_Rot.y = (retpos.x - 640) / 10;
+	Gun_Rot.x = (retpos.y - 360) / 50;
 
 
-	gun->SetRotation(gunRot);
-	gun->SetScale(gunScal);
-	gun->SetParent(came);
-	gun->SetPosition(gunPos);
+	Gun->SetRotation(Gun_Rot);
+	Gun->SetScale(Gun_Scl);
+	Gun->SetParent(came);
+	Gun->SetPosition(Gun_Pos);
 
-	gunmat = gun->GetMatrix();
-	gunWorldPos = { 0.0f,0.0f,1.0f };
-	gunWorldPos = XMVector3Transform(gunPos, gunmat);
+	Gun_Mat = Gun->GetMatrix();
+	GunWorld_Pos = { 0.0f,0.0f,1.0f };
+	GunWorld_Pos = XMVector3Transform(Gun_Pos, Gun_Mat);
 }
 
 void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[], int pat)
 {
-	paternCount = pat;
+	PaternCount = pat;
 	if (CamWork == true) {
 		//弾の発射前
 		if (Remaining < BULL - 1 && ReloadFlag == false) {
@@ -116,7 +116,7 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 				particle = true;
 				for (int i = 0; i < BULL; i++) {
 					if (bull[i]->CheckOk()) {
-						bull[i]->Test(gunWorldPos, TrackWorldPos, Eye_rot,rotation);
+						bull[i]->Test(GunWorld_Pos, TrackWorld_Pos, Eye_rot,Ret_Rot);
 						bull[i]->TriggerOn();
 						break;
 					}
@@ -126,22 +126,22 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 		ParticleEfect();
 		//リロード
 		if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
-			if (reloadSound == true) {
-				reload->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
-				reloadSound = false;
+			if (ReloadSound_F == true) {
+				Reload_SE->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
+				ReloadSound_F = false;
 			}
 			ReloadFlag = true;
 		}
 
 		if (ReloadFlag == true) {
-			
+			Remaining = 8;
 			ReloadTime += 1;
-			ans = ReloadTime % 10;
-			if (ans == 0) {
-				Remaining -= 1;
+			Anser = ReloadTime % 40;
+			if (Anser == 0) {
+				Remaining = 0;
 				if (Remaining == 0) {
 					ReloadFlag = false;
-					reloadSound = true;
+					ReloadSound_F = true;
 					ReloadTime = 0;
 				}
 			}
@@ -153,7 +153,7 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 		//Eye_rot.x = 0;
 	}
 
-	vel = XMVector3TransformNormal(vel, playermat);
+	vel = XMVector3TransformNormal(vel, Player_Mat);
 
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Updata();
@@ -164,74 +164,74 @@ void Player::Updata(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 	CameraWork();
 
 	Set(came);
-	cam->Updata(vel, Eye_rot, came);
+	Railcam->Updata(vel, Eye_rot, came);
 
 	Track->Updata();
-	player->Updata();
-	gun->Updata();
-	parti->Update({ 1.0f,0.0f,0.0f,0.0f });
-	part->Update({ 0.0f,1.0f,0,0.0f });
+	Player->Updata();
+	Gun->Updata();
+	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
+	PartGreen->Update({ 0.0f,1.0f,0,0.0f });
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
 	ParticleManager::PreDraw(cmdeList);
-	parti->Draw();
-	part->Draw();
+	PartRed->Draw();
+	PartGreen->Draw();
 	ParticleManager::PostDraw();
 }
 
 void Player::SpriteDraw()
 {
 	if (CamWork == true) {
-		spriteRet->Draw();
+		SpriteRet->Draw();
 	}
 	else {
-		curtain->Draw();
-		curtain2->Draw();
-		skip->Draw();
+		Curtain_Up->Draw();
+		Curtain_Down->Draw();
+		Skip->Draw();
 	}
 }
 
 void Player::CameraWork()
 {
-	if (CamWork == false && start == false) {
+	if (CamWork == false && Start_F == false) {
 
 		if (stanby == false) {
 			Eye_rot.y = 180;
 		}
-		else if (stanby == true && act == 0) {
+		else if (stanby == true && ActionCount == 0) {
 			Eye_rot.y -= 2;
 			//後ろを向く
 			if (Eye_rot.y <= 0) {
 				Eye_rot.y = 0;
-				actTime += 0.2f;
-				if (actTime > 5) {
-					actTime = 5.0f;
+				ActionTimer += 0.2f;
+				if (ActionTimer > 5) {
+					ActionTimer = 5.0f;
 					Eye_rot.x += 1.0f;
 				}
 			}
 			//下を向く
 			if (Eye_rot.x >= 90) {
-				actTime = 0.0f;
+				ActionTimer = 0.0f;
 				Eye_rot.x = 90;
-				act = 1;
+				ActionCount = 1;
 			}
 		}
-		if (act == 1) {
+		if (ActionCount == 1) {
 
-			actTime += 0.15f;
+			ActionTimer += 0.15f;
 			vel = { 0.0f,0.67f,0.4f };
-			if (actTime >= 5) {
+			if (ActionTimer >= 5) {
 				vel = { 0.0f,-0.6f,0.0f };
 				Eye_rot.x -= 0.7f;
 			}
 			if (Eye_rot.x <= 0.0f) {
 				Eye_rot.x = 0.0f;
 			}
-			if (playerWorldPos.m128_f32[1] <= 0.3f) {
+			if (PlayerWorld_Pos.m128_f32[1] <= 0.3f) {
 				vel = { 0.0f,0.0f,0.0f };
-				position.m128_f32[1] = 0.0f;
+				Ret_Pos.m128_f32[1] = 0.0f;
 				MovieFlag = true;
 			}
 		}
@@ -240,17 +240,17 @@ void Player::CameraWork()
 
 	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanby == true && CamWork == false) {
 		MovieFlag = true;
-		act = 100;
+		ActionCount = 100;
 		Eye_rot.x = 0;
 		Eye_rot.y = 0;
-		position = { 0.0f,-0.7f,13.0f };
-		cam->Initialize(position, Eye_rot);
+		Ret_Pos = { 0.0f,-0.7f,13.0f };
+		Railcam->Initialize(Ret_Pos, Eye_rot);
 	}
 
 	if (stanby == false) {
-		actTime += 0.01f;
-		if (actTime >= 1.0f) {
-			actTime = 0.0f;
+		ActionTimer += 0.01f;
+		if (ActionTimer >= 1.0f) {
+			ActionTimer = 0.0f;
 			stanby = true;
 		}
 	}
@@ -285,26 +285,26 @@ void Player::CameraWork()
 		if (curtainPos2.y >= 720) {
 			curtainPos2.y = 720;
 			CamWork = true;
-			start = true;
+			Start_F = true;
 		}
 
 		if (skipPos.y >= 720) {
 			skipPos.y = 12000;
 		}
 	}
-	curtain->SetPosition(curtainPos);
-	curtain2->SetPosition(curtainPos2);
-	skip->SetPosition(skipPos);
+	Curtain_Up->SetPosition(curtainPos);
+	Curtain_Down->SetPosition(curtainPos2);
+	Skip->SetPosition(skipPos);
 }
 
 void Player::PlayerMove(bool& move, int patern)
 {
-	XMMATRIX camMat = cam->GetWorld();
+	XMMATRIX camMat = Railcam->GetWorld();
 	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
 
 	camvec = XMVector3Transform(camvec, camMat);
 
-	paternCount = patern;
+	PaternCount = patern;
 	//敵をすべて倒した時
 	if (move == true) {
 		Active = true;
@@ -312,7 +312,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 	if (Active == true) {
 		kBulletSpeed = 0.5f;
-		if (Shake == true) {
+		if (ShakeHead_F == true) {
 			if (shake == 0) {
 				Eye_rot.x += 0.05f;
 				if (Eye_rot.x >= 0.5f) {
@@ -332,8 +332,8 @@ void Player::PlayerMove(bool& move, int patern)
 			if (camvec.m128_f32[2] >= 20) {
 				move = false;
 				Active = false;
-				waveCount += 1;
-				movetimer = 0.0f;
+				WaveCount += 1;
+				MoveTimer = 0.0f;
 				Finish = true;
 			}
 			else {
@@ -346,8 +346,8 @@ void Player::PlayerMove(bool& move, int patern)
 			if (camvec.m128_f32[2] >= 40) {
 				move = false;
 				Active = false;
-				waveCount += 1;
-				movetimer = 0.0f;
+				WaveCount += 1;
+				MoveTimer = 0.0f;
 				Finish = true;
 			}
 			else {
@@ -357,18 +357,16 @@ void Player::PlayerMove(bool& move, int patern)
 		else if (patern == 2) {
 			EneCount = 4;
 			Eye_rot.y += 3;
-			//rotation.y -= 3;
 			if (Eye_rot.y >= 90) {
 				Eye_rot.y = 90;
-				changeRot = -90;
-				//rotation.y = changeRot;
+				ChangeRot = -90;
 				vel = { 0, 0, kBulletSpeed };
 			}
 			if (camvec.m128_f32[0] >= 30) {
 				move = false;
 				Active = false;
-				waveCount += 1;
-				movetimer = 0.0f;
+				WaveCount += 1;
+				MoveTimer = 0.0f;
 				Finish = true;
 			}
 			else {
@@ -382,8 +380,8 @@ void Player::PlayerMove(bool& move, int patern)
 			if (camvec.m128_f32[0] >= 45) {
 				move = false;
 				Active = false;
-				waveCount += 1;
-				movetimer = 0.0f;
+				WaveCount += 1;
+				MoveTimer = 0.0f;
 				Finish = true;
 			}
 			else {
@@ -393,18 +391,16 @@ void Player::PlayerMove(bool& move, int patern)
 		else if (patern == 4) {
 			EneCount = 5;
 			Eye_rot.y -= 3;
-			//rotation.y += 3;
 			if (Eye_rot.y <= 0) {
-				changeRot = 0;
-				//rotation.y = changeRot;
+				ChangeRot = 0;
 				Eye_rot.y = 0;
 				vel = { 0, 0, kBulletSpeed };
 			}
 			if (camvec.m128_f32[2] >= 70) {
 				move = false;
 				Active = false;
-				waveCount += 1;
-				movetimer = 0.0f;
+				WaveCount += 1;
+				MoveTimer = 0.0f;
 				Finish = true;
 			}
 			else {
@@ -420,8 +416,8 @@ void Player::PlayerMove(bool& move, int patern)
 			if (camvec.m128_f32[2] >= 90) {
 				move = false;
 				Active = false;
-				waveCount += 1;
-				movetimer = 0.0f;
+				WaveCount += 1;
+				MoveTimer = 0.0f;
 				Finish = true;
 			}
 			else {
@@ -431,13 +427,13 @@ void Player::PlayerMove(bool& move, int patern)
 		else if (patern == 6) {
 			stanby = false;
 			vel = { 0, 0, 0.1 };
-			Shake = false;
+			ShakeHead_F = false;
 			if (camvec.m128_f32[2] >= 92) {
 				vel = { 0,0.05,0.1 };
 				if (camvec.m128_f32[2] >= 97) {
 					vel = { 0.0f,0.0f,0.0f };
-					Fring = true;
-					if (Fring == true) {
+					Fring_F = true;
+					if (Fring_F == true) {
 						vel = { 0.0f,0.674f,0.0f };
 					}
 				}
@@ -445,37 +441,34 @@ void Player::PlayerMove(bool& move, int patern)
 			move = false;
 			CamWork = false;
 
-			waveCount += 1;
-			movetimer = 0.0f;
+			WaveCount += 1;
+			MoveTimer = 0.0f;
 			MovieFlag = false;
-			act = 0;
+			ActionCount = 0;
 		}
 	}
 }
 
 void Player::ObjDraw()
 {
-	//Track->Draw();
+	Track->Draw();
 	if (Hp >= 0 && CamWork == true) {
-		gun->Draw();
+		Gun->Draw();
 	}
 }
 
 void Player::ImGuiDraw()
 {
 
-	XMMATRIX camMat = cam->GetWorld();
+	XMMATRIX camMat = Railcam->GetWorld();
 	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
 
 	camvec = XMVector3Transform(camvec, camMat);
-
-	float paaa = paternCount;
 
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plyer");
-	ImGui::SliderFloat("pos.x", &paaa, -100.0f, 100.0f);
 	if (ImGui::TreeNode("LoacalPos")) {
 		ImGui::SliderFloat("pos.x", &pos.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("pos.y", &pos.y, -100.0f, 100.0f);
@@ -484,10 +477,10 @@ void Player::ImGuiDraw()
 	}
 
 
-	if (ImGui::TreeNode("rotation")) {
-		ImGui::SliderFloat("Rot.x", &rotation.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Rot.y", &rotation.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("Rot.z", &rotation.z, -100.0f, 100.0f);
+	if (ImGui::TreeNode("Ret_Rot")) {
+		ImGui::SliderFloat("Rot.x", &Ret_Rot.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.y", &Ret_Rot.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.z", &Ret_Rot.z, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
@@ -498,16 +491,16 @@ void Player::ImGuiDraw()
 	}
 
 	if (ImGui::TreeNode("gunpos")) {
-		ImGui::SliderFloat("gunpos.x", &gunPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunpos.y", &gunPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunpos.z", &gunPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.x", &Gun_Pos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.y", &Gun_Pos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.z", &Gun_Pos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
 	if (ImGui::TreeNode("gunWorldpos")) {
-		ImGui::SliderFloat("gunWordpos.x", &gunWorldPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.y", &gunWorldPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.z", &gunWorldPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.x", &GunWorld_Pos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.y", &GunWorld_Pos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.z", &GunWorld_Pos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
@@ -547,14 +540,14 @@ void Player::ChangeViewPort(XMMATRIX& matViewPort)
 void Player::SoundEffect()
 {
 	
-	ShotSound->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
+	Shot_SE->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
 }
 
 void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[])
 {
 	Mouse::GetInstance()->MouseMoveSprite(retpos);
 
-	spriteRet->SetPosition(retpos);
+	SpriteRet->SetPosition(retpos);
 
 	XMMATRIX matViewport;
 
@@ -563,23 +556,23 @@ void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT
 	XMMATRIX View = came->GetViewMatrix();
 	XMMATRIX Pro = came->GetProjectionMatrix();
 
-	positionRet = TrackWorldPos;
+	RetWorld_Pos = TrackWorld_Pos;
 
 	Distance = 11;
 
-	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, positionRet, Distance);
+	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, retpos, RetWorld_Pos, Distance);
 
 
 	for (int i = 0; i < EneCount; i++) {
 		if ((retpos.x >= Ene2dPos[i].x - 16) && (retpos.x <= Ene2dPos[i].x + 16)) {
 
-			positionRet.m128_f32[0] = enePos[i].m128_f32[0];
-			positionRet.m128_f32[2] = enePos[i].m128_f32[2];
-			positionRet.m128_f32[1] = positionRet.m128_f32[1] - 0.35f;
+			RetWorld_Pos.m128_f32[0] = enePos[i].m128_f32[0];
+			RetWorld_Pos.m128_f32[2] = enePos[i].m128_f32[2];
+			RetWorld_Pos.m128_f32[1] = RetWorld_Pos.m128_f32[1] - 0.35f;
 		}
 	}
 
-	Track->SetPosition(positionRet);
+	Track->SetPosition(RetWorld_Pos);
 
 
 }
@@ -588,22 +581,22 @@ void Player::ParticleEfect()
 {
 	if (particle == true) {
 		for (int i = 0; i < 10; i++) {
-			double radX = rotation.y * M_PI / 180;
-			double radY = gunRot.x * M_PI / 180;
+			double radX = Ret_Rot.y * M_PI / 180;
+			double radY = Gun_Rot.x * M_PI / 180;
 			float sinradX = sinf(radX);
 			float cosradX = cosf(radX);
 
 			float sinradY = sinf(radY);
 			float cosradY = cosf(radY);
-			if (paternCount == 3 || paternCount == 4) {
-				pos.x = gunWorldPos.m128_f32[0] + 2.3f;
-				pos.y = gunWorldPos.m128_f32[1] - sinradY * 3;
-				pos.z = gunWorldPos.m128_f32[2]-2.8f*cosradX;
+			if (PaternCount == 3 || PaternCount == 4) {
+				pos.x = GunWorld_Pos.m128_f32[0] + 2.3f;
+				pos.y = GunWorld_Pos.m128_f32[1] - sinradY * 3;
+				pos.z = GunWorld_Pos.m128_f32[2]-2.8f*cosradX;
 			}
-			else if (paternCount == 0 || paternCount == 1 || paternCount == 2 || paternCount == 5) {
-				pos.x = gunWorldPos.m128_f32[0]+sinradX*2.8f;
-				pos.y = gunWorldPos.m128_f32[1]-sinradY*3;
-				pos.z = gunWorldPos.m128_f32[2] + 2.3f;
+			else if (PaternCount == 0 || PaternCount == 1 || PaternCount == 2 || PaternCount == 5) {
+				pos.x = GunWorld_Pos.m128_f32[0]+sinradX*2.8f;
+				pos.y = GunWorld_Pos.m128_f32[1]-sinradY*3;
+				pos.z = GunWorld_Pos.m128_f32[2] + 2.3f;
 			}
 
 			const float rnd_vel = 0.001f;
@@ -612,12 +605,10 @@ void Player::ParticleEfect()
 			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			XMFLOAT3 acc{};
-			XMFLOAT3 ac2{};
-			acc.y = -0.00001;
 			acc.y = -0.00001;
 
-			parti->Add(10, pos, vel, acc, 0.7f, 0.2f, 1.0f);
-			part->Add(10, pos, vel, acc, 0.5f, 0.2f, 1.0f);
+			PartRed->Add(10, pos, vel, acc, 0.7f, 0.2f, 1.0f);
+			PartGreen->Add(10, pos, vel, acc, 0.5f, 0.2f, 1.0f);
 		}
 		particle = false;
 		SoundEffect();

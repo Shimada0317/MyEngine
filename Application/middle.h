@@ -54,11 +54,6 @@ public:
 
 	int GetHp() { return playerHp; }
 private:
-	
-	//unique_ptr <Player> player;
-	//unique_ptr <Bullet> bull[9];
-	unique_ptr <Enemy> enemy[MAXENEMY];
-	unique_ptr<Enemy>tst;
 	//ƒwƒŠObj
 	unique_ptr<Object3d> heri;
 	unique_ptr<Object3d> Goal;
@@ -173,8 +168,6 @@ private:
 
 	//DebugScene‚Ì‚â‚Â‚ğ‚Á‚Ä‚«‚½
 	std::list<std::unique_ptr<Robot>>rob;
-	std::unique_ptr<Body>bob;
-	std::unique_ptr<Head>head;
 	std::unique_ptr<Object3d> bo = nullptr;
 	std::unique_ptr<Player>player;
 	Bullet* bull[9];

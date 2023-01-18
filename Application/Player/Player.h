@@ -45,7 +45,7 @@ public:
 
 	void Finalize();
 
-	void ChangeViewPort(XMMATRIX& mat);
+	void ChangeViewPort(XMMATRIX& Track_Mat);
 
 	void SoundEffect();
 
@@ -56,13 +56,13 @@ public:
 #pragma region Get
 	const bool& GetFinish() { return Finish; }
 	//三次元座標
-	const XMVECTOR& GetPosition() { return position; }
+	const XMVECTOR& GetPosition() { return Ret_Pos; }
 	//角度
-	const XMFLOAT3& GetRotation() { return rotation; }
+	const XMFLOAT3& GetRotation() { return Ret_Rot; }
 	//スケール
-	const XMFLOAT3& GetScl() { return scale; }
+	const XMFLOAT3& GetScl() { return Ret_Scl; }
 	//行列
-	const XMMATRIX& GetMat() { return mat; }
+	const XMMATRIX& GetMat() { return Track_Mat; }
 	//二次元座標
 	const XMFLOAT2& GetRetPosition() { return retpos; }
 	//二次元スケール
@@ -70,16 +70,16 @@ public:
 
 	const bool& GetCamWork() { return CamWork; }
 
-	const bool& GetFring() { return Fring; }
+	const bool& GetFring() { return Fring_F; }
 	//Hp
 	int GetHp() { return Hp; }
 #pragma endregion
 
 #pragma region Set
 
-	void SetPosition(const XMVECTOR& position) { this->position = position; }
-	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
-	void SetScl(const XMFLOAT3& scale) { this->scale = scale; }
+	void SetPosition(const XMVECTOR& position) { this->Ret_Pos = position; }
+	void SetRotation(const XMFLOAT3& rotation) { this->Ret_Rot = rotation; }
+	void SetScl(const XMFLOAT3& scale) { this->Ret_Scl = scale; }
 	void SetRetPosition(const XMFLOAT2& position) { this->retpos = position; }
 	void SetRetSiz(const XMFLOAT2& scale) { this->retsize = scale; }
 	void SetHp(int HP) { this->Hp = HP; }
@@ -89,61 +89,59 @@ private:
 
 	//Objモデル
 	ObjModel* TrackModel = nullptr;
-	ObjModel* gunModel = nullptr;
-	ObjModel* playerModel = nullptr;
-	ObjModel* eleModel = nullptr;
+	ObjModel* GunModel = nullptr;
+	ObjModel* PlayerModel = nullptr;
 	//Obj
 	std::unique_ptr<Object3d> Track;
-	std::unique_ptr<Object3d> gun;
-	std::unique_ptr<Object3d> player;
-	std::unique_ptr<Object3d> elevetor;
+	std::unique_ptr<Object3d> Gun;
+	std::unique_ptr<Object3d> Player;
 	//スプライト
-	std::unique_ptr<Sprite> spriteRet;
-	std::unique_ptr<Sprite> curtain;
-	std::unique_ptr<Sprite> curtain2;
-	std::unique_ptr<Sprite> window;
-	std::unique_ptr<Sprite> skip;
+	std::unique_ptr<Sprite> SpriteRet;
+	std::unique_ptr<Sprite> Curtain_Up;
+	std::unique_ptr<Sprite> Curtain_Down;
+	std::unique_ptr<Sprite> Window;
+	std::unique_ptr<Sprite> Skip;
 	//発砲時のエフェクト
-	ParticleManager* part = nullptr;
-	ParticleManager* parti = nullptr;
+	ParticleManager* PartGreen = nullptr;
+	ParticleManager* PartRed = nullptr;
 	//その他の機能
-	Audio* ShotSound;
-	Audio* reload;
+	Audio* Shot_SE;
+	Audio* Reload_SE;
 	Mouse* mouse = nullptr;
-	RailCamera* cam;
+	RailCamera* Railcam;
 	//ローカル
 		//レティクルObjのステータス
-		XMVECTOR position = { 0.0f,55.0f,0.0f };
-		XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 scale = { 0.3f,0.3f,0.3f };
+		XMVECTOR Ret_Pos = { 0.0f,55.0f,0.0f };
+		XMFLOAT3 Ret_Rot = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 Ret_Scl = { 0.3f,0.3f,0.3f };
 		//発射台Objのステータス
-		XMVECTOR gunPos = { 0.0f,0.0f,-3.0f };
-		XMFLOAT3 gunRot = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 gunScal={0.3f,0.3f,0.3f};
+		XMVECTOR Gun_Pos = { 0.0f,0.0f,-3.0f };
+		XMFLOAT3 Gun_Rot = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 Gun_Scl={0.3f,0.3f,0.3f};
 		//プレイヤーObjのステータス
-		XMVECTOR playerPos = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 playerRot = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 playerScl = { 0.3f,0.3f,0.3f };
+		XMVECTOR Player_Pos = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 Player_Rot = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 Player_Scl = { 0.3f,0.3f,0.3f };
 	//ワールド
 		//レティクルのステータス
-		XMVECTOR TrackWorldPos = { 0.0f,0.0f,0.0f };
-		XMMATRIX mat;
+		XMVECTOR TrackWorld_Pos = { 0.0f,0.0f,0.0f };
+		XMMATRIX Track_Mat;
 		XMVECTOR WorldFarPos={0.0f,0.0f,0.0f};
 		//発射台のステータス
-		XMVECTOR gunWorldPos = { 0.0f,0.0f,-5.0f };
-		XMMATRIX gunmat;
+		XMVECTOR GunWorld_Pos = { 0.0f,0.0f,-5.0f };
+		XMMATRIX Gun_Mat;
 		//プレイヤーのステータス
-		XMVECTOR playerWorldPos = { 0.0f,0.0f,-0.1f };
-		XMMATRIX playermat;
-		XMVECTOR positionRet;
+		XMVECTOR PlayerWorld_Pos = { 0.0f,0.0f,-0.1f };
+		XMMATRIX Player_Mat;
+		XMVECTOR RetWorld_Pos;
 		//パーティクルのステータス
-		XMVECTOR PartPos = { 0.0f,0.0f,2.0f };
+		XMVECTOR Part_Pos = { 0.0f,0.0f,2.0f };
 	//ビューポート
-	XMMATRIX matViewPort;
+	XMMATRIX MatViewPort;
 	//カメラ
 	XMFLOAT3 Eye_rot = {0.0f,0.0f,0.0f};
 	XMFLOAT3 Target_pos = {0.0f,0.0f,0.0f};
-	XMFLOAT3 up = { 0.0f,1.0f,0.0f };
+	XMFLOAT3 Up = { 0.0f,1.0f,0.0f };
 	//スプライト
 	XMFLOAT4 spCol = { 1,1,1,1 };
 	XMFLOAT2 anc = { 0.5f,0.5f };
@@ -161,15 +159,15 @@ private:
 	//Reload
 	bool ReloadFlag = false;
 	int ReloadTime = 0;
-	int ans = 0;
+	int Anser = 0;
 
 	XMVECTOR vel;
 	bool Active = false;
 	float kBulletSpeed=0;
 	XMVECTOR velocity = { 0.0f,0.0f,0.0f };
 	//動いたときのtimer
-	float movetimer = 0.0f;
-	int waveCount = 0;
+	float MoveTimer = 0.0f;
+	int WaveCount = 0;
 
 	//cam
 	int shake = 0;
@@ -180,23 +178,23 @@ private:
 
 	bool MovieFlag = false;
 	bool stanby = false;
-	int act = 0;
-	float actTime = 0.0f;
+	int ActionCount = 0;
+	float ActionTimer = 0.0f;
 
-	bool start = false;
+	bool Start_F = false;
 
-	bool Fring = false;
+	bool Fring_F = false;
 
-	bool Shake = true;
+	bool ShakeHead_F = true;
 
-	bool reloadSound = true;
+	bool ReloadSound_F = true;
 
-	float changeRot = 0;
+	float ChangeRot = 0;
 
 	float Distance = 11;
 	int EneCount = 0;
 
-	int paternCount = 0;
+	int PaternCount = 0;
 
 	const float  M_PI = 3.14;
 
