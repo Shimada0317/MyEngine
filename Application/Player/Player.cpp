@@ -451,7 +451,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 void Player::ObjDraw()
 {
-	Track->Draw();
+	//Track->Draw();
 	if (Hp >= 0 && CamWork == true) {
 		Gun->Draw();
 	}

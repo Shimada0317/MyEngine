@@ -178,7 +178,7 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	Object3d::PostDraw();
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	//RockOn->Draw();
+	RockOn->Draw();
 	Sprite::PostDraw();
 }
 
