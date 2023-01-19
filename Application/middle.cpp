@@ -178,7 +178,7 @@ void middle::Updata()
 			enemyPos[CountDistance] = Robot->GetPosition();
 			ene2DPos[CountDistance] = Robot->Get2DPosition();
 			for (int i = 0; i < 9; i++) {
-				Robot->Updata(bull[i], playerMat, spown, playerHp);
+				Robot->Updata(bull[i],playerHp);
 			}
 			CountDistance += 1;
 		}

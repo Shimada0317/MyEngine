@@ -14,7 +14,6 @@
 #include<memory>
 #include<list>
 
-
 class Robot
 {
 private:
@@ -25,122 +24,115 @@ private:
 public:
 	//デストラクタ
 	~Robot();
-	//初期化
-	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& AllPos, Camera* came, const bool& Step = false);
-	//全て更新
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="allRot">回転</param>
+	/// <param name="AllPos">座標</param>
+	/// <param name="came">カメラ</param>
+	/// <param name="Step">移動時に横移動するか</param>
+	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& AllPos, Camera* came, const bool& movement= false);
+	/// <summary>
+	/// Upfdateはこの中で
+	/// </summary>
+	/// <param name="bull">プレイヤーの弾</param>
 	void AllUpdata(Bullet* bull);
-	//更新内の処理
-	void Updata(Bullet* bull, const XMMATRIX& player,bool& spown,int& playerHp);
+	/// <summary>
+	/// ロボットの更新処理
+	/// </summary>
+	/// <param name="bull">プレイヤーの弾</param>
+	/// <param name="playerHp">プレイヤーのHP</param>
+	void Updata(Bullet* bull,int& playerHp);
 	//描画
 	void Draw(DirectXCommon* dxCommon);
 	//Img描画
 	void ImgDraw();
 	//パーティクル描画
 	void ParticleDraw(DirectXCommon* dxCommon);
-	//プレイヤー追尾
-	void TrackPlayer();
+	//プレイヤー追尾モード
+	void TrackPlayerMode();
 	//首振り
 	void Motion();
+	//攻撃モード
+	void AttackMode(int& playerHp);
 	//2D→3D座標
 	void WorldtoScreen();
 	//ビュー変換
 	void ChangeViewPort(XMMATRIX& matViewPort);
 
 public://Getter Setter
-	void SetPosition(XMVECTOR allPos) { this->allPos = allPos; }
+	void SetPosition(XMVECTOR allPos) { this->All_Pos = allPos; }
 
-	void SetRotation(XMFLOAT3 allRot) { this->allRot = allRot; }
+	void SetRotation(XMFLOAT3 allRot) { this->All_Rot = allRot; }
 
 	void SetTrackPoint(XMVECTOR TrackPoint) { this->TrackPoint = TrackPoint; }
 
-	const XMVECTOR& GetPosition() { return alll; }
+	const XMVECTOR& GetPosition() { return Center_WorldPos; }
 
-	const XMFLOAT2& Get2DPosition() { return Ene2DPos; }
+	const XMFLOAT2& Get2DPosition() { return RockOn_Pos; }
 
 	bool IsDead() const { return isDead_; }
 
 private:
+	//体ごとのパーツ
 	std::unique_ptr<Head> head;
-	std::unique_ptr<BothArms>Arms;
+	std::unique_ptr<BothArms>arms;
 	std::unique_ptr<Body>body;
-	std::unique_ptr<ObjParticle>part;
-	std::unique_ptr<Object3d> shadow;
-	ObjModel* shadowModel = nullptr;
-	std::list<std::unique_ptr<ObjParticle>>particle_;
-
-	std::unique_ptr<Object3d> center;
-
+	//Obj
+	std::unique_ptr<Object3d> Shadow;
+	std::unique_ptr<Object3d> Center;
+	//Objモデル
+	ObjModel* ShadowModel = nullptr;
+	//Objパーティクル
+	std::list<std::unique_ptr<ObjParticle>>Obj_Particle;
+	//スプライト
 	std::unique_ptr<Sprite> RockOn;
-
-	Texture* fireTex;
-
-	Audio* clush;
-
-	XMFLOAT3 Texpos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 TexSiz = { 1.0f,1.0f,1.0f };
-	XMFLOAT4 TexCol = { 1.0f,1.0f,1.0f,1.0f };
-
-	XMVECTOR alll = { 0.0f,0.0f,0.0f };
-
-	XMVECTOR allPos = { 0.0f,0.0f,-10.0f };
-	XMVECTOR firstPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 allRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 Rot = { 0.0f,0.0f,0.0f };
-	//RockOn
-	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
-	XMFLOAT2 RockOnAnc = { 0.5f,0.5f };
-	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
-
-	XMFLOAT2 Ene2DPos = { 0.0f,0.0f };
-
-	XMVECTOR offset;
-
-	XMMATRIX vmat;
-	XMMATRIX cmat;
-	XMMATRIX matViewPort;
-
-	XMVECTOR imgpos={0.0f,0.0f,0.0f};
-
+	//その他
+	Audio* Clush_SE;
 	Camera* camera;
-
-	bool Partarive[3];
-	bool Myarive = false;
-	float attackT = 0.0f;
-	float time = 0.0f;
+	//敵の中心部分のステータス
+	XMVECTOR Center_WorldPos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 Center_Rot = { 0.0f,0.0f,0.0f };
+	//敵が持っているステータス
 	int Hp = 50;
 	int OldHp = 0;
-
-	XMFLOAT4 color = { 1,0,0,0.1f };
-
+	bool Robotarive = false;
 	XMVECTOR TrackPoint = { 0,0,0 };
-
-	XMVECTOR playerPos;
-
-	XMVECTOR shadowPos = { 0,0,0 };
-
-	XMFLOAT4 shadowColor = { 0.0f,0.0f,0.0f,0.1f };
-
-	int action = 0;
+		//パーツごとに渡すステータス
+		XMVECTOR All_Pos = { 0.0f,0.0f,-10.0f };
+		XMFLOAT3 All_Rot;
+		//部位破壊用
+		bool RemainPart[3];
+	//影のステータス
+	XMVECTOR Shadow_Pos = { 0,0,0 };
+	XMFLOAT4 Shadow_Col = { 0.0f,0.0f,0.0f,0.1f };
+	//敵が持つ2D系のステータス
+	XMFLOAT2 RockOn_Pos = { 0.0f,0.0f };
+	XMFLOAT2 RockOn_Anc = { 0.5f,0.5f };
+	XMFLOAT4 RockOn_Col = { 1.0f,1.0f,1.0f,1.0f };
+	//2D座標を持たせる計算で使う変数
+	XMVECTOR offset;
+	XMMATRIX Center_Mat;
+	XMMATRIX MatViewPort;
+	//攻撃モードで使用される変数
+	float AttackTime = 0.0f;
 	float AttackChanse = 0;
-	float rad = 0;
+	float Rand = 0;
 	bool AttackFase = false;
-	bool shake = false;
-	float AttackTime = 0;
-	float speed = 0.005f;
-
-	bool isDead_ = false;
-
-	bool dice = false;
-	int patern=0;
-
-
-	float l = 0;
-
+	float AttackPreparationTime = 0;
+	//移動速度
+	float MoveSpeed = 0.005f;
+	//プレイヤーと敵の距離
+	float Length = 0;
+	//待機時のモーション変数
 	float MotionTime = 0.0f;
 	bool MotionChange = true;
-	float RobT = 0.0f;
-	bool slideF = false;
-	float RobS = 0.001f;
-	bool step = false;
+	//サイドステップ
+	float MovementChangeTime = 0.0f;
+	bool Reversal_F = false;
+	float SideStepSpeed = 0.001f;
+	bool Movement_F = false;
+	//Hpが0以上か
+	bool isDead_ = false;
 };
 

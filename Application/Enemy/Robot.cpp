@@ -5,134 +5,106 @@ Robot::~Robot()
 {
 	head.reset();
 	body.reset();
-	Arms.reset();
-	part.reset();
-	shadow.reset();
-	delete shadowModel;
-	delete clush;
+	arms.reset();
+	Shadow.reset();
+	delete ShadowModel;
+	delete Clush_SE;
+	delete camera;
 }
 
-void Robot::Initialize(const XMFLOAT3& AllRot, const XMVECTOR& AllPos,Camera* came, const bool& Step)
+void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos,Camera* came, const bool& movement)
 {
-	shadowModel = ObjModel::CreateFromOBJ("shadow");
-	shadow = Object3d::Create(shadowModel);
-	center = Object3d::Create(shadowModel);
-
-	allPos = AllPos;
-	cmat = center->GetMatrix();
-	alll = XMVector3TransformNormal(allPos, cmat);
+	All_Rot = all_Rot;
+	All_Pos = all_Pos;
 	camera=came;
+
+	ShadowModel = ObjModel::CreateFromOBJ("Shadow");
+	Shadow = Object3d::Create(ShadowModel);
+	Center = Object3d::Create(ShadowModel);
+
+	Center_Mat = Center->GetMatrix();
+	Center_WorldPos = XMVector3TransformNormal(All_Pos, Center_Mat);
 
 	head = std::make_unique<Head>();
 	body = std::make_unique<Body>();
-	/*LArm = std::make_unique<LeftArm>();
-	RArm = std::make_unique<RightArm>();*/
-	Arms = std::make_unique<BothArms>();
-	part = std::make_unique<ObjParticle>();
-	head->Initialize(Partarive[0],alll,allRot,came);
-	body->Initialize();
-	/*LArm->Initialize();
-	RArm->Initialize();*/
-	Arms->Initialize();
-	part->Initialize();
+	arms = std::make_unique<BothArms>();
 
-	clush = new Audio();
-	clush->Initialize();
+	head->Initialize(RemainPart[0],Center_WorldPos,All_Rot,came);
+	body->Initialize();
+	arms->Initialize();
+
+
+	Clush_SE = new Audio();
+	Clush_SE->Initialize();
 
 	Sprite::LoadTexture(350, L"Resources/mark.png");
-	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnc));
+	RockOn.reset(Sprite::SpriteCreate(350, RockOn_Pos, RockOn_Col, RockOn_Anc));
 
-	Arms->RespownSet(AllRot);
-
+	
 	for (int i = 0; i < 3; i++) {
-		Partarive[i] = true;
+		RemainPart[i] = true;
 	}
 	Hp = 150;
 	OldHp = Hp;
-	Myarive = true;
-	allRot = AllRot;
-	center->SetRotation(AllRot);
-	step = Step;
-
-	center->SetPosition(alll);
+	Robotarive = true;
+	arms->RespownSet(All_Rot);
+	Center->SetRotation(All_Rot);
+	Movement_F = movement;
+	Center->SetPosition(Center_WorldPos);
 }
 
 void Robot::AllUpdata(Bullet* bull)
 {
-	center->SetScale({ 1.0f,1.0f,1.0f });
-	XMMatrixIsIdentity(cmat);
-	cmat = center->GetMatrix();
-	alll = XMVector3TransformNormal(allPos, cmat);
-	center->SetPosition(alll);
+	Center->SetScale({ 1.0f,1.0f,1.0f });
+	XMMatrixIsIdentity(Center_Mat);
+	Center_Mat = Center->GetMatrix();
+	Center_WorldPos = XMVector3TransformNormal(All_Pos, Center_Mat);
+	Center->SetPosition(Center_WorldPos);
 
-	shadowPos = alll;
-	shadowPos.m128_f32[1] = alll.m128_f32[1] - 0.8f;
-	shadow->SetPosition(shadowPos);
-	shadow->SetRotation({ 0.0f,0.0f,0.0f });
-	shadow->SetScale({ 1.0f,1.0f,1.0f });
+	Shadow_Pos = Center_WorldPos;
+	Shadow_Pos.m128_f32[1] = Center_WorldPos.m128_f32[1] - 0.8f;
+	Shadow->SetPosition(Shadow_Pos);
+	Shadow->SetRotation({ 0.0f,0.0f,0.0f });
+	Shadow->SetScale({ 1.0f,1.0f,1.0f });
 
-	head->Updata(Partarive[0], alll, allRot, bull, Hp);
-	Arms->Updata(Partarive[1], alll, allRot, bull, Hp);
-	body->Updata(Partarive[2], alll, allRot, bull, Hp);
-	part->Updata(alll, allRot);
-	shadow->Updata(shadowColor);
-	center->Updata();
+	head->Updata(RemainPart[0], Center_WorldPos, All_Rot, bull, Hp);
+	arms->Updata(RemainPart[1], Center_WorldPos, All_Rot, bull, Hp);
+	body->Updata(RemainPart[2], Center_WorldPos, All_Rot, bull, Hp);
+	Shadow->Updata(Shadow_Col);
+	Center->Updata();
 
 	WorldtoScreen();
 
-	for (std::unique_ptr<ObjParticle>& patrticle : particle_) {
-		patrticle->Updata(alll, allRot);
+	for (std::unique_ptr<ObjParticle>& patrticle : Obj_Particle) {
+		patrticle->Updata(Center_WorldPos, All_Rot);
 	}
 }
 
-void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playerHp)
+void Robot::Updata(Bullet* bull,int& playerHp)
 {
-	particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
+	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 
 		});
 
-	playerPos = { 0.0f,0.0f,0.0f };
-	playerPos = XMVector3Transform(playerPos, player);
-
-
-
 	//ダメージを受けたとき
 	if (OldHp > Hp) {
-		clush->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
-		//part->Effect();
+		Clush_SE->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
 		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 		newparticle->Initialize();
-		particle_.push_back(std::move(newparticle));
+		Obj_Particle.push_back(std::move(newparticle));
 		OldHp = Hp;
 	}
 
 	//生きているとき
-	if (Myarive == true && Hp > 0) {
-		TrackPlayer();
-		if (l <= 2) {
-			step = false;
+	if (Robotarive == true && Hp > 0) {
+		TrackPlayerMode();
+		//プレイヤーの前まで来たとき
+		if (Length <= 2) {
 			Motion();
-			//プレイヤーの前まで来たとき
-			speed = 0;
-			if (AttackFase != true) {
-				AttackTime += 0.01f;
-				if (AttackTime >= 12) {
-					rad = (rand() % 10);
-					AttackChanse = rad;
-					AttackTime = 0;
-					rad = 0;
-				}
-				if (AttackChanse >= 3) {
-					AttackFase = true;
-					AttackChanse = 0;
-				}
-			}
-			if (AttackFase == true) {
-				attackT += 0.1f;
-
-				Arms->Attack(attackT, AttackFase, playerHp,Myarive);
-			}
+			Movement_F = false;
+			MoveSpeed = 0;
+			AttackMode(playerHp);
 		}
 	}
 	else {
@@ -143,16 +115,16 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 	//生きているときにHPが0になったら
 	if (Hp <= 0) {
 		Hp = 0;
-		shadowColor.w = 0.0f;
-		Myarive = false;
-		AttackTime = 0;
+		Shadow_Col.w = 0.0f;
+		Robotarive = false;
+		AttackPreparationTime = 0;
 		AttackChanse = 0;
-		rad = 0;
+		Rand = 0;
 		for (int i = 0; i < 3; i++) {
-			Partarive[i] = false;
+			RemainPart[i] = false;
 		}
 		XMFLOAT4 col = body->GetCol();
-		if (col.w <=  0&&particle_.empty()) {
+		if (col.w <=  0&&Obj_Particle.empty()) {
 			isDead_ = true;
 		}
 
@@ -164,15 +136,12 @@ void Robot::Updata(Bullet* bull, const XMMATRIX& player, bool& spown, int& playe
 void Robot::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	head->Draw(Partarive[0]);
-	/*RArm->Draw(arive[1]);
-	LArm->Draw(arive[2]);*/
-	Arms->Draw(Partarive[1]);
-	body->Draw(Partarive[2]);
-	shadow->Draw();
-	//center->Draw();
-	//part->Draw();
-	for (std::unique_ptr<ObjParticle>& particle : particle_) {
+	head->Draw(RemainPart[0]);
+	arms->Draw(RemainPart[1]);
+	body->Draw(RemainPart[2]);
+	Shadow->Draw();
+	//Center->Draw();
+	for (std::unique_ptr<ObjParticle>& particle : Obj_Particle) {
 		particle->Draw();
 	}
 	Object3d::PostDraw();
@@ -193,13 +162,13 @@ void Robot::ImgDraw()
 	ImGui::Begin("Enemy");
 	//ImGui::Checkbox("Att", &AttackFase);
 //	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
-	//ImGui::SliderFloat("len", &l, -100.0f, 100.0f);
+	//ImGui::SliderFloat("len", &Length, -100.0f, 100.0f);
 	//ImGui::SliderFloat("imgPosX", &Ene2DPos.x, -100.0f, 100.0f);
 	//ImGui::SliderFloat("imgPosY", &Ene2DPos.y, -100.0f, 100.0f);
 
-	ImGui::SliderFloat("AllPosX", &alll.m128_f32[0], -100.0f, 100.0f);
-	ImGui::SliderFloat("AllPosY", &alll.m128_f32[1], -100.0f, 100.0f);
-	ImGui::SliderFloat("AllPosZ", &alll.m128_f32[2], -100.0f, 100.0f);
+	ImGui::SliderFloat("AllPosX", &Center_WorldPos.m128_f32[0], -100.0f, 100.0f);
+	ImGui::SliderFloat("AllPosY", &Center_WorldPos.m128_f32[1], -100.0f, 100.0f);
+	ImGui::SliderFloat("AllPosZ", &Center_WorldPos.m128_f32[2], -100.0f, 100.0f);
 
 	ImGui::End();
 	ImGui::PopStyleColor();
@@ -211,43 +180,42 @@ void Robot::ParticleDraw(DirectXCommon* dxCommon)
 
 }
 
-void Robot::TrackPlayer()
+void Robot::TrackPlayerMode()
 {
 
 	float vx = 0;
 	float vy = 0;
 	float vz = 0;
 
-	vx = (allPos.m128_f32[0] - TrackPoint.m128_f32[0]);
-	vy = (allPos.m128_f32[1] - TrackPoint.m128_f32[1]);
-	vz = (allPos.m128_f32[2] - TrackPoint.m128_f32[2]);
+	vx = (All_Pos.m128_f32[0] - TrackPoint.m128_f32[0]);
+	vy = (All_Pos.m128_f32[1] - TrackPoint.m128_f32[1]);
+	vz = (All_Pos.m128_f32[2] - TrackPoint.m128_f32[2]);
 
 
 	float v2x = pow(vx, 2);
 	float v2y = pow(vy, 2);
 	float v2z = pow(vz, 2);
-	l = sqrtf(v2x + v2y + v2z);
+	Length = sqrtf(v2x + v2y + v2z);
 
-	float v3x = (vx / l) * speed;
-	float v3y = (vy / l) * speed;
-	float v3z = (vz / l) * speed;
-	//remaining += 1;
-	allPos.m128_f32[0] -= v3x;
-	//allPos.m128_f32[1] -= v3y;
-	allPos.m128_f32[2] -= v3z;
+	float v3x = (vx / Length) * MoveSpeed;
+	float v3y = (vy / Length) * MoveSpeed;
+	float v3z = (vz / Length) * MoveSpeed;
 
-	if (step == true) {
-		allPos.m128_f32[0] += RobS;
-		RobT += 0.01f;
-		if (RobT <= 2 && slideF == false) {
-			RobS = -RobS;
-			RobT = 0;
-			slideF = true;
+	All_Pos.m128_f32[0] -= v3x;
+	All_Pos.m128_f32[2] -= v3z;
+	//サイドステップ
+	if (Movement_F == true) {
+		All_Pos.m128_f32[0] += SideStepSpeed;
+		MovementChangeTime += 0.01f;
+		if (MovementChangeTime <= 2 && Reversal_F == false) {
+			SideStepSpeed = -SideStepSpeed;
+			MovementChangeTime = 0;
+			Reversal_F = true;
 		}
-		else if (RobT >= 2 && slideF == true) {
-			RobS = +RobS;
-			RobT = 0;
-			slideF = false;
+		else if (MovementChangeTime >= 2 && Reversal_F == true) {
+			SideStepSpeed = +SideStepSpeed;
+			MovementChangeTime = 0;
+			Reversal_F = false;
 		}
 	}
 }
@@ -258,11 +226,11 @@ void Robot::Motion()
 
 	XMFLOAT3 bodyScl = body->GetScl();
 	XMFLOAT3 headScl = head->GetScl();
-	XMFLOAT3 armScl = Arms->GetScl();
+	XMFLOAT3 armScl = arms->GetScl();
 	float rot = 0.05f;
 
-		MotionTime += 0.001f;
-
+	MotionTime += 0.001f;
+	//徐々に大きく
 	if (MotionChange == true) {
 
 		bodyScl.x += SclPlus.x;
@@ -281,6 +249,7 @@ void Robot::Motion()
 			MotionTime = 0.0f;
 		}
 	}
+	//徐々に小さく
 	else {
 		bodyScl.x -= SclPlus.x;
 		bodyScl.y -= SclPlus.y;
@@ -301,28 +270,53 @@ void Robot::Motion()
 
 	body->SetScl(bodyScl);
 	head->SetScl(headScl);
-	Arms->SetScl(armScl);
+	arms->SetScl(armScl);
 
 	head->Motion(rot);
 
+}
+
+void Robot::AttackMode(int& playerHp)
+{
+	//攻撃フェイズに移行していないとき
+	if (AttackFase != true) {
+		AttackPreparationTime += 0.01f;
+		//準備時間が一定の値に達した時
+		if (AttackPreparationTime >= 12) {
+			Rand = (rand() % 10);
+			AttackChanse = Rand;
+			AttackPreparationTime = 0;
+			Rand = 0;
+		}
+		//攻撃タイミングが一定以上の値になった時
+		if (AttackChanse >= 3) {
+			AttackFase = true;
+			AttackChanse = 0;
+		}
+	}
+	//攻撃フェイズに移行した時
+	if (AttackFase == true) {
+		AttackTime += 0.1f;
+		arms->Attack(AttackTime, AttackFase, playerHp, Robotarive);
+	}
 }
 
 void Robot::WorldtoScreen()
 {
 	const float kDistancePlayerTo3DReticle = 50.0f;
 	offset = { 0.0,0.0,1.0f };
-	offset = XMVector3TransformNormal(offset, cmat);
+	offset = XMVector3TransformNormal(offset, Center_Mat);
 	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
-	center->SetRotation(Rot);
-	cmat = center->GetMatrix();
-	alll = { 0.0f,0.0f,0.0f };
-	alll = XMVector3TransformNormal(allPos, cmat);
+	Center->SetRotation(Center_Rot);
+	Center_Mat = Center->GetMatrix();
+	Center_WorldPos = { 0.0f,0.0f,0.0f };
+	Center_WorldPos = XMVector3TransformNormal(All_Pos, Center_Mat);
 	{
-		XMVECTOR positionRet = alll;
+		XMVECTOR positionRet = Center_WorldPos;
 
-		ChangeViewPort(matViewPort);
+		ChangeViewPort(MatViewPort);
 
-		XMMATRIX matVP = matViewPort;
+		XMMATRIX matVP = MatViewPort;
 
 		XMMATRIX View = camera->GetViewMatrix();
 		XMMATRIX Pro = camera->GetProjectionMatrix();
@@ -331,11 +325,11 @@ void Robot::WorldtoScreen()
 
 		positionRet = XMVector3TransformCoord(positionRet, matViewProjectionViewport);
 
-		RockOn->SetPosition({ positionRet.m128_f32[0],positionRet.m128_f32[1] });
+		RockOn_Pos.x = positionRet.m128_f32[0];
+		RockOn_Pos.y = positionRet.m128_f32[1];
 
+		RockOn->SetPosition(RockOn_Pos);
 
-		Ene2DPos.x = positionRet.m128_f32[0];
-		Ene2DPos.y = positionRet.m128_f32[1];
 	}
 }
 
