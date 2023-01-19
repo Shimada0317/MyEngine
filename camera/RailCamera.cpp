@@ -33,7 +33,7 @@ void RailCamera::Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot)
 
 
 
-void RailCamera::Updata(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* NormalCam)
+void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* NormalCam)
 {
 	Position += vel;
 
@@ -83,7 +83,7 @@ void RailCamera::Updata(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	//プレイヤーにワールド座標を送る
 	NormalCam->SetWorld(MatWorld);
 	//debug->SetPosition(Position);
-	//debug->Updata();
+	//debug->Update();
 }
 
 void RailCamera::Draw()

@@ -22,7 +22,7 @@ void BothArms::SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* 
 	Arm->SetScale(Arm_Scl);
 }
 
-void BothArms::Updata(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull, int& Hp)
+void BothArms::Update(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull, int& Hp)
 {
 	if (Arm_Rot.x >= 40) {
 		Arm_Rot.x = 0;
@@ -41,7 +41,7 @@ void BothArms::Updata(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotat
 		Color.w -= 0.01f;
 	}
 
-	Arm->Updata(Color);
+	Arm->Update(Color);
 }
 
 void BothArms::Draw(bool arive)

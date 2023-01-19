@@ -28,7 +28,7 @@ public://ƒƒ“ƒoŠÖ”
 	//‰Šú‰»
 	void Initialize(WinApp* winApp);
 	//XV
-	void Updata();
+	void Update();
 
 	bool PushKey(BYTE keyNumber);
 

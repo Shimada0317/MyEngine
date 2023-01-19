@@ -36,7 +36,7 @@ public:
 
 	void TriggerOn();
 
-	void Updata();
+	void Update();
 
 	void Draw();
 

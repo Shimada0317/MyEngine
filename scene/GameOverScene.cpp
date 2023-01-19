@@ -19,7 +19,7 @@ void GameOverScene::SetPosSclRot()
 	GameOver->SetPosition({ pos });
 }
 
-void GameOverScene::Updata()
+void GameOverScene::Update()
 {
 	if (Mouse::GetInstance()->PushClick(0)|| Mouse::GetInstance()->PushClick(1)) {
 		BaseScene* scene_ = new TitleScene(sceneManager_);

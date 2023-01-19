@@ -73,7 +73,7 @@ void Bullet::TriggerOn()
 	Trigger = true;
 }
 
-void Bullet::Updata()
+void Bullet::Update()
 {
 	time += 0.2f;
 	if (time >= 1) {
@@ -87,7 +87,7 @@ void Bullet::Updata()
 	}
 
 	Set();
-	bullet->Updata();
+	bullet->Update();
 }
 
 void Bullet::Draw()

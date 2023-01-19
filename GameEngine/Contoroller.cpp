@@ -104,7 +104,7 @@ void Contoroller::Initialize(WinApp* winApp)
 	CleanUpDirectInput();
 }
 
-void Contoroller::Updata()
+void Contoroller::Update()
 {
 	HRESULT result;
 

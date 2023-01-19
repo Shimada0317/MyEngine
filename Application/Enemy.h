@@ -19,7 +19,7 @@ public:
 
 	void Set();
 
-	void Updata(XMVECTOR pos, int wave,int oldwave, bool& StopT, XMVECTOR positionP,bool& spown);
+	void Update(XMVECTOR pos, int wave,int oldwave, bool& StopT, XMVECTOR positionP,bool& spown);
 
 	void Draw();
 

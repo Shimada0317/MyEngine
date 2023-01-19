@@ -20,7 +20,7 @@ public:
 
 	void SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull);
 
-	void Updata(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull, int& Hp);
+	void Update(bool& arive, const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull, int& Hp);
 
 	void Draw(bool arive);
 

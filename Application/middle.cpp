@@ -34,7 +34,7 @@ void middle::Initialize()
 
 	player = std::make_unique<Player>();
 	player->Initalize(camera);
-	camera->Updata();
+	camera->Update();
 	playerPos = player->GetPosition();
 
 	for (int i = 0; i < 9; i++) {
@@ -133,12 +133,12 @@ void middle::SetPSR()
 	Goal->SetScale(GoalScl);
 	Goal->SetRotation({ 0.0f,90.0f,0.0f });
 
-	heri->Updata({ 0.7f,0.7f,0.6f,1.0f });
-	Goal->Updata({ 0.7f,0.7f,0.6f,1.0f });
-	hane->Updata({ 0.0f,0.0f,0.0f,1.0f });
+	heri->Update({ 0.7f,0.7f,0.6f,1.0f });
+	Goal->Update({ 0.7f,0.7f,0.6f,1.0f });
+	hane->Update({ 0.0f,0.0f,0.0f,1.0f });
 }
 
-void middle::Updata()
+void middle::Update()
 {
 	CountDistance = 0;
 	heripos.m128_f32[2] += heriX;
@@ -178,7 +178,7 @@ void middle::Updata()
 			enemyPos[CountDistance] = Robot->GetPosition();
 			ene2DPos[CountDistance] = Robot->Get2DPosition();
 			for (int i = 0; i < 9; i++) {
-				Robot->Updata(bull[i],playerHp);
+				Robot->Update(bull[i],playerHp);
 			}
 			CountDistance += 1;
 		}
@@ -200,7 +200,7 @@ void middle::Updata()
 	SetPSR();
 	//プレイヤーの更新処理
 	player->Update(bull, Remaining,enemyPos,camera,ene2DPos,patern);
-	camera->Updata();
+	camera->Update();
 }
 
 void middle::Draw(DirectXCommon* dxCommon)

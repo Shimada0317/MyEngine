@@ -34,7 +34,7 @@ public:
 
 	void Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot);
 
-	void Updata(const XMVECTOR& vel,const XMFLOAT3& rot,Camera* NormalCam);
+	void Update(const XMVECTOR& vel,const XMFLOAT3& rot,Camera* NormalCam);
 
 	void Draw();
 

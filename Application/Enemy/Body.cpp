@@ -27,7 +27,7 @@ void Body::SetPRS(const XMVECTOR& allpos, const XMFLOAT3 rotation, Bullet* bull)
 	
 }
 
-void Body::Updata(bool& arive,const XMVECTOR& allpos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
+void Body::Update(bool& arive,const XMVECTOR& allpos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
 {
 	BodyMat = Body->GetMatrix();
 	Body_Pos = XMVector3Transform(Body_Pos, BodyMat);
@@ -56,7 +56,7 @@ void Body::Updata(bool& arive,const XMVECTOR& allpos, const XMFLOAT3 rotation, B
 		}
 	}
 	
-	Body->Updata(HItColor);
+	Body->Update(HItColor);
 }
 
 void Body::Draw(bool arive)

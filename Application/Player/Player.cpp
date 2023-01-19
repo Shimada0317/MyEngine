@@ -55,7 +55,7 @@ void Player::Initalize(Camera* came)
 	PartGreen = ParticleManager::Create(came);
 	PartRed = ParticleManager::Create(came);
 	Eye_rot.y = 180;
-	Railcam->Updata(vel, Eye_rot, came);
+	Railcam->Update(vel, Eye_rot, came);
 
 	Shot_SE = new Audio();
 	Shot_SE->Initialize();
@@ -150,7 +150,7 @@ void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 	vel = XMVector3TransformNormal(vel, Player_Mat);
 
 	for (int i = 0; i < 9; i++) {
-		bull[i]->Updata();
+		bull[i]->Update();
 	}
 
 	MouthContoroll(enePos, came, Ene2dPos);
@@ -158,11 +158,11 @@ void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 	CameraWork();
 
 	Set(came);
-	Railcam->Updata(vel, Eye_rot, came);
+	Railcam->Update(vel, Eye_rot, came);
 
-	Track->Updata();
-	Player->Updata();
-	Gun->Updata();
+	Track->Update();
+	Player->Update();
+	Gun->Update();
 	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
 	PartGreen->Update({ 0.0f,1.0f,0,0.0f });
 }

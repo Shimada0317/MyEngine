@@ -31,7 +31,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム更新
 	/// </summary>
-	virtual void Updata();
+	virtual void Update();
 
 	/// <summary>
 	/// ビュー行列を更新

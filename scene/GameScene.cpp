@@ -134,25 +134,25 @@ void GameScene::AllUpdata()
 {
 	if (GameStart == true) {
 
-		Mid->Updata();
+		Mid->Update();
 	}
 
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i]->Updata({ 0.4f,0.4f,0.5f,0.9f });
-		Bills1[i]->Updata({ 0.2f,0.2f,0.2f,0.9f });
+		Bills[i]->Update({ 0.4f,0.4f,0.5f,0.9f });
+		Bills1[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
 	}
 
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i]->Updata({ 0.2f,0.2f,0.3f,1.0f });
+		FieldBills[i]->Update({ 0.2f,0.2f,0.3f,1.0f });
 	}
 
-	Sphere->Updata();
+	Sphere->Update();
 
-	World->Updata({ 0.7f,0.7f,0.7f,1.0f });
-	Start->Updata();
+	World->Update({ 0.7f,0.7f,0.7f,1.0f });
+	Start->Update();
 }
 
-void GameScene::Updata()
+void GameScene::Update()
 {
 
 	if (GameStart == false) {

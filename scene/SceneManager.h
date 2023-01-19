@@ -12,7 +12,7 @@ public:
 	/// <summary>
 	/// XV
 	/// </summary>
-	void Updata(DirectXCommon* dxComon);
+	void Update(DirectXCommon* dxComon);
 
 	/// <summary>
 	/// •`‰æ

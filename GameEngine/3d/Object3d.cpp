@@ -258,7 +258,7 @@ bool Object3d::Initialize()
 	return true;
 }
 
-void Object3d::Updata(const XMFLOAT4 color)
+void Object3d::Update(const XMFLOAT4 color)
 {
 	assert(camera);
 

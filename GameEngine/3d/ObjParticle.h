@@ -27,7 +27,7 @@ public:
 
 	void Set(XMVECTOR& enemyPos,XMFLOAT3& allRot);
 
-	void Updata(XMVECTOR& enemyPos,XMFLOAT3& allRot);
+	void Update(XMVECTOR& enemyPos,XMFLOAT3& allRot);
 
 	void Effect();
 

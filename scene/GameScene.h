@@ -46,7 +46,7 @@ public://メンバ関数
 
 	void AllUpdata();
 
-	void Updata() override;
+	void Update() override;
 
 	void ObjDraw(DirectXCommon* dxCommon);
 

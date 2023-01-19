@@ -66,20 +66,20 @@ void Robot::AllUpdata(Bullet* bull)
 	Shadow->SetRotation({ 0.0f,0.0f,0.0f });
 	Shadow->SetScale({ 1.0f,1.0f,1.0f });
 
-	head->Updata(RemainPart[0], Center_WorldPos, All_Rot, bull, Hp);
-	arms->Updata(RemainPart[1], Center_WorldPos, All_Rot, bull, Hp);
-	body->Updata(RemainPart[2], Center_WorldPos, All_Rot, bull, Hp);
-	Shadow->Updata(Shadow_Col);
-	Center->Updata();
+	head->Update(RemainPart[0], Center_WorldPos, All_Rot, bull, Hp);
+	arms->Update(RemainPart[1], Center_WorldPos, All_Rot, bull, Hp);
+	body->Update(RemainPart[2], Center_WorldPos, All_Rot, bull, Hp);
+	Shadow->Update(Shadow_Col);
+	Center->Update();
 
 	WorldtoScreen();
 
 	for (std::unique_ptr<ObjParticle>& patrticle : Obj_Particle) {
-		patrticle->Updata(Center_WorldPos, All_Rot);
+		patrticle->Update(Center_WorldPos, All_Rot);
 	}
 }
 
-void Robot::Updata(Bullet* bull,int& playerHp)
+void Robot::Update(Bullet* bull,int& playerHp)
 {
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();

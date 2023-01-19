@@ -69,7 +69,7 @@ void DebugScene::SetPosSclRot()
 
 }
 
-void DebugScene::Updata()
+void DebugScene::Update()
 {
 	
 	XMMATRIX mat = bo->GetMatrix();
@@ -109,14 +109,14 @@ void DebugScene::Updata()
 
 	SetPosSclRot();
 	MouthContoroll();
-	cam->Updata(vel, Eye_rot, camera);
-	camera->Updata();
+	cam->Update(vel, Eye_rot, camera);
+	camera->Update();
 	
-	bo->Updata();
-	testEn->Updata();
+	bo->Update();
+	testEn->Update();
 	partM->Update(color);
 	//camera->Update();
-	//mid->Updata();
+	//mid->Update();
 }
 
 void DebugScene::Draw(DirectXCommon* dxCommon)

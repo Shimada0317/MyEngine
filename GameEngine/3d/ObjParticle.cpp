@@ -106,7 +106,7 @@ void ObjParticle::Set(XMVECTOR& enemyPos, XMFLOAT3& allRot)
 	}
 }
 
-void ObjParticle::Updata(XMVECTOR& enemyPos,XMFLOAT3& allRot)
+void ObjParticle::Update(XMVECTOR& enemyPos,XMFLOAT3& allRot)
 {
 	Set(enemyPos,allRot);
 	Effect();
@@ -136,8 +136,8 @@ void ObjParticle::Updata(XMVECTOR& enemyPos,XMFLOAT3& allRot)
 			Delete_ = true;
 			break;
 		}
-		Gear[i]->Updata();
-		Worm[i]->Updata();
+		Gear[i]->Update();
+		Worm[i]->Update();
 	}
 }
 

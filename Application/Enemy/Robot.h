@@ -42,7 +42,7 @@ public:
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
-	void Updata(Bullet* bull,int& playerHp);
+	void Update(Bullet* bull,int& playerHp);
 	//描画
 	void Draw(DirectXCommon* dxCommon);
 	//Img描画

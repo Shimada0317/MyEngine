@@ -34,7 +34,7 @@ void Head::SetPRS(const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull
 	Head->SetScale(Head_Scl);
 }
 
-void Head::Updata(bool& arive,const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
+void Head::Update(bool& arive,const XMVECTOR& bodyPos, const XMFLOAT3 rotation, Bullet* bull,int& Hp)
 {
 	if (arive == true) {
 		//SetPRS(bodyPos);
@@ -55,7 +55,7 @@ void Head::Updata(bool& arive,const XMVECTOR& bodyPos, const XMFLOAT3 rotation, 
 		HitColor.w -= 0.01f;
 	}
 
-	Head->Updata(HitColor);
+	Head->Update(HitColor);
 }
 
 void Head::Draw(bool arive)

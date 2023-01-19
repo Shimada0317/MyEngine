@@ -50,7 +50,7 @@ void Input::Initialize(WinApp* winApp)
 
 }
 
-void Input::Updata() 
+void Input::Update() 
 {
 	HRESULT result;
 

@@ -11,7 +11,7 @@ DebugCamera::DebugCamera(int window_width, int window_height)
 	scaleY = 1.0f / (float)window_height;
 }
 
-void DebugCamera::Updata()
+void DebugCamera::Update()
 {
 	bool dirty = false;
 	float angleX = 0;
@@ -48,5 +48,5 @@ void DebugCamera::Updata()
 	//	SetUp({ vUp.m128_f32[0], vUp.m128_f32[1],vUp.m128_f32[2] });
 	//}
 
-	Camera::Updata();
+	Camera::Update();
 }

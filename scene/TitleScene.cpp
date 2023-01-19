@@ -139,7 +139,7 @@ void TitleScene::SetPosSclRot()
 
 }
 
-void TitleScene::Updata()
+void TitleScene::Update()
 {
 	Action::GetInstance()->PlayerMove2d(Title_Size, 1.0f);
 
@@ -220,19 +220,19 @@ void TitleScene::Updata()
 	}
 
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i]->Updata({ 0.4f,0.4f,0.5f,1.0f });
-		Bills1[i]->Updata({ 0.2f,0.2f,0.2f,0.9f });
+		Bills[i]->Update({ 0.4f,0.4f,0.5f,1.0f });
+		Bills1[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
 
 	}
 
 	post->Update(Post_Col);
 	SetPosSclRot();
-	Sphere->Updata();
-	GroundObj->Updata();
-	World->Updata();
-	Start->Updata();
+	Sphere->Update();
+	GroundObj->Update();
+	World->Update();
+	Start->Update();
 
-	TitleCamera->Updata();
+	TitleCamera->Update();
 }
 
 

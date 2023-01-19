@@ -26,7 +26,7 @@ public:
 
 	void SetPSR();
 
-	void Updata();
+	void Update();
 
 	void Draw(DirectXCommon* dxCommon);
 
