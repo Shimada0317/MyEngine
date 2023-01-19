@@ -34,8 +34,6 @@ public:
 
 	void ImGuiDraw();
 
-	void Fainalize();
-
 	void SetEnemyPos();
 
 	void Enemy2Enemy();

@@ -226,7 +226,6 @@
     <None Include="Resources\shaders\FBX.hlsli" />
     <None Include="Resources\shaders\Particle.hlsli" />
     <None Include="Resources\shaders\Texture.hlsli" />
-    <None Include="Resources\shaders\Obj.hlsli" />
     <None Include="Resources\shaders\Lambert.hlsli" />
     <None Include="Resources\shaders\Light.hlsli" />
     <None Include="Resources\shaders\toon.hlsli">
@@ -245,11 +244,8 @@
     <FxCompile Include="Resources\shaders\ParticleVS.hlsl" />
     <FxCompile Include="Resources\shaders\ParticlePS.hlsl" />
     <FxCompile Include="Resources\shaders\ParticleGS.hlsl" />
-    <FxCompile Include="Resources\shaders\TextureGS.hlsl" />
     <FxCompile Include="Resources\shaders\TexturePS.hlsl" />
     <FxCompile Include="Resources\shaders\TextureVS.hlsl" />
-    <FxCompile Include="Resources\shaders\ObjVS.hlsl" />
-    <FxCompile Include="Resources\shaders\ObjPS.hlsl" />
     <FxCompile Include="Resources\shaders\LambertVS.hlsl" />
     <FxCompile Include="Resources\shaders\LambertPS.hlsl" />
     <FxCompile Include="Resources\shaders\LightVS.hlsl" />

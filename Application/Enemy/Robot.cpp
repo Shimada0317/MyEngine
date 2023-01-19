@@ -9,7 +9,6 @@ Robot::~Robot()
 	Shadow.reset();
 	delete ShadowModel;
 	delete Clush_SE;
-	delete camera;
 }
 
 void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos,Camera* came, const bool& movement)

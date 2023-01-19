@@ -1,13 +1,7 @@
 #pragma once
 #include"ObjModel.h"
 #include"Object3d.h"
-#include"Input.h"
-#include"DebugText.h"
-#include"Action.h"
-#include"DebugCamera.h"
-#include"Texture.h"
-#include"TextureModel.h"
-#include"WinApp.h"
+#include"Sprite.h"
 #include<vector>
 #include"Audio.h"
 #include"Bullet.h"
@@ -24,33 +18,62 @@ class Player
 {
 public:
 	~Player();
-
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="came">カメラ</param>
 	void Initalize(Camera* came);
+	/// <summary>
+	/// ステータスのSetは全部ここ
+	/// </summary>
+	/// <param name="came"></param>
+	void Set(Camera* camera);
+	/// <summary>
+	/// 更新処理
+	/// </summary>
+	/// <param name="bull">プレイヤーの弾</param>
+	/// <param name="Remaining">残弾数</param>
+	/// <param name="enePos">敵の座標</param>
+	/// <param name="came">カメラ</param>
+	/// <param name="Ene2dPos">敵の2D座標</param>
+	/// <param name="pat">現在のフェイズ</param>
+	void Update(Bullet* bull[], int& Remaining,const XMVECTOR enePos[], Camera* came,const XMFLOAT2 Ene2dPos[],int patern);
 
-	void Set(Camera* came);
-
-	void Updata(Bullet* bull[], int& Remaining,const XMVECTOR enePos[], Camera* came,const XMFLOAT2 Ene2dPos[],int pat);
-
+	/// <summary>
+	/// パーティクルの描画
+	/// </summary>
+	/// <param name="cmdeList">コマンドリスト</param>
 	void ParticleDraw(ID3D12GraphicsCommandList* cmdeList);
-
+	/// <summary>
+	/// スプライトの描画
+	/// </summary>
 	void SpriteDraw();
-
+	/// <summary>
+	/// スタート時のカメラワーク
+	/// </summary>
 	void CameraWork();
-
+	/// <summary>
+	/// 敵を倒した時の移動
+	/// </summary>
+	/// <param name="move"></param>
+	/// <param name="patern">フェイズ番号</param>
 	void PlayerMove(bool& move,int patern);
-
+	//Objの描画
 	void ObjDraw();
-
+	//Imguiの描画
 	void ImGuiDraw();
-
-	void Finalize();
-
+	//ビューポート行列の計算
 	void ChangeViewPort(XMMATRIX& Track_Mat);
-
+	//SE呼び出し
 	void SoundEffect();
-
+	/// <summary>
+	/// マウスの取得
+	/// </summary>
+	/// <param name="enePos">敵の座標</param>
+	/// <param name="came">カメラ</param>
+	/// <param name="Ene2dPos">敵の2D座標</param>
 	void MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[]);
-
+	//パーティクル発生
 	void ParticleEfect();
 
 #pragma region Get
@@ -64,9 +87,9 @@ public:
 	//行列
 	const XMMATRIX& GetMat() { return Track_Mat; }
 	//二次元座標
-	const XMFLOAT2& GetRetPosition() { return retpos; }
+	const XMFLOAT2& GetRetPosition() { return Ret_Pos2D; }
 	//二次元スケール
-	const XMFLOAT2& GetRetSiz() { return retsize; }
+	const XMFLOAT2& GetRetSiz() { return Ret_Siz; }
 
 	const bool& GetCamWork() { return CamWork; }
 
@@ -76,12 +99,11 @@ public:
 #pragma endregion
 
 #pragma region Set
-
 	void SetPosition(const XMVECTOR& position) { this->Ret_Pos = position; }
 	void SetRotation(const XMFLOAT3& rotation) { this->Ret_Rot = rotation; }
 	void SetScl(const XMFLOAT3& scale) { this->Ret_Scl = scale; }
-	void SetRetPosition(const XMFLOAT2& position) { this->retpos = position; }
-	void SetRetSiz(const XMFLOAT2& scale) { this->retsize = scale; }
+	void SetRetPosition(const XMFLOAT2& position) { this->Ret_Pos2D = position; }
+	void SetRetSiz(const XMFLOAT2& scale) { this->Ret_Siz = scale; }
 	void SetHp(int HP) { this->Hp = HP; }
 	void SetFinish(const bool& finish) { this->Finish = finish; }
 #pragma endregion
@@ -143,28 +165,31 @@ private:
 	XMFLOAT3 Target_pos = {0.0f,0.0f,0.0f};
 	XMFLOAT3 Up = { 0.0f,1.0f,0.0f };
 	//スプライト
-	XMFLOAT4 spCol = { 1,1,1,1 };
-	XMFLOAT2 anc = { 0.5f,0.5f };
-	XMFLOAT2 retpos = { 640.0f,360.0f };
-	XMFLOAT2 retsize = { 64.0f,64.0f };
-	XMFLOAT2 curtainPos = { 0.0f,0.0f };
-	XMFLOAT2 curtainSiz = { 1280.0f,100.0f };
-	XMFLOAT2 curtainPos2 = { 0.0f,620.0f };
-	XMFLOAT2 windowPos = { 0.0f,0.0f };
-	XMFLOAT2 skipPos = { 1100,720.0f };
+		//2Dレティクルのステータス
+		XMFLOAT4 Ret_Col = { 1,1,1,1 };
+		XMFLOAT2 Ret_Anc = { 0.5f,0.5f };
+		XMFLOAT2 Ret_Pos2D = { 640.0f,360.0f };
+		XMFLOAT2 Ret_Siz = { 64.0f,64.0f };
+		//始まりと終わりの演出使う黒いカーテン
+		XMFLOAT2 Curtain_UpPos = { 0.0f,0.0f };
+		XMFLOAT2 Curtain_Siz = { 1280.0f,100.0f };
+		XMFLOAT2 Curtain_DownPos = { 0.0f,620.0f };
+		//Skip文字の表示
+		XMFLOAT2 Skip_Pos = { 1100,720.0f };
+	//2D座標入の取得用変数
 	XMVECTOR offset = { 0,0,1.0f };
 
-	bool particle = false;
+	bool Particle_F = false;
 	int Hp = 5;
 	//Reload
 	bool ReloadFlag = false;
 	int ReloadTime = 0;
 	int Anser = 0;
-
+	//移動
 	XMVECTOR vel;
-	bool Active = false;
-	float kBulletSpeed=0;
-	XMVECTOR velocity = { 0.0f,0.0f,0.0f };
+	bool Move_F = false;
+	//弾の速度
+	float MoveSpeed=0;
 	//動いたときのtimer
 	float MoveTimer = 0.0f;
 	int WaveCount = 0;

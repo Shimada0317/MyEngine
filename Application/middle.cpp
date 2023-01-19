@@ -199,7 +199,7 @@ void middle::Updata()
 	//座標の設定
 	SetPSR();
 	//プレイヤーの更新処理
-	player->Updata(bull, Remaining,enemyPos,camera,ene2DPos,patern);
+	player->Update(bull, Remaining,enemyPos,camera,ene2DPos,patern);
 	camera->Updata();
 }
 
@@ -285,12 +285,6 @@ void middle::ImGuiDraw()
 	//ImGui::PopStyleColor();
 }
 
-void middle::Fainalize()
-{
-
-	player->Finalize();
-	//delete[] bulletHUD;
-}
 
 	
 void middle::LoadEnemyPopData()
