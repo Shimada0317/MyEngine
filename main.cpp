@@ -12,7 +12,6 @@
 #include<d3dx12.h>
 #include"BaseClassIUDF.h"
 #include"Framework.h"
-//#include"fbxsdk.h"
 
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
@@ -25,12 +24,9 @@
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 
-//	FbxManager* fbxManager = FbxManager::Create();
 	Framework* game=new BaseClassIUDF;
 
 	game->Run();
-
-	
 
 	delete game;
 
