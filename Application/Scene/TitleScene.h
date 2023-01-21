@@ -11,16 +11,10 @@
 #include"ObjModel.h"
 #include"Input.h"
 #include"ParticleManager.h"
-#include"Player.h"
-#include"Bullet.h"
-#include"middle.h"
 #include"PostEffect.h"
-#include"Robot.h"
 #include"PostEffect.h"
 #include<memory>
 #include"Light.h"
-#include"Texture.h"
-#include"TextureModel.h"
 #include"Camera.h"
 
 using namespace std;
@@ -37,6 +31,7 @@ private: // エイリアス
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMMATRIX = DirectX::XMMATRIX;
+	using XMVECTOR = DirectX::XMVECTOR;
 private:
 	static const int debugTextNumber = 0;
 

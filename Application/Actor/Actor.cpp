@@ -1,8 +1,8 @@
-#include "middle.h"
-#include "imgui/imgui.h"
-#include"imgui/imconfig.h"
+#include "Actor.h"
+#include "imgui.h"
+#include"imconfig.h"
 #include<fstream>
-middle::~middle()
+Actor::~Actor()
 {
 	for (int i = 0; i < 9; i++) {
 		delete bull[i];
@@ -20,7 +20,7 @@ middle::~middle()
 //
 ////セーブ
 //
-void middle::Initialize()
+void Actor::Initialize()
 {
 	Sprite::LoadTexture(10, L"Resources/reload.png");
 	Sprite::LoadTexture(13, L"Resources/one.png");
@@ -81,7 +81,7 @@ void middle::Initialize()
 	heriFry->LoadFile("Resources/Sound/SE/heriFry.wav", 0.8f);
 }
 
-void middle::SetPSR()
+void Actor::SetPSR()
 {
 	playerMat = player->GetMat();
 
@@ -138,7 +138,7 @@ void middle::SetPSR()
 	hane->Update({ 0.0f,0.0f,0.0f,1.0f });
 }
 
-void middle::Update()
+void Actor::Update()
 {
 	CountDistance = 0;
 	heripos.m128_f32[2] += heriX;
@@ -203,7 +203,7 @@ void middle::Update()
 	camera->Update();
 }
 
-void middle::Draw(DirectXCommon* dxCommon)
+void Actor::Draw(DirectXCommon* dxCommon)
 {
 	for (std::unique_ptr<Robot>& robot : rob) {
 		robot->Draw(dxCommon);
@@ -223,7 +223,7 @@ void middle::Draw(DirectXCommon* dxCommon)
 	player->ParticleDraw(dxCommon->GetCmdList());
 }
 
-void middle::SpriteDraw()
+void Actor::SpriteDraw()
 {
 	if (getCamWorkF == true) {
 
@@ -256,7 +256,7 @@ void middle::SpriteDraw()
 	player->SpriteDraw();
 }
 
-void middle::ImGuiDraw()
+void Actor::ImGuiDraw()
 {
 
 	/*for (std::unique_ptr<Robot>& robot : rob) {
@@ -287,7 +287,7 @@ void middle::ImGuiDraw()
 
 
 	
-void middle::LoadEnemyPopData()
+void Actor::LoadEnemyPopData()
 {
 	std::ifstream file;
 	file.open("Resources/LoadEnemy.csv");
@@ -299,7 +299,7 @@ void middle::LoadEnemyPopData()
 	file.close();
 }
 
-void middle::UpdataEnemyPopCommands()
+void Actor::UpdataEnemyPopCommands()
 {
 	//待機処理
 	if (waitF == true) {

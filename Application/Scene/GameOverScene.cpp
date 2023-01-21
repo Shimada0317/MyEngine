@@ -1,6 +1,7 @@
 #include "GameOverScene.h"
 #include"SceneManager.h"
 #include"TitleScene.h"
+#include"Mouse.h"
 
 GameOverScene::GameOverScene(SceneManager* sceneManager_)
 	:BaseScene(sceneManager_)

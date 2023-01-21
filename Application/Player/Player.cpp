@@ -1,7 +1,8 @@
 #include "Player.h"
 #include<cassert>
-#include "imgui/imgui.h"
-#include"imgui/imconfig.h"
+#include "imgui.h"
+#include"imconfig.h"
+#include"Mouse.h"
 #include"WinApp.h"
 
 Player::~Player()

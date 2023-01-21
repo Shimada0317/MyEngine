@@ -17,10 +17,10 @@
 using namespace std;
 const int MAXENEMY = 10;
 
-class middle
+class Actor
 {
 public: 
-	~middle();
+	~Actor();
 
 	void Initialize();
 

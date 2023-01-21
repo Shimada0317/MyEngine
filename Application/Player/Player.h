@@ -7,7 +7,6 @@
 #include"Bullet.h"
 #include"ParticleManager.h"
 #include"RailCamera.h"
-#include"Mouse.h"
 
 #include<memory>
 #include<list>
@@ -129,7 +128,6 @@ private:
 	//その他の機能
 	Audio* Shot_SE;
 	Audio* Reload_SE;
-	Mouse* mouse = nullptr;
 	RailCamera* Railcam;
 	//ローカル
 		//レティクルObjのステータス

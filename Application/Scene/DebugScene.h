@@ -11,7 +11,6 @@
 #include"ParticleManager.h"
 #include"Player.h"
 #include"Light.h"
-#include"middle.h"
 #include"Mouse.h"
 #include"Texture.h"
 #include<memory>
@@ -98,8 +97,6 @@ private:
 	float addgrav = 0.4f;
 	float time = 0.0f;
 	float gravity = 0.0f;
-
-	std::unique_ptr<middle>mid;
 
 	//ƒ[ƒ‹ƒh
 	XMVECTOR playerWorldPos = { 0.0f,0.0f,0.0f };

@@ -54,7 +54,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	StartModel = ObjModel::CreateFromOBJ("bil", true);
 	Start = Object3d::Create(StartModel);
 	
-	Mid = std::make_unique <middle>();
+	Mid = std::make_unique <Actor>();
 	Mid->Initialize();
 	Patern = Mid->GetPatern();
 

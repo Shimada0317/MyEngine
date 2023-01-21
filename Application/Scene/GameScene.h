@@ -14,7 +14,7 @@
 #include"ParticleManager.h"
 #include"Light.h"
 #include"LightGroup.h"
-#include"middle.h"
+#include"Actor.h"
 #include"ClearScene.h"
 
 #include<memory>
@@ -79,7 +79,7 @@ private://メンバ変数
 	Audio* Bgm = nullptr;
 	PostEffect* postEffect = nullptr;
 	Light* light = nullptr;
-	unique_ptr <middle> Mid = nullptr;
+	unique_ptr <Actor> Mid = nullptr;
 	//最初のビルのステータス
 	XMVECTOR Start_Pos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 Start_Scl = { 15.0f,15.0f,15.0f };

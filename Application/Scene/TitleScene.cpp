@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iomanip>
 #include"GameScene.h"
+#include"Mouse.h"
 
 using namespace DirectX;
 

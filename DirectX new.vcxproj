@@ -45,13 +45,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(ProjectDir)lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)External\lib\fbx_sdk\include;$(ProjectDir)External\lib\DirectXTex\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)External\lib\fbx_sdk\lib;$(ProjectDir)External\lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib\fbx_sdk\include;$(ProjectDir)lib\DirectXTex\inc;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib\fbx_sdk\lib;$(ProjectDir)lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)External\lib\fbx_sdk\include;$(ProjectDir)External\lib\DirectXTex\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)External\lib\fbx_sdk\lib;$(ProjectDir)External\lib\DirectXTex\lib\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -59,7 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Actor;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene;$(ProjectDir)External\imgui</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>false</TreatWarningAsError>
     </ClCompile>
@@ -77,7 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)DirectXteX;$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Actor;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene;$(ProjectDir)External\imgui</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>false</TreatWarningAsError>
@@ -91,6 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application\Actor\Actor.cpp" />
     <ClCompile Include="Application\Particle\ObjParticle.cpp" />
     <ClCompile Include="Application\Scene\BaseClassIUDF.cpp" />
     <ClCompile Include="Application\Scene\BaseScene.cpp" />
@@ -100,6 +101,13 @@
     <ClCompile Include="Application\Scene\GameScene.cpp" />
     <ClCompile Include="Application\Scene\SceneManager.cpp" />
     <ClCompile Include="Application\Scene\TitleScene.cpp" />
+    <ClCompile Include="External\imgui\imgui.cpp" />
+    <ClCompile Include="External\imgui\imgui_demo.cpp" />
+    <ClCompile Include="External\imgui\imgui_draw.cpp" />
+    <ClCompile Include="External\imgui\imgui_impl_dx12.cpp" />
+    <ClCompile Include="External\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="External\imgui\imgui_tables.cpp" />
+    <ClCompile Include="External\imgui\imgui_widgets.cpp" />
     <ClCompile Include="GameEngine\2d\Sprite\Sprite.cpp" />
     <ClCompile Include="GameEngine\2d\Texture\Texture.cpp" />
     <ClCompile Include="GameEngine\2d\Texture\TextureModel.cpp" />
@@ -131,17 +139,9 @@
     <ClCompile Include="Application\Enemy\Body.cpp" />
     <ClCompile Include="Application\Enemy\Head.cpp" />
     <ClCompile Include="Application\Enemy\Robot.cpp" />
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_impl_dx12.cpp" />
-    <ClCompile Include="imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="imgui\imgui_tables.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameEngine\3d\Material.cpp" />
     <ClCompile Include="GameEngine\3d\Mesh.cpp" />
-    <ClCompile Include="Application\middle.cpp" />
     <ClCompile Include="GameEngine\3d\ObjModel.cpp" />
     <ClCompile Include="GameEngine\3d\Object3d.cpp" />
     <ClCompile Include="Application\Player\Player.cpp" />
@@ -270,6 +270,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Actor\Actor.h" />
     <ClInclude Include="Application\Particle\ObjParticle.h" />
     <ClInclude Include="Application\Scene\BaseClassIUDF.h" />
     <ClInclude Include="Application\Scene\BaseScene.h" />
@@ -279,6 +280,14 @@
     <ClInclude Include="Application\Scene\GameScene.h" />
     <ClInclude Include="Application\Scene\SceneManager.h" />
     <ClInclude Include="Application\Scene\TitleScene.h" />
+    <ClInclude Include="External\imgui\imconfig.h" />
+    <ClInclude Include="External\imgui\imgui.h" />
+    <ClInclude Include="External\imgui\imgui_impl_dx12.h" />
+    <ClInclude Include="External\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="External\imgui\imgui_internal.h" />
+    <ClInclude Include="External\imgui\imstb_rectpack.h" />
+    <ClInclude Include="External\imgui\imstb_textedit.h" />
+    <ClInclude Include="External\imgui\imstb_truetype.h" />
     <ClInclude Include="GameEngine\2d\Sprite\Sprite.h" />
     <ClInclude Include="GameEngine\2d\Texture\Texture.h" />
     <ClInclude Include="GameEngine\2d\Texture\TextureModel.h" />
@@ -311,17 +320,8 @@
     <ClInclude Include="Application\Enemy\Body.h" />
     <ClInclude Include="Application\Enemy\Head.h" />
     <ClInclude Include="Application\Enemy\Robot.h" />
-    <ClInclude Include="imgui\imconfig.h" />
-    <ClInclude Include="imgui\imgui.h" />
-    <ClInclude Include="imgui\imgui_impl_dx12.h" />
-    <ClInclude Include="imgui\imgui_impl_win32.h" />
-    <ClInclude Include="imgui\imgui_internal.h" />
-    <ClInclude Include="imgui\imstb_rectpack.h" />
-    <ClInclude Include="imgui\imstb_textedit.h" />
-    <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="GameEngine\3d\Material.h" />
     <ClInclude Include="GameEngine\3d\Mesh.h" />
-    <ClInclude Include="Application\middle.h" />
     <ClInclude Include="GameEngine\3d\ObjModel.h" />
     <ClInclude Include="GameEngine\3d\Object3d.h" />
     <ClInclude Include="Application\Player\Player.h" />
