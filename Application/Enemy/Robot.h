@@ -78,11 +78,19 @@ private:
 	std::unique_ptr<Head> head;
 	std::unique_ptr<BothArms>arms;
 	std::unique_ptr<Body>body;
+
+	std::unique_ptr<Object3d> HeadPart;
+	std::unique_ptr<Object3d> ArmsPart;
+	std::unique_ptr<Object3d> BodyPart;
+
 	//Obj
 	std::unique_ptr<Object3d> Shadow;
 	std::unique_ptr<Object3d> Center;
 	//Objモデル
 	ObjModel* ShadowModel = nullptr;
+	ObjModel* HeadPartModel;
+	ObjModel* ArmsPartModel;
+	ObjModel* BodyPartModel;
 	//Objパーティクル
 	std::list<std::unique_ptr<ObjParticle>>Obj_Particle;
 	//スプライト
@@ -98,6 +106,13 @@ private:
 	int OldHp = 0;
 	bool Robotarive = false;
 	XMVECTOR TrackPoint = { 0,0,0 };
+	//パーツごとのスケール
+	XMFLOAT3 HeadPartScl = { 0.3f,0.3f,0.3f };
+	XMFLOAT3 BodyPartScl = { 1.0f,1.0f,1.0f };
+	XMFLOAT3 ArmsPartScl = { 0.2f,0.2f,0.2f };
+	XMVECTOR HeadPartPos = { 0.0f,0.0f,0.0f };
+	XMVECTOR BodyPartPos = { 0.0f,0.0f,0.0f };
+	XMVECTOR ArmsPartPos = { 0.0f,0.0f,0.0f };
 		//パーツごとに渡すステータス
 		XMVECTOR All_Pos = { 0.0f,0.0f,-10.0f };
 		XMFLOAT3 All_Rot;

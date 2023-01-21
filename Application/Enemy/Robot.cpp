@@ -7,6 +7,15 @@ Robot::~Robot()
 	body.reset();
 	arms.reset();
 	Shadow.reset();
+
+	HeadPart.reset();
+	BodyPart.reset();
+	ArmsPart.reset();
+
+
+	delete HeadPartModel;
+	delete BodyPartModel;
+	delete ArmsPartModel;
 	delete ShadowModel;
 	delete Clush_SE;
 }
@@ -21,16 +30,25 @@ void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos,Camera* 
 	Shadow = Object3d::Create(ShadowModel);
 	Center = Object3d::Create(ShadowModel);
 
+	HeadPartModel = ObjModel::CreateFromOBJ("Head");
+	HeadPart = Object3d::Create(HeadPartModel);
+
+	BodyPartModel = ObjModel::CreateFromOBJ("tst2");
+	BodyPart = Object3d::Create(BodyPartModel);
+
+	ArmsPartModel = ObjModel::CreateFromOBJ("BothArm");
+	ArmsPart = Object3d::Create(ArmsPartModel);
+
 	Center_Mat = Center->GetMatrix();
 	Center_WorldPos = XMVector3TransformNormal(All_Pos, Center_Mat);
 
-	head = std::make_unique<Head>();
+	/*head = std::make_unique<Head>();
 	body = std::make_unique<Body>();
 	arms = std::make_unique<BothArms>();
 
 	head->Initialize(RemainPart[0],Center_WorldPos,All_Rot,came);
 	body->Initialize();
-	arms->Initialize();
+	arms->Initialize();*/
 
 
 	Clush_SE = new Audio();
@@ -46,7 +64,7 @@ void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos,Camera* 
 	Hp = 150;
 	OldHp = Hp;
 	Robotarive = true;
-	arms->RespownSet(All_Rot);
+	//arms->RespownSet(All_Rot);
 	Center->SetRotation(All_Rot);
 	Movement_F = movement;
 	Center->SetPosition(Center_WorldPos);
@@ -66,11 +84,34 @@ void Robot::AllUpdata(Bullet* bull)
 	Shadow->SetRotation({ 0.0f,0.0f,0.0f });
 	Shadow->SetScale({ 1.0f,1.0f,1.0f });
 
-	head->Update(RemainPart[0], Center_WorldPos, All_Rot, bull, Hp);
+	/*head->Update(RemainPart[0], Center_WorldPos, All_Rot, bull, Hp);
 	arms->Update(RemainPart[1], Center_WorldPos, All_Rot, bull, Hp);
-	body->Update(RemainPart[2], Center_WorldPos, All_Rot, bull, Hp);
+	body->Update(RemainPart[2], Center_WorldPos, All_Rot, bull, Hp);*/
 	Shadow->Update(Shadow_Col);
 	Center->Update();
+
+	HeadPartPos = Center_WorldPos;
+	ArmsPartPos = Center_WorldPos;
+	BodyPartPos = Center_WorldPos;
+	HeadPartPos.m128_f32[1] = Center_WorldPos.m128_f32[1] + 1.0f;
+	ArmsPartPos.m128_f32[1] = Center_WorldPos.m128_f32[1] + 0.2f;
+	
+
+	HeadPart->SetPosition(HeadPartPos);
+	HeadPart->SetRotation(All_Rot);
+	HeadPart->SetScale(HeadPartScl);
+
+	BodyPart->SetPosition(BodyPartPos);
+	BodyPart->SetRotation(All_Rot);
+	BodyPart->SetScale(BodyPartScl);
+
+	ArmsPart->SetPosition(ArmsPartPos);
+	ArmsPart->SetRotation(All_Rot);
+	ArmsPart->SetScale(ArmsPartScl);
+
+	HeadPart->Update();
+	BodyPart->Update();
+	ArmsPart->Update();
 
 	WorldtoScreen();
 
@@ -85,6 +126,10 @@ void Robot::Update(Bullet* bull,int& playerHp)
 		return particle->IsDelete();
 
 		});
+
+	if (Input::GetInstance()->PushKey(DIK_O)) {
+		Hp = 0;
+	}
 
 	//ダメージを受けたとき
 	if (OldHp > Hp) {
@@ -103,7 +148,7 @@ void Robot::Update(Bullet* bull,int& playerHp)
 			Motion();
 			Movement_F = false;
 			MoveSpeed = 0;
-			AttackMode(playerHp);
+			//AttackMode(playerHp);
 		}
 	}
 	else {
@@ -122,10 +167,11 @@ void Robot::Update(Bullet* bull,int& playerHp)
 		for (int i = 0; i < 3; i++) {
 			RemainPart[i] = false;
 		}
-		XMFLOAT4 col = body->GetCol();
-		if (col.w <=  0&&Obj_Particle.empty()) {
-			isDead_ = true;
-		}
+		isDead_ = true;
+		//XMFLOAT4 col = body->GetCol();
+		/*if (col.w <=  0&&Obj_Particle.empty()) {
+			
+		}*/
 
 	}
 	
@@ -135,9 +181,12 @@ void Robot::Update(Bullet* bull,int& playerHp)
 void Robot::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	head->Draw(RemainPart[0]);
+	/*head->Draw(RemainPart[0]);
 	arms->Draw(RemainPart[1]);
-	body->Draw(RemainPart[2]);
+	body->Draw(RemainPart[2]);*/
+	HeadPart->Draw();
+	BodyPart->Draw();
+	ArmsPart->Draw();
 	Shadow->Draw();
 	//Center->Draw();
 	for (std::unique_ptr<ObjParticle>& particle : Obj_Particle) {
@@ -221,57 +270,57 @@ void Robot::TrackPlayerMode()
 
 void Robot::Motion()
 {
-	XMFLOAT3 SclPlus = { 0.00001f,0.00001f,0.00001f };
+	//XMFLOAT3 SclPlus = { 0.00001f,0.00001f,0.00001f };
 
-	XMFLOAT3 bodyScl = body->GetScl();
-	XMFLOAT3 headScl = head->GetScl();
-	XMFLOAT3 armScl = arms->GetScl();
-	float rot = 0.05f;
+	//XMFLOAT3 bodyScl = body->GetScl();
+	//XMFLOAT3 headScl = head->GetScl();
+	//XMFLOAT3 armScl = arms->GetScl();
+	//float rot = 0.05f;
 
-	MotionTime += 0.001f;
-	//徐々に大きく
-	if (MotionChange == true) {
+	//MotionTime += 0.001f;
+	////徐々に大きく
+	//if (MotionChange == true) {
 
-		bodyScl.x += SclPlus.x;
-		bodyScl.y += SclPlus.y;
-		bodyScl.z += SclPlus.z;
+	//	bodyScl.x += SclPlus.x;
+	//	bodyScl.y += SclPlus.y;
+	//	bodyScl.z += SclPlus.z;
 
-		headScl.x += SclPlus.x;
-		headScl.y += SclPlus.y;
-		headScl.z += SclPlus.z;
+	//	headScl.x += SclPlus.x;
+	//	headScl.y += SclPlus.y;
+	//	headScl.z += SclPlus.z;
 
-		armScl.x += SclPlus.x;
-		armScl.y += SclPlus.y;
-		armScl.z += SclPlus.z;
-		if (MotionTime >= 1) {
-			MotionChange = false;
-			MotionTime = 0.0f;
-		}
-	}
-	//徐々に小さく
-	else {
-		bodyScl.x -= SclPlus.x;
-		bodyScl.y -= SclPlus.y;
-		bodyScl.z -= SclPlus.z;
+	//	armScl.x += SclPlus.x;
+	//	armScl.y += SclPlus.y;
+	//	armScl.z += SclPlus.z;
+	//	if (MotionTime >= 1) {
+	//		MotionChange = false;
+	//		MotionTime = 0.0f;
+	//	}
+	//}
+	////徐々に小さく
+	//else {
+	//	bodyScl.x -= SclPlus.x;
+	//	bodyScl.y -= SclPlus.y;
+	//	bodyScl.z -= SclPlus.z;
 
-		headScl.x -= SclPlus.x;
-		headScl.y -= SclPlus.y;
-		headScl.z -= SclPlus.z;
+	//	headScl.x -= SclPlus.x;
+	//	headScl.y -= SclPlus.y;
+	//	headScl.z -= SclPlus.z;
 
-		armScl.x -= SclPlus.x;
-		armScl.y -= SclPlus.y;
-		armScl.z -= SclPlus.z;
-		if (MotionTime >= 1) {
-			MotionChange = true;
-			MotionTime = 0.0f;
-		}
-	}
+	//	armScl.x -= SclPlus.x;
+	//	armScl.y -= SclPlus.y;
+	//	armScl.z -= SclPlus.z;
+	//	if (MotionTime >= 1) {
+	//		MotionChange = true;
+	//		MotionTime = 0.0f;
+	//	}
+	//}
 
-	body->SetScl(bodyScl);
+	/*body->SetScl(bodyScl);
 	head->SetScl(headScl);
 	arms->SetScl(armScl);
 
-	head->Motion(rot);
+	head->Motion(rot);*/
 
 }
 
@@ -311,21 +360,21 @@ void Robot::WorldtoScreen()
 	Center_WorldPos = { 0.0f,0.0f,0.0f };
 	Center_WorldPos = XMVector3TransformNormal(All_Pos, Center_Mat);
 	{
-		XMVECTOR positionRet = Center_WorldPos;
+		XMVECTOR PositionRet = Center_WorldPos;
 
 		ChangeViewPort(MatViewPort);
 
-		XMMATRIX matVP = MatViewPort;
+		XMMATRIX MatVP = MatViewPort;
 
 		XMMATRIX View = camera->GetViewMatrix();
 		XMMATRIX Pro = camera->GetProjectionMatrix();
 
-		XMMATRIX matViewProjectionViewport = View * Pro * matVP;
+		XMMATRIX MatViewProjectionViewport = View * Pro * MatVP;
 
-		positionRet = XMVector3TransformCoord(positionRet, matViewProjectionViewport);
+		PositionRet = XMVector3TransformCoord(PositionRet, MatViewProjectionViewport);
 
-		RockOn_Pos.x = positionRet.m128_f32[0];
-		RockOn_Pos.y = positionRet.m128_f32[1];
+		RockOn_Pos.x = PositionRet.m128_f32[0];
+		RockOn_Pos.y = PositionRet.m128_f32[1];
 
 		RockOn->SetPosition(RockOn_Pos);
 
