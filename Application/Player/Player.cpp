@@ -9,14 +9,14 @@ Player::~Player()
 {
 	delete TrackModel;
 	delete GunModel;
-	delete PlayerModel;
+	delete BodyModel;
 	delete PartGreen;
-	delete Shot_SE;
-	delete Reload_SE;
+	delete ShotSe;
+	delete ReloadSe;
 
 	Track.reset();
 	Gun.reset();
-	Player.reset();
+	Body.reset();
 }
 
 void Player::Initalize(Camera* came)
@@ -30,75 +30,75 @@ void Player::Initalize(Camera* came)
 	GunModel = ObjModel::CreateFromOBJ("gun");
 	Gun = Object3d::Create(GunModel);
 
-	PlayerModel = ObjModel::CreateFromOBJ("gun");
-	Player = Object3d::Create(PlayerModel);
+	BodyModel = ObjModel::CreateFromOBJ("gun");
+	Body = Object3d::Create(BodyModel);
 
 	Sprite::LoadTexture(200, L"Resources/mark2.png");
-	SpriteRet.reset(Sprite::SpriteCreate(200, Ret_Pos2D, Ret_Col, Ret_Anc));
+	SpriteReticle.reset(Sprite::SpriteCreate(200, ReticlePos2D, ReticleColor, ReticleAncorPoint));
 
 	Sprite::LoadTexture(300, L"Resources/curtain.png");
-	Curtain_Up.reset(Sprite::SpriteCreate(300, Curtain_UpPos));
+	CurtainUp.reset(Sprite::SpriteCreate(300, CurtainUpPos));
 
-	Skip_Pos = Curtain_DownPos;
+	SkipPos = CurtainDownPos;
 
 	Sprite::LoadTexture(302, L"Resources/Skip.png");
-	Skip.reset(Sprite::SpriteCreate(302, Skip_Pos));
+	Skip.reset(Sprite::SpriteCreate(302, SkipPos));
 
-	Curtain_Down.reset(Sprite::SpriteCreate(300, Curtain_DownPos));
-	Curtain_Up->SetSize(Curtain_Siz);
-	Curtain_Down->SetSize(Curtain_Siz);
+	CurtainDown.reset(Sprite::SpriteCreate(300, CurtainDownPos));
+	CurtainUp->SetSize(CurtainSize);
+	CurtainDown->SetSize(CurtainSize);
 
-	Railcam = new RailCamera();
-	Railcam->Initialize(Ret_Pos, Ret_Rot);
+	RailCam = new RailCamera();
+	RailCam->Initialize(ReticlePos, ReticleRot);
 
-	Player->SetParent(came);
+	Body->SetParent(came);
 
 	PartGreen = ParticleManager::Create(came);
 	PartRed = ParticleManager::Create(came);
 	Eye_rot.y = 180;
-	Railcam->Update(vel, Eye_rot, came);
+	RailCam->Update(vel, Eye_rot, came);
 
-	Shot_SE = new Audio();
-	Shot_SE->Initialize();
+	ShotSe = new Audio();
+	ShotSe->Initialize();
 
-	Reload_SE = new Audio();
-	Reload_SE->Initialize();
+	ReloadSe = new Audio();
+	ReloadSe->Initialize();
 };
 
 void Player::Set(Camera* came)
 {
 	const float BulletSpeed = 15.0f;
-	TrackWorld_Pos = { 0.0f,0.0f,2.0f };
-	TrackWorld_Pos = XMVector3Transform(TrackWorld_Pos, Track_Mat);
+	TrackWorldPos = { 0.0f,0.0f,2.0f };
+	TrackWorldPos = XMVector3Transform(TrackWorldPos, TrackMat);
 
-	Player_Mat = Player->GetMatrix();
-	PlayerWorld_Pos = { -10.0f,0.0f,-20.0f };
-	PlayerWorld_Pos = XMVector3Transform(PlayerWorld_Pos, Player_Mat);
+	BodyMat = Body->GetMatrix();
+	BodyWorldPos = { -10.0f,0.0f,-20.0f };
+	BodyWorldPos = XMVector3Transform(BodyWorldPos, BodyMat);
 
-	Ret_Rot.y = (Ret_Pos2D.x - 640) / 10 + ChangeRot;
+	ReticleRot.y = (ReticlePos2D.x - 640) / 10 + ChangeRot;
 	//レティクルObj
-	Track->SetRotation({ Ret_Rot });
-	Track->SetScale({ Ret_Scl });
-	Track_Mat = Track->GetMatrix();
+	Track->SetRotation({ ReticleRot });
+	Track->SetScale({ ReticleScl });
+	TrackMat = Track->GetMatrix();
 
 	//プレイヤーObj
-	Player->SetRotation(Player_Rot);
-	Player->SetPosition(Player_Pos);
-	Player->SetScale(Player_Scl);
-	Player->SetParent(came);
+	Body->SetRotation(BodyRot);
+	Body->SetPosition(BodyPos);
+	Body->SetScale(BodyScl);
+	Body->SetParent(came);
 
-	Gun_Rot.y = (Ret_Pos2D.x - 640) / 10;
-	Gun_Rot.x = (Ret_Pos2D.y - 360) / 50;
+	GunRot.y = (ReticlePos2D.x - 640) / 10;
+	GunRot.x = (ReticlePos2D.y - 360) / 50;
 
 
-	Gun->SetRotation(Gun_Rot);
-	Gun->SetScale(Gun_Scl);
+	Gun->SetRotation(GunRot);
+	Gun->SetScale(GunScl);
 	Gun->SetParent(came);
-	Gun->SetPosition(Gun_Pos);
+	Gun->SetPosition(GunPos);
 
-	Gun_Mat = Gun->GetMatrix();
-	GunWorld_Pos = { 0.0f,0.0f,1.0f };
-	GunWorld_Pos = XMVector3Transform(Gun_Pos, Gun_Mat);
+	GunMat = Gun->GetMatrix();
+	GunWorldPos = { 0.0f,0.0f,1.0f };
+	GunWorldPos = XMVector3Transform(GunPos, GunMat);
 }
 
 void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[], int pat)
@@ -112,7 +112,7 @@ void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 				Particle_F = true;
 				for (int i = 0; i < BULL; i++) {
 					if (bull[i]->CheckOk()) {
-						bull[i]->Test(GunWorld_Pos, TrackWorld_Pos, Eye_rot,Ret_Rot);
+						bull[i]->Test(GunWorldPos, TrackWorldPos, Eye_rot,ReticleRot);
 						bull[i]->TriggerOn();
 						break;
 					}
@@ -123,7 +123,7 @@ void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 		//リロード
 		if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
 			if (ReloadSound_F == true) {
-				Reload_SE->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
+				ReloadSe->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
 				ReloadSound_F = false;
 			}
 			ReloadFlag = true;
@@ -148,7 +148,7 @@ void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 		vel = { 0, 0, MoveSpeed };
 	}
 
-	vel = XMVector3TransformNormal(vel, Player_Mat);
+	vel = XMVector3TransformNormal(vel, BodyMat);
 
 	for (int i = 0; i < 9; i++) {
 		bull[i]->Update();
@@ -159,10 +159,10 @@ void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 	CameraWork();
 
 	Set(came);
-	Railcam->Update(vel, Eye_rot, came);
+	RailCam->Update(vel, Eye_rot, came);
 
 	Track->Update();
-	Player->Update();
+	Body->Update();
 	Gun->Update();
 	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
 	PartGreen->Update({ 0.0f,1.0f,0,0.0f });
@@ -179,11 +179,11 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 void Player::SpriteDraw()
 {
 	if (CamWork == true) {
-		SpriteRet->Draw();
+		SpriteReticle->Draw();
 	}
 	else {
-		Curtain_Up->Draw();
-		Curtain_Down->Draw();
+		CurtainUp->Draw();
+		CurtainDown->Draw();
 		Skip->Draw();
 	}
 }
@@ -224,9 +224,9 @@ void Player::CameraWork()
 			if (Eye_rot.x <= 0.0f) {
 				Eye_rot.x = 0.0f;
 			}
-			if (PlayerWorld_Pos.m128_f32[1] <= 0.3f) {
+			if (BodyWorldPos.m128_f32[1] <= 0.3f) {
 				vel = { 0.0f,0.0f,0.0f };
-				Ret_Pos.m128_f32[1] = 0.0f;
+				ReticlePos.m128_f32[1] = 0.0f;
 				MovieFlag = true;
 			}
 		}
@@ -238,8 +238,8 @@ void Player::CameraWork()
 		ActionCount = 100;
 		Eye_rot.x = 0;
 		Eye_rot.y = 0;
-		Ret_Pos = { 0.0f,-0.7f,13.0f };
-		Railcam->Initialize(Ret_Pos, Eye_rot);
+		ReticlePos = { 0.0f,-0.7f,13.0f };
+		RailCam->Initialize(ReticlePos, Eye_rot);
 	}
 
 	if (stanby == false) {
@@ -251,50 +251,50 @@ void Player::CameraWork()
 	}
 
 	if (MovieFlag == false) {
-		Curtain_UpPos.y += 4;
-		Curtain_DownPos.y -= 4;
-		Skip_Pos.y -= 2;
+		CurtainUpPos.y += 4;
+		CurtainDownPos.y -= 4;
+		SkipPos.y -= 2;
 
-		if (Curtain_UpPos.y >= 0) {
-			Curtain_UpPos.y = 0;
+		if (CurtainUpPos.y >= 0) {
+			CurtainUpPos.y = 0;
 		}
 
-		if (Curtain_DownPos.y <= 620) {
-			Curtain_DownPos.y = 620;
+		if (CurtainDownPos.y <= 620) {
+			CurtainDownPos.y = 620;
 		}
 
-		if (Skip_Pos.y <= 620) {
-			Skip_Pos.y = 620;
+		if (SkipPos.y <= 620) {
+			SkipPos.y = 620;
 		}
 	}
 
 	else {
-		Curtain_UpPos.y -= 4;
-		Curtain_DownPos.y += 4;
-		Skip_Pos.y += 4;
+		CurtainUpPos.y -= 4;
+		CurtainDownPos.y += 4;
+		SkipPos.y += 4;
 
-		if (Curtain_UpPos.y <= -100) {
-			Curtain_UpPos.y = -100;
+		if (CurtainUpPos.y <= -100) {
+			CurtainUpPos.y = -100;
 		}
 
-		if (Curtain_DownPos.y >= 720) {
-			Curtain_DownPos.y = 720;
+		if (CurtainDownPos.y >= 720) {
+			CurtainDownPos.y = 720;
 			CamWork = true;
 			Start_F = true;
 		}
 
-		if (Skip_Pos.y >= 720) {
-			Skip_Pos.y = 12000;
+		if (SkipPos.y >= 720) {
+			SkipPos.y = 12000;
 		}
 	}
-	Curtain_Up->SetPosition(Curtain_UpPos);
-	Curtain_Down->SetPosition(Curtain_DownPos);
-	Skip->SetPosition(Skip_Pos);
+	CurtainUp->SetPosition(CurtainUpPos);
+	CurtainDown->SetPosition(CurtainDownPos);
+	Skip->SetPosition(SkipPos);
 }
 
 void Player::PlayerMove(bool& move, int patern)
 {
-	XMMATRIX camMat = Railcam->GetWorld();
+	XMMATRIX camMat = RailCam->GetWorld();
 	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
 
 	camvec = XMVector3Transform(camvec, camMat);
@@ -446,7 +446,6 @@ void Player::PlayerMove(bool& move, int patern)
 
 void Player::ObjDraw()
 {
-	//Track->Draw();
 	if (Hp >= 0 && CamWork == true) {
 		Gun->Draw();
 	}
@@ -455,7 +454,7 @@ void Player::ObjDraw()
 void Player::ImGuiDraw()
 {
 
-	XMMATRIX camMat = Railcam->GetWorld();
+	XMMATRIX camMat = RailCam->GetWorld();
 	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
 
 	camvec = XMVector3Transform(camvec, camMat);
@@ -472,30 +471,30 @@ void Player::ImGuiDraw()
 	}
 
 
-	if (ImGui::TreeNode("Ret_Rot")) {
-		ImGui::SliderFloat("Rot.x", &Ret_Rot.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Rot.y", &Ret_Rot.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("Rot.z", &Ret_Rot.z, -100.0f, 100.0f);
+	if (ImGui::TreeNode("ReticleRot")) {
+		ImGui::SliderFloat("Rot.x", &ReticleRot.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.y", &ReticleRot.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("Rot.z", &ReticleRot.z, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("Ret_Pos2D")) {
-		ImGui::SliderFloat("Ret_Pos2D.x", &Ret_Pos2D.x, 0.0f, 1280.0f);
-		ImGui::SliderFloat("Ret_Pos2D.y", &Ret_Pos2D.y, 0.0f, 720.0f);
+	if (ImGui::TreeNode("ReticlePos2D")) {
+		ImGui::SliderFloat("ReticlePos2D.x", &ReticlePos2D.x, 0.0f, 1280.0f);
+		ImGui::SliderFloat("ReticlePos2D.y", &ReticlePos2D.y, 0.0f, 720.0f);
 		ImGui::TreePop();
 	}
 
 	if (ImGui::TreeNode("gunpos")) {
-		ImGui::SliderFloat("gunpos.x", &Gun_Pos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunpos.y", &Gun_Pos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunpos.z", &Gun_Pos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.x", &GunPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.y", &GunPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.z", &GunPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
 	if (ImGui::TreeNode("gunWorldpos")) {
-		ImGui::SliderFloat("gunWordpos.x", &GunWorld_Pos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.y", &GunWorld_Pos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.z", &GunWorld_Pos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.x", &GunWorldPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.y", &GunWorldPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.z", &GunWorldPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
@@ -529,14 +528,14 @@ void Player::ChangeViewPort(XMMATRIX& matViewPort)
 
 void Player::SoundEffect()
 {
-	Shot_SE->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
+	ShotSe->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
 }
 
 void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[])
 {
-	Mouse::GetInstance()->MouseMoveSprite(Ret_Pos2D);
+	Mouse::GetInstance()->MouseMoveSprite(ReticlePos2D);
 
-	SpriteRet->SetPosition(Ret_Pos2D);
+	SpriteReticle->SetPosition(ReticlePos2D);
 
 	XMMATRIX matViewport;
 
@@ -545,23 +544,23 @@ void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT
 	XMMATRIX View = came->GetViewMatrix();
 	XMMATRIX Pro = came->GetProjectionMatrix();
 
-	RetWorld_Pos = TrackWorld_Pos;
+	ReticleWorldPos = TrackWorldPos;
 
 	Distance = 11;
 
-	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, Ret_Pos2D, RetWorld_Pos, Distance);
+	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, ReticlePos2D, ReticleWorldPos, Distance);
 
 
 	for (int i = 0; i < EneCount; i++) {
-		if ((Ret_Pos2D.x >= Ene2dPos[i].x - 16) && (Ret_Pos2D.x <= Ene2dPos[i].x + 16)) {
+		if ((ReticlePos2D.x >= Ene2dPos[i].x - 16) && (ReticlePos2D.x <= Ene2dPos[i].x + 16)) {
 
-			RetWorld_Pos.m128_f32[0] = enePos[i].m128_f32[0];
-			RetWorld_Pos.m128_f32[2] = enePos[i].m128_f32[2];
-			RetWorld_Pos.m128_f32[1] = RetWorld_Pos.m128_f32[1] - 0.35f;
+			ReticleWorldPos.m128_f32[0] = enePos[i].m128_f32[0];
+			ReticleWorldPos.m128_f32[2] = enePos[i].m128_f32[2];
+			ReticleWorldPos.m128_f32[1] = ReticleWorldPos.m128_f32[1] - 0.35f;
 		}
 	}
 
-	Track->SetPosition(RetWorld_Pos);
+	Track->SetPosition(ReticleWorldPos);
 
 
 }
@@ -570,22 +569,22 @@ void Player::ParticleEfect()
 {
 	if (Particle_F == true) {
 		for (int i = 0; i < 10; i++) {
-			double radX = Ret_Rot.y * M_PI / 180;
-			double radY = Gun_Rot.x * M_PI / 180;
+			double radX = ReticleRot.y * M_PI / 180;
+			double radY = GunRot.x * M_PI / 180;
 			float sinradX = sinf(radX);
 			float cosradX = cosf(radX);
 
 			float sinradY = sinf(radY);
 			float cosradY = cosf(radY);
 			if (PaternCount == 3 || PaternCount == 4) {
-				pos.x = GunWorld_Pos.m128_f32[0] + 2.3f;
-				pos.y = GunWorld_Pos.m128_f32[1] - sinradY * 3;
-				pos.z = GunWorld_Pos.m128_f32[2]-2.8f*cosradX;
+				pos.x = GunWorldPos.m128_f32[0] + 2.3f;
+				pos.y = GunWorldPos.m128_f32[1] - sinradY * 3;
+				pos.z = GunWorldPos.m128_f32[2]-2.8f*cosradX;
 			}
 			else if (PaternCount == 0 || PaternCount == 1 || PaternCount == 2 || PaternCount == 5) {
-				pos.x = GunWorld_Pos.m128_f32[0]+sinradX*2.8f;
-				pos.y = GunWorld_Pos.m128_f32[1]-sinradY*3;
-				pos.z = GunWorld_Pos.m128_f32[2] + 2.3f;
+				pos.x = GunWorldPos.m128_f32[0]+sinradX*2.8f;
+				pos.y = GunWorldPos.m128_f32[1]-sinradY*3;
+				pos.z = GunWorldPos.m128_f32[2] + 2.3f;
 			}
 
 			const float rnd_vel = 0.001f;
