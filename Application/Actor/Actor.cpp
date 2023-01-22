@@ -173,17 +173,21 @@ void Actor::Update()
 			player->SetFinish(finish);
 		}
 
+
+		XMFLOAT2 Player2DPos = player->GetRetPosition();
+		bool PlayerBulletShot_F = player->GetBulletShot();
 		//“G‚ÌXVˆ—
 		for (std::unique_ptr<Robot>& Robot : rob) {
 			enemyPos[CountDistance] = Robot->GetPosition();
 			ene2DPos[CountDistance] = Robot->Get2DPosition();
 			for (int i = 0; i < 9; i++) {
-				Robot->Update(playerHp);
+				Robot->Update(Player2DPos,playerHp,PlayerBulletShot_F);
 			}
 			CountDistance += 1;
 		}
+		player->SetBulletShot(PlayerBulletShot_F);
 	}
-
+	
 	if (patern >= 5) {
 		heriY += 15.0f;
 	}

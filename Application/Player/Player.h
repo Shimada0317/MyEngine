@@ -95,6 +95,8 @@ public:
 	const bool& GetFring() { return Fring_F; }
 	//Hp
 	int GetHp() { return Hp; }
+
+	const bool& GetBulletShot() { return BulletShot_F; }
 #pragma endregion
 
 #pragma region Set
@@ -105,6 +107,7 @@ public:
 	void SetRetSiz(const XMFLOAT2& scale) { this->ReticleSize = scale; }
 	void SetHp(int HP) { this->Hp = HP; }
 	void SetFinish(const bool& finish) { this->Finish = finish; }
+	void SetBulletShot(const bool& BulletShot_F) { this->BulletShot_F = BulletShot_F; }
 #pragma endregion
 private:
 
@@ -222,5 +225,9 @@ private:
 	const float  M_PI = 3.14;
 
 	XMFLOAT3 pos;
+
+
+	bool BulletShot_F = false;
+	float ShotCoolTime = 0.0f;
 };
 

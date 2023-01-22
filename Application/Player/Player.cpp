@@ -104,21 +104,26 @@ void Player::Set(Camera* came)
 void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[], int pat)
 {
 	PaternCount = pat;
+	BulletShot_F = false;
 	if (CamWork == true) {
 		//’e‚Ì”­ŽË‘O
-		if (Remaining < BULL - 1 && ReloadFlag == false) {
+		if (Remaining < BULL - 1 && ReloadFlag == false && BulletShot_F == false) {
 			if (Mouse::GetInstance()->PushClick(0)) {
 				Remaining += 1;
 				Particle_F = true;
-				for (int i = 0; i < BULL; i++) {
-					if (bull[i]->CheckOk()) {
-						bull[i]->Test(GunWorldPos, TrackWorldPos, Eye_rot,ReticleRot);
-						bull[i]->TriggerOn();
-						break;
-					}
-				}
+				BulletShot_F = true;
 			}
 		}
+		if (BulletShot_F == true) {
+			ShotCoolTime += 1;
+			if (ShotCoolTime >= 2) {
+				ShotCoolTime = false;
+			}
+		}
+		else {
+			ShotCoolTime = 0.0f;
+		}
+
 		ParticleEfect();
 		//ƒŠƒ[ƒh
 		if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
@@ -579,11 +584,11 @@ void Player::ParticleEfect()
 			if (PaternCount == 3 || PaternCount == 4) {
 				pos.x = GunWorldPos.m128_f32[0] + 2.3f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 3;
-				pos.z = GunWorldPos.m128_f32[2]-2.8f*cosradX;
+				pos.z = GunWorldPos.m128_f32[2] - 2.8f * cosradX;
 			}
 			else if (PaternCount == 0 || PaternCount == 1 || PaternCount == 2 || PaternCount == 5) {
-				pos.x = GunWorldPos.m128_f32[0]+sinradX*2.8f;
-				pos.y = GunWorldPos.m128_f32[1]-sinradY*3;
+				pos.x = GunWorldPos.m128_f32[0] + sinradX * 2.8f;
+				pos.y = GunWorldPos.m128_f32[1] - sinradY * 3;
 				pos.z = GunWorldPos.m128_f32[2] + 2.3f;
 			}
 

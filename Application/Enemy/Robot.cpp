@@ -112,8 +112,10 @@ void Robot::AllUpdata()
 	}
 }
 
-void Robot::Update(int& playerHp)
+void Robot::Update(const XMFLOAT2& Player2DPos,int& PlayerHp,bool& PlyerBulletShot)
 {
+	StatusSet();
+
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 
@@ -122,6 +124,14 @@ void Robot::Update(int& playerHp)
 	if (Input::GetInstance()->PushKey(DIK_O)) {
 		Hp = 0;
 	}
+
+	if (PlyerBulletShot == true) {
+		if (Player2DPos.x - 30 < RockOn_Pos.x && Player2DPos.x + 30 > RockOn_Pos.x) {
+			Hp -= 10;
+			PlyerBulletShot = false;
+		}
+	}
+
 
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
 	if (OldHp > Hp) {

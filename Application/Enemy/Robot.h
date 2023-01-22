@@ -45,7 +45,7 @@ public:
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
-	void Update(int& playerHp);
+	void Update(const XMFLOAT2& Player2DPos, int& PlayerHp,bool& PlayerBulletShot);
 	//描画
 	void Draw(DirectXCommon* dxCommon);
 	//Img描画
