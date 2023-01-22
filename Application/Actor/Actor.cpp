@@ -178,7 +178,7 @@ void Actor::Update()
 			enemyPos[CountDistance] = Robot->GetPosition();
 			ene2DPos[CountDistance] = Robot->Get2DPosition();
 			for (int i = 0; i < 9; i++) {
-				Robot->Update(bull[i],playerHp);
+				Robot->Update(playerHp);
 			}
 			CountDistance += 1;
 		}

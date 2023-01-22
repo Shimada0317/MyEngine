@@ -32,17 +32,20 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Step">移動時に横移動するか</param>
 	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& AllPos, Camera* came, const bool& movement= false);
+
+	void StatusSet();
+
 	/// <summary>
 	/// Upfdateはこの中で
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
-	void AllUpdata(Bullet* bull);
+	void AllUpdata();
 	/// <summary>
 	/// ロボットの更新処理
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
-	void Update(Bullet* bull,int& playerHp);
+	void Update(int& playerHp);
 	//描画
 	void Draw(DirectXCommon* dxCommon);
 	//Img描画

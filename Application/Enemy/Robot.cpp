@@ -42,15 +42,6 @@ void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos,Camera* 
 	Center_Mat = Center->GetMatrix();
 	Center_WorldPos = XMVector3TransformNormal(All_Pos, Center_Mat);
 
-	/*head = std::make_unique<Head>();
-	body = std::make_unique<Body>();
-	arms = std::make_unique<BothArms>();
-
-	head->Initialize(RemainPart[0],Center_WorldPos,All_Rot,came);
-	body->Initialize();
-	arms->Initialize();*/
-
-
 	Clush_SE = new Audio();
 	Clush_SE->Initialize();
 
@@ -64,14 +55,14 @@ void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos,Camera* 
 	Hp = 150;
 	OldHp = Hp;
 	Robotarive = true;
-	//arms->RespownSet(All_Rot);
 	Center->SetRotation(All_Rot);
 	Movement_F = movement;
 	Center->SetPosition(Center_WorldPos);
 }
 
-void Robot::AllUpdata(Bullet* bull)
+void Robot::StatusSet()
 {
+
 	Center->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(Center_Mat);
 	Center_Mat = Center->GetMatrix();
@@ -84,18 +75,12 @@ void Robot::AllUpdata(Bullet* bull)
 	Shadow->SetRotation({ 0.0f,0.0f,0.0f });
 	Shadow->SetScale({ 1.0f,1.0f,1.0f });
 
-	/*head->Update(RemainPart[0], Center_WorldPos, All_Rot, bull, Hp);
-	arms->Update(RemainPart[1], Center_WorldPos, All_Rot, bull, Hp);
-	body->Update(RemainPart[2], Center_WorldPos, All_Rot, bull, Hp);*/
-	Shadow->Update(Shadow_Col);
-	Center->Update();
 
 	HeadPartPos = Center_WorldPos;
 	ArmsPartPos = Center_WorldPos;
 	BodyPartPos = Center_WorldPos;
 	HeadPartPos.m128_f32[1] = Center_WorldPos.m128_f32[1] + 1.0f;
 	ArmsPartPos.m128_f32[1] = Center_WorldPos.m128_f32[1] + 0.2f;
-	
 
 	HeadPart->SetPosition(HeadPartPos);
 	HeadPart->SetRotation(All_Rot);
@@ -109,18 +94,25 @@ void Robot::AllUpdata(Bullet* bull)
 	ArmsPart->SetRotation(All_Rot);
 	ArmsPart->SetScale(ArmsPartScl);
 
+	WorldtoScreen();
+}
+
+void Robot::AllUpdata()
+{
+
+	Shadow->Update(Shadow_Col);
+	Center->Update();
+
 	HeadPart->Update();
 	BodyPart->Update();
 	ArmsPart->Update();
-
-	WorldtoScreen();
 
 	for (std::unique_ptr<ObjParticle>& patrticle : Obj_Particle) {
 		patrticle->Update(Center_WorldPos, All_Rot);
 	}
 }
 
-void Robot::Update(Bullet* bull,int& playerHp)
+void Robot::Update(int& playerHp)
 {
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
@@ -148,7 +140,6 @@ void Robot::Update(Bullet* bull,int& playerHp)
 			Motion();
 			Movement_F = false;
 			MoveSpeed = 0;
-			//AttackMode(playerHp);
 		}
 	}
 	else {
@@ -168,22 +159,15 @@ void Robot::Update(Bullet* bull,int& playerHp)
 			RemainPart[i] = false;
 		}
 		isDead_ = true;
-		//XMFLOAT4 col = body->GetCol();
-		/*if (col.w <=  0&&Obj_Particle.empty()) {
-			
-		}*/
 
 	}
 	
-	AllUpdata(bull);
+	AllUpdata();
 }
 
 void Robot::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	/*head->Draw(RemainPart[0]);
-	arms->Draw(RemainPart[1]);
-	body->Draw(RemainPart[2]);*/
 	HeadPart->Draw();
 	BodyPart->Draw();
 	ArmsPart->Draw();
@@ -208,11 +192,6 @@ void Robot::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Enemy");
-	//ImGui::Checkbox("Att", &AttackFase);
-//	ImGui::SliderFloat("Hp", &a, -100.0f, 100.0f);
-	//ImGui::SliderFloat("len", &Length, -100.0f, 100.0f);
-	//ImGui::SliderFloat("imgPosX", &Ene2DPos.x, -100.0f, 100.0f);
-	//ImGui::SliderFloat("imgPosY", &Ene2DPos.y, -100.0f, 100.0f);
 
 	ImGui::SliderFloat("AllPosX", &Center_WorldPos.m128_f32[0], -100.0f, 100.0f);
 	ImGui::SliderFloat("AllPosY", &Center_WorldPos.m128_f32[1], -100.0f, 100.0f);

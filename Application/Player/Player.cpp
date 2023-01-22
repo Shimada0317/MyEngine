@@ -165,7 +165,7 @@ void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 	Body->Update();
 	Gun->Update();
 	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
-	PartGreen->Update({ 0.0f,1.0f,0,0.0f });
+	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
 }
 
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
