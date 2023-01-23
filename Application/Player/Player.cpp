@@ -5,6 +5,8 @@
 #include"Mouse.h"
 #include"WinApp.h"
 
+const int ReaminingBullet = 8;
+
 Player::~Player()
 {
 	delete TrackModel;
@@ -90,7 +92,6 @@ void Player::Set(Camera* came)
 	GunRot.y = (ReticlePos2D.x - 640) / 10;
 	GunRot.x = (ReticlePos2D.y - 360) / 50;
 
-
 	Gun->SetRotation(GunRot);
 	Gun->SetScale(GunScl);
 	Gun->SetParent(came);
@@ -101,27 +102,25 @@ void Player::Set(Camera* came)
 	GunWorldPos = XMVector3Transform(GunPos, GunMat);
 }
 
-void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[], int pat)
+void Player::Update(int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[], int paterncount)
 {
-	PaternCount = pat;
+	PaternCount = paterncount;
 	BulletShot_F = false;
-	if (CamWork == true) {
+	//マウス座標の取得
+	MouthContoroll();
+	//
+	if (CameraWork_F == true) {
 		//弾の発射前
-		if (Remaining < BULL - 1 && ReloadFlag == false && BulletShot_F == false) {
-			if (Mouse::GetInstance()->PushClick(0)) {
+		if (Remaining <  ReaminingBullet&& ReloadFlag == false && BulletShot_F == false) {
+			if (Mouse::GetInstance()->PushClick(0)) {				
 				Remaining += 1;
 				Particle_F = true;
 				BulletShot_F = true;
+				Recoil_F = true;
 			}
-		}
-		if (BulletShot_F == true) {
-			ShotCoolTime += 1;
-			if (ShotCoolTime >= 2) {
-				ShotCoolTime = false;
+			else {
+				BulletShot_F = false;
 			}
-		}
-		else {
-			ShotCoolTime = 0.0f;
 		}
 
 		ParticleEfect();
@@ -138,6 +137,7 @@ void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 			Remaining = 8;
 			ReloadTime += 1;
 			Anser = ReloadTime % 40;
+			
 			if (Anser == 0) {
 				Remaining = 0;
 				if (Remaining == 0) {
@@ -154,12 +154,6 @@ void Player::Update(Bullet* bull[], int& Remaining, const XMVECTOR enePos[], Cam
 	}
 
 	vel = XMVector3TransformNormal(vel, BodyMat);
-
-	for (int i = 0; i < 9; i++) {
-		bull[i]->Update();
-	}
-
-	MouthContoroll(enePos, came, Ene2dPos);
 
 	CameraWork();
 
@@ -183,7 +177,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 
 void Player::SpriteDraw()
 {
-	if (CamWork == true) {
+	if (CameraWork_F == true) {
 		SpriteReticle->Draw();
 	}
 	else {
@@ -195,7 +189,7 @@ void Player::SpriteDraw()
 
 void Player::CameraWork()
 {
-	if (CamWork == false && Start_F == false) {
+	if (CameraWork_F == false && Start_F == false) {
 
 		if (stanby == false) {
 			Eye_rot.y = 180;
@@ -238,7 +232,7 @@ void Player::CameraWork()
 
 	}
 
-	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanby == true && CamWork == false) {
+	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanby == true && CameraWork_F == false) {
 		MovieFlag = true;
 		ActionCount = 100;
 		Eye_rot.x = 0;
@@ -284,7 +278,7 @@ void Player::CameraWork()
 
 		if (CurtainDownPos.y >= 720) {
 			CurtainDownPos.y = 720;
-			CamWork = true;
+			CameraWork_F = true;
 			Start_F = true;
 		}
 
@@ -439,7 +433,7 @@ void Player::PlayerMove(bool& move, int patern)
 				}
 			}
 			move = false;
-			CamWork = false;
+			CameraWork_F = false;
 
 			WaveCount += 1;
 			MoveTimer = 0.0f;
@@ -451,7 +445,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 void Player::ObjDraw()
 {
-	if (Hp >= 0 && CamWork == true) {
+	if (Hp >= 0 && CameraWork_F == true) {
 		Gun->Draw();
 	}
 }
@@ -536,38 +530,12 @@ void Player::SoundEffect()
 	ShotSe->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
 }
 
-void Player::MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[])
+void Player::MouthContoroll()
 {
+	//マウス座標の取得
 	Mouse::GetInstance()->MouseMoveSprite(ReticlePos2D);
-
+	//取得した座標をレティクルにセット
 	SpriteReticle->SetPosition(ReticlePos2D);
-
-	XMMATRIX matViewport;
-
-	ChangeViewPort(matViewport);
-
-	XMMATRIX View = came->GetViewMatrix();
-	XMMATRIX Pro = came->GetProjectionMatrix();
-
-	ReticleWorldPos = TrackWorldPos;
-
-	Distance = 11;
-
-	Mouse::GetInstance()->Mousemove(View, Pro, matViewport, ReticlePos2D, ReticleWorldPos, Distance);
-
-
-	for (int i = 0; i < EneCount; i++) {
-		if ((ReticlePos2D.x >= Ene2dPos[i].x - 16) && (ReticlePos2D.x <= Ene2dPos[i].x + 16)) {
-
-			ReticleWorldPos.m128_f32[0] = enePos[i].m128_f32[0];
-			ReticleWorldPos.m128_f32[2] = enePos[i].m128_f32[2];
-			ReticleWorldPos.m128_f32[1] = ReticleWorldPos.m128_f32[1] - 0.35f;
-		}
-	}
-
-	Track->SetPosition(ReticleWorldPos);
-
-
 }
 
 void Player::ParticleEfect()

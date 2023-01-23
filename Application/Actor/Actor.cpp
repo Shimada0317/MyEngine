@@ -4,9 +4,7 @@
 #include<fstream>
 Actor::~Actor()
 {
-	for (int i = 0; i < 9; i++) {
-		delete bull[i];
-	}
+
 	player.reset();
 	delete Reload;
 	delete wave;
@@ -36,11 +34,6 @@ void Actor::Initialize()
 	player->Initalize(camera);
 	camera->Update();
 	playerPos = player->GetPosition();
-
-	for (int i = 0; i < 9; i++) {
-		bull[i] = new Bullet();
-		bull[i]->Initialize();
-	}
 
 	//スプライトの読み込み
 	for (int i = 0; i < 9; i++) {
@@ -203,7 +196,7 @@ void Actor::Update()
 	//座標の設定
 	SetPSR();
 	//プレイヤーの更新処理
-	player->Update(bull, Remaining,enemyPos,camera,ene2DPos,patern);
+	player->Update(Remaining,enemyPos,camera,ene2DPos,patern);
 	camera->Update();
 }
 
@@ -213,9 +206,6 @@ void Actor::Draw(DirectXCommon* dxCommon)
 		robot->Draw(dxCommon);
 	}
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	for (int i = 0; i < 9; i++) {
-		bull[i]->Draw();
-	}
 	Goal->Draw();
 	hane->Draw();
 	if (backObj == true) {
@@ -342,12 +332,8 @@ void Actor::UpdataEnemyPopCommands()
 
 		if (word.find("WAVE") == 0) {
 			getline(line_stram, word, ',');
-
 			//WAVEの要素
 			count = atoi(word.c_str());
-			for (int i = 0; i < 9; i++) {
-				bull[i]->SetCount(count);
-			}
 		}
 		if (patern == count) {
 			if (word.find("ROTATION") == 0) {

@@ -127,7 +127,7 @@ void Robot::Update(const XMFLOAT2& Player2DPos,int& PlayerHp,bool& PlyerBulletSh
 
 	if (PlyerBulletShot == true) {
 		if (Player2DPos.x - 30 < RockOn_Pos.x && Player2DPos.x + 30 > RockOn_Pos.x) {
-			Hp -= 10;
+			Hp -= 30;
 			PlyerBulletShot = false;
 		}
 	}

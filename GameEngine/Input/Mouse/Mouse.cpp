@@ -24,6 +24,7 @@ void Mouse::Initialize(WinApp* winApp)
 	result = Onclick->SetCooperativeLevel(
 		winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 
+	ShowCursor(false);
 }
 
 void Mouse::Update()
@@ -65,6 +66,20 @@ void Mouse::MouseMoveSprite(XMFLOAT2& spritePos)
 
 	spritePos.x = mousePosition.x;
 	spritePos.y = mousePosition.y;
+}
+
+void Mouse::MouseGetSpritePos(XMFLOAT2& spritePos)
+{
+	POINT mousePosition;
+
+	mousePosition.x = spritePos.x;
+	mousePosition.y = spritePos.y;
+
+	GetCursorPos(&mousePosition);
+
+	HWND hwnd = winApp->GetHwnd();
+
+	ScreenToClient(hwnd, &mousePosition);
 }
 
 void Mouse::Mousemove(const XMMATRIX& View, const XMMATRIX& Pro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet,float Distance=11)

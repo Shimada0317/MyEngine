@@ -11,8 +11,6 @@
 #include<memory>
 #include<list>
 
-const int BULL = 9;
-
 class Player
 {
 public:
@@ -36,7 +34,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(Bullet* bull[], int& Remaining,const XMVECTOR enePos[], Camera* came,const XMFLOAT2 Ene2dPos[],int patern);
+	void Update(int& Remaining,const XMVECTOR enePos[], Camera* came,const XMFLOAT2 Ene2dPos[],int patern);
 
 	/// <summary>
 	/// パーティクルの描画
@@ -68,10 +66,7 @@ public:
 	/// <summary>
 	/// マウスの取得
 	/// </summary>
-	/// <param name="enePos">敵の座標</param>
-	/// <param name="came">カメラ</param>
-	/// <param name="Ene2dPos">敵の2D座標</param>
-	void MouthContoroll(const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[]);
+	void MouthContoroll();
 	//パーティクル発生
 	void ParticleEfect();
 
@@ -90,7 +85,7 @@ public:
 	//二次元スケール
 	const XMFLOAT2& GetRetSiz() { return ReticleSize; }
 
-	const bool& GetCamWork() { return CamWork; }
+	const bool& GetCamWork() { return CameraWork_F; }
 
 	const bool& GetFring() { return Fring_F; }
 	//Hp
@@ -200,7 +195,7 @@ private:
 
 	bool Finish = false;
 
-	bool CamWork = false;
+	bool CameraWork_F = false;
 
 	bool MovieFlag = false;
 	bool stanby = false;
@@ -229,5 +224,7 @@ private:
 
 	bool BulletShot_F = false;
 	float ShotCoolTime = 0.0f;
+	bool Recoil_F = false;
+	float RecoilTime = 0.0f;
 };
 

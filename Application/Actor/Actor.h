@@ -168,7 +168,6 @@ private:
 	std::list<std::unique_ptr<Robot>>rob;
 	std::unique_ptr<Object3d> bo = nullptr;
 	std::unique_ptr<Player>player;
-	Bullet* bull[9];
 
 	bool a = true;
 
