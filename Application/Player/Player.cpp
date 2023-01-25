@@ -195,14 +195,14 @@ void Player::CameraWork()
 			Eye_rot.y = 180;
 		}
 		else if (stanby == true && ActionCount == 0) {
-			Action::GetInstance()->EaseOut(Eye_rot.y, -10.0f);
+			Action::GetInstance()->EaseOut(Eye_rot.y, -5.0f);
 			//Œã‚ë‚ðŒü‚­
 			if (Eye_rot.y <= 0) {
 				Eye_rot.y = 0;
 				ActionTimer += 0.2f;
 				if (ActionTimer > 5) {
 					ActionTimer = 5.0f;
-					Action::GetInstance()->EaseOut(Eye_rot.x, 100.0f);
+					Action::GetInstance()->EaseOut(Eye_rot.x, 95.0f);
 				}
 			}
 			//‰º‚ðŒü‚­
@@ -218,7 +218,7 @@ void Player::CameraWork()
 			vel = { 0.0f,0.67f,0.4f };
 			if (ActionTimer >= 5) {
 				vel = { 0.0f,-0.6f,0.0f };
-				Action::GetInstance()->EaseOut(Eye_rot.x, -10.0f);
+				Action::GetInstance()->EaseOut(Eye_rot.x, -5.0f);
 			}
 			if (Eye_rot.x <= 0.0f) {
 				Eye_rot.x = 0.0f;
@@ -349,7 +349,7 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 		else if (patern == 2) {
 			EneCount = 4;
-			Eye_rot.y += 3;
+			Action::GetInstance()->EaseOut(Eye_rot.y, 95.0f);
 			if (Eye_rot.y >= 90) {
 				Eye_rot.y = 90;
 				ChangeRot = -90;
@@ -383,7 +383,7 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 		else if (patern == 4) {
 			EneCount = 5;
-			Eye_rot.y -= 3;
+			Action::GetInstance()->EaseOut(Eye_rot.y, -5.0f);
 			if (Eye_rot.y <= 0) {
 				ChangeRot = 0;
 				Eye_rot.y = 0;

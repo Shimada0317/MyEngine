@@ -79,7 +79,7 @@ float Action::GetRangRand(float minValue, float maxValue)
 
 void Action::EaseOut(float& MoveValue, float PurposeValue)
 {
-	float dx = (PurposeValue - MoveValue) / 50.0f;
+	float dx = (PurposeValue - MoveValue) / 30.0f;
 	MoveValue += dx;
 }
 

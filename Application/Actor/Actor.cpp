@@ -209,9 +209,7 @@ void Actor::Update()
 
 void Actor::Draw(DirectXCommon* dxCommon)
 {
-	for (std::unique_ptr<Robot>& robot : rob) {
-		robot->Draw(dxCommon);
-	}
+	
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	Goal->Draw();
 	hane->Draw();
@@ -220,7 +218,9 @@ void Actor::Draw(DirectXCommon* dxCommon)
 	}
 	player->ObjDraw();
 	Object3d::PostDraw();
-
+	for (std::unique_ptr<Robot>& robot : rob) {
+		robot->Draw(dxCommon);
+	}
 	player->ParticleDraw(dxCommon->GetCmdList());
 }
 
