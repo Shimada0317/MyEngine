@@ -51,7 +51,7 @@ void Player::Initalize(Camera* came)
 	CurtainDown->SetSize(CurtainSize);
 
 	RailCam = new RailCamera();
-	RailCam->Initialize(ReticlePos, ReticleRot);
+	RailCam->MatrixIdentity(ReticlePos, ReticleRot);
 
 	Body->SetParent(came);
 
@@ -105,24 +105,23 @@ void Player::Set(Camera* came)
 void Player::Update(int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[], int paterncount)
 {
 	PaternCount = paterncount;
-	BulletShot_F = false;
+	//BulletShot_F = false;
 	//マウス座標の取得
 	MouthContoroll();
 	//
 	if (CameraWork_F == true) {
 		//弾の発射前
-		if (Remaining <  ReaminingBullet&& ReloadFlag == false && BulletShot_F == false) {
-			if (Mouse::GetInstance()->PushClick(0)) {				
+		if (Mouse::GetInstance()->PushClick(0)) {
+			if (Remaining < ReaminingBullet && ReloadFlag == false && BulletShot_F == false) {
 				Remaining += 1;
 				Particle_F = true;
 				BulletShot_F = true;
 				Recoil_F = true;
 			}
-			else {
-				BulletShot_F = false;
-			}
 		}
-
+		else {
+			BulletShot_F = false;
+		}
 		ParticleEfect();
 		//リロード
 		if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
@@ -137,7 +136,7 @@ void Player::Update(int& Remaining, const XMVECTOR enePos[], Camera* came, const
 			Remaining = 8;
 			ReloadTime += 1;
 			Anser = ReloadTime % 40;
-			
+
 			if (Anser == 0) {
 				Remaining = 0;
 				if (Remaining == 0) {
@@ -158,6 +157,7 @@ void Player::Update(int& Remaining, const XMVECTOR enePos[], Camera* came, const
 	CameraWork();
 
 	Set(came);
+	
 	RailCam->Update(vel, Eye_rot, came);
 
 	Track->Update();
@@ -238,7 +238,7 @@ void Player::CameraWork()
 		Eye_rot.x = 0;
 		Eye_rot.y = 0;
 		ReticlePos = { 0.0f,-0.7f,13.0f };
-		RailCam->Initialize(ReticlePos, Eye_rot);
+		RailCam->MatrixIdentity(ReticlePos, Eye_rot);
 	}
 
 	if (stanby == false) {
@@ -266,7 +266,6 @@ void Player::CameraWork()
 			SkipPos.y = 620;
 		}
 	}
-
 	else {
 		CurtainUpPos.y -= 4;
 		CurtainDownPos.y += 4;

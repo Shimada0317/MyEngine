@@ -19,7 +19,7 @@ Camera::Camera(int window_width, int window_height)
 }
 
 
-void Camera::Update()
+void Camera::RecalculationMatrix()
 {
 	if (viewDirty || projectionDirty) {
 		// çƒåvéZïKóvÇ»ÇÁ
@@ -39,7 +39,7 @@ void Camera::Update()
 	matViewProjection = matView * matProjection;
 
 	}
-	//matWorld = DirectX::XMMatrixIdentity();
+
 }
 
 void Camera::UpdataViewMatrix()

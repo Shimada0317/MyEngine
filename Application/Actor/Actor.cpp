@@ -32,7 +32,7 @@ void Actor::Initialize()
 
 	player = std::make_unique<Player>();
 	player->Initalize(camera);
-	camera->Update();
+	camera->RecalculationMatrix();
 	playerPos = player->GetPosition();
 
 	//スプライトの読み込み
@@ -133,6 +133,12 @@ void Actor::SetPSR()
 
 void Actor::Update()
 {
+	float playeroldjup = playerHp;
+	if (playeroldjup > playerHp) {
+		
+	}
+
+
 	CountDistance = 0;
 	heripos.m128_f32[2] += heriX;
 
@@ -197,7 +203,8 @@ void Actor::Update()
 	SetPSR();
 	//プレイヤーの更新処理
 	player->Update(Remaining,enemyPos,camera,ene2DPos,patern);
-	camera->Update();
+	camera->RecalculationMatrix();
+	
 }
 
 void Actor::Draw(DirectXCommon* dxCommon)
@@ -422,7 +429,6 @@ void Actor::UpdataEnemyPopCommands()
 				std::unique_ptr<Robot> newRobot = std::make_unique<Robot>();
 				newRobot->Initialize(ROTATION,POSITION,camera, step);
 				newRobot->SetTrackPoint(TRACK);
-				//newRobot->SetRotation(ROTATION);
 				rob.push_back(std::move(newRobot));
 
 				POPSkip = false;
@@ -432,7 +438,6 @@ void Actor::UpdataEnemyPopCommands()
 		}
 
 		if (patern < count) {
-			//patern += 1;
 			break;
 		}
 

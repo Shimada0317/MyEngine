@@ -18,28 +18,45 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 	using XMVECTOR = DirectX::XMVECTOR;
 private:
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
 	Action();
-	
+	/// <summary>
+	/// デストラクタ
+	/// </summary>
 	~Action();
-
 public:
 	Action(const Action&) = delete;
 
 	Action& operator=(const Action&) = delete;
-
+	/// <summary>
+	/// インスタンス生成
+	/// </summary>
+	/// <returns></returns>
 	static Action* GetInstance();
-
-	void PlayerMove3d(XMVECTOR &position);
-
-	void PlayerJump(XMFLOAT3& position,bool& JumpFlag);
-
-	void PlayerMove2d(XMFLOAT2 &position, float Speed);
-
-
-	void Gunshot(int bullet,bool& shot);
-
-	bool Shot(int bullet, bool& shot);
-private:
-	float JumpPosition = 0;
+	/// <summary>
+	/// 3Dアクションゲーム用、移動用関数(3Dだけど2Dアクションゲーム想定)
+	/// </summary>
+	/// <param name="position">プレイヤーの座標</param>
+	void PlayerMove3d(XMVECTOR& position);
+	/// <summary>
+	/// 3Dアクションゲーム用、ジャンプ用関数
+	/// </summary>
+	/// <param name="position">プレイヤーの座標</param>
+	/// <param name="JumpFlag">ジャンプをしているか否か</param>
+	void PlayerJump(XMFLOAT3& position, bool& JumpFlag);
+	/// <summary>
+	/// 2Dアクションゲーム用、移動用関数
+	/// </summary>
+	/// <param name="position"></param>
+	/// <param name="Speed"></param>
+	void PlayerMove2d(XMFLOAT2& position, float Speed);
+	/// <summary>
+	/// ロボットの更新処理
+	/// </summary>
+	/// <param name="minValue">最小の範囲値</param>
+	/// <param name="maxValue">最大の範囲値</param>
+	float GetRangRand(float minValue, float maxValue);
 };
 

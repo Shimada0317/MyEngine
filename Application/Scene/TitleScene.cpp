@@ -233,7 +233,7 @@ void TitleScene::Update()
 	World->Update();
 	Start->Update();
 
-	TitleCamera->Update();
+	TitleCamera->RecalculationMatrix();
 }
 
 

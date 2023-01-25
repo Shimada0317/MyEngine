@@ -46,8 +46,10 @@ void Mouse::Update()
 
 bool Mouse::PushClick(BYTE click)
 {
-	if (!(clipre.rgbButtons[click]&(0x80))&&(cli.rgbButtons[click]&(0x80))) {
-		return true;
+	if (!(clipre.rgbButtons[click]&(0x80))) {
+		if ((cli.rgbButtons[click] & (0x80))) {
+			return true;
+		}
 	}
 
     return false;

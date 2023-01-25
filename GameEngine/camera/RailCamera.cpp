@@ -7,14 +7,9 @@ RailCamera::~RailCamera()
 {
 }
 
-void RailCamera::Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot)
+void RailCamera::MatrixIdentity(const XMVECTOR& Pos, const XMFLOAT3& Rot)
 {
-	//Target = { 0.0f,0.0f,-1.0f };
 	Eye = { 0,1,-5 };
-
-	//debugModel = ObjModel::CreateFromOBJ("Gear");
-	//debug = Object3d::Create(debugModel);
-
 
 	Position = Pos;
 	Rotation = Rot;
@@ -37,7 +32,6 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 {
 	Position += vel;
 
-
 	Eye = { 0,1.5,-5 };
 	Rotation = { 0.0f,0.0f,0.0f };
 	Rotation.x = rot.x;
@@ -53,8 +47,6 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	MatWorld = XMMatrixIdentity();
 	MatWorld *= MatRot;
 	MatWorld *= MatTrans;
-
-
 
 	XMVECTOR eye2 = { Eye.x,Eye.y,Eye.z };
 	eye2 = XMVector3Transform(eye2, MatWorld);
@@ -82,80 +74,13 @@ void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* Normal
 	NormalCam->SetEye(Eye);
 	//プレイヤーにワールド座標を送る
 	NormalCam->SetWorld(MatWorld);
-	//debug->SetPosition(Position);
-	//debug->Update();
+
 }
 
-void RailCamera::Draw()
+void RailCamera::ShakeCamera(const XMVECTOR& Pos)
 {
-	//debug->Draw();
+	Position = Pos;
+
+	Position.m128_f32[0] += 0.1f;
+	Position.m128_f32[1] += 0.1f;
 }
-
-void RailCamera::UpdataViewMatrix()
-{
-	// 視点座標
-	EyePosition = XMLoadFloat3(&Eye);
-	// 注視点座標
-	TargetPosition = XMLoadFloat3(&Target);
-	// （仮の）上方向
-	UpVector = XMLoadFloat3(&Up);
-
-	// カメラZ軸（視線方向）
-	XMVECTOR cameraAxisZ = XMVectorSubtract(TargetPosition, EyePosition);
-	// 0ベクトルだと向きが定まらないので除外
-	assert(!XMVector3Equal(cameraAxisZ, XMVectorZero()));
-	assert(!XMVector3IsInfinite(cameraAxisZ));
-	assert(!XMVector3Equal(UpVector, XMVectorZero()));
-	assert(!XMVector3IsInfinite(UpVector));
-	// ベクトルを正規化
-	cameraAxisZ = XMVector3Normalize(cameraAxisZ);
-
-	// カメラのX軸（右方向）
-	XMVECTOR cameraAxisX;
-	// X軸は上方向→Z軸の外積で求まる
-	cameraAxisX = XMVector3Cross(UpVector, cameraAxisZ);
-	// ベクトルを正規化
-	cameraAxisX = XMVector3Normalize(cameraAxisX);
-
-	// カメラのY軸（上方向）
-	XMVECTOR cameraAxisY;
-	// Y軸はZ軸→X軸の外積で求まる
-	cameraAxisY = XMVector3Cross(cameraAxisZ, cameraAxisX);
-
-	// ここまでで直交した3方向のベクトルが揃う
-	//（ワールド座標系でのカメラの右方向、上方向、前方向）	
-
-	// カメラ回転行列
-	XMMATRIX matCameraRot;
-	// カメラ座標系→ワールド座標系の変換行列
-	matCameraRot.r[0] = cameraAxisX;
-	matCameraRot.r[1] = cameraAxisY;
-	matCameraRot.r[2] = cameraAxisZ;
-	matCameraRot.r[3] = XMVectorSet(0, 0, 0, 1);
-	// 転置により逆行列（逆回転）を計算
-	MatView = XMMatrixTranspose(matCameraRot);
-
-	// 視点座標に-1を掛けた座標
-	XMVECTOR reverseEyePosition = XMVectorNegate(EyePosition);
-	// カメラの位置からワールド原点へのベクトル（カメラ座標系）
-	XMVECTOR tX = XMVector3Dot(cameraAxisX, reverseEyePosition);	// X成分
-	XMVECTOR tY = XMVector3Dot(cameraAxisY, reverseEyePosition);	// Y成分
-	XMVECTOR tZ = XMVector3Dot(cameraAxisZ, reverseEyePosition);	// Z成分
-	// 一つのベクトルにまとめる
-	XMVECTOR translation = XMVectorSet(tX.m128_f32[0], tY.m128_f32[1], tZ.m128_f32[2], 1.0f);
-	// ビュー行列に平行移動成分を設定
-	MatView.r[3] = translation;
-
-}
-
-void RailCamera::UpdataProjectionMatrix()
-{
-	// 透視投影による射影行列の生成
-	MatProjection = XMMatrixPerspectiveFovLH(
-		XMConvertToRadians(60.0f),
-		AspectRatio,
-		0.1f, 1000.0f
-	);
-}
-
-

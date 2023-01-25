@@ -58,6 +58,8 @@ public:
 	void Motion();
 	//攻撃モード
 	void AttackMode(int& playerHp);
+	//攻撃
+	void Attack(int& playerhp);
 	//2D→3D座標
 	void WorldtoScreen();
 	//ビュー変換
@@ -113,9 +115,18 @@ private:
 	XMFLOAT3 HeadPartScl = { 0.3f,0.3f,0.3f };
 	XMFLOAT3 BodyPartScl = { 1.0f,1.0f,1.0f };
 	XMFLOAT3 ArmsPartScl = { 0.2f,0.2f,0.2f };
+	//パーツごとのポジション
 	XMVECTOR HeadPartPos = { 0.0f,0.0f,0.0f };
 	XMVECTOR BodyPartPos = { 0.0f,0.0f,0.0f };
 	XMVECTOR ArmsPartPos = { 0.0f,0.0f,0.0f };
+	//パーツごとの色
+	XMFLOAT4 ArmsPartColor = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT4 HeadPartColor = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT4 BodyPartColor = { 1.0f,1.0f,1.0f,1.0f };
+	//パーツごとの回転
+	XMFLOAT3 ArmsPartRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 HeadPartRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 BodyPartRot = { 0.0f,0.0f,0.0f };
 		//パーツごとに渡すステータス
 		XMVECTOR All_Pos = { 0.0f,0.0f,-10.0f };
 		XMFLOAT3 All_Rot;
@@ -133,11 +144,14 @@ private:
 	XMMATRIX Center_Mat;
 	XMMATRIX MatViewPort;
 	//攻撃モードで使用される変数
+
 	float AttackTime = 0.0f;
-	float AttackChanse = 0;
+	int AttackChanse = 0;
 	float Rand = 0;
 	bool AttackFase = false;
+	//攻撃の準備時間
 	float AttackPreparationTime = 0;
+	bool AttackShakeDown = false;
 	//移動速度
 	float MoveSpeed = 0.005f;
 	//プレイヤーと敵の距離
@@ -152,5 +166,7 @@ private:
 	bool Movement_F = false;
 	//Hpが0以上か
 	bool isDead_ = false;
+
+	float Distance = 60.0f;
 };
 

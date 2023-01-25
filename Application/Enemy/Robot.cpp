@@ -1,5 +1,7 @@
 #include "Robot.h"
 #include"Action.h"
+#include<random>
+
 
 Robot::~Robot()
 {
@@ -22,18 +24,23 @@ Robot::~Robot()
 
 void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos,Camera* came, const bool& movement)
 {
-	All_Rot = all_Rot;
+	HeadPartRot = all_Rot;
+	BodyPartRot = all_Rot;
+	ArmsPartRot = all_Rot;
+
 	All_Pos = all_Pos;
 	camera=came;
 
-	ShadowModel = ObjModel::CreateFromOBJ("Shadow");
+	
+
+	ShadowModel = ObjModel::CreateFromOBJ("Shadow",true);
 	Shadow = Object3d::Create(ShadowModel);
 	Center = Object3d::Create(ShadowModel);
 
-	HeadPartModel = ObjModel::CreateFromOBJ("Head");
+	HeadPartModel = ObjModel::CreateFromOBJ("Head",true);
 	HeadPart = Object3d::Create(HeadPartModel);
 
-	BodyPartModel = ObjModel::CreateFromOBJ("tst2");
+	BodyPartModel = ObjModel::CreateFromOBJ("tst2",true);
 	BodyPart = Object3d::Create(BodyPartModel);
 
 	ArmsPartModel = ObjModel::CreateFromOBJ("BothArm");
@@ -62,7 +69,6 @@ void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos,Camera* 
 
 void Robot::StatusSet()
 {
-
 	Center->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(Center_Mat);
 	Center_Mat = Center->GetMatrix();
@@ -83,15 +89,15 @@ void Robot::StatusSet()
 	ArmsPartPos.m128_f32[1] = Center_WorldPos.m128_f32[1] + 0.2f;
 
 	HeadPart->SetPosition(HeadPartPos);
-	HeadPart->SetRotation(All_Rot);
+	HeadPart->SetRotation(HeadPartRot);
 	HeadPart->SetScale(HeadPartScl);
 
 	BodyPart->SetPosition(BodyPartPos);
-	BodyPart->SetRotation(All_Rot);
+	BodyPart->SetRotation(BodyPartRot);
 	BodyPart->SetScale(BodyPartScl);
 
 	ArmsPart->SetPosition(ArmsPartPos);
-	ArmsPart->SetRotation(All_Rot);
+	ArmsPart->SetRotation(ArmsPartRot);
 	ArmsPart->SetScale(ArmsPartScl);
 
 	WorldtoScreen();
@@ -103,9 +109,9 @@ void Robot::AllUpdata()
 	Shadow->Update(Shadow_Col);
 	Center->Update();
 
-	HeadPart->Update();
-	BodyPart->Update();
-	ArmsPart->Update();
+	HeadPart->Update(HeadPartColor);
+	BodyPart->Update(BodyPartColor);
+	ArmsPart->Update(ArmsPartColor);
 
 	for (std::unique_ptr<ObjParticle>& patrticle : Obj_Particle) {
 		patrticle->Update(Center_WorldPos, All_Rot);
@@ -126,12 +132,12 @@ void Robot::Update(const XMFLOAT2& Player2DPos,int& PlayerHp,bool& PlyerBulletSh
 	}
 
 	if (PlyerBulletShot == true) {
-		if (Player2DPos.x - 30 < RockOn_Pos.x && Player2DPos.x + 30 > RockOn_Pos.x) {
+		if (Player2DPos.x -Distance < RockOn_Pos.x && Player2DPos.x + Distance > RockOn_Pos.x&&
+			Player2DPos.y-Distance<RockOn_Pos.y&&Player2DPos.y+Distance>RockOn_Pos.y) {
 			Hp -= 30;
 			PlyerBulletShot = false;
 		}
 	}
-
 
 	//ダメージを受けたとき
 	if (OldHp > Hp) {
@@ -150,6 +156,7 @@ void Robot::Update(const XMFLOAT2& Player2DPos,int& PlayerHp,bool& PlyerBulletSh
 			Motion();
 			Movement_F = false;
 			MoveSpeed = 0;
+			AttackMode(PlayerHp);
 		}
 	}
 	else {
@@ -160,7 +167,10 @@ void Robot::Update(const XMFLOAT2& Player2DPos,int& PlayerHp,bool& PlyerBulletSh
 	//生きているときにHPが0になったら
 	if (Hp <= 0) {
 		Hp = 0;
-		Shadow_Col.w = 0.0f;
+		Shadow_Col.w -= 0.01f;
+		ArmsPartColor.w -= 0.01f;
+		BodyPartColor.w -= 0.01f;
+		HeadPartColor.w -= 0.01f;
 		Robotarive = false;
 		AttackPreparationTime = 0;
 		AttackChanse = 0;
@@ -168,8 +178,9 @@ void Robot::Update(const XMFLOAT2& Player2DPos,int& PlayerHp,bool& PlyerBulletSh
 		for (int i = 0; i < 3; i++) {
 			RemainPart[i] = false;
 		}
-		isDead_ = true;
-
+		if (ArmsPartColor.w <= 0&&Obj_Particle.empty()) {
+			isDead_ = true;
+		}
 	}
 	
 	AllUpdata();
@@ -193,30 +204,6 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	Sprite::PostDraw();
 }
 
-void Robot::ImgDraw()
-{
-
-	float a = Hp;
-	float o = OldHp;
-	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
-	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
-	ImGui::Begin("Enemy");
-
-	ImGui::SliderFloat("AllPosX", &Center_WorldPos.m128_f32[0], -100.0f, 100.0f);
-	ImGui::SliderFloat("AllPosY", &Center_WorldPos.m128_f32[1], -100.0f, 100.0f);
-	ImGui::SliderFloat("AllPosZ", &Center_WorldPos.m128_f32[2], -100.0f, 100.0f);
-
-	ImGui::End();
-	ImGui::PopStyleColor();
-	ImGui::PopStyleColor();
-}
-
-void Robot::ParticleDraw(DirectXCommon* dxCommon)
-{
-
-}
-
 void Robot::TrackPlayerMode()
 {
 
@@ -237,6 +224,8 @@ void Robot::TrackPlayerMode()
 	float v3x = (vx / Length) * MoveSpeed;
 	float v3y = (vy / Length) * MoveSpeed;
 	float v3z = (vz / Length) * MoveSpeed;
+	Distance = 60;
+	Distance -= Length*1.5;
 
 	All_Pos.m128_f32[0] -= v3x;
 	All_Pos.m128_f32[2] -= v3z;
@@ -259,93 +248,80 @@ void Robot::TrackPlayerMode()
 
 void Robot::Motion()
 {
-	//XMFLOAT3 SclPlus = { 0.00001f,0.00001f,0.00001f };
-
-	//XMFLOAT3 bodyScl = body->GetScl();
-	//XMFLOAT3 headScl = head->GetScl();
-	//XMFLOAT3 armScl = arms->GetScl();
-	//float rot = 0.05f;
-
-	//MotionTime += 0.001f;
-	////徐々に大きく
-	//if (MotionChange == true) {
-
-	//	bodyScl.x += SclPlus.x;
-	//	bodyScl.y += SclPlus.y;
-	//	bodyScl.z += SclPlus.z;
-
-	//	headScl.x += SclPlus.x;
-	//	headScl.y += SclPlus.y;
-	//	headScl.z += SclPlus.z;
-
-	//	armScl.x += SclPlus.x;
-	//	armScl.y += SclPlus.y;
-	//	armScl.z += SclPlus.z;
-	//	if (MotionTime >= 1) {
-	//		MotionChange = false;
-	//		MotionTime = 0.0f;
-	//	}
-	//}
-	////徐々に小さく
-	//else {
-	//	bodyScl.x -= SclPlus.x;
-	//	bodyScl.y -= SclPlus.y;
-	//	bodyScl.z -= SclPlus.z;
-
-	//	headScl.x -= SclPlus.x;
-	//	headScl.y -= SclPlus.y;
-	//	headScl.z -= SclPlus.z;
-
-	//	armScl.x -= SclPlus.x;
-	//	armScl.y -= SclPlus.y;
-	//	armScl.z -= SclPlus.z;
-	//	if (MotionTime >= 1) {
-	//		MotionChange = true;
-	//		MotionTime = 0.0f;
-	//	}
-	//}
-
-	/*body->SetScl(bodyScl);
-	head->SetScl(headScl);
-	arms->SetScl(armScl);
-
-	head->Motion(rot);*/
-
+	BodyPartRot.y = 30;
+	HeadPartRot.y = 30;
+	ArmsPartRot.y = 30;
 }
 
 void Robot::AttackMode(int& playerHp)
 {
+	//除算結果の値
+	int divisionvalue=0;
 	//攻撃フェイズに移行していないとき
 	if (AttackFase != true) {
 		AttackPreparationTime += 0.01f;
 		//準備時間が一定の値に達した時
 		if (AttackPreparationTime >= 12) {
-			Rand = (rand() % 10);
-			AttackChanse = Rand;
+			//0~10の範囲なの乱数を生成
+			AttackChanse=Action::GetInstance()->GetRangRand(0, 10);
 			AttackPreparationTime = 0;
-			Rand = 0;
+			divisionvalue = AttackChanse % 2;
 		}
-		//攻撃タイミングが一定以上の値になった時
-		if (AttackChanse >= 3) {
+		//生成した乱数の値が一定の時
+		if (divisionvalue==1) {
+			//攻撃に移行する
 			AttackFase = true;
+			//乱数の初期化
 			AttackChanse = 0;
 		}
 	}
 	//攻撃フェイズに移行した時
 	if (AttackFase == true) {
-		AttackTime += 0.1f;
-		arms->Attack(AttackTime, AttackFase, playerHp, Robotarive);
+		Attack(playerHp);
 	}
+}
+
+void Robot::Attack(int& playerhp)
+{
+	//巨大化していく値
+	float gigantic = 0.00002f;
+	float discoloration = 0.01f;
+	if (AttackShakeDown == false) {
+		ArmsPartRot.x += 0.05f;
+		ArmsPartScl.x += gigantic;
+		ArmsPartScl.y += gigantic;
+		ArmsPartScl.z += gigantic;
+
+		ArmsPartColor.y -= discoloration;
+		ArmsPartColor.z -= discoloration;
+		if (ArmsPartRot.x >= 40.0f) {
+			AttackShakeDown = true;
+		}
+	}
+	else {
+		ArmsPartRot.x -= 1.0f;
+		if (ArmsPartRot.x <= 0.0f) {
+			ArmsPartRot.x = 0.0f;
+			ArmsPartColor = { 1.0f,1.0f,1.0f ,1.0f};
+			ArmsPartScl = { 0.2f,0.2f,0.2f };
+			AttackShakeDown = false;
+			AttackFase = false;
+			//playerhp -= 1;
+		}
+	}
+	
+
+
 }
 
 void Robot::WorldtoScreen()
 {
+	Center->SetRotation(Center_Rot);
+	Center_Mat = Center->GetMatrix();
 	const float kDistancePlayerTo3DReticle = 50.0f;
 	offset = { 0.0,0.0,1.0f };
 	offset = XMVector3TransformNormal(offset, Center_Mat);
 	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
-	Center->SetRotation(Center_Rot);
-	Center_Mat = Center->GetMatrix();
 	Center_WorldPos = { 0.0f,0.0f,0.0f };
 	Center_WorldPos = XMVector3TransformNormal(All_Pos, Center_Mat);
 	{

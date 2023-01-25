@@ -25,7 +25,7 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 	partM = ParticleManager::Create(camera);
 
 	cam = new RailCamera();
-	cam->Initialize(position, rotation);
+	cam->MatrixIdentity(position, rotation);
 
 	bo->SetParent(camera);
 }
@@ -97,36 +97,20 @@ void DebugScene::Update()
 		vel = XMVector3TransformNormal(vel, mat);
 	}
 
-	//for (int i = 0; i < 9; i++) {
-	//	for (int j = 0; j < 3; j++) {
-	//		rob[j]->Update(bull[i]);
-	//		//break;
-	//	}
-	//	//break;
-	//}
-	//
-
 
 	SetPosSclRot();
 	MouthContoroll();
 	cam->Update(vel, Eye_rot, camera);
-	camera->Update();
+	camera->RecalculationMatrix();
 	
 	bo->Update();
 	testEn->Update();
 	partM->Update(color);
-	//camera->Update();
-	//mid->Update();
 }
 
 void DebugScene::Draw(DirectXCommon* dxCommon)
 {
 	dxCommon->PreDraw();
-	/*for (int j = 0; j < 3; j++) {
-		rob[j]->Draw(dxCommon);
-	}*/
-	//player->ParticleDraw(dxCommon->GetCmdList());
-
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
 	partM->Draw();
 	ParticleManager::PostDraw();

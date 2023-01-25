@@ -29,9 +29,9 @@ public: // メンバ関数
 	virtual ~Camera() = default;
 
 	/// <summary>
-	/// 毎フレーム更新
+	/// 行列の再計算
 	/// </summary>
-	virtual void Update();
+	virtual void RecalculationMatrix();
 
 	/// <summary>
 	/// ビュー行列を更新

@@ -1,5 +1,6 @@
 #include "Action.h"
 #include"Mouse.h"
+#include<random>
 
 Action::Action()
 {
@@ -64,28 +65,19 @@ void Action::PlayerMove2d(XMFLOAT2 &position, float Speed)
 	}
 }
 
-void Action::Gunshot(int Remainigbullet, bool& shot)
+float Action::GetRangRand(float minValue, float maxValue)
 {
- 	if (Mouse::GetInstance()->PushClick(0)||Input::GetInstance()->PushKey(DIK_SPACE)) {
-		shot = true;
-	}
-
+	//シード乱数生成器
+	std::random_device rnd;
+	//メルセンヌ・ツイスタ方
+	std::mt19937_64 mt64(rnd());
+	//範囲内の離散分布を作る
+	std::uniform_real_distribution<float> genRandFloat(minValue, maxValue);
+	//分布の中から生成した乱数を使って1つだけ値を取り出す
+	return genRandFloat(mt64);
 }
 
-bool Action::Shot(int bullet, bool& shot)
-{
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-		if (bullet > 0) {
-			shot = true;
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
 
-	
-}
 
 
 

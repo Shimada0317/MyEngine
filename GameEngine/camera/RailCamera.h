@@ -32,15 +32,11 @@ public:
 
 	const XMMATRIX& GetWorld() { return MatWorld; }
 
-	void Initialize(const XMVECTOR& Pos, const XMFLOAT3& Rot);
+	void MatrixIdentity(const XMVECTOR& Pos, const XMFLOAT3& Rot);
 
 	void Update(const XMVECTOR& vel,const XMFLOAT3& rot,Camera* NormalCam);
 
-	void Draw();
-
-	void UpdataViewMatrix();
-
-	void UpdataProjectionMatrix();
+	void ShakeCamera(const XMVECTOR& Pos);
 
 private:
 	Camera* camera = nullptr;
