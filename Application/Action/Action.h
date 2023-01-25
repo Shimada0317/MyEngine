@@ -58,5 +58,9 @@ public:
 	/// <param name="minValue">Å¬‚Ì”ÍˆÍ’l</param>
 	/// <param name="maxValue">Å‘å‚Ì”ÍˆÍ’l</param>
 	float GetRangRand(float minValue, float maxValue);
+	/// <summary>
+	/// 
+	/// </summary>
+	void EaseOut(float& MoveValue, float PurposeVValue);
 };
 
