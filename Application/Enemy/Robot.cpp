@@ -225,7 +225,7 @@ void Robot::TrackPlayerMode()
 	float v3y = (vy / Length) * MoveSpeed;
 	float v3z = (vz / Length) * MoveSpeed;
 	Distance = 60;
-	Distance -= Length*1.5;
+	Distance -= Length*2.0f;
 
 	All_Pos.m128_f32[0] -= v3x;
 	All_Pos.m128_f32[2] -= v3z;
@@ -248,9 +248,9 @@ void Robot::TrackPlayerMode()
 
 void Robot::Motion()
 {
-	BodyPartRot.y = 30;
-	HeadPartRot.y = 30;
-	ArmsPartRot.y = 30;
+	//BodyPartRot.y = 30;
+	//HeadPartRot.y = 30;
+	//ArmsPartRot.y = 30;
 }
 
 void Robot::AttackMode(int& playerHp)

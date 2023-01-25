@@ -190,7 +190,7 @@ void Player::SpriteDraw()
 void Player::CameraWork()
 {
 	if (CameraWork_F == false && Start_F == false) {
-
+	
 		if (stanby == false) {
 			Eye_rot.y = 180;
 		}
@@ -237,6 +237,7 @@ void Player::CameraWork()
 		ActionCount = 100;
 		Eye_rot.x = 0;
 		Eye_rot.y = 0;
+		vel = { 0.0f,0.0f,0.0f };
 		ReticlePos = { 0.0f,-0.7f,13.0f };
 		RailCam->MatrixIdentity(ReticlePos, Eye_rot);
 	}

@@ -59,8 +59,10 @@ public:
 	/// <param name="maxValue">最大の範囲値</param>
 	float GetRangRand(float minValue, float maxValue);
 	/// <summary>
-	/// 
+	/// イーズアウト
 	/// </summary>
+	/// /// <param name="MoveValue">移動する値</param>
+	/// <param name="PurposeVValue">目的地の値</param>
 	void EaseOut(float& MoveValue, float PurposeVValue);
 };
 

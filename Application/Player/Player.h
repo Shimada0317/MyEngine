@@ -226,5 +226,7 @@ private:
 	float ShotCoolTime = 0.0f;
 	bool Recoil_F = false;
 	float RecoilTime = 0.0f;
+
+	float easetimer = 0;
 };
 
