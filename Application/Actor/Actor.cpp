@@ -4,7 +4,6 @@
 #include<fstream>
 Actor::~Actor()
 {
-
 	player.reset();
 	delete Reload;
 	delete wave;
@@ -15,9 +14,7 @@ Actor::~Actor()
 		delete LifeCount[i];
 	}
 }
-//
-////セーブ
-//
+
 void Actor::Initialize()
 {
 	Sprite::LoadTexture(10, L"Resources/reload.png");
@@ -153,11 +150,11 @@ void Actor::Update()
 	getCamWorkF = player->GetCamWork();
 	if (getCamWorkF == true) {
 
-		rob.remove_if([](std::unique_ptr<Robot>& robot) {
+		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
 			});
 
-		if (rob.empty()) {
+		if (Robot.empty()) {
 			move = true;
 		}
 
@@ -171,9 +168,6 @@ void Actor::Update()
 			finish = false;
 			player->SetFinish(finish);
 		}
-
-
-
 	}
 	
 	if (patern >= 5) {
@@ -189,12 +183,11 @@ void Actor::Update()
 	XMFLOAT2 Player2DPos = player->GetRetPosition();
 	bool PlayerBulletShot_F = player->GetBulletShot();
 	//敵の更新処理
-	for (std::unique_ptr<Robot>& Robot : rob) {
-		enemyPos[CountDistance] = Robot->GetPosition();
-		ene2DPos[CountDistance] = Robot->Get2DPosition();
+	for (std::unique_ptr<Enemy>& Enemy : Robot) {
+		enemyPos[CountDistance] = Enemy->GetPosition();
+		ene2DPos[CountDistance] = Enemy->Get2DPosition();
 		for (int i = 0; i < 9; i++) {
-			Robot->TrackRot(Player2DPos);
-			Robot->Update(Player2DPos, playerHp, PlayerBulletShot_F);
+			Enemy->Update(Player2DPos, playerHp, PlayerBulletShot_F);
 		}
 		CountDistance += 1;
 	}
@@ -219,7 +212,7 @@ void Actor::Draw(DirectXCommon* dxCommon)
 	}
 	player->ObjDraw();
 	Object3d::PostDraw();
-	for (std::unique_ptr<Robot>& robot : rob) {
+	for (std::unique_ptr<Enemy>& robot : Robot) {
 		robot->Draw(dxCommon);
 	}
 	player->ParticleDraw(dxCommon->GetCmdList());
@@ -261,7 +254,7 @@ void Actor::SpriteDraw()
 void Actor::ImGuiDraw()
 {
 
-	/*for (std::unique_ptr<Robot>& robot : rob) {
+	/*for (std::unique_ptr<Enemy>& robot : Robot) {
 		robot->ImgDraw();
 	}
 	player->ImGuiDraw();*/
@@ -427,10 +420,10 @@ void Actor::UpdataEnemyPopCommands()
 			}
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
-				std::unique_ptr<Robot> newRobot = std::make_unique<Robot>();
+				std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
 				newRobot->Initialize(ROTATION,POSITION,camera, step);
 				newRobot->SetTrackPoint(TRACK);
-				rob.push_back(std::move(newRobot));
+				Robot.push_back(std::move(newRobot));
 
 				POPSkip = false;
 				TRACKSkip = false;

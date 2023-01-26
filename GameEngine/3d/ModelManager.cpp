@@ -10,7 +10,6 @@ ModelManager::~ModelManager()
 
 ModelManager* ModelManager::GetInstance()
 {
-
     static ModelManager instance;
     return &instance;
 }
@@ -19,11 +18,6 @@ void ModelManager::Initialize()
 {
     CallModel("worm");
     CallModel("Gear");
-}
-
-void ModelManager::Finalize()
-{
-   
 }
 
 void ModelManager::CallModel(const std::string& ObjModelname)

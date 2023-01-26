@@ -133,7 +133,7 @@
     <ClCompile Include="GameEngine\3d\ModelManager.cpp" />
     <ClCompile Include="Application\Collision\Collision.cpp" />
     <ClCompile Include="Application\Collision\CollisionPrimitive.cpp" />
-    <ClCompile Include="Application\Enemy\Robot.cpp" />
+    <ClCompile Include="Application\Enemy\Enemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameEngine\3d\Material.cpp" />
     <ClCompile Include="GameEngine\3d\Mesh.cpp" />
@@ -309,7 +309,7 @@
     <ClInclude Include="GameEngine\WinApp\WinApp.h" />
     <ClInclude Include="Application\Collision\Collision.h" />
     <ClInclude Include="Application\Collision\CollisionPrimitive.h" />
-    <ClInclude Include="Application\Enemy\Robot.h" />
+    <ClInclude Include="Application\Enemy\Enemy.h" />
     <ClInclude Include="GameEngine\3d\Material.h" />
     <ClInclude Include="GameEngine\3d\Mesh.h" />
     <ClInclude Include="GameEngine\3d\ObjModel.h" />

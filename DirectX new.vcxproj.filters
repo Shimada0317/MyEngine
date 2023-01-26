@@ -195,7 +195,7 @@
     <ClCompile Include="GameEngine\3d\FbxLoader.cpp">
       <Filter>ソース ファイル\GameEngine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\Robot.cpp">
+    <ClCompile Include="Application\Enemy\Enemy.cpp">
       <Filter>ソース ファイル\Application\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\3d\Object3d.cpp">
@@ -435,7 +435,7 @@
     <ClInclude Include="GameEngine\3d\ObjModel.h">
       <Filter>ヘッダー ファイル\GameEngine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\Robot.h">
+    <ClInclude Include="Application\Enemy\Enemy.h">
       <Filter>ヘッダー ファイル\Application\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\camera\Camera.h">

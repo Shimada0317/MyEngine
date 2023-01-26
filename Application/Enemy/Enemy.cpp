@@ -1,16 +1,15 @@
-#include "Robot.h"
+#include "Enemy.h"
 #include"Action.h"
 #include<random>
 
-
-Robot::~Robot()
+//デストラクタ
+Enemy::~Enemy()
 {
 	Shadow.reset();
 
 	HeadPart.reset();
 	BodyPart.reset();
 	ArmsPart.reset();
-
 
 	delete HeadPartModel;
 	delete BodyPartModel;
@@ -19,7 +18,8 @@ Robot::~Robot()
 	delete ClushSe;
 }
 
-void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera* came, const bool& movement)
+//初期化処理
+void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera* came, const bool& movement)
 {
 	HeadPartRot = all_Rot;
 	BodyPartRot = all_Rot;
@@ -31,7 +31,7 @@ void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	ShadowModel = ObjModel::CreateFromOBJ("Shadow", true);
 	Shadow = Object3d::Create(ShadowModel);
 	Center = Object3d::Create(ShadowModel);
-	HeadCenter = Object3d::Create(ShadowModel);
+
 
 	HeadPartModel = ObjModel::CreateFromOBJ("Head", true);
 	HeadPart = Object3d::Create(HeadPartModel);
@@ -61,7 +61,8 @@ void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	Center->SetPosition(CenterWorldPos);
 }
 
-void Robot::StatusSet()
+//ステータスセット
+void Enemy::StatusSet()
 {
 	Center->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(CenterMat);
@@ -100,9 +101,9 @@ void Robot::StatusSet()
 	RockOnHead->SetPosition(RockOnHeadPos);
 }
 
-void Robot::AllUpdata()
+//Obj等の更新処理をまとめる
+void Enemy::AllUpdate()
 {
-
 	Shadow->Update(ShadowCol);
 	Center->Update();
 
@@ -115,7 +116,8 @@ void Robot::AllUpdata()
 	}
 }
 
-void Robot::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBulletShot)
+//更新処理
+void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBulletShot)
 {
 	StatusSet();
 
@@ -177,10 +179,11 @@ void Robot::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 		}
 	}
 
-	AllUpdata();
+	AllUpdate();
 }
 
-void Robot::Draw(DirectXCommon* dxCommon)
+//描画処理
+void Enemy::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	HeadPart->Draw();
@@ -199,9 +202,9 @@ void Robot::Draw(DirectXCommon* dxCommon)
 	Sprite::PostDraw();
 }
 
-void Robot::TrackPlayerMode()
+//プレイヤーへの追尾モードの時
+void Enemy::TrackPlayerMode()
 {
-
 	float vx = 0;
 	float vy = 0;
 	float vz = 0;
@@ -209,7 +212,6 @@ void Robot::TrackPlayerMode()
 	vx = (AllPos.m128_f32[0] - TrackPoint.m128_f32[0]);
 	vy = (AllPos.m128_f32[1] - TrackPoint.m128_f32[1]);
 	vz = (AllPos.m128_f32[2] - TrackPoint.m128_f32[2]);
-
 
 	float v2x = pow(vx, 2);
 	float v2y = pow(vy, 2);
@@ -241,27 +243,13 @@ void Robot::TrackPlayerMode()
 	}
 }
 
-void Robot::Motion()
+void Enemy::Motion()
 {
 
 }
 
-void Robot::TrackRot(const XMFLOAT2& playerPos)
-{
-	double ax, az, bx, bz;
-	const float PI = 3.14159;
-
-	bx = cos(BodyPartRot.y);
-	bz = sin(BodyPartRot.y);
-
-	ax = (playerPos.x) - BodyPartPos.m128_f32[0];
-	az = (playerPos.y) - BodyPartPos.m128_f32[2];
-
-	BodyPartRot.y += (ax * bz - az * bx < 0.0) ? +PI / 180 * 8 : -PI / 180 * 8;
-	BodyPart->SetRotation(BodyPartRot);
-}
-
-void Robot::AttackMode(int& playerHp)
+//攻撃モードの時
+void Enemy::AttackMode(int& playerHp)
 {
 	//除算結果の値
 	int divisionvalue = 0;
@@ -289,7 +277,8 @@ void Robot::AttackMode(int& playerHp)
 	}
 }
 
-void Robot::Attack(int& playerhp)
+//攻撃する時
+void Enemy::Attack(int& playerhp)
 {
 	//巨大化していく値
 	float gigantic = 0.00002f;
@@ -317,12 +306,10 @@ void Robot::Attack(int& playerhp)
 			//playerhp -= 1;
 		}
 	}
-
-
-
 }
 
-XMFLOAT2 Robot::WorldtoScreen(const XMVECTOR& Set3dPosition)
+//3D座標から2D座標を取得する
+XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& Set3dPosition)
 {
 	Center->SetRotation(CenterRot);
 	CenterMat = Center->GetMatrix();
@@ -330,8 +317,6 @@ XMFLOAT2 Robot::WorldtoScreen(const XMVECTOR& Set3dPosition)
 	offset = { 0.0,0.0,1.0f };
 	offset = XMVector3TransformNormal(offset, CenterMat);
 	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
-	/*CenterWorldPos = { 0.0f,0.0f,0.0f };
-	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);*/
 
 	XMVECTOR PositionRet = Set3dPosition;
 
@@ -350,12 +335,11 @@ XMFLOAT2 Robot::WorldtoScreen(const XMVECTOR& Set3dPosition)
 	get2dposition.x = PositionRet.m128_f32[0];
 	get2dposition.y = PositionRet.m128_f32[1];
 
-
 	return get2dposition;
-
 }
 
-void Robot::ChangeViewPort(XMMATRIX& matViewPort)
+//ビュー変換
+void Enemy::ChangeViewPort(XMMATRIX& matViewPort)
 {
 	matViewPort.r[0].m128_f32[0] = WinApp::window_width / 2;
 	matViewPort.r[0].m128_f32[1] = 0;

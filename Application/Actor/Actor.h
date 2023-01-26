@@ -9,7 +9,7 @@
 #include"ClearScene.h"
 #include"ObjParticle.h"
 #include<sstream>
-#include"Robot.h"
+#include"Enemy.h"
 
 #include<memory>
 
@@ -164,7 +164,7 @@ private:
 	int ENE = 0;
 
 	//DebugScene‚Ì‚â‚Â‚ğ‚Á‚Ä‚«‚½
-	std::list<std::unique_ptr<Robot>>rob;
+	std::list<std::unique_ptr<Enemy>>Robot;
 	std::unique_ptr<Object3d> bo = nullptr;
 	std::unique_ptr<Player>player;
 

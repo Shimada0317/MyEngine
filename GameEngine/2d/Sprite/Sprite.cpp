@@ -166,12 +166,6 @@ bool Sprite::StaticInitialize(ID3D12Device* device, int window_width, int window
 	gpipeline.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;//0～255指定のRGBA
 	gpipeline.SampleDesc.Count = 1;//1ぴくせるにつき1回サンプリング
 
-	//デプステンシルステートの設定
-	/*gpipeline.DepthStencilState.DepthEnable = true;
-	gpipeline.DepthStencilState.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ALL;
-	gpipeline.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
-	gpipeline.DSVFormat = DXGI_FORMAT_D32_FLOAT;*/
-
 	gpipeline.DepthStencilState = CD3DX12_DEPTH_STENCIL_DESC(D3D12_DEFAULT);
 	gpipeline.DepthStencilState.DepthFunc = D3D12_COMPARISON_FUNC_ALWAYS;
 	gpipeline.DepthStencilState.DepthEnable = false;

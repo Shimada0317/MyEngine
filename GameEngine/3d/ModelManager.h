@@ -22,8 +22,6 @@ public:
 
 	void Initialize();
 
-	void Finalize();
-
 	void CallModel(const std::string& ObjModelname);
 
 	ObjModel* GetModel(int number) { return model_[number]; }
