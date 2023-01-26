@@ -41,10 +41,6 @@ public://ƒƒ“ƒo•Ï”
 
 	void Draw(DirectXCommon* dxCommon)override;
 
-	void ChangeViewPort(XMMATRIX& mat);
-
-	void MouthContoroll();
-
 	void Finalize() override;
 private:
 	std::unique_ptr<Robot>rob[3];
