@@ -195,9 +195,6 @@
     <ClCompile Include="GameEngine\3d\FbxLoader.cpp">
       <Filter>ソース ファイル\GameEngine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\Enemy.cpp">
-      <Filter>ソース ファイル\Application\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="GameEngine\3d\Object3d.cpp">
       <Filter>ソース ファイル\GameEngine\3d</Filter>
     </ClCompile>
@@ -329,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="GameEngine\DirectXCommon\DirectXCommon.cpp">
       <Filter>ソース ファイル\GameEngine\DirectXCommon</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\Enemy.cpp">
+      <Filter>ソース ファイル\Application\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

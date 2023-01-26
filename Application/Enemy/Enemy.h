@@ -37,7 +37,7 @@ public:
 	void StatusSet();
 
 	/// <summary>
-	/// Update‚Í‚±‚Ì’†‚Å
+	/// Obj“™‚ÌUpdate‚Í‚±‚Ì’†‚Å
 	/// </summary>
 	/// <param name="bull">ƒvƒŒƒCƒ„[‚Ì’e</param>
 	void AllUpdate();

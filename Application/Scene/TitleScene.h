@@ -33,30 +33,79 @@ private: // エイリアス
 private:
 	static const int debugTextNumber = 0;
 
-public://メンバ変数
+public://メンバ関数
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="sceneManager_"></param>
 	TitleScene(SceneManager* sceneManager_);
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="dxComon"></param>
 	void Initialize(DirectXCommon* dxComon) override;
 
-	void SetPosSclRot();
+	/// <summary>
+	/// ステータスセット
+	/// </summary>
+	void StatusSet();
 
+	/// <summary>
+	/// Obj等のUpdateはこの中で
+	/// </summary>
+	void AllUpdate();
+
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
 
+	/// <summary>
+	/// カメラの移動
+	/// </summary>
 	void CameraMove();
 
+	/// <summary>
+	/// カーソルが範囲内に入っているか
+	/// </summary>
+	/// <param name="cursorPos">カーソルの座標</param>
+	/// <param name="checkPos">押せるスプライトの座標</param>
+	/// <param name="radX">スプライトの横の範囲</param>
+	/// <param name="radY">スプライトの縦の範囲</param>
 	void CheckCursorIn(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY);
 
+	/// <summary>
+	/// 矢印のスプライトの範囲
+	/// </summary>
+	/// <param name="cursorPos">カーソルの座標</param>
+	/// <param name="checkPos">押せるスプライトの座標</param>
+	/// <param name="radX">スプライトの横の範囲</param>
+	/// <param name="radY">スプライトの縦の範囲</param>
+	/// <returns></returns>
 	bool NextorBack(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY);
 
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon)override;
 
+	/// <summary>
+	/// 終了処理
+	/// </summary>
 	void Finalize() override;
+
 private:
 	//Objモデル
+	//ビル
 	ObjModel* BillsModel = nullptr;
+	//地面
 	ObjModel* Ground = nullptr;
+	//天球
 	ObjModel* Spheremodel = nullptr;
 	ObjModel* Worldmodel = nullptr;
+	
 	ObjModel* StartModel = nullptr;
 	//Obj
 	unique_ptr <Object3d> Sphere;
@@ -66,67 +115,67 @@ private:
 	unique_ptr <Object3d >World;
 	unique_ptr<Object3d> Start;
 	//スプライト
-	Sprite* title = nullptr;
-	Sprite* cursor = nullptr;
-	Sprite* clickBefore = nullptr;
-	Sprite* clickAfter = nullptr;
+	Sprite* Title = nullptr;
+	Sprite* Cursor = nullptr;
+	Sprite* ClickBefore = nullptr;
+	Sprite* ClickAfter = nullptr;
 	Sprite* SignalBefore = nullptr;
 	Sprite* SignalAfter = nullptr;
-	Sprite* setumei = nullptr;
-	Sprite* setumei2 = nullptr;
-	Sprite* setumei3 = nullptr;
-	Sprite* arrowRight = nullptr;
-	Sprite* arrowLeft = nullptr;
-	Sprite* arrowRightTrue = nullptr;
-	Sprite* arrowLeftTrue = nullptr;
+	Sprite* Explanation = nullptr;
+	Sprite* Explanation2 = nullptr;
+	Sprite* Explanation3 = nullptr;
+	Sprite* ArrowRight = nullptr;
+	Sprite* ArrowLeft = nullptr;
+	Sprite* ArrowRightTrue = nullptr;
+	Sprite* ArrowLeftTrue = nullptr;
 	//その他の機能
 	Light* light = nullptr;
-	PostEffect* post = nullptr;
-	Audio* Click_SE = nullptr;
-	Audio* MorseCode_SE = nullptr;
+	PostEffect* Post = nullptr;
+	Audio* ClickSe = nullptr;
+	Audio* MorseCodeSe = nullptr;
 	Audio* Bgm = nullptr;
 	Camera* TitleCamera = nullptr;
 	DirectXCommon* dxCommon = nullptr;
 	//球体のステータス
-	XMVECTOR Sphere_Pos = { 0,0,0 };
-	XMFLOAT3 Sphere_Scl = { 4.0f,4.0f,4.0f };
-	XMFLOAT3 Sphere_Rot = { 0,0,0 };
+	XMVECTOR SpherePos = { 0,0,0 };
+	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
+	XMFLOAT3 SphereRot = { 0,0,0 };
 	//フィールドのステータス
-	XMVECTOR Ground_Pos = { 22.5f,-1,40 };
-	XMFLOAT3 Ground_Scl = { 13,20,16 };
-	XMFLOAT3 Ground_Rot = { 0,0,0 };
+	XMVECTOR GroundPos = { 22.5f,-1,40 };
+	XMFLOAT3 GroundScl = { 13,20,16 };
+	XMFLOAT3 GroundRot = { 0,0,0 };
 	//ビル群のステータス
-	XMFLOAT3 Bills_Scl = { 10.0f,10.0f,10.0f };
-	XMVECTOR Bills_Pos = { 0.0f,0.0f,-16.5f };
-	XMVECTOR Bills_Pos1 = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 Bills_Rot = { 0.0f,90.0f,0.0f };
+	XMFLOAT3 BillsScl = { 10.0f,10.0f,10.0f };
+	XMVECTOR BillsPos = { 0.0f,0.0f,-16.5f };
+	XMVECTOR BillsPos1 = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 BillsRot = { 0.0f,90.0f,0.0f };
 	//カメラの移動先のステータス
-	XMVECTOR Start_Pos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 Start_Scl = { 15.0f,15.0f,15.0f };
+	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 StartScl = { 15.0f,15.0f,15.0f };
 	//カメラのステータス
-	XMFLOAT3 Cam_Target= { 0.0f,0.0f,0.0f };
-	XMFLOAT3 Cam_Eye = { 0.0f,0.0f,0.0f };
-	XMVECTOR Cam_Move = { 0.0f,0.0f,0.0f };
-	XMVECTOR CamEye_Move = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 CamTarget= { 0.0f,0.0f,0.0f };
+	XMFLOAT3 CamEye = { 0.0f,0.0f,0.0f };
+	XMVECTOR CamMove = { 0.0f,0.0f,0.0f };
+	XMVECTOR CamEyeMove = { 0.0f,0.0f,0.0f };
 
 	bool CameraEyeMove_F = false;
 	bool CameraChange_F = false;
 	//足場のステータス
-	XMVECTOR World_Pos = { 0.0f,-1.1f,0.0f };
-	XMFLOAT3 World_Scl = { 100,100,100 };
+	XMVECTOR WorldPos = { 0.0f,-1.1f,0.0f };
+	XMFLOAT3 WorldScl = { 100,100,100 };
 	//スプライトのステータス
-	XMFLOAT4 Sprite_Col = { 1,1,1,1 };
+	XMFLOAT4 SpriteCol = { 1,1,1,1 };
 	XMFLOAT2 Anchorpoint = { 0.5f,0.5f };
-	XMFLOAT2 Reticle_Pos = { 640.0f,360.0f };
-	XMFLOAT2 Click_Pos = { 380,560 };
+	XMFLOAT2 ReticlePos = { 640.0f,360.0f };
+	XMFLOAT2 ClickPos = { 380,560 };
 	//タイトルスプライトのステータス
-	XMFLOAT2 Title_Size = { 1280.0f,720.0f };
-	XMFLOAT2 Title_Pos = { 0.0f,0.0f };
+	XMFLOAT2 TitleSize = { 1280.0f,720.0f };
+	XMFLOAT2 TitlePos = { 0.0f,0.0f };
 	
 	bool TitleSprite_F = true;
 	//説明の矢印座標
-	XMFLOAT2 ArrowRight_Pos = { 1220.0f,300 };
-	XMFLOAT2 ArrowLeft_Pos = { 30.0f,300 };
+	XMFLOAT2 ArrowRightPos = { 1220.0f,300 };
+	XMFLOAT2 ArrowLeftPos = { 30.0f,300 };
 	
 	bool RightTrueIn_F = false;
 	bool LeftTrueIn_F = false;
