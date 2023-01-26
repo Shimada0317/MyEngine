@@ -28,6 +28,9 @@ void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	AllPos = all_Pos;
 	camera = came;
 
+	PursePositiveRot += HeadPartRot.y;
+	PurseNegativeeRot += HeadPartRot.y;
+
 	OriginDistance = Distance;
 	OriginHeadDistance = HeadDistance;
 
@@ -129,10 +132,6 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 
 		});
 
-	if (Input::GetInstance()->PushKey(DIK_O)) {
-		Hp = 0;
-	}
-
 	if (PlyerBulletShot == true) {
 		if (Player2DPos.x - Distance < RockOnPos.x && Player2DPos.x + Distance > RockOnPos.x &&
 			Player2DPos.y - Distance<RockOnPos.y && Player2DPos.y + Distance>RockOnPos.y) {
@@ -145,6 +144,10 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 			Hp -= 50;
 			PlyerBulletShot = false;
 		}
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_O)) {
+		Hp = 0;
 	}
 
 	//ダメージを受けたとき
@@ -252,6 +255,7 @@ void Enemy::TrackPlayerMode()
 
 void Enemy::Motion()
 {
+	
 
 }
 
@@ -272,6 +276,7 @@ void Enemy::AttackMode(int& playerHp)
 		}
 		//生成した乱数の値が一定の時
 		if (divisionvalue == 1) {
+			
 			//攻撃に移行する
 			AttackFase = true;
 			//乱数の初期化
@@ -280,7 +285,18 @@ void Enemy::AttackMode(int& playerHp)
 	}
 	//攻撃フェイズに移行した時
 	if (AttackFase == true) {
+		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot+1);
+		if (HeadPartRot.y >= PursePositiveRot) {
+			HeadPartRot.y = PursePositiveRot;
+		}
 		Attack(playerHp);
+	}
+	else {
+		Action::GetInstance()->EaseOut(HeadPartRot.y, PurseNegativeeRot-1);
+		if (HeadPartRot.y <= PurseNegativeeRot) {
+			HeadPartRot.y = PurseNegativeeRot;
+		}
+
 	}
 }
 
@@ -310,7 +326,7 @@ void Enemy::Attack(int& playerhp)
 			ArmsPartScl = { 0.2f,0.2f,0.2f };
 			AttackShakeDown = false;
 			AttackFase = false;
-			//playerhp -= 1;
+			playerhp -= 1;
 		}
 	}
 }
