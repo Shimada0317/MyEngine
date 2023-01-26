@@ -148,7 +148,7 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 	}
 
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
-	if (OldHp > Hp) {
+	if (OldHp > Hp&&Hp>=0) {
 		ClushSe->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
 		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 		newparticle->Initialize();

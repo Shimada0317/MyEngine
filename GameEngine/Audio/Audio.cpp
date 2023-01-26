@@ -22,6 +22,7 @@ bool Audio::Initialize() {
 }
 
 
+
 void Audio::LoadFile(const char* filename, const float volume) {
 	HRESULT result;
 
@@ -63,8 +64,39 @@ void Audio::LoadFile(const char* filename, const float volume) {
 	memcpy(&wfex, &format.fmt, sizeof(format.fmt));
 	wfex.wBitsPerSample = format.fmt.nBlockAlign * 8 / format.fmt.nChannels;
 
+	// 波形フォーマットを元にSourceVoiceの生成
+	IXAudio2SourceVoice* pSourceVoice = nullptr;
+	result = xAudio2->CreateSourceVoice(&pSourceVoice, &wfex, 0, 2.0f, &voiceCallback);
+	if FAILED(result) {
+		delete[] pBuffer;
+		assert(0);
+		return;
+	}
 
+	// 再生する波形データの設定
+	XAUDIO2_BUFFER buf{};
+	buf.pAudioData = (BYTE*)pBuffer;
+	buf.pContext = pBuffer;
+	buf.Flags = XAUDIO2_END_OF_STREAM;
+	buf.AudioBytes = data.size;
+	pSourceVoice->SetVolume(volume);
+	// 波形データの再生
+	result = pSourceVoice->SubmitSourceBuffer(&buf);
+	if FAILED(result) {
+		delete[] pBuffer;
+		assert(0);
+		return;
+	}
+	XAUDIO2_VOICE_STATE xaudio2state;
+	pSourceVoice->GetState(&xaudio2state);
+	result = pSourceVoice->Start(0);
+	if FAILED(result) {
+		delete[] pBuffer;
+		assert(0);
+		return;
+	}
 }
+
 
 
 void Audio::LoopWave(const char* filename, float Volume) {
