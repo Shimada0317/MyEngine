@@ -9,9 +9,7 @@
 #include "Sprite.h"
 #include"Object3d.h"
 #include"ObjModel.h"
-#include"Input.h"
 #include"ParticleManager.h"
-#include"PostEffect.h"
 #include"PostEffect.h"
 #include<memory>
 #include"Light.h"

@@ -5,8 +5,6 @@
 #include <iomanip>
 #include"Action.h"
 #include"SceneManager.h"
-#include"FbxLoader.h"
-#include"FbxObject3d.h"
 #include"ClearScene.h"
 #include"GameOverScene.h"
 #include"TitleScene.h"

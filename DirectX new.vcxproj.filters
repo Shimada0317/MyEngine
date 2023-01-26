@@ -52,9 +52,6 @@
     <Filter Include="ソース ファイル\Application\Action">
       <UniqueIdentifier>{4c4bec9a-8449-4b14-af29-0247bd6b7c77}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Application\Bullet">
-      <UniqueIdentifier>{41257541-f387-4024-b820-388614fd0f3b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Application\Collision">
       <UniqueIdentifier>{71e7a77d-7602-4960-b549-7991bbaffdce}</UniqueIdentifier>
     </Filter>
@@ -75,9 +72,6 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\Application\Action">
       <UniqueIdentifier>{49c59051-60aa-48d8-91df-cc40c792a3c2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Application\Bullet">
-      <UniqueIdentifier>{981c7c2e-8a84-46c6-b591-09e2862d1a36}</UniqueIdentifier>
     </Filter>
     <Filter Include="ヘッダー ファイル\Application\Collision">
       <UniqueIdentifier>{6f78a8ff-bd97-4673-9540-0e8a5b64ee3b}</UniqueIdentifier>
@@ -201,16 +195,7 @@
     <ClCompile Include="GameEngine\3d\FbxLoader.cpp">
       <Filter>ソース ファイル\GameEngine\3d</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\Body.cpp">
-      <Filter>ソース ファイル\Application\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\Head.cpp">
-      <Filter>ソース ファイル\Application\Enemy</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Enemy\Robot.cpp">
-      <Filter>ソース ファイル\Application\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\BothArms.cpp">
       <Filter>ソース ファイル\Application\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\3d\Object3d.cpp">
@@ -276,9 +261,6 @@
     <ClCompile Include="Application\Scene\DebugScene.cpp">
       <Filter>ソース ファイル\Application\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Scene\GameOverScene.cpp">
-      <Filter>ソース ファイル\Application\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Scene\GameScene.cpp">
       <Filter>ソース ファイル\Application\Scene</Filter>
     </ClCompile>
@@ -305,9 +287,6 @@
     </ClCompile>
     <ClCompile Include="GameEngine\3d\ModelManager.cpp">
       <Filter>ソース ファイル\GameEngine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Bullet\Bullet.cpp">
-      <Filter>ソース ファイル\Application\Bullet</Filter>
     </ClCompile>
     <ClCompile Include="Application\Collision\Collision.cpp">
       <Filter>ソース ファイル\Application\Collision</Filter>
@@ -456,15 +435,6 @@
     <ClInclude Include="GameEngine\3d\ObjModel.h">
       <Filter>ヘッダー ファイル\GameEngine\3d</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\Body.h">
-      <Filter>ヘッダー ファイル\Application\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\BothArms.h">
-      <Filter>ヘッダー ファイル\Application\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\Head.h">
-      <Filter>ヘッダー ファイル\Application\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Enemy\Robot.h">
       <Filter>ヘッダー ファイル\Application\Enemy</Filter>
     </ClInclude>
@@ -528,9 +498,6 @@
     <ClInclude Include="Application\Scene\DebugScene.h">
       <Filter>ヘッダー ファイル\Application\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Scene\GameOverScene.h">
-      <Filter>ヘッダー ファイル\Application\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Scene\GameScene.h">
       <Filter>ヘッダー ファイル\Application\Scene</Filter>
     </ClInclude>
@@ -560,9 +527,6 @@
     </ClInclude>
     <ClInclude Include="GameEngine\3d\ModelManager.h">
       <Filter>ヘッダー ファイル\GameEngine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Bullet\Bullet.h">
-      <Filter>ヘッダー ファイル\Application\Bullet</Filter>
     </ClInclude>
     <ClInclude Include="Application\Collision\Collision.h">
       <Filter>ヘッダー ファイル\Application\Collision</Filter>

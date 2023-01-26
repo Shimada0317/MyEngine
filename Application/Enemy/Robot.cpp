@@ -5,9 +5,6 @@
 
 Robot::~Robot()
 {
-	head.reset();
-	body.reset();
-	arms.reset();
 	Shadow.reset();
 
 	HeadPart.reset();
@@ -19,7 +16,7 @@ Robot::~Robot()
 	delete BodyPartModel;
 	delete ArmsPartModel;
 	delete ShadowModel;
-	delete Clush_SE;
+	delete ClushSe;
 }
 
 void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera* came, const bool& movement)
@@ -48,19 +45,14 @@ void Robot::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	CenterMat = Center->GetMatrix();
 	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
 
-	HeadCenterMat = HeadCenter->GetMatrix();
 
-
-	Clush_SE = new Audio();
-	Clush_SE->Initialize();
+	ClushSe = new Audio();
+	ClushSe->Initialize();
 
 	Sprite::LoadTexture(350, L"Resources/mark.png");
 	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnchorPoint));
+	RockOnHead.reset(Sprite::SpriteCreate(350, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
 
-
-	for (int i = 0; i < 3; i++) {
-		RemainPart[i] = true;
-	}
 	Hp = 150;
 	OldHp = Hp;
 	RobotArive = true;
@@ -103,7 +95,9 @@ void Robot::StatusSet()
 	ArmsPart->SetScale(ArmsPartScl);
 
 	RockOnPos=WorldtoScreen(BodyPartPos);
+	RockOnHeadPos = WorldtoScreen(HeadPartPos);
 	RockOn->SetPosition(RockOnPos);
+	RockOnHead->SetPosition(RockOnHeadPos);
 }
 
 void Robot::AllUpdata()
@@ -144,7 +138,7 @@ void Robot::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
 	if (OldHp > Hp) {
-		Clush_SE->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
+		ClushSe->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
 		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 		newparticle->Initialize();
 		Obj_Particle.push_back(std::move(newparticle));
@@ -178,9 +172,6 @@ void Robot::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 		AttackPreparationTime = 0;
 		AttackChanse = 0;
 		Rand = 0;
-		for (int i = 0; i < 3; i++) {
-			RemainPart[i] = false;
-		}
 		if (ArmsPartColor.w <= 0 && Obj_Particle.empty()) {
 			isDead_ = true;
 		}
@@ -204,6 +195,7 @@ void Robot::Draw(DirectXCommon* dxCommon)
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	RockOn->Draw();
+	RockOnHead->Draw();
 	Sprite::PostDraw();
 }
 

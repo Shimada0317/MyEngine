@@ -97,7 +97,6 @@
     <ClCompile Include="Application\Scene\BaseScene.cpp" />
     <ClCompile Include="Application\Scene\ClearScene.cpp" />
     <ClCompile Include="Application\Scene\DebugScene.cpp" />
-    <ClCompile Include="Application\Scene\GameOverScene.cpp" />
     <ClCompile Include="Application\Scene\GameScene.cpp" />
     <ClCompile Include="Application\Scene\SceneManager.cpp" />
     <ClCompile Include="Application\Scene\TitleScene.cpp" />
@@ -131,13 +130,9 @@
     <ClCompile Include="GameEngine\ParticleManager\ParticleManager.cpp" />
     <ClCompile Include="GameEngine\PostEffect\PostEffect.cpp" />
     <ClCompile Include="GameEngine\WinApp\WinApp.cpp" />
-    <ClCompile Include="Application\Enemy\BothArms.cpp" />
-    <ClCompile Include="Application\Bullet\Bullet.cpp" />
     <ClCompile Include="GameEngine\3d\ModelManager.cpp" />
     <ClCompile Include="Application\Collision\Collision.cpp" />
     <ClCompile Include="Application\Collision\CollisionPrimitive.cpp" />
-    <ClCompile Include="Application\Enemy\Body.cpp" />
-    <ClCompile Include="Application\Enemy\Head.cpp" />
     <ClCompile Include="Application\Enemy\Robot.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="GameEngine\3d\Material.cpp" />
@@ -276,7 +271,6 @@
     <ClInclude Include="Application\Scene\BaseScene.h" />
     <ClInclude Include="Application\Scene\ClearScene.h" />
     <ClInclude Include="Application\Scene\DebugScene.h" />
-    <ClInclude Include="Application\Scene\GameOverScene.h" />
     <ClInclude Include="Application\Scene\GameScene.h" />
     <ClInclude Include="Application\Scene\SceneManager.h" />
     <ClInclude Include="Application\Scene\TitleScene.h" />
@@ -295,8 +289,6 @@
     <ClInclude Include="GameEngine\3d\FbxModel.h" />
     <ClInclude Include="GameEngine\3d\FbxObject3d.h" />
     <ClInclude Include="Application\Action\Action.h" />
-    <ClInclude Include="Application\Enemy\BothArms.h" />
-    <ClInclude Include="Application\Bullet\Bullet.h" />
     <ClInclude Include="GameEngine\3d\ModelManager.h" />
     <ClInclude Include="GameEngine\Audio\Audio.h" />
     <ClInclude Include="GameEngine\camera\Camera.h" />
@@ -317,8 +309,6 @@
     <ClInclude Include="GameEngine\WinApp\WinApp.h" />
     <ClInclude Include="Application\Collision\Collision.h" />
     <ClInclude Include="Application\Collision\CollisionPrimitive.h" />
-    <ClInclude Include="Application\Enemy\Body.h" />
-    <ClInclude Include="Application\Enemy\Head.h" />
     <ClInclude Include="Application\Enemy\Robot.h" />
     <ClInclude Include="GameEngine\3d\Material.h" />
     <ClInclude Include="GameEngine\3d\Mesh.h" />

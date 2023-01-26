@@ -1,8 +1,5 @@
 #pragma once
 #include"Audio.h"
-#include"Body.h"
-#include"BothArms.h"
-#include"Head.h"
 #include"ObjParticle.h"
 #include"DirectXCommon.h"
 #include"Texture.h"
@@ -85,15 +82,12 @@ public://Getter Setter
 
 private:
 	//体ごとのパーツ
-	std::unique_ptr<Head> head;
-	std::unique_ptr<BothArms>arms;
-	std::unique_ptr<Body>body;
 
+
+	//Obj
 	std::unique_ptr<Object3d> HeadPart;
 	std::unique_ptr<Object3d> ArmsPart;
 	std::unique_ptr<Object3d> BodyPart;
-
-	//Obj
 	std::unique_ptr<Object3d> Shadow;
 	std::unique_ptr<Object3d> Center;
 	std::unique_ptr<Object3d> HeadCenter;
@@ -106,17 +100,14 @@ private:
 	std::list<std::unique_ptr<ObjParticle>>Obj_Particle;
 	//スプライト
 	std::unique_ptr<Sprite> RockOn;
+	std::unique_ptr<Sprite> RockOnHead;
 	//その他
-	Audio* Clush_SE;
+	Audio* ClushSe;
 	Camera* camera;
 	//敵の中心部分のステータス
 	XMVECTOR CenterWorldPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 CenterRot = { 0.0f,0.0f,0.0f };
 	XMMATRIX CenterMat;
-	//敵の頭の中心部分のステータス
-	XMVECTOR HeadCenterWorldPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 HeadCenterRot = { 0.0f,0.0f,0.0f };
-	XMMATRIX HeadCenterMat;
 	//敵が持っているステータス
 	int Hp = 50;
 	int OldHp = 0;
@@ -138,11 +129,9 @@ private:
 	XMFLOAT3 ArmsPartRot = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 HeadPartRot = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 BodyPartRot = { 0.0f,0.0f,0.0f };
-		//パーツごとに渡すステータス
-		XMVECTOR AllPos = { 0.0f,0.0f,-10.0f };
-		XMFLOAT3 AllRot;
-		//部位破壊用
-		bool RemainPart[3];
+	//パーツごとに渡すステータス
+	XMVECTOR AllPos = { 0.0f,0.0f,-10.0f };
+	XMFLOAT3 AllRot;
 	//影のステータス
 	XMVECTOR ShadowPos = { 0,0,0 };
 	XMFLOAT4 ShadowCol = { 0.0f,0.0f,0.0f,0.1f };
@@ -150,11 +139,11 @@ private:
 	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
 	XMFLOAT2 RockOnAnchorPoint = { 0.5f,0.5f };
 	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT2 RockOnHeadPos = { 0.0f,0.0f };
 	//2D座標を持たせる計算で使う変数
 	XMVECTOR offset;
 	XMMATRIX MatViewPort;
 	//攻撃モードで使用される変数
-
 	float AttackTime = 0.0f;
 	int AttackChanse = 0;
 	float Rand = 0;

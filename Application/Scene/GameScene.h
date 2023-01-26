@@ -6,16 +6,12 @@
 #include "Sprite.h"
 #include"Object3d.h"
 #include"ObjModel.h"
-#include"Input.h"
 #include"BaseScene.h"
-#include"FbxObject3d.h"
 #include"DebugCamera.h"
 #include"PostEffect.h"
 #include"ParticleManager.h"
 #include"Light.h"
-#include"LightGroup.h"
 #include"Actor.h"
-#include"ClearScene.h"
 
 #include<memory>
 
