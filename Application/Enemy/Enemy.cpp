@@ -28,6 +28,9 @@ void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	AllPos = all_Pos;
 	camera = came;
 
+	OriginDistance = Distance;
+	OriginHeadDistance = HeadDistance;
+
 	ShadowModel = ObjModel::CreateFromOBJ("Shadow", true);
 	Shadow = Object3d::Create(ShadowModel);
 	Center = Object3d::Create(ShadowModel);
@@ -137,8 +140,8 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 			PlyerBulletShot = false;
 		}
 
-		if (Player2DPos.x - Distance < RockOnHeadPos.x && Player2DPos.x + Distance > RockOnHeadPos.x &&
-			Player2DPos.y - Distance<RockOnHeadPos.y && Player2DPos.y + Distance>RockOnHeadPos.y) {
+		if (Player2DPos.x - HeadDistance < RockOnHeadPos.x && Player2DPos.x + HeadDistance > RockOnHeadPos.x &&
+			Player2DPos.y - HeadDistance<RockOnHeadPos.y && Player2DPos.y + HeadDistance>RockOnHeadPos.y) {
 			Hp -= 50;
 			PlyerBulletShot = false;
 		}
@@ -201,11 +204,6 @@ void Enemy::Draw(DirectXCommon* dxCommon)
 		particle->Draw();
 	}
 	Object3d::PostDraw();
-
-	Sprite::PreDraw(dxCommon->GetCmdList());
-	RockOn->Draw();
-	RockOnHead->Draw();
-	Sprite::PostDraw();
 }
 
 //プレイヤーへの追尾モードの時
@@ -227,8 +225,11 @@ void Enemy::TrackPlayerMode()
 	float v3x = (vx / Length) * MoveSpeed;
 	float v3y = (vy / Length) * MoveSpeed;
 	float v3z = (vz / Length) * MoveSpeed;
-	Distance = 60;
+	Distance = OriginDistance;
+	HeadDistance = OriginHeadDistance;
+	
 	Distance -= Length * 2.0f;
+	HeadDistance -= Length ;
 
 	AllPos.m128_f32[0] -= v3x;
 	AllPos.m128_f32[2] -= v3z;

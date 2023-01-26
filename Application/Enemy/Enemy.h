@@ -230,6 +230,10 @@ private:
 	bool isDead_ = false;
 
 	//“G‚ÆƒvƒŒƒCƒ„[‚Ì‹——£
+	float OriginDistance;
+	float OriginHeadDistance;
+
 	float Distance = 60.0f;
+	float HeadDistance = 30.0f;
 };
 
