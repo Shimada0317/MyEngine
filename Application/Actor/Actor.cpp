@@ -173,18 +173,7 @@ void Actor::Update()
 		}
 
 
-		XMFLOAT2 Player2DPos = player->GetRetPosition();
-		bool PlayerBulletShot_F = player->GetBulletShot();
-		//敵の更新処理
-		for (std::unique_ptr<Robot>& Robot : rob) {
-			enemyPos[CountDistance] = Robot->GetPosition();
-			ene2DPos[CountDistance] = Robot->Get2DPosition();
-			for (int i = 0; i < 9; i++) {
-				Robot->Update(Player2DPos,playerHp,PlayerBulletShot_F);
-			}
-			CountDistance += 1;
-		}
-		player->SetBulletShot(PlayerBulletShot_F);
+
 	}
 	
 	if (patern >= 5) {
@@ -197,12 +186,24 @@ void Actor::Update()
 			GoalPos.m128_f32[1] += 0.2f;
 		}
 	}
-
+	XMFLOAT2 Player2DPos = player->GetRetPosition();
+	bool PlayerBulletShot_F = player->GetBulletShot();
+	//敵の更新処理
+	for (std::unique_ptr<Robot>& Robot : rob) {
+		enemyPos[CountDistance] = Robot->GetPosition();
+		ene2DPos[CountDistance] = Robot->Get2DPosition();
+		for (int i = 0; i < 9; i++) {
+			Robot->TrackRot(Player2DPos);
+			Robot->Update(Player2DPos, playerHp, PlayerBulletShot_F);
+		}
+		CountDistance += 1;
+	}
+	player->SetBulletShot(PlayerBulletShot_F);
 	player->PlayerMove(move, patern);
 	//座標の設定
 	SetPSR();
 	//プレイヤーの更新処理
-	player->Update(Remaining,enemyPos,camera,ene2DPos,patern);
+	player->Update(Remaining,camera,patern);
 	camera->RecalculationMatrix();
 	
 }

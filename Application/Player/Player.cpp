@@ -102,7 +102,7 @@ void Player::Set(Camera* came)
 	GunWorldPos = XMVector3Transform(GunPos, GunMat);
 }
 
-void Player::Update(int& Remaining, const XMVECTOR enePos[], Camera* came, const XMFLOAT2 Ene2dPos[], int paterncount)
+void Player::Update(int& Remaining, Camera* came,  int paterncount)
 {
 	PaternCount = paterncount;
 	//BulletShot_F = false;

@@ -56,25 +56,30 @@ public:
 	void TrackPlayerMode();
 	//首振り
 	void Motion();
+
+	void TrackRot(const XMFLOAT2& playerPos);
 	//攻撃モード
 	void AttackMode(int& playerHp);
 	//攻撃
 	void Attack(int& playerhp);
-	//2D→3D座標
-	void WorldtoScreen();
+	/// <summary>
+	/// 2D→3D座標
+	/// </summary>
+	/// <param name="Set3dPosition">表示したい3D座標の場所</param>
+	XMFLOAT2 WorldtoScreen(const XMVECTOR& Set3dPosition);
 	//ビュー変換
 	void ChangeViewPort(XMMATRIX& matViewPort);
 
 public://Getter Setter
-	void SetPosition(XMVECTOR allPos) { this->All_Pos = allPos; }
+	void SetPosition(XMVECTOR allPos) { this->AllPos = allPos; }
 
-	void SetRotation(XMFLOAT3 allRot) { this->All_Rot = allRot; }
+	void SetRotation(XMFLOAT3 allRot) { this->AllRot = allRot; }
 
 	void SetTrackPoint(XMVECTOR TrackPoint) { this->TrackPoint = TrackPoint; }
 
-	const XMVECTOR& GetPosition() { return Center_WorldPos; }
+	const XMVECTOR& GetPosition() { return CenterWorldPos; }
 
-	const XMFLOAT2& Get2DPosition() { return RockOn_Pos; }
+	const XMFLOAT2& Get2DPosition() { return RockOnPos; }
 
 	bool IsDead() const { return isDead_; }
 
@@ -91,6 +96,7 @@ private:
 	//Obj
 	std::unique_ptr<Object3d> Shadow;
 	std::unique_ptr<Object3d> Center;
+	std::unique_ptr<Object3d> HeadCenter;
 	//Objモデル
 	ObjModel* ShadowModel = nullptr;
 	ObjModel* HeadPartModel;
@@ -104,12 +110,17 @@ private:
 	Audio* Clush_SE;
 	Camera* camera;
 	//敵の中心部分のステータス
-	XMVECTOR Center_WorldPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 Center_Rot = { 0.0f,0.0f,0.0f };
+	XMVECTOR CenterWorldPos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 CenterRot = { 0.0f,0.0f,0.0f };
+	XMMATRIX CenterMat;
+	//敵の頭の中心部分のステータス
+	XMVECTOR HeadCenterWorldPos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 HeadCenterRot = { 0.0f,0.0f,0.0f };
+	XMMATRIX HeadCenterMat;
 	//敵が持っているステータス
 	int Hp = 50;
 	int OldHp = 0;
-	bool Robotarive = false;
+	bool RobotArive = false;
 	XMVECTOR TrackPoint = { 0,0,0 };
 	//パーツごとのスケール
 	XMFLOAT3 HeadPartScl = { 0.3f,0.3f,0.3f };
@@ -128,20 +139,19 @@ private:
 	XMFLOAT3 HeadPartRot = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 BodyPartRot = { 0.0f,0.0f,0.0f };
 		//パーツごとに渡すステータス
-		XMVECTOR All_Pos = { 0.0f,0.0f,-10.0f };
-		XMFLOAT3 All_Rot;
+		XMVECTOR AllPos = { 0.0f,0.0f,-10.0f };
+		XMFLOAT3 AllRot;
 		//部位破壊用
 		bool RemainPart[3];
 	//影のステータス
-	XMVECTOR Shadow_Pos = { 0,0,0 };
-	XMFLOAT4 Shadow_Col = { 0.0f,0.0f,0.0f,0.1f };
+	XMVECTOR ShadowPos = { 0,0,0 };
+	XMFLOAT4 ShadowCol = { 0.0f,0.0f,0.0f,0.1f };
 	//敵が持つ2D系のステータス
-	XMFLOAT2 RockOn_Pos = { 0.0f,0.0f };
-	XMFLOAT2 RockOn_Anc = { 0.5f,0.5f };
-	XMFLOAT4 RockOn_Col = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
+	XMFLOAT2 RockOnAnchorPoint = { 0.5f,0.5f };
+	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
 	//2D座標を持たせる計算で使う変数
 	XMVECTOR offset;
-	XMMATRIX Center_Mat;
 	XMMATRIX MatViewPort;
 	//攻撃モードで使用される変数
 

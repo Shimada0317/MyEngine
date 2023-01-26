@@ -252,9 +252,6 @@
     <ClCompile Include="GameEngine\Input\Contoroller\Contoroller.cpp">
       <Filter>ソース ファイル\GameEngine\Input\Contoroller</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngine\DirectXCommon\DirectXCommon.cpp">
-      <Filter>ソース ファイル\GameEngine\DirectXCommon</Filter>
-    </ClCompile>
     <ClCompile Include="GameEngine\Framework\Framework.cpp">
       <Filter>ソース ファイル\GameEngine\Framework</Filter>
     </ClCompile>
@@ -350,6 +347,9 @@
     </ClCompile>
     <ClCompile Include="External\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\DirectXCommon\DirectXCommon.cpp">
+      <Filter>ソース ファイル\GameEngine\DirectXCommon</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

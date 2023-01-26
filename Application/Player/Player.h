@@ -34,7 +34,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(int& Remaining,const XMVECTOR enePos[], Camera* came,const XMFLOAT2 Ene2dPos[],int patern);
+	void Update(int& Remaining, Camera* came,int patern);
 
 	/// <summary>
 	/// パーティクルの描画
