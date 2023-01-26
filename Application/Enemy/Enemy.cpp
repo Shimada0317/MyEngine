@@ -136,6 +136,12 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 			Hp -= 30;
 			PlyerBulletShot = false;
 		}
+
+		if (Player2DPos.x - Distance < RockOnHeadPos.x && Player2DPos.x + Distance > RockOnHeadPos.x &&
+			Player2DPos.y - Distance<RockOnHeadPos.y && Player2DPos.y + Distance>RockOnHeadPos.y) {
+			Hp -= 50;
+			PlyerBulletShot = false;
+		}
 	}
 
 	//ƒ_ƒ[ƒW‚ğó‚¯‚½‚Æ‚«
