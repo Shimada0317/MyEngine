@@ -59,7 +59,7 @@ void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnchorPoint));
 	RockOnHead.reset(Sprite::SpriteCreate(350, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
 
-	Hp = 150;
+	Hp = 160;
 	OldHp = Hp;
 	RobotArive = true;
 	Center->SetRotation(AllRot);
@@ -135,19 +135,15 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 	if (PlyerBulletShot == true) {
 		if (Player2DPos.x - Distance < RockOnPos.x && Player2DPos.x + Distance > RockOnPos.x &&
 			Player2DPos.y - Distance<RockOnPos.y && Player2DPos.y + Distance>RockOnPos.y) {
-			Hp -= 30;
+			Hp -= 35;
 			PlyerBulletShot = false;
 		}
 
 		if (Player2DPos.x - HeadDistance < RockOnHeadPos.x && Player2DPos.x + HeadDistance > RockOnHeadPos.x &&
 			Player2DPos.y - HeadDistance<RockOnHeadPos.y && Player2DPos.y + HeadDistance>RockOnHeadPos.y) {
-			Hp -= 50;
+			Hp -= 40;
 			PlyerBulletShot = false;
 		}
-	}
-
-	if (Input::GetInstance()->PushKey(DIK_O)) {
-		Hp = 0;
 	}
 
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
@@ -255,7 +251,45 @@ void Enemy::TrackPlayerMode()
 
 void Enemy::Motion()
 {
+	XMFLOAT3 hypertrophy = { 0.00001f,0.00001f,0.00001f };
+
+	MotionTime += 0.001f;
+
+	if (MotionChange == true) {
+		BodyPartScl.x += hypertrophy.x;
+		ArmsPartScl.x += hypertrophy.x;
+		HeadPartScl.x += hypertrophy.x;
+
+		BodyPartScl.y += hypertrophy.y;
+		ArmsPartScl.y += hypertrophy.y;
+		HeadPartScl.y += hypertrophy.y;
+
+		BodyPartScl.z += hypertrophy.z;
+		ArmsPartScl.z += hypertrophy.z;
+		HeadPartScl.z += hypertrophy.z;
+		if (MotionTime >= 1) {
+			MotionChange = false;
+			MotionTime = 0.0f;
+		}
+	}
 	
+	else {
+		BodyPartScl.x -= hypertrophy.x;
+		ArmsPartScl.x -= hypertrophy.x;
+		HeadPartScl.x -= hypertrophy.x;
+					  
+		BodyPartScl.y -= hypertrophy.y;
+		ArmsPartScl.y -= hypertrophy.y;
+		HeadPartScl.y -= hypertrophy.y;
+					  
+		BodyPartScl.z -= hypertrophy.z;
+		ArmsPartScl.z -= hypertrophy.z;
+		HeadPartScl.z -= hypertrophy.z;
+		if (MotionTime >= 1) {
+			MotionChange = true;
+			MotionTime = 0.0f;
+		}
+	}
 
 }
 

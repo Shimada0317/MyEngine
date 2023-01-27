@@ -237,9 +237,6 @@ private:
 	float HeadDistance = 30.0f;
 
 	//“G‚Ìƒ‚[ƒVƒ‡ƒ“—p
-	bool HeadRotAction = false;
-	float MotionTimer = 0.0f;
-
 	float PursePositiveRot = 180;
 	float PurseNegativeeRot = 0;
 };

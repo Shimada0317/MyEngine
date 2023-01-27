@@ -428,7 +428,7 @@ void Player::PlayerMove(bool& move, int patern)
 					vel = { 0.0f,0.0f,0.0f };
 					Fring_F = true;
 					if (Fring_F == true) {
-						vel = { 0.0f,0.674f,0.0f };
+						vel = { 0.0f,0.665f,0.0f };
 					}
 				}
 			}
