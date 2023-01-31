@@ -64,5 +64,12 @@ public:
 	/// /// <param name="MoveValue">移動する値</param>
 	/// <param name="PurposeVValue">目的地の値</param>
 	void EaseOut(float& MoveValue, float PurposeVValue);
+	/// <summary>
+	/// 透明にする
+	/// </summary>
+	/// <param name="color">減色</param>
+	/// <param name="transparent">α値</param>
+	void Flash(float& color,float transparent);
+private:
 };
 

@@ -79,8 +79,13 @@ float Action::GetRangRand(float minValue, float maxValue)
 
 void Action::EaseOut(float& MoveValue, float PurposeValue)
 {
-	float dx = (PurposeValue - MoveValue) / 30.0f;
-	MoveValue += dx;
+	float easevalue = (PurposeValue - MoveValue) / 30.0f;
+	MoveValue += easevalue;
+}
+
+void Action::Flash(float& color, float transparent)
+{
+	color -= transparent;
 }
 
 

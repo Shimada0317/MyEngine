@@ -208,5 +208,13 @@ private:
 	int CountDistance=0;
 
 	Camera* camera;
+
+	//Spriteのステータス
+	XMFLOAT4 ReloadSpriteColor = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT2 AnchorPoint = { 0.5f,0.5f };
+	XMFLOAT2 ReloadSpritePos = { 1070,310 };
+	XMFLOAT2 ReloadSpriteSize = { 160,90 };
+
+	bool Revers = false;
 };
 

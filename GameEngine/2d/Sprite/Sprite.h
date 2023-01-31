@@ -86,8 +86,10 @@ public://メンバ関数
 	void SetFlipY(bool FlipY);
 	//テクスチャ
 	void SetTexRect(XMFLOAT2 texBase, XMFLOAT2 texSize);
+	//色
+	void SetColor(XMFLOAT4 color);
 	//描画
-	void Draw();
+	void Draw(const XMFLOAT4& color={1.0f,1.0f,1.0f,1.0f});
 
 protected://メンバ変数
 		//頂点バッファ

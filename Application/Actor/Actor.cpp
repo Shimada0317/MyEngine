@@ -17,7 +17,7 @@ Actor::~Actor()
 
 void Actor::Initialize()
 {
-	Sprite::LoadTexture(10, L"Resources/reload.png");
+	Sprite::LoadTexture(10, L"Resources/Reload.png");
 	Sprite::LoadTexture(13, L"Resources/one.png");
 	Sprite::LoadTexture(14, L"Resources/two.png");
 	Sprite::LoadTexture(15, L"Resources/three.png");
@@ -38,7 +38,7 @@ void Actor::Initialize()
 		bulletHUD[i] = Sprite::SpriteCreate(i, { 10.0f,10.0f });
 	}
 
-	Reload = Sprite::SpriteCreate(10, { 10.0f,10.0f }, { 1.0f,1.0f,1.0f,1.0f });
+	Reload = Sprite::SpriteCreate(10, ReloadSpritePos, ReloadSpriteColor,AnchorPoint);
 	wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
 	slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
 	maxcount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
@@ -81,8 +81,7 @@ void Actor::SetPSR()
 		bulletHUD[i]->SetPosition({ spPos.x,spPos.y + 32 * i });
 	}
 	//リロードの文字
-	Reload->SetSize({ 128,64 });
-	Reload->SetPosition({ 1140,300 });
+	Reload->SetSize(ReloadSpriteSize);
 	//左下のwaveの文字
 	wave->SetSize({ 256,128 });
 	wave->SetPosition({ 0,600 });
@@ -197,6 +196,25 @@ void Actor::Update()
 	SetPSR();
 	//プレイヤーの更新処理
 	player->Update(Remaining,camera,patern);
+	if (Remaining >= 8) {
+		if (Revers == false) {
+			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 210);
+			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 140);
+			if (ReloadSpriteSize.x >= 200) {
+				Revers = true;
+			}
+		}
+		else {
+			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 150);
+			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 80);
+			if (ReloadSpriteSize.x <= 160) {
+				Revers = false;
+			}
+		}
+	}
+	else {
+		ReloadSpriteColor.w = 1.0f;
+	}
 	camera->RecalculationMatrix();
 	
 }
@@ -227,7 +245,7 @@ void Actor::SpriteDraw()
 		}
 
 		if (Remaining == 8) {
-			Reload->Draw();
+			Reload->Draw(ReloadSpriteColor);
 		}
 
 		if (playerHp == 1) {
