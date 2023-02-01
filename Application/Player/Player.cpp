@@ -136,7 +136,6 @@ void Player::Update(int& Remaining, Camera* came,  int paterncount)
 			Remaining = 8;
 			ReloadTime += 1;
 			Anser = ReloadTime % 40;
-
 			if (Anser == 0) {
 				Remaining = 0;
 				if (Remaining == 0) {
