@@ -228,5 +228,7 @@ private:
 	float RecoilTime = 0.0f;
 
 	float easetimer = 0;
+
+	bool MouseStop_F = false;
 };
 

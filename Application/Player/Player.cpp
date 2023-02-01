@@ -89,8 +89,7 @@ void Player::Set(Camera* came)
 	Body->SetScale(BodyScl);
 	Body->SetParent(came);
 
-	GunRot.y = (ReticlePos2D.x - 640) / 10;
-	GunRot.x = (ReticlePos2D.y - 360) / 50;
+	
 
 	Gun->SetRotation(GunRot);
 	Gun->SetScale(GunScl);
@@ -105,10 +104,17 @@ void Player::Set(Camera* came)
 void Player::Update(int& Remaining, Camera* came,  int paterncount)
 {
 	PaternCount = paterncount;
-	//BulletShot_F = false;
+	
 	//マウス座標の取得
+	GunRot.y = (ReticlePos2D.x - 640) / 10;
 	MouthContoroll();
-	//
+	if (MouseStop_F == false) {
+		GunRot.x = (ReticlePos2D.y - 360) / 50;
+	}
+	else {
+		GunRot.x += 10.0f;
+	}
+	
 	if (CameraWork_F == true) {
 		//弾の発射前
 		if (Mouse::GetInstance()->PushClick(0)) {
@@ -128,6 +134,7 @@ void Player::Update(int& Remaining, Camera* came,  int paterncount)
 			if (ReloadSound_F == true) {
 				ReloadSe->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
 				ReloadSound_F = false;
+				MouseStop_F = true;
 			}
 			ReloadFlag = true;
 		}
@@ -138,10 +145,12 @@ void Player::Update(int& Remaining, Camera* came,  int paterncount)
 			Anser = ReloadTime % 40;
 			if (Anser == 0) {
 				Remaining = 0;
+				GunRot.x = 0;
 				if (Remaining == 0) {
 					ReloadFlag = false;
 					ReloadSound_F = true;
 					ReloadTime = 0;
+					MouseStop_F = false;
 				}
 			}
 		}
@@ -176,7 +185,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 
 void Player::SpriteDraw()
 {
-	if (CameraWork_F == true) {
+	if (CameraWork_F == true&&MouseStop_F==false) {
 		SpriteReticle->Draw();
 	}
 	else {
