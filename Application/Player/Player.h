@@ -110,10 +110,12 @@ private:
 	ObjModel* TrackModel = nullptr;
 	ObjModel* GunModel = nullptr;
 	ObjModel* BodyModel = nullptr;
+	ObjModel* CartridgeModel = nullptr;
 	//Obj
 	std::unique_ptr<Object3d> Track;
 	std::unique_ptr<Object3d> Gun;
 	std::unique_ptr<Object3d> Body;
+	std::unique_ptr<Object3d> Cartridge;
 	//スプライト
 	std::unique_ptr<Sprite> SpriteReticle;
 	std::unique_ptr<Sprite> CurtainUp;
@@ -136,6 +138,10 @@ private:
 		XMVECTOR GunPos = { 0.0f,0.0f,-3.0f };
 		XMFLOAT3 GunRot = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 GunScl={0.3f,0.3f,0.3f};
+		//薬莢Objステータス
+		XMVECTOR CartridgePos = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 CartridgeRot = { 0.0f,0.0f,0.0f };
+		XMFLOAT3 CartridgeScl = { 0.1f,0.1f,0.1f };
 		//プレイヤーObjのステータス
 		XMVECTOR BodyPos = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 BodyRot = { 0.0f,0.0f,0.0f };

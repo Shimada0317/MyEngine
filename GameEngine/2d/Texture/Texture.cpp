@@ -326,9 +326,15 @@ bool Texture::LoadTexture(UINT texnumber, const wchar_t* filename)
 	TexMetadata metadata{};
 	ScratchImage scratchImg{};
 
-	result = LoadFromWICFile(
+	/*result = LoadFromWICFile(
 		filename, WIC_FLAGS_NONE,
-		&metadata, scratchImg);
+		&metadata, scratchImg);*/
+
+	result = LoadFromDDSFile(
+		filename, DDS_FLAGS_NONE,
+		&metadata, scratchImg
+	);
+
 	if (FAILED(result)) {
 		assert(0);
 		return false;
@@ -645,7 +651,7 @@ Texture* Texture::Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLO
 		// テクスチャ情報取得
 		D3D12_RESOURCE_DESC resDesc = texbuff[texNumber]->GetDesc();
 		// スプライトのサイズをテクスチャのサイズに設定
-		size = { 1,1,1 };
+		//size = { 1,1,1 };
 	}
 
 	// Spriteのインスタンスを生成

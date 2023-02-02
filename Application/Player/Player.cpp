@@ -35,6 +35,9 @@ void Player::Initalize(Camera* came)
 	BodyModel = ObjModel::CreateFromOBJ("gun");
 	Body = Object3d::Create(BodyModel);
 
+	CartridgeModel = ObjModel::CreateFromOBJ("Head");
+	Cartridge = Object3d::Create(CartridgeModel);
+
 	Sprite::LoadTexture(200, L"Resources/mark2.png");
 	SpriteReticle.reset(Sprite::SpriteCreate(200, ReticlePos2D, ReticleColor, ReticleAncorPoint));
 
@@ -89,16 +92,23 @@ void Player::Set(Camera* came)
 	Body->SetScale(BodyScl);
 	Body->SetParent(came);
 
-	
 
 	Gun->SetRotation(GunRot);
 	Gun->SetScale(GunScl);
 	Gun->SetParent(came);
 	Gun->SetPosition(GunPos);
 
+	CartridgePos = GunPos;
+
+	Cartridge->SetPosition(CartridgePos);
+	Cartridge->SetScale(CartridgeScl);
+	Cartridge->SetParent(came);
+
 	GunMat = Gun->GetMatrix();
 	GunWorldPos = { 0.0f,0.0f,1.0f };
 	GunWorldPos = XMVector3Transform(GunPos, GunMat);
+
+	
 }
 
 void Player::Update(int& Remaining, Camera* came,  int paterncount)
@@ -171,6 +181,7 @@ void Player::Update(int& Remaining, Camera* came,  int paterncount)
 	Track->Update();
 	Body->Update();
 	Gun->Update();
+	Cartridge->Update();
 	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
 	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
 }
@@ -455,6 +466,7 @@ void Player::ObjDraw()
 {
 	if (Hp >= 0 && CameraWork_F == true) {
 		Gun->Draw();
+		Cartridge->Draw();
 	}
 }
 

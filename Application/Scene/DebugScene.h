@@ -41,7 +41,14 @@ public://ÉÅÉìÉoïœêî
 
 	void Finalize() override;
 private:
-	
+	Texture* tex = nullptr;
+	XMFLOAT3 position = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 size = { 5.0f,5.0f,10.0f };
+	XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
+
+	XMFLOAT3 cameraEye = { 0.0f,0.0f,-20.0f };
+	XMFLOAT3 cameraTarget = { 0.0f,1.0f,0.0f };
+
 };
 
 
