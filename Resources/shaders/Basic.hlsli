@@ -23,3 +23,13 @@ struct VSOutput
 	float4 world:POSITION;
 	float2 uv  :TEXCOORD; // uv’l
 };
+
+static const int POINTLIGHT_NUM = 3;
+
+struct PointLight
+{
+	float3 lightpos;
+	float3 lightcolor;
+	float3 lightatten;
+	uint active;
+};

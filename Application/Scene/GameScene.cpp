@@ -173,13 +173,13 @@ void GameScene::Update()
 			//画面を赤くするフラグが立った時
 			if (PostEffectOn == true) {
 				PostCol.x = 0.7f;
-				if (PostCol.x >= 0.5f) {
+				if (PostCol.x >= 0.7f) {
 					PostEffectOn = false;
 				}
 			}
 			//画面を赤くするフラグが立っていない時
 			if (PostEffectOn == false) {
-				PostCol.x -= 0.1f;
+				PostCol.x -= 0.05f;
 				if (PostCol.x <= 0) {
 					PostCol.x = 0;
 				}

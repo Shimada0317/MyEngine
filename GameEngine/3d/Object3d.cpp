@@ -332,7 +332,7 @@ void Object3d::Draw()
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
 
 	// ライトの描画
-	light->Draw(cmdList, 3);
+	//light->Draw(cmdList, 3);
 
 	// モデル描画
 	model->Draw(cmdList);

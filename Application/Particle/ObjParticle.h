@@ -5,8 +5,6 @@
 #include<DirectXMath.h>
 #include"Texture.h"
 
-const int MAX = 20;
-
 class ObjParticle
 {
 private: // エイリアス
@@ -21,15 +19,11 @@ private: // エイリアス
 public:
 	~ObjParticle();
 
-	void InitializeState(int i);
+	void Initialize(int ModelNumber,const XMVECTOR& particlepos,const XMFLOAT3& particlescl,const XMFLOAT3& particlerot);
 
-	void Initialize();
-
-	void Set(XMVECTOR& enemyPos,XMFLOAT3& allRot);
+	void Set();
 
 	void Update(XMVECTOR& enemyPos,XMFLOAT3& allRot);
-
-	void Effect();
 
 	void Draw();
 
@@ -38,30 +32,12 @@ public:
 	bool IsDelete()const { return Delete_; }
 private:
 
-	std::unique_ptr<Object3d>Worm[MAX];
-	std::unique_ptr<Object3d> Gear[MAX];
-	//ギアのステータス
-	XMVECTOR Gear_Pos[MAX];
-	XMFLOAT3 Gear_Rot = { 90,0,0 };
-	XMFLOAT3 Gear_Scl[MAX];
-	//芯のステータス
-	XMVECTOR Worm_Pos[MAX];
-	XMFLOAT3 Worm_Rot = { 90.0f,0.0f,0.0f };
-	XMFLOAT3 Worm_Scl[MAX];
+	std::unique_ptr<Object3d>Particle;
+	//パーティクルステータス
+	XMVECTOR ParticlePos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 ParticleScl = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 ParticleRot = { 0.0f,0.0f,0.0f };
 
-	XMFLOAT3 Up[MAX];
-
-	bool Effect_F[MAX];
-	float Gear_NumX[MAX];
-	float Gear_NumY[MAX];
-	float Gear_NumZ[MAX];
-	float Scale_NumX = 0;
-	float Scale_NumY = 0;
-	float Worm_NumX[MAX];
-	float Worm_NumY[MAX];
-	float Worm_NumZ[MAX];
-
-	bool Delete_ = false;
-	float Gravity[MAX];
+	bool Delete_;
 };
 
