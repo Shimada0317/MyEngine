@@ -209,7 +209,5 @@ private: // ƒƒ“ƒo•Ï”
 	XMFLOAT4 color = { 1,1,1,1 };
 
 	std::forward_list<Particle>particles;
-
-	XMFLOAT3 pas;
 };
 

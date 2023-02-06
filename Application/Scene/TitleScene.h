@@ -193,6 +193,6 @@ private:
 
 	int SetumeiPage = 0;
 
-	
+	float rando;
 };
 

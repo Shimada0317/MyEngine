@@ -150,6 +150,7 @@ void TitleScene::AllUpdate()
 //XVˆ—
 void TitleScene::Update()
 {
+
 	Action::GetInstance()->PlayerMove2d(TitleSize, 1.0f);
 
 	Mouse::GetInstance()->MouseMoveSprite(ReticlePos);

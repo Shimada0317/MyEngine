@@ -563,8 +563,6 @@ void ParticleManager::Update(XMFLOAT4 color)
 		it->scale += it->s_scale;
 	}
 
-	XMFLOAT3 pa = pas;
-
 	//頂点バッファへデータ転送
 	VertexPos* vertMap = nullptr;
 	result = vertBuff->Map(0, nullptr, (void**)&vertMap);
@@ -631,6 +629,5 @@ void ParticleManager::Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOA
 		p.s_scale = start_scale;
 		p.e_scale = end_scale;
 
-		pas = position;
 }
 

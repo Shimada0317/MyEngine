@@ -137,21 +137,29 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 			Player2DPos.y - Distance<RockOnPos.y && Player2DPos.y + Distance>RockOnPos.y) {
 			Hp -= 35;
 			PlyerBulletShot = false;
+			for (int i = 0; i < 20; i++) {
+				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
+				newparticle->Initialize(0, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
+				Obj_Particle.push_back(std::move(newparticle));
+			}
 		}
 
 		if (Player2DPos.x - HeadDistance < RockOnHeadPos.x && Player2DPos.x + HeadDistance > RockOnHeadPos.x &&
 			Player2DPos.y - HeadDistance<RockOnHeadPos.y && Player2DPos.y + HeadDistance>RockOnHeadPos.y) {
 			Hp -= 40;
 			PlyerBulletShot = false;
+			for (int i = 0; i < 20; i++) {
+				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
+				newparticle->Initialize(0, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
+				Obj_Particle.push_back(std::move(newparticle));
+			}
 		}
 	}
 
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
 	if (OldHp > Hp&&Hp>=0) {
 		ClushSe->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
-		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
-		newparticle->Initialize(0,BodyPartPos,{0.3f,0.3f,0.3f},{BodyPartRot});
-		Obj_Particle.push_back(std::move(newparticle));
+		
 		OldHp = Hp;
 	}
 
