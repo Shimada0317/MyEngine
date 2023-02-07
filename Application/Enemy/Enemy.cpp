@@ -132,14 +132,14 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 
 		});
 
-	if (PlyerBulletShot == true) {
+	if (PlyerBulletShot == true&&Hp>0) {
 		if (Player2DPos.x - Distance < RockOnPos.x && Player2DPos.x + Distance > RockOnPos.x &&
 			Player2DPos.y - Distance<RockOnPos.y && Player2DPos.y + Distance>RockOnPos.y) {
 			Hp -= 35;
 			PlyerBulletShot = false;
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < 5; i++) {
 				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
-				newparticle->Initialize(0, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
+				newparticle->Initialize(1, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
 				Obj_Particle.push_back(std::move(newparticle));
 			}
 		}
@@ -148,9 +148,9 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 			Player2DPos.y - HeadDistance<RockOnHeadPos.y && Player2DPos.y + HeadDistance>RockOnHeadPos.y) {
 			Hp -= 40;
 			PlyerBulletShot = false;
-			for (int i = 0; i < 20; i++) {
+			for (int i = 0; i < 5; i++) {
 				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
-				newparticle->Initialize(0, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
+				newparticle->Initialize(1, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
 				Obj_Particle.push_back(std::move(newparticle));
 			}
 		}
@@ -202,14 +202,15 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 void Enemy::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
+	for (std::unique_ptr<ObjParticle>& particle : Obj_Particle) {
+		particle->Draw();
+	}
 	HeadPart->Draw();
 	BodyPart->Draw();
 	ArmsPart->Draw();
 	Shadow->Draw();
 	//Center->Draw();
-	for (std::unique_ptr<ObjParticle>& particle : Obj_Particle) {
-		particle->Draw();
-	}
+	
 	Object3d::PostDraw();
 }
 

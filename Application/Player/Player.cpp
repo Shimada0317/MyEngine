@@ -133,6 +133,7 @@ void Player::Update(int& Remaining, Camera* came,  int paterncount)
 				Particle_F = true;
 				BulletShot_F = true;
 				Recoil_F = true;
+				
 			}
 		}
 		else {
@@ -554,8 +555,14 @@ void Player::MouthContoroll()
 {
 	//マウス座標の取得
 	Mouse::GetInstance()->MouseMoveSprite(ReticlePos2D);
-	//取得した座標をレティクルにセット
-	SpriteReticle->SetPosition(ReticlePos2D);
+	if (Recoil_F == true) {
+		Mouse::GetInstance()->RecoilMouse(ReticlePos2D);
+		Recoil_F = false;
+	}
+	else {
+		//取得した座標をレティクルにセット
+		SpriteReticle->SetPosition(ReticlePos2D);
+	}
 }
 
 void Player::ParticleEfect()

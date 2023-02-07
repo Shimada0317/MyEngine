@@ -23,7 +23,7 @@ void Mouse::Initialize(WinApp* winApp)
 	result = Onclick->SetDataFormat(&c_dfDIMouse);
 	result = Onclick->SetCooperativeLevel(
 		winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
-
+	
 	ShowCursor(false);
 }
 
@@ -68,6 +68,28 @@ void Mouse::MouseMoveSprite(XMFLOAT2& spritePos)
 
 	spritePos.x = mousePosition.x;
 	spritePos.y = mousePosition.y;
+
+	
+}
+
+void Mouse::RecoilMouse(XMFLOAT2& spritepos)
+{
+	HWND hwnd = winApp->GetHwnd();
+
+	float posX = 0;
+	float posY = 0;
+
+	WINDOWINFO windoInfo;
+	//ウィンドウの位置を取得
+	windoInfo.cbSize = sizeof(WINDOWINFO);
+	GetWindowInfo(hwnd, &windoInfo);
+	//マウスの移動先の絶対座標
+	posX = spritepos.x + windoInfo.rcWindow.left+10;
+	posY = spritepos.y + windoInfo.rcWindow.top + 20;
+
+	SetCursorPos(posX, posY);
+
+
 }
 
 void Mouse::MouseGetSpritePos(XMFLOAT2& spritePos)
