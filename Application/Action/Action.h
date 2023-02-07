@@ -70,6 +70,14 @@ public:
 	/// <param name="color">減色</param>
 	/// <param name="transparent">α値</param>
 	void Flash(float& color,float transparent);
+
+	/// <summary>
+	/// XMFLOAT3の全要素に同じ値を加算する
+	/// </summary>
+	/// <param name="value">加算される値</param>
+	/// <param name="addvalue">加算する値</param>
+	/// <returns></returns>
+	DirectX::XMFLOAT3 ConvertToXMFLOAT3(float SourceValue);
 private:
 };
 

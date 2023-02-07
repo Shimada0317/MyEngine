@@ -88,6 +88,18 @@ void Action::Flash(float& color, float transparent)
 	color -= transparent;
 }
 
+DirectX::XMFLOAT3 Action::ConvertToXMFLOAT3(float SourceValue)
+{
+	XMFLOAT3 ConvertValue;
+	
+	ConvertValue.x = SourceValue;
+	ConvertValue.y = SourceValue;
+	ConvertValue.z = SourceValue;
+
+	return ConvertValue;
+}
+
+
 
 
 

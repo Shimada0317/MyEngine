@@ -2,16 +2,35 @@
 #include<time.h>
 #include"Action.h"
 
+using namespace DirectX;
+
 ObjParticle::~ObjParticle()
 {
 
 }
 
+const XMFLOAT3 operator-(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs)
+{
+	XMFLOAT3 result;
+	result.x = lhs.x - rhs.x;
+	result.y = lhs.y - rhs.y;
+	result.z = lhs.z - rhs.z;
+	return result;
+}
+
+const XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs)
+{
+	XMFLOAT3 result;
+	result.x = lhs.x / rhs;
+	result.y = lhs.y / rhs;
+	result.z = lhs.z / rhs;
+	return result;
+}
 
 void ObjParticle::Initialize(int ModelNumber, const XMVECTOR& particlepos, const XMFLOAT3& particlescl, const XMFLOAT3& particlerot)
 {
 	Particle = Object3d::Create(ModelManager::GetInstance()->GetModel(ModelNumber));
-	random= Action::GetInstance()->GetRangRand(0.01f, 0.04f);
+	random= Action::GetInstance()->GetRangRand(0.04f, 0.1f);
 	ParticlePos = particlepos;
 	ParticleScl = particlescl;
 	ParticleRot = particlerot;
@@ -28,8 +47,14 @@ void ObjParticle::Set()
 void ObjParticle::Update(XMVECTOR& enemyPos,XMFLOAT3& allRot)
 {
 	Set();
-	ParticlePos.m128_f32[1] += random;
-	//Delete_ = true;
+	XMFLOAT3 ConvertValue = Action::GetInstance()->ConvertToXMFLOAT3(random);
+	ConvertValue = ConvertValue / 100;
+	time += 0.001f;
+	ParticlePos.m128_f32[1] += random-gravity*time;
+	ParticleScl = ParticleScl - ConvertValue;
+	if (ParticleScl.x <= 0 && ParticleScl.y <= 0 && ParticleScl.z <= 0) {
+		Delete_ = true;
+	}
 	Particle->Update();
 }
 

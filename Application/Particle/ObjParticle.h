@@ -40,5 +40,7 @@ private:
 
 	bool Delete_;
 	float random;
+	float time = 0.0f;
+	float gravity = 0.6f;
 };
 
