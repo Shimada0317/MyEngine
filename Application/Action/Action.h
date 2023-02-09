@@ -62,8 +62,9 @@ public:
 	/// イーズアウト
 	/// </summary>
 	/// /// <param name="MoveValue">移動する値</param>
-	/// <param name="PurposeVValue">目的地の値</param>
-	void EaseOut(float& MoveValue, float PurposeVValue);
+	/// <param name="PurposeValue">目的地の値</param>
+	void EaseOut(float& MoveValue, float PurposeValue);
+
 	/// <summary>
 	/// 透明にする
 	/// </summary>
