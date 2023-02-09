@@ -10,6 +10,7 @@
 #include"DebugScene.h"
 #include"ModelManager.h"
 
+const float AddPosetEfectColor = 0.05f;
 
 using namespace DirectX;
 
@@ -153,9 +154,9 @@ void GameScene::Update()
 {
 
 	if (GameStart == false) {
-		PostCol.x += 0.05f;
-		PostCol.y += 0.05f;
-		PostCol.z += 0.05f;
+		PostCol.x += AddPosetEfectColor;
+		PostCol.y += AddPosetEfectColor;
+		PostCol.z += AddPosetEfectColor;
 		if (PostCol.x >= 0.0f) {
 			PostCol.x = 0.0f;
 			PostCol.y = 0.0f;
