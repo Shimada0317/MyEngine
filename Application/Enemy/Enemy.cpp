@@ -2,6 +2,10 @@
 #include"Action.h"
 #include<random>
 
+const int HeadDamage = 40;
+const int BodyDamage = 35;
+const float Subtraction = 0.01f;
+
 //デストラクタ
 Enemy::~Enemy()
 {
@@ -43,10 +47,6 @@ void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	CenterMat = Center->GetMatrix();
 	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
 
-
-	//ClushSe = new Audio();
-	//ClushSe->Initialize();
-
 	Sprite::LoadTexture(350, L"Resources/mark.png");
 	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnchorPoint));
 	RockOnHead.reset(Sprite::SpriteCreate(350, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
@@ -73,7 +73,6 @@ void Enemy::StatusSet()
 	Shadow->SetPosition(ShadowPos);
 	Shadow->SetRotation({ 0.0f,0.0f,0.0f });
 	Shadow->SetScale({ 1.0f,1.0f,1.0f });
-
 
 	HeadPartPos = CenterWorldPos;
 	ArmsPartPos = CenterWorldPos;
@@ -127,7 +126,7 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 	if (PlyerBulletShot == true&&Hp>0) {
 		if (Player2DPos.x - Distance < RockOnPos.x && Player2DPos.x + Distance > RockOnPos.x &&
 			Player2DPos.y - Distance<RockOnPos.y && Player2DPos.y + Distance>RockOnPos.y) {
-			Hp -= 35;
+			Hp -= BodyDamage;
 			PlyerBulletShot = false;
 			for (int i = 0; i < 5; i++) {
 				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
@@ -138,7 +137,7 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 
 		if (Player2DPos.x - HeadDistance < RockOnHeadPos.x && Player2DPos.x + HeadDistance > RockOnHeadPos.x &&
 			Player2DPos.y - HeadDistance<RockOnHeadPos.y && Player2DPos.y + HeadDistance>RockOnHeadPos.y) {
-			Hp -= 40;
+			Hp -= HeadDamage;
 			PlyerBulletShot = false;
 			for (int i = 0; i < 5; i++) {
 				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
@@ -150,8 +149,6 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 
 	//ダメージを受けたとき
 	if (OldHp > Hp&&Hp>=0) {
-		//ClushSe->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
-		
 		OldHp = Hp;
 	}
 
@@ -174,10 +171,10 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 	//生きているときにHPが0になったら
 	if (Hp <= 0) {
 		Hp = 0;
-		ShadowCol.w -= 0.01f;
-		ArmsPartColor.w -= 0.01f;
-		BodyPartColor.w -= 0.01f;
-		HeadPartColor.w -= 0.01f;
+		ShadowCol.w -= Subtraction;
+		ArmsPartColor.w -= Subtraction;
+		BodyPartColor.w -= Subtraction;
+		HeadPartColor.w -= Subtraction;
 		RobotArive = false;
 		AttackPreparationTime = 0;
 		AttackChanse = 0;

@@ -342,7 +342,7 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 		if (patern == 0) {
 			vel = { 0, 0, MoveSpeed };
-			EneCount = 3;
+			EnemyCount = 3;
 			if (camvec.m128_f32[2] >= 20) {
 				move = false;
 				Move_F = false;
@@ -355,7 +355,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 		else if (patern == 1) {
-			EneCount = 4;
+			EnemyCount = 4;
 			vel = { 0, 0, MoveSpeed };
 			if (camvec.m128_f32[2] >= 40) {
 				move = false;
@@ -369,7 +369,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 		else if (patern == 2) {
-			EneCount = 4;
+			EnemyCount = 4;
 			Action::GetInstance()->EaseOut(Eye_rot.y, 95.0f);
 			if (Eye_rot.y >= 90) {
 				Eye_rot.y = 90;
@@ -388,7 +388,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 		else if (patern == 3) {
-			EneCount = 3;
+			EnemyCount = 3;
 			vel = { 0, 0, MoveSpeed };
 
 			if (camvec.m128_f32[0] >= 45) {
@@ -403,7 +403,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 		else if (patern == 4) {
-			EneCount = 5;
+			EnemyCount = 5;
 			Action::GetInstance()->EaseOut(Eye_rot.y, -5.0f);
 			if (Eye_rot.y <= 0) {
 				ChangeRot = 0;
