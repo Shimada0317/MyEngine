@@ -1,5 +1,6 @@
 #include "Framework.h"
 #include"FbxLoader.h"
+#include"ModelManager.h"
 
 
 void Framework::Run()
@@ -48,6 +49,8 @@ void Framework::Initialize()
 
 	//Fbx
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
+
+	ModelManager::GetInstance()->Initialize();
 
 }
 

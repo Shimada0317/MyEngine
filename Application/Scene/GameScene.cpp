@@ -25,7 +25,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect->Initialize();
 	postEffect->Update(PostCol);
 
-	ModelManager::GetInstance()->Initialize();
+	
 
 	light = Light::Create();
 	Object3d::SetLight(light);

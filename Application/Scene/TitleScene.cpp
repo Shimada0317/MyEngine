@@ -43,13 +43,13 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	SignalAfter = Sprite::SpriteCreate(6, ClickPos);
 
 	Sprite::LoadTexture(7, L"Resources/setumei2.png");
-	Explanation = Sprite::SpriteCreate(7, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	Explanation = Sprite::SpriteCreate(7, {WinApp::window_width/ 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
 
 	Sprite::LoadTexture(8, L"Resources/setumei.png");
-	Explanation2 = Sprite::SpriteCreate(8, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	Explanation2 = Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
 
 	Sprite::LoadTexture(9, L"Resources/setumei3.png");
-	Explanation3 = Sprite::SpriteCreate(9, { 1280.0f / 2.0f,720.0f / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	Explanation3 = Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
 
 	Sprite::LoadTexture(10, L"Resources/arrowRight.png");
 	ArrowRight = Sprite::SpriteCreate(10, ArrowRightPos);
@@ -71,7 +71,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	}
 
 	Spheremodel = ObjModel::CreateFromOBJ("skydome");
-	Sphere = Object3d::Create(Spheremodel);
+	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
 
 	Worldmodel = ObjModel::CreateFromOBJ("World", true);
 	World = Object3d::Create(Worldmodel);

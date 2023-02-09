@@ -84,8 +84,9 @@ void Mouse::RecoilMouse(XMFLOAT2& spritepos)
 	windoInfo.cbSize = sizeof(WINDOWINFO);
 	GetWindowInfo(hwnd, &windoInfo);
 	//マウスの移動先の絶対座標
-	posX = spritepos.x + windoInfo.rcWindow.left+10;
-	posY = spritepos.y + windoInfo.rcWindow.top + 20;
+	posX = spritepos.x + windoInfo.rcWindow.left + 10;
+	posY = spritepos.y + windoInfo.rcWindow.top + 5;
+
 
 	SetCursorPos(posX, posY);
 

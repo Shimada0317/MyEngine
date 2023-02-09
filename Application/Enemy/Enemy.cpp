@@ -11,10 +11,6 @@ Enemy::~Enemy()
 	BodyPart.reset();
 	ArmsPart.reset();
 
-	delete HeadPartModel;
-	delete BodyPartModel;
-	delete ArmsPartModel;
-	delete ShadowModel;
 	delete ClushSe;
 }
 
@@ -34,26 +30,22 @@ void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	OriginDistance = Distance;
 	OriginHeadDistance = HeadDistance;
 
-	ShadowModel = ObjModel::CreateFromOBJ("Shadow", true);
-	Shadow = Object3d::Create(ShadowModel);
-	Center = Object3d::Create(ShadowModel);
+	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
+	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
 
 
-	HeadPartModel = ObjModel::CreateFromOBJ("Head", true);
-	HeadPart = Object3d::Create(HeadPartModel);
+	HeadPart = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
 
-	BodyPartModel = ObjModel::CreateFromOBJ("tst2", true);
-	BodyPart = Object3d::Create(BodyPartModel);
+	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
 
-	ArmsPartModel = ObjModel::CreateFromOBJ("BothArm");
-	ArmsPart = Object3d::Create(ArmsPartModel);
+	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
 
 	CenterMat = Center->GetMatrix();
 	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
 
 
-	ClushSe = new Audio();
-	ClushSe->Initialize();
+	//ClushSe = new Audio();
+	//ClushSe->Initialize();
 
 	Sprite::LoadTexture(350, L"Resources/mark.png");
 	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnchorPoint));
@@ -158,7 +150,7 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 
 	//ƒ_ƒ[ƒW‚ðŽó‚¯‚½‚Æ‚«
 	if (OldHp > Hp&&Hp>=0) {
-		ClushSe->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
+		//ClushSe->LoadFile("Resources/Sound/SE/clush.wav", 0.3f);
 		
 		OldHp = Hp;
 	}

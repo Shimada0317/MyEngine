@@ -126,16 +126,6 @@ private:
 	//中心
 	std::unique_ptr<Object3d> Center;
 
-	//Objモデル
-	//影モデル
-	ObjModel* ShadowModel = nullptr;
-	//頭モデル
-	ObjModel* HeadPartModel;
-	//両腕モデル
-	ObjModel* ArmsPartModel;
-	//体モデル
-	ObjModel* BodyPartModel;
-
 	//Objパーティクル
 	std::list<std::unique_ptr<ObjParticle>>Obj_Particle;
 

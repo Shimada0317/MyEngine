@@ -39,6 +39,7 @@ private:
 	XMFLOAT3 ParticleRot = { 0.0f,0.0f,0.0f };
 
 	bool Delete_;
+	float RandomZ;
 	float RandomY;
 	float RandomX;
 	float SmoleScl;
