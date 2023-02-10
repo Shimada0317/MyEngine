@@ -97,16 +97,6 @@ public://メンバ関数
 	void Finalize() override;
 
 private:
-	//Objモデル
-	//ビル
-	ObjModel* BillsModel = nullptr;
-	//地面
-	ObjModel* Ground = nullptr;
-	//天球
-	ObjModel* Spheremodel = nullptr;
-	ObjModel* Worldmodel = nullptr;
-	
-	ObjModel* StartModel = nullptr;
 	//Obj
 	unique_ptr <Object3d> Sphere;
 	unique_ptr<Object3d> Bills[BILL];
@@ -183,12 +173,10 @@ private:
 	XMFLOAT4 Post_Col = { 0.0f,0.0f,0.0f,1.0f };
 
 	bool CursorIn_F = false;
-	bool CantClick_F = true;
 	bool FadeOut_F = false;
 	bool TitleDisplay_F = true;
 	bool Click_F = true;
 
-	float CantClickTimer = 0.0f;
 	float volume = 0.8f;
 
 	int SetumeiPage = 0;

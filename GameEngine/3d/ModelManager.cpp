@@ -16,19 +16,22 @@ ModelManager* ModelManager::GetInstance()
 
 void ModelManager::Initialize()
 {
-    CallModel("worm");
-    CallModel("Gear");
-    CallModel("skydome");
+    CallModel("worm",true);
+    CallModel("Gear",true);
     CallModel("Shadow");
-    CallModel("Head");
-    CallModel("tst2");
-    CallModel("BothArm");
+    CallModel("Head",true);
+    CallModel("tst2",true);
+    CallModel("BothArm",true);
+    CallModel("skydome");
+    CallModel("bills");
+    CallModel("bil",true);
+    CallModel("World");
 }
 
-void ModelManager::CallModel(const std::string& ObjModelname)
+void ModelManager::CallModel(const std::string& ObjModelname, bool Smoothing)
 {
     ObjModel* model = nullptr;
-    model = ObjModel::CreateFromOBJ(ObjModelname,true);
+    model = ObjModel::CreateFromOBJ(ObjModelname,Smoothing);
     model_.push_back(model);
 }
 

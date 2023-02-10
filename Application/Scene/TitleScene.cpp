@@ -8,6 +8,11 @@
 
 using namespace DirectX;
 
+const float SubColor = 0.01f;
+const float CameraMoveValueXandY = 0.4f;
+const float CameraMoveValueZ = 0.1f;
+const float CameraEyeMoveValue = 0.01f;
+
 TitleScene::TitleScene(SceneManager* sceneManager_)
 	:BaseScene(sceneManager_)
 {
@@ -25,66 +30,49 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/start.png");
-	Title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
-
 	Sprite::LoadTexture(2, L"REsources/mark2.png");
-	Cursor = Sprite::SpriteCreate(2, ReticlePos, SpriteCol, Anchorpoint);
-
 	Sprite::LoadTexture(3, L"Resources/Click.png");
-	ClickBefore = Sprite::SpriteCreate(3, ClickPos);
-
 	Sprite::LoadTexture(4, L"Resources/Click2.png");
-	ClickAfter = Sprite::SpriteCreate(4, ClickPos);
-
 	Sprite::LoadTexture(5, L"Resources/SIGNAL.png");
-	SignalBefore = Sprite::SpriteCreate(5, ClickPos);
-
 	Sprite::LoadTexture(6, L"Resources/SIGNAL2.png");
-	SignalAfter = Sprite::SpriteCreate(6, ClickPos);
-
 	Sprite::LoadTexture(7, L"Resources/setumei2.png");
-	Explanation = Sprite::SpriteCreate(7, {WinApp::window_width/ 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
-
 	Sprite::LoadTexture(8, L"Resources/setumei.png");
-	Explanation2 = Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
-
 	Sprite::LoadTexture(9, L"Resources/setumei3.png");
-	Explanation3 = Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
-
 	Sprite::LoadTexture(10, L"Resources/arrowRight.png");
-	ArrowRight = Sprite::SpriteCreate(10, ArrowRightPos);
-
 	Sprite::LoadTexture(11, L"Resources/arrowLeft.png");
-	ArrowLeft = Sprite::SpriteCreate(11, ArrowLeftPos);
-
 	Sprite::LoadTexture(12, L"Resources/arrowRightTrue.png");
-	ArrowRightTrue = Sprite::SpriteCreate(12, ArrowRightPos);
-
 	Sprite::LoadTexture(13, L"Resources/arrowLeftTrue.png");
+
+	//スプライトの生成
+	Title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
+	Cursor = Sprite::SpriteCreate(2, ReticlePos, SpriteCol, Anchorpoint);
+	ClickBefore = Sprite::SpriteCreate(3, ClickPos);
+	ClickAfter = Sprite::SpriteCreate(4, ClickPos);
+	SignalBefore = Sprite::SpriteCreate(5, ClickPos);
+	SignalAfter = Sprite::SpriteCreate(6, ClickPos);
+	Explanation = Sprite::SpriteCreate(7, {WinApp::window_width/ 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	Explanation2 = Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	Explanation3 = Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	ArrowRight = Sprite::SpriteCreate(10, ArrowRightPos);
+	ArrowLeft = Sprite::SpriteCreate(11, ArrowLeftPos);
+	ArrowRightTrue = Sprite::SpriteCreate(12, ArrowRightPos);
 	ArrowLeftTrue = Sprite::SpriteCreate(13, ArrowLeftPos);
 
-
-	BillsModel = ObjModel::CreateFromOBJ("Bills");
+	//オブジェクトの生成
+	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i] = Object3d::Create(BillsModel);
-		Bills1[i] = Object3d::Create(BillsModel);
+		Bills[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		Bills1[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 	}
-
-	Spheremodel = ObjModel::CreateFromOBJ("skydome");
-	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
-
-	Worldmodel = ObjModel::CreateFromOBJ("World", true);
-	World = Object3d::Create(Worldmodel);
-
-	StartModel = ObjModel::CreateFromOBJ("bil", true);
-	Start = Object3d::Create(StartModel);
-
+	Start = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
+	World = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
+	//SEの初期か
 	ClickSe = new Audio();
 	ClickSe->Initialize();
 	Bgm = new Audio();
 	Bgm->Initialize();
 	Bgm->LoopWave("Resources/Sound/BGM/title.wav", 0.75f);
-
+	//ポストエフェクトの初期化
 	Post = new PostEffect();
 	Post->Initialize();
 	 CamEyeMove = { 0.0f,0.0f,0.0f };
@@ -93,18 +81,18 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 //ステータスセット
 void TitleScene::StatusSet()
 {
-	TitleCamera->MoveEyeVector( CamEyeMove);
+	//カメラの動き
+	TitleCamera->MoveEyeVector(CamEyeMove);
 	TitleCamera->MoveVector(CamMove);
-
+	//天球のステータスのセット
 	Sphere->SetRotation(SphereRot);
 	Sphere->SetPosition(SpherePos);
 	Sphere->SetScale(SphereScl);
-
+	//地面のステータスのセット
 	World->SetPosition(WorldPos);
 	World->SetScale(WorldScl);
-
+	//左右のビルのステータスのセット
 	for (int i = 0; i < BILLS; i++) {
-
 		Bills[i]->SetScale(BillsScl);
 		Bills1[i]->SetScale(BillsScl);
 		if (i % 2 == 0) {
@@ -122,44 +110,42 @@ void TitleScene::StatusSet()
 		Bills1[i]->SetRotation(BillsRot);
 		Bills1[i]->SetPosition(BillsPos1);
 	}
-
+	//カメラの移動先のビルのステータスセット
 	Start->SetPosition(StartPos);
 	Start->SetScale(StartScl);
 	Start->SetRotation({ 0.0f,180.0f,0.0f });
-
+	//タイトルスプライトのステータスセット
 	Title->SetSize({ TitleSize });
 	Title->SetPosition({ TitlePos });
-
+	//マウスカーソルの座標セット
 	Cursor->SetPosition({ ReticlePos });
 }
 
+//全ての更新処理をまとめる
 void TitleScene::AllUpdate()
 {
+	//左右のビルの更新処理
 	for (int i = 0; i < BILLS; i++) {
 		Bills[i]->Update({ 0.4f,0.4f,0.5f,1.0f });
 		Bills1[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
 	}
-
+	//ポストエフェクトの更新処理
 	Post->Update(Post_Col);
-	StatusSet();
+	//天球の更新処理
 	Sphere->Update();
+	//地面の更新処理
 	World->Update();
+	//カメラの移動先のビルの更新処理
 	Start->Update();
 }
 
 //更新処理
 void TitleScene::Update()
 {
-
-	Action::GetInstance()->PlayerMove2d(TitleSize, 1.0f);
-
 	Mouse::GetInstance()->MouseMoveSprite(ReticlePos);
-	//DirectX毎フレーム処理 ここから
-
-	CamMove = { 0.0f,0.0f,0.0f };
-
+	//カメラのムーブ関数
 	CameraMove();
-
+	//カーソルがスプライトの範囲内であるか
 	CheckCursorIn(ReticlePos, ClickPos, 500, 75);
 	//最初のクリック
 	if (CursorIn_F == true && TitleDisplay_F == true) {
@@ -170,22 +156,15 @@ void TitleScene::Update()
 		}
 	}
 
-	if (CantClick_F == false) {
-		CantClickTimer += 0.1f;
-		if (CantClickTimer >= 1) {
-			CantClickTimer = 0.0f;
-			CantClick_F = true;
-		}
-	}
+
 	//カメラが移動した後の画面
 	if (SetumeiPage < 2 && TitleDisplay_F == false&&CameraChange_F==true) {
 		if (NextorBack(ReticlePos, ArrowRightPos, 35, 35)) {
 			RightTrueIn_F = true;
 			//矢印を押された時
-			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && CantClick_F == true) {
+			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				ClickSe->LoadFile("Resources/Sound/SE/click.wav", volume);
 				SetumeiPage += 1;
-				CantClick_F = false;
 			}
 		}
 		else {
@@ -196,16 +175,16 @@ void TitleScene::Update()
 	if (SetumeiPage > 0) {
 		if (NextorBack(ReticlePos, ArrowLeftPos, 35, 35)) {
 			LeftTrueIn_F = true;
-			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) && CantClick_F == true) {
+			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				ClickSe->LoadFile("Resources/Sound/SE/click.wav", volume);
 				SetumeiPage -= 1;
-				CantClick_F = false;
 			}
 		}
 		else {
 			LeftTrueIn_F = false;
 		}
 	}
+	//救援ヘリを呼ぶとき
 	if (CameraChange_F == true && CursorIn_F == true && SetumeiPage == 2) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			if (Click_F == true) {
@@ -216,12 +195,12 @@ void TitleScene::Update()
 
 		}
 	}
+	//救援ヘリを読んだ後
 	if (FadeOut_F == true) {
-	
-		Post_Col.x -= 0.01f;
-		Post_Col.y -= 0.01f;
-		Post_Col.z -= 0.01f;
-		Post_Col.w -= 0.01f;
+		Post_Col.x -= SubColor;
+		Post_Col.y -= SubColor;
+		Post_Col.z -= SubColor;
+		Post_Col.w -= SubColor;
 		if (Post_Col.w <= 0) {
 			//シーン切り替え
 			BaseScene* scene_ = new GameScene(sceneManager_);
@@ -229,20 +208,22 @@ void TitleScene::Update()
 		}
 	}
 
+	StatusSet();
 	AllUpdate();
-
+	//カメラの再計算
 	TitleCamera->RecalculationMatrix();
 }
 
 //カメラの移動
 void TitleScene::CameraMove()
 {
+	CamMove = { 0.0f,0.0f,0.0f };
 	if (CameraEyeMove_F == true && CameraChange_F == false) {
 		if ( CamEyeMove.m128_f32[0] >= -1.1) {
-			 CamEyeMove.m128_f32[0] -= 0.01f;
-			CamMove.m128_f32[0] += 0.4f;
-			CamMove.m128_f32[1] -= 0.4f;
-			CamMove.m128_f32[2] -= 0.1f;
+			 CamEyeMove.m128_f32[0] -= CameraEyeMoveValue;
+			CamMove.m128_f32[0] += CameraMoveValueXandY;
+			CamMove.m128_f32[1] -= CameraMoveValueXandY;
+			CamMove.m128_f32[2] -= CameraMoveValueZ;
 		}
 		else {
 			CameraChange_F = true;
@@ -356,10 +337,6 @@ void TitleScene::Finalize()
 	delete Post;
 	delete TitleCamera;
 	delete light;
-	delete BillsModel;
-	delete Spheremodel;
-	delete Worldmodel;
-	delete Ground;
 	delete ArrowLeft;
 	delete ArrowRight;
 	delete ArrowLeftTrue;
@@ -369,7 +346,6 @@ void TitleScene::Finalize()
 	delete Explanation3;
 	delete SignalAfter;
 	delete SignalBefore;
-	delete StartModel;
 	delete ClickSe;
 	delete Cursor;
 	delete Bgm;

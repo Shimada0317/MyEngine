@@ -22,7 +22,7 @@ public:
 
 	void Initialize();
 
-	void CallModel(const std::string& ObjModelname);
+	void CallModel(const std::string& ObjModelname,bool Smoothing=false);
 
 	ObjModel* GetModel(int number) { return model_[number]; }
 private:
