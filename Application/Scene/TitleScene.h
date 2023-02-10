@@ -147,7 +147,6 @@ private:
 	XMFLOAT3 CamEye = { 0.0f,0.0f,0.0f };
 	XMVECTOR CamMove = { 0.0f,0.0f,0.0f };
 	XMVECTOR CamEyeMove = { 0.0f,0.0f,0.0f };
-
 	bool CameraEyeMove_F = false;
 	bool CameraChange_F = false;
 	//足場のステータス
@@ -161,26 +160,24 @@ private:
 	//タイトルスプライトのステータス
 	XMFLOAT2 TitleSize = { 1280.0f,720.0f };
 	XMFLOAT2 TitlePos = { 0.0f,0.0f };
-	
 	bool TitleSprite_F = true;
 	//説明の矢印座標
 	XMFLOAT2 ArrowRightPos = { 1220.0f,300 };
 	XMFLOAT2 ArrowLeftPos = { 30.0f,300 };
-	
 	bool RightTrueIn_F = false;
 	bool LeftTrueIn_F = false;
 	//ポストエフェクトの色
 	XMFLOAT4 Post_Col = { 0.0f,0.0f,0.0f,1.0f };
-
+	//カーソルが入っているか
 	bool CursorIn_F = false;
+	//フェードを掛けるか掛けないか
 	bool FadeOut_F = false;
 	bool TitleDisplay_F = true;
+	//クリックしているかどうか
 	bool Click_F = true;
-
+	//音量
 	float volume = 0.8f;
-
-	int SetumeiPage = 0;
-
-	float rando;
+	//説明ページ
+	int ExplanationPage = 0;
 };
 

@@ -33,27 +33,65 @@ private:
 
 
 public://メンバ関数
-
+	/// <summary>
+	/// コンストラクタ
+	/// </summary>
+	/// <param name="sceneManager_"></param>
 	GameScene(SceneManager* sceneManager_);
 
+	/// <summary>
+	/// 初期化処理
+	/// </summary>
+	/// <param name="dxComon"></param>
 	void Initialize(DirectXCommon* dxComon) override;
 
-	void SetPosSclRot();
+	/// <summary>
+	/// ステータスセット
+	/// </summary>
+	void StatusSet();
 
+	/// <summary>
+	/// オブジェクト等の全ての更新処理
+	/// </summary>
 	void AllUpdata();
 
+	/// <summary>
+	/// 更新処理
+	/// </summary>
 	void Update() override;
 
+	/// <summary>
+	/// オブジェクトの描画
+	/// </summary>
+	/// <param name="dxCommon">dxCommonからコマンドリストをゲット</param>
 	void ObjDraw(DirectXCommon* dxCommon);
 
+	/// <summary>
+	/// スプライトの描画
+	/// </summary>
+	/// <param name="dxCommon">dxCommonからコマンドリストをゲット</param>
 	void SpriteDraw(DirectXCommon* dxCommon);
 
+	/// <summary>
+	/// ImgUI描画
+	/// </summary>
 	void ImgDraw();
 
+	/// <summary>
+	/// ポストエフェクトの描画
+	/// </summary>
+	/// <param name="dxCommon">dxCommonからコマンドリストをゲット</param>
 	void PostEffectDraw(DirectXCommon* dxCommon);
 
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="dxCommon">dxCommonからコマンドリストをゲット</param>
 	void Draw(DirectXCommon* dxCommon)override;
 
+	/// <summary>
+	/// 終了処理
+	/// </summary>
 	void Finalize() override;
 private://メンバ変数
 	//Objモデル

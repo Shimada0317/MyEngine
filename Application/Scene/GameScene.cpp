@@ -26,32 +26,29 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect->Initialize();
 	postEffect->Update(PostCol);
 
-	
-
 	light = Light::Create();
 	Object3d::SetLight(light);
 
+	//	スプライトの読み込み
+	Sprite::LoadTexture(35, L"Resources/Mision.png");
+	Sprite::LoadTexture(36, L"Resources/CONTINUE.png");
+	//スプライトの生成
+	Clear = Sprite::SpriteCreate(35, { 0.0f,0.0f });
+	Conteniu = Sprite::SpriteCreate(36, { 0.0f,0.0f });
+
 	//モデルの読み込み
-	BillsModel = ObjModel::CreateFromOBJ("Bills");
+	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i] = Object3d::Create(BillsModel);
-		Bills1[i] = Object3d::Create(BillsModel);
+		Bills[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		Bills1[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 
 	}
-
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i] = Object3d::Create(BillsModel);
+		FieldBills[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 	}
-	 SphereModel = ObjModel::CreateFromOBJ("skydome");
-	Sphere = Object3d::Create();
-	Sphere->SetModel( SphereModel);
-
-	WorldModel = ObjModel::CreateFromOBJ("World", true);
-	World = Object3d::Create(WorldModel);
-
-	StartModel = ObjModel::CreateFromOBJ("bil", true);
-	Start = Object3d::Create(StartModel);
-	
+	World = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
+	Start = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
+	//
 	Mid = std::make_unique <Actor>();
 	Mid->Initialize();
 	Patern = Mid->GetPatern();
@@ -59,13 +56,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	PlayerHp = Mid->GetHp();
 	OldHp = PlayerHp;
 
-	Sprite::LoadTexture(35, L"Resources/Mision.png");
-	Clear = Sprite::SpriteCreate(35, { 0.0f,0.0f });
-
-	Sprite::LoadTexture(36, L"Resources/CONTINUE.png");
-	Conteniu = Sprite::SpriteCreate(36, { 0.0f,0.0f });
-
-	PostEffectDraw(dxComon);
+	//PostEffectDraw(dxComon);
 
 	Bgm = new Audio;
 	Bgm->Initialize();
@@ -84,7 +75,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	FieldBill_Rot[4] = { 0.0f,0.0f,0.0f };
 }
 
-void GameScene::SetPosSclRot()
+void GameScene::StatusSet()
 {
 	Sphere->SetRotation(Sphere_Rot);
 	Sphere->SetPosition(Sphere_Pos);
@@ -215,7 +206,7 @@ void GameScene::Update()
 	}
 	//ゴールについていないとき更新を続ける
 	if (StopUpdate == false) {
-		SetPosSclRot();
+		StatusSet();
 		AllUpdata();
 	}
 	//ゴールに着いたらクリア画面を表示

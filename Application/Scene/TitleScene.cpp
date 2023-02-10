@@ -156,15 +156,14 @@ void TitleScene::Update()
 		}
 	}
 
-
 	//カメラが移動した後の画面
-	if (SetumeiPage < 2 && TitleDisplay_F == false&&CameraChange_F==true) {
+	if (ExplanationPage < 2 && TitleDisplay_F == false&&CameraChange_F==true) {
 		if (NextorBack(ReticlePos, ArrowRightPos, 35, 35)) {
 			RightTrueIn_F = true;
 			//矢印を押された時
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				ClickSe->LoadFile("Resources/Sound/SE/click.wav", volume);
-				SetumeiPage += 1;
+				ExplanationPage += 1;
 			}
 		}
 		else {
@@ -172,29 +171,31 @@ void TitleScene::Update()
 		}
 	}
 
-	if (SetumeiPage > 0) {
+	//ページが0以上であれば
+	if (ExplanationPage > 0) {
 		if (NextorBack(ReticlePos, ArrowLeftPos, 35, 35)) {
 			LeftTrueIn_F = true;
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				ClickSe->LoadFile("Resources/Sound/SE/click.wav", volume);
-				SetumeiPage -= 1;
+				ExplanationPage -= 1;
 			}
 		}
 		else {
 			LeftTrueIn_F = false;
 		}
 	}
+
 	//救援ヘリを呼ぶとき
-	if (CameraChange_F == true && CursorIn_F == true && SetumeiPage == 2) {
+	if (CameraChange_F == true && CursorIn_F == true && ExplanationPage == 2) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			if (Click_F == true) {
 				ClickSe->LoadFile("Resources/Sound/SE/MorseCode.wav", volume);
 				Click_F = false;
 			}
 			FadeOut_F = true;
-
 		}
 	}
+
 	//救援ヘリを読んだ後
 	if (FadeOut_F == true) {
 		Post_Col.x -= SubColor;
@@ -269,8 +270,6 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 		Bills1[i]->Draw();
 	}
 	Start->Draw();
-
-	////オブジェクト後処理
 	Object3d::PostDraw();
 
 	Sprite::PreDraw(dxCommon->GetCmdList());
@@ -286,7 +285,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 		}
 	}
 	else if (CameraChange_F == true ) {
-		if (SetumeiPage < 2) {
+		if (ExplanationPage < 2) {
 			if (RightTrueIn_F == false) {
 				ArrowRight->Draw();
 			}
@@ -294,7 +293,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 				ArrowRightTrue->Draw();
 			}
 		}
-		if (SetumeiPage > 0) {
+		if (ExplanationPage > 0) {
 			if (LeftTrueIn_F == false) {
 				ArrowLeft->Draw();
 			}
@@ -302,16 +301,16 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 				ArrowLeftTrue->Draw();
 			}
 		}
-		if (SetumeiPage == 0) {
+		if (ExplanationPage == 0) {
 			Explanation->Draw();
 		}
-		else if (SetumeiPage == 1) {
+		else if (ExplanationPage == 1) {
 			Explanation2->Draw();
 		}
-		else if (SetumeiPage == 2) {
+		else if (ExplanationPage == 2) {
 			Explanation3->Draw();
 		}
-		if (SetumeiPage == 2) {
+		if (ExplanationPage == 2) {
 			if (CursorIn_F == false) {
 				SignalBefore->Draw();
 			}

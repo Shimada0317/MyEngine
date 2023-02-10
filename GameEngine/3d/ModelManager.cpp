@@ -18,7 +18,7 @@ void ModelManager::Initialize()
 {
     CallModel("worm",true);
     CallModel("Gear",true);
-    CallModel("Shadow");
+    CallModel("Shadow",true);
     CallModel("Head",true);
     CallModel("tst2",true);
     CallModel("BothArm",true);

@@ -34,15 +34,15 @@ void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	OriginDistance = Distance;
 	OriginHeadDistance = HeadDistance;
 
-	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
-	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
+	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
+	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
 
 
-	HeadPart = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
+	HeadPart = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
 
-	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
+	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
 
-	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
+	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
 
 	CenterMat = Center->GetMatrix();
 	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
