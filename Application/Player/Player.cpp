@@ -2,6 +2,7 @@
 #include<cassert>
 #include "imgui.h"
 #include"imconfig.h"
+#include"ModelManager.h"
 #include"Mouse.h"
 #include"WinApp.h"
 
@@ -9,14 +10,12 @@ const int ReaminingBullet = 8;
 
 Player::~Player()
 {
-	delete TrackModel;
 	delete GunModel;
 	delete BodyModel;
 	delete PartGreen;
 	delete ShotSe;
 	delete ReloadSe;
 
-	Track.reset();
 	Gun.reset();
 	Body.reset();
 }
@@ -26,30 +25,19 @@ void Player::Initalize(Camera* came)
 
 	Object3d::SetCamera(came);
 
-	TrackModel = ObjModel::CreateFromOBJ("tst2");
-	Track = Object3d::Create(TrackModel);
-
-	GunModel = ObjModel::CreateFromOBJ("gun");
-	Gun = Object3d::Create(GunModel);
-
-	BodyModel = ObjModel::CreateFromOBJ("gun");
-	Body = Object3d::Create(BodyModel);
-
-	CartridgeModel = ObjModel::CreateFromOBJ("Head");
-	Cartridge = Object3d::Create(CartridgeModel);
-
-	Sprite::LoadTexture(200, L"Resources/mark2.png");
-	SpriteReticle.reset(Sprite::SpriteCreate(200, ReticlePos2D, ReticleColor, ReticleAncorPoint));
-
-	Sprite::LoadTexture(300, L"Resources/curtain.png");
-	CurtainUp.reset(Sprite::SpriteCreate(300, CurtainUpPos));
-
 	SkipPos = CurtainDownPos;
-
+	Sprite::LoadTexture(200, L"Resources/mark2.png");
+	Sprite::LoadTexture(300, L"Resources/curtain.png");
 	Sprite::LoadTexture(302, L"Resources/Skip.png");
+
+	SpriteReticle.reset(Sprite::SpriteCreate(200, ReticlePos2D, ReticleColor, ReticleAncorPoint));
+	CurtainUp.reset(Sprite::SpriteCreate(300, CurtainUpPos));
+	CurtainDown.reset(Sprite::SpriteCreate(300, CurtainDownPos));
 	Skip.reset(Sprite::SpriteCreate(302, SkipPos));
 
-	CurtainDown.reset(Sprite::SpriteCreate(300, CurtainDownPos));
+	Gun = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
+	Body = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
+
 	CurtainUp->SetSize(CurtainSize);
 	CurtainDown->SetSize(CurtainSize);
 
@@ -72,43 +60,26 @@ void Player::Initalize(Camera* came)
 
 void Player::Set(Camera* came)
 {
-	const float BulletSpeed = 15.0f;
-	TrackWorldPos = { 0.0f,0.0f,2.0f };
-	TrackWorldPos = XMVector3Transform(TrackWorldPos, TrackMat);
-
 	BodyMat = Body->GetMatrix();
 	BodyWorldPos = { -10.0f,0.0f,-20.0f };
 	BodyWorldPos = XMVector3Transform(BodyWorldPos, BodyMat);
 
 	ReticleRot.y = (ReticlePos2D.x - 640) / 10 + ChangeRot;
-	//レティクルObj
-	Track->SetRotation({ ReticleRot });
-	Track->SetScale({ ReticleScl });
-	TrackMat = Track->GetMatrix();
 
-	//プレイヤーObj
 	Body->SetRotation(BodyRot);
 	Body->SetPosition(BodyPos);
 	Body->SetScale(BodyScl);
 	Body->SetParent(came);
-
 
 	Gun->SetRotation(GunRot);
 	Gun->SetScale(GunScl);
 	Gun->SetParent(came);
 	Gun->SetPosition(GunPos);
 
-	CartridgePos = GunPos;
-
-	Cartridge->SetPosition(CartridgePos);
-	Cartridge->SetScale(CartridgeScl);
-	Cartridge->SetParent(came);
 
 	GunMat = Gun->GetMatrix();
 	GunWorldPos = { 0.0f,0.0f,1.0f };
 	GunWorldPos = XMVector3Transform(GunPos, GunMat);
-
-	
 }
 
 void Player::Update(int& Remaining, Camera* came,  int paterncount)
@@ -179,10 +150,8 @@ void Player::Update(int& Remaining, Camera* came,  int paterncount)
 	
 	RailCam->Update(vel, Eye_rot, came);
 
-	Track->Update();
 	Body->Update();
 	Gun->Update();
-	Cartridge->Update();
 	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
 	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
 }
@@ -467,7 +436,6 @@ void Player::ObjDraw()
 {
 	if (Hp >= 0 && CameraWork_F == true) {
 		Gun->Draw();
-		Cartridge->Draw();
 	}
 }
 

@@ -26,6 +26,9 @@ void ModelManager::Initialize()
     CallModel("bills");
     CallModel("bil",true);
     CallModel("World");
+    CallModel("gun");
+    CallModel("heri", true);
+    CallModel("hane", true);
 }
 
 void ModelManager::CallModel(const std::string& ObjModelname, bool Smoothing)

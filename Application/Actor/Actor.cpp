@@ -1,7 +1,9 @@
 #include "Actor.h"
 #include "imgui.h"
 #include"imconfig.h"
+#include"ModelManager.h"
 #include<fstream>
+
 Actor::~Actor()
 {
 	player.reset();
@@ -51,19 +53,13 @@ void Actor::Initialize()
 	}
 	LoadEnemyPopData();
 
-	heriM = ObjModel::CreateFromOBJ("heri", true);
-	heri = Object3d::Create(heriM);
-
-	haneM = ObjModel::CreateFromOBJ("hane", true);
-	hane = Object3d::Create(haneM);
-
-	Goal = Object3d::Create(heriM);
+	heri = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
+	Goal = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
+	hane = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
 
 	playerMat = player->GetMat();
 	playerHp = player->GetHp();
-
 	getCamWorkF = player->GetCamWork();
-
 	clearT = 0;
 
 	heriFry = new Audio();
@@ -130,10 +126,6 @@ void Actor::SetPSR()
 void Actor::Update()
 {
 	float playeroldjup = playerHp;
-	if (playeroldjup > playerHp) {
-		
-	}
-
 
 	CountDistance = 0;
 	heripos.m128_f32[2] += heriX;
@@ -148,15 +140,12 @@ void Actor::Update()
 
 	getCamWorkF = player->GetCamWork();
 	if (getCamWorkF == true) {
-
 		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
 			});
-
 		if (Robot.empty()) {
 			move = true;
 		}
-
 		finish = player->GetFinish();
 		if (finish == true) {
 			move = false;
@@ -215,13 +204,11 @@ void Actor::Update()
 	else {
 		ReloadSpriteColor.w = 1.0f;
 	}
-	camera->RecalculationMatrix();
-	
+	camera->RecalculationMatrix();	
 }
 
 void Actor::Draw(DirectXCommon* dxCommon)
 {
-	
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	Goal->Draw();
 	hane->Draw();
@@ -239,11 +226,9 @@ void Actor::Draw(DirectXCommon* dxCommon)
 void Actor::SpriteDraw()
 {
 	if (getCamWorkF == true) {
-
 		for (int i = Remaining; i < 8; i++) {
 			bulletHUD[i]->Draw();
 		}
-
 		if (Remaining == 8) {
 			Reload->Draw(ReloadSpriteColor);
 		}
@@ -265,7 +250,6 @@ void Actor::SpriteDraw()
 		}
 		HpBer->Draw();
 	}
-
 	player->SpriteDraw();
 }
 
@@ -307,7 +291,6 @@ void Actor::LoadEnemyPopData()
 	assert(file.is_open());
 
 	enemyPopCommands << file.rdbuf();
-
 
 	file.close();
 }

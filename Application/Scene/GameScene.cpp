@@ -13,15 +13,17 @@
 const float AddPosetEfectColor = 0.05f;
 
 using namespace DirectX;
-
+//コンストラクタ
 GameScene::GameScene(SceneManager* sceneManager_)
 	:BaseScene(sceneManager_)
 {
 
 }
 
+//初期化処理
 void GameScene::Initialize(DirectXCommon* dxComon)
 {
+	//ポストエフェクトの生成
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 	postEffect->Update(PostCol);
@@ -48,15 +50,12 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	}
 	World = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
 	Start = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
-	//
-	Mid = std::make_unique <Actor>();
-	Mid->Initialize();
-	Patern = Mid->GetPatern();
-
-	PlayerHp = Mid->GetHp();
+	
+	Act = std::make_unique <Actor>();
+	Act->Initialize();
+	Patern = Act->GetPatern();
+	PlayerHp = Act->GetHp();
 	OldHp = PlayerHp;
-
-	//PostEffectDraw(dxComon);
 
 	Bgm = new Audio;
 	Bgm->Initialize();
@@ -75,25 +74,29 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	FieldBill_Rot[4] = { 0.0f,0.0f,0.0f };
 }
 
+//ステータスセット
 void GameScene::StatusSet()
 {
+	//天球のステータスセット
 	Sphere->SetRotation(Sphere_Rot);
 	Sphere->SetPosition(Sphere_Pos);
 	Sphere->SetScale(Sphere_Scl);
 
+	//地面のステータスセット
 	World->SetPosition(World_Pos);
 	World->SetScale(World_Scl);
 
-	Patern = Mid->GetPatern();
-	PlayerHp = Mid->GetHp();
+	//アクタークラスからゲット
+	Patern = Act->GetPatern();
+	PlayerHp = Act->GetHp();
 
+	//スタート地点のステータスセット
 	Start->SetPosition(Start_Pos);
 	Start->SetScale(Start_Scl);
 	Start->SetRotation(Start_Rot);
 
-
+	//左右のビルのステータスセット
 	for (int i = 0; i < BILLS; i++) {
-
 		Bills[i]->SetScale(Bills_Scl);
 		Bills1[i]->SetScale(Bills_Scl);
 		if (i % 2 == 0) {
@@ -112,6 +115,7 @@ void GameScene::StatusSet()
 		Bills1[i]->SetPosition(Bills_Pos1);
 	}
 
+	//フィールドの建物のステータスセット
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i]->SetPosition(FieldBill_pos[i]);
 		FieldBills[i]->SetRotation(FieldBill_Rot[i]);
@@ -119,28 +123,31 @@ void GameScene::StatusSet()
 	}
 };
 
+//オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
+	//ゲーム開始時にアクターを更新処理
 	if (GameStart == true) {
-
-		Mid->Update();
+		Act->Update();
 	}
-
+	//左右のビルの更新処理
 	for (int i = 0; i < BILLS; i++) {
 		Bills[i]->Update({ 0.4f,0.4f,0.5f,0.9f });
 		Bills1[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
 	}
-
+	//フィールドのビルの更新処理
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i]->Update({ 0.2f,0.2f,0.3f,1.0f });
 	}
-
+	//天球の更新処理
 	Sphere->Update();
-
+	//地面の更新処理
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
+	//スタート地点の更新処理
 	Start->Update();
 }
 
+//ゲームシーンの更新処理
 void GameScene::Update()
 {
 
@@ -198,7 +205,7 @@ void GameScene::Update()
 		}
 	}
 
-	XMVECTOR GoalPos = Mid->GetGoalPos();
+	XMVECTOR GoalPos = Act->GetGoalPos();
 	//ゴールに着いたとき
 	if (GoalPos.m128_f32[1] >= 100) {
 		ClearFlag = true;
@@ -219,16 +226,14 @@ void GameScene::Update()
 	postEffect->Update(PostCol);
 }
 
+//オブジェクトの描画処理
 void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
-
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	Sphere->Draw();
 	World->Draw();
-
 	Start->Draw();
-
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i]->Draw();
 	}
@@ -236,18 +241,17 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 		Bills[i]->Draw();
 		Bills1[i]->Draw();
 	}
-
-	////human3d->Draw();
 	////オブジェクト後処理
 	Object3d::PostDraw();
-	Mid->Draw(dxCommon);
+	Act->Draw(dxCommon);
 
 }
 
+//スプライトの描画処理
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	Mid->SpriteDraw();
+	Act->SpriteDraw();
 	if (ClearFlag == true) {
 		Clear->Draw();
 	}
@@ -257,15 +261,15 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 	Sprite::PostDraw();
 }
 
+//ImgUiの描画処理
 void GameScene::ImgDraw()
 {
-	Mid->ImGuiDraw();
+	Act->ImGuiDraw();
 }
 
-
+//ポストエフェクトの描画処理
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 {
-
 	postEffect->PreDrawScene(dxCommon->GetCmdList());
 	ObjDraw(dxCommon);
 	SpriteDraw(dxCommon);
@@ -278,11 +282,13 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 	dxCommon->PostDraw();
 }
 
+//描画処理
 void GameScene::Draw(DirectXCommon* dxCommon)
 {
 	PostEffectDraw(dxCommon);
 }
 
+//終了処理
 void GameScene::Finalize()
 {
 	delete  SphereModel;
@@ -293,11 +299,8 @@ void GameScene::Finalize()
 	delete Conteniu;
 	delete Clear;
 	delete Bgm;
-
 	World.reset();
 	Start.reset();
-
-
 	for (int i = 0; i < BILLS; i++) {
 		Bills[i].reset();
 		Bills1[i].reset();
@@ -305,6 +308,6 @@ void GameScene::Finalize()
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i].reset();
 	}
-	Mid.reset();
+	Act.reset();
 }
 
