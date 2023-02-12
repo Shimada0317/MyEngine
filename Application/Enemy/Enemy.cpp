@@ -5,6 +5,17 @@
 const int HeadDamage = 40;
 const int BodyDamage = 35;
 const float Subtraction = 0.01f;
+const XMFLOAT4 AddColor = { 0.1f,0.1f,0.1f,0.0f };
+
+const XMFLOAT4 operator+(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& rhs)
+{
+	XMFLOAT4 result;
+	result.x = lhs.x + rhs.x;
+	result.y = lhs.y + rhs.y;
+	result.z = lhs.z + rhs.z;
+	result.w = lhs.w + rhs.w;
+	return result;
+}
 
 //デストラクタ
 Enemy::~Enemy()
@@ -51,6 +62,9 @@ void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnchorPoint));
 	RockOnHead.reset(Sprite::SpriteCreate(350, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
 
+	HeadPartScl = { 0.0f,0.0f,0.0f };
+	ArmsPartScl = { 0.0f,0.0f,0.0f };
+
 	Hp = 160;
 	OldHp = Hp;
 	RobotArive = true;
@@ -62,6 +76,25 @@ void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 //ステータスセット
 void Enemy::StatusSet()
 {
+
+	if (Defomation_F == false) {
+		AllPos.m128_f32[1] -= 0.01f;
+		if (AllPos.m128_f32[1] <= 0) {
+			AllPos.m128_f32[1] = 0;
+			DefomationCount += 0.01f;
+			Action::GetInstance()->EaseOut(HeadPartScl.x, 0.3f);
+			Action::GetInstance()->EaseOut(HeadPartScl.y, 0.3f);
+			Action::GetInstance()->EaseOut(HeadPartScl.z, 0.3f);
+
+			Action::GetInstance()->EaseOut(ArmsPartScl.x, 0.2f);
+			Action::GetInstance()->EaseOut(ArmsPartScl.y, 0.2f);
+			Action::GetInstance()->EaseOut(ArmsPartScl.z, 0.2f);
+		}
+		if (DefomationCount >= 1) {
+			Defomation_F = true;
+		}
+	}
+
 	Center->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(CenterMat);
 	CenterMat = Center->GetMatrix();
@@ -69,7 +102,7 @@ void Enemy::StatusSet()
 	Center->SetPosition(CenterWorldPos);
 
 	ShadowPos = CenterWorldPos;
-	ShadowPos.m128_f32[1] = CenterWorldPos.m128_f32[1] - 0.8f;
+	ShadowPos.m128_f32[1] = -0.8;
 	Shadow->SetPosition(ShadowPos);
 	Shadow->SetRotation({ 0.0f,0.0f,0.0f });
 	Shadow->SetScale({ 1.0f,1.0f,1.0f });
@@ -92,7 +125,7 @@ void Enemy::StatusSet()
 	ArmsPart->SetRotation(ArmsPartRot);
 	ArmsPart->SetScale(ArmsPartScl);
 
-	RockOnPos=WorldtoScreen(BodyPartPos);
+	RockOnPos = WorldtoScreen(BodyPartPos);
 	RockOnHeadPos = WorldtoScreen(HeadPartPos);
 	RockOn->SetPosition(RockOnPos);
 	RockOnHead->SetPosition(RockOnHeadPos);
@@ -116,14 +149,14 @@ void Enemy::AllUpdate()
 //更新処理
 void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBulletShot)
 {
-	StatusSet();
+
 
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 
 		});
 
-	if (PlyerBulletShot == true&&Hp>0) {
+	if (PlyerBulletShot == true && Hp > 0) {
 		if (Player2DPos.x - Distance < RockOnPos.x && Player2DPos.x + Distance > RockOnPos.x &&
 			Player2DPos.y - Distance<RockOnPos.y && Player2DPos.y + Distance>RockOnPos.y) {
 			Hp -= BodyDamage;
@@ -148,12 +181,12 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 	}
 
 	//ダメージを受けたとき
-	if (OldHp > Hp&&Hp>=0) {
+	if (OldHp > Hp && Hp >= 0) {
 		OldHp = Hp;
 	}
 
 	//生きているとき
-	if (RobotArive == true && Hp > 0) {
+	if (RobotArive == true && Hp > 0 && Defomation_F == true) {
 		TrackPlayerMode();
 		//プレイヤーの前まで来たとき
 		if (Length <= 2) {
@@ -184,6 +217,7 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 		}
 	}
 
+	StatusSet();
 	AllUpdate();
 }
 
@@ -199,7 +233,7 @@ void Enemy::Draw(DirectXCommon* dxCommon)
 	ArmsPart->Draw();
 	Shadow->Draw();
 	//Center->Draw();
-	
+
 	Object3d::PostDraw();
 }
 
@@ -224,9 +258,9 @@ void Enemy::TrackPlayerMode()
 	float v3z = (vz / Length) * MoveSpeed;
 	Distance = OriginDistance;
 	HeadDistance = OriginHeadDistance;
-	
+
 	Distance -= Length * 2.0f;
-	HeadDistance -= Length ;
+	HeadDistance -= Length;
 
 	AllPos.m128_f32[0] -= v3x;
 	AllPos.m128_f32[2] -= v3z;
@@ -270,16 +304,16 @@ void Enemy::Motion()
 			MotionTime = 0.0f;
 		}
 	}
-	
+
 	else {
 		BodyPartScl.x -= hypertrophy.x;
 		ArmsPartScl.x -= hypertrophy.x;
 		HeadPartScl.x -= hypertrophy.x;
-					  
+
 		BodyPartScl.y -= hypertrophy.y;
 		ArmsPartScl.y -= hypertrophy.y;
 		HeadPartScl.y -= hypertrophy.y;
-					  
+
 		BodyPartScl.z -= hypertrophy.z;
 		ArmsPartScl.z -= hypertrophy.z;
 		HeadPartScl.z -= hypertrophy.z;
@@ -308,7 +342,7 @@ void Enemy::AttackMode(int& playerHp)
 		}
 		//生成した乱数の値が一定の時
 		if (divisionvalue == 1) {
-			
+
 			//攻撃に移行する
 			AttackFase = true;
 			//乱数の初期化
@@ -317,14 +351,14 @@ void Enemy::AttackMode(int& playerHp)
 	}
 	//攻撃フェイズに移行した時
 	if (AttackFase == true) {
-		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot+1);
+		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);
 		if (HeadPartRot.y >= PursePositiveRot) {
 			HeadPartRot.y = PursePositiveRot;
 		}
 		Attack(playerHp);
 	}
 	else {
-		Action::GetInstance()->EaseOut(HeadPartRot.y, PurseNegativeeRot-1);
+		Action::GetInstance()->EaseOut(HeadPartRot.y, PurseNegativeeRot - 1);
 		if (HeadPartRot.y <= PurseNegativeeRot) {
 			HeadPartRot.y = PurseNegativeeRot;
 		}

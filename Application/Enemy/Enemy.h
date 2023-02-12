@@ -83,6 +83,8 @@ public:
 	/// <param name="Set3dPosition">表示したい3D座標の場所</param>
 	XMFLOAT2 WorldtoScreen(const XMVECTOR& Set3dPosition);
 
+
+
 	/// <summary>
 	/// ビュー変換
 	/// </summary>
@@ -229,5 +231,9 @@ private:
 	//敵のモーション用
 	float PursePositiveRot = 180;
 	float PurseNegativeeRot = 0;
+
+	//変形用のフラグ
+	bool Defomation_F = false;
+	float DefomationCount = 0.0f;
 };
 
