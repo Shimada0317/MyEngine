@@ -76,9 +76,10 @@ void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera*
 //ステータスセット
 void Enemy::StatusSet()
 {
-
+	//変形前なら
 	if (Defomation_F == false) {
 		AllPos.m128_f32[1] -= 0.01f;
+		//地面に着いたとき
 		if (AllPos.m128_f32[1] <= 0) {
 			AllPos.m128_f32[1] = 0;
 			DefomationCount += 0.01f;
@@ -90,11 +91,12 @@ void Enemy::StatusSet()
 			Action::GetInstance()->EaseOut(ArmsPartScl.y, 0.2f);
 			Action::GetInstance()->EaseOut(ArmsPartScl.z, 0.2f);
 		}
-		if (DefomationCount >= 1) {
-			Defomation_F = true;
-		}
 	}
 
+	if (DefomationCount >= 1) {
+		DefomationCount = 1;
+		Defomation_F = true;
+	}
 	Center->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(CenterMat);
 	CenterMat = Center->GetMatrix();
@@ -186,13 +188,14 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 	}
 
 	//生きているとき
-	if (RobotArive == true && Hp > 0 && Defomation_F == true) {
-		TrackPlayerMode();
+	if (RobotArive == true && Hp > 0) {
+		if (Length > 2&&Defomation_F == true ) {
+			TrackPlayerMode();
+		}
 		//プレイヤーの前まで来たとき
-		if (Length <= 2) {
+		else if (Length <= 2) {
 			Motion();
 			Movement_F = false;
-			MoveSpeed = 0;
 			AttackMode(PlayerHp);
 		}
 	}
@@ -285,7 +288,7 @@ void Enemy::Motion()
 {
 	XMFLOAT3 hypertrophy = { 0.00001f,0.00001f,0.00001f };
 
-	MotionTime += 0.001f;
+	MotionTime += 0.0001f;
 
 	if (MotionChange == true) {
 		BodyPartScl.x += hypertrophy.x;

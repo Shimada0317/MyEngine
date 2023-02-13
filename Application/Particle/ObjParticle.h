@@ -44,6 +44,6 @@ private:
 	float RandomX;
 	float SmoleScl;
 	float time = 0.0f;
-	float gravity = 0.6f;
+	float gravity = 0.5f;
 };
 

@@ -1,7 +1,7 @@
 //コマンド,//パラメータ1,//パラメータ2,//パラメータ3
 WAVE,0,,
 POSITION,-5,0,30
-TRACK,-1.5.2,0,20
+TRACK,-1.8.2,0,20
 STEP,1,,
 ARIVE,1,,
 
@@ -11,7 +11,7 @@ STEP,1,,
 ARIVE,1,,
 
 POSITION,5,0,30
-TRACK,1.5,0,20
+TRACK,1.8,0,20
 STEP,1,,
 ARIVE,1,,
 

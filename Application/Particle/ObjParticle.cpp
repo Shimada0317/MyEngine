@@ -51,7 +51,7 @@ void ObjParticle::Update(XMVECTOR& enemyPos,XMFLOAT3& allRot)
 	Set();
 	XMFLOAT3 ConvertValue = Action::GetInstance()->ConvertToXMFLOAT3(SmoleScl);
 	ConvertValue = ConvertValue / 100;
-	time += 0.0002f;
+	time += 0.001f;
 	ParticlePos.m128_f32[2] += RandomZ;
 	ParticlePos.m128_f32[1] += RandomY-gravity*time;
 	ParticlePos.m128_f32[0] += RandomX;

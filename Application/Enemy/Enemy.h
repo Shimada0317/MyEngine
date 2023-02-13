@@ -203,10 +203,10 @@ private:
 	bool AttackShakeDown = false;
 
 	//移動速度
-	float MoveSpeed = 0.005f;
+	float MoveSpeed = 0.06f;
 
 	//プレイヤーと敵の距離
-	float Length = 0;
+	float Length = 3.0f;
 
 	//待機時のモーション変数
 	float MotionTime = 0.0f;

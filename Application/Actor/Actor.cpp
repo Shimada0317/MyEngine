@@ -172,12 +172,7 @@ void Actor::Update()
 	bool PlayerBulletShot_F = player->GetBulletShot();
 	//“G‚ÌXVˆ—
 	for (std::unique_ptr<Enemy>& Enemy : Robot) {
-		enemyPos[CountDistance] = Enemy->GetPosition();
-		ene2DPos[CountDistance] = Enemy->Get2DPosition();
-		for (int i = 0; i < 9; i++) {
-			Enemy->Update(Player2DPos, playerHp, PlayerBulletShot_F);
-		}
-		CountDistance += 1;
+		Enemy->Update(Player2DPos, playerHp, PlayerBulletShot_F);
 	}
 	player->SetBulletShot(PlayerBulletShot_F);
 	player->PlayerMove(move, patern);
