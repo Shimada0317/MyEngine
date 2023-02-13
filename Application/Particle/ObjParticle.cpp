@@ -31,9 +31,9 @@ void ObjParticle::Initialize(int ModelNumber, const XMVECTOR& particlepos, const
 {
 	Particle = Object3d::Create(ModelManager::GetInstance()->GetModel(ModelNumber));
 	RandomZ = Action::GetInstance()->GetRangRand(-0.01f, 0.01);
-	RandomY= Action::GetInstance()->GetRangRand(0.01f, 0.03f);
-	RandomX = Action::GetInstance()->GetRangRand(-0.01f, 0.01f);
-	SmoleScl = Action::GetInstance()->GetRangRand(0.05f, 0.07f);
+	RandomY= Action::GetInstance()->GetRangRand(0.1f, 0.3f);
+	RandomX = Action::GetInstance()->GetRangRand(-0.05f, 0.05f);
+	SmoleScl = Action::GetInstance()->GetRangRand(0.5f, 0.7f);
 	ParticlePos = particlepos;
 	ParticleScl = particlescl;
 	ParticleRot = particlerot;
@@ -50,8 +50,8 @@ void ObjParticle::Update(XMVECTOR& enemyPos,XMFLOAT3& allRot)
 {
 	Set();
 	XMFLOAT3 ConvertValue = Action::GetInstance()->ConvertToXMFLOAT3(SmoleScl);
-	ConvertValue = ConvertValue / 100;
-	time += 0.001f;
+	ConvertValue = ConvertValue / 200;
+	time += 0.005;
 	ParticlePos.m128_f32[2] += RandomZ;
 	ParticlePos.m128_f32[1] += RandomY-gravity*time;
 	ParticlePos.m128_f32[0] += RandomX;
