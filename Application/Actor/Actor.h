@@ -1,20 +1,14 @@
 #pragma once
-#include"Action.h"
 #include"Audio.h"
 #include"Player.h"
-#include"Bullet.h"
-#include"Input.h"
-#include"Collision.h"
 #include"BaseScene.h"
 #include"ClearScene.h"
-#include"ObjParticle.h"
 #include<sstream>
 #include"Enemy.h"
 
 #include<memory>
 
 using namespace std;
-const int MAXENEMY = 10;
 
 class Actor
 {
@@ -55,11 +49,7 @@ private:
 	unique_ptr<Object3d> heri;
 	unique_ptr<Object3d> Goal;
 	unique_ptr<Object3d> hane;
-	//ヘリモデル
-	ObjModel* heriM;
-	ObjModel* haneM;
 
-	//]unique_ptr<Robot>rob;
 	
 	Sprite* bulletHUD[9];
 	Sprite* Reload = nullptr;
@@ -76,21 +66,6 @@ private:
 	XMVECTOR backplayer = { 0,0,-5 };
 	XMFLOAT3 playerScl = { 0,0,0 };
 	XMFLOAT3 playerRot = { 0,0 ,0 };
-	//弾のステータス
-	XMVECTOR bullPos[9];
-	XMFLOAT3 bullScl = { 0,0,0 };
-	XMFLOAT3 bullRot = { 0,0,0 };
-	bool fire[9];
-	float v3x=0;
-	float v3y=0;
-	float v3z=0;
-
-	//敵のステータス
-	XMVECTOR enemyPos[5];
-	XMFLOAT2 ene2DPos[5];
-	XMFLOAT3 enemyScl = { 0,0,0 };
-	XMFLOAT3 enemyRot[MAXENEMY];
-	XMVECTOR absolutePos = { 0,0,0 };
 	//ヘリステータス
 	XMVECTOR GoalPos = { 45.0f,3.0f,92.0f };
 	XMFLOAT3 GoalScl = { 3.0f,3.0f,3.0f };
@@ -114,20 +89,12 @@ private:
 	//弾の発射地点
 	XMFLOAT3 startPos = { 0,0.5f,-1 };
 
-	Input* input = nullptr;
-	bool moveTime = false;
-
-	//bool arive = false;
-
-	float mouseX = 0;
-	float mouseY = 0;
 	//敵の変数
 	int next = 0;
 	bool retime[9];
 	bool reshot = false;
 
 	bool lost = false;
-	int life[MAXENEMY];
 	//リロード機能
 	//int Remaining = 0;
 	bool ReloadFlag = false;
@@ -142,9 +109,8 @@ private:
 	XMFLOAT3 target = { 0,0,0 };
 	XMFLOAT3 up = { 0,1,0 };
 
-	float enespeed[MAXENEMY];
 	float stopT = 0;
-	bool stop[MAXENEMY];
+
 
 	float hit = 0;
 	int patern = 0;
@@ -161,51 +127,21 @@ private:
 	bool waitF = false;
 	int waitT = 0;
 
-	int ENE = 0;
 
 	//DebugSceneのやつを持ってきた
 	std::list<std::unique_ptr<Enemy>>Robot;
-	std::unique_ptr<Object3d> bo = nullptr;
 	std::unique_ptr<Player>player;
 
-	bool a = true;
-
-	ObjModel* bomodel = nullptr;
-
-	XMVECTOR position = { 0.0f,0.0f,0.1f };
-	XMFLOAT3 rotation = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 scale = { 0.1f,0.1f,0.1f };
 
 	int playerHp;
 
-	XMVECTOR allpos[3];
-
-	//XMVECTOR allpos = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 Eye_pos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 Target_pos = { 0.0f,0.0f,0.0f };
-	bool arive = true;
-
 	int Remaining = 0;
 
-	bool all[MAXENEMY];
-	bool waveCount = false;
-	bool startmove = false;
-	bool oldmove = false;
-	bool spown = false;
-
-	XMMATRIX playerMat;
-	int rad;
-	int oldrand[3];
-
-	XMVECTOR TrackPoint[MAXENEMY];
+	bool StartMovie = false;
 
 	bool finish = false;
 
-	bool start = false;
-
-	bool getCamWorkF = false;
-
-	int CountDistance=0;
+	bool GetCamWork_F = false;
 
 	Camera* camera;
 

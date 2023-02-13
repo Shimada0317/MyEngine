@@ -57,9 +57,8 @@ void Actor::Initialize()
 	Goal = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
 	hane = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
 
-	playerMat = player->GetMat();
 	playerHp = player->GetHp();
-	getCamWorkF = player->GetCamWork();
+	GetCamWork_F = player->GetCamWork();
 	clearT = 0;
 
 	heriFry = new Audio();
@@ -69,7 +68,6 @@ void Actor::Initialize()
 
 void Actor::SetPSR()
 {
-	playerMat = player->GetMat();
 
 	//HUDのポジションセット
 	for (int i = 0; i < 9; i++) {
@@ -105,7 +103,7 @@ void Actor::SetPSR()
 	heri->SetRotation({0.0f,180.0f,0.0f});
 
 	hane->SetRotation({ 0.0f,heriY,0.0f });
-	if (startmove == false) {
+	if (StartMovie == false) {
 		hane->SetPosition(heripos);
 		hane->SetScale(heriscl);
 	}
@@ -127,19 +125,18 @@ void Actor::Update()
 {
 	float playeroldjup = playerHp;
 
-	CountDistance = 0;
 	heripos.m128_f32[2] += heriX;
 
 	if (heripos.m128_f32[2] >= 20) {
 		backObj = false;
-		startmove = true;
+		StartMovie = true;
 	}
 	else {
 		heriY += 15.0f;
 	}
 
-	getCamWorkF = player->GetCamWork();
-	if (getCamWorkF == true) {
+	GetCamWork_F = player->GetCamWork();
+	if (GetCamWork_F == true) {
 		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
 			});
@@ -220,7 +217,7 @@ void Actor::Draw(DirectXCommon* dxCommon)
 
 void Actor::SpriteDraw()
 {
-	if (getCamWorkF == true) {
+	if (GetCamWork_F == true) {
 		for (int i = Remaining; i < 8; i++) {
 			bulletHUD[i]->Draw();
 		}
@@ -300,7 +297,7 @@ void Actor::UpdataEnemyPopCommands()
 		}
 		return;
 	}
-	ENE = 0;
+
 	std::string line;
 
 	XMVECTOR POSITION = { 0.0f,0.0f,0.0f };
