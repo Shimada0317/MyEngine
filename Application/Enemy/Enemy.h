@@ -201,6 +201,7 @@ private:
 	//UŒ‚‚Ì€”õŠÔ
 	float AttackPreparationTime = 0;
 	bool AttackShakeDown = false;
+	float AttackCharge = 0.0f;
 
 	//ˆÚ“®‘¬“x
 	float MoveSpeed = 0.06f;

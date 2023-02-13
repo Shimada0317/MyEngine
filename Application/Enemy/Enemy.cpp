@@ -4,7 +4,7 @@
 
 const int HeadDamage = 40;
 const int BodyDamage = 35;
-const float Subtraction = 0.01f;
+const float Subtraction = 0.05f;
 const XMFLOAT4 AddColor = { 0.1f,0.1f,0.1f,0.0f };
 
 const XMFLOAT4 operator+(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& rhs)
@@ -78,7 +78,7 @@ void Enemy::StatusSet()
 {
 	//変形前なら
 	if (Defomation_F == false) {
-		AllPos.m128_f32[1] -= 0.01f;
+		AllPos.m128_f32[1] -= 0.1f;
 		//地面に着いたとき
 		if (AllPos.m128_f32[1] <= 0) {
 			AllPos.m128_f32[1] = 0;
@@ -189,11 +189,11 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 
 	//生きているとき
 	if (RobotArive == true && Hp > 0) {
-		if (Length > 2&&Defomation_F == true ) {
+		if (Length > 1.5f&&Defomation_F == true ) {
 			TrackPlayerMode();
 		}
 		//プレイヤーの前まで来たとき
-		else if (Length <= 2) {
+		else if (Length <= 1.5f) {
 			Motion();
 			Movement_F = false;
 			AttackMode(PlayerHp);
@@ -335,7 +335,7 @@ void Enemy::AttackMode(int& playerHp)
 	int divisionvalue = 0;
 	//攻撃フェイズに移行していないとき
 	if (AttackFase != true) {
-		AttackPreparationTime += 0.01f;
+		AttackPreparationTime += 0.1f;
 		//準備時間が一定の値に達した時
 		if (AttackPreparationTime >= 12) {
 			//0~10の範囲なの乱数を生成
@@ -376,7 +376,7 @@ void Enemy::Attack(int& playerhp)
 	float gigantic = 0.00002f;
 	float discoloration = 0.01f;
 	if (AttackShakeDown == false) {
-		ArmsPartRot.x += 0.05f;
+		ArmsPartRot.x += 0.4f;
 		ArmsPartScl.x += gigantic;
 		ArmsPartScl.y += gigantic;
 		ArmsPartScl.z += gigantic;
@@ -384,11 +384,16 @@ void Enemy::Attack(int& playerhp)
 		ArmsPartColor.y -= discoloration;
 		ArmsPartColor.z -= discoloration;
 		if (ArmsPartRot.x >= 40.0f) {
-			AttackShakeDown = true;
+			ArmsPartRot.x = 40;
+			AttackCharge += 0.1f;
+			if (AttackCharge >= 10) {
+				AttackCharge = 0;
+				AttackShakeDown = true;
+			}
 		}
 	}
 	else {
-		ArmsPartRot.x -= 1.0f;
+		ArmsPartRot.x -= 10.0f;
 		if (ArmsPartRot.x <= 0.0f) {
 			ArmsPartRot.x = 0.0f;
 			ArmsPartColor = { 1.0f,1.0f,1.0f ,1.0f };
