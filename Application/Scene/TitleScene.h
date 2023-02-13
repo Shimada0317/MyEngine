@@ -64,7 +64,7 @@ public://メンバ関数
 	/// <summary>
 	/// カメラの移動
 	/// </summary>
-	void CameraMove();
+	void CameraDirection();
 
 	/// <summary>
 	/// カーソルが範囲内に入っているか
@@ -84,6 +84,9 @@ public://メンバ関数
 	/// <param name="radY">スプライトの縦の範囲</param>
 	/// <returns></returns>
 	bool NextorBack(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY);
+
+	//void DescriptionPage();
+
 
 	/// <summary>
 	/// 描画処理
@@ -111,9 +114,9 @@ private:
 	Sprite* ClickAfter = nullptr;
 	Sprite* SignalBefore = nullptr;
 	Sprite* SignalAfter = nullptr;
-	Sprite* Explanation = nullptr;
-	Sprite* Explanation2 = nullptr;
-	Sprite* Explanation3 = nullptr;
+	Sprite* DescriptionOperation = nullptr;
+	Sprite* EnemyOverview = nullptr;
+	Sprite* Description3 = nullptr;
 	Sprite* ArrowRight = nullptr;
 	Sprite* ArrowLeft = nullptr;
 	Sprite* ArrowRightTrue = nullptr;
@@ -143,10 +146,8 @@ private:
 	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 StartScl = { 15.0f,15.0f,15.0f };
 	//カメラのステータス
-	XMFLOAT3 CamTarget= { 0.0f,0.0f,0.0f };
-	XMFLOAT3 CamEye = { 0.0f,0.0f,0.0f };
-	XMVECTOR CamMove = { 0.0f,0.0f,0.0f };
-	XMVECTOR CamEyeMove = { 0.0f,0.0f,0.0f };
+	XMVECTOR CameraMove = { 0.0f,0.0f,0.0f };
+	XMVECTOR CameraEyeMove = { 0.0f,0.0f,0.0f };
 	bool CameraEyeMove_F = false;
 	bool CameraChange_F = false;
 	//足場のステータス
@@ -167,7 +168,7 @@ private:
 	bool RightTrueIn_F = false;
 	bool LeftTrueIn_F = false;
 	//ポストエフェクトの色
-	XMFLOAT4 Post_Col = { 0.0f,0.0f,0.0f,1.0f };
+	XMFLOAT4 PostEfectColor = { 0.0f,0.0f,0.0f,1.0f };
 	//カーソルが入っているか
 	bool CursorIn_F = false;
 	//フェードを掛けるか掛けないか
@@ -176,8 +177,8 @@ private:
 	//クリックしているかどうか
 	bool Click_F = true;
 	//音量
-	float volume = 0.8f;
+	float Volume = 0.8f;
 	//説明ページ
-	int ExplanationPage = 0;
+	int DescriptionPage = 0;
 };
 

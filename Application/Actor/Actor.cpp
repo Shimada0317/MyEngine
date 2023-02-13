@@ -8,11 +8,11 @@ Actor::~Actor()
 {
 	player.reset();
 	delete Reload;
-	delete wave;
-	delete slash;
+	delete Wave;
+	delete Slash;
 	delete HpBer;
 	for (int i = 0; i < 5; i++) {
-		delete changecount[i];
+		delete ChangeCount[i];
 		delete LifeCount[i];
 	}
 }
@@ -32,7 +32,6 @@ void Actor::Initialize()
 	player = std::make_unique<Player>();
 	player->Initalize(camera);
 	camera->RecalculationMatrix();
-	playerPos = player->GetPosition();
 
 	//スプライトの読み込み
 	for (int i = 0; i < 9; i++) {
@@ -41,12 +40,12 @@ void Actor::Initialize()
 	}
 
 	Reload = Sprite::SpriteCreate(10, ReloadSpritePos, ReloadSpriteColor,AnchorPoint);
-	wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
-	slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
-	maxcount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
+	Wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
+	Slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
+	MaxCount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
 	HpBer = Sprite::SpriteCreate(18, { 10.0f,10.0f });
 	for (int i = 0; i < 5; i++) {
-		changecount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
+		ChangeCount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
 	for (int i = 0; i < 5; i++) {
 		LifeCount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
@@ -57,9 +56,8 @@ void Actor::Initialize()
 	Goal = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
 	hane = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
 
-	playerHp = player->GetHp();
+	PlayerHp = player->GetHp();
 	GetCamWork_F = player->GetCamWork();
-	clearT = 0;
 
 	heriFry = new Audio();
 	heriFry->Initialize();
@@ -71,41 +69,40 @@ void Actor::SetPSR()
 
 	//HUDのポジションセット
 	for (int i = 0; i < 9; i++) {
-		bulletHUD[i]->SetSize({ spSiz });
-		bulletHUD[i]->SetPosition({ spPos.x,spPos.y + 32 * i });
+		bulletHUD[i]->SetSize({ SpriteSiz });
+		bulletHUD[i]->SetPosition({ SpritePos.x,SpritePos.y + 32 * i });
 	}
 	//リロードの文字
 	Reload->SetSize(ReloadSpriteSize);
 	//左下のwaveの文字
-	wave->SetSize({ 256,128 });
-	wave->SetPosition({ 0,600 });
+	Wave->SetSize({ 256,128 });
+	Wave->SetPosition({ 0,600 });
 	//waveの最大数
-	maxcount->SetSize({ 80,80 });
-	maxcount->SetPosition({ 320, 630 });
+	MaxCount->SetSize({ 80,80 });
+	MaxCount->SetPosition({ 320, 630 });
 	//waveの最大値と数字の間の/←これ
-	slash->SetSize({ 80,80 });
-	slash->SetPosition({ 280,630 });
+	Slash->SetSize({ 80,80 });
+	Slash->SetPosition({ 280,630 });
 	//変動するカウンター
 	for (int i = 0; i < 5; i++) {
-		changecount[i]->SetSize({ 80,80 });
-		changecount[i]->SetPosition({ 240,630 });
+		ChangeCount[i]->SetSize({ 80,80 });
+		ChangeCount[i]->SetPosition({ 240,630 });
 		LifeCount[i]->SetSize({ 80,80 });
 		LifeCount[i]->SetPosition({ 1200,630 });
 	}
 	//Hpバー
 	HpBer->SetSize({ 128,64 });
 	HpBer->SetPosition({ 1070,650 });
-	player->SetHp(playerHp);
-	playerPos = player->GetPosition();
+	player->SetHp(PlayerHp);
 
-	heri->SetPosition(heripos);
-	heri->SetScale(heriscl);
+	heri->SetPosition(Heripos);
+	heri->SetScale(Heriscl);
 	heri->SetRotation({0.0f,180.0f,0.0f});
 
-	hane->SetRotation({ 0.0f,heriY,0.0f });
+	hane->SetRotation({ 0.0f,HeriY,0.0f });
 	if (StartMovie == false) {
-		hane->SetPosition(heripos);
-		hane->SetScale(heriscl);
+		hane->SetPosition(Heripos);
+		hane->SetScale(Heriscl);
 	}
 	else {
 		hane->SetPosition(GoalPos);
@@ -123,16 +120,16 @@ void Actor::SetPSR()
 
 void Actor::Update()
 {
-	float playeroldjup = playerHp;
+	float playeroldjup = PlayerHp;
 
-	heripos.m128_f32[2] += heriX;
+	Heripos.m128_f32[2] += HeriX;
 
-	if (heripos.m128_f32[2] >= 20) {
-		backObj = false;
+	if (Heripos.m128_f32[2] >= 20) {
+		BackObj = false;
 		StartMovie = true;
 	}
 	else {
-		heriY += 15.0f;
+		HeriY += 15.0f;
 	}
 
 	GetCamWork_F = player->GetCamWork();
@@ -141,13 +138,13 @@ void Actor::Update()
 			return robot->IsDead();
 			});
 		if (Robot.empty()) {
-			move = true;
+			Move = true;
 		}
 		finish = player->GetFinish();
 		if (finish == true) {
-			move = false;
+			Move = false;
 		}
-		if (move == false && finish == true) {
+		if (Move == false && finish == true) {
 			UpdataEnemyPopCommands();
 			patern += 1;
 			finish = false;
@@ -156,7 +153,7 @@ void Actor::Update()
 	}
 	
 	if (patern >= 5) {
-		heriY += 15.0f;
+		HeriY += 15.0f;
 	}
 
 	if (patern >= 6) {
@@ -169,10 +166,10 @@ void Actor::Update()
 	bool PlayerBulletShot_F = player->GetBulletShot();
 	//敵の更新処理
 	for (std::unique_ptr<Enemy>& Enemy : Robot) {
-		Enemy->Update(Player2DPos, playerHp, PlayerBulletShot_F);
+		Enemy->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
 	}
 	player->SetBulletShot(PlayerBulletShot_F);
-	player->PlayerMove(move, patern);
+	player->PlayerMove(Move, patern);
 	//座標の設定
 	SetPSR();
 	//プレイヤーの更新処理
@@ -204,7 +201,7 @@ void Actor::Draw(DirectXCommon* dxCommon)
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	Goal->Draw();
 	hane->Draw();
-	if (backObj == true) {
+	if (BackObj == true) {
 		heri->Draw();
 	}
 	player->ObjDraw();
@@ -225,19 +222,19 @@ void Actor::SpriteDraw()
 			Reload->Draw(ReloadSpriteColor);
 		}
 
-		if (playerHp == 1) {
+		if (PlayerHp == 1) {
 			LifeCount[0]->Draw();
 		}
-		else if (playerHp == 2) {
+		else if (PlayerHp == 2) {
 			LifeCount[1]->Draw();
 		}
-		else if (playerHp == 3) {
+		else if (PlayerHp == 3) {
 			LifeCount[2]->Draw();
 		}
-		else if (playerHp == 4) {
+		else if (PlayerHp == 4) {
 			LifeCount[3]->Draw();
 		}
-		else if (playerHp == 5) {
+		else if (PlayerHp == 5) {
 			LifeCount[4]->Draw();
 		}
 		HpBer->Draw();
@@ -282,7 +279,7 @@ void Actor::LoadEnemyPopData()
 	file.open("Resources/LoadEnemy.csv");
 	assert(file.is_open());
 
-	enemyPopCommands << file.rdbuf();
+	EnemyPopCommands << file.rdbuf();
 
 	file.close();
 }
@@ -290,10 +287,10 @@ void Actor::LoadEnemyPopData()
 void Actor::UpdataEnemyPopCommands()
 {
 	//待機処理
-	if (waitF == true) {
-		waitT--;
-		if (waitT <= 0) {
-			waitF = false;
+	if (Wait_F == true) {
+		WaitT--;
+		if (WaitT <= 0) {
+			Wait_F = false;
 		}
 		return;
 	}
@@ -311,7 +308,7 @@ void Actor::UpdataEnemyPopCommands()
 	bool TRACKSkip = false;
 	bool ARIVESkip = false;
 
-	while (getline(enemyPopCommands, line))
+	while (getline(EnemyPopCommands, line))
 	{
 
 		std::istringstream line_stram(line);

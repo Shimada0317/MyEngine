@@ -43,7 +43,7 @@ public:
 
 	const XMVECTOR& GetGoalPos() { return GoalPos; }
 
-	int GetHp() { return playerHp; }
+	int GetHp() { return PlayerHp; }
 private:
 	//ヘリObj
 	unique_ptr<Object3d> heri;
@@ -53,79 +53,37 @@ private:
 	
 	Sprite* bulletHUD[9];
 	Sprite* Reload = nullptr;
-	Sprite* wave = nullptr;
-	Sprite* maxcount = nullptr;
-	Sprite* slash = nullptr;
-	Sprite* changecount[5];
+	Sprite* Wave = nullptr;
+	Sprite* MaxCount = nullptr;
+	Sprite* Slash = nullptr;
+	Sprite* ChangeCount[5];
 	Sprite* LifeCount[5];
 	Sprite* HpBer;
 
 	Audio* heriFry = nullptr;
-	//プレイヤーのステータス
-	XMVECTOR playerPos = { 0,0,0 };
-	XMVECTOR backplayer = { 0,0,-5 };
-	XMFLOAT3 playerScl = { 0,0,0 };
-	XMFLOAT3 playerRot = { 0,0 ,0 };
 	//ヘリステータス
 	XMVECTOR GoalPos = { 45.0f,3.0f,92.0f };
 	XMFLOAT3 GoalScl = { 3.0f,3.0f,3.0f };
 
-	XMVECTOR heripos = { 0.0f,75.0f,-160.0f };
-	XMFLOAT3 heriscl = { 10.0f,10.0f,10.0f };
-
-	XMVECTOR start_pos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 start_scl = { 15.0f,15.0f,15.0f };
+	XMVECTOR Heripos = { 0.0f,75.0f,-160.0f };
+	XMFLOAT3 Heriscl = { 10.0f,10.0f,10.0f };
 
 
-	float heriY = 0.0f;
-	bool move = false;
-	bool backObj = true;
-	float heriX = 3.1f;
-	float clearT = 0;
+	float HeriY = 0.0f;
+	bool Move = false;
+	bool BackObj = true;
+	float HeriX = 3.1f;
 
-	XMFLOAT2 spSiz = { 64.0f,64.0f };
-	XMFLOAT2 spPos = { 1200.0f,0.0f };
+	XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
+	XMFLOAT2 SpritePos = { 1200.0f,0.0f };
 
-	//弾の発射地点
-	XMFLOAT3 startPos = { 0,0.5f,-1 };
-
-	//敵の変数
-	int next = 0;
-	bool retime[9];
-	bool reshot = false;
-
-	bool lost = false;
-	//リロード機能
-	//int Remaining = 0;
-	bool ReloadFlag = false;
-	int ReloadTime = 0;
-	int ans = 0;
-
-	float speedm = 2.1f;
-
-	XMMATRIX matInverseVPV;
-	
-	XMFLOAT3 eye = { 0, 0, -5 };
-	XMFLOAT3 target = { 0,0,0 };
-	XMFLOAT3 up = { 0,1,0 };
-
-	float stopT = 0;
-
-
-	float hit = 0;
 	int patern = 0;
-	int oldpatern = 0;
-	float cammove = 0.1f;
 	bool count = false;
-	//プレイヤーの向きに発射
-	XMVECTOR verosity_;
-	const float bullSpeed = 1.0f;
-
 	//敵発生コマンド
-	std::stringstream enemyPopCommands;
+	std::stringstream EnemyPopCommands;
 	//待機コマンド
-	bool waitF = false;
-	int waitT = 0;
+	bool Wait_F = false;
+	int WaitT = 0;
 
 
 	//DebugSceneのやつを持ってきた
@@ -133,7 +91,7 @@ private:
 	std::unique_ptr<Player>player;
 
 
-	int playerHp;
+	int PlayerHp;
 
 	int Remaining = 0;
 

@@ -50,9 +50,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	ClickAfter = Sprite::SpriteCreate(4, ClickPos);
 	SignalBefore = Sprite::SpriteCreate(5, ClickPos);
 	SignalAfter = Sprite::SpriteCreate(6, ClickPos);
-	Explanation = Sprite::SpriteCreate(7, {WinApp::window_width/ 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
-	Explanation2 = Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
-	Explanation3 = Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	DescriptionOperation = Sprite::SpriteCreate(7, {WinApp::window_width/ 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	EnemyOverview = Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	Description3 = Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
 	ArrowRight = Sprite::SpriteCreate(10, ArrowRightPos);
 	ArrowLeft = Sprite::SpriteCreate(11, ArrowLeftPos);
 	ArrowRightTrue = Sprite::SpriteCreate(12, ArrowRightPos);
@@ -75,15 +75,15 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	//ポストエフェクトの初期化
 	Post = new PostEffect();
 	Post->Initialize();
-	 CamEyeMove = { 0.0f,0.0f,0.0f };
+	 CameraEyeMove = { 0.0f,0.0f,0.0f };
 }
 
 //ステータスセット
 void TitleScene::StatusSet()
 {
 	//カメラの動き
-	TitleCamera->MoveEyeVector(CamEyeMove);
-	TitleCamera->MoveVector(CamMove);
+	TitleCamera->MoveEyeVector(CameraEyeMove);
+	TitleCamera->MoveVector(CameraMove);
 	//天球のステータスのセット
 	Sphere->SetRotation(SphereRot);
 	Sphere->SetPosition(SpherePos);
@@ -130,7 +130,7 @@ void TitleScene::AllUpdate()
 		Bills1[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
 	}
 	//ポストエフェクトの更新処理
-	Post->Update(Post_Col);
+	Post->Update(PostEfectColor);
 	//天球の更新処理
 	Sphere->Update();
 	//地面の更新処理
@@ -144,7 +144,7 @@ void TitleScene::Update()
 {
 	Mouse::GetInstance()->MouseMoveSprite(ReticlePos);
 	//カメラのムーブ関数
-	CameraMove();
+	CameraDirection();
 	//カーソルがスプライトの範囲内であるか
 	CheckCursorIn(ReticlePos, ClickPos, 500, 75);
 	//最初のクリック
@@ -157,13 +157,13 @@ void TitleScene::Update()
 	}
 
 	//カメラが移動した後の画面
-	if (ExplanationPage < 2 && TitleDisplay_F == false&&CameraChange_F==true) {
+	if (DescriptionPage < 2 && TitleDisplay_F == false&&CameraChange_F==true) {
 		if (NextorBack(ReticlePos, ArrowRightPos, 35, 35)) {
 			RightTrueIn_F = true;
 			//矢印を押された時
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
-				ClickSe->LoadFile("Resources/Sound/SE/click.wav", volume);
-				ExplanationPage += 1;
+				ClickSe->LoadFile("Resources/Sound/SE/click.wav", Volume);
+				DescriptionPage += 1;
 			}
 		}
 		else {
@@ -172,12 +172,12 @@ void TitleScene::Update()
 	}
 
 	//ページが0以上であれば
-	if (ExplanationPage > 0) {
+	if (DescriptionPage > 0) {
 		if (NextorBack(ReticlePos, ArrowLeftPos, 35, 35)) {
 			LeftTrueIn_F = true;
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
-				ClickSe->LoadFile("Resources/Sound/SE/click.wav", volume);
-				ExplanationPage -= 1;
+				ClickSe->LoadFile("Resources/Sound/SE/click.wav", Volume);
+				DescriptionPage -= 1;
 			}
 		}
 		else {
@@ -186,10 +186,10 @@ void TitleScene::Update()
 	}
 
 	//救援ヘリを呼ぶとき
-	if (CameraChange_F == true && CursorIn_F == true && ExplanationPage == 2) {
+	if (CameraChange_F == true && CursorIn_F == true && DescriptionPage == 2) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			if (Click_F == true) {
-				ClickSe->LoadFile("Resources/Sound/SE/MorseCode.wav", volume);
+				ClickSe->LoadFile("Resources/Sound/SE/MorseCode.wav", Volume);
 				Click_F = false;
 			}
 			FadeOut_F = true;
@@ -198,11 +198,11 @@ void TitleScene::Update()
 
 	//救援ヘリを読んだ後
 	if (FadeOut_F == true) {
-		Post_Col.x -= SubColor;
-		Post_Col.y -= SubColor;
-		Post_Col.z -= SubColor;
-		Post_Col.w -= SubColor;
-		if (Post_Col.w <= 0) {
+		PostEfectColor.x -= SubColor;
+		PostEfectColor.y -= SubColor;
+		PostEfectColor.z -= SubColor;
+		PostEfectColor.w -= SubColor;
+		if (PostEfectColor.w <= 0) {
 			//シーン切り替え
 			BaseScene* scene_ = new GameScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
@@ -216,15 +216,15 @@ void TitleScene::Update()
 }
 
 //カメラの移動
-void TitleScene::CameraMove()
+void TitleScene::CameraDirection()
 {
-	CamMove = { 0.0f,0.0f,0.0f };
+	CameraMove = { 0.0f,0.0f,0.0f };
 	if (CameraEyeMove_F == true && CameraChange_F == false) {
-		if ( CamEyeMove.m128_f32[0] >= -1.1) {
-			 CamEyeMove.m128_f32[0] -= CameraEyeMoveValue;
-			CamMove.m128_f32[0] += CameraMoveValueXandY;
-			CamMove.m128_f32[1] -= CameraMoveValueXandY;
-			CamMove.m128_f32[2] -= CameraMoveValueZ;
+		if ( CameraEyeMove.m128_f32[0] >= -1.1) {
+			 CameraEyeMove.m128_f32[0] -= CameraEyeMoveValue;
+			CameraMove.m128_f32[0] += CameraMoveValueXandY;
+			CameraMove.m128_f32[1] -= CameraMoveValueXandY;
+			CameraMove.m128_f32[2] -= CameraMoveValueZ;
 		}
 		else {
 			CameraChange_F = true;
@@ -232,7 +232,7 @@ void TitleScene::CameraMove()
 	}
 
 	if (CameraChange_F == true) {
-		 CamEyeMove = { 0.0f,0.0f,0.0f };
+		 CameraEyeMove = { 0.0f,0.0f,0.0f };
 	}
 }
 
@@ -285,7 +285,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 		}
 	}
 	else if (CameraChange_F == true ) {
-		if (ExplanationPage < 2) {
+		if (DescriptionPage < 2) {
 			if (RightTrueIn_F == false) {
 				ArrowRight->Draw();
 			}
@@ -293,7 +293,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 				ArrowRightTrue->Draw();
 			}
 		}
-		if (ExplanationPage > 0) {
+		if (DescriptionPage > 0) {
 			if (LeftTrueIn_F == false) {
 				ArrowLeft->Draw();
 			}
@@ -301,16 +301,16 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 				ArrowLeftTrue->Draw();
 			}
 		}
-		if (ExplanationPage == 0) {
-			Explanation->Draw();
+		if (DescriptionPage == 0) {
+			DescriptionOperation->Draw();
 		}
-		else if (ExplanationPage == 1) {
-			Explanation2->Draw();
+		else if (DescriptionPage == 1) {
+			EnemyOverview->Draw();
 		}
-		else if (ExplanationPage == 2) {
-			Explanation3->Draw();
+		else if (DescriptionPage == 2) {
+			Description3->Draw();
 		}
-		if (ExplanationPage == 2) {
+		if (DescriptionPage == 2) {
 			if (CursorIn_F == false) {
 				SignalBefore->Draw();
 			}
@@ -340,9 +340,9 @@ void TitleScene::Finalize()
 	delete ArrowRight;
 	delete ArrowLeftTrue;
 	delete ArrowRightTrue;
-	delete Explanation;
-	delete Explanation2;
-	delete Explanation3;
+	delete EnemyOverview;
+	delete DescriptionOperation;
+	delete Description3;
 	delete SignalAfter;
 	delete SignalBefore;
 	delete ClickSe;
