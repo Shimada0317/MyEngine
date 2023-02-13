@@ -94,17 +94,12 @@ public://メンバ関数
 	/// </summary>
 	void Finalize() override;
 private://メンバ変数
-	//Objモデル
-	ObjModel* SphereModel = nullptr;
-	ObjModel* WorldModel = nullptr;
-	ObjModel* StartModel = nullptr;
-	ObjModel* BillsModel = nullptr;
 	//Obj
 	unique_ptr <Object3d> Sphere;
 	unique_ptr <Object3d> World;
 	unique_ptr<Object3d> Start;
-	unique_ptr<Object3d> Bills[BILLS];
-	unique_ptr<Object3d> Bills1[BILLS];
+	unique_ptr<Object3d> BillsHighAlpha[BILLS];
+	unique_ptr<Object3d> BillsLowAlpha[BILLS];
 	unique_ptr<Object3d> FieldBills[5];
 	//スプライト
 	Sprite* Clear = nullptr;
@@ -115,25 +110,25 @@ private://メンバ変数
 	Light* light = nullptr;
 	unique_ptr <Actor> Act = nullptr;
 	//最初のビルのステータス
-	XMVECTOR Start_Pos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 Start_Scl = { 15.0f,15.0f,15.0f };
-	XMFLOAT3 Start_Rot = { 0.0f,180.0f,0.0f };
+	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 StartScl = { 15.0f,15.0f,15.0f };
+	XMFLOAT3 StartRot = { 0.0f,180.0f,0.0f };
 	//天球のステータス
-	XMVECTOR Sphere_Pos = { 0,0,0 };
-	XMFLOAT3 Sphere_Scl = { 4.0f,4.0f,4.0f };
-	XMFLOAT3 Sphere_Rot = { 0,0,0 };
+	XMVECTOR SpherePos = { 0,0,0 };
+	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
+	XMFLOAT3 SphereRot = { 0,0,0 };
 	//フィールドのステータス
-	XMFLOAT3 FieldBill_Scl = { 6.0f,10.0f,7.0f };
-	XMVECTOR FieldBill_pos[5];
-	XMFLOAT3 FieldBill_Rot[5];
+	XMFLOAT3 FieldBillScl = { 6.0f,10.0f,7.0f };
+	XMVECTOR FieldBillPos[5];
+	XMFLOAT3 FieldBillRot[5];
 	//足場のステータス
-	XMVECTOR World_Pos = { 0.0f,-1.1f,0.0f };
-	XMFLOAT3 World_Scl = { 100,100,100 };
+	XMVECTOR WorldPos = { 0.0f,-1.1f,0.0f };
+	XMFLOAT3 WorldScl = { 100,100,100 };
 	//ビル群のステータス
-	XMFLOAT3 Bills_Scl = { 10.0f,10.0f,10.0f };
-	XMVECTOR Bills_Pos = { 0.0f,0.0f,-16.5f };
-	XMVECTOR Bills_Pos1 = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 Bills_Rot = { 0.0f,90.0f,0.0f };
+	XMFLOAT3 BillsScl = { 10.0f,10.0f,10.0f };
+	XMVECTOR BillsHighAlphaPos = { 0.0f,0.0f,-16.5f };
+	XMVECTOR BillsLowAlphaPos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 BillsRot = { 0.0f,90.0f,0.0f };
 	//その他の変数
 	XMFLOAT4 PostCol = { -1.0f,-1.0f,-1.0f,1.0f };
 	int Patern = 0;

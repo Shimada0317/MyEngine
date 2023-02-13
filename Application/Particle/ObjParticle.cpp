@@ -30,7 +30,7 @@ const XMFLOAT3 operator/(const DirectX::XMFLOAT3& lhs, const float rhs)
 void ObjParticle::Initialize(int ModelNumber, const XMVECTOR& particlepos, const XMFLOAT3& particlescl, const XMFLOAT3& particlerot)
 {
 	Particle = Object3d::Create(ModelManager::GetInstance()->GetModel(ModelNumber));
-	RandomZ = Action::GetInstance()->GetRangRand(-0.01f, 0.01);
+	RandomZ = Action::GetInstance()->GetRangRand(-0.1f, 0.1);
 	RandomY= Action::GetInstance()->GetRangRand(0.1f, 0.3f);
 	RandomX = Action::GetInstance()->GetRangRand(-0.05f, 0.05f);
 	SmoleScl = Action::GetInstance()->GetRangRand(0.5f, 0.7f);

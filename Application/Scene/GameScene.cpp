@@ -41,8 +41,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//モデルの読み込み
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
-		Bills1[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		BillsHighAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		BillsLowAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 
 	}
 	for (int i = 0; i < 5; i++) {
@@ -61,65 +61,65 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Bgm->Initialize();
 	Bgm->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
 
-	FieldBill_pos[0] = {-35.0f,0.0f,20.0f};
-	FieldBill_pos[1] = { -7.0f,-1,80 };
-	FieldBill_pos[2]={37.0,0.0f,-10.0f};
-	FieldBill_pos[3] = { -900.0,0.0f,0.0f };;
-	FieldBill_pos[4] = { -900.0,0.0f,0.0f };;
+	FieldBillPos[0] = {-35.0f,0.0f,20.0f};
+	FieldBillPos[1] = { -7.0f,-1,80 };
+	FieldBillPos[2]={37.0,0.0f,-10.0f};
+	FieldBillPos[3] = { -900.0,0.0f,0.0f };;
+	FieldBillPos[4] = { -900.0,0.0f,0.0f };;
 
-	FieldBill_Rot[0]={0.0f,270.0f,0.0f};
-	FieldBill_Rot[1]={0.0f,0.0f,0.0f};
-	FieldBill_Rot[2] = { 0.0f,90.0f,0.0f };
-	FieldBill_Rot[3] = { 0.0f,0.0f,0.0f };
-	FieldBill_Rot[4] = { 0.0f,0.0f,0.0f };
+	FieldBillRot[0]={0.0f,270.0f,0.0f};
+	FieldBillRot[1]={0.0f,0.0f,0.0f};
+	FieldBillRot[2] = { 0.0f,90.0f,0.0f };
+	FieldBillRot[3] = { 0.0f,0.0f,0.0f };
+	FieldBillRot[4] = { 0.0f,0.0f,0.0f };
 }
 
 //ステータスセット
 void GameScene::StatusSet()
 {
 	//天球のステータスセット
-	Sphere->SetRotation(Sphere_Rot);
-	Sphere->SetPosition(Sphere_Pos);
-	Sphere->SetScale(Sphere_Scl);
+	Sphere->SetRotation(SphereRot);
+	Sphere->SetPosition(SpherePos);
+	Sphere->SetScale(SphereScl);
 
 	//地面のステータスセット
-	World->SetPosition(World_Pos);
-	World->SetScale(World_Scl);
+	World->SetPosition(WorldPos);
+	World->SetScale(WorldScl);
 
 	//アクタークラスからゲット
 	Patern = Act->GetPatern();
 	PlayerHp = Act->GetHp();
 
 	//スタート地点のステータスセット
-	Start->SetPosition(Start_Pos);
-	Start->SetScale(Start_Scl);
-	Start->SetRotation(Start_Rot);
+	Start->SetPosition(StartPos);
+	Start->SetScale(StartScl);
+	Start->SetRotation(StartRot);
 
 	//左右のビルのステータスセット
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i]->SetScale(Bills_Scl);
-		Bills1[i]->SetScale(Bills_Scl);
+		BillsHighAlpha[i]->SetScale(BillsScl);
+		BillsLowAlpha[i]->SetScale(BillsScl);
 		if (i % 2 == 0) {
-			Bills_Pos = { 100.0f, 0,-300.0f + (100 * i / 2) };
-			Bills_Pos1 = { 200.0f,0,-300.0f + (100 * i / 2) };
-			Bills_Rot = { 0.0f,90.0f,0.0f };
+			BillsHighAlphaPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
+			BillsLowAlphaPos = { 200.0f,0,-300.0f + (100 * i / 2) };
+			BillsRot = { 0.0f,90.0f,0.0f };
 		}
 		else if (i % 2 == 1) {
-			Bills_Pos = { -100.0f,0,-300.0f + (100 * i / 2) };
-			Bills_Pos1 = { -200.0f, 0,-300.0f + (100 * i / 2) };
-			Bills_Rot = { 0.0f,270.0f,0.0f };
+			BillsHighAlphaPos = { -100.0f,0,-300.0f + (100 * i / 2) };
+			BillsLowAlphaPos = { -200.0f, 0,-300.0f + (100 * i / 2) };
+			BillsRot = { 0.0f,270.0f,0.0f };
 		}
-		Bills[i]->SetRotation(Bills_Rot);
-		Bills[i]->SetPosition(Bills_Pos);
-		Bills1[i]->SetRotation(Bills_Rot);
-		Bills1[i]->SetPosition(Bills_Pos1);
+		BillsHighAlpha[i]->SetRotation(BillsRot);
+		BillsHighAlpha[i]->SetPosition(BillsHighAlphaPos);
+		BillsLowAlpha[i]->SetRotation(BillsRot);
+		BillsLowAlpha[i]->SetPosition(BillsLowAlphaPos);
 	}
 
 	//フィールドの建物のステータスセット
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i]->SetPosition(FieldBill_pos[i]);
-		FieldBills[i]->SetRotation(FieldBill_Rot[i]);
-		FieldBills[i]->SetScale(FieldBill_Scl);
+		FieldBills[i]->SetPosition(FieldBillPos[i]);
+		FieldBills[i]->SetRotation(FieldBillRot[i]);
+		FieldBills[i]->SetScale(FieldBillScl);
 	}
 };
 
@@ -132,8 +132,8 @@ void GameScene::AllUpdata()
 	}
 	//左右のビルの更新処理
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i]->Update({ 0.4f,0.4f,0.5f,0.9f });
-		Bills1[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
+		BillsHighAlpha[i]->Update({ 0.4f,0.4f,0.5f,0.9f });
+		BillsLowAlpha[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
 	}
 	//フィールドのビルの更新処理
 	for (int i = 0; i < 5; i++) {
@@ -238,8 +238,8 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 		FieldBills[i]->Draw();
 	}
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i]->Draw();
-		Bills1[i]->Draw();
+		BillsHighAlpha[i]->Draw();
+		BillsLowAlpha[i]->Draw();
 	}
 	////オブジェクト後処理
 	Object3d::PostDraw();
@@ -291,19 +291,15 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 //終了処理
 void GameScene::Finalize()
 {
-	delete  SphereModel;
-	delete WorldModel;
 	delete postEffect;
-	delete BillsModel;
-	delete StartModel;
 	delete Conteniu;
 	delete Clear;
 	delete Bgm;
 	World.reset();
 	Start.reset();
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i].reset();
-		Bills1[i].reset();
+		BillsHighAlpha[i].reset();
+		BillsLowAlpha[i].reset();
 	}
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i].reset();

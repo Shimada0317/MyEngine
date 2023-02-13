@@ -6,13 +6,12 @@
 #include"GameScene.h"
 #include"Mouse.h"
 
-using namespace DirectX;
-
 const float SubColor = 0.01f;
 const float CameraMoveValueXandY = 0.4f;
 const float CameraMoveValueZ = 0.1f;
 const float CameraEyeMoveValue = 0.01f;
 
+//コンストラクタ
 TitleScene::TitleScene(SceneManager* sceneManager_)
 	:BaseScene(sceneManager_)
 {
@@ -50,9 +49,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	ClickAfter = Sprite::SpriteCreate(4, ClickPos);
 	SignalBefore = Sprite::SpriteCreate(5, ClickPos);
 	SignalAfter = Sprite::SpriteCreate(6, ClickPos);
-	DescriptionOperation = Sprite::SpriteCreate(7, {WinApp::window_width/ 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	DescriptionOperation = Sprite::SpriteCreate(7, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
 	EnemyOverview = Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
-	Description3 = Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
+	GameStartPreparation = Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
 	ArrowRight = Sprite::SpriteCreate(10, ArrowRightPos);
 	ArrowLeft = Sprite::SpriteCreate(11, ArrowLeftPos);
 	ArrowRightTrue = Sprite::SpriteCreate(12, ArrowRightPos);
@@ -61,8 +60,8 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	//オブジェクトの生成
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
-		Bills1[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		BillsHighAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		BillsLowAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 	}
 	Start = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
 	World = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
@@ -75,7 +74,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	//ポストエフェクトの初期化
 	Post = new PostEffect();
 	Post->Initialize();
-	 CameraEyeMove = { 0.0f,0.0f,0.0f };
+	CameraEyeMove = { 0.0f,0.0f,0.0f };
 }
 
 //ステータスセット
@@ -93,22 +92,22 @@ void TitleScene::StatusSet()
 	World->SetScale(WorldScl);
 	//左右のビルのステータスのセット
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i]->SetScale(BillsScl);
-		Bills1[i]->SetScale(BillsScl);
+		BillsHighAlpha[i]->SetScale(BillsScl);
+		BillsLowAlpha[i]->SetScale(BillsScl);
 		if (i % 2 == 0) {
-			BillsPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
-			BillsPos1 = { 200.0f,0,-300.0f + (100 * i / 2) };
+			BillsHighAlphaPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
+			BillsLowAlphaPos = { 200.0f,0,-300.0f + (100 * i / 2) };
 			BillsRot = { 0.0f,90.0f,0.0f };
 		}
 		else if (i % 2 == 1) {
-			BillsPos = { -100.0f,0,-300.0f + (100 * i / 2) };
-			BillsPos1 = { -200.0f, 0,-300.0f + (100 * i / 2) };
+			BillsHighAlphaPos = { -100.0f,0,-300.0f + (100 * i / 2) };
+			BillsLowAlphaPos = { -200.0f, 0,-300.0f + (100 * i / 2) };
 			BillsRot = { 0.0f,270.0f,0.0f };
 		}
-		Bills[i]->SetRotation(BillsRot);
-		Bills[i]->SetPosition(BillsPos);
-		Bills1[i]->SetRotation(BillsRot);
-		Bills1[i]->SetPosition(BillsPos1);
+		BillsHighAlpha[i]->SetRotation(BillsRot);
+		BillsHighAlpha[i]->SetPosition(BillsHighAlphaPos);
+		BillsLowAlpha[i]->SetRotation(BillsRot);
+		BillsLowAlpha[i]->SetPosition(BillsLowAlphaPos);
 	}
 	//カメラの移動先のビルのステータスセット
 	Start->SetPosition(StartPos);
@@ -126,8 +125,8 @@ void TitleScene::AllUpdate()
 {
 	//左右のビルの更新処理
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i]->Update({ 0.4f,0.4f,0.5f,1.0f });
-		Bills1[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
+		BillsHighAlpha[i]->Update({ 0.4f,0.4f,0.5f,1.0f });
+		BillsLowAlpha[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
 	}
 	//ポストエフェクトの更新処理
 	Post->Update(PostEfectColor);
@@ -156,8 +155,63 @@ void TitleScene::Update()
 		}
 	}
 
+	DescriptionPageOperation();
+
+	FadeOutAndSceneChange();
+
+	StatusSet();
+	AllUpdate();
+	//カメラの再計算
+	TitleCamera->RecalculationMatrix();
+}
+
+//カメラの移動
+void TitleScene::CameraDirection()
+{
+	CameraMove = { 0.0f,0.0f,0.0f };
+	if (CameraEyeMove_F == true && CameraChange_F == false) {
+		if (CameraEyeMove.m128_f32[0] >= -1.1) {
+			CameraEyeMove.m128_f32[0] -= CameraEyeMoveValue;
+			CameraMove.m128_f32[0] += CameraMoveValueXandY;
+			CameraMove.m128_f32[1] -= CameraMoveValueXandY;
+			CameraMove.m128_f32[2] -= CameraMoveValueZ;
+		}
+		else {
+			CameraChange_F = true;
+		}
+	}
+
+	if (CameraChange_F == true) {
+		CameraEyeMove = { 0.0f,0.0f,0.0f };
+	}
+}
+
+//カーソルが範囲内に入っているか
+void TitleScene::CheckCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
+{
+	if ((check_Pos.x <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && (check_Pos.y <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
+		CursorIn_F = true;
+	}
+	else {
+		CursorIn_F = false;
+	}
+}
+
+//矢印のスプライトの範囲
+bool TitleScene::NextorBack(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
+{
+	if ((check_Pos.x <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && (check_Pos.y <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
+		return true;
+	}
+
+	return false;
+}
+
+//操作ページの操作
+void TitleScene::DescriptionPageOperation()
+{
 	//カメラが移動した後の画面
-	if (DescriptionPage < 2 && TitleDisplay_F == false&&CameraChange_F==true) {
+	if (DescriptionPage < 2 && TitleDisplay_F == false && CameraChange_F == true) {
 		if (NextorBack(ReticlePos, ArrowRightPos, 35, 35)) {
 			RightTrueIn_F = true;
 			//矢印を押された時
@@ -195,7 +249,11 @@ void TitleScene::Update()
 			FadeOut_F = true;
 		}
 	}
+}
 
+//フェードアウト後にゲームシーンへチェンジ
+void TitleScene::FadeOutAndSceneChange()
+{
 	//救援ヘリを読んだ後
 	if (FadeOut_F == true) {
 		PostEfectColor.x -= SubColor;
@@ -208,53 +266,6 @@ void TitleScene::Update()
 			sceneManager_->SetNextScene(scene_);
 		}
 	}
-
-	StatusSet();
-	AllUpdate();
-	//カメラの再計算
-	TitleCamera->RecalculationMatrix();
-}
-
-//カメラの移動
-void TitleScene::CameraDirection()
-{
-	CameraMove = { 0.0f,0.0f,0.0f };
-	if (CameraEyeMove_F == true && CameraChange_F == false) {
-		if ( CameraEyeMove.m128_f32[0] >= -1.1) {
-			 CameraEyeMove.m128_f32[0] -= CameraEyeMoveValue;
-			CameraMove.m128_f32[0] += CameraMoveValueXandY;
-			CameraMove.m128_f32[1] -= CameraMoveValueXandY;
-			CameraMove.m128_f32[2] -= CameraMoveValueZ;
-		}
-		else {
-			CameraChange_F = true;
-		}
-	}
-
-	if (CameraChange_F == true) {
-		 CameraEyeMove = { 0.0f,0.0f,0.0f };
-	}
-}
-
-//カーソルが範囲内に入っているか
-void TitleScene::CheckCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
-{
-	if ((check_Pos.x <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && (check_Pos.y <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
-		CursorIn_F = true;
-	}
-	else {
-		CursorIn_F = false;
-	}
-}
-
-//矢印のスプライトの範囲
-bool TitleScene::NextorBack(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
-{
-	if ((check_Pos.x <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && (check_Pos.y <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
-		return true;
-	}
-
-	return false;
 }
 
 //描画処理
@@ -266,8 +277,8 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	World->Draw();
 	Sphere->Draw();
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i]->Draw();
-		Bills1[i]->Draw();
+		BillsHighAlpha[i]->Draw();
+		BillsLowAlpha[i]->Draw();
 	}
 	Start->Draw();
 	Object3d::PostDraw();
@@ -284,7 +295,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 			ClickAfter->Draw();
 		}
 	}
-	else if (CameraChange_F == true ) {
+	else if (CameraChange_F == true) {
 		if (DescriptionPage < 2) {
 			if (RightTrueIn_F == false) {
 				ArrowRight->Draw();
@@ -308,7 +319,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 			EnemyOverview->Draw();
 		}
 		else if (DescriptionPage == 2) {
-			Description3->Draw();
+			GameStartPreparation->Draw();
 		}
 		if (DescriptionPage == 2) {
 			if (CursorIn_F == false) {
@@ -342,7 +353,7 @@ void TitleScene::Finalize()
 	delete ArrowRightTrue;
 	delete EnemyOverview;
 	delete DescriptionOperation;
-	delete Description3;
+	delete GameStartPreparation;
 	delete SignalAfter;
 	delete SignalBefore;
 	delete ClickSe;
@@ -350,8 +361,8 @@ void TitleScene::Finalize()
 	delete Bgm;
 
 	for (int i = 0; i < BILLS; i++) {
-		Bills[i].reset();
-		Bills1[i].reset();
+		BillsHighAlpha[i].reset();
+		BillsLowAlpha[i].reset();
 	}
 	Sphere.reset();
 	World.reset();

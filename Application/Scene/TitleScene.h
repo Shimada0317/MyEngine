@@ -85,8 +85,15 @@ public://メンバ関数
 	/// <returns></returns>
 	bool NextorBack(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY);
 
-	//void DescriptionPage();
+	/// <summary>
+	/// 説明画面で行われる処理
+	/// </summary>
+	void DescriptionPageOperation();
 
+	/// <summary>
+	///　フェードアウト後にゲームシーンへチェンジ
+	/// </summary>
+	void FadeOutAndSceneChange();
 
 	/// <summary>
 	/// 描画処理
@@ -102,8 +109,8 @@ public://メンバ関数
 private:
 	//Obj
 	unique_ptr <Object3d> Sphere;
-	unique_ptr<Object3d> Bills[BILL];
-	unique_ptr<Object3d> Bills1[BILL];
+	unique_ptr<Object3d> BillsHighAlpha[BILL];
+	unique_ptr<Object3d> BillsLowAlpha[BILL];
 	unique_ptr <Object3d> GroundObj;
 	unique_ptr <Object3d >World;
 	unique_ptr<Object3d> Start;
@@ -116,7 +123,7 @@ private:
 	Sprite* SignalAfter = nullptr;
 	Sprite* DescriptionOperation = nullptr;
 	Sprite* EnemyOverview = nullptr;
-	Sprite* Description3 = nullptr;
+	Sprite* GameStartPreparation = nullptr;
 	Sprite* ArrowRight = nullptr;
 	Sprite* ArrowLeft = nullptr;
 	Sprite* ArrowRightTrue = nullptr;
@@ -139,8 +146,8 @@ private:
 	XMFLOAT3 GroundRot = { 0,0,0 };
 	//ビル群のステータス
 	XMFLOAT3 BillsScl = { 10.0f,10.0f,10.0f };
-	XMVECTOR BillsPos = { 0.0f,0.0f,-16.5f };
-	XMVECTOR BillsPos1 = { 0.0f,0.0f,-16.5f };
+	XMVECTOR BillsHighAlphaPos = { 0.0f,0.0f,-16.5f };
+	XMVECTOR BillsLowAlphaPos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 BillsRot = { 0.0f,90.0f,0.0f };
 	//カメラの移動先のステータス
 	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
