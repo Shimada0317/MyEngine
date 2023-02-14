@@ -8,10 +8,9 @@
 
 const int ReaminingBullet = 8;
 
+//デストラクタ
 Player::~Player()
 {
-	delete GunModel;
-	delete BodyModel;
 	delete PartGreen;
 	delete ShotSe;
 	delete ReloadSe;
@@ -20,10 +19,11 @@ Player::~Player()
 	Body.reset();
 }
 
-void Player::Initalize(Camera* came)
+//初期化処理
+void Player::Initalize(Camera* camera)
 {
 
-	Object3d::SetCamera(came);
+	Object3d::SetCamera(camera);
 
 	SkipPos = CurtainDownPos;
 	Sprite::LoadTexture(200, L"Resources/mark2.png");
@@ -44,12 +44,12 @@ void Player::Initalize(Camera* came)
 	RailCam = new RailCamera();
 	RailCam->MatrixIdentity(ReticlePos, ReticleRot);
 
-	Body->SetParent(came);
+	Body->SetParent(camera);
 
-	PartGreen = ParticleManager::Create(came);
-	PartRed = ParticleManager::Create(came);
+	PartGreen = ParticleManager::Create(camera);
+	PartRed = ParticleManager::Create(camera);
 	Eye_rot.y = 180;
-	RailCam->Update(vel, Eye_rot, came);
+	RailCam->Update(vel, Eye_rot, camera);
 
 	ShotSe = new Audio();
 	ShotSe->Initialize();
@@ -58,7 +58,8 @@ void Player::Initalize(Camera* came)
 	ReloadSe->Initialize();
 };
 
-void Player::Set(Camera* came)
+//ステータスセット
+void Player::StatusSet(Camera* camera)
 {
 	BodyMat = Body->GetMatrix();
 	BodyWorldPos = { -10.0f,0.0f,-20.0f };
@@ -69,11 +70,11 @@ void Player::Set(Camera* came)
 	Body->SetRotation(BodyRot);
 	Body->SetPosition(BodyPos);
 	Body->SetScale(BodyScl);
-	Body->SetParent(came);
+	Body->SetParent(camera);
 
 	Gun->SetRotation(GunRot);
 	Gun->SetScale(GunScl);
-	Gun->SetParent(came);
+	Gun->SetParent(camera);
 	Gun->SetPosition(GunPos);
 
 
@@ -82,15 +83,16 @@ void Player::Set(Camera* came)
 	GunWorldPos = XMVector3Transform(GunPos, GunMat);
 }
 
-void Player::Update(int& Remaining, Camera* came,  int paterncount)
+//更新処理
+void Player::Update(int& Remaining, Camera* camera,  int paterncount)
 {
 	PaternCount = paterncount;
 	
 	//マウス座標の取得
-	GunRot.y = (ReticlePos2D.x - 640) / 10;
+	GunRot.y = (ReticlePos2D.x - WinApp::window_width/2) / 10;
 	MouthContoroll();
 	if (MouseStop_F == false) {
-		GunRot.x = (ReticlePos2D.y - 360) / 50;
+		GunRot.x = (ReticlePos2D.y - WinApp::window_height/2) / 50;
 	}
 	else {
 		GunRot.x += 10.0f;
@@ -146,9 +148,9 @@ void Player::Update(int& Remaining, Camera* came,  int paterncount)
 
 	CameraWork();
 
-	Set(came);
+	StatusSet(camera);
 	
-	RailCam->Update(vel, Eye_rot, came);
+	RailCam->Update(vel, Eye_rot, camera);
 
 	Body->Update();
 	Gun->Update();
@@ -156,6 +158,7 @@ void Player::Update(int& Remaining, Camera* came,  int paterncount)
 	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
 }
 
+//パーティクル描画
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
 	ParticleManager::PreDraw(cmdeList);
@@ -164,6 +167,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 	ParticleManager::PostDraw();
 }
 
+//スプライト描画
 void Player::SpriteDraw()
 {
 	if (CameraWork_F == true&&MouseStop_F==false) {
@@ -176,6 +180,7 @@ void Player::SpriteDraw()
 	}
 }
 
+//カメラワーク
 void Player::CameraWork()
 {
 	if (CameraWork_F == false && Start_F == false) {
@@ -280,6 +285,7 @@ void Player::CameraWork()
 	Skip->SetPosition(SkipPos);
 }
 
+//プレイヤー移動
 void Player::PlayerMove(bool& move, int patern)
 {
 	XMMATRIX camMat = RailCam->GetWorld();
@@ -432,6 +438,7 @@ void Player::PlayerMove(bool& move, int patern)
 	}
 }
 
+//オブジェクト描画
 void Player::ObjDraw()
 {
 	if (Hp >= 0 && CameraWork_F == true) {
@@ -519,6 +526,7 @@ void Player::SoundEffect()
 	ShotSe->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
 }
 
+//マウス操作
 void Player::MouthContoroll()
 {
 	//マウス座標の取得
@@ -533,6 +541,7 @@ void Player::MouthContoroll()
 	}
 }
 
+//マズルエフェクト
 void Player::ParticleEfect()
 {
 	if (Particle_F == true) {

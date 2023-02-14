@@ -236,5 +236,9 @@ private:
 	//変形用のフラグ
 	bool Defomation_F = false;
 	float DefomationCount = 0.0f;
+
+	//振動
+	float Vibration=0.0f;
+	bool VibrationChange = false;
 };
 

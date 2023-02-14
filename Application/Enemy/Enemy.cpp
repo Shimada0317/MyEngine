@@ -383,8 +383,26 @@ void Enemy::Attack(int& playerhp)
 
 		ArmsPartColor.y -= discoloration;
 		ArmsPartColor.z -= discoloration;
+		//˜r‚ªÅ‘å“_‚É’B‚µ‚½Žž
 		if (ArmsPartRot.x >= 40.0f) {
 			ArmsPartRot.x = 40;
+
+			if (VibrationChange == true) {
+				Vibration -= 2.2f;
+				if (Vibration <= -2.2f) {
+					VibrationChange = false;
+				}
+			}
+			else {
+				Vibration += 2.2f;
+				if (Vibration >= 2.2f) {
+					VibrationChange = true;
+				}
+			}
+			//‘Ì‚Ìk‚¦
+			HeadPartRot.y + -Vibration;
+			BodyPartRot.y += Vibration;
+			ArmsPartRot.y += Vibration;
 			AttackCharge += 0.1f;
 			if (AttackCharge >= 10) {
 				AttackCharge = 0;

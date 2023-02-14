@@ -19,12 +19,12 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="came">カメラ</param>
-	void Initalize(Camera* came);
+	void Initalize(Camera* camera);
 	/// <summary>
 	/// ステータスのSetは全部ここ
 	/// </summary>
 	/// <param name="came"></param>
-	void Set(Camera* camera);
+	void StatusSet(Camera* camera);
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -34,7 +34,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(int& Remaining, Camera* came,int patern);
+	void Update(int& Remaining, Camera* camera,int patern);
 
 	/// <summary>
 	/// パーティクルの描画
@@ -78,13 +78,11 @@ public:
 	const XMFLOAT3& GetRotation() { return ReticleRot; }
 	//スケール
 	const XMFLOAT3& GetScl() { return ReticleScl; }
-	//行列
-	const XMMATRIX& GetMat() { return TrackMat; }
 	//二次元座標
 	const XMFLOAT2& GetRetPosition() { return ReticlePos2D; }
 	//二次元スケール
 	const XMFLOAT2& GetRetSiz() { return ReticleSize; }
-
+	//カメラワーク
 	const bool& GetCamWork() { return CameraWork_F; }
 
 	const bool& GetFring() { return Fring_F; }
@@ -105,12 +103,6 @@ public:
 	void SetBulletShot(const bool& BulletShot_F) { this->BulletShot_F = BulletShot_F; }
 #pragma endregion
 private:
-
-	//Objモデル
-	ObjModel* TrackModel = nullptr;
-	ObjModel* GunModel = nullptr;
-	ObjModel* BodyModel = nullptr;
-	ObjModel* CartridgeModel = nullptr;
 	//Obj
 	std::unique_ptr<Object3d> Track;
 	std::unique_ptr<Object3d> Gun;
