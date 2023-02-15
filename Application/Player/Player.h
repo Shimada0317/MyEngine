@@ -67,6 +67,11 @@ public:
 	/// マウスの取得
 	/// </summary>
 	void MouthContoroll();
+	/// <summary>
+	/// 画面揺れ
+	/// </summary>
+	/// <param name="limitshakevalue">シェイクする値</param>
+	void ScreenShake(float shakevalue,float shakingtime);
 	//パーティクル発生
 	void ParticleEfect();
 
@@ -155,8 +160,8 @@ private:
 	//ビューポート
 	XMMATRIX MatViewPort;
 	//カメラ
-	XMFLOAT3 Eye_rot = {0.0f,0.0f,0.0f};
-	XMFLOAT3 Target_pos = {0.0f,0.0f,0.0f};
+	XMFLOAT3 EyeRot = {0.0f,0.0f,0.0f};
+	XMFLOAT3 TargetPos = {0.0f,0.0f,0.0f};
 	XMFLOAT3 Up = { 0.0f,1.0f,0.0f };
 	//スプライト
 		//2Dレティクルのステータス
@@ -224,9 +229,18 @@ private:
 	float ShotCoolTime = 0.0f;
 	bool Recoil_F = false;
 	float RecoilTime = 0.0f;
+	float ShakingScreenValue = 0.0f;
+	bool ShakingScreen_F = true;
+	XMFLOAT3 OldEyeRot;
 
 	float easetimer = 0;
 
 	bool MouseStop_F = false;
+	float ShakeLimitTime = 0;
+	bool ShakingStart = false;
+	XMVECTOR OldPos;
+	bool RecoilGun = false;
+	float RecoveryTime = 0.0f;
+
 };
 

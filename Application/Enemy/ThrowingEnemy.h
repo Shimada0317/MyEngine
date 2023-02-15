@@ -1,15 +1,13 @@
 #pragma once
-#include"Audio.h"
 #include"ObjParticle.h"
 #include"DirectXCommon.h"
 #include"Sprite.h"
-#include"Camera.h"
-#include"ParticleManager.h"
 #include<DirectXMath.h>
 #include<memory>
 #include<list>
 
-class Enemy
+
+class ThrowingEnemy
 {
 private:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -18,9 +16,6 @@ private:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
-	//デストラクタ
-	~Enemy();
-
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -28,7 +23,7 @@ public:
 	/// <param name="AllPos">座標</param>
 	/// <param name="came">カメラ</param>
 	/// <param name="Step">移動時に横移動するか</param>
-	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& qllPos, Camera* camera, const bool& movement= false);
+	void Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera);
 
 	/// <summary>
 	/// ステータスをセット
@@ -46,74 +41,13 @@ public:
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
-	void Update(const XMFLOAT2& player2Dpos, int& playerhp,bool& playerbulletshot);
+	void Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlayerBulletShot);
 
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
-
-	/// <summary>
-	/// プレイヤー追尾モード
-	/// </summary>
-	void TrackPlayerMode();
-
-	/// <summary>
-	/// 待機モーション
-	/// </summary>
-	void Motion();
-
-	/// <summary>
-	/// 攻撃モード
-	/// </summary>
-	/// <param name="playerHp">プレイヤーのHp</param>
-	void AttackMode(int& playerHp);
-
-	/// <summary>
-	/// 攻撃
-	/// </summary>
-	/// <param name="playerhp">プレイヤーのHp</param>
-	void Attack(int& playerhp);
-
-	/// <summary>
-	/// 2D→3D座標
-	/// </summary>
-	/// <param name="Set3dPosition">表示したい3D座標の場所</param>
-	XMFLOAT2 WorldtoScreen(const XMVECTOR& set3Dposition);
-
-
-
-	/// <summary>
-	/// ビュー変換
-	/// </summary>
-	void ChangeViewPort(XMMATRIX& matviewport);
-
-public://Getter Setter
-	/// <summary>
-	/// 追尾先のセッター
-	/// </summary>
-	/// <param name="TrackPoint">追尾先</param>
-	void SetTrackPoint(const XMVECTOR& trackpoint) { this->TrackPoint = trackpoint; }
-
-	/// <summary>
-	/// 中心のワールド座標のゲッター
-	/// </summary>
-	/// <returns></returns>
-	const XMVECTOR& GetPosition() { return CenterWorldPos; }
-
-	/// <summary>
-	/// 2D座標のゲッター
-	/// </summary>
-	/// <returns></returns>
-	const XMFLOAT2& Get2DPosition() { return RockOnPos; }
-
-	/// <summary>
-	/// 倒されているか
-	/// </summary>
-	/// <returns></returns>
-	bool IsDead() const { return isDead_; }
-
 private:
 	//Obj
 	//頭
@@ -126,7 +60,6 @@ private:
 	std::unique_ptr<Object3d> Shadow;
 	//中心
 	std::unique_ptr<Object3d> Center;
-
 	//Objパーティクル
 	std::list<std::unique_ptr<ObjParticle>>Obj_Particle;
 
@@ -136,9 +69,6 @@ private:
 	//頭
 	std::unique_ptr<Sprite> RockOnHead;
 
-	//その他
-	//サウンドエフェクト
-	Audio* ClushSe;
 	//カメラ
 	Camera* BringUpCamera;
 
@@ -187,40 +117,6 @@ private:
 	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT2 RockOnHeadPos = { 0.0f,0.0f };
 
-	//2D座標を持たせる計算で使う変数
-	XMVECTOR offset;
-	XMMATRIX MatViewPort;
-
-	//攻撃モードで使用される変数
-	float AttackTime = 0.0f;
-	int AttackChanse = 0;
-	float Rand = 0;
-	bool AttackFase = false;
-
-	//攻撃の準備時間
-	float AttackPreparationTime = 0;
-	bool AttackShakeDown = false;
-	float AttackCharge = 0.0f;
-
-	//移動速度
-	float MoveSpeed = 0.06f;
-
-	//プレイヤーと敵の距離
-	float Length = 3.0f;
-
-	//待機時のモーション変数
-	float MotionTime = 0.0f;
-	bool MotionChange = true;
-
-	//サイドステップ
-	float MovementChangeTime = 0.0f;
-	bool Reversal_F = false;
-	float SideStepSpeed = 0.001f;
-	bool Movement_F = false;
-
-	//Hpが0以上か
-	bool isDead_ = false;
-
 	//敵とプレイヤーの距離
 	float OriginDistance;
 	float OriginHeadDistance;
@@ -231,16 +127,5 @@ private:
 	//敵のモーション用
 	float PursePositiveRot = 180;
 	float PurseNegativeeRot = 0;
-
-	//変形用のフラグ
-	bool Defomation_F = false;
-	float DefomationCount = 0.0f;
-
-	//振動
-	float Vibration=0.0f;
-	bool VibrationChange = false;
-
-	XMVECTOR AttackBeforePos = { 0.0f,0.0f,0.0f };
-	float LimitDistance = 0.0f;
 };
 

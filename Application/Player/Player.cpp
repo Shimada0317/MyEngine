@@ -48,8 +48,8 @@ void Player::Initalize(Camera* camera)
 
 	PartGreen = ParticleManager::Create(camera);
 	PartRed = ParticleManager::Create(camera);
-	Eye_rot.y = 180;
-	RailCam->Update(vel, Eye_rot, camera);
+	EyeRot.y = 180;
+	RailCam->Update(vel, EyeRot, camera);
 
 	ShotSe = new Audio();
 	ShotSe->Initialize();
@@ -77,27 +77,25 @@ void Player::StatusSet(Camera* camera)
 	Gun->SetParent(camera);
 	Gun->SetPosition(GunPos);
 
-
 	GunMat = Gun->GetMatrix();
-	GunWorldPos = { 0.0f,0.0f,1.0f };
 	GunWorldPos = XMVector3Transform(GunPos, GunMat);
 }
 
 //更新処理
-void Player::Update(int& Remaining, Camera* camera,  int paterncount)
+void Player::Update(int& Remaining, Camera* camera, int paterncount)
 {
 	PaternCount = paterncount;
-	
+
 	//マウス座標の取得
-	GunRot.y = (ReticlePos2D.x - WinApp::window_width/2) / 10;
+	GunRot.y = (ReticlePos2D.x - WinApp::window_width / 2) / 10;
 	MouthContoroll();
 	if (MouseStop_F == false) {
-		GunRot.x = (ReticlePos2D.y - WinApp::window_height/2) / 50;
+		GunRot.x = (ReticlePos2D.y - WinApp::window_height / 2) / 50;
 	}
 	else {
 		GunRot.x += 10.0f;
 	}
-	
+
 	if (CameraWork_F == true) {
 		//弾の発射前
 		if (Mouse::GetInstance()->PushClick(0)) {
@@ -106,12 +104,29 @@ void Player::Update(int& Remaining, Camera* camera,  int paterncount)
 				Particle_F = true;
 				BulletShot_F = true;
 				Recoil_F = true;
-				
+				ShakingStart = true;
+				RecoilGun = true;
 			}
 		}
 		else {
 			BulletShot_F = false;
 		}
+
+
+		if (RecoilGun == true) {
+			RecoveryTime += 0.2f;
+			GunPos.m128_f32[2] = -3.5f;
+			if (RecoveryTime >= 1) {
+				GunPos.m128_f32[2] = -3.0f;
+				RecoveryTime = 0.0f;
+				RecoilGun = false;
+			}
+		}
+
+		if (ShakingStart == true) {
+			ScreenShake(0.4f, 0.5f);
+		}
+
 		ParticleEfect();
 		//リロード
 		if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
@@ -149,8 +164,8 @@ void Player::Update(int& Remaining, Camera* camera,  int paterncount)
 	CameraWork();
 
 	StatusSet(camera);
-	
-	RailCam->Update(vel, Eye_rot, camera);
+
+	RailCam->Update(vel, EyeRot, camera);
 
 	Body->Update();
 	Gun->Update();
@@ -170,7 +185,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 //スプライト描画
 void Player::SpriteDraw()
 {
-	if (CameraWork_F == true&&MouseStop_F==false) {
+	if (CameraWork_F == true && MouseStop_F == false) {
 		SpriteReticle->Draw();
 	}
 	else {
@@ -184,25 +199,25 @@ void Player::SpriteDraw()
 void Player::CameraWork()
 {
 	if (CameraWork_F == false && Start_F == false) {
-	
+
 		if (stanby == false) {
-			Eye_rot.y = 180;
+			EyeRot.y = 180;
 		}
 		else if (stanby == true && ActionCount == 0) {
-			Action::GetInstance()->EaseOut(Eye_rot.y, -5.0f);
+			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
 			//後ろを向く
-			if (Eye_rot.y <= 0) {
-				Eye_rot.y = 0;
+			if (EyeRot.y <= 0) {
+				EyeRot.y = 0;
 				ActionTimer += 0.2f;
 				if (ActionTimer > 5) {
 					ActionTimer = 5.0f;
-					Action::GetInstance()->EaseOut(Eye_rot.x, 95.0f);
+					Action::GetInstance()->EaseOut(EyeRot.x, 95.0f);
 				}
 			}
 			//下を向く
-			if (Eye_rot.x >= 90) {
+			if (EyeRot.x >= 90) {
 				ActionTimer = 0.0f;
-				Eye_rot.x = 90;
+				EyeRot.x = 90;
 				ActionCount = 1;
 			}
 		}
@@ -212,10 +227,10 @@ void Player::CameraWork()
 			vel = { 0.0f,0.67f,0.4f };
 			if (ActionTimer >= 5) {
 				vel = { 0.0f,-0.6f,0.0f };
-				Action::GetInstance()->EaseOut(Eye_rot.x, -5.0f);
+				Action::GetInstance()->EaseOut(EyeRot.x, -5.0f);
 			}
-			if (Eye_rot.x <= 0.0f) {
-				Eye_rot.x = 0.0f;
+			if (EyeRot.x <= 0.0f) {
+				EyeRot.x = 0.0f;
 			}
 			if (BodyWorldPos.m128_f32[1] <= 0.3f) {
 				vel = { 0.0f,0.0f,0.0f };
@@ -229,11 +244,11 @@ void Player::CameraWork()
 	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanby == true && CameraWork_F == false) {
 		MovieFlag = true;
 		ActionCount = 100;
-		Eye_rot.x = 0;
-		Eye_rot.y = 0;
+		EyeRot.x = 0;
+		EyeRot.y = 0;
 		vel = { 0.0f,0.0f,0.0f };
 		ReticlePos = { 0.0f,-0.7f,13.0f };
-		RailCam->MatrixIdentity(ReticlePos, Eye_rot);
+		RailCam->MatrixIdentity(ReticlePos, EyeRot);
 	}
 
 	if (stanby == false) {
@@ -303,14 +318,14 @@ void Player::PlayerMove(bool& move, int patern)
 		MoveSpeed = 0.5f;
 		if (ShakeHead_F == true) {
 			if (shake == 0) {
-				Eye_rot.x += 0.05f;
-				if (Eye_rot.x >= 0.5f) {
+				EyeRot.x += 0.05f;
+				if (EyeRot.x >= 0.5f) {
 					shake = 1;
 				}
 			}
 			if (shake == 1) {
-				Eye_rot.x -= 0.05f;
-				if (Eye_rot.x <= -0.5f) {
+				EyeRot.x -= 0.05f;
+				if (EyeRot.x <= -0.5f) {
 					shake = 0;
 				}
 			}
@@ -324,6 +339,7 @@ void Player::PlayerMove(bool& move, int patern)
 				WaveCount += 1;
 				MoveTimer = 0.0f;
 				Finish = true;
+				EyeRot.x = 0;
 			}
 			else {
 				Distance = 11;
@@ -345,9 +361,9 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 		else if (patern == 2) {
 			EnemyCount = 4;
-			Action::GetInstance()->EaseOut(Eye_rot.y, 95.0f);
-			if (Eye_rot.y >= 90) {
-				Eye_rot.y = 90;
+			Action::GetInstance()->EaseOut(EyeRot.y, 95.0f);
+			if (EyeRot.y >= 90) {
+				EyeRot.y = 90;
 				ChangeRot = -90;
 				vel = { 0, 0, MoveSpeed };
 			}
@@ -379,10 +395,10 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 		else if (patern == 4) {
 			EnemyCount = 5;
-			Action::GetInstance()->EaseOut(Eye_rot.y, -5.0f);
-			if (Eye_rot.y <= 0) {
+			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
+			if (EyeRot.y <= 0) {
 				ChangeRot = 0;
-				Eye_rot.y = 0;
+				EyeRot.y = 0;
 				vel = { 0, 0, MoveSpeed };
 			}
 			if (camvec.m128_f32[2] >= 70) {
@@ -397,9 +413,9 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 		else if (patern == 5) {
-			Eye_rot.y -= 3;
-			if (Eye_rot.y <= 0) {
-				Eye_rot.y = 0;
+			EyeRot.y -= 3;
+			if (EyeRot.y <= 0) {
+				EyeRot.y = 0;
 				vel = { 0, 0, MoveSpeed };
 			}
 			if (camvec.m128_f32[2] >= 90) {
@@ -538,6 +554,31 @@ void Player::MouthContoroll()
 	else {
 		//取得した座標をレティクルにセット
 		SpriteReticle->SetPosition(ReticlePos2D);
+	}
+}
+
+void Player::ScreenShake(float shakevalue, float shakingtime)
+{
+	if (ShakeLimitTime <= 1) {
+		ShakeLimitTime += shakingtime;
+		if (ShakingScreen_F == true) {
+			ShakingScreenValue -= shakevalue;
+			if (ShakingScreenValue <= -shakevalue) {
+				ShakingScreen_F = false;
+			}
+		}
+		else {
+			ShakingScreenValue += shakevalue;
+			if (ShakingScreenValue >= shakevalue) {
+				ShakingScreen_F = true;
+			}
+		}
+		EyeRot.x += ShakingScreenValue;
+	}
+	else {
+		ShakeLimitTime = 0;
+		ShakingStart = false;
+		EyeRot.x = 0;
 	}
 }
 

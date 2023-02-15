@@ -2,6 +2,8 @@
 #include"Action.h"
 #include<random>
 
+using namespace DirectX;
+
 const int HeadDamage = 40;
 const int BodyDamage = 35;
 const float Subtraction = 0.05f;
@@ -30,14 +32,14 @@ Enemy::~Enemy()
 }
 
 //初期化処理
-void Enemy::Initialize(const XMFLOAT3& all_Rot, const XMVECTOR& all_Pos, Camera* came, const bool& movement)
+void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const bool& movement)
 {
-	HeadPartRot = all_Rot;
-	BodyPartRot = all_Rot;
-	ArmsPartRot = all_Rot;
+	HeadPartRot = allrot;
+	BodyPartRot = allrot;
+	ArmsPartRot = allrot;
 
-	AllPos = all_Pos;
-	camera = came;
+	AllPos = allpos;
+	BringUpCamera = camera;
 
 	PursePositiveRot += HeadPartRot.y;
 	PurseNegativeeRot += HeadPartRot.y;
@@ -149,7 +151,7 @@ void Enemy::AllUpdate()
 }
 
 //更新処理
-void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBulletShot)
+void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbulletshot)
 {
 
 
@@ -158,11 +160,11 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 
 		});
 
-	if (PlyerBulletShot == true && Hp > 0) {
-		if (Player2DPos.x - Distance < RockOnPos.x && Player2DPos.x + Distance > RockOnPos.x &&
-			Player2DPos.y - Distance<RockOnPos.y && Player2DPos.y + Distance>RockOnPos.y) {
+	if (plyerbulletshot == true && Hp > 0) {
+		if (player2Dpos.x - Distance < RockOnPos.x && player2Dpos.x + Distance > RockOnPos.x &&
+			player2Dpos.y - Distance<RockOnPos.y && player2Dpos.y + Distance>RockOnPos.y) {
 			Hp -= BodyDamage;
-			PlyerBulletShot = false;
+			plyerbulletshot = false;
 			for (int i = 0; i < 5; i++) {
 				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 				newparticle->Initialize(1, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
@@ -170,10 +172,10 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 			}
 		}
 
-		if (Player2DPos.x - HeadDistance < RockOnHeadPos.x && Player2DPos.x + HeadDistance > RockOnHeadPos.x &&
-			Player2DPos.y - HeadDistance<RockOnHeadPos.y && Player2DPos.y + HeadDistance>RockOnHeadPos.y) {
+		if (player2Dpos.x - HeadDistance < RockOnHeadPos.x && player2Dpos.x + HeadDistance > RockOnHeadPos.x &&
+			player2Dpos.y - HeadDistance<RockOnHeadPos.y && player2Dpos.y + HeadDistance>RockOnHeadPos.y) {
 			Hp -= HeadDamage;
-			PlyerBulletShot = false;
+			plyerbulletshot = false;
 			for (int i = 0; i < 5; i++) {
 				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 				newparticle->Initialize(1, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
@@ -196,7 +198,7 @@ void Enemy::Update(const XMFLOAT2& Player2DPos, int& PlayerHp, bool& PlyerBullet
 		else if (Length <= 1.5f) {
 			Motion();
 			Movement_F = false;
-			AttackMode(PlayerHp);
+			AttackMode(playerhp);
 		}
 	}
 	else {
@@ -329,7 +331,7 @@ void Enemy::Motion()
 }
 
 //攻撃モードの時
-void Enemy::AttackMode(int& playerHp)
+void Enemy::AttackMode(int& playerhp)
 {
 	//除算結果の値
 	int divisionvalue = 0;
@@ -358,7 +360,7 @@ void Enemy::AttackMode(int& playerHp)
 		if (HeadPartRot.y >= PursePositiveRot) {
 			HeadPartRot.y = PursePositiveRot;
 		}
-		Attack(playerHp);
+		Attack(playerhp);
 	}
 	else {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PurseNegativeeRot - 1);
@@ -400,7 +402,7 @@ void Enemy::Attack(int& playerhp)
 				}
 			}
 			//体の震え
-			HeadPartRot.y + -Vibration;
+			HeadPartRot.y += Vibration;
 			BodyPartRot.y += Vibration;
 			ArmsPartRot.y += Vibration;
 			AttackCharge += 0.1f;
@@ -424,7 +426,7 @@ void Enemy::Attack(int& playerhp)
 }
 
 //3D座標から2D座標を取得する
-XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& Set3dPosition)
+XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 {
 	Center->SetRotation(CenterRot);
 	CenterMat = Center->GetMatrix();
@@ -433,14 +435,14 @@ XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& Set3dPosition)
 	offset = XMVector3TransformNormal(offset, CenterMat);
 	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
 
-	XMVECTOR PositionRet = Set3dPosition;
+	XMVECTOR PositionRet = set3Dposition;
 
 	ChangeViewPort(MatViewPort);
 
 	XMMATRIX MatVP = MatViewPort;
 
-	XMMATRIX View = camera->GetViewMatrix();
-	XMMATRIX Pro = camera->GetProjectionMatrix();
+	XMMATRIX View = BringUpCamera->GetViewMatrix();
+	XMMATRIX Pro = BringUpCamera->GetProjectionMatrix();
 
 	XMMATRIX MatViewProjectionViewport = View * Pro * MatVP;
 
@@ -454,25 +456,25 @@ XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& Set3dPosition)
 }
 
 //ビュー変換
-void Enemy::ChangeViewPort(XMMATRIX& matViewPort)
+void Enemy::ChangeViewPort(XMMATRIX& matviewport)
 {
-	matViewPort.r[0].m128_f32[0] = WinApp::window_width / 2;
-	matViewPort.r[0].m128_f32[1] = 0;
-	matViewPort.r[0].m128_f32[2] = 0;
-	matViewPort.r[0].m128_f32[3] = 0;
-
-	matViewPort.r[1].m128_f32[0] = 0;
-	matViewPort.r[1].m128_f32[1] = -(WinApp::window_height / 2);
-	matViewPort.r[1].m128_f32[2] = 0;
-	matViewPort.r[1].m128_f32[3] = 0;
-
-	matViewPort.r[2].m128_f32[0] = 0;
-	matViewPort.r[2].m128_f32[1] = 0;
-	matViewPort.r[2].m128_f32[2] = 1;
-	matViewPort.r[2].m128_f32[3] = 0;
-
-	matViewPort.r[3].m128_f32[0] = WinApp::window_width / 2 + offset.m128_f32[0];
-	matViewPort.r[3].m128_f32[1] = WinApp::window_height / 2 + offset.m128_f32[1];
-	matViewPort.r[3].m128_f32[2] = 0;
-	matViewPort.r[3].m128_f32[3] = 1;
+	matviewport.r[0].m128_f32[0] = WinApp::window_width / 2;
+	matviewport.r[0].m128_f32[1] = 0;
+	matviewport.r[0].m128_f32[2] = 0;
+	matviewport.r[0].m128_f32[3] = 0;
+	   
+	matviewport.r[1].m128_f32[0] = 0;
+	matviewport.r[1].m128_f32[1] = -(WinApp::window_height / 2);
+	matviewport.r[1].m128_f32[2] = 0;
+	matviewport.r[1].m128_f32[3] = 0;
+	   
+	matviewport.r[2].m128_f32[0] = 0;
+	matviewport.r[2].m128_f32[1] = 0;
+	matviewport.r[2].m128_f32[2] = 1;
+	matviewport.r[2].m128_f32[3] = 0;
+	   
+	matviewport.r[3].m128_f32[0] = WinApp::window_width / 2 + offset.m128_f32[0];
+	matviewport.r[3].m128_f32[1] = WinApp::window_height / 2 + offset.m128_f32[1];
+	matviewport.r[3].m128_f32[2] = 0;
+	matviewport.r[3].m128_f32[3] = 1;
 }
