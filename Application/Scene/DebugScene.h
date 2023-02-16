@@ -57,6 +57,7 @@ private:
 
 	//球体のステータス
 	XMVECTOR SpherePos = { 0,0,0 };
+	XMVECTOR SphereWPos = { 0,0,0 };
 	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
 	XMFLOAT3 SphereRot = { 0,0,0 };
 	//フィールドのステータス

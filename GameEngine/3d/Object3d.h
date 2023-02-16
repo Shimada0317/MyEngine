@@ -160,6 +160,8 @@ public: // メンバ関数
 
 	const XMMATRIX& GetMatrix() { return matWorld; }
 
+	const XMMATRIX& GetNotParentWorld(){return WorldMatrix;}
+
 	void SetMatrixR(const XMMATRIX& matrot) { this->matRot = matrot; }
 
 	const XMMATRIX& GetMatrixR() { return matRot; }
@@ -195,6 +197,8 @@ private: // メンバ変数
 	XMVECTOR position = { 0,0,0 };
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
+	
+	XMMATRIX WorldMatrix;
 	// 親オブジェクト
 	Object3d* parent = nullptr;
 	//カメラ親オブジェクト

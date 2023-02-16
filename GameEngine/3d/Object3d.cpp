@@ -279,6 +279,11 @@ void Object3d::Update(const XMFLOAT4 color)
 	matWorld *= matRot; // ワールド行列に回転を反映
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
+	WorldMatrix = XMMatrixIdentity();
+	WorldMatrix *= matScale;
+	WorldMatrix *= matRot;
+	WorldMatrix *= matTrans;
+
 	//if (isBillboard) {
 	//const XMMATRIX& matBillboard = camera->GetBillboardMatrix();
 

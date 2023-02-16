@@ -31,8 +31,12 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 void DebugScene::SetPosSclRot()
 {
 
+	XMMATRIX matWorld = Sphere->GetMatrix();
+
+	SphereWPos = XMVector3TransformNormal(SpherePos, matWorld);
+
 	Sphere->SetScale(SphereScl);
-	Sphere->SetPosition(SpherePos);
+	Sphere->SetPosition(SphereWPos);
 	Sphere->SetRotation(SphereRot);
 
 	Ground->SetScale(GroundScl);
@@ -51,6 +55,11 @@ void DebugScene::SetPosSclRot()
 
 void DebugScene::Update()
 {
+	if (Input::GetInstance()->TriggerKey(DIK_A)) {
+		SphereRot.y += 10;
+	}
+
+	Action::GetInstance()->PlayerMove3d(SpherePos);
 	SetPosSclRot();
 	tex->Update();
 	Sphere->Update();

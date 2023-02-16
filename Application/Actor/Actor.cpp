@@ -247,8 +247,8 @@ void Actor::ImGuiDraw()
 
 	/*for (std::unique_ptr<Enemy>& robot : Robot) {
 		robot->ImgDraw();
-	}
-	player->ImGuiDraw();*/
+	}*/
+	player->ImGuiDraw();
 	//float a = patern;
 	//ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	//ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));

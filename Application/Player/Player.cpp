@@ -71,14 +71,20 @@ void Player::StatusSet(Camera* camera)
 	Body->SetPosition(BodyPos);
 	Body->SetScale(BodyScl);
 	Body->SetParent(camera);
+	
+
+	//GunNotParentPos.m128_f32[2] = -1.0f;
+	GunMat = Gun->GetMatrix();
+	GunWorldPos = XMVector3Transform(GunPos, GunMat);
 
 	Gun->SetRotation(GunRot);
 	Gun->SetScale(GunScl);
 	Gun->SetParent(camera);
-	Gun->SetPosition(GunPos);
+	XMMATRIX GunNotParentMatrix = Gun->GetNotParentWorld();
 
-	GunMat = Gun->GetMatrix();
-	GunWorldPos = XMVector3Transform(GunPos, GunMat);
+	GunNotParentPos = XMVector3TransformNormal(GunPos, GunNotParentMatrix);
+	Gun->SetPosition(GunNotParentPos);
+	
 }
 
 //XVˆ—
@@ -93,7 +99,7 @@ void Player::Update(int& Remaining, Camera* camera, int paterncount)
 		GunRot.x = (ReticlePos2D.y - WinApp::window_height / 2) / 50;
 	}
 	else {
-		GunRot.x += 10.0f;
+		//GunRot.x += 10.0f;
 	}
 
 	if (CameraWork_F == true) {
@@ -115,16 +121,16 @@ void Player::Update(int& Remaining, Camera* camera, int paterncount)
 
 		if (RecoilGun == true) {
 			RecoveryTime += 0.2f;
-			GunPos.m128_f32[2] = -3.5f;
+			GunPos.m128_f32[2] = -12.5f;
 			if (RecoveryTime >= 1) {
-				GunPos.m128_f32[2] = -3.0f;
+				GunPos.m128_f32[2] = -12.0f;
 				RecoveryTime = 0.0f;
 				RecoilGun = false;
 			}
 		}
 
 		if (ShakingStart == true) {
-			ScreenShake(0.4f, 0.5f);
+			ScreenShake(0.6f, 0.2f);
 		}
 
 		ParticleEfect();
@@ -503,9 +509,9 @@ void Player::ImGuiDraw()
 	}
 
 	if (ImGui::TreeNode("gunWorldpos")) {
-		ImGui::SliderFloat("gunWordpos.x", &GunWorldPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.y", &GunWorldPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.z", &GunWorldPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.x", &GunNotParentPos.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.y", &GunNotParentPos.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.z", &GunNotParentPos.m128_f32[2], -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
@@ -600,9 +606,9 @@ void Player::ParticleEfect()
 				pos.z = GunWorldPos.m128_f32[2] - 2.8f * cosradX;
 			}
 			else if (PaternCount == 0 || PaternCount == 1 || PaternCount == 2 || PaternCount == 5) {
-				pos.x = GunWorldPos.m128_f32[0] + sinradX * 2.8f;
+				pos.x = GunWorldPos.m128_f32[0] + sinradX * 3.5f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 3;
-				pos.z = GunWorldPos.m128_f32[2] + 2.3f;
+				pos.z = GunWorldPos.m128_f32[2] + 5.0f;
 			}
 
 			const float rnd_vel = 0.001f;
