@@ -378,7 +378,7 @@ void Enemy::Attack(int& playerhp)
 	float gigantic = 0.00002f;
 	float discoloration = 0.01f;
 	if (AttackShakeDown == false) {
-		ArmsPartRot.x += 0.4f;
+		ArmsPartRot.x += 1.5f;
 		ArmsPartScl.x += gigantic;
 		ArmsPartScl.y += gigantic;
 		ArmsPartScl.z += gigantic;

@@ -132,7 +132,7 @@ private:
 		XMFLOAT3 ReticleRot = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 ReticleScl = { 0.3f,0.3f,0.3f };
 		//発射台Objのステータス
-		XMVECTOR GunPos = { 0.0f,1.0f,-12.0f };
+		XMVECTOR GunPos = { 0.0f,0.0f,-12.0f };
 		XMVECTOR GunNotParentPos = { 0.0f,0.0f,-10.0f };
 		XMFLOAT3 GunRot = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 GunScl={0.3f,0.3f,0.3f};

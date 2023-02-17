@@ -36,10 +36,13 @@ void Actor::Initialize()
 	//スプライトの読み込み
 	for (int i = 0; i < 9; i++) {
 		Sprite::LoadTexture(i, L"Resources/bullet.png");
-		bulletHUD[i] = Sprite::SpriteCreate(i, { 10.0f,10.0f });
+		SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
+		SpriteRot[i] = 0;
+		bulletHUD[i] = Sprite::SpriteCreate(i, SpritePos[i], {1.0f,1.0f,1.0f,1.0f},AnchorPoint);
+		DropBullet[i] = false;
 	}
 
-	Reload = Sprite::SpriteCreate(10, ReloadSpritePos, ReloadSpriteColor,AnchorPoint);
+	Reload = Sprite::SpriteCreate(10, ReloadSpritePos, ReloadSpriteColor, AnchorPoint);
 	Wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
 	Slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
 	MaxCount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
@@ -58,6 +61,7 @@ void Actor::Initialize()
 
 	PlayerHp = player->GetHp();
 	GetCamWork_F = player->GetCamWork();
+	OldRemaining = Remaining;
 
 	heriFry = new Audio();
 	heriFry->Initialize();
@@ -66,11 +70,23 @@ void Actor::Initialize()
 
 void Actor::SetPSR()
 {
+	if (OldRemaining < Remaining) {
+		DropBullet[OldRemaining] = true;
+		OldRemaining = Remaining;
+	}
+
+	for (int i = 0; i < 8; i++) {
+		if (DropBullet[i] == true) {
+			SpritePos[i].y += 10;
+			SpriteRot[i] += 40;
+		}
+	}
 
 	//HUDのポジションセット
 	for (int i = 0; i < 9; i++) {
 		bulletHUD[i]->SetSize({ SpriteSiz });
-		bulletHUD[i]->SetPosition({ SpritePos.x,SpritePos.y + 32 * i });
+		bulletHUD[i]->SetPosition(SpritePos[i]);
+		bulletHUD[i]->SetRotation(SpriteRot[i]);
 	}
 	//リロードの文字
 	Reload->SetSize(ReloadSpriteSize);
@@ -97,7 +113,7 @@ void Actor::SetPSR()
 
 	heri->SetPosition(Heripos);
 	heri->SetScale(Heriscl);
-	heri->SetRotation({0.0f,180.0f,0.0f});
+	heri->SetRotation({ 0.0f,180.0f,0.0f });
 
 	hane->SetRotation({ 0.0f,HeriY,0.0f });
 	if (StartMovie == false) {
@@ -151,7 +167,7 @@ void Actor::Update()
 			player->SetFinish(finish);
 		}
 	}
-	
+
 	if (patern >= 5) {
 		HeriY += 15.0f;
 	}
@@ -173,7 +189,7 @@ void Actor::Update()
 	//座標の設定
 	SetPSR();
 	//プレイヤーの更新処理
-	player->Update(Remaining,camera,patern);
+	player->Update(Remaining, camera, patern);
 	if (Remaining >= 8) {
 		if (Revers == false) {
 			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 210);
@@ -193,7 +209,7 @@ void Actor::Update()
 	else {
 		ReloadSpriteColor.w = 1.0f;
 	}
-	camera->RecalculationMatrix();	
+	camera->RecalculationMatrix();
 }
 
 void Actor::Draw(DirectXCommon* dxCommon)
@@ -215,8 +231,10 @@ void Actor::Draw(DirectXCommon* dxCommon)
 void Actor::SpriteDraw()
 {
 	if (GetCamWork_F == true) {
-		for (int i = Remaining; i < 8; i++) {
-			bulletHUD[i]->Draw();
+		for (int i = 0; i < 8; i++) {
+			if (Remaining <= 8) {
+				bulletHUD[i]->Draw();
+			}
 		}
 		if (Remaining == 8) {
 			Reload->Draw(ReloadSpriteColor);
@@ -272,7 +290,7 @@ void Actor::ImGuiDraw()
 }
 
 
-	
+
 void Actor::LoadEnemyPopData()
 {
 	std::ifstream file;
@@ -411,7 +429,7 @@ void Actor::UpdataEnemyPopCommands()
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
-				newRobot->Initialize(ROTATION,POSITION,camera, step);
+				newRobot->Initialize(ROTATION, POSITION, camera, step);
 				newRobot->SetTrackPoint(TRACK);
 				Robot.push_back(std::move(newRobot));
 

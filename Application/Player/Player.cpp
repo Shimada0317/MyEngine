@@ -75,7 +75,7 @@ void Player::StatusSet(Camera* camera)
 
 	//GunNotParentPos.m128_f32[2] = -1.0f;
 	GunMat = Gun->GetMatrix();
-	GunWorldPos = XMVector3Transform(GunPos, GunMat);
+	GunWorldPos = XMVector3TransformNormal(GunPos, GunMat);
 
 	Gun->SetRotation(GunRot);
 	Gun->SetScale(GunScl);
@@ -99,7 +99,7 @@ void Player::Update(int& Remaining, Camera* camera, int paterncount)
 		GunRot.x = (ReticlePos2D.y - WinApp::window_height / 2) / 50;
 	}
 	else {
-		//GunRot.x += 10.0f;
+		GunRot.x += 10.0f;
 	}
 
 	if (CameraWork_F == true) {

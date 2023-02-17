@@ -75,7 +75,9 @@ private:
 	float HeriX = 3.1f;
 
 	XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
-	XMFLOAT2 SpritePos = { 1200.0f,0.0f };
+	XMFLOAT2 SpritePos[9];
+	bool DropBullet[9];
+	float SpriteRot[9];
 
 	int patern = 0;
 	bool count = false;
@@ -94,6 +96,7 @@ private:
 	int PlayerHp;
 
 	int Remaining = 0;
+	int OldRemaining = 0;
 
 	bool StartMovie = false;
 
