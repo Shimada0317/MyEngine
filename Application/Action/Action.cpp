@@ -88,6 +88,11 @@ void Action::Flash(float& color, float transparent)
 	color -= transparent;
 }
 
+void Action::ThrowUp(float gravity, float time, float upper, float& position)
+{
+	position += gravity * time - upper;
+}
+
 DirectX::XMFLOAT3 Action::ConvertToXMFLOAT3(float SourceValue)
 {
 	XMFLOAT3 ConvertValue;

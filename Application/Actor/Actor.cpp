@@ -38,6 +38,7 @@ void Actor::Initialize()
 		Sprite::LoadTexture(i, L"Resources/bullet.png");
 		SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
 		SpriteRot[i] = 0;
+		Time[i] = 0;
 		bulletHUD[i] = Sprite::SpriteCreate(i, SpritePos[i], {1.0f,1.0f,1.0f,1.0f},AnchorPoint);
 		DropBullet[i] = false;
 	}
@@ -76,9 +77,14 @@ void Actor::SetPSR()
 	}
 
 	for (int i = 0; i < 8; i++) {
-		if (DropBullet[i] == true) {
+		if (DropBullet[i] == true&&SpritePos[i].y <= 1300) {
 			SpritePos[i].y += 10;
-			SpriteRot[i] += 40;
+			Time[i] += 0.5f;
+			Action::GetInstance()->ThrowUp(Gravity,Time[i], 40, SpritePos[i].y);
+			SpriteRot[i] += 80;
+		}
+		else if (SpritePos[i].y > 1300) {
+			Time[i] = 0;
 		}
 	}
 
@@ -132,6 +138,8 @@ void Actor::SetPSR()
 	heri->Update({ 0.7f,0.7f,0.6f,1.0f });
 	Goal->Update({ 0.7f,0.7f,0.6f,1.0f });
 	hane->Update({ 0.0f,0.0f,0.0f,1.0f });
+
+	Reload_F = player->GetReload();
 }
 
 void Actor::Update()
@@ -206,9 +214,16 @@ void Actor::Update()
 			}
 		}
 	}
-	else {
-		ReloadSpriteColor.w = 1.0f;
+	else if (Remaining == 0) {
+		for (int i = 0; i < 9; i++) {
+			SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
+			SpriteRot[i] = 0;
+			Time[i] = 0;
+			DropBullet[i] = false;
+			OldRemaining = Remaining;
+		}
 	}
+
 	camera->RecalculationMatrix();
 }
 
@@ -232,11 +247,11 @@ void Actor::SpriteDraw()
 {
 	if (GetCamWork_F == true) {
 		for (int i = 0; i < 8; i++) {
-			if (Remaining <= 8) {
+			if (Remaining <= 8&&Reload_F==false) {
 				bulletHUD[i]->Draw();
 			}
 		}
-		if (Remaining == 8) {
+		if (Remaining >= 8) {
 			Reload->Draw(ReloadSpriteColor);
 		}
 

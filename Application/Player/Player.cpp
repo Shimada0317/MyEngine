@@ -102,15 +102,21 @@ void Player::Update(int& Remaining, Camera* camera, int paterncount)
 		GunRot.x += 10.0f;
 	}
 
+	//カメラが動いていないとき
 	if (CameraWork_F == true) {
 		//弾の発射前
 		if (Mouse::GetInstance()->PushClick(0)) {
 			if (Remaining < ReaminingBullet && ReloadFlag == false && BulletShot_F == false) {
 				Remaining += 1;
+				//パーティクル発生フラグ
 				Particle_F = true;
+				//弾の発射フラグ
 				BulletShot_F = true;
+				//2Dスプライトリコイルフラグ
 				Recoil_F = true;
+				//画面揺れのフラグ
 				ShakingStart = true;
+				//銃オブジェクトリコイルフラグ
 				RecoilGun = true;
 			}
 		}

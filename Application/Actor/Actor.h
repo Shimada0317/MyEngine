@@ -78,6 +78,8 @@ private:
 	XMFLOAT2 SpritePos[9];
 	bool DropBullet[9];
 	float SpriteRot[9];
+	float Gravity = 9.8f;
+	float Time[9];
 
 	int patern = 0;
 	bool count = false;
@@ -103,6 +105,8 @@ private:
 	bool finish = false;
 
 	bool GetCamWork_F = false;
+
+	bool Reload_F = false;
 
 	Camera* camera;
 

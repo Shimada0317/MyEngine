@@ -73,6 +73,15 @@ public:
 	void Flash(float& color,float transparent);
 
 	/// <summary>
+	/// 投げ上げ
+	/// </summary>
+	/// <param name="gravity">重力</param>
+	/// <param name="time">時間</param>
+	/// <param name="upper">投げ上げる値</param>
+	/// <param name="position">現在地</param>
+	void ThrowUp(float gravity, float time, float upper, float& position);
+
+	/// <summary>
 	/// XMFLOAT3の全要素に同じ値を加算する
 	/// </summary>
 	/// <param name="value">加算される値</param>

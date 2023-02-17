@@ -91,6 +91,9 @@ public:
 	const bool& GetCamWork() { return CameraWork_F; }
 
 	const bool& GetFring() { return Fring_F; }
+
+	const bool& GetReload() { return ReloadFlag; }
+
 	//Hp
 	int GetHp() { return Hp; }
 
