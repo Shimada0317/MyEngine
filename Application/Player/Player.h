@@ -26,6 +26,10 @@ public:
 	/// <param name="came"></param>
 	void StatusSet(Camera* camera);
 	/// <summary>
+	///　オブジェクト等の更新処理
+	/// </summary>
+	void AllUpdate(Camera* camera);
+	/// <summary>
 	/// 更新処理
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
@@ -34,8 +38,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(int& Remaining, Camera* camera,int patern);
-
+	void Update(Camera* camera,int patern);
 	/// <summary>
 	/// パーティクルの描画
 	/// </summary>
@@ -55,13 +58,22 @@ public:
 	/// <param name="move"></param>
 	/// <param name="patern">フェイズ番号</param>
 	void PlayerMove(bool& move,int patern);
-	//Objの描画
+	/// <summary>
+	/// Objの描画
+	/// </summary>
 	void ObjDraw();
-	//Imguiの描画
+	/// <summary>
+	/// Imguiの描画
+	/// </summary>
 	void ImGuiDraw();
-	//ビューポート行列の計算
+	/// <summary>
+	/// ビューポート行列の計算
+	/// </summary>
+	/// <param name="Track_Mat">追尾用の行列</param>
 	void ChangeViewPort(XMMATRIX& Track_Mat);
-	//SE呼び出し
+	/// <summary>
+	/// SE呼び出し
+	/// </summary>
 	void SoundEffect();
 	/// <summary>
 	/// マウスの取得
@@ -72,7 +84,16 @@ public:
 	/// </summary>
 	/// <param name="limitshakevalue">シェイクする値</param>
 	void ScreenShake(float shakevalue,float shakingtime);
-	//パーティクル発生
+	
+	void DamageProcess();
+
+	void GunShotProcess();
+
+	void ReloadProcess();
+
+	/// <summary>
+	/// パーティクル発生
+	/// </summary>
 	void ParticleEfect();
 
 #pragma region Get
@@ -91,8 +112,6 @@ public:
 	const bool& GetCamWork() { return CameraWork_F; }
 
 	const bool& GetFring() { return Fring_F; }
-
-	const bool& GetReload() { return ReloadFlag; }
 
 	//Hp
 	int GetHp() { return Hp; }
@@ -122,6 +141,8 @@ private:
 	std::unique_ptr<Sprite> CurtainDown;
 	std::unique_ptr<Sprite> Window;
 	std::unique_ptr<Sprite> Skip;
+	std::unique_ptr<Sprite> bulletHUD[9];
+	std::unique_ptr<Sprite> Reload;
 	//発砲時のエフェクト
 	ParticleManager* PartGreen = nullptr;
 	ParticleManager* PartRed = nullptr;
@@ -184,12 +205,13 @@ private:
 
 	bool Particle_F = false;
 	int Hp = 5;
+	int OldHp = 0;
 	//Reload
 	bool ReloadFlag = false;
 	int ReloadTime = 0;
 	int Anser = 0;
 	//移動
-	XMVECTOR vel;
+	XMVECTOR Velocity;
 	bool Move_F = false;
 	//弾の速度
 	float MoveSpeed=0;
@@ -199,6 +221,7 @@ private:
 
 	//cam
 	int shake = 0;
+	float ShakingValue = 0.0f;
 
 	bool Finish = false;
 
@@ -245,5 +268,24 @@ private:
 	XMVECTOR OldPos;
 	bool RecoilGun = false;
 	float RecoveryTime = 0.0f;
+	//持ってきたもの
+	int Remaining = 0;
+	int OldRemaining = 0;
+
+	XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
+	XMFLOAT2 SpritePos[9];
+	bool DropBullet[9];
+	float SpriteRot[9];
+	float Gravity = 9.8f;
+	float Time[9];
+
+
+	//Spriteのステータス
+	XMFLOAT4 ReloadSpriteColor = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT2 AnchorPoint = { 0.5f,0.5f };
+	XMFLOAT2 ReloadSpritePos = { 1070,310 };
+	XMFLOAT2 ReloadSpriteSize = { 160,90 };
+
+	bool Revers = false;
 };
 

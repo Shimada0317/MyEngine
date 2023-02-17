@@ -7,7 +7,6 @@
 Actor::~Actor()
 {
 	player.reset();
-	delete Reload;
 	delete Wave;
 	delete Slash;
 	delete HpBer;
@@ -19,7 +18,7 @@ Actor::~Actor()
 
 void Actor::Initialize()
 {
-	Sprite::LoadTexture(10, L"Resources/Reload.png");
+	
 	Sprite::LoadTexture(13, L"Resources/one.png");
 	Sprite::LoadTexture(14, L"Resources/two.png");
 	Sprite::LoadTexture(15, L"Resources/three.png");
@@ -33,17 +32,9 @@ void Actor::Initialize()
 	player->Initalize(camera);
 	camera->RecalculationMatrix();
 
-	//スプライトの読み込み
-	for (int i = 0; i < 9; i++) {
-		Sprite::LoadTexture(i, L"Resources/bullet.png");
-		SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
-		SpriteRot[i] = 0;
-		Time[i] = 0;
-		bulletHUD[i] = Sprite::SpriteCreate(i, SpritePos[i], {1.0f,1.0f,1.0f,1.0f},AnchorPoint);
-		DropBullet[i] = false;
-	}
 
-	Reload = Sprite::SpriteCreate(10, ReloadSpritePos, ReloadSpriteColor, AnchorPoint);
+
+	
 	Wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
 	Slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
 	MaxCount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
@@ -62,7 +53,7 @@ void Actor::Initialize()
 
 	PlayerHp = player->GetHp();
 	GetCamWork_F = player->GetCamWork();
-	OldRemaining = Remaining;
+	
 
 	heriFry = new Audio();
 	heriFry->Initialize();
@@ -71,31 +62,7 @@ void Actor::Initialize()
 
 void Actor::SetPSR()
 {
-	if (OldRemaining < Remaining) {
-		DropBullet[OldRemaining] = true;
-		OldRemaining = Remaining;
-	}
 
-	for (int i = 0; i < 8; i++) {
-		if (DropBullet[i] == true&&SpritePos[i].y <= 1300) {
-			SpritePos[i].y += 10;
-			Time[i] += 0.5f;
-			Action::GetInstance()->ThrowUp(Gravity,Time[i], 40, SpritePos[i].y);
-			SpriteRot[i] += 80;
-		}
-		else if (SpritePos[i].y > 1300) {
-			Time[i] = 0;
-		}
-	}
-
-	//HUDのポジションセット
-	for (int i = 0; i < 9; i++) {
-		bulletHUD[i]->SetSize({ SpriteSiz });
-		bulletHUD[i]->SetPosition(SpritePos[i]);
-		bulletHUD[i]->SetRotation(SpriteRot[i]);
-	}
-	//リロードの文字
-	Reload->SetSize(ReloadSpriteSize);
 	//左下のwaveの文字
 	Wave->SetSize({ 256,128 });
 	Wave->SetPosition({ 0,600 });
@@ -139,7 +106,6 @@ void Actor::SetPSR()
 	Goal->Update({ 0.7f,0.7f,0.6f,1.0f });
 	hane->Update({ 0.0f,0.0f,0.0f,1.0f });
 
-	Reload_F = player->GetReload();
 }
 
 void Actor::Update()
@@ -197,32 +163,8 @@ void Actor::Update()
 	//座標の設定
 	SetPSR();
 	//プレイヤーの更新処理
-	player->Update(Remaining, camera, patern);
-	if (Remaining >= 8) {
-		if (Revers == false) {
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 210);
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 140);
-			if (ReloadSpriteSize.x >= 200) {
-				Revers = true;
-			}
-		}
-		else {
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 150);
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 80);
-			if (ReloadSpriteSize.x <= 160) {
-				Revers = false;
-			}
-		}
-	}
-	else if (Remaining == 0) {
-		for (int i = 0; i < 9; i++) {
-			SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
-			SpriteRot[i] = 0;
-			Time[i] = 0;
-			DropBullet[i] = false;
-			OldRemaining = Remaining;
-		}
-	}
+	player->Update( camera, patern);
+
 
 	camera->RecalculationMatrix();
 }
@@ -246,14 +188,8 @@ void Actor::Draw(DirectXCommon* dxCommon)
 void Actor::SpriteDraw()
 {
 	if (GetCamWork_F == true) {
-		for (int i = 0; i < 8; i++) {
-			if (Remaining <= 8&&Reload_F==false) {
-				bulletHUD[i]->Draw();
-			}
-		}
-		if (Remaining >= 8) {
-			Reload->Draw(ReloadSpriteColor);
-		}
+		
+		
 
 		if (PlayerHp == 1) {
 			LifeCount[0]->Draw();

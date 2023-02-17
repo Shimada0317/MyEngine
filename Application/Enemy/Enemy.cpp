@@ -84,14 +84,16 @@ void Enemy::StatusSet()
 		//’n–Ê‚É’…‚¢‚½‚Æ‚«
 		if (AllPos.m128_f32[1] <= 0) {
 			AllPos.m128_f32[1] = 0;
-			DefomationCount += 0.01f;
-			Action::GetInstance()->EaseOut(HeadPartScl.x, 0.3f);
-			Action::GetInstance()->EaseOut(HeadPartScl.y, 0.3f);
-			Action::GetInstance()->EaseOut(HeadPartScl.z, 0.3f);
+			DefomationCount += 0.05f;
+			if (HeadPartScl.z <= 0.3f && ArmsPartScl.z <= 0.2f) {
+				Action::GetInstance()->EaseOut(HeadPartScl.x, 1.0f);
+				Action::GetInstance()->EaseOut(HeadPartScl.y, 1.0f);
+				Action::GetInstance()->EaseOut(HeadPartScl.z, 1.0f);
 
-			Action::GetInstance()->EaseOut(ArmsPartScl.x, 0.2f);
-			Action::GetInstance()->EaseOut(ArmsPartScl.y, 0.2f);
-			Action::GetInstance()->EaseOut(ArmsPartScl.z, 0.2f);
+				Action::GetInstance()->EaseOut(ArmsPartScl.x, 0.8f);
+				Action::GetInstance()->EaseOut(ArmsPartScl.y, 0.8f);
+				Action::GetInstance()->EaseOut(ArmsPartScl.z, 0.8f);
+			}
 		}
 	}
 

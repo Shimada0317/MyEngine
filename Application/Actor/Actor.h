@@ -51,8 +51,6 @@ private:
 	unique_ptr<Object3d> hane;
 
 	
-	Sprite* bulletHUD[9];
-	Sprite* Reload = nullptr;
 	Sprite* Wave = nullptr;
 	Sprite* MaxCount = nullptr;
 	Sprite* Slash = nullptr;
@@ -74,12 +72,7 @@ private:
 	bool BackObj = true;
 	float HeriX = 3.1f;
 
-	XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
-	XMFLOAT2 SpritePos[9];
-	bool DropBullet[9];
-	float SpriteRot[9];
-	float Gravity = 9.8f;
-	float Time[9];
+	
 
 	int patern = 0;
 	bool count = false;
@@ -97,8 +90,7 @@ private:
 
 	int PlayerHp;
 
-	int Remaining = 0;
-	int OldRemaining = 0;
+	
 
 	bool StartMovie = false;
 
@@ -106,16 +98,9 @@ private:
 
 	bool GetCamWork_F = false;
 
-	bool Reload_F = false;
 
 	Camera* camera;
 
-	//Spriteのステータス
-	XMFLOAT4 ReloadSpriteColor = { 1.0f,1.0f,1.0f,1.0f };
-	XMFLOAT2 AnchorPoint = { 0.5f,0.5f };
-	XMFLOAT2 ReloadSpritePos = { 1070,310 };
-	XMFLOAT2 ReloadSpriteSize = { 160,90 };
-
-	bool Revers = false;
+	
 };
 

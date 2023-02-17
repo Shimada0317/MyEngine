@@ -203,7 +203,7 @@ private:
 	float AttackCharge = 0.0f;
 
 	//移動速度
-	float MoveSpeed = 0.06f;
+	float MoveSpeed = 0.1f;
 
 	//プレイヤーと敵の距離
 	float Length = 3.0f;
