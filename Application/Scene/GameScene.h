@@ -104,6 +104,7 @@ private://メンバ変数
 	//スプライト
 	Sprite* Clear = nullptr;
 	Sprite* Conteniu = nullptr;
+	Sprite* DamageEfectSp = nullptr;
 	//その他の機能
 	Audio* Bgm = nullptr;
 	PostEffect* postEffect = nullptr;
@@ -139,5 +140,7 @@ private://メンバ変数
 	bool StopUpdate = false;
 	bool DethFlag = false;
 	bool GameStart = false;
+	bool DamageHit = false;
+	XMFLOAT4 DamageEfectColor = { 1.f,1.f,1.f,1.f };
 };
 

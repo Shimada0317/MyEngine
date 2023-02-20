@@ -57,6 +57,7 @@ private:
 	Sprite* ChangeCount[5];
 	Sprite* LifeCount[5];
 	Sprite* HpBer;
+	
 
 	Audio* heriFry = nullptr;
 	//ヘリステータス

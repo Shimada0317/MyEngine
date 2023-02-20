@@ -25,6 +25,7 @@ void Actor::Initialize()
 	Sprite::LoadTexture(16, L"Resources/four.png");
 	Sprite::LoadTexture(17, L"Resources/five.png");
 	Sprite::LoadTexture(18, L"Resources/Hpber.png");
+	
 
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
@@ -39,6 +40,8 @@ void Actor::Initialize()
 	Slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
 	MaxCount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
 	HpBer = Sprite::SpriteCreate(18, { 10.0f,10.0f });
+	
+
 	for (int i = 0; i < 5; i++) {
 		ChangeCount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
@@ -188,7 +191,6 @@ void Actor::Draw(DirectXCommon* dxCommon)
 void Actor::SpriteDraw()
 {
 	if (GetCamWork_F == true) {
-		
 		
 
 		if (PlayerHp == 1) {

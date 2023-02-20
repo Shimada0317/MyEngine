@@ -32,11 +32,13 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLight(light);
 
 	//	スプライトの読み込み
+	Sprite::LoadTexture(19, L"Resources/DamageEfect.png");
 	Sprite::LoadTexture(35, L"Resources/Mision.png");
 	Sprite::LoadTexture(36, L"Resources/CONTINUE.png");
 	//スプライトの生成
 	Clear = Sprite::SpriteCreate(35, { 0.0f,0.0f });
 	Conteniu = Sprite::SpriteCreate(36, { 0.0f,0.0f });
+	DamageEfectSp = Sprite::SpriteCreate(19, { 0.0f, 0.0f },DamageEfectColor);
 
 	//モデルの読み込み
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
@@ -121,6 +123,8 @@ void GameScene::StatusSet()
 		FieldBills[i]->SetRotation(FieldBillRot[i]);
 		FieldBills[i]->SetScale(FieldBillScl);
 	}
+
+	DamageEfectSp->SetColor(DamageEfectColor);
 };
 
 //オブジェクトなどの更新処理
@@ -167,6 +171,8 @@ void GameScene::Update()
 			//ダメージを食らったたとき
 			if (OldHp > PlayerHp) {
 				PostEffectOn = true;
+				DamageHit = true;
+				DamageEfectColor.w = 1;
 				OldHp = PlayerHp;
 			}
 			//画面を赤くするフラグが立った時
@@ -202,6 +208,13 @@ void GameScene::Update()
 		else if (Mouse::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new GameScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
+		}
+	}
+
+	if (DamageHit == true) {
+		DamageEfectColor.w -= 0.05f;
+		if (DamageEfectColor.w <= 0) {
+			DamageHit = false;
 		}
 	}
 
@@ -252,6 +265,9 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	Act->SpriteDraw();
+	if (DamageHit == true) {
+		DamageEfectSp->Draw();
+	}
 	if (ClearFlag == true) {
 		Clear->Draw();
 	}
