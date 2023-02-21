@@ -88,8 +88,10 @@ public://メンバ関数
 	void SetTexRect(XMFLOAT2 texBase, XMFLOAT2 texSize);
 	//色
 	void SetColor(XMFLOAT4 color);
+
+	void UpadteConstBuffer();
 	//描画
-	void Draw(const XMFLOAT4& color={1.0f,1.0f,1.0f,1.0f});
+	void Draw();
 
 protected://メンバ変数
 		//頂点バッファ
@@ -121,6 +123,8 @@ protected://メンバ変数
 	XMFLOAT2 texBase = { 0,0 };
 	//テクスチャ幅
 	XMFLOAT2 texSize = { 1.0f,1.0f };
+
+	XMFLOAT4 GetColor = { 1.f,1.f,1.f,1.f };
 private:
 	void Trans();
 };

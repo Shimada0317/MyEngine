@@ -456,18 +456,7 @@ void Sprite::SetTexRect(XMFLOAT2 texBase, XMFLOAT2 texSize)
 
 void Sprite::SetColor(XMFLOAT4 color)
 {
-	this->matWorld = XMMatrixIdentity();
-	this->matWorld *= XMMatrixRotationZ(XMConvertToRadians(rotation));
-	this->matWorld *= XMMatrixTranslation(position.x, position.y, 0.0f);
-
-	ConstBufferData* constMap = nullptr;
-	HRESULT result = this->constBuff->Map(0, nullptr, (void**)&constMap);
-	if (SUCCEEDED(result))
-	{
-		constMap->color = color;
-		constMap->mat = this->matWorld * matProjection;
-		this->constBuff->Unmap(0, nullptr);
-	}
+	GetColor = color;
 }
 
 void Sprite::SetAnchor(XMFLOAT2 anchorpoint)
@@ -478,7 +467,7 @@ void Sprite::SetAnchor(XMFLOAT2 anchorpoint)
 }
 
 
-void Sprite::Draw(const XMFLOAT4& color)
+void Sprite::Draw()
 {
 	this->matWorld = XMMatrixIdentity();
 	this->matWorld *= XMMatrixRotationZ(XMConvertToRadians(rotation));
@@ -488,7 +477,7 @@ void Sprite::Draw(const XMFLOAT4& color)
 	HRESULT result = this->constBuff->Map(0, nullptr, (void**)&constMap);
 	if (SUCCEEDED(result)) 
 	{
-		constMap->color = color;
+		constMap->color = GetColor;
 		constMap->mat = this->matWorld * matProjection;
 		this->constBuff->Unmap(0, nullptr);
 	}

@@ -142,6 +142,7 @@ private:
 	std::unique_ptr<Sprite> Window;
 	std::unique_ptr<Sprite> Skip;
 	std::unique_ptr<Sprite> bulletHUD[9];
+	std::unique_ptr<Sprite> Smoke[9];
 	std::unique_ptr<Sprite> Reload;
 	//発砲時のエフェクト
 	ParticleManager* PartGreen = nullptr;
@@ -156,7 +157,7 @@ private:
 		XMFLOAT3 ReticleRot = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 ReticleScl = { 0.3f,0.3f,0.3f };
 		//発射台Objのステータス
-		XMVECTOR GunPos = { 0.0f,0.0f,-12.0f };
+		XMVECTOR GunPos = { 0.0f,0.0f,-3.0f };
 		XMVECTOR GunNotParentPos = { 0.0f,0.0f,-10.0f };
 		XMFLOAT3 GunRot = { 0.0f,0.0f,0.0f };
 		XMFLOAT3 GunScl={0.3f,0.3f,0.3f};

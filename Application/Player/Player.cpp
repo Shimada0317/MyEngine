@@ -30,6 +30,7 @@ void Player::Initalize(Camera* camera)
 	Sprite::LoadTexture(300, L"Resources/curtain.png");
 	Sprite::LoadTexture(302, L"Resources/Skip.png");
 	Sprite::LoadTexture(303, L"Resources/bullet.png");
+	Sprite::LoadTexture(304, L"Resources/Smoke.png");
 	Sprite::LoadTexture(10, L"Resources/Reload.png");
 	//スプライトの読み込み
 	for (int i = 0; i < 9; i++) {
@@ -37,12 +38,13 @@ void Player::Initalize(Camera* camera)
 		SpriteRot[i] = 0;
 		Time[i] = 0;
 		bulletHUD[i].reset(Sprite::SpriteCreate(303, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
+		Smoke[i].reset(Sprite::SpriteCreate(304, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
 		DropBullet[i] = false;
 	}
 
 	OldRemaining = Remaining;
 
-	Reload.reset (Sprite::SpriteCreate(10, ReloadSpritePos, ReloadSpriteColor, AnchorPoint));
+	Reload.reset(Sprite::SpriteCreate(10, ReloadSpritePos, ReloadSpriteColor, AnchorPoint));
 
 	SpriteReticle.reset(Sprite::SpriteCreate(200, ReticlePos2D, ReticleColor, ReticleAncorPoint));
 	CurtainUp.reset(Sprite::SpriteCreate(300, CurtainUpPos));
@@ -104,7 +106,7 @@ void Player::StatusSet(Camera* camera)
 	Body->SetPosition(BodyPos);
 	Body->SetScale(BodyScl);
 	Body->SetParent(camera);
-	
+
 
 	//GunNotParentPos.m128_f32[2] = -1.0f;
 	GunMat = Gun->GetMatrix();
@@ -125,10 +127,10 @@ void Player::StatusSet(Camera* camera)
 		bulletHUD[i]->SetRotation(SpriteRot[i]);
 	}
 
-	
+
 	//リロードの文字
 	Reload->SetSize(ReloadSpriteSize);
-	
+	Reload->SetColor(ReloadSpriteColor);
 }
 
 
@@ -143,7 +145,7 @@ void Player::AllUpdate(Camera* camera)
 
 
 //更新処理
-void Player::Update( Camera* camera, int paterncount)
+void Player::Update(Camera* camera, int paterncount)
 {
 	PaternCount = paterncount;
 
@@ -161,12 +163,10 @@ void Player::Update( Camera* camera, int paterncount)
 
 	//カメラが動いていないとき
 	if (CameraWork_F == true) {
-		
+
 		GunShotProcess();
 
-		if (ShakingStart == true) {
-			ScreenShake(ShakingValue, 0.1f);
-		}
+		ScreenShake(ShakingValue, 0.1f);
 
 		ParticleEfect();
 
@@ -198,12 +198,13 @@ void Player::SpriteDraw()
 		SpriteReticle->Draw();
 		for (int i = 0; i < 8; i++) {
 			if (Remaining <= 8 && ReloadFlag == false) {
+				//Smoke[i]->Draw();
 				bulletHUD[i]->Draw();
 			}
 		}
 
 		if (Remaining >= 8) {
-			Reload->Draw(ReloadSpriteColor);
+			Reload->Draw();
 		}
 	}
 	else {
@@ -472,7 +473,9 @@ void Player::PlayerMove(bool& move, int patern)
 	}
 	else if (Move_F == false) {
 		MoveSpeed = 0.0f;
-		Velocity = { 0, 0, MoveSpeed };
+		float RandomX = Action::GetInstance()->GetRangRand(-0.01f, 0.01f);
+		float RandomY = Action::GetInstance()->GetRangRand(-0.01f, 0.01f);
+		Velocity = { RandomX,RandomY,0.f };
 	}
 }
 
@@ -484,6 +487,7 @@ void Player::ObjDraw()
 	}
 }
 
+//ImgUi描画
 void Player::ImGuiDraw()
 {
 
@@ -496,26 +500,12 @@ void Player::ImGuiDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plyer");
-	if (ImGui::TreeNode("LoacalPos")) {
-		ImGui::SliderFloat("pos.x", &pos.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &pos.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &pos.z, -100.0f, 100.0f);
+	if (ImGui::TreeNode("Shake")) {
+		ImGui::SliderFloat("ShakingValue", &ShakingValue, -100.0f, 100.0f);
+
 		ImGui::TreePop();
 	}
 
-
-	if (ImGui::TreeNode("ReticleRot")) {
-		ImGui::SliderFloat("Rot.x", &ReticleRot.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("Rot.y", &ReticleRot.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("Rot.z", &ReticleRot.z, -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("ReticlePos2D")) {
-		ImGui::SliderFloat("ReticlePos2D.x", &ReticlePos2D.x, 0.0f, 1280.0f);
-		ImGui::SliderFloat("ReticlePos2D.y", &ReticlePos2D.y, 0.0f, 720.0f);
-		ImGui::TreePop();
-	}
 
 	if (ImGui::TreeNode("gunpos")) {
 		ImGui::SliderFloat("gunpos.x", &GunPos.m128_f32[0], -100.0f, 100.0f);
@@ -579,31 +569,37 @@ void Player::MouthContoroll()
 	}
 }
 
+//画面揺れ
 void Player::ScreenShake(float shakevalue, float shakingtime)
 {
-	if (ShakeLimitTime <= 1) {
-		ShakeLimitTime += shakingtime;
-		if (ShakingScreen_F == true) {
-			ShakingScreenValue -= shakevalue;
-			if (ShakingScreenValue <= -shakevalue) {
-				ShakingScreen_F = false;
+	if (ShakingStart == true) {
+		if (ShakeLimitTime <= 1) {
+			ShakeLimitTime += shakingtime;
+			if (ShakingScreen_F == true) {
+				ShakingScreenValue -= shakevalue;
+				if (ShakingScreenValue <= -shakevalue) {
+					ShakingScreen_F = false;
+				}
 			}
+			else {
+				ShakingScreenValue += shakevalue;
+				if (ShakingScreenValue >= shakevalue) {
+					ShakingScreen_F = true;
+				}
+			}
+			EyeRot.x += ShakingScreenValue;
 		}
 		else {
-			ShakingScreenValue += shakevalue;
-			if (ShakingScreenValue >= shakevalue) {
-				ShakingScreen_F = true;
-			}
+			ShakingScreen_F = true;
+			ShakeLimitTime = 0;
+			ShakingStart = false;
+			ShakingScreenValue = 0;
+			EyeRot.x = 0;
 		}
-		EyeRot.x += ShakingScreenValue;
-	}
-	else {
-		ShakeLimitTime = 0;
-		ShakingStart = false;
-		EyeRot.x = 0;
 	}
 }
 
+//ダメージを受けたときの処理
 void Player::DamageProcess()
 {
 	if (OldHp > Hp) {
@@ -613,6 +609,7 @@ void Player::DamageProcess()
 	}
 }
 
+//弾の発射処理
 void Player::GunShotProcess()
 {
 	//弾の発射前
@@ -638,15 +635,18 @@ void Player::GunShotProcess()
 
 	if (RecoilGun == true) {
 		RecoveryTime += 0.2f;
-		GunPos.m128_f32[2] = -12.5f;
+		GunRot.x = -25;
+		GunPos.m128_f32[2] = -3.1f;
 		if (RecoveryTime >= 1) {
-			GunPos.m128_f32[2] = -12.0f;
+			GunRot.x = 0;
+			GunPos.m128_f32[2] = -3.0f;
 			RecoveryTime = 0.0f;
 			RecoilGun = false;
 		}
 	}
 }
 
+//リロード処理
 void Player::ReloadProcess()
 {
 	//右クリックを押した時
@@ -716,13 +716,13 @@ void Player::ParticleEfect()
 			float cosradY = cosf(radY);
 			if (PaternCount == 3 || PaternCount == 4) {
 				pos.x = GunWorldPos.m128_f32[0] + 2.3f;
-				pos.y = GunWorldPos.m128_f32[1] - sinradY * 3;
+				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
 				pos.z = GunWorldPos.m128_f32[2] - 2.8f * cosradX;
 			}
 			else if (PaternCount == 0 || PaternCount == 1 || PaternCount == 2 || PaternCount == 5) {
 				pos.x = GunWorldPos.m128_f32[0] + sinradX * 3.5f;
-				pos.y = GunWorldPos.m128_f32[1] - sinradY * 3;
-				pos.z = GunWorldPos.m128_f32[2] + 5.0f;
+				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
+				pos.z = GunWorldPos.m128_f32[2] + 3.0f;
 			}
 
 			const float rnd_vel = 0.001f;

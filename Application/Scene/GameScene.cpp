@@ -212,7 +212,7 @@ void GameScene::Update()
 	}
 
 	if (DamageHit == true) {
-		DamageEfectColor.w -= 0.05f;
+		DamageEfectColor.w -= 0.02f;
 		if (DamageEfectColor.w <= 0) {
 			DamageHit = false;
 		}
