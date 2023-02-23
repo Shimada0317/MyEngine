@@ -97,7 +97,7 @@ public:
 	void ParticleEfect();
 
 #pragma region Get
-	const bool& GetFinish() { return Finish; }
+	const bool& GetFinish() { return FinishFlag; }
 	//三次元座標
 	const XMVECTOR& GetPosition() { return ReticlePos; }
 	//角度
@@ -109,14 +109,14 @@ public:
 	//二次元スケール
 	const XMFLOAT2& GetRetSiz() { return ReticleSize; }
 	//カメラワーク
-	const bool& GetCamWork() { return CameraWork_F; }
+	const bool& GetCamWork() { return CameraWorkFlag; }
 
-	const bool& GetFring() { return Fring_F; }
+	const bool& GetFring() { return FringFlag; }
 
 	//Hp
 	int GetHp() { return Hp; }
 
-	const bool& GetBulletShot() { return BulletShot_F; }
+	const bool& GetBulletShot() { return BulletShotFlag; }
 #pragma endregion
 
 #pragma region Set
@@ -126,8 +126,8 @@ public:
 	void SetRetPosition(const XMFLOAT2& position) { this->ReticlePos2D = position; }
 	void SetRetSiz(const XMFLOAT2& scale) { this->ReticleSize = scale; }
 	void SetHp(int HP) { this->Hp = HP; }
-	void SetFinish(const bool& finish) { this->Finish = finish; }
-	void SetBulletShot(const bool& BulletShot_F) { this->BulletShot_F = BulletShot_F; }
+	void SetFinish(const bool& finish) { this->FinishFlag = finish; }
+	void SetBulletShot(const bool& BulletShot_F) { this->BulletShotFlag = BulletShot_F; }
 #pragma endregion
 private:
 	//Obj
@@ -204,7 +204,7 @@ private:
 	//2D座標入の取得用変数
 	XMVECTOR offset = { 0,0,1.0f };
 
-	bool Particle_F = false;
+	bool ParticleFlag = false;
 	int Hp = 5;
 	int OldHp = 0;
 	//Reload
@@ -213,7 +213,7 @@ private:
 	int Anser = 0;
 	//移動
 	XMVECTOR Velocity;
-	bool Move_F = false;
+	bool MoveFlag = false;
 	//弾の速度
 	float MoveSpeed=0;
 	//動いたときのtimer
@@ -224,22 +224,22 @@ private:
 	int shake = 0;
 	float ShakingValue = 0.0f;
 
-	bool Finish = false;
+	bool FinishFlag = false;
 
-	bool CameraWork_F = false;
+	bool CameraWorkFlag = false;
 
 	bool MovieFlag = false;
-	bool stanby = false;
+	bool StanbyFlag = false;
 	int ActionCount = 0;
 	float ActionTimer = 0.0f;
 
-	bool Start_F = false;
+	bool StartFlag = false;
 
-	bool Fring_F = false;
+	bool FringFlag = false;
 
-	bool ShakeHead_F = true;
+	bool ShakeHeadFlag = true;
 
-	bool ReloadSound_F = true;
+	bool ReloadSoundFlag = true;
 
 	float ChangeRot = 0;
 
@@ -253,21 +253,21 @@ private:
 	XMFLOAT3 pos;
 
 
-	bool BulletShot_F = false;
+	bool BulletShotFlag = false;
 	float ShotCoolTime = 0.0f;
-	bool Recoil_F = false;
+	bool RecoilFlag = false;
 	float RecoilTime = 0.0f;
 	float ShakingScreenValue = 0.0f;
-	bool ShakingScreen_F = true;
+	bool ShakingScreenFlag = true;
 	XMFLOAT3 OldEyeRot;
 
 	float easetimer = 0;
 
-	bool MouseStop_F = false;
+	bool MouseStopFlag = false;
 	float ShakeLimitTime = 0;
-	bool ShakingStart = false;
+	bool ShakingStartFlag = false;
 	XMVECTOR OldPos;
-	bool RecoilGun = false;
+	bool RecoilGunFlag = false;
 	float RecoveryTime = 0.0f;
 	//持ってきたもの
 	int Remaining = 0;
@@ -275,7 +275,7 @@ private:
 
 	XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
 	XMFLOAT2 SpritePos[9];
-	bool DropBullet[9];
+	bool DropBulletFlag[9];
 	float SpriteRot[9];
 	float Gravity = 9.8f;
 	float Time[9];
@@ -287,6 +287,6 @@ private:
 	XMFLOAT2 ReloadSpritePos = { 1070,310 };
 	XMFLOAT2 ReloadSpriteSize = { 160,90 };
 
-	bool Revers = false;
+	bool ReversFlag = false;
 };
 

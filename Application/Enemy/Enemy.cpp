@@ -69,9 +69,11 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 
 	Hp = 160;
 	OldHp = Hp;
-	RobotArive = true;
+	RandomFlag = true;
+	TimerLimit = 8;
+	RobotAriveFlag = true;
 	Center->SetRotation(AllRot);
-	Movement_F = movement;
+	MovementFlag = movement;
 	Center->SetPosition(CenterWorldPos);
 }
 
@@ -79,7 +81,7 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 void Enemy::StatusSet()
 {
 	//変形前なら
-	if (Defomation_F == false) {
+	if (DefomationFlag == false) {
 		AllPos.m128_f32[1] -= 0.1f;
 		//地面に着いたとき
 		if (AllPos.m128_f32[1] <= 0) {
@@ -99,7 +101,7 @@ void Enemy::StatusSet()
 
 	if (DefomationCount >= 1) {
 		DefomationCount = 1;
-		Defomation_F = true;
+		DefomationFlag = true;
 	}
 	Center->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(CenterMat);
@@ -201,26 +203,26 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 		AttackTimeMax = 20;
 	}
 
-	if (Random == false) {
+	if (RandomFlag == false) {
 		TimerLimit = Action::GetInstance()->GetRangRand(AttackTimeMin, AttackTimeMax);
-		Random = true;
+		RandomFlag = true;
 	}
 
 	//生きているとき
-	if (RobotArive == true && Hp > 0) {
-		if (Length > 1.5f&&Defomation_F == true ) {
+	if (RobotAriveFlag == true && Hp > 0) {
+		if (Length > 1.5f&&DefomationFlag == true ) {
 			TrackPlayerMode();
 		}
 		//プレイヤーの前まで来たとき
 		else if (Length <= 1.5f) {
 			AtttackTimer += 0.1f;
 			Motion();
-			Movement_F = false;
+			MovementFlag = false;
 			AttackMode(playerhp);
 		}
 	}
 	else {
-		AttackFase = false;
+		AttackFaseFlag = false;
 		TrackPoint.m128_f32[1] = 100;
 	}
 
@@ -231,12 +233,12 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 		ArmsPartColor.w -= Subtraction;
 		BodyPartColor.w -= Subtraction;
 		HeadPartColor.w -= Subtraction;
-		RobotArive = false;
+		RobotAriveFlag = false;
 		AttackPreparationTime = 0;
 		AttackChanse = 0;
 		Rand = 0;
 		if (ArmsPartColor.w <= 0 && Obj_Particle.empty()) {
-			isDead_ = true;
+			DeadFlag = true;
 		}
 	}
 
@@ -288,18 +290,18 @@ void Enemy::TrackPlayerMode()
 	AllPos.m128_f32[0] -= v3x;
 	AllPos.m128_f32[2] -= v3z;
 	//サイドステップ
-	if (Movement_F == true) {
+	if (MovementFlag == true) {
 		AllPos.m128_f32[0] += SideStepSpeed;
 		MovementChangeTime += 0.01f;
-		if (MovementChangeTime <= 2 && Reversal_F == false) {
+		if (MovementChangeTime <= 2 && ReversalFlag == false) {
 			SideStepSpeed = -SideStepSpeed;
 			MovementChangeTime = 0;
-			Reversal_F = true;
+			ReversalFlag = true;
 		}
-		else if (MovementChangeTime >= 2 && Reversal_F == true) {
+		else if (MovementChangeTime >= 2 && ReversalFlag == true) {
 			SideStepSpeed = +SideStepSpeed;
 			MovementChangeTime = 0;
-			Reversal_F = false;
+			ReversalFlag = false;
 		}
 	}
 }
@@ -310,7 +312,7 @@ void Enemy::Motion()
 
 	MotionTime += 0.0001f;
 
-	if (MotionChange == true) {
+	if (MotionChangeFlag == true) {
 		BodyPartScl.x += hypertrophy.x;
 		ArmsPartScl.x += hypertrophy.x;
 		HeadPartScl.x += hypertrophy.x;
@@ -323,7 +325,7 @@ void Enemy::Motion()
 		ArmsPartScl.z += hypertrophy.z;
 		HeadPartScl.z += hypertrophy.z;
 		if (MotionTime >= 1) {
-			MotionChange = false;
+			MotionChangeFlag = false;
 			MotionTime = 0.0f;
 		}
 	}
@@ -341,7 +343,7 @@ void Enemy::Motion()
 		ArmsPartScl.z -= hypertrophy.z;
 		HeadPartScl.z -= hypertrophy.z;
 		if (MotionTime >= 1) {
-			MotionChange = true;
+			MotionChangeFlag = true;
 			MotionTime = 0.0f;
 		}
 	}
@@ -352,8 +354,8 @@ void Enemy::Motion()
 void Enemy::AttackMode(int& playerhp)
 {
 	if (AtttackTimer >= TimerLimit) {
-		AttackFase = true;
-		Random = false;
+		AttackFaseFlag = true;
+		RandomFlag = false;
 	}
 	//除算結果の値
 	//int divisionvalue = 0;
@@ -377,7 +379,7 @@ void Enemy::AttackMode(int& playerhp)
 	//	}
 	//}
 	//攻撃フェイズに移行した時
-	if (AttackFase == true) {
+	if (AttackFaseFlag == true) {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);
 		if (HeadPartRot.y >= PursePositiveRot) {
 			HeadPartRot.y = PursePositiveRot;
@@ -397,9 +399,9 @@ void Enemy::AttackMode(int& playerhp)
 void Enemy::Attack(int& playerhp, float& attacktimer)
 {
 	//巨大化していく値
-	float gigantic = 0.00002f;
+	float gigantic = 0.0002f;
 	float discoloration = 0.01f;
-	if (AttackShakeDown == false) {
+	if (AttackShakeDownFlag == false) {
 		ArmsPartRot.x += 1.5f;
 		ArmsPartScl.x += gigantic;
 		ArmsPartScl.y += gigantic;
@@ -411,16 +413,16 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 		if (ArmsPartRot.x >= 40.0f) {
 			ArmsPartRot.x = 40;
 
-			if (VibrationChange == true) {
+			if (VibrationChangeFlag == true) {
 				Vibration -= 2.2f;
 				if (Vibration <= -2.2f) {
-					VibrationChange = false;
+					VibrationChangeFlag = false;
 				}
 			}
 			else {
 				Vibration += 2.2f;
 				if (Vibration >= 2.2f) {
-					VibrationChange = true;
+					VibrationChangeFlag = true;
 				}
 			}
 			//体の震え
@@ -430,7 +432,7 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			AttackCharge += 0.1f;
 			if (AttackCharge >= 10) {
 				AttackCharge = 0;
-				AttackShakeDown = true;
+				AttackShakeDownFlag = true;
 			}
 		}
 	}
@@ -440,8 +442,8 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			ArmsPartRot.x = 0.0f;
 			ArmsPartColor = { 1.0f,1.0f,1.0f ,1.0f };
 			ArmsPartScl = { 0.2f,0.2f,0.2f };
-			AttackShakeDown = false;
-			AttackFase = false;
+			AttackShakeDownFlag = false;
+			AttackFaseFlag = false;
 			attacktimer = 0;
 			playerhp -= 1;
 		}

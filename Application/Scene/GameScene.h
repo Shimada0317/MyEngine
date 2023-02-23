@@ -135,12 +135,12 @@ private://メンバ変数
 	int Patern = 0;
 	int PlayerHp;
 	int OldHp;
-	bool PostEffectOn = false;
+	bool PostEffectOnFlag = false;
 	bool ClearFlag = false;
-	bool StopUpdate = false;
+	bool StopUpdateFlag = false;
 	bool DethFlag = false;
-	bool GameStart = false;
-	bool DamageHit = false;
+	bool GameStartFlag = false;
+	bool DamageHitFlag = false;
 	XMFLOAT4 DamageEfectColor = { 1.f,1.f,1.f,1.f };
 };
 

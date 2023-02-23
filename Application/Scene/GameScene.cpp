@@ -131,7 +131,7 @@ void GameScene::StatusSet()
 void GameScene::AllUpdata()
 {
 	//ゲーム開始時にアクターを更新処理
-	if (GameStart == true) {
+	if (GameStartFlag == true) {
 		Act->Update();
 	}
 	//左右のビルの更新処理
@@ -155,7 +155,7 @@ void GameScene::AllUpdata()
 void GameScene::Update()
 {
 
-	if (GameStart == false) {
+	if (GameStartFlag == false) {
 		PostCol.x += AddPosetEfectColor;
 		PostCol.y += AddPosetEfectColor;
 		PostCol.z += AddPosetEfectColor;
@@ -163,27 +163,27 @@ void GameScene::Update()
 			PostCol.x = 0.0f;
 			PostCol.y = 0.0f;
 			PostCol.z = 0.0f;
-			GameStart = true;
+			GameStartFlag = true;
 		}
 	}
-	if (GameStart == true) {
+	if (GameStartFlag == true) {
 		if (PlayerHp > 0) {
 			//ダメージを食らったたとき
 			if (OldHp > PlayerHp) {
-				PostEffectOn = true;
-				DamageHit = true;
+				PostEffectOnFlag = true;
+				DamageHitFlag = true;
 				DamageEfectColor.w = 1;
 				OldHp = PlayerHp;
 			}
 			//画面を赤くするフラグが立った時
-			if (PostEffectOn == true) {
+			if (PostEffectOnFlag == true) {
 				PostCol.x = 0.7f;
 				if (PostCol.x >= 0.7f) {
-					PostEffectOn = false;
+					PostEffectOnFlag = false;
 				}
 			}
 			//画面を赤くするフラグが立っていない時
-			if (PostEffectOn == false) {
+			if (PostEffectOnFlag == false) {
 				PostCol.x -= 0.05f;
 				if (PostCol.x <= 0) {
 					PostCol.x = 0;
@@ -192,7 +192,7 @@ void GameScene::Update()
 		}
 		//体力が0になったら
 		else if (PlayerHp <= 0) {
-			StopUpdate = true;
+			StopUpdateFlag = true;
 			PostCol.x += 0.01f;
 			if (PostCol.x >= 2.0f) {
 				DethFlag = true;
@@ -211,10 +211,10 @@ void GameScene::Update()
 		}
 	}
 
-	if (DamageHit == true) {
+	if (DamageHitFlag == true) {
 		DamageEfectColor.w -= 0.02f;
 		if (DamageEfectColor.w <= 0) {
-			DamageHit = false;
+			DamageHitFlag = false;
 		}
 	}
 
@@ -222,10 +222,10 @@ void GameScene::Update()
 	//ゴールに着いたとき
 	if (GoalPos.m128_f32[1] >= 100) {
 		ClearFlag = true;
-		StopUpdate = true;
+		StopUpdateFlag = true;
 	}
 	//ゴールについていないとき更新を続ける
-	if (StopUpdate == false) {
+	if (StopUpdateFlag == false) {
 		StatusSet();
 		AllUpdata();
 	}
@@ -265,7 +265,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	Act->SpriteDraw();
-	if (DamageHit == true) {
+	if (DamageHitFlag == true) {
 		DamageEfectSp->Draw();
 	}
 	if (ClearFlag == true) {

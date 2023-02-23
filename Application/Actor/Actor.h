@@ -35,9 +35,9 @@ public:
 
 	void UpdataEnemyPopCommands();
 public:
-	void SetPatern(int patern) { this->patern = patern; }
+	void SetPatern(int patern) { this->Patern = patern; }
 
-	const int& GetPatern() { return patern; }
+	const int& GetPatern() { return Patern; }
 
 	void SetGoalPos(const XMVECTOR& goalPos) { this->GoalPos = goalPos; }
 
@@ -46,9 +46,9 @@ public:
 	int GetHp() { return PlayerHp; }
 private:
 	//ヘリObj
-	unique_ptr<Object3d> heri;
+	unique_ptr<Object3d> Heri;
 	unique_ptr<Object3d> Goal;
-	unique_ptr<Object3d> hane;
+	unique_ptr<Object3d> Hane;
 
 	
 	Sprite* Wave = nullptr;
@@ -69,18 +69,18 @@ private:
 
 
 	float HeriY = 0.0f;
-	bool Move = false;
-	bool BackObj = true;
+	bool MoveFlag = false;
+	bool BackObjFlag = true;
 	float HeriX = 3.1f;
 
 	
 
-	int patern = 0;
-	bool count = false;
+	int Patern = 0;
+	bool CountFlag = false;
 	//敵発生コマンド
 	std::stringstream EnemyPopCommands;
 	//待機コマンド
-	bool Wait_F = false;
+	bool WaitFlag = false;
 	int WaitT = 0;
 
 
@@ -93,11 +93,11 @@ private:
 
 	
 
-	bool StartMovie = false;
+	bool StartMovieFlag = false;
 
-	bool finish = false;
+	bool FinishFlag = false;
 
-	bool GetCamWork_F = false;
+	bool GetCamWorkFlag = false;
 
 
 	Camera* camera;

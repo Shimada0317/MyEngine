@@ -50,12 +50,12 @@ void Actor::Initialize()
 	}
 	LoadEnemyPopData();
 
-	heri = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
+	Heri = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
 	Goal = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
-	hane = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
+	Hane = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
 
 	PlayerHp = player->GetHp();
-	GetCamWork_F = player->GetCamWork();
+	GetCamWorkFlag = player->GetCamWork();
 	
 
 	heriFry = new Audio();
@@ -87,28 +87,27 @@ void Actor::SetPSR()
 	HpBer->SetPosition({ 1070,650 });
 	player->SetHp(PlayerHp);
 
-	heri->SetPosition(Heripos);
-	heri->SetScale(Heriscl);
-	heri->SetRotation({ 0.0f,180.0f,0.0f });
+	Heri->SetPosition(Heripos);
+	Heri->SetScale(Heriscl);
+	Heri->SetRotation({ 0.0f,180.0f,0.0f });
 
-	hane->SetRotation({ 0.0f,HeriY,0.0f });
-	if (StartMovie == false) {
-		hane->SetPosition(Heripos);
-		hane->SetScale(Heriscl);
+	Hane->SetRotation({ 0.0f,HeriY,0.0f });
+	if (StartMovieFlag == false) {
+		Hane->SetPosition(Heripos);
+		Hane->SetScale(Heriscl);
 	}
 	else {
-		hane->SetPosition(GoalPos);
-		hane->SetScale(GoalScl);
+		Hane->SetPosition(GoalPos);
+		Hane->SetScale(GoalScl);
 	}
 
 	Goal->SetPosition(GoalPos);
 	Goal->SetScale(GoalScl);
 	Goal->SetRotation({ 0.0f,90.0f,0.0f });
 
-	heri->Update({ 0.7f,0.7f,0.6f,1.0f });
+	Heri->Update({ 0.7f,0.7f,0.6f,1.0f });
 	Goal->Update({ 0.7f,0.7f,0.6f,1.0f });
-	hane->Update({ 0.0f,0.0f,0.0f,1.0f });
-
+	Hane->Update({ 0.0f,0.0f,0.0f,1.0f });
 }
 
 void Actor::Update()
@@ -118,38 +117,38 @@ void Actor::Update()
 	Heripos.m128_f32[2] += HeriX;
 
 	if (Heripos.m128_f32[2] >= 20) {
-		BackObj = false;
-		StartMovie = true;
+		BackObjFlag = false;
+		StartMovieFlag = true;
 	}
 	else {
 		HeriY += 15.0f;
 	}
 
-	GetCamWork_F = player->GetCamWork();
-	if (GetCamWork_F == true) {
+	GetCamWorkFlag = player->GetCamWork();
+	if (GetCamWorkFlag == true) {
 		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
 			});
 		if (Robot.empty()) {
-			Move = true;
+			MoveFlag = true;
 		}
-		finish = player->GetFinish();
-		if (finish == true) {
-			Move = false;
+		FinishFlag = player->GetFinish();
+		if (FinishFlag == true) {
+			MoveFlag = false;
 		}
-		if (Move == false && finish == true) {
+		if (MoveFlag == false && FinishFlag == true) {
 			UpdataEnemyPopCommands();
-			patern += 1;
-			finish = false;
-			player->SetFinish(finish);
+			Patern += 1;
+			FinishFlag = false;
+			player->SetFinish(FinishFlag);
 		}
 	}
 
-	if (patern >= 5) {
+	if (Patern >= 5) {
 		HeriY += 15.0f;
 	}
 
-	if (patern >= 6) {
+	if (Patern >= 6) {
 		bool fring = player->GetFring();
 		if (fring == true) {
 			GoalPos.m128_f32[1] += 0.2f;
@@ -162,11 +161,11 @@ void Actor::Update()
 		Enemy->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
 	}
 	player->SetBulletShot(PlayerBulletShot_F);
-	player->PlayerMove(Move, patern);
+	player->PlayerMove(MoveFlag, Patern);
 	//座標の設定
 	SetPSR();
 	//プレイヤーの更新処理
-	player->Update( camera, patern);
+	player->Update( camera, Patern);
 
 
 	camera->RecalculationMatrix();
@@ -176,9 +175,9 @@ void Actor::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	Goal->Draw();
-	hane->Draw();
-	if (BackObj == true) {
-		heri->Draw();
+	Hane->Draw();
+	if (BackObjFlag == true) {
+		Heri->Draw();
 	}
 	player->ObjDraw();
 	Object3d::PostDraw();
@@ -190,7 +189,7 @@ void Actor::Draw(DirectXCommon* dxCommon)
 
 void Actor::SpriteDraw()
 {
-	if (GetCamWork_F == true) {
+	if (GetCamWorkFlag == true) {
 		
 
 		if (PlayerHp == 1) {
@@ -258,10 +257,10 @@ void Actor::LoadEnemyPopData()
 void Actor::UpdataEnemyPopCommands()
 {
 	//待機処理
-	if (Wait_F == true) {
+	if (WaitFlag == true) {
 		WaitT--;
 		if (WaitT <= 0) {
-			Wait_F = false;
+			WaitFlag = false;
 		}
 		return;
 	}
@@ -297,7 +296,7 @@ void Actor::UpdataEnemyPopCommands()
 			//WAVEの要素
 			count = atoi(word.c_str());
 		}
-		if (patern == count) {
+		if (Patern == count) {
 			if (word.find("ROTATION") == 0) {
 
 				getline(line_stram, word, ',');
@@ -392,7 +391,7 @@ void Actor::UpdataEnemyPopCommands()
 			}
 		}
 
-		if (patern < count) {
+		if (Patern < count) {
 			break;
 		}
 

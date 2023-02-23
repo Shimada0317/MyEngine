@@ -39,7 +39,7 @@ void Player::Initalize(Camera* camera)
 		Time[i] = 0;
 		bulletHUD[i].reset(Sprite::SpriteCreate(303, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
 		Smoke[i].reset(Sprite::SpriteCreate(304, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
-		DropBullet[i] = false;
+		DropBulletFlag[i] = false;
 	}
 
 	OldRemaining = Remaining;
@@ -80,7 +80,7 @@ void Player::StatusSet(Camera* camera)
 {
 
 	for (int i = 0; i < 8; i++) {
-		if (DropBullet[i] == true && SpritePos[i].y <= 1300) {
+		if (DropBulletFlag[i] == true && SpritePos[i].y <= 1300) {
 			SpritePos[i].y += 10;
 			Time[i] += 0.5f;
 			Action::GetInstance()->ThrowUp(Gravity, Time[i], 40, SpritePos[i].y);
@@ -92,7 +92,7 @@ void Player::StatusSet(Camera* camera)
 	}
 
 	if (OldRemaining < Remaining) {
-		DropBullet[OldRemaining] = true;
+		DropBulletFlag[OldRemaining] = true;
 		OldRemaining = Remaining;
 	}
 
@@ -154,7 +154,7 @@ void Player::Update(Camera* camera, int paterncount)
 	//マウス座標の取得
 	GunRot.y = (ReticlePos2D.x - WinApp::window_width / 2) / 10;
 	MouthContoroll();
-	if (MouseStop_F == false) {
+	if (MouseStopFlag == false) {
 		GunRot.x = (ReticlePos2D.y - WinApp::window_height / 2) / 50;
 	}
 	else {
@@ -162,7 +162,7 @@ void Player::Update(Camera* camera, int paterncount)
 	}
 
 	//カメラが動いていないとき
-	if (CameraWork_F == true) {
+	if (CameraWorkFlag == true) {
 
 		GunShotProcess();
 
@@ -194,7 +194,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 //スプライト描画
 void Player::SpriteDraw()
 {
-	if (CameraWork_F == true && MouseStop_F == false) {
+	if (CameraWorkFlag == true && MouseStopFlag == false) {
 		SpriteReticle->Draw();
 		for (int i = 0; i < 8; i++) {
 			if (Remaining <= 8 && ReloadFlag == false) {
@@ -217,12 +217,12 @@ void Player::SpriteDraw()
 //カメラワーク
 void Player::CameraWork()
 {
-	if (CameraWork_F == false && Start_F == false) {
+	if (CameraWorkFlag == false && StartFlag == false) {
 
-		if (stanby == false) {
+		if (StanbyFlag == false) {
 			EyeRot.y = 180;
 		}
-		else if (stanby == true && ActionCount == 0) {
+		else if (StanbyFlag == true && ActionCount == 0) {
 			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
 			//後ろを向く
 			if (EyeRot.y <= 0) {
@@ -260,7 +260,7 @@ void Player::CameraWork()
 
 	}
 
-	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanby == true && CameraWork_F == false) {
+	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && StanbyFlag == true && CameraWorkFlag == false) {
 		MovieFlag = true;
 		ActionCount = 100;
 		EyeRot.x = 0;
@@ -270,11 +270,11 @@ void Player::CameraWork()
 		RailCam->MatrixIdentity(ReticlePos, EyeRot);
 	}
 
-	if (stanby == false) {
+	if (StanbyFlag == false) {
 		ActionTimer += 0.01f;
 		if (ActionTimer >= 1.0f) {
 			ActionTimer = 0.0f;
-			stanby = true;
+			StanbyFlag = true;
 		}
 	}
 
@@ -306,8 +306,8 @@ void Player::CameraWork()
 
 		if (CurtainDownPos.y >= 720) {
 			CurtainDownPos.y = 720;
-			CameraWork_F = true;
-			Start_F = true;
+			CameraWorkFlag = true;
+			StartFlag = true;
 		}
 
 		if (SkipPos.y >= 720) {
@@ -330,12 +330,12 @@ void Player::PlayerMove(bool& move, int patern)
 	PaternCount = patern;
 	//敵をすべて倒した時
 	if (move == true) {
-		Move_F = true;
+		MoveFlag = true;
 	}
 
-	if (Move_F == true) {
+	if (MoveFlag == true) {
 		MoveSpeed = 0.5f;
-		if (ShakeHead_F == true) {
+		if (ShakeHeadFlag == true) {
 			if (shake == 0) {
 				EyeRot.x += 0.05f;
 				if (EyeRot.x >= 0.5f) {
@@ -354,10 +354,10 @@ void Player::PlayerMove(bool& move, int patern)
 			EnemyCount = 3;
 			if (camvec.m128_f32[2] >= 20) {
 				move = false;
-				Move_F = false;
+				MoveFlag = false;
 				WaveCount += 1;
 				MoveTimer = 0.0f;
-				Finish = true;
+				FinishFlag = true;
 				EyeRot.x = 0;
 			}
 			else {
@@ -369,10 +369,10 @@ void Player::PlayerMove(bool& move, int patern)
 			Velocity = { 0, 0, MoveSpeed };
 			if (camvec.m128_f32[2] >= 40) {
 				move = false;
-				Move_F = false;
+				MoveFlag = false;
 				WaveCount += 1;
 				MoveTimer = 0.0f;
-				Finish = true;
+				FinishFlag = true;
 			}
 			else {
 				Distance = 11;
@@ -388,10 +388,10 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 			if (camvec.m128_f32[0] >= 30) {
 				move = false;
-				Move_F = false;
+				MoveFlag = false;
 				WaveCount += 1;
 				MoveTimer = 0.0f;
-				Finish = true;
+				FinishFlag = true;
 			}
 			else {
 				Distance = 11;
@@ -403,10 +403,10 @@ void Player::PlayerMove(bool& move, int patern)
 
 			if (camvec.m128_f32[0] >= 45) {
 				move = false;
-				Move_F = false;
+				MoveFlag = false;
 				WaveCount += 1;
 				MoveTimer = 0.0f;
-				Finish = true;
+				FinishFlag = true;
 			}
 			else {
 				Distance = 11;
@@ -422,10 +422,10 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 			if (camvec.m128_f32[2] >= 70) {
 				move = false;
-				Move_F = false;
+				MoveFlag = false;
 				WaveCount += 1;
 				MoveTimer = 0.0f;
-				Finish = true;
+				FinishFlag = true;
 			}
 			else {
 				Distance = 11;
@@ -439,31 +439,31 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 			if (camvec.m128_f32[2] >= 90) {
 				move = false;
-				Move_F = false;
+				MoveFlag = false;
 				WaveCount += 1;
 				MoveTimer = 0.0f;
-				Finish = true;
+				FinishFlag = true;
 			}
 			else {
 				Distance = 11;
 			}
 		}
 		else if (patern == 6) {
-			stanby = false;
+			StanbyFlag = false;
 			Velocity = { 0, 0, 0.1 };
-			ShakeHead_F = false;
+			ShakeHeadFlag = false;
 			if (camvec.m128_f32[2] >= 92) {
 				Velocity = { 0,0.05,0.1 };
 				if (camvec.m128_f32[2] >= 97) {
 					Velocity = { 0.0f,0.0f,0.0f };
-					Fring_F = true;
-					if (Fring_F == true) {
+					FringFlag = true;
+					if (FringFlag == true) {
 						Velocity = { 0.0f,0.665f,0.0f };
 					}
 				}
 			}
 			move = false;
-			CameraWork_F = false;
+			CameraWorkFlag = false;
 
 			WaveCount += 1;
 			MoveTimer = 0.0f;
@@ -471,7 +471,7 @@ void Player::PlayerMove(bool& move, int patern)
 			ActionCount = 0;
 		}
 	}
-	else if (Move_F == false) {
+	else if (MoveFlag == false) {
 		MoveSpeed = 0.0f;
 		float RandomX = Action::GetInstance()->GetRangRand(-0.008f, 0.008f);
 		float RandomY = Action::GetInstance()->GetRangRand(-0.008f, 0.008f);
@@ -483,7 +483,7 @@ void Player::PlayerMove(bool& move, int patern)
 //オブジェクト描画
 void Player::ObjDraw()
 {
-	if (Hp >= 0 && CameraWork_F == true) {
+	if (Hp >= 0 && CameraWorkFlag == true) {
 		Gun->Draw();
 	}
 }
@@ -560,9 +560,9 @@ void Player::MouthContoroll()
 {
 	//マウス座標の取得
 	Mouse::GetInstance()->MouseMoveSprite(ReticlePos2D);
-	if (Recoil_F == true) {
+	if (RecoilFlag == true) {
 		Mouse::GetInstance()->RecoilMouse(ReticlePos2D);
-		Recoil_F = false;
+		RecoilFlag = false;
 	}
 	else {
 		//取得した座標をレティクルにセット
@@ -573,27 +573,27 @@ void Player::MouthContoroll()
 //画面揺れ
 void Player::ScreenShake(float shakevalue, float shakingtime)
 {
-	if (ShakingStart == true) {
+	if (ShakingStartFlag == true) {
 		if (ShakeLimitTime <= 1) {
 			ShakeLimitTime += shakingtime;
-			if (ShakingScreen_F == true) {
+			if (ShakingScreenFlag == true) {
 				ShakingScreenValue -= shakevalue;
 				if (ShakingScreenValue <= -shakevalue) {
-					ShakingScreen_F = false;
+					ShakingScreenFlag = false;
 				}
 			}
 			else {
 				ShakingScreenValue += shakevalue;
 				if (ShakingScreenValue >= shakevalue) {
-					ShakingScreen_F = true;
+					ShakingScreenFlag = true;
 				}
 			}
 			EyeRot.x += ShakingScreenValue;
 		}
 		else {
-			ShakingScreen_F = true;
+			ShakingScreenFlag = true;
 			ShakeLimitTime = 0;
-			ShakingStart = false;
+			ShakingStartFlag = false;
 			ShakingScreenValue = 0;
 			EyeRot.x = 0;
 		}
@@ -604,7 +604,7 @@ void Player::ScreenShake(float shakevalue, float shakingtime)
 void Player::DamageProcess()
 {
 	if (OldHp > Hp) {
-		ShakingStart = true;
+		ShakingStartFlag = true;
 		ShakingValue = 3.5f;
 		OldHp = Hp;
 	}
@@ -615,26 +615,26 @@ void Player::GunShotProcess()
 {
 	//弾の発射前
 	if (Mouse::GetInstance()->PushClick(0)) {
-		if (Remaining < ReaminingBullet && ReloadFlag == false && BulletShot_F == false) {
+		if (Remaining < ReaminingBullet && ReloadFlag == false && BulletShotFlag == false) {
 			Remaining += 1;
 			//パーティクル発生フラグ
-			Particle_F = true;
+			ParticleFlag = true;
 			//弾の発射フラグ
-			BulletShot_F = true;
+			BulletShotFlag = true;
 			//2Dスプライトリコイルフラグ
-			Recoil_F = true;
+			RecoilFlag = true;
 			//画面揺れのフラグ
-			ShakingStart = true;
+			ShakingStartFlag = true;
 			//銃オブジェクトリコイルフラグ
-			RecoilGun = true;
+			RecoilGunFlag = true;
 			ShakingValue = 0.6f;
 		}
 	}
 	else {
-		BulletShot_F = false;
+		BulletShotFlag = false;
 	}
 
-	if (RecoilGun == true) {
+	if (RecoilGunFlag == true) {
 		RecoveryTime += 0.2f;
 		GunRot.x = -25;
 		GunPos.m128_f32[2] = -3.1f;
@@ -642,7 +642,7 @@ void Player::GunShotProcess()
 			GunRot.x = 0;
 			GunPos.m128_f32[2] = -3.0f;
 			RecoveryTime = 0.0f;
-			RecoilGun = false;
+			RecoilGunFlag = false;
 		}
 	}
 }
@@ -652,27 +652,27 @@ void Player::ReloadProcess()
 {
 	//右クリックを押した時
 	if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
-		if (ReloadSound_F == true) {
+		if (ReloadSoundFlag == true) {
 			ReloadSe->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
-			ReloadSound_F = false;
-			MouseStop_F = true;
+			ReloadSoundFlag = false;
+			MouseStopFlag = true;
 		}
 		ReloadFlag = true;
 	}
 
 	if (Remaining >= 8) {
-		if (Revers == false) {
+		if (ReversFlag == false) {
 			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 210);
 			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 140);
 			if (ReloadSpriteSize.x >= 200) {
-				Revers = true;
+				ReversFlag = true;
 			}
 		}
 		else {
 			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 150);
 			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 80);
 			if (ReloadSpriteSize.x <= 160) {
-				Revers = false;
+				ReversFlag = false;
 			}
 		}
 	}
@@ -681,7 +681,7 @@ void Player::ReloadProcess()
 			SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
 			SpriteRot[i] = 0;
 			Time[i] = 0;
-			DropBullet[i] = false;
+			DropBulletFlag[i] = false;
 			OldRemaining = Remaining;
 		}
 	}
@@ -695,9 +695,9 @@ void Player::ReloadProcess()
 			GunRot.x = 0;
 			if (Remaining == 0) {
 				ReloadFlag = false;
-				ReloadSound_F = true;
+				ReloadSoundFlag = true;
 				ReloadTime = 0;
-				MouseStop_F = false;
+				MouseStopFlag = false;
 			}
 		}
 	}
@@ -706,7 +706,7 @@ void Player::ReloadProcess()
 //マズルエフェクト
 void Player::ParticleEfect()
 {
-	if (Particle_F == true) {
+	if (ParticleFlag == true) {
 		for (int i = 0; i < 10; i++) {
 			double radX = ReticleRot.y * M_PI / 180;
 			double radY = GunRot.x * M_PI / 180;
@@ -737,7 +737,7 @@ void Player::ParticleEfect()
 			PartRed->Add(10, pos, vel, acc, 0.7f, 0.2f, 1.0f);
 			PartGreen->Add(10, pos, vel, acc, 0.5f, 0.2f, 1.0f);
 		}
-		Particle_F = false;
+		ParticleFlag = false;
 		SoundEffect();
 	}
 

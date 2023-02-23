@@ -112,7 +112,7 @@ public://Getter Setter
 	/// 倒されているか
 	/// </summary>
 	/// <returns></returns>
-	bool IsDead() const { return isDead_; }
+	bool IsDead() const { return DeadFlag; }
 
 private:
 	//Obj
@@ -150,7 +150,7 @@ private:
 	//敵が持っているステータス
 	int Hp = 50;
 	int OldHp = 0;
-	bool RobotArive = false;
+	bool RobotAriveFlag = false;
 	XMVECTOR TrackPoint = { 0,0,0 };
 
 	//パーツごとのスケール
@@ -195,11 +195,11 @@ private:
 	float AttackTime = 0.0f;
 	int AttackChanse = 0;
 	float Rand = 0;
-	bool AttackFase = false;
+	bool AttackFaseFlag = false;
 
 	//攻撃の準備時間
 	float AttackPreparationTime = 0;
-	bool AttackShakeDown = false;
+	bool AttackShakeDownFlag = false;
 	float AttackCharge = 0.0f;
 
 	//移動速度
@@ -210,16 +210,16 @@ private:
 
 	//待機時のモーション変数
 	float MotionTime = 0.0f;
-	bool MotionChange = true;
+	bool MotionChangeFlag = true;
 
 	//サイドステップ
 	float MovementChangeTime = 0.0f;
-	bool Reversal_F = false;
+	bool ReversalFlag = false;
 	float SideStepSpeed = 0.001f;
-	bool Movement_F = false;
+	bool MovementFlag = false;
 
 	//Hpが0以上か
-	bool isDead_ = false;
+	bool DeadFlag = false;
 
 	//敵とプレイヤーの距離
 	float OriginDistance;
@@ -233,19 +233,19 @@ private:
 	float PurseNegativeeRot = 0;
 
 	//変形用のフラグ
-	bool Defomation_F = false;
+	bool DefomationFlag = false;
 	float DefomationCount = 0.0f;
 
 	//振動
 	float Vibration=0.0f;
-	bool VibrationChange = false;
+	bool VibrationChangeFlag = false;
 
 	XMVECTOR AttackBeforePos = { 0.0f,0.0f,0.0f };
 	float LimitDistance = 0.0f;
 
 	float AtttackTimer = 0.f;
 	float TimerLimit = 0.f;
-	bool Random = false;
+	bool RandomFlag = false;
 	float AttackTimeMin = 20;
 	float AttackTimeMax = 40;
 };
