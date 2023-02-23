@@ -625,6 +625,7 @@ void ParticleManager::Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOA
 		p.position = position;
 		p.velocity = velocity;
 		p.accel = accel;
+		p.frame = time;
 		p.num_frame = file;
 		p.s_scale = start_scale;
 		p.e_scale = end_scale;

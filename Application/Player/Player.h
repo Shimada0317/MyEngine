@@ -147,6 +147,7 @@ private:
 	//発砲時のエフェクト
 	ParticleManager* PartGreen = nullptr;
 	ParticleManager* PartRed = nullptr;
+	ParticleManager* PartSmoke = nullptr;
 	//その他の機能
 	Audio* ShotSe;
 	Audio* ReloadSe;

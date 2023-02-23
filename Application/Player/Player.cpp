@@ -12,6 +12,8 @@ const int ReaminingBullet = 8;
 Player::~Player()
 {
 	delete PartGreen;
+	delete PartRed;
+	delete PartSmoke;
 	delete ShotSe;
 	delete ReloadSe;
 
@@ -64,6 +66,7 @@ void Player::Initalize(Camera* camera)
 
 	PartGreen = ParticleManager::Create(camera);
 	PartRed = ParticleManager::Create(camera);
+	PartSmoke = ParticleManager::Create(camera);
 	EyeRot.y = 180;
 	OldHp = Hp;
 	RailCam->Update(Velocity, EyeRot, camera);
@@ -141,6 +144,7 @@ void Player::AllUpdate(Camera* camera)
 	Gun->Update();
 	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
 	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
+	PartSmoke->Update({ 0.1f,0.1f,0.1f,0.0f });
 }
 
 
@@ -186,6 +190,7 @@ void Player::Update(Camera* camera, int paterncount)
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
 	ParticleManager::PreDraw(cmdeList);
+	PartSmoke->Draw();
 	PartRed->Draw();
 	PartGreen->Draw();
 	ParticleManager::PostDraw();
@@ -732,10 +737,13 @@ void Player::ParticleEfect()
 			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			XMFLOAT3 acc{};
-			acc.y = -0.00001;
+			acc.y = 0.0;
 
-			PartRed->Add(10, pos, vel, acc, 0.7f, 0.2f, 1.0f);
-			PartGreen->Add(10, pos, vel, acc, 0.5f, 0.2f, 1.0f);
+			XMFLOAT3 Smokeacc{};
+			Smokeacc.y += 0.005f;
+			PartRed->Add(20, pos, vel, acc, 0.7f, 0.2f, 1.0f);
+			PartGreen->Add(20, pos, vel, acc, 0.5f, 0.2f, 1.0f);
+			PartSmoke->Add(20, pos, vel, Smokeacc, 0.4f, 0.2f, 1.0f);
 		}
 		ParticleFlag = false;
 		SoundEffect();
