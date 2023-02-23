@@ -74,7 +74,7 @@ public:
 	/// 攻撃
 	/// </summary>
 	/// <param name="playerhp">プレイヤーのHp</param>
-	void Attack(int& playerhp);
+	void Attack(int& playerhp,float& attacktimer);
 
 	/// <summary>
 	/// 2D→3D座標
@@ -242,5 +242,11 @@ private:
 
 	XMVECTOR AttackBeforePos = { 0.0f,0.0f,0.0f };
 	float LimitDistance = 0.0f;
+
+	float AtttackTimer = 0.f;
+	float TimerLimit = 0.f;
+	bool Random = false;
+	float AttackTimeMin = 20;
+	float AttackTimeMax = 40;
 };
 

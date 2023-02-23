@@ -189,6 +189,21 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 	//ダメージを受けたとき
 	if (OldHp > Hp && Hp >= 0) {
 		OldHp = Hp;
+		HeadPartColor.y -= 0.2f;
+		HeadPartColor.z -= 0.2f;
+
+		BodyPartColor.y -= 0.2f;
+		BodyPartColor.z -= 0.2f;
+	}
+
+	if (Hp < 50) {
+		AttackTimeMin = 15;
+		AttackTimeMax = 20;
+	}
+
+	if (Random == false) {
+		TimerLimit = Action::GetInstance()->GetRangRand(AttackTimeMin, AttackTimeMax);
+		Random = true;
 	}
 
 	//生きているとき
@@ -198,6 +213,7 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 		}
 		//プレイヤーの前まで来たとき
 		else if (Length <= 1.5f) {
+			AtttackTimer += 0.1f;
 			Motion();
 			Movement_F = false;
 			AttackMode(playerhp);
@@ -335,34 +351,38 @@ void Enemy::Motion()
 //攻撃モードの時
 void Enemy::AttackMode(int& playerhp)
 {
-	//除算結果の値
-	int divisionvalue = 0;
-	//攻撃フェイズに移行していないとき
-	if (AttackFase != true) {
-		AttackPreparationTime += 0.1f;
-		//準備時間が一定の値に達した時
-		if (AttackPreparationTime >= 12) {
-			//0~10の範囲なの乱数を生成
-			AttackChanse = Action::GetInstance()->GetRangRand(0, 10);
-			AttackPreparationTime = 0;
-			divisionvalue = AttackChanse % 2;
-		}
-		//生成した乱数の値が一定の時
-		if (divisionvalue == 1) {
-
-			//攻撃に移行する
-			AttackFase = true;
-			//乱数の初期化
-			AttackChanse = 0;
-		}
+	if (AtttackTimer >= TimerLimit) {
+		AttackFase = true;
+		Random = false;
 	}
+	//除算結果の値
+	//int divisionvalue = 0;
+	////攻撃フェイズに移行していないとき
+	//if (AttackFase != true) {
+	//	AttackPreparationTime += 0.1f;
+	//	//準備時間が一定の値に達した時
+	//	if (AttackPreparationTime >= 12) {
+	//		//0~10の範囲なの乱数を生成
+	//		AttackChanse = Action::GetInstance()->GetRangRand(0, 10);
+	//		AttackPreparationTime = 0;
+	//		divisionvalue = AttackChanse % 2;
+	//	}
+	//	//生成した乱数の値が一定の時
+	//	if (divisionvalue == 1) {
+
+	//		//攻撃に移行する
+	//		AttackFase = true;
+	//		//乱数の初期化
+	//		AttackChanse = 0;
+	//	}
+	//}
 	//攻撃フェイズに移行した時
 	if (AttackFase == true) {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);
 		if (HeadPartRot.y >= PursePositiveRot) {
 			HeadPartRot.y = PursePositiveRot;
 		}
-		Attack(playerhp);
+		Attack(playerhp,AtttackTimer);
 	}
 	else {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PurseNegativeeRot - 1);
@@ -374,7 +394,7 @@ void Enemy::AttackMode(int& playerhp)
 }
 
 //攻撃する時
-void Enemy::Attack(int& playerhp)
+void Enemy::Attack(int& playerhp, float& attacktimer)
 {
 	//巨大化していく値
 	float gigantic = 0.00002f;
@@ -422,6 +442,7 @@ void Enemy::Attack(int& playerhp)
 			ArmsPartScl = { 0.2f,0.2f,0.2f };
 			AttackShakeDown = false;
 			AttackFase = false;
+			attacktimer = 0;
 			playerhp -= 1;
 		}
 	}

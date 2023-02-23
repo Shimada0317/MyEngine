@@ -473,9 +473,10 @@ void Player::PlayerMove(bool& move, int patern)
 	}
 	else if (Move_F == false) {
 		MoveSpeed = 0.0f;
-		float RandomX = Action::GetInstance()->GetRangRand(-0.01f, 0.01f);
-		float RandomY = Action::GetInstance()->GetRangRand(-0.01f, 0.01f);
+		float RandomX = Action::GetInstance()->GetRangRand(-0.008f, 0.008f);
+		float RandomY = Action::GetInstance()->GetRangRand(-0.008f, 0.008f);
 		Velocity = { RandomX,RandomY,0.f };
+		Velocity = { 0.f,0.f,0.f };
 	}
 }
 
