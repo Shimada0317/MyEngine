@@ -57,6 +57,9 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 
 	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
 
+	PartGreen = ParticleManager::Create(camera);
+	PartRed = ParticleManager::Create(camera);
+
 	CenterMat = Center->GetMatrix();
 	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
 
@@ -149,6 +152,9 @@ void Enemy::AllUpdate()
 	BodyPart->Update(BodyPartColor);
 	ArmsPart->Update(ArmsPartColor);
 
+	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
+	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
+
 	for (std::unique_ptr<ObjParticle>& patrticle : Obj_Particle) {
 		patrticle->Update(CenterWorldPos, AllRot);
 	}
@@ -193,7 +199,6 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 		OldHp = Hp;
 		HeadPartColor.y -= 0.2f;
 		HeadPartColor.z -= 0.2f;
-
 		BodyPartColor.y -= 0.2f;
 		BodyPartColor.z -= 0.2f;
 	}
@@ -210,11 +215,12 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 
 	//生きているとき
 	if (RobotAriveFlag == true && Hp > 0) {
-		if (Length > 1.5f&&DefomationFlag == true ) {
+		if (Length > LengthLimit && DefomationFlag == true) {
 			TrackPlayerMode();
 		}
 		//プレイヤーの前まで来たとき
-		else if (Length <= 1.5f) {
+		else if (Length <= LengthLimit) {
+			BodyPartPos.m128_f32[2] -= 1.f;
 			AtttackTimer += 0.1f;
 			Motion();
 			MovementFlag = false;
@@ -233,15 +239,20 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 		ArmsPartColor.w -= Subtraction;
 		BodyPartColor.w -= Subtraction;
 		HeadPartColor.w -= Subtraction;
+		ParticleEfectFlag = true;
+		if (ParticleEfectFlag == true&&RobotAriveFlag==true) {
+			ParticleEfect();
+		}
 		RobotAriveFlag = false;
 		AttackPreparationTime = 0;
 		AttackChanse = 0;
 		Rand = 0;
+		
 		if (ArmsPartColor.w <= 0 && Obj_Particle.empty()) {
 			DeadFlag = true;
 		}
 	}
-
+	
 	StatusSet();
 	AllUpdate();
 }
@@ -249,6 +260,11 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 //描画処理
 void Enemy::Draw(DirectXCommon* dxCommon)
 {
+	ParticleManager::PreDraw(dxCommon->GetCmdList());
+	PartGreen->Draw();
+	PartRed->Draw();
+	ParticleManager::PostDraw();
+
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	for (std::unique_ptr<ObjParticle>& particle : Obj_Particle) {
 		particle->Draw();
@@ -258,8 +274,9 @@ void Enemy::Draw(DirectXCommon* dxCommon)
 	ArmsPart->Draw();
 	Shadow->Draw();
 	//Center->Draw();
-
 	Object3d::PostDraw();
+
+
 }
 
 //プレイヤーへの追尾モードの時
@@ -324,6 +341,7 @@ void Enemy::Motion()
 		BodyPartScl.z += hypertrophy.z;
 		ArmsPartScl.z += hypertrophy.z;
 		HeadPartScl.z += hypertrophy.z;
+
 		if (MotionTime >= 1) {
 			MotionChangeFlag = false;
 			MotionTime = 0.0f;
@@ -381,12 +399,15 @@ void Enemy::AttackMode(int& playerhp)
 	//攻撃フェイズに移行した時
 	if (AttackFaseFlag == true) {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);
+		LengthLimit = 0.5f;
+
 		if (HeadPartRot.y >= PursePositiveRot) {
 			HeadPartRot.y = PursePositiveRot;
 		}
-		Attack(playerhp,AtttackTimer);
+		Attack(playerhp, AtttackTimer);
 	}
 	else {
+		LengthLimit = 1.5f;
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PurseNegativeeRot - 1);
 		if (HeadPartRot.y <= PurseNegativeeRot) {
 			HeadPartRot.y = PurseNegativeeRot;
@@ -446,6 +467,7 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			AttackFaseFlag = false;
 			attacktimer = 0;
 			playerhp -= 1;
+
 		}
 	}
 }
@@ -487,19 +509,43 @@ void Enemy::ChangeViewPort(XMMATRIX& matviewport)
 	matviewport.r[0].m128_f32[1] = 0;
 	matviewport.r[0].m128_f32[2] = 0;
 	matviewport.r[0].m128_f32[3] = 0;
-	   
+
 	matviewport.r[1].m128_f32[0] = 0;
 	matviewport.r[1].m128_f32[1] = -(WinApp::window_height / 2);
 	matviewport.r[1].m128_f32[2] = 0;
 	matviewport.r[1].m128_f32[3] = 0;
-	   
+
 	matviewport.r[2].m128_f32[0] = 0;
 	matviewport.r[2].m128_f32[1] = 0;
 	matviewport.r[2].m128_f32[2] = 1;
 	matviewport.r[2].m128_f32[3] = 0;
-	   
+
 	matviewport.r[3].m128_f32[0] = WinApp::window_width / 2 + offset.m128_f32[0];
 	matviewport.r[3].m128_f32[1] = WinApp::window_height / 2 + offset.m128_f32[1];
 	matviewport.r[3].m128_f32[2] = 0;
 	matviewport.r[3].m128_f32[3] = 1;
+}
+
+void Enemy::ParticleEfect()
+{
+	for (int i = 0; i < 50; i++) {
+		XMFLOAT3 pos;
+
+		pos.x = CenterWorldPos.m128_f32[0];
+		pos.y = CenterWorldPos.m128_f32[1];
+		pos.z = CenterWorldPos.m128_f32[2];
+
+		const float rnd_vel = 0.04f;
+		XMFLOAT3 vel{};
+		vel.x = Action::GetInstance()->GetRangRand(-0.03f,0.03f);
+		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.06f);;
+
+		XMFLOAT3 acc{};
+		acc.y = 0.0;
+
+		PartRed->Add(200, pos, vel, acc, 4.0f, 0.0f, 150.0f);
+		PartGreen->Add(200, pos, vel, acc, 3.7f, 0.0f, 150.0f);
+	}
+	ParticleEfectFlag = false;
+
 }

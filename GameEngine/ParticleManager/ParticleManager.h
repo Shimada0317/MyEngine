@@ -37,9 +37,6 @@ public: // サブクラス
 
 	struct Particle
 	{
-
-		using XMFLOAT3 = DirectX::XMFLOAT3;
-
 		XMFLOAT3 position = {};
 
 		XMFLOAT3 velocity = {};
@@ -190,10 +187,15 @@ public: // メンバ関数
 	void Draw();
 
 	/// <summary>
-	/// 座標の取得
+	/// 
 	/// </summary>
-	/// <returns>座標</returns>
-
+	/// <param name="file">発生させるエフェクト数</param>
+	/// <param name="position">座標</param>
+	/// <param name="velocity">方向</param>
+	/// <param name="accel">加速度</param>
+	/// <param name="start_scale">スケール</param>
+	/// <param name="end_scale">縮小後のスケール</param>
+	/// <param name="time"></param>
 	void Add(int file, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale, float time);
 
 private: // メンバ変数

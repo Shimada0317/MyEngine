@@ -481,7 +481,7 @@ void Player::PlayerMove(bool& move, int patern)
 		float RandomX = Action::GetInstance()->GetRangRand(-0.008f, 0.008f);
 		float RandomY = Action::GetInstance()->GetRangRand(-0.008f, 0.008f);
 		Velocity = { RandomX,RandomY,0.f };
-		Velocity = { 0.f,0.f,0.f };
+		//Velocity = { 0.f,0.f,0.f };
 	}
 }
 
@@ -720,6 +720,9 @@ void Player::ParticleEfect()
 
 			float sinradY = sinf(radY);
 			float cosradY = cosf(radY);
+
+			XMFLOAT3 pos;
+			
 			if (PaternCount == 3 || PaternCount == 4) {
 				pos.x = GunWorldPos.m128_f32[0] + 2.3f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
@@ -736,6 +739,12 @@ void Player::ParticleEfect()
 			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+			const float smokernd_vel = 0.05f;
+			XMFLOAT3 smokevel{};
+			smokevel.x = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
+			smokevel.y = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
+			smokevel.z = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
 			XMFLOAT3 acc{};
 			acc.y = 0.0;
 
@@ -743,7 +752,7 @@ void Player::ParticleEfect()
 			Smokeacc.y += 0.005f;
 			PartRed->Add(20, pos, vel, acc, 0.7f, 0.2f, 1.0f);
 			PartGreen->Add(20, pos, vel, acc, 0.5f, 0.2f, 1.0f);
-			PartSmoke->Add(20, pos, vel, Smokeacc, 0.4f, 0.2f, 1.0f);
+			PartSmoke->Add(20, pos, smokevel, Smokeacc, 0.4f, 0.2f, 1.0f);
 		}
 		ParticleFlag = false;
 		SoundEffect();

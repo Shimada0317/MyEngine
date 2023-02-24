@@ -89,6 +89,11 @@ public:
 	/// </summary>
 	void ChangeViewPort(XMMATRIX& matviewport);
 
+	/// <summary>
+	/// パーティクル発生
+	/// </summary>
+	void ParticleEfect();
+
 public://Getter Setter
 	/// <summary>
 	/// 追尾先のセッター
@@ -135,6 +140,10 @@ private:
 	std::unique_ptr<Sprite> RockOn;
 	//頭
 	std::unique_ptr<Sprite> RockOnHead;
+
+	//発砲時のエフェクト
+	ParticleManager* PartGreen = nullptr;
+	ParticleManager* PartRed = nullptr;
 
 	//その他
 	//サウンドエフェクト
@@ -207,6 +216,7 @@ private:
 
 	//プレイヤーと敵の距離
 	float Length = 3.0f;
+	float LengthLimit = 1.5f;
 
 	//待機時のモーション変数
 	float MotionTime = 0.0f;
@@ -248,5 +258,7 @@ private:
 	bool RandomFlag = false;
 	float AttackTimeMin = 20;
 	float AttackTimeMax = 40;
+
+	bool ParticleEfectFlag = false;
 };
 
