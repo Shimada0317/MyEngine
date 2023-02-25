@@ -13,6 +13,7 @@
 #include"PostEffect.h"
 #include<memory>
 #include"Light.h"
+#include"LightGroup.h"
 #include"Camera.h"
 
 using namespace std;
@@ -130,6 +131,7 @@ private:
 	Sprite* ArrowLeftTrue = nullptr;
 	//その他の機能
 	Light* light = nullptr;
+	LightGroup* lightGroupe = nullptr;
 	PostEffect* Post = nullptr;
 	Audio* ClickSe = nullptr;
 	Audio* MorseCodeSe = nullptr;
@@ -187,5 +189,9 @@ private:
 	float Volume = 0.8f;
 	//説明ページ
 	int DescriptionPage = 0;
+
+	float PointLightPos[3] = { 0.f,0.f,0.f };
+	float PointLightColor[3] = { 1.f,1.f,1.f };
+	float PointLightAtten[3] = { 0.3f,0.1f,0.1f };
 };
 

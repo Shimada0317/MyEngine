@@ -41,6 +41,7 @@ void Framework::Initialize()
 	ParticleManager::StaticInitialize(camera,dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	Texture::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height,camera);
 	Light::StaticInitialize(dxCommon->GetDev());
+	LightGroup::StaticInitialize(dxCommon->GetDev());
 	debugText = DebugText::GetInstance();
 	debugText->Initialize(debugTextNumber);
 

@@ -33,3 +33,11 @@ struct PointLight
 	float3 lightatten;
 	uint active;
 };
+
+static const int DIRLIGHT_NUM = 3;
+
+cbuffer cbuff2 : register(b2)
+{
+	float3 lightv;
+	float3 lightcolor;
+}

@@ -57,6 +57,16 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	ArrowRightTrue = Sprite::SpriteCreate(12, ArrowRightPos);
 	ArrowLeftTrue = Sprite::SpriteCreate(13, ArrowLeftPos);
 
+	
+	lightGroupe = LightGroup::Create();
+	lightGroupe->SetDirLightActive(0, false);
+	lightGroupe->SetDirLightActive(1, false);
+	lightGroupe->SetDirLightActive(2, false);
+	lightGroupe->SetPointLightActive(0, true);
+	PointLightPos[0] = 0.5f;
+	PointLightPos[1] = 1.0f;
+	PointLightPos[2] = 0.0f;
+
 	//オブジェクトの生成
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
 	for (int i = 0; i < BILLS; i++) {
@@ -118,6 +128,10 @@ void TitleScene::StatusSet()
 	Title->SetPosition({ TitlePos });
 	//マウスカーソルの座標セット
 	Cursor->SetPosition({ ReticlePos });
+
+	lightGroupe->SetPointLightPos(0, XMFLOAT3(PointLightPos));
+	lightGroupe->SetPointLightColor(0, XMFLOAT3(PointLightColor));
+	lightGroupe->SetPointLightAtten(0, XMFLOAT3(PointLightAtten));
 }
 
 //全ての更新処理をまとめる
@@ -136,6 +150,8 @@ void TitleScene::AllUpdate()
 	World->Update();
 	//カメラの移動先のビルの更新処理
 	Start->Update();
+
+	lightGroupe->Update();
 }
 
 //更新処理
