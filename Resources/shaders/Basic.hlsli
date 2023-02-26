@@ -29,7 +29,7 @@ static const int POINTLIGHT_NUM = 3;
 struct PointLight
 {
 	float3 lightpos;
-	float3 lightcolor;
+	//float3 lightcolor;
 	float3 lightatten;
 	uint active;
 };

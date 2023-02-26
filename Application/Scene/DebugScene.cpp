@@ -10,7 +10,7 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 {
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 	light = Light::Create();
-	light->SetLightColor({ 0,1,1 });
+	light->SetLightColor({ 1,1,1 });
 	Object3d::SetCamera(camera);
 	Object3d::SetLight(light);
 
