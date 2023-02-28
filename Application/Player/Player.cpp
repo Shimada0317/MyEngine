@@ -463,7 +463,7 @@ void Player::PlayerMove(bool& move, int patern)
 					Velocity = { 0.0f,0.0f,0.0f };
 					FringFlag = true;
 					if (FringFlag == true) {
-						Velocity = { 0.0f,0.665f,0.0f };
+						Velocity = { 0.0f,0.6683f,0.0f };
 					}
 				}
 			}
@@ -752,7 +752,7 @@ void Player::ParticleEfect()
 			Smokeacc.y += 0.005f;
 			PartRed->Add(20, pos, vel, acc, 0.7f, 0.2f, 1.0f);
 			PartGreen->Add(20, pos, vel, acc, 0.5f, 0.2f, 1.0f);
-			PartSmoke->Add(20, pos, smokevel, Smokeacc, 0.4f, 0.2f, 1.0f);
+			PartSmoke->Add(50, pos, smokevel, acc, 0.5f, 0.0f, 1.0f);
 		}
 		ParticleFlag = false;
 		SoundEffect();

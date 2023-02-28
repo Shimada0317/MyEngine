@@ -280,7 +280,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 //ImgUiの描画処理
 void GameScene::ImgDraw()
 {
-	Act->ImGuiDraw();
+	//Act->ImGuiDraw();
 }
 
 //ポストエフェクトの描画処理

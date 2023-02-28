@@ -50,7 +50,7 @@ void Object3d::CreateGraphicsPipeline()
 
 	// 頂点シェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/BasicVS.hlsl",    // シェーダファイル名
+		L"Resources/shaders/OBJVertexShader.hlsl",    // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "vs_5_0",    // エントリーポイント名、シェーダーモデル指定
@@ -73,7 +73,7 @@ void Object3d::CreateGraphicsPipeline()
 
 	// ピクセルシェーダの読み込みとコンパイル
 	result = D3DCompileFromFile(
-		L"Resources/shaders/BasicPS.hlsl",    // シェーダファイル名
+		L"Resources/shaders/OBJPixelShader.hlsl",    // シェーダファイル名
 		nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, // インクルード可能にする
 		"main", "ps_5_0",    // エントリーポイント名、シェーダーモデル指定
@@ -336,9 +336,14 @@ void Object3d::Draw()
 	// 定数バッファビューをセット
 	cmdList->SetGraphicsRootConstantBufferView(0, constBuffB0->GetGPUVirtualAddress());
 
-	// ライトの描画
-	light->Draw(cmdList, 3);
+	if (light != nullptr) {
+		// ライトの描画
+		light->Draw(cmdList, 3);
+	}
 
+	if (lightGroup != nullptr) {
+		lightGroup->Draw(cmdList, 3);
+	}
 	// モデル描画
 	model->Draw(cmdList);
 }

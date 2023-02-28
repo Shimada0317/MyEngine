@@ -69,9 +69,9 @@ private:
 	XMFLOAT3 sphereRot = { 0,0,0 };
 	XMFLOAT3 sphereScl = { 4.0f,4.0f,4.0f };
 
-	float PointLightsPos[3] = { 0,0,0 };
-	float PoinLightColor[3] = { 1,1,1 };
-	float PointLightAtten[3] = { 0.3f,0.1f,0.1f };
+	XMFLOAT3 PointLightsPos = { 0,0,0 };
+	float PoinLightColor[3] = { 0,0,1 };
+	float PointLightAtten[3] = { 0.03f,0.01f,0.01f };
 
 	LightGroup* lightGroupe;
 	XMVECTOR lightDir = { 0,0,0,0 };

@@ -538,7 +538,8 @@ void Enemy::ParticleEfect()
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};
 		vel.x = Action::GetInstance()->GetRangRand(-0.03f,0.03f);
-		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.06f);;
+		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.06f);
+		vel.z = Action::GetInstance()->GetRangRand(-0.01f, 0.01f);
 
 		XMFLOAT3 acc{};
 		acc.y = 0.0;

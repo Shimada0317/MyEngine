@@ -25,6 +25,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetCamera(TitleCamera);
 
 	light = Light::Create();
+	light->SetLightColor({ 1.0f,1.0f,1.0f });
 	Object3d::SetLight(light);
 
 	////スプライトの読み込み
@@ -132,6 +133,8 @@ void TitleScene::StatusSet()
 	lightGroupe->SetPointLightPos(0, XMFLOAT3(PointLightPos));
 	lightGroupe->SetPointLightColor(0, XMFLOAT3(PointLightColor));
 	lightGroupe->SetPointLightAtten(0, XMFLOAT3(PointLightAtten));
+
+	
 }
 
 //全ての更新処理をまとめる
@@ -151,7 +154,7 @@ void TitleScene::AllUpdate()
 	//カメラの移動先のビルの更新処理
 	Start->Update();
 
-	lightGroupe->Update();
+	light->Update();
 }
 
 //更新処理
