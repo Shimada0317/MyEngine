@@ -4,7 +4,7 @@ cbuffer cbuff0:register(b0)
 	matrix viewproj;
 	matrix world;
 	float3 camerapos;
-
+	float timer;
 };
 
 cbuffer cbuff1:register(b1)

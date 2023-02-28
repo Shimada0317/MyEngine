@@ -48,7 +48,7 @@ public: // サブクラス
 		XMMATRIX viewproj;    // ビュープロジェクション行列
 		XMMATRIX world; // ワールド行列
 		XMFLOAT3 cameraPos; // カメラ座標（ワールド座標）
-
+		float timer;
 	};
 
 public: // 静的メンバ関数
@@ -210,5 +210,7 @@ private: // メンバ変数
 
 	XMMATRIX matScale, matRot, matTrans;
 
+
+	float timer = 0;
 };
 

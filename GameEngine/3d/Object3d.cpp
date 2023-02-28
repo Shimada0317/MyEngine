@@ -308,6 +308,8 @@ void Object3d::Update(const XMFLOAT4 color)
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
 	const XMFLOAT3& cameraPos = camera->GetEye();
 
+	timer += 0.001f;
+
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);
@@ -315,6 +317,7 @@ void Object3d::Update(const XMFLOAT4 color)
 	constMap->viewproj = matViewProjection;
 	constMap->world = matWorld;
 	constMap->cameraPos = cameraPos;
+	constMap->timer = timer;
 	constBuffB0->Unmap(0, nullptr);
 }
 
@@ -342,7 +345,7 @@ void Object3d::Draw()
 	}
 
 	if (lightGroup != nullptr) {
-		lightGroup->Draw(cmdList, 3);
+		lightGroup->Draw(cmdList,3);
 	}
 	// モデル描画
 	model->Draw(cmdList);

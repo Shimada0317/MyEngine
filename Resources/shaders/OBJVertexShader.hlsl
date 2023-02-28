@@ -10,7 +10,7 @@ VSOutput main(float4 pos : POSITION, float3 normal : NORMAL, float2 uv : TEXCOOR
 	output.svpos = mul(mul(viewproj, world), pos);
 	output.world = wpos;
 	output.normal = wnormal.xyz;
-	output.uv = uv;
+	output.uv = uv.x+timer;
 
 	return output;
 }

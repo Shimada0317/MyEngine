@@ -16,7 +16,7 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 
 
 	Object3d::SetCamera(camera);
-	Object3d::SetLight(light);
+	//Object3d::SetLight(light);
 	Object3d::SetLightGroup(lightGroupe);
 
 
@@ -33,8 +33,8 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 	lightGroupe->SetDirLightActive(1, false);
 	lightGroupe->SetDirLightActive(2, false);
 	lightGroupe->SetPointLightActive(0, true);
-	PointLightsPos.x = 0.0f;
-	PointLightsPos.y = 0.0f;
+	PointLightsPos.x = 0.5f;
+	PointLightsPos.y = 1.0f;
 	PointLightsPos.z = 0.0f;
 
 	camera->SetTarget(cameraTarget);
