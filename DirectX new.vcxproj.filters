@@ -600,7 +600,7 @@
     <ClInclude Include="Application\Easing\Easing.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="SpotLight.h">
+    <ClInclude Include="GameEngine\Light\SpotLight\SpotLight.h">
       <Filter>ヘッダー ファイル\GameEngine\Light</Filter>
     </ClInclude>
   </ItemGroup>

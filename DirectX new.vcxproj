@@ -326,6 +326,7 @@
     <ClInclude Include="GameEngine\Light\Light.h" />
     <ClInclude Include="GameEngine\Light\LightGroup.h" />
     <ClInclude Include="GameEngine\Light\PointLight.h" />
+    <ClInclude Include="GameEngine\Light\SpotLight\SpotLight.h" />
     <ClInclude Include="GameEngine\ParticleManager\ParticleManager.h" />
     <ClInclude Include="GameEngine\PostEffect\PostEffect.h" />
     <ClInclude Include="GameEngine\WinApp\WinApp.h" />
@@ -337,7 +338,6 @@
     <ClInclude Include="GameEngine\3d\ObjModel.h" />
     <ClInclude Include="GameEngine\3d\Object3d.h" />
     <ClInclude Include="Application\Player\Player.h" />
-    <ClInclude Include="SpotLight.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

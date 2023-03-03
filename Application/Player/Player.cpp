@@ -478,6 +478,7 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 	}
 	else if (MoveFlag == false) {
+
 		Velocity = { 0.f,0.f,0.f };
 	}
 }
