@@ -109,6 +109,7 @@ private://メンバ変数
 	Audio* Bgm = nullptr;
 	PostEffect* postEffect = nullptr;
 	Light* light = nullptr;
+	LightGroup* lightGroupe = nullptr;
 	unique_ptr <Actor> Act = nullptr;
 	//最初のビルのステータス
 	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
@@ -142,5 +143,20 @@ private://メンバ変数
 	bool GameStartFlag = false;
 	bool DamageHitFlag = false;
 	XMFLOAT4 DamageEfectColor = { 1.f,1.f,1.f,1.f };
+
+
+	XMVECTOR lightDir = { 0,0,0,0 };
+
+	XMFLOAT3 SpotLightDir = { 0,-1,0 };
+	XMFLOAT3 SpotLightPos = { 0,1005,0 };
+	XMFLOAT3 SpotLightColor = { 1,1,1 };
+	XMFLOAT3 SpotLightAtten = { 0.f,0.f,0.f };
+	XMFLOAT2 SpotLightFactorAngle = { 20.0f,30.0f };
+
+	XMFLOAT3 SpotLightDir2 = { 0,-1,0 };
+	XMFLOAT3 SpotLightPos2 = { 0,1005,0 };
+	XMFLOAT3 SpotLightColor2 = { 0.7,0.4 ,0 };
+	XMFLOAT3 SpotLightAtten2 = { 0.f,0.f,0.f };
+	XMFLOAT2 SpotLightFactorAngle2 = { 20.0f,30.0f };
 };
 

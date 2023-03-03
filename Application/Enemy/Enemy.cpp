@@ -7,6 +7,8 @@ using namespace DirectX;
 const int HeadDamage = 40;
 const int BodyDamage = 35;
 const float Subtraction = 0.05f;
+const float FallSpeed = 0.25f;
+const float AddDefomationValue = 0.04f;
 const XMFLOAT4 AddColor = { 0.1f,0.1f,0.1f,0.0f };
 
 const XMFLOAT4 operator+(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& rhs)
@@ -85,11 +87,11 @@ void Enemy::StatusSet()
 {
 	//変形前なら
 	if (DefomationFlag == false) {
-		AllPos.m128_f32[1] -= 0.1f;
+		AllPos.m128_f32[1] -=FallSpeed;
 		//地面に着いたとき
 		if (AllPos.m128_f32[1] <= 0) {
 			AllPos.m128_f32[1] = 0;
-			DefomationCount += 0.05f;
+			DefomationCount += AddDefomationValue;
 			if (HeadPartScl.z <= 0.3f && ArmsPartScl.z <= 0.2f) {
 				Action::GetInstance()->EaseOut(HeadPartScl.x, 1.0f);
 				Action::GetInstance()->EaseOut(HeadPartScl.y, 1.0f);
@@ -163,7 +165,9 @@ void Enemy::AllUpdate()
 //更新処理
 void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbulletshot)
 {
-
+	if(Input::GetInstance()->TriggerKey(DIK_O)){
+		Hp=0;
+	}
 
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
@@ -375,27 +379,7 @@ void Enemy::AttackMode(int& playerhp)
 		AttackFaseFlag = true;
 		RandomFlag = false;
 	}
-	//除算結果の値
-	//int divisionvalue = 0;
-	////攻撃フェイズに移行していないとき
-	//if (AttackFase != true) {
-	//	AttackPreparationTime += 0.1f;
-	//	//準備時間が一定の値に達した時
-	//	if (AttackPreparationTime >= 12) {
-	//		//0~10の範囲なの乱数を生成
-	//		AttackChanse = Action::GetInstance()->GetRangRand(0, 10);
-	//		AttackPreparationTime = 0;
-	//		divisionvalue = AttackChanse % 2;
-	//	}
-	//	//生成した乱数の値が一定の時
-	//	if (divisionvalue == 1) {
-
-	//		//攻撃に移行する
-	//		AttackFase = true;
-	//		//乱数の初期化
-	//		AttackChanse = 0;
-	//	}
-	//}
+	
 	//攻撃フェイズに移行した時
 	if (AttackFaseFlag == true) {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);

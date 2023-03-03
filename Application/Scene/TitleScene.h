@@ -193,5 +193,19 @@ private:
 	float PointLightPos[3] = { 0.f,0.f,0.f };
 	float PointLightColor[3] = { 1.f,1.f,1.f };
 	float PointLightAtten[3] = { 0.3f,0.1f,0.1f };
+
+	XMVECTOR lightDir = { 0,0,0,0 };
+
+	XMFLOAT3 SpotLightDir = { 0,-1,0 };
+	XMFLOAT3 SpotLightPos = { 0,1005,0 };
+	XMFLOAT3 SpotLightColor = { 1,1,1 };
+	XMFLOAT3 SpotLightAtten = { 0.f,0.f,0.f };
+	XMFLOAT2 SpotLightFactorAngle = { 20.0f,30.0f };
+
+	XMFLOAT3 SpotLightDir2 = { 0,0,0 };
+	XMFLOAT3 SpotLightPos2 = { 10,1005,160 };
+	XMFLOAT3 SpotLightColor2 = { 0,0,1 };
+	XMFLOAT3 SpotLightAtten2 = { 0.f,0.f,0.f };
+	XMFLOAT2 SpotLightFactorAngle2 = { 20.0f,30.0f };
 };
 

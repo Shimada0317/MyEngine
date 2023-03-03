@@ -29,7 +29,7 @@ void ModelManager::Initialize()
     CallModel("gun");
     CallModel("heri", true);
     CallModel("hane", true);
-    CallModel("Sphere");
+    CallModel("Sphere",true);
 }
 
 void ModelManager::CallModel(const std::string& ObjModelname, bool Smoothing)

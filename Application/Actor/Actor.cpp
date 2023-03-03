@@ -83,8 +83,8 @@ void Actor::SetPSR()
 		LifeCount[i]->SetPosition({ 1200,630 });
 	}
 	//Hpƒo[
-	HpBer->SetSize({ 128,64 });
-	HpBer->SetPosition({ 1070,650 });
+	HpBer->SetSize({ 224,96 });
+	HpBer->SetPosition({ WinApp::window_width-228,WinApp::window_height-100 });
 	player->SetHp(PlayerHp);
 
 	Heri->SetPosition(Heripos);
@@ -191,6 +191,7 @@ void Actor::SpriteDraw()
 {
 	if (GetCamWorkFlag == true) {
 		
+		HpBer->Draw();
 
 		if (PlayerHp == 1) {
 			LifeCount[0]->Draw();
@@ -207,7 +208,6 @@ void Actor::SpriteDraw()
 		else if (PlayerHp == 5) {
 			LifeCount[4]->Draw();
 		}
-		HpBer->Draw();
 	}
 	player->SpriteDraw();
 }

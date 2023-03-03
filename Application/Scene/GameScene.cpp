@@ -29,7 +29,10 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect->Update(PostCol);
 
 	light = Light::Create();
+	lightGroupe = LightGroup::Create();
+
 	Object3d::SetLight(light);
+	Object3d::SetLightGroup(lightGroupe);
 
 	//	スプライトの読み込み
 	Sprite::LoadTexture(19, L"Resources/DamageEfect.png");
@@ -74,6 +77,13 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	FieldBillRot[2] = { 0.0f,90.0f,0.0f };
 	FieldBillRot[3] = { 0.0f,0.0f,0.0f };
 	FieldBillRot[4] = { 0.0f,0.0f,0.0f };
+
+	lightGroupe->SetPointLightActive(0, false);
+	lightGroupe->SetPointLightActive(1, false);
+	lightGroupe->SetPointLightActive(2, false);
+	lightGroupe->SetSpotLightActive(0, true);
+	lightGroupe->SetSpotLightActive(1, true);
+	lightGroupe->SetSpotLightActive(2, true);
 }
 
 //ステータスセット
@@ -125,6 +135,18 @@ void GameScene::StatusSet()
 	}
 
 	DamageEfectSp->SetColor(DamageEfectColor);
+
+	lightGroupe->SetSpotLightDir(0, XMVECTOR({ SpotLightDir.x, SpotLightDir.y, SpotLightDir.z }));
+	lightGroupe->SetSpotLightPos(0, SpotLightPos);
+	lightGroupe->SetSpotLightColor(0, SpotLightColor);
+	lightGroupe->SetSpotLightAtten(0, SpotLightAtten);
+	lightGroupe->SetSpotLightFactorAngle(0, SpotLightFactorAngle);
+
+	lightGroupe->SetSpotLightDir(1, XMVECTOR({ SpotLightDir2.x, SpotLightDir2.y, SpotLightDir2.z }));
+	lightGroupe->SetSpotLightPos(1, SpotLightPos2);
+	lightGroupe->SetSpotLightColor(1, SpotLightColor2);
+	lightGroupe->SetSpotLightAtten(1, SpotLightAtten2);
+	lightGroupe->SetSpotLightFactorAngle(1, SpotLightFactorAngle2);
 };
 
 //オブジェクトなどの更新処理
@@ -136,19 +158,21 @@ void GameScene::AllUpdata()
 	}
 	//左右のビルの更新処理
 	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->Update({ 0.4f,0.4f,0.5f,0.9f });
-		BillsLowAlpha[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
+		BillsHighAlpha[i]->Update({ 0.4f,0.4f,0.5f,1.0f });
+		BillsLowAlpha[i]->Update({ 0.2f,0.2f,0.2f,1.0f });
 	}
 	//フィールドのビルの更新処理
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i]->Update({ 0.2f,0.2f,0.3f,1.0f });
 	}
 	//天球の更新処理
-	Sphere->Update();
+	Sphere->Update({1,1,1,1},true);
 	//地面の更新処理
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理
 	Start->Update();
+
+	lightGroupe->Update();
 }
 
 //ゲームシーンの更新処理
@@ -237,6 +261,7 @@ void GameScene::Update()
 		}
 	}
 	postEffect->Update(PostCol);
+	lightGroupe->Update();
 }
 
 //オブジェクトの描画処理

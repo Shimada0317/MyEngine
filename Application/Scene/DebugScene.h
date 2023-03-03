@@ -44,6 +44,7 @@ private:
 	std::unique_ptr<Object3d> Sphere;
 	std::unique_ptr<Object3d> Ground;
 	std::unique_ptr<Object3d> sphere;
+	std::unique_ptr<Object3d> wall;
 
 	ObjModel* SphereModel;
 	ObjModel* GroundModel;
@@ -70,11 +71,23 @@ private:
 	XMFLOAT3 sphereScl = { 4.0f,4.0f,4.0f };
 
 	XMFLOAT3 PointLightsPos = { 0,0,0 };
-	float PoinLightColor[3] = { 0,0,1 };
+	float PoinLightColor[3] = { 1,1,1 };
 	float PointLightAtten[3] = { 0.03f,0.01f,0.01f };
 
 	LightGroup* lightGroupe;
 	XMVECTOR lightDir = { 0,0,0,0 };
+
+	XMFLOAT3 SpotLightDir = { 0,-1,0};
+	XMFLOAT3 SpotLightPos = { 0,1005,0 };
+	XMFLOAT3 SpotLightColor = { 1,1,1 };
+	XMFLOAT3 SpotLightAtten = { 0.f,0.f,0.f };
+	XMFLOAT2 SpotLightFactorAngle = { 20.0f,30.0f };
+
+	XMFLOAT3 SpotLightDir2 = { 0,-1,0 };
+	XMFLOAT3 SpotLightPos2 = { 0,5,0 };
+	XMFLOAT3 SpotLightColor2 = { 1,1,1 };
+	XMFLOAT3 SpotLightAtten2 = { 0.f,0.f,0.f };
+	XMFLOAT2 SpotLightFactorAngle2 = { 20.0f,30.0f };
 };
 
 

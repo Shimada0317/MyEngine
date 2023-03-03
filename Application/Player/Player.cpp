@@ -86,6 +86,7 @@ void Player::StatusSet(Camera* camera)
 		if (DropBulletFlag[i] == true && SpritePos[i].y <= 1300) {
 			SpritePos[i].y += 10;
 			Time[i] += 0.5f;
+			SpritePos[i].x += Action::GetInstance()->GetRangRand(-10, 10);
 			Action::GetInstance()->ThrowUp(Gravity, Time[i], 40, SpritePos[i].y);
 			SpriteRot[i] += 80;
 		}
@@ -477,11 +478,7 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 	}
 	else if (MoveFlag == false) {
-		MoveSpeed = 0.0f;
-		float RandomX = Action::GetInstance()->GetRangRand(-0.008f, 0.008f);
-		float RandomY = Action::GetInstance()->GetRangRand(-0.008f, 0.008f);
-		Velocity = { RandomX,RandomY,0.f };
-		//Velocity = { 0.f,0.f,0.f };
+		Velocity = { 0.f,0.f,0.f };
 	}
 }
 

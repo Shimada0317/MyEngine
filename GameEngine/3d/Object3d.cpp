@@ -258,7 +258,7 @@ bool Object3d::Initialize()
 	return true;
 }
 
-void Object3d::Update(const XMFLOAT4 color)
+void Object3d::Update(const XMFLOAT4 color,bool UvScroll)
 {
 	assert(camera);
 
@@ -308,8 +308,9 @@ void Object3d::Update(const XMFLOAT4 color)
 	const XMMATRIX& matViewProjection = camera->GetViewProjectionMatrix();
 	const XMFLOAT3& cameraPos = camera->GetEye();
 
-	timer += 0.001f;
-
+	if (UvScroll == true) {
+		timer += 0.0001f;
+	}
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;
 	result = constBuffB0->Map(0, nullptr, (void**)&constMap);

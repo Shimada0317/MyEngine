@@ -43,9 +43,24 @@ struct DirLight
 	uint active;
 };
 
+//スポットライトの数
+static const int SPOTLIGHT_NUM = 3;
+
+struct SpotLight
+{
+	float3 lightv;
+	float3 lightpos;
+	float3 lightcolor;
+	float3 lightatten;
+	float2 lightfactoranglecos;
+	uint active;
+};
+
 cbuffer cbuff2 : register(b2)
 {
 	float3 ambientColor;
 	DirLight dirLights[DIRLIGHT_NUM];
 	PointLight pointLights[POINTLIGHT_NUM];
+	SpotLight spotLights[SPOTLIGHT_NUM];
 }
+

@@ -123,7 +123,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update(const XMFLOAT4 color={1,1,1,1});
+	void Update(const XMFLOAT4 color={1,1,1,1},bool UvScroll=false);
 
 	
 

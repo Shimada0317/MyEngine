@@ -26,7 +26,10 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 
 	light = Light::Create();
 	light->SetLightColor({ 1.0f,1.0f,1.0f });
+	lightGroupe = LightGroup::Create();
+
 	Object3d::SetLight(light);
+	Object3d::SetLightGroup(lightGroupe);
 
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/start.png");
@@ -58,16 +61,6 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	ArrowRightTrue = Sprite::SpriteCreate(12, ArrowRightPos);
 	ArrowLeftTrue = Sprite::SpriteCreate(13, ArrowLeftPos);
 
-	
-	lightGroupe = LightGroup::Create();
-	lightGroupe->SetDirLightActive(0, false);
-	lightGroupe->SetDirLightActive(1, false);
-	lightGroupe->SetDirLightActive(2, false);
-	lightGroupe->SetPointLightActive(0, true);
-	PointLightPos[0] = 0.5f;
-	PointLightPos[1] = 1.0f;
-	PointLightPos[2] = 0.0f;
-
 	//オブジェクトの生成
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
 	for (int i = 0; i < BILLS; i++) {
@@ -86,6 +79,13 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Post = new PostEffect();
 	Post->Initialize();
 	CameraEyeMove = { 0.0f,0.0f,0.0f };
+
+	lightGroupe->SetPointLightActive(0, false);
+	lightGroupe->SetPointLightActive(1, false);
+	lightGroupe->SetPointLightActive(2, false);
+	lightGroupe->SetSpotLightActive(0, true);
+	lightGroupe->SetSpotLightActive(1, true);
+	lightGroupe->SetSpotLightActive(2, true);
 }
 
 //ステータスセット
@@ -130,11 +130,17 @@ void TitleScene::StatusSet()
 	//マウスカーソルの座標セット
 	Cursor->SetPosition({ ReticlePos });
 
-	lightGroupe->SetPointLightPos(0, XMFLOAT3(PointLightPos));
-	lightGroupe->SetPointLightColor(0, XMFLOAT3(PointLightColor));
-	lightGroupe->SetPointLightAtten(0, XMFLOAT3(PointLightAtten));
+	lightGroupe->SetSpotLightDir(0, XMVECTOR({ SpotLightDir.x, SpotLightDir.y, SpotLightDir.z }));
+	lightGroupe->SetSpotLightPos(0, SpotLightPos);
+	lightGroupe->SetSpotLightColor(0, SpotLightColor);
+	lightGroupe->SetSpotLightAtten(0, SpotLightAtten);
+	lightGroupe->SetSpotLightFactorAngle(0, SpotLightFactorAngle);
 
-	
+	lightGroupe->SetSpotLightDir(1, XMVECTOR({ SpotLightDir2.x, SpotLightDir2.y, SpotLightDir2.z }));
+	lightGroupe->SetSpotLightPos(1, SpotLightPos2);
+	lightGroupe->SetSpotLightColor(1, SpotLightColor2);
+	lightGroupe->SetSpotLightAtten(1, SpotLightAtten2);
+	lightGroupe->SetSpotLightFactorAngle(1, SpotLightFactorAngle2);
 }
 
 //全ての更新処理をまとめる
@@ -148,13 +154,15 @@ void TitleScene::AllUpdate()
 	//ポストエフェクトの更新処理
 	Post->Update(PostEfectColor);
 	//天球の更新処理
-	Sphere->Update();
+	Sphere->Update({1,1,1,1}, true);
 	//地面の更新処理
 	World->Update();
 	//カメラの移動先のビルの更新処理
 	Start->Update();
 
-	light->Update();
+	//light->Update();
+
+	lightGroupe->Update();
 }
 
 //更新処理
@@ -173,6 +181,18 @@ void TitleScene::Update()
 			TitleDisplay_F = false;
 		}
 	}
+
+	if (Input::GetInstance()->PushKey(DIK_W)) { SpotLightPos.z += 1.0f; }
+	else if (Input::GetInstance()->PushKey(DIK_S)) { SpotLightPos.z -= 1.0f; }
+	if (Input::GetInstance()->PushKey(DIK_D)) { SpotLightPos.x += 1.0f; }
+	else if (Input::GetInstance()->PushKey(DIK_A)) { SpotLightPos.x -= 1.0f; }
+
+
+	if (Input::GetInstance()->PushKey(DIK_UP)) { SpotLightDir.y += 1.0f; }
+	else if (Input::GetInstance()->PushKey(DIK_DOWN)) { SpotLightDir.y -= 1.0f; }
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) { SpotLightDir.x += 0.1f; }
+	else if (Input::GetInstance()->PushKey(DIK_LEFT)) { SpotLightDir.x -= 0.1f; }
+
 
 	DescriptionPageOperation();
 

@@ -339,6 +339,9 @@
     <ClCompile Include="Application\Scene\BaseClassIUDF.cpp">
       <Filter>ソース ファイル\Application\Scene\Base</Filter>
     </ClCompile>
+    <ClCompile Include="GameEngine\Light\SpotLight\SpotLight.cpp">
+      <Filter>ソース ファイル\GameEngine\Light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -596,6 +599,9 @@
     </ClInclude>
     <ClInclude Include="Application\Easing\Easing.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>ヘッダー ファイル\GameEngine\Light</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
