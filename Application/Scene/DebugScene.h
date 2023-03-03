@@ -78,10 +78,10 @@ private:
 	XMVECTOR lightDir = { 0,0,0,0 };
 
 	XMFLOAT3 SpotLightDir = { 0,-1,0};
-	XMFLOAT3 SpotLightPos = { 0,1005,0 };
+	XMFLOAT3 SpotLightPos = { 0,5,0 };
 	XMFLOAT3 SpotLightColor = { 1,1,1 };
 	XMFLOAT3 SpotLightAtten = { 0.f,0.f,0.f };
-	XMFLOAT2 SpotLightFactorAngle = { 20.0f,30.0f };
+	XMFLOAT2 SpotLightFactorAngle = { 10.0f,20.0f };
 
 	XMFLOAT3 SpotLightDir2 = { 0,-1,0 };
 	XMFLOAT3 SpotLightPos2 = { 0,5,0 };

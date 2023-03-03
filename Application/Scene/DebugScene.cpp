@@ -116,7 +116,7 @@ void DebugScene::Update()
 
 //	light->SetLightDir(lightDir);
 
-	Action::GetInstance()->PlayerMove3d(SpherePos);
+	//Action::GetInstance()->PlayerMove3d(SpherePos);
 	SetPosSclRot();
 	//light->Update();
 	lightGroupe->Update();

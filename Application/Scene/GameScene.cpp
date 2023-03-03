@@ -41,7 +41,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//スプライトの生成
 	Clear = Sprite::SpriteCreate(35, { 0.0f,0.0f });
 	Conteniu = Sprite::SpriteCreate(36, { 0.0f,0.0f });
-	DamageEfectSp = Sprite::SpriteCreate(19, { 0.0f, 0.0f },DamageEfectColor);
+	DamageEfectSp = Sprite::SpriteCreate(19, { 0.0f, 0.0f }, DamageEfectColor);
 
 	//モデルの読み込み
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
@@ -55,7 +55,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	}
 	World = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
 	Start = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
-	
+
 	Act = std::make_unique <Actor>();
 	Act->Initialize();
 	Patern = Act->GetPatern();
@@ -66,14 +66,14 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Bgm->Initialize();
 	Bgm->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
 
-	FieldBillPos[0] = {-35.0f,0.0f,20.0f};
+	FieldBillPos[0] = { -35.0f,0.0f,20.0f };
 	FieldBillPos[1] = { -7.0f,-1,80 };
-	FieldBillPos[2]={37.0,0.0f,-10.0f};
+	FieldBillPos[2] = { 37.0,0.0f,-10.0f };
 	FieldBillPos[3] = { -900.0,0.0f,0.0f };;
 	FieldBillPos[4] = { -900.0,0.0f,0.0f };;
 
-	FieldBillRot[0]={0.0f,270.0f,0.0f};
-	FieldBillRot[1]={0.0f,0.0f,0.0f};
+	FieldBillRot[0] = { 0.0f,270.0f,0.0f };
+	FieldBillRot[1] = { 0.0f,0.0f,0.0f };
 	FieldBillRot[2] = { 0.0f,90.0f,0.0f };
 	FieldBillRot[3] = { 0.0f,0.0f,0.0f };
 	FieldBillRot[4] = { 0.0f,0.0f,0.0f };
@@ -166,7 +166,7 @@ void GameScene::AllUpdata()
 		FieldBills[i]->Update({ 0.2f,0.2f,0.3f,1.0f });
 	}
 	//天球の更新処理
-	Sphere->Update({1,1,1,1},true);
+	Sphere->Update({ 1,1,1,1 }, true);
 	//地面の更新処理
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理
@@ -305,6 +305,25 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 //ImgUiの描画処理
 void GameScene::ImgDraw()
 {
+
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Light");
+
+	ImGui::SliderFloat("PosX", &SpotLightPos.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("PosY", &SpotLightPos.y, -100.0f, 100.0f);
+	ImGui::SliderFloat("PosZ", &SpotLightPos.z, -100.0f, 100.0f);
+
+	ImGui::SliderFloat("RotX", &SpotLightDir.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("RotY", &SpotLightDir.y, -100.0f, 100.0f);
+	ImGui::SliderFloat("RotZ", &SpotLightDir.z, -100.0f, 100.0f);
+
+
+
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 	//Act->ImGuiDraw();
 }
 
