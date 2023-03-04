@@ -81,9 +81,9 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightGroupe->SetPointLightActive(0, false);
 	lightGroupe->SetPointLightActive(1, false);
 	lightGroupe->SetPointLightActive(2, false);
-	lightGroupe->SetSpotLightActive(0, true);
-	lightGroupe->SetSpotLightActive(1, true);
-	lightGroupe->SetSpotLightActive(2, true);
+	lightGroupe->SetSpotLightActive(0, false);
+	lightGroupe->SetSpotLightActive(1, false);
+	lightGroupe->SetSpotLightActive(2, false);
 }
 
 //ステータスセット
@@ -147,6 +147,12 @@ void GameScene::StatusSet()
 	lightGroupe->SetSpotLightColor(1, SpotLightColor2);
 	lightGroupe->SetSpotLightAtten(1, SpotLightAtten2);
 	lightGroupe->SetSpotLightFactorAngle(1, SpotLightFactorAngle2);
+
+	lightGroupe->SetSpotLightDir(2, XMVECTOR({ SpotLightDir3.x, SpotLightDir3.y, SpotLightDir3.z }));
+	lightGroupe->SetSpotLightPos(2, SpotLightPos3);
+	lightGroupe->SetSpotLightColor(2, SpotLightColor3);
+	lightGroupe->SetSpotLightAtten(2, SpotLightAtten3);
+	lightGroupe->SetSpotLightFactorAngle(2, SpotLightFactorAngle3);
 };
 
 //オブジェクトなどの更新処理
@@ -172,12 +178,35 @@ void GameScene::AllUpdata()
 	//スタート地点の更新処理
 	Start->Update();
 
-	lightGroupe->Update();
 }
 
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
+
+	if (Input::GetInstance()->TriggerKey(DIK_0)) {
+		lightGroupe->SetSpotLightActive(0, true);
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_1)) {
+		lightGroupe->SetSpotLightActive(1, true);
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_2)) {
+		lightGroupe->SetSpotLightActive(2, true);
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_3)) {
+		lightGroupe->SetSpotLightActive(0, false);
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_4)) {
+		lightGroupe->SetSpotLightActive(1, false);
+	}
+
+	if (Input::GetInstance()->TriggerKey(DIK_5)) {
+		lightGroupe->SetSpotLightActive(2, false);
+	}
 
 	if (GameStartFlag == false) {
 		PostCol.x += AddPosetEfectColor;
@@ -311,13 +340,13 @@ void GameScene::ImgDraw()
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Light");
 
-	ImGui::SliderFloat("PosX", &SpotLightPos.x, -100.0f, 100.0f);
-	ImGui::SliderFloat("PosY", &SpotLightPos.y, -100.0f, 100.0f);
-	ImGui::SliderFloat("PosZ", &SpotLightPos.z, -100.0f, 100.0f);
+	ImGui::SliderFloat("PosX", &SpotLightPos2.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("PosY", &SpotLightPos2.y, -100.0f, 1000.0f);
+	ImGui::SliderFloat("PosZ", &SpotLightPos2.z, -100.0f, 100.0f);
 
-	ImGui::SliderFloat("RotX", &SpotLightDir.x, -100.0f, 100.0f);
-	ImGui::SliderFloat("RotY", &SpotLightDir.y, -100.0f, 100.0f);
-	ImGui::SliderFloat("RotZ", &SpotLightDir.z, -100.0f, 100.0f);
+	ImGui::SliderFloat("RotX", &SpotLightDir2.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("RotY", &SpotLightDir2.y, -100.0f, 100.0f);
+	ImGui::SliderFloat("RotZ", &SpotLightDir2.z, -100.0f, 100.0f);
 
 
 

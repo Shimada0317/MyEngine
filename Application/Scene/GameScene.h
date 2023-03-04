@@ -147,16 +147,22 @@ private://メンバ変数
 
 	XMVECTOR lightDir = { 0,0,0,0 };
 
-	XMFLOAT3 SpotLightDir = { 0,-1,0 };
-	XMFLOAT3 SpotLightPos = { 0,35,25 };
+	XMFLOAT3 SpotLightDir = { -6.5f,4.5f,60.f };
+	XMFLOAT3 SpotLightPos = { 15,4,-15 };
 	XMFLOAT3 SpotLightColor = { 1,1,1 };
 	XMFLOAT3 SpotLightAtten = { 0.f,0.f,0.f };
 	XMFLOAT2 SpotLightFactorAngle = { 20.0f,30.0f };
 
 	XMFLOAT3 SpotLightDir2 = { 0,-10,0 };
-	XMFLOAT3 SpotLightPos2 = { 0,205,0 };
-	XMFLOAT3 SpotLightColor2 = { 1,1,1 };
+	XMFLOAT3 SpotLightPos2 = { 0,505,0 };
+	XMFLOAT3 SpotLightColor2 = { 0.3f,0.3f,0.3f };
 	XMFLOAT3 SpotLightAtten2 = { 0.f,0.f,0.f };
 	XMFLOAT2 SpotLightFactorAngle2 = { 20.0f,30.0f };
+
+	XMFLOAT3 SpotLightDir3 = { 0.5f,4.5f,60.f };
+	XMFLOAT3 SpotLightPos3 = { -8,4,-15 };
+	XMFLOAT3 SpotLightColor3 = { 1,1,1 };
+	XMFLOAT3 SpotLightAtten3 = { 0.f,0.f,0.f };
+	XMFLOAT2 SpotLightFactorAngle3 = { 20.0f,30.0f };
 };
 

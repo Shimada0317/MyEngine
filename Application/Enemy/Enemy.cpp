@@ -450,7 +450,7 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			AttackShakeDownFlag = false;
 			AttackFaseFlag = false;
 			attacktimer = 0;
-			playerhp -= 1;
+			//playerhp -= 1;
 
 		}
 	}
