@@ -61,7 +61,7 @@ private:
 
 	Audio* heriFry = nullptr;
 	//ヘリステータス
-	XMVECTOR GoalPos = { 45.0f,3.0f,92.0f };
+	XMVECTOR GoalPos = { 56.f,3.0f,92.0f };
 	XMFLOAT3 GoalScl = { 3.0f,3.0f,3.0f };
 
 	XMVECTOR Heripos = { 0.0f,75.0f,-160.0f };
@@ -95,7 +95,7 @@ private:
 
 	bool StartMovieFlag = false;
 
-	bool FinishFlag = false;
+	bool StopFlag = false;
 
 	bool GetCamWorkFlag = false;
 

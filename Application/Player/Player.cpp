@@ -341,111 +341,203 @@ void Player::PlayerMove(bool& move, int patern)
 
 	if (MoveFlag == true) {
 		MoveSpeed = 0.5f;
-		if (ShakeHeadFlag == true) {
-			if (shake == 0) {
-				EyeRot.x += 0.05f;
-				if (EyeRot.x >= 0.5f) {
-					shake = 1;
-				}
-			}
-			if (shake == 1) {
-				EyeRot.x -= 0.05f;
-				if (EyeRot.x <= -0.5f) {
-					shake = 0;
-				}
-			}
-		}
+		MoveShakingHead();
 		if (patern == 0) {
 			Velocity = { 0, 0, MoveSpeed };
-			EnemyCount = 3;
 			if (camvec.m128_f32[2] >= 20) {
+				Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
+				Velocity = { 0.f,0.f,0.f };
+				if (EyeRot.y >= 180) {
+					StopFlag = true;
+					move = false;
+					MoveFlag = false;
+				}
+			}
+		}
+
+		else if (patern == 1) {
+			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
+			if (EyeRot.y <= 0) {
+				EyeRot.y = 0;
+				Velocity = { 0, 0, 0 };
 				move = false;
 				MoveFlag = false;
-				WaveCount += 1;
-				MoveTimer = 0.0f;
-				FinishFlag = true;
-				EyeRot.x = 0;
+				StopFlag = true;
 			}
-			
 		}
-		else if (patern == 1) {
-			EnemyCount = 4;
-			Velocity = { 0, 0, MoveSpeed };
+
+		/*else if (patern == 1) {
+			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
+			if (EyeRot.y <= 0) {
+				EyeRot.y = 0;
+				Velocity = { 0, 0, MoveSpeed };
+			}
 			if (camvec.m128_f32[2] >= 40) {
 				move = false;
 				MoveFlag = false;
-				WaveCount += 1;
-				MoveTimer = 0.0f;
-				FinishFlag = true;
+				StopFlag = true;
 			}
-			
-		}
+		}*/
+
 		else if (patern == 2) {
-			EnemyCount = 4;
+			Velocity = { 0, 0, MoveSpeed };
+			if (camvec.m128_f32[2] >= 40) {
+				Velocity = { 0.f,0.f,0.f };
+				MoveFlag = false;
+				move = false;
+				StopFlag = true;
+			}
+		}
+
+
+		/*else if (patern == 2) {
+			Action::GetInstance()->EaseOut(EyeRot.y, -95.0f);
+			if (EyeRot.y <= -90) {
+				EyeRot.y = -90;
+				ChangeRot = -90;
+				Velocity = { 0, 0, 0 };
+				MoveFlag = false;
+				move = false;
+				StopFlag = true;
+			}
+			if (camvec.m128_f32[0] >= 30) {
+
+			}
+		}*/
+
+		else if (patern == 3) {
+			Action::GetInstance()->EaseOut(EyeRot.y, -95.0f);
+			if (EyeRot.y <= -90) {
+				EyeRot.y = -90;
+				ChangeRot = -90;
+				Velocity = { 0, 0, 0 };
+				move = false;
+				MoveFlag = false;
+				StopFlag = true;
+			}
+		}
+
+		/*	else if (patern == 3) {
+				Action::GetInstance()->EaseOut(EyeRot.y, 95.0f);
+				if(EyeRot.y>=90){
+					EyeRot.y = 90;
+					Velocity = { 0, 0, MoveSpeed };
+				}
+
+				if (camvec.m128_f32[0] >= 30) {
+					move = false;
+					MoveFlag = false;
+					StopFlag = true;
+				}
+			}*/
+
+		else if (patern == 4) {
 			Action::GetInstance()->EaseOut(EyeRot.y, 95.0f);
 			if (EyeRot.y >= 90) {
+				ChangeRot = 90;
 				EyeRot.y = 90;
-				ChangeRot = -90;
 				Velocity = { 0, 0, MoveSpeed };
 			}
 			if (camvec.m128_f32[0] >= 30) {
 				move = false;
 				MoveFlag = false;
-				WaveCount += 1;
-				MoveTimer = 0.0f;
-				FinishFlag = true;
+				StopFlag = true;
 			}
-			
 		}
-		else if (patern == 3) {
-			EnemyCount = 3;
-			Velocity = { 0, 0, MoveSpeed };
 
+		/*	else if (patern == 4) {
+				Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
+				if (EyeRot.y <= 0) {
+					ChangeRot = 0;
+					EyeRot.y = 0;
+					Velocity = { 0, 0, MoveSpeed };
+				}
+				if (camvec.m128_f32[2] >= 70) {
+					move = false;
+					MoveFlag = false;
+					StopFlag = true;
+				}
+			}*/
+
+		else if (patern == 5) {
+			Velocity = { 0, 0, MoveSpeed };
 			if (camvec.m128_f32[0] >= 45) {
 				move = false;
 				MoveFlag = false;
-				WaveCount += 1;
-				MoveTimer = 0.0f;
-				FinishFlag = true;
+				StopFlag = true;
+				Velocity = { 0, 0, 0 };
 			}
-			
 		}
-		else if (patern == 4) {
-			EnemyCount = 5;
-			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-			if (EyeRot.y <= 0) {
-				ChangeRot = 0;
-				EyeRot.y = 0;
-				Velocity = { 0, 0, MoveSpeed };
-			}
-			if (camvec.m128_f32[2] >= 70) {
-				move = false;
-				MoveFlag = false;
-				WaveCount += 1;
-				MoveTimer = 0.0f;
-				FinishFlag = true;
-			}
-			
-		}
-		else if (patern == 5) {
+
+		/*else if (patern == 5) {
 			EyeRot.y -= 3;
 			if (EyeRot.y <= 0) {
 				EyeRot.y = 0;
 				Velocity = { 0, 0, MoveSpeed };
 			}
-			if (camvec.m128_f32[2] >= 90) {
+			if (camvec.m128_f32[2] >= 30) {
 				move = false;
 				MoveFlag = false;
-				WaveCount += 1;
-				MoveTimer = 0.0f;
-				FinishFlag = true;
+				StopFlag = true;
 			}
-			
-		}
+		}*/
+
 		else if (patern == 6) {
+			Velocity = { 0, 0, MoveSpeed };
+			if (camvec.m128_f32[0] >= 50) {
+				Velocity = { 0, 0, 0 };
+				Action::GetInstance()->EaseOut(EyeRot.y, 145.0f);
+				if (EyeRot.y >= 130) {
+					move = false;
+					MoveFlag = false;
+					StopFlag = true;
+					Velocity = { 0, 0, 0 };
+				}
+			}
+
+		}
+
+		else if (patern == 7) {
+			if (camvec.m128_f32[0] <= 55) {
+				Velocity = { 0, 0, MoveSpeed };
+			}
+			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
+			if (EyeRot.y <= 0) {
+				move = false;
+				MoveFlag = false;
+				StopFlag = true;
+				Velocity = { 0, 0, 0 };
+			}
+		}
+
+		else if (patern == 8) {
+			ActionCount = 0;
+			Velocity = { 0.f,0.f,MoveSpeed };
+			if (camvec.m128_f32[2] >= 80) {
+				Velocity = { 0,0.,0.1 };
+				if (camvec.m128_f32[2] >= 82) {
+					ShakeHeadFlag = false;
+					Velocity = { 0.0f,0.0f,0.0f };
+					Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
+					if (EyeRot.y >= 180) {
+						EyeRot.y = 180;
+						move = false;
+						MoveFlag = false;
+						StopFlag = true;
+						Velocity = { 0, 0, 0 };
+					}
+				}
+			}
+		}
+
+		else if (patern == 9) {
 			StanbyFlag = false;
 			Velocity = { 0, 0, 0.1 };
 			ShakeHeadFlag = false;
+			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
+			if (EyeRot.y <= 0) {
+				EyeRot.y = 0;
+			}
 			if (camvec.m128_f32[2] >= 92) {
 				Velocity = { 0,0.05,0.1 };
 				if (camvec.m128_f32[2] >= 97) {
@@ -458,9 +550,6 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 			move = false;
 			CameraWorkFlag = false;
-
-			WaveCount += 1;
-			MoveTimer = 0.0f;
 			MovieFlag = false;
 			ActionCount = 0;
 		}
@@ -494,7 +583,6 @@ void Player::ImGuiDraw()
 	ImGui::Begin("Plyer");
 	if (ImGui::TreeNode("Shake")) {
 		ImGui::SliderFloat("ShakingValue", &ShakingValue, -100.0f, 100.0f);
-
 		ImGui::TreePop();
 	}
 
@@ -694,6 +782,24 @@ void Player::ReloadProcess()
 	}
 }
 
+void Player::MoveShakingHead()
+{
+	if (ShakeHeadFlag == true) {
+		if (shake == 0) {
+			EyeRot.x += 0.05f;
+			if (EyeRot.x >= 0.5f) {
+				shake = 1;
+			}
+		}
+		if (shake == 1) {
+			EyeRot.x -= 0.05f;
+			if (EyeRot.x <= -0.5f) {
+				shake = 0;
+			}
+		}
+	}
+}
+
 //マズルエフェクト
 void Player::ParticleEfect()
 {
@@ -708,7 +814,7 @@ void Player::ParticleEfect()
 			float cosradY = cosf(radY);
 
 			XMFLOAT3 pos;
-			
+
 			if (PaternCount == 3 || PaternCount == 4) {
 				pos.x = GunWorldPos.m128_f32[0] + 2.3f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;

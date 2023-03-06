@@ -84,12 +84,22 @@ public:
 	/// </summary>
 	/// <param name="limitshakevalue">シェイクする値</param>
 	void ScreenShake(float shakevalue,float shakingtime);
-	
+	/// <summary>
+	/// ダメージ食らったときの処理
+	/// </summary>
 	void DamageProcess();
-
+	/// <summary>
+	/// 発砲処理
+	/// </summary>
 	void GunShotProcess();
-
+	/// <summary>
+	/// リロード処理
+	/// </summary>
 	void ReloadProcess();
+	/// <summary>
+	/// 移動時にカメラ揺れ
+	/// </summary>
+	void MoveShakingHead();
 
 	/// <summary>
 	/// パーティクル発生
@@ -97,7 +107,7 @@ public:
 	void ParticleEfect();
 
 #pragma region Get
-	const bool& GetFinish() { return FinishFlag; }
+	const bool& GetFinish() { return StopFlag; }
 	//三次元座標
 	const XMVECTOR& GetPosition() { return ReticlePos; }
 	//角度
@@ -126,7 +136,7 @@ public:
 	void SetRetPosition(const XMFLOAT2& position) { this->ReticlePos2D = position; }
 	void SetRetSiz(const XMFLOAT2& scale) { this->ReticleSize = scale; }
 	void SetHp(int HP) { this->Hp = HP; }
-	void SetFinish(const bool& finish) { this->FinishFlag = finish; }
+	void SetFinish(const bool& finish) { this->StopFlag = finish; }
 	void SetBulletShot(const bool& BulletShot_F) { this->BulletShotFlag = BulletShot_F; }
 #pragma endregion
 private:
@@ -217,15 +227,13 @@ private:
 	bool MoveFlag = false;
 	//弾の速度
 	float MoveSpeed=0;
-	//動いたときのtimer
-	float MoveTimer = 0.0f;
-	int WaveCount = 0;
+
 
 	//cam
 	int shake = 0;
 	float ShakingValue = 0.0f;
 
-	bool FinishFlag = false;
+	bool StopFlag = false;
 
 	bool CameraWorkFlag = false;
 
@@ -243,8 +251,6 @@ private:
 	bool ReloadSoundFlag = true;
 
 	float ChangeRot = 0;
-
-	int EnemyCount = 0;
 
 	int PaternCount = 0;
 

@@ -103,7 +103,7 @@ void Actor::SetPSR()
 
 	Goal->SetPosition(GoalPos);
 	Goal->SetScale(GoalScl);
-	Goal->SetRotation({ 0.0f,90.0f,0.0f });
+	Goal->SetRotation({ 0.0f,270.0f,0.0f });
 
 	Heri->Update({ 0.7f,0.7f,0.6f,1.0f });
 	Goal->Update({ 0.7f,0.7f,0.6f,1.0f });
@@ -132,15 +132,15 @@ void Actor::Update()
 		if (Robot.empty()) {
 			MoveFlag = true;
 		}
-		FinishFlag = player->GetFinish();
-		if (FinishFlag == true) {
+		StopFlag = player->GetFinish();
+		if (StopFlag == true) {
 			MoveFlag = false;
 		}
-		if (MoveFlag == false && FinishFlag == true) {
+		if (MoveFlag == false && StopFlag == true) {
 			UpdataEnemyPopCommands();
 			Patern += 1;
-			FinishFlag = false;
-			player->SetFinish(FinishFlag);
+			StopFlag = false;
+			player->SetFinish(StopFlag);
 		}
 	}
 
@@ -219,26 +219,16 @@ void Actor::ImGuiDraw()
 		robot->ImgDraw();
 	}*/
 	player->ImGuiDraw();
-	//float a = patern;
-	//ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
-	//ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
-	//ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
-	//ImGui::Begin("Enemy");
-	//ImGui::SliderFloat("EnemyPos x", &enemyPos[0].m128_f32[0], -100.0f, 100.0f);
-	//ImGui::SliderFloat("EnemyPos y", &enemyPos[0].m128_f32[1], -100.0f, 100.0f);
-	//ImGui::SliderFloat("EnemyPos z", &enemyPos[0].m128_f32[2], -100.0f, 100.0f);
+	float a = Patern;
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Patern");
+	ImGui::SliderFloat("Patern", &a, 0.0f, 10.0f);
 
-	//ImGui::SliderFloat("EnemyPos x", &enemyPos[1].m128_f32[0], -100.0f, 100.0f);
-	//ImGui::SliderFloat("EnemyPos y", &enemyPos[1].m128_f32[1], -100.0f, 100.0f);
-	//ImGui::SliderFloat("EnemyPos z", &enemyPos[1].m128_f32[2], -100.0f, 100.0f);
-
-	//ImGui::SliderFloat("EnemyPos x", &enemyPos[2].m128_f32[0], -100.0f, 100.0f);
-	//ImGui::SliderFloat("EnemyPos y", &enemyPos[2].m128_f32[1], -100.0f, 100.0f);
-	//ImGui::SliderFloat("EnemyPos z", &enemyPos[2].m128_f32[2], -100.0f, 100.0f);
-
-	//ImGui::End();
-	//ImGui::PopStyleColor();
-	//ImGui::PopStyleColor();
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 }
 
 

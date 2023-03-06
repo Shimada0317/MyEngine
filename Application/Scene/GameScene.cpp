@@ -348,7 +348,7 @@ void GameScene::ImgDraw()
 	ImGui::SliderFloat("RotY", &SpotLightDir2.y, -100.0f, 100.0f);
 	ImGui::SliderFloat("RotZ", &SpotLightDir2.z, -100.0f, 100.0f);
 
-
+	Act->ImGuiDraw();
 
 	ImGui::End();
 	ImGui::PopStyleColor();
