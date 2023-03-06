@@ -366,9 +366,7 @@ void Player::PlayerMove(bool& move, int patern)
 				FinishFlag = true;
 				EyeRot.x = 0;
 			}
-			else {
-				Distance = 11;
-			}
+			
 		}
 		else if (patern == 1) {
 			EnemyCount = 4;
@@ -380,9 +378,7 @@ void Player::PlayerMove(bool& move, int patern)
 				MoveTimer = 0.0f;
 				FinishFlag = true;
 			}
-			else {
-				Distance = 11;
-			}
+			
 		}
 		else if (patern == 2) {
 			EnemyCount = 4;
@@ -399,9 +395,7 @@ void Player::PlayerMove(bool& move, int patern)
 				MoveTimer = 0.0f;
 				FinishFlag = true;
 			}
-			else {
-				Distance = 11;
-			}
+			
 		}
 		else if (patern == 3) {
 			EnemyCount = 3;
@@ -414,9 +408,7 @@ void Player::PlayerMove(bool& move, int patern)
 				MoveTimer = 0.0f;
 				FinishFlag = true;
 			}
-			else {
-				Distance = 11;
-			}
+			
 		}
 		else if (patern == 4) {
 			EnemyCount = 5;
@@ -433,9 +425,7 @@ void Player::PlayerMove(bool& move, int patern)
 				MoveTimer = 0.0f;
 				FinishFlag = true;
 			}
-			else {
-				Distance = 11;
-			}
+			
 		}
 		else if (patern == 5) {
 			EyeRot.y -= 3;
@@ -450,9 +440,7 @@ void Player::PlayerMove(bool& move, int patern)
 				MoveTimer = 0.0f;
 				FinishFlag = true;
 			}
-			else {
-				Distance = 11;
-			}
+			
 		}
 		else if (patern == 6) {
 			StanbyFlag = false;

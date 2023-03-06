@@ -244,7 +244,6 @@ private:
 
 	float ChangeRot = 0;
 
-	float Distance = 11;
 	int EnemyCount = 0;
 
 	int PaternCount = 0;
