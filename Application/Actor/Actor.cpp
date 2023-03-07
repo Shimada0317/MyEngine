@@ -226,6 +226,8 @@ void Actor::ImGuiDraw()
 	ImGui::Begin("Patern");
 	ImGui::SliderFloat("Patern", &a, 0.0f, 10.0f);
 
+
+
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();

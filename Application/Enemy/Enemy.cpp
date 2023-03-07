@@ -4,7 +4,7 @@
 
 using namespace DirectX;
 
-const int HeadDamage = 60;
+const int HeadDamage = 80;
 const int BodyDamage = 50;
 const float Subtraction = 0.05f;
 const float FallSpeed = 0.25f;
