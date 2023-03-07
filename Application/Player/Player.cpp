@@ -358,26 +358,12 @@ void Player::PlayerMove(bool& move, int patern)
 		else if (patern == 1) {
 			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
 			if (EyeRot.y <= 0) {
-				EyeRot.y = 0;
 				Velocity = { 0, 0, 0 };
 				move = false;
 				MoveFlag = false;
 				StopFlag = true;
 			}
 		}
-
-		/*else if (patern == 1) {
-			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-			if (EyeRot.y <= 0) {
-				EyeRot.y = 0;
-				Velocity = { 0, 0, MoveSpeed };
-			}
-			if (camvec.m128_f32[2] >= 40) {
-				move = false;
-				MoveFlag = false;
-				StopFlag = true;
-			}
-		}*/
 
 		else if (patern == 2) {
 			Velocity = { 0, 0, MoveSpeed };
@@ -389,21 +375,6 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 
-
-		/*else if (patern == 2) {
-			Action::GetInstance()->EaseOut(EyeRot.y, -95.0f);
-			if (EyeRot.y <= -90) {
-				EyeRot.y = -90;
-				ChangeRot = -90;
-				Velocity = { 0, 0, 0 };
-				MoveFlag = false;
-				move = false;
-				StopFlag = true;
-			}
-			if (camvec.m128_f32[0] >= 30) {
-
-			}
-		}*/
 
 		else if (patern == 3) {
 			Action::GetInstance()->EaseOut(EyeRot.y, -95.0f);
@@ -488,6 +459,7 @@ void Player::PlayerMove(bool& move, int patern)
 				Velocity = { 0, 0, 0 };
 				Action::GetInstance()->EaseOut(EyeRot.y, 145.0f);
 				if (EyeRot.y >= 130) {
+					ChangeRot = 130;
 					move = false;
 					MoveFlag = false;
 					StopFlag = true;
@@ -503,6 +475,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
 			if (EyeRot.y <= 0) {
+				ChangeRot = 0;
 				move = false;
 				MoveFlag = false;
 				StopFlag = true;
@@ -520,7 +493,7 @@ void Player::PlayerMove(bool& move, int patern)
 					Velocity = { 0.0f,0.0f,0.0f };
 					Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
 					if (EyeRot.y >= 180) {
-						EyeRot.y = 180;
+						ChangeRot = 0;
 						move = false;
 						MoveFlag = false;
 						StopFlag = true;
@@ -536,6 +509,7 @@ void Player::PlayerMove(bool& move, int patern)
 			ShakeHeadFlag = false;
 			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
 			if (EyeRot.y <= 0) {
+				ChangeRot = 0;
 				EyeRot.y = 0;
 			}
 			if (camvec.m128_f32[2] >= 92) {
@@ -598,6 +572,13 @@ void Player::ImGuiDraw()
 		ImGui::SliderFloat("gunWordpos.x", &GunNotParentPos.m128_f32[0], -100.0f, 100.0f);
 		ImGui::SliderFloat("gunWordpos.y", &GunNotParentPos.m128_f32[1], -100.0f, 100.0f);
 		ImGui::SliderFloat("gunWordpos.z", &GunNotParentPos.m128_f32[2], -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("ParticlePos")) {
+		ImGui::SliderFloat("pos.x", &pos.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.y", &pos.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("pos.z", &pos.z, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 
@@ -813,18 +794,34 @@ void Player::ParticleEfect()
 			float sinradY = sinf(radY);
 			float cosradY = cosf(radY);
 
-			XMFLOAT3 pos;
+			
 
-			if (PaternCount == 3 || PaternCount == 4) {
+			if (PaternCount == 5 || PaternCount == 6) {
 				pos.x = GunWorldPos.m128_f32[0] + 2.3f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-				pos.z = GunWorldPos.m128_f32[2] - 2.8f * cosradX;
+				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
 			}
-			else if (PaternCount == 0 || PaternCount == 1 || PaternCount == 2 || PaternCount == 5) {
+			else if (PaternCount == 0 || PaternCount == 2 || PaternCount == 3 || PaternCount == 8) {
 				pos.x = GunWorldPos.m128_f32[0] + sinradX * 3.5f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
 				pos.z = GunWorldPos.m128_f32[2] + 3.0f;
 			}
+			else if (PaternCount == 1 || PaternCount == 9) {
+				pos.x = GunWorldPos.m128_f32[0] - sinradX * 3.5f;
+				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
+				pos.z = GunWorldPos.m128_f32[2] - 3.0f;
+			}
+			else if (PaternCount == 4) {
+				pos.x = GunWorldPos.m128_f32[0] - 2.3f;
+				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
+				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
+			}
+			else if (PaternCount == 7) {
+				pos.x = GunWorldPos.m128_f32[0] + 2.3f*sinradX;
+				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
+				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
+			}
+
 
 			const float rnd_vel = 0.001f;
 			XMFLOAT3 vel{};

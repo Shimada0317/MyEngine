@@ -291,5 +291,7 @@ private:
 	XMFLOAT2 ReloadSpriteSize = { 160,90 };
 
 	bool ReversFlag = false;
+
+	XMFLOAT3 pos;
 };
 

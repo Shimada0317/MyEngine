@@ -196,7 +196,7 @@ void Object3d::CreateGraphicsPipeline()
 Object3d::~Object3d()
 {
 	//delete model;
-	//delete parent;
+	delete parent;
 }
 
 

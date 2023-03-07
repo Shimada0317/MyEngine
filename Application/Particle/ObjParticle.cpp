@@ -6,7 +6,7 @@ using namespace DirectX;
 
 ObjParticle::~ObjParticle()
 {
-
+	Particle.reset();
 }
 
 const XMFLOAT3 operator-(const DirectX::XMFLOAT3& lhs, const DirectX::XMFLOAT3& rhs)

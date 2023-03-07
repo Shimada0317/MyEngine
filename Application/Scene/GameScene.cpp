@@ -152,7 +152,7 @@ void GameScene::StatusSet()
 	lightGroupe->SetSpotLightPos(2, SpotLightPos3);
 	lightGroupe->SetSpotLightColor(2, SpotLightColor3);
 	lightGroupe->SetSpotLightAtten(2, SpotLightAtten3);
-	lightGroupe->SetSpotLightFactorAngle(2, SpotLightFactorAngle3);
+
 };
 
 //オブジェクトなどの更新処理
@@ -174,7 +174,7 @@ void GameScene::AllUpdata()
 	//天球の更新処理
 	Sphere->Update({ 1,1,1,1 }, true);
 	//地面の更新処理
-	World->Update({ 0.7f,0.7f,0.7f,1.0f });
+	World->Update({ 0.7f,0.7f,0.7f,1.0f },true);
 	//スタート地点の更新処理
 	Start->Update();
 
@@ -339,14 +339,39 @@ void GameScene::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Light");
+	if (ImGui::TreeNode("RedLight")) {
+		ImGui::SliderFloat("PosX", &SpotLightPos.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("PosY", &SpotLightPos.y, -100.0f, 1000.0f);
+		ImGui::SliderFloat("PosZ", &SpotLightPos.z, -100.0f, 100.0f);
 
-	ImGui::SliderFloat("PosX", &SpotLightPos2.x, -100.0f, 100.0f);
-	ImGui::SliderFloat("PosY", &SpotLightPos2.y, -100.0f, 1000.0f);
-	ImGui::SliderFloat("PosZ", &SpotLightPos2.z, -100.0f, 100.0f);
+		ImGui::SliderFloat("RotX", &SpotLightDir.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("RotY", &SpotLightDir.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("RotZ", &SpotLightDir.z, -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
 
-	ImGui::SliderFloat("RotX", &SpotLightDir2.x, -100.0f, 100.0f);
-	ImGui::SliderFloat("RotY", &SpotLightDir2.y, -100.0f, 100.0f);
-	ImGui::SliderFloat("RotZ", &SpotLightDir2.z, -100.0f, 100.0f);
+	if (ImGui::TreeNode("GreenLight")) {
+		ImGui::SliderFloat("PosX", &SpotLightPos2.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("PosY", &SpotLightPos2.y, -100.0f, 1000.0f);
+		ImGui::SliderFloat("PosZ", &SpotLightPos2.z, -100.0f, 100.0f);
+
+		ImGui::SliderFloat("RotX", &SpotLightDir2.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("RotY", &SpotLightDir2.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("RotZ", &SpotLightDir2.z, -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("BlueLight")) {
+		ImGui::SliderFloat("PosX", &SpotLightPos3.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("PosY", &SpotLightPos3.y, -100.0f, 1000.0f);
+		ImGui::SliderFloat("PosZ", &SpotLightPos3.z, -100.0f, 100.0f);
+
+		ImGui::SliderFloat("RotX", &SpotLightDir3.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("RotY", &SpotLightDir3.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("RotZ", &SpotLightDir3.z, -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
+
 
 	Act->ImGuiDraw();
 
@@ -384,6 +409,8 @@ void GameScene::Finalize()
 	delete Conteniu;
 	delete Clear;
 	delete Bgm;
+	delete light;
+	delete lightGroupe;
 	World.reset();
 	Start.reset();
 	for (int i = 0; i < BILLS; i++) {
