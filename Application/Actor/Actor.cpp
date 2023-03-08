@@ -8,7 +8,6 @@ Actor::~Actor()
 {
 	player.reset();
 	delete Wave;
-	delete Slash;
 	delete HpBer;
 	for (int i = 0; i < 5; i++) {
 		delete ChangeCount[i];
@@ -37,7 +36,6 @@ void Actor::Initialize()
 
 	
 	Wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
-	Slash = Sprite::SpriteCreate(12, { 10.0f,10.0f });
 	MaxCount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
 	HpBer = Sprite::SpriteCreate(18, { 10.0f,10.0f });
 	
@@ -72,15 +70,12 @@ void Actor::SetPSR()
 	//waveの最大数
 	MaxCount->SetSize({ 80,80 });
 	MaxCount->SetPosition({ 320, 630 });
-	//waveの最大値と数字の間の/←これ
-	Slash->SetSize({ 80,80 });
-	Slash->SetPosition({ 280,630 });
 	//変動するカウンター
 	for (int i = 0; i < 5; i++) {
 		ChangeCount[i]->SetSize({ 80,80 });
 		ChangeCount[i]->SetPosition({ 240,630 });
 		LifeCount[i]->SetSize({ 80,80 });
-		LifeCount[i]->SetPosition({ 1200,630 });
+		LifeCount[i]->SetPosition({ 1160,630 });
 	}
 	//Hpバー
 	HpBer->SetSize({ 224,96 });
@@ -154,7 +149,7 @@ void Actor::Update()
 	if (Patern >= 6) {
 		bool fring = player->GetFring();
 		if (fring == true) {
-			GoalPos.m128_f32[1] += 0.2f;
+			GoalPos.m128_f32[1] += velo.m128_f32[1];
 		}
 	}
 	XMFLOAT2 Player2DPos = player->GetRetPosition();

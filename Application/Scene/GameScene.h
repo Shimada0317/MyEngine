@@ -147,22 +147,24 @@ private://メンバ変数
 
 	XMVECTOR lightDir = { 0,0,0,0 };
 
-	XMFLOAT3 SpotLightDir = { 0,-10,0 };
-	XMFLOAT3 SpotLightPos = { 0,505,0 };
-	XMFLOAT3 SpotLightColor = { 1.0,0.1,0.1 };
-	XMFLOAT3 SpotLightAtten = { 0.f,0.f,0.f };
-	XMFLOAT2 SpotLightFactorAngle = { 20.0f,30.0f };
+	XMFLOAT3 FieldSpotLightDir = { 0,-10,0 };
+	XMFLOAT3 FieldSpotLightPos = { 0,505,50 };
+	XMFLOAT3 FieldSpotLightColor = { 1.0,0.5f,0.f };
+	XMFLOAT3 FieldSpotLightAtten = { 0.f,0.f,0.f };
+	XMFLOAT2 FieldSpotLightFactorAngle = { 20.0f,30.0f };
 
-	XMFLOAT3 SpotLightDir2 = { 0,-10,0 };
-	XMFLOAT3 SpotLightPos2 = { 0,35,0 };
-	XMFLOAT3 SpotLightColor2 = { 1.f,1.f,1.f };
-	XMFLOAT3 SpotLightAtten2 = { 0.f,0.f,0.f };
-	XMFLOAT2 SpotLightFactorAngle2 = { 20.0f,30.0f };
+	XMFLOAT3 PlayerSpotLightDir = { 0,-10,0 };
+	XMFLOAT3 PlayerSpotLightPos = { 0,35,0 };
+	XMFLOAT3 PlayerSpotLightColor = { 1.f,1.f,1.f };
+	XMFLOAT3 PlayerSpotLightAtten = { 0.f,0.f,0.f };
+	XMFLOAT2 PlayerSpotLightFactorAngle = { 20.0f,30.0f };
 
 	XMFLOAT3 SpotLightDir3 = { 0,-10,0 };
-	XMFLOAT3 SpotLightPos3 = { 0,50,0 };
+	XMFLOAT3 SpotLightPos3 = { 0,50,20 };
 	XMFLOAT3 SpotLightColor3 = { 1,1,1 };
 	XMFLOAT3 SpotLightAtten3 = { 0.f,0.f,0.f };
 	XMFLOAT2 SpotLightFactorAngle3 = { 20.0f,30.0f };
+	bool SpotLightPositionChange = false;
+
 };
 

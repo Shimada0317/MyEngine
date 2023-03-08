@@ -82,8 +82,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightGroupe->SetPointLightActive(1, false);
 	lightGroupe->SetPointLightActive(2, false);
 	lightGroupe->SetSpotLightActive(0, true);
-	lightGroupe->SetSpotLightActive(1, true);
-	lightGroupe->SetSpotLightActive(2, false);
+	lightGroupe->SetSpotLightActive(1,true);
+	lightGroupe->SetSpotLightActive(2, true);
 }
 
 //ステータスセット
@@ -136,23 +136,23 @@ void GameScene::StatusSet()
 
 	DamageEfectSp->SetColor(DamageEfectColor);
 
-	lightGroupe->SetSpotLightDir(0, XMVECTOR({ SpotLightDir.x, SpotLightDir.y, SpotLightDir.z }));
-	lightGroupe->SetSpotLightPos(0, SpotLightPos);
-	lightGroupe->SetSpotLightColor(0, SpotLightColor);
-	lightGroupe->SetSpotLightAtten(0, SpotLightAtten);
-	lightGroupe->SetSpotLightFactorAngle(0, SpotLightFactorAngle);
+	lightGroupe->SetSpotLightDir(0, XMVECTOR({ FieldSpotLightDir.x, FieldSpotLightDir.y, FieldSpotLightDir.z }));
+	lightGroupe->SetSpotLightPos(0, FieldSpotLightPos);
+	lightGroupe->SetSpotLightColor(0, FieldSpotLightColor);
+	lightGroupe->SetSpotLightAtten(0, FieldSpotLightAtten);
+	lightGroupe->SetSpotLightFactorAngle(0, FieldSpotLightFactorAngle);
 
-	lightGroupe->SetSpotLightDir(1, XMVECTOR({ SpotLightDir2.x, SpotLightDir2.y, SpotLightDir2.z }));
-	lightGroupe->SetSpotLightPos(1, SpotLightPos2);
-	lightGroupe->SetSpotLightColor(1, SpotLightColor2);
-	lightGroupe->SetSpotLightAtten(1, SpotLightAtten2);
-	lightGroupe->SetSpotLightFactorAngle(1, SpotLightFactorAngle2);
+	lightGroupe->SetSpotLightDir(1, XMVECTOR({ PlayerSpotLightDir.x, PlayerSpotLightDir.y, PlayerSpotLightDir.z }));
+	lightGroupe->SetSpotLightPos(1, PlayerSpotLightPos);
+	lightGroupe->SetSpotLightColor(1, PlayerSpotLightColor);
+	lightGroupe->SetSpotLightAtten(1, PlayerSpotLightAtten);
+	lightGroupe->SetSpotLightFactorAngle(1, PlayerSpotLightFactorAngle);
 
 	lightGroupe->SetSpotLightDir(2, XMVECTOR({ SpotLightDir3.x, SpotLightDir3.y, SpotLightDir3.z }));
 	lightGroupe->SetSpotLightPos(2, SpotLightPos3);
 	lightGroupe->SetSpotLightColor(2, SpotLightColor3);
 	lightGroupe->SetSpotLightAtten(2, SpotLightAtten3);
-
+	lightGroupe->SetSpotLightFactorAngle(2, SpotLightFactorAngle3);
 };
 
 //オブジェクトなどの更新処理
@@ -161,8 +161,58 @@ void GameScene::AllUpdata()
 	int Wave = Act->GetPatern();
 
 	XMVECTOR velocity = Act->GetVelocity();
-	SpotLightPos2.x += velocity.m128_f32[0];
-	SpotLightPos2.z += velocity.m128_f32[2];
+	PlayerSpotLightPos.x += velocity.m128_f32[0];
+	PlayerSpotLightPos.z += velocity.m128_f32[2];
+	if (Wave <= 4 && Wave < 5) {
+		if (SpotLightPositionChange == false) {
+			Action::GetInstance()->EaseOut(SpotLightPos3.z, 61);
+			if (SpotLightPos3.z >= 60) {
+				SpotLightPositionChange = true;
+			}
+		}
+		else {
+			Action::GetInstance()->EaseOut(SpotLightPos3.z, -11);
+			if (SpotLightPos3.z <= -10) {
+				SpotLightPositionChange = false;
+			}
+		}
+	}
+
+	
+	if (Wave > 4 && Wave < 8) {
+		SpotLightPos3.z = 45;
+		if (SpotLightPositionChange == false) {
+			Action::GetInstance()->EaseOut(SpotLightPos3.x, 61);
+			if (SpotLightPos3.x >= 60) {
+				SpotLightPositionChange = true;
+			}
+		}
+		else {
+			Action::GetInstance()->EaseOut(SpotLightPos3.x, -11);
+			if (SpotLightPos3.x <= -10) {
+				SpotLightPositionChange = false;
+			}
+		}
+	}
+
+	if (Wave == 8 || Wave == 9) {
+		if (SpotLightPos3.x <= 60) {
+			Action::GetInstance()->EaseOut(SpotLightPos3.x, 61);
+		}
+
+		if (SpotLightPositionChange == false) {
+			Action::GetInstance()->EaseOut(SpotLightPos3.z, 111);
+			if (SpotLightPos3.z >= 110) {
+				SpotLightPositionChange = true;
+			}
+		}
+		else {
+			Action::GetInstance()->EaseOut(SpotLightPos3.z, 49);
+			if (SpotLightPos3.z <= 50) {
+				SpotLightPositionChange = false;
+			}
+		}
+	}
 
 	//ゲーム開始時にアクターを更新処理
 	if (GameStartFlag == true) {
@@ -192,15 +242,7 @@ void GameScene::Update()
 
 
 
-	
-	if (Input::GetInstance()->TriggerKey(DIK_2)) {
-		lightGroupe->SetSpotLightActive(2, true);
-	}
 
-
-	if (Input::GetInstance()->TriggerKey(DIK_5)) {
-		lightGroupe->SetSpotLightActive(2, false);
-	}
 
 	if (GameStartFlag == false) {
 		PostCol.x += AddPosetEfectColor;
@@ -327,6 +369,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 //ImgUiの描画処理
 void GameScene::ImgDraw()
+
 {
 
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
@@ -334,6 +377,20 @@ void GameScene::ImgDraw()
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Light");
 
+	if (ImGui::TreeNode("WorldLight")) {
+		ImGui::SliderFloat("PosX", &FieldSpotLightPos.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("PosY", &FieldSpotLightPos.y, -100.0f, 1000.0f);
+		ImGui::SliderFloat("PosZ", &FieldSpotLightPos.z, -100.0f, 100.0f);
+
+		ImGui::SliderFloat("DirX", &FieldSpotLightDir.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("DirY", &FieldSpotLightDir.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("DirZ", &FieldSpotLightDir.z, -100.0f, 100.0f);
+
+		ImGui::SliderFloat("AttenX", &FieldSpotLightAtten.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("AttenY", &FieldSpotLightAtten.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("AttenZ", &FieldSpotLightAtten.z, -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
 
 	if (ImGui::TreeNode("BlueLight")) {
 		ImGui::SliderFloat("PosX", &SpotLightPos3.x, -100.0f, 100.0f);

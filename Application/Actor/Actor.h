@@ -58,7 +58,6 @@ private:
 	
 	Sprite* Wave = nullptr;
 	Sprite* MaxCount = nullptr;
-	Sprite* Slash = nullptr;
 	Sprite* ChangeCount[5];
 	Sprite* LifeCount[5];
 	Sprite* HpBer;
