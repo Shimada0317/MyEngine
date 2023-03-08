@@ -44,6 +44,11 @@ public:
 	const XMVECTOR& GetGoalPos() { return GoalPos; }
 
 	int GetHp() { return PlayerHp; }
+
+	void SetVelocity(const XMVECTOR& Velocity) { this->Velo = Velocity; }
+
+	const XMVECTOR& GetVelocity() { return Velo; }
+
 private:
 	//ƒwƒŠObj
 	unique_ptr<Object3d> Heri;
@@ -91,7 +96,7 @@ private:
 
 	int PlayerHp;
 
-	
+	XMVECTOR Velo;
 
 	bool StartMovieFlag = false;
 

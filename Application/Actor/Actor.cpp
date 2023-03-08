@@ -112,6 +112,9 @@ void Actor::SetPSR()
 
 void Actor::Update()
 {
+	XMVECTOR velo = player->GetVelocity();
+	SetVelocity(velo);
+
 	float playeroldjup = PlayerHp;
 
 	Heripos.m128_f32[2] += HeriX;

@@ -81,8 +81,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightGroupe->SetPointLightActive(0, false);
 	lightGroupe->SetPointLightActive(1, false);
 	lightGroupe->SetPointLightActive(2, false);
-	lightGroupe->SetSpotLightActive(0, false);
-	lightGroupe->SetSpotLightActive(1, false);
+	lightGroupe->SetSpotLightActive(0, true);
+	lightGroupe->SetSpotLightActive(1, true);
 	lightGroupe->SetSpotLightActive(2, false);
 }
 
@@ -158,6 +158,12 @@ void GameScene::StatusSet()
 //オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
+	int Wave = Act->GetPatern();
+
+	XMVECTOR velocity = Act->GetVelocity();
+	SpotLightPos2.x += velocity.m128_f32[0];
+	SpotLightPos2.z += velocity.m128_f32[2];
+
 	//ゲーム開始時にアクターを更新処理
 	if (GameStartFlag == true) {
 		Act->Update();
@@ -174,7 +180,7 @@ void GameScene::AllUpdata()
 	//天球の更新処理
 	Sphere->Update({ 1,1,1,1 }, true);
 	//地面の更新処理
-	World->Update({ 0.7f,0.7f,0.7f,1.0f },true);
+	World->Update({ 0.7f,0.7f,0.7f,1.0f }, true);
 	//スタート地点の更新処理
 	Start->Update();
 
@@ -184,25 +190,13 @@ void GameScene::AllUpdata()
 void GameScene::Update()
 {
 
-	if (Input::GetInstance()->TriggerKey(DIK_0)) {
-		lightGroupe->SetSpotLightActive(0, true);
-	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_1)) {
-		lightGroupe->SetSpotLightActive(1, true);
-	}
 
+	
 	if (Input::GetInstance()->TriggerKey(DIK_2)) {
 		lightGroupe->SetSpotLightActive(2, true);
 	}
 
-	if (Input::GetInstance()->TriggerKey(DIK_3)) {
-		lightGroupe->SetSpotLightActive(0, false);
-	}
-
-	if (Input::GetInstance()->TriggerKey(DIK_4)) {
-		lightGroupe->SetSpotLightActive(1, false);
-	}
 
 	if (Input::GetInstance()->TriggerKey(DIK_5)) {
 		lightGroupe->SetSpotLightActive(2, false);
@@ -339,36 +333,20 @@ void GameScene::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Light");
-	if (ImGui::TreeNode("RedLight")) {
-		ImGui::SliderFloat("PosX", &SpotLightPos.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("PosY", &SpotLightPos.y, -100.0f, 1000.0f);
-		ImGui::SliderFloat("PosZ", &SpotLightPos.z, -100.0f, 100.0f);
 
-		ImGui::SliderFloat("RotX", &SpotLightDir.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("RotY", &SpotLightDir.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("RotZ", &SpotLightDir.z, -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("GreenLight")) {
-		ImGui::SliderFloat("PosX", &SpotLightPos2.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("PosY", &SpotLightPos2.y, -100.0f, 1000.0f);
-		ImGui::SliderFloat("PosZ", &SpotLightPos2.z, -100.0f, 100.0f);
-
-		ImGui::SliderFloat("RotX", &SpotLightDir2.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("RotY", &SpotLightDir2.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("RotZ", &SpotLightDir2.z, -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
 
 	if (ImGui::TreeNode("BlueLight")) {
 		ImGui::SliderFloat("PosX", &SpotLightPos3.x, -100.0f, 100.0f);
 		ImGui::SliderFloat("PosY", &SpotLightPos3.y, -100.0f, 1000.0f);
 		ImGui::SliderFloat("PosZ", &SpotLightPos3.z, -100.0f, 100.0f);
 
-		ImGui::SliderFloat("RotX", &SpotLightDir3.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("RotY", &SpotLightDir3.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("RotZ", &SpotLightDir3.z, -100.0f, 100.0f);
+		ImGui::SliderFloat("DirX", &SpotLightDir3.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("DirY", &SpotLightDir3.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("DirZ", &SpotLightDir3.z, -100.0f, 100.0f);
+
+		ImGui::SliderFloat("AttenX", &SpotLightAtten3.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("AttenY", &SpotLightAtten3.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("AttenZ", &SpotLightAtten3.z, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

@@ -138,6 +138,7 @@ public:
 	void SetHp(int HP) { this->Hp = HP; }
 	void SetFinish(const bool& finish) { this->StopFlag = finish; }
 	void SetBulletShot(const bool& BulletShot_F) { this->BulletShotFlag = BulletShot_F; }
+	const XMVECTOR& GetVelocity() { return Velocity; }
 #pragma endregion
 private:
 	//Obj
