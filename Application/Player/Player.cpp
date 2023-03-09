@@ -24,34 +24,29 @@ Player::~Player()
 //初期化処理
 void Player::Initalize(Camera* camera)
 {
-
 	Object3d::SetCamera(camera);
 
 	SkipPos = CurtainDownPos;
-	Sprite::LoadTexture(200, L"Resources/mark2.png");
-	Sprite::LoadTexture(300, L"Resources/curtain.png");
-	Sprite::LoadTexture(302, L"Resources/Skip.png");
-	Sprite::LoadTexture(303, L"Resources/bullet.png");
-	Sprite::LoadTexture(304, L"Resources/Smoke.png");
-	Sprite::LoadTexture(10, L"Resources/Reload.png");
+	Sprite::LoadTexture(20, L"Resources/mark2.png");
+	Sprite::LoadTexture(21, L"Resources/curtain.png");
+	Sprite::LoadTexture(22, L"Resources/Skip.png");
+	Sprite::LoadTexture(23, L"Resources/bullet.png");
+	Sprite::LoadTexture(24, L"Resources/Smoke.png");
+	Sprite::LoadTexture(25, L"Resources/Reload.png");
 	//スプライトの読み込み
+	SpriteReticle.reset(Sprite::SpriteCreate(20, ReticlePos2D, ReticleColor, ReticleAncorPoint));
+	CurtainUp.reset(Sprite::SpriteCreate(21, CurtainUpPos));
+	CurtainDown.reset(Sprite::SpriteCreate(21, CurtainDownPos));
+	Skip.reset(Sprite::SpriteCreate(22, SkipPos));
 	for (int i = 0; i < 9; i++) {
 		SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
 		SpriteRot[i] = 0;
 		Time[i] = 0;
-		bulletHUD[i].reset(Sprite::SpriteCreate(303, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
-		Smoke[i].reset(Sprite::SpriteCreate(304, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
+		bulletHUD[i].reset(Sprite::SpriteCreate(23, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
+		Smoke[i].reset(Sprite::SpriteCreate(24, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
 		DropBulletFlag[i] = false;
 	}
-
-	OldRemaining = Remaining;
-
-	Reload.reset(Sprite::SpriteCreate(10, ReloadSpritePos, ReloadSpriteColor, AnchorPoint));
-
-	SpriteReticle.reset(Sprite::SpriteCreate(200, ReticlePos2D, ReticleColor, ReticleAncorPoint));
-	CurtainUp.reset(Sprite::SpriteCreate(300, CurtainUpPos));
-	CurtainDown.reset(Sprite::SpriteCreate(300, CurtainDownPos));
-	Skip.reset(Sprite::SpriteCreate(302, SkipPos));
+	Reload.reset(Sprite::SpriteCreate(25, ReloadSpritePos, ReloadSpriteColor, AnchorPoint));
 
 	Gun = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
 	Body = Object3d::Create(ModelManager::GetInstance()->GetModel(10));

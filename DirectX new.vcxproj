@@ -94,9 +94,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application\Actor\Actor.cpp" />
-    <ClCompile Include="Application\Easing\Easing.cpp" />
-    <ClCompile Include="Application\Enemy\BigEnemy.cpp" />
-    <ClCompile Include="Application\Enemy\ThrowingEnemy.cpp" />
     <ClCompile Include="Application\Particle\ObjParticle.cpp" />
     <ClCompile Include="Application\Scene\BaseClassIUDF.cpp" />
     <ClCompile Include="Application\Scene\BaseScene.cpp" />
@@ -285,9 +282,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Actor\Actor.h" />
-    <ClInclude Include="Application\Easing\Easing.h" />
-    <ClInclude Include="Application\Enemy\BigEnemy.h" />
-    <ClInclude Include="Application\Enemy\ThrowingEnemy.h" />
     <ClInclude Include="Application\Particle\ObjParticle.h" />
     <ClInclude Include="Application\Scene\BaseClassIUDF.h" />
     <ClInclude Include="Application\Scene\BaseScene.h" />

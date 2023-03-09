@@ -116,19 +116,19 @@ private:
 	unique_ptr <Object3d >World;
 	unique_ptr<Object3d> Start;
 	//スプライト
-	Sprite* Title = nullptr;
-	Sprite* Cursor = nullptr;
-	Sprite* ClickBefore = nullptr;
-	Sprite* ClickAfter = nullptr;
-	Sprite* SignalBefore = nullptr;
-	Sprite* SignalAfter = nullptr;
-	Sprite* DescriptionOperation = nullptr;
-	Sprite* EnemyOverview = nullptr;
-	Sprite* GameStartPreparation = nullptr;
-	Sprite* ArrowRight = nullptr;
-	Sprite* ArrowLeft = nullptr;
-	Sprite* ArrowRightTrue = nullptr;
-	Sprite* ArrowLeftTrue = nullptr;
+	std::unique_ptr<Sprite> Title = nullptr;
+	std::unique_ptr<Sprite> Cursor = nullptr;
+	std::unique_ptr<Sprite> ClickBefore = nullptr;
+	std::unique_ptr<Sprite> ClickAfter = nullptr;
+	std::unique_ptr<Sprite> SignalBefore = nullptr;
+	std::unique_ptr<Sprite> SignalAfter = nullptr;
+	std::unique_ptr<Sprite> DescriptionOperation = nullptr;
+	std::unique_ptr<Sprite> EnemyOverview = nullptr;
+	std::unique_ptr<Sprite> GameStartPreparation = nullptr;
+	std::unique_ptr<Sprite> ArrowRight = nullptr;
+	std::unique_ptr<Sprite> ArrowLeft = nullptr;
+	std::unique_ptr<Sprite> ArrowRightTrue = nullptr;
+	std::unique_ptr<Sprite> ArrowLeftTrue = nullptr;
 	//その他の機能
 	Light* light = nullptr;
 	LightGroup* lightGroupe = nullptr;
@@ -137,7 +137,6 @@ private:
 	Audio* MorseCodeSe = nullptr;
 	Audio* Bgm = nullptr;
 	Camera* TitleCamera = nullptr;
-	DirectXCommon* dxCommon = nullptr;
 	//球体のステータス
 	XMVECTOR SpherePos = { 0,0,0 };
 	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
@@ -194,7 +193,6 @@ private:
 	float PointLightColor[3] = { 1.f,1.f,1.f };
 	float PointLightAtten[3] = { 0.3f,0.1f,0.1f };
 
-	XMVECTOR lightDir = { 0,0,0,0 };
 
 	XMFLOAT3 SpotLightDir = { 0,-1,0 };
 	XMFLOAT3 SpotLightPos = { 0,1005,0 };

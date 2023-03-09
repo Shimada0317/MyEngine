@@ -212,7 +212,7 @@ private:
 		XMFLOAT2 CurtainSize = { 1280.0f,100.0f };
 		XMFLOAT2 CurtainDownPos = { 0.0f,620.0f };
 		//Skip•¶š‚Ì•\¦
-		XMFLOAT2 SkipPos = { 1100,720.0f };
+		XMFLOAT2 SkipPos = { 0.0f,620.0f };
 	//2DÀ•W“ü‚Ìæ“¾—p•Ï”
 	XMVECTOR offset = { 0,0,1.0f };
 

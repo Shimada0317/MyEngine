@@ -46,7 +46,7 @@ void ObjParticle::Set()
 	Particle->SetScale(ParticleScl);
 }
 
-void ObjParticle::Update(XMVECTOR& enemyPos,XMFLOAT3& allRot)
+void ObjParticle::Update()
 {
 	Set();
 	XMFLOAT3 ConvertValue = Action::GetInstance()->ConvertToXMFLOAT3(SmoleScl);

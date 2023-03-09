@@ -26,6 +26,7 @@ public:
 	/// </summary>
 	void Run();
 
+	void End();
 
 	/// <summary>
 	/// ‰Šú‰»

@@ -47,19 +47,19 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(13, L"Resources/arrowLeftTrue.png");
 
 	//スプライトの生成
-	Title = Sprite::SpriteCreate(1, { 1.0f,1.0f });
-	Cursor = Sprite::SpriteCreate(2, ReticlePos, SpriteCol, Anchorpoint);
-	ClickBefore = Sprite::SpriteCreate(3, ClickPos);
-	ClickAfter = Sprite::SpriteCreate(4, ClickPos);
-	SignalBefore = Sprite::SpriteCreate(5, ClickPos);
-	SignalAfter = Sprite::SpriteCreate(6, ClickPos);
-	DescriptionOperation = Sprite::SpriteCreate(7, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
-	EnemyOverview = Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
-	GameStartPreparation = Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint);
-	ArrowRight = Sprite::SpriteCreate(10, ArrowRightPos);
-	ArrowLeft = Sprite::SpriteCreate(11, ArrowLeftPos);
-	ArrowRightTrue = Sprite::SpriteCreate(12, ArrowRightPos);
-	ArrowLeftTrue = Sprite::SpriteCreate(13, ArrowLeftPos);
+	Title.reset(Sprite::SpriteCreate(1, { 1.0f,1.0f }));
+	Cursor.reset( Sprite::SpriteCreate(2, ReticlePos, SpriteCol, Anchorpoint));
+	ClickBefore.reset(Sprite::SpriteCreate(3, ClickPos));
+	ClickAfter.reset(Sprite::SpriteCreate(4, ClickPos));
+	SignalBefore.reset(Sprite::SpriteCreate(5, ClickPos));
+	SignalAfter.reset(Sprite::SpriteCreate(6, ClickPos));
+	DescriptionOperation.reset(Sprite::SpriteCreate(7, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint));
+	EnemyOverview.reset(Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint));
+	GameStartPreparation.reset(Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint));
+	ArrowRight.reset(Sprite::SpriteCreate(10, ArrowRightPos));
+	ArrowLeft.reset(Sprite::SpriteCreate(11, ArrowLeftPos));
+	ArrowRightTrue.reset(Sprite::SpriteCreate(12, ArrowRightPos));
+	ArrowLeftTrue.reset(Sprite::SpriteCreate(13, ArrowLeftPos));
 
 	//オブジェクトの生成
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
@@ -79,10 +79,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Post = new PostEffect();
 	Post->Initialize();
 	CameraEyeMove = { 0.0f,0.0f,0.0f };
-
-	lightGroupe->SetPointLightActive(0, false);
-	lightGroupe->SetPointLightActive(1, false);
-	lightGroupe->SetPointLightActive(2, false);
+	//スポットライトをアクティブ状態
 	lightGroupe->SetSpotLightActive(0, true);
 	lightGroupe->SetSpotLightActive(1, true);
 	lightGroupe->SetSpotLightActive(2, true);
@@ -130,12 +127,14 @@ void TitleScene::StatusSet()
 	//マウスカーソルの座標セット
 	Cursor->SetPosition({ ReticlePos });
 
+	//1つ目のスポットライトを設定
 	lightGroupe->SetSpotLightDir(0, XMVECTOR({ SpotLightDir.x, SpotLightDir.y, SpotLightDir.z }));
 	lightGroupe->SetSpotLightPos(0, SpotLightPos);
 	lightGroupe->SetSpotLightColor(0, SpotLightColor);
 	lightGroupe->SetSpotLightAtten(0, SpotLightAtten);
 	lightGroupe->SetSpotLightFactorAngle(0, SpotLightFactorAngle);
-
+	
+	//2つ目のスポットライトを設定
 	lightGroupe->SetSpotLightDir(1, XMVECTOR({ SpotLightDir2.x, SpotLightDir2.y, SpotLightDir2.z }));
 	lightGroupe->SetSpotLightPos(1, SpotLightPos2);
 	lightGroupe->SetSpotLightColor(1, SpotLightColor2);
@@ -159,9 +158,7 @@ void TitleScene::AllUpdate()
 	World->Update();
 	//カメラの移動先のビルの更新処理
 	Start->Update();
-
-	//light->Update();
-
+	//ライトグループ更新
 	lightGroupe->Update();
 }
 
@@ -182,23 +179,12 @@ void TitleScene::Update()
 		}
 	}
 
-	if (Input::GetInstance()->PushKey(DIK_W)) { SpotLightPos.z += 1.0f; }
-	else if (Input::GetInstance()->PushKey(DIK_S)) { SpotLightPos.z -= 1.0f; }
-	if (Input::GetInstance()->PushKey(DIK_D)) { SpotLightPos.x += 1.0f; }
-	else if (Input::GetInstance()->PushKey(DIK_A)) { SpotLightPos.x -= 1.0f; }
-
-
-	if (Input::GetInstance()->PushKey(DIK_UP)) { SpotLightDir.y += 1.0f; }
-	else if (Input::GetInstance()->PushKey(DIK_DOWN)) { SpotLightDir.y -= 1.0f; }
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) { SpotLightDir.x += 0.1f; }
-	else if (Input::GetInstance()->PushKey(DIK_LEFT)) { SpotLightDir.x -= 0.1f; }
-
-
 	DescriptionPageOperation();
 
 	FadeOutAndSceneChange();
 
 	StatusSet();
+
 	AllUpdate();
 	//カメラの再計算
 	TitleCamera->RecalculationMatrix();
@@ -381,24 +367,24 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 //終了処理
 void TitleScene::Finalize()
 {
-	delete Title;
-	delete dxCommon;
 	delete Post;
 	delete TitleCamera;
 	delete light;
-	delete ArrowLeft;
-	delete ArrowRight;
-	delete ArrowLeftTrue;
-	delete ArrowRightTrue;
-	delete EnemyOverview;
-	delete DescriptionOperation;
-	delete GameStartPreparation;
-	delete SignalAfter;
-	delete SignalBefore;
 	delete ClickSe;
-	delete Cursor;
 	delete Bgm;
+	delete lightGroupe;
 
+	Title.reset();
+	ArrowLeft.reset();
+	ArrowRight.reset();
+	ArrowLeftTrue.reset();
+	ArrowRightTrue.reset();
+	EnemyOverview.reset();
+	DescriptionOperation.reset();
+	GameStartPreparation.reset();
+	SignalAfter.reset();
+	SignalBefore.reset();
+	Cursor.reset();
 	for (int i = 0; i < BILLS; i++) {
 		BillsHighAlpha[i].reset();
 		BillsLowAlpha[i].reset();

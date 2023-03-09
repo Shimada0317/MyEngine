@@ -35,13 +35,13 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLightGroup(lightGroupe);
 
 	//	スプライトの読み込み
-	Sprite::LoadTexture(19, L"Resources/DamageEfect.png");
-	Sprite::LoadTexture(35, L"Resources/Mision.png");
-	Sprite::LoadTexture(36, L"Resources/CONTINUE.png");
+	Sprite::LoadTexture(20, L"Resources/DamageEfect.png");
+	Sprite::LoadTexture(21, L"Resources/Mision.png");
+	Sprite::LoadTexture(22, L"Resources/CONTINUE.png");
 	//スプライトの生成
-	Clear = Sprite::SpriteCreate(35, { 0.0f,0.0f });
-	Conteniu = Sprite::SpriteCreate(36, { 0.0f,0.0f });
-	DamageEfectSp = Sprite::SpriteCreate(19, { 0.0f, 0.0f }, DamageEfectColor);
+	Clear.reset(Sprite::SpriteCreate(21, { 0.0f,0.0f }));
+	Conteniu.reset(Sprite::SpriteCreate(22, { 0.0f,0.0f }));
+	DamageEfectSp.reset(Sprite::SpriteCreate(20, { 0.0f, 0.0f }, DamageEfectColor));
 
 	//モデルの読み込み
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
@@ -441,8 +441,8 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 void GameScene::Finalize()
 {
 	delete postEffect;
-	delete Conteniu;
-	delete Clear;
+	Conteniu.reset();
+	Clear.reset();
 	delete Bgm;
 	delete light;
 	delete lightGroupe;

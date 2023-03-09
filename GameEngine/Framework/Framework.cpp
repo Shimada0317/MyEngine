@@ -24,6 +24,13 @@ void Framework::Run()
 	Finalize();
 }
 
+void Framework::End()
+{
+	delete dxCommon;
+	delete winApp;
+	delete sceneManager_;
+}
+
 void Framework::Initialize()
 {
 	winApp = new WinApp();
@@ -35,7 +42,7 @@ void Framework::Initialize()
 	mouse = Mouse::GetInstance();
 	mouse->Initialize(winApp);
 	camera = new DebugCamera(WinApp::window_width,WinApp::window_height);
-	//audio->LoadFile("Resources/digitalworld.wav", 0.1);
+
 	Object3d::StaticInitialize(dxCommon->GetDev(),camera);
 	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
 	ParticleManager::StaticInitialize(camera,dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
@@ -75,27 +82,17 @@ void Framework::Finalize()
 {
 
 	winApp->Finalize();
-	
-	delete sceneManager_;
-
 	//ウィンドウ表示
 	ShowWindow(winApp->GetHwnd(), SW_SHOW);
 	//コンソールへの文字出力
 	OutputDebugStringA("Hello,DirectX!!\n");
 
 	FbxLoader::GetInstance()->Finalize();
-
-	//delete input;
-	delete winApp;
-	//delete dxCommon;
 }
 
 
 void Framework::Draw()
 {
-
-
-
 	//描画前処理
 	//dxCommon->PreDraw();
 	//シーン描画

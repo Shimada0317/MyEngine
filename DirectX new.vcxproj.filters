@@ -327,15 +327,6 @@
     <ClCompile Include="Application\Enemy\Enemy.cpp">
       <Filter>ソース ファイル\Application\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\BigEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\ThrowingEnemy.cpp">
-      <Filter>ソース ファイル\Application\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Easing\Easing.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Scene\BaseClassIUDF.cpp">
       <Filter>ソース ファイル\Application\Scene\Base</Filter>
     </ClCompile>
@@ -590,15 +581,6 @@
     </ClInclude>
     <ClInclude Include="External\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\BigEnemy.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\ThrowingEnemy.h">
-      <Filter>ヘッダー ファイル\Application\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Easing\Easing.h">
-      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\Light\SpotLight\SpotLight.h">
       <Filter>ヘッダー ファイル\GameEngine\Light</Filter>

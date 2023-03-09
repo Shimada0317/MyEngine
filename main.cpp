@@ -28,6 +28,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
 	game->Run();
 
+	game->End();
+
 	delete game;
 
 	return 0;

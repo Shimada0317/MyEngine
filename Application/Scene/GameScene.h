@@ -102,9 +102,9 @@ private://メンバ変数
 	unique_ptr<Object3d> BillsLowAlpha[BILLS];
 	unique_ptr<Object3d> FieldBills[5];
 	//スプライト
-	Sprite* Clear = nullptr;
-	Sprite* Conteniu = nullptr;
-	Sprite* DamageEfectSp = nullptr;
+	unique_ptr<Sprite> Clear = nullptr;
+	unique_ptr<Sprite> Conteniu = nullptr;
+	unique_ptr<Sprite> DamageEfectSp = nullptr;
 	//その他の機能
 	Audio* Bgm = nullptr;
 	PostEffect* postEffect = nullptr;
