@@ -9,14 +9,11 @@ DebugScene::DebugScene(SceneManager* sceneManager_)
 void DebugScene::Initialize(DirectXCommon* dxComon)
 {
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
-	//light = Light::Create();
-	//light->SetLightColor({ 1,1,1 });
 
 	lightGroupe = LightGroup::Create();
 
 
 	Object3d::SetCamera(camera);
-	//Object3d::SetLight(light);
 	Object3d::SetLightGroup(lightGroupe);
 
 
@@ -31,17 +28,7 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 
 	wall = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
 
-	/*lightGroupe->SetDirLightActive(0, false);
-	lightGroupe->SetDirLightActive(1, false);
-	lightGroupe->SetDirLightActive(2, false);
-	lightGroupe->SetPointLightActive(0, true);
-	PointLightsPos.x = 0.5f;
-	PointLightsPos.y = 1.0f;
-	PointLightsPos.z = 0.0f;*/
 
-	lightGroupe->SetPointLightActive(0, false);
-	lightGroupe->SetPointLightActive(1, false);
-	lightGroupe->SetPointLightActive(2, false);
 	lightGroupe->SetSpotLightActive(0, true);
 	lightGroupe->SetSpotLightActive(1, true);
 	lightGroupe->SetSpotLightActive(2, true);
@@ -78,10 +65,6 @@ void DebugScene::SetPosSclRot()
 	camera->SetTarget(cameraTarget);
 	camera->SetEye(cameraEye);
 	camera->RecalculationMatrix();
-
-	/*lightGroupe->SetPointLightPos(0, PointLightsPos);
-	lightGroupe->SetPointLightColor(0, XMFLOAT3(PoinLightColor));
-	lightGroupe->SetPointLightAtten(0, XMFLOAT3(PointLightAtten));*/
 
 	lightGroupe->SetSpotLightDir(0, XMVECTOR({ SpotLightDir.x, SpotLightDir.y, SpotLightDir.z }));
 	lightGroupe->SetSpotLightPos(0, SpotLightPos);
