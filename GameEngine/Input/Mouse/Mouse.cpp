@@ -24,7 +24,7 @@ void Mouse::Initialize(WinApp* winApp)
 	result = Onclick->SetCooperativeLevel(
 		winApp->GetHwnd(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	
-	//ShowCursor(false);
+	ShowCursor(false);
 }
 
 void Mouse::Update()

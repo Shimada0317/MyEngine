@@ -35,13 +35,13 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLightGroup(lightGroupe);
 
 	//	スプライトの読み込み
-	Sprite::LoadTexture(20, L"Resources/DamageEfect.png");
-	Sprite::LoadTexture(21, L"Resources/Mision.png");
-	Sprite::LoadTexture(22, L"Resources/CONTINUE.png");
+	Sprite::LoadTexture(30, L"Resources/DamageEfect.png");
+	Sprite::LoadTexture(31, L"Resources/Mision.png");
+	Sprite::LoadTexture(32, L"Resources/CONTINUE.png");
 	//スプライトの生成
-	Clear.reset(Sprite::SpriteCreate(21, { 0.0f,0.0f }));
-	Conteniu.reset(Sprite::SpriteCreate(22, { 0.0f,0.0f }));
-	DamageEfectSp.reset(Sprite::SpriteCreate(20, { 0.0f, 0.0f }, DamageEfectColor));
+	DamageEfectSp.reset(Sprite::SpriteCreate(30, { 0.0f, 0.0f }, DamageEfectColor));
+	Clear.reset(Sprite::SpriteCreate(31, { 0.0f,0.0f }));
+	Conteniu.reset(Sprite::SpriteCreate(32, { 0.0f,0.0f }));
 
 	//モデルの読み込み
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
@@ -369,51 +369,8 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 
 //ImgUiの描画処理
 void GameScene::ImgDraw()
-
 {
 
-	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
-	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
-	ImGui::Begin("Light");
-
-	if (ImGui::TreeNode("WorldLight")) {
-		ImGui::SliderFloat("PosX", &FieldSpotLightPos.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("PosY", &FieldSpotLightPos.y, -100.0f, 1000.0f);
-		ImGui::SliderFloat("PosZ", &FieldSpotLightPos.z, -100.0f, 100.0f);
-
-		ImGui::SliderFloat("DirX", &FieldSpotLightDir.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("DirY", &FieldSpotLightDir.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("DirZ", &FieldSpotLightDir.z, -100.0f, 100.0f);
-
-		ImGui::SliderFloat("AttenX", &FieldSpotLightAtten.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("AttenY", &FieldSpotLightAtten.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("AttenZ", &FieldSpotLightAtten.z, -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("BlueLight")) {
-		ImGui::SliderFloat("PosX", &SpotLightPos3.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("PosY", &SpotLightPos3.y, -100.0f, 1000.0f);
-		ImGui::SliderFloat("PosZ", &SpotLightPos3.z, -100.0f, 100.0f);
-
-		ImGui::SliderFloat("DirX", &SpotLightDir3.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("DirY", &SpotLightDir3.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("DirZ", &SpotLightDir3.z, -100.0f, 100.0f);
-
-		ImGui::SliderFloat("AttenX", &SpotLightAtten3.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("AttenY", &SpotLightAtten3.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("AttenZ", &SpotLightAtten3.z, -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-
-	Act->ImGuiDraw();
-
-	ImGui::End();
-	ImGui::PopStyleColor();
-	ImGui::PopStyleColor();
-	//Act->ImGuiDraw();
 }
 
 //ポストエフェクトの描画処理

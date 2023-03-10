@@ -118,7 +118,7 @@ private://メンバ変数
 	//天球のステータス
 	XMVECTOR SpherePos = { 0,0,0 };
 	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
-	XMFLOAT3 SphereRot = { 0,0,0 };
+	XMFLOAT3 SphereRot = { 0,90,0 };
 	//フィールドのステータス
 	XMFLOAT3 FieldBillScl = { 6.0f,10.0f,7.0f };
 	XMVECTOR FieldBillPos[5];

@@ -25,16 +25,12 @@ void Actor::Initialize()
 	Sprite::LoadTexture(17, L"Resources/five.png");
 	Sprite::LoadTexture(18, L"Resources/Hpber.png");
 	
-
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
 	player = std::make_unique<Player>();
 	player->Initalize(camera);
 	camera->RecalculationMatrix();
 
-
-
-	
 	Wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
 	MaxCount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
 	HpBer = Sprite::SpriteCreate(18, { 10.0f,10.0f });
@@ -109,8 +105,6 @@ void Actor::Update()
 {
 	XMVECTOR velo = player->GetVelocity();
 	SetVelocity(velo);
-
-	float playeroldjup = PlayerHp;
 
 	Heripos.m128_f32[2] += HeriX;
 

@@ -65,9 +65,9 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 	CenterMat = Center->GetMatrix();
 	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
 
-	Sprite::LoadTexture(350, L"Resources/mark.png");
-	RockOn.reset(Sprite::SpriteCreate(350, RockOnPos, RockOnCol, RockOnAnchorPoint));
-	RockOnHead.reset(Sprite::SpriteCreate(350, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
+	Sprite::LoadTexture(40, L"Resources/mark.png");
+	RockOn.reset(Sprite::SpriteCreate(40, RockOnPos, RockOnCol, RockOnAnchorPoint));
+	RockOnHead.reset(Sprite::SpriteCreate(40, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
 
 	HeadPartScl = { 0.0f,0.0f,0.0f };
 	ArmsPartScl = { 0.0f,0.0f,0.0f };
@@ -165,9 +165,6 @@ void Enemy::AllUpdate()
 //XVˆ—
 void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbulletshot)
 {
-	if(Input::GetInstance()->TriggerKey(DIK_O)){
-		Hp=0;
-	}
 
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
@@ -450,7 +447,7 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			AttackShakeDownFlag = false;
 			AttackFaseFlag = false;
 			attacktimer = 0;
-			//playerhp -= 1;
+			playerhp -= 1;
 
 		}
 	}
