@@ -89,7 +89,7 @@ public://メンバ関数
 	/// <summary>
 	/// 説明画面で行われる処理
 	/// </summary>
-	void DescriptionPageOperation();
+	void DescriptionPageProces();
 
 	/// <summary>
 	///　フェードアウト後にゲームシーンへチェンジ

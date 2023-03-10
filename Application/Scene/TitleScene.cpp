@@ -179,7 +179,7 @@ void TitleScene::Update()
 		}
 	}
 
-	DescriptionPageOperation();
+	DescriptionPageProces();
 
 	FadeOutAndSceneChange();
 
@@ -232,8 +232,8 @@ bool TitleScene::NextorBack(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Po
 	return false;
 }
 
-//操作ページの操作
-void TitleScene::DescriptionPageOperation()
+
+void TitleScene::DescriptionPageProces()
 {
 	//カメラが移動した後の画面
 	if (DescriptionPage < 2 && TitleDisplay_F == false && CameraChange_F == true) {

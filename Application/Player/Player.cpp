@@ -383,19 +383,6 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 
-		/*	else if (patern == 3) {
-				Action::GetInstance()->EaseOut(EyeRot.y, 95.0f);
-				if(EyeRot.y>=90){
-					EyeRot.y = 90;
-					Velocity = { 0, 0, MoveSpeed };
-				}
-
-				if (camvec.m128_f32[0] >= 30) {
-					move = false;
-					MoveFlag = false;
-					StopFlag = true;
-				}
-			}*/
 
 		else if (patern == 4) {
 			Action::GetInstance()->EaseOut(EyeRot.y, 95.0f);
@@ -411,19 +398,6 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 
-		/*	else if (patern == 4) {
-				Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-				if (EyeRot.y <= 0) {
-					ChangeRot = 0;
-					EyeRot.y = 0;
-					Velocity = { 0, 0, MoveSpeed };
-				}
-				if (camvec.m128_f32[2] >= 70) {
-					move = false;
-					MoveFlag = false;
-					StopFlag = true;
-				}
-			}*/
 
 		else if (patern == 5) {
 			Velocity = { 0, 0, MoveSpeed };
@@ -435,18 +409,6 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 
-		/*else if (patern == 5) {
-			EyeRot.y -= 3;
-			if (EyeRot.y <= 0) {
-				EyeRot.y = 0;
-				Velocity = { 0, 0, MoveSpeed };
-			}
-			if (camvec.m128_f32[2] >= 30) {
-				move = false;
-				MoveFlag = false;
-				StopFlag = true;
-			}
-		}*/
 
 		else if (patern == 6) {
 			Velocity = { 0, 0, MoveSpeed };
@@ -760,17 +722,21 @@ void Player::ReloadProcess()
 
 void Player::MoveShakingHead()
 {
+	//‰ÁŽZ‚ÆŒ¸ŽZ‚·‚éˆ×‚Ìâ‘Î’l
+	const float EyeRotAbsouluteValue = 0.5f;
+	//”½“]‚³‚¹‚é‚½‚ß‚Ìâ‘Î’l
+	const float AbsoluteValue = 0.5f;
 	if (ShakeHeadFlag == true) {
-		if (shake == 0) {
+		if (Shake == false) {
 			EyeRot.x += 0.05f;
 			if (EyeRot.x >= 0.5f) {
-				shake = 1;
+				Shake = true;
 			}
 		}
-		if (shake == 1) {
-			EyeRot.x -= 0.05f;
-			if (EyeRot.x <= -0.5f) {
-				shake = 0;
+		if (Shake == false) {
+			EyeRot.x -= 0.05;
+			if (EyeRot.x <=-0.5f) {
+				Shake = true;
 			}
 		}
 	}
@@ -788,8 +754,6 @@ void Player::ParticleEfect()
 
 			float sinradY = sinf(radY);
 			float cosradY = cosf(radY);
-
-			
 
 			if (PaternCount == 5 || PaternCount == 6) {
 				pos.x = GunWorldPos.m128_f32[0] + 2.3f;
@@ -817,7 +781,6 @@ void Player::ParticleEfect()
 				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
 			}
 
-
 			const float rnd_vel = 0.001f;
 			XMFLOAT3 vel{};
 			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
@@ -841,7 +804,6 @@ void Player::ParticleEfect()
 		ParticleFlag = false;
 		SoundEffect();
 	}
-
 }
 
 

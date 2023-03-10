@@ -38,7 +38,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(Camera* camera,int patern);
+	void Update(Camera* camera, int patern);
 	/// <summary>
 	/// パーティクルの描画
 	/// </summary>
@@ -57,7 +57,7 @@ public:
 	/// </summary>
 	/// <param name="move"></param>
 	/// <param name="patern">フェイズ番号</param>
-	void PlayerMove(bool& move,int patern);
+	void PlayerMove(bool& move, int patern);
 	/// <summary>
 	/// Objの描画
 	/// </summary>
@@ -83,7 +83,7 @@ public:
 	/// 画面揺れ
 	/// </summary>
 	/// <param name="limitshakevalue">シェイクする値</param>
-	void ScreenShake(float shakevalue,float shakingtime);
+	void ScreenShake(float shakevalue, float shakingtime);
 	/// <summary>
 	/// ダメージ食らったときの処理
 	/// </summary>
@@ -100,12 +100,10 @@ public:
 	/// 移動時にカメラ揺れ
 	/// </summary>
 	void MoveShakingHead();
-
 	/// <summary>
 	/// パーティクル発生
 	/// </summary>
 	void ParticleEfect();
-
 #pragma region Get
 	const bool& GetFinish() { return StopFlag; }
 	//三次元座標
@@ -120,12 +118,11 @@ public:
 	const XMFLOAT2& GetRetSiz() { return ReticleSize; }
 	//カメラワーク
 	const bool& GetCamWork() { return CameraWorkFlag; }
-
+	//飛び立つ
 	const bool& GetFring() { return FringFlag; }
-
 	//Hp
 	int GetHp() { return Hp; }
-
+	//撃った時
 	const bool& GetBulletShot() { return BulletShotFlag; }
 #pragma endregion
 
@@ -165,54 +162,54 @@ private:
 	RailCamera* RailCam;
 	//ローカル
 		//レティクルObjのステータス
-		XMVECTOR ReticlePos = { 0.0f,55.0f,0.0f };
-		XMFLOAT3 ReticleRot = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 ReticleScl = { 0.3f,0.3f,0.3f };
-		//発射台Objのステータス
-		XMVECTOR GunPos = { 0.0f,0.0f,-3.0f };
-		XMVECTOR GunNotParentPos = { 0.0f,0.0f,-10.0f };
-		XMFLOAT3 GunRot = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 GunScl={0.3f,0.3f,0.3f};
-		//薬莢Objステータス
-		XMVECTOR CartridgePos = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 CartridgeRot = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 CartridgeScl = { 0.1f,0.1f,0.1f };
-		//プレイヤーObjのステータス
-		XMVECTOR BodyPos = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 BodyRot = { 0.0f,0.0f,0.0f };
-		XMFLOAT3 BodyScl = { 0.3f,0.3f,0.3f };
+	XMVECTOR ReticlePos = { 0.0f,55.0f,0.0f };
+	XMFLOAT3 ReticleRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 ReticleScl = { 0.3f,0.3f,0.3f };
+	//発射台Objのステータス
+	XMVECTOR GunPos = { 0.0f,0.0f,-3.0f };
+	XMVECTOR GunNotParentPos = { 0.0f,0.0f,-10.0f };
+	XMFLOAT3 GunRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 GunScl = { 0.3f,0.3f,0.3f };
+	//薬莢Objステータス
+	XMVECTOR CartridgePos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 CartridgeRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 CartridgeScl = { 0.1f,0.1f,0.1f };
+	//プレイヤーObjのステータス
+	XMVECTOR BodyPos = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 BodyRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 BodyScl = { 0.3f,0.3f,0.3f };
 	//ワールド
 		//レティクルのステータス
-		XMVECTOR TrackWorldPos = { 0.0f,0.0f,0.0f };
-		XMMATRIX TrackMat;
-		XMVECTOR WorldFarPos={0.0f,0.0f,0.0f};
-		//発射台のステータス
-		XMVECTOR GunWorldPos = { 0.0f,0.0f,-5.0f };
-		XMMATRIX GunMat;
-		//プレイヤーのステータス
-		XMVECTOR BodyWorldPos = { 0.0f,0.0f,-0.1f };
-		XMMATRIX BodyMat;
-		XMVECTOR ReticleWorldPos;
-		//パーティクルのステータス
-		XMVECTOR ParticlePos = { 0.0f,0.0f,2.0f };
+	XMVECTOR TrackWorldPos = { 0.0f,0.0f,0.0f };
+	XMMATRIX TrackMat;
+	XMVECTOR WorldFarPos = { 0.0f,0.0f,0.0f };
+	//発射台のステータス
+	XMVECTOR GunWorldPos = { 0.0f,0.0f,-5.0f };
+	XMMATRIX GunMat;
+	//プレイヤーのステータス
+	XMVECTOR BodyWorldPos = { 0.0f,0.0f,-0.1f };
+	XMMATRIX BodyMat;
+	XMVECTOR ReticleWorldPos;
+	//パーティクルのステータス
+	XMVECTOR ParticlePos = { 0.0f,0.0f,2.0f };
 	//ビューポート
 	XMMATRIX MatViewPort;
 	//カメラ
-	XMFLOAT3 EyeRot = {0.0f,0.0f,0.0f};
-	XMFLOAT3 TargetPos = {0.0f,0.0f,0.0f};
+	XMFLOAT3 EyeRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 TargetPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Up = { 0.0f,1.0f,0.0f };
 	//スプライト
 		//2Dレティクルのステータス
-		XMFLOAT4 ReticleColor = { 1,1,1,1 };
-		XMFLOAT2 ReticleAncorPoint = { 0.5f,0.5f };
-		XMFLOAT2 ReticlePos2D = { 640.0f,360.0f };
-		XMFLOAT2 ReticleSize = { 64.0f,64.0f };
-		//始まりと終わりの演出使う黒いカーテン
-		XMFLOAT2 CurtainUpPos = { 0.0f,0.0f };
-		XMFLOAT2 CurtainSize = { 1280.0f,100.0f };
-		XMFLOAT2 CurtainDownPos = { 0.0f,620.0f };
-		//Skip文字の表示
-		XMFLOAT2 SkipPos = { 0.0f,620.0f };
+	XMFLOAT4 ReticleColor = { 1,1,1,1 };
+	XMFLOAT2 ReticleAncorPoint = { 0.5f,0.5f };
+	XMFLOAT2 ReticlePos2D = { 640.0f,360.0f };
+	XMFLOAT2 ReticleSize = { 64.0f,64.0f };
+	//始まりと終わりの演出使う黒いカーテン
+	XMFLOAT2 CurtainUpPos = { 0.0f,0.0f };
+	XMFLOAT2 CurtainSize = { 1280.0f,100.0f };
+	XMFLOAT2 CurtainDownPos = { 0.0f,620.0f };
+	//Skip文字の表示
+	XMFLOAT2 SkipPos = { 0.0f,620.0f };
 	//2D座標入の取得用変数
 	XMVECTOR offset = { 0,0,1.0f };
 
@@ -227,11 +224,11 @@ private:
 	XMVECTOR Velocity;
 	bool MoveFlag = false;
 	//弾の速度
-	float MoveSpeed=0;
+	float MoveSpeed = 0;
 
 
 	//cam
-	int shake = 0;
+	bool Shake = 0;
 	float ShakingValue = 0.0f;
 
 	bool StopFlag = false;
