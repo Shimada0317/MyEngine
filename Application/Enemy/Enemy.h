@@ -141,7 +141,7 @@ private:
 	//頭
 	std::unique_ptr<Sprite> RockOnHead;
 
-	//発砲時のエフェクト
+	//ダメージを食らったときのエフェクト
 	ParticleManager* PartGreen = nullptr;
 	ParticleManager* PartRed = nullptr;
 

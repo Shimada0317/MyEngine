@@ -140,6 +140,13 @@ void TitleScene::StatusSet()
 	lightGroupe->SetSpotLightColor(1, SpotLightColor2);
 	lightGroupe->SetSpotLightAtten(1, SpotLightAtten2);
 	lightGroupe->SetSpotLightFactorAngle(1, SpotLightFactorAngle2);
+
+	//1つ目のスポットライトを設定
+	lightGroupe->SetSpotLightDir(2, XMVECTOR({ SpotLightDir.x, SpotLightDir.y, SpotLightDir.z }));
+	lightGroupe->SetSpotLightPos(2, SpotLightPos);
+	lightGroupe->SetSpotLightColor(2, SpotLightColor);
+	lightGroupe->SetSpotLightAtten(2, SpotLightAtten);
+	lightGroupe->SetSpotLightFactorAngle(2, SpotLightFactorAngle);
 }
 
 //全ての更新処理をまとめる
@@ -147,7 +154,7 @@ void TitleScene::AllUpdate()
 {
 	//左右のビルの更新処理
 	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->Update({ 0.4f,0.4f,0.5f,1.0f });
+		BillsHighAlpha[i]->Update({ 0.8f,0.6f,0.3f,1.0f });
 		BillsLowAlpha[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
 	}
 	//ポストエフェクトの更新処理

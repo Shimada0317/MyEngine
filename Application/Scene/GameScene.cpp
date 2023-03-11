@@ -142,11 +142,17 @@ void GameScene::StatusSet()
 	lightGroupe->SetSpotLightAtten(0, FieldSpotLightAtten);
 	lightGroupe->SetSpotLightFactorAngle(0, FieldSpotLightFactorAngle);
 
-	lightGroupe->SetSpotLightDir(1, XMVECTOR({ PlayerSpotLightDir.x, PlayerSpotLightDir.y, PlayerSpotLightDir.z }));
+	/*lightGroupe->SetSpotLightDir(1, XMVECTOR({ PlayerSpotLightDir.x, PlayerSpotLightDir.y, PlayerSpotLightDir.z }));
 	lightGroupe->SetSpotLightPos(1, PlayerSpotLightPos);
 	lightGroupe->SetSpotLightColor(1, PlayerSpotLightColor);
 	lightGroupe->SetSpotLightAtten(1, PlayerSpotLightAtten);
-	lightGroupe->SetSpotLightFactorAngle(1, PlayerSpotLightFactorAngle);
+	lightGroupe->SetSpotLightFactorAngle(1, PlayerSpotLightFactorAngle);*/
+
+	lightGroupe->SetSpotLightDir(1, XMVECTOR({ FieldSpotLightDir.x, FieldSpotLightDir.y, FieldSpotLightDir.z }));
+	lightGroupe->SetSpotLightPos(1, FieldSpotLightPos);
+	lightGroupe->SetSpotLightColor(1, FieldSpotLightColor);
+	lightGroupe->SetSpotLightAtten(1, FieldSpotLightAtten);
+	lightGroupe->SetSpotLightFactorAngle(1, FieldSpotLightFactorAngle);
 
 	lightGroupe->SetSpotLightDir(2, XMVECTOR({ SpotLightDir3.x, SpotLightDir3.y, SpotLightDir3.z }));
 	lightGroupe->SetSpotLightPos(2, SpotLightPos3);
@@ -220,12 +226,12 @@ void GameScene::AllUpdata()
 	}
 	//左右のビルの更新処理
 	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->Update({ 0.4f,0.4f,0.5f,1.0f });
-		BillsLowAlpha[i]->Update({ 0.2f,0.2f,0.2f,1.0f });
+		BillsHighAlpha[i]->Update({ 0.9f,0.9f,0.9f,1.0f });
+		BillsLowAlpha[i]->Update({ 0.9f,0.6f,0.2f,1.0f });
 	}
 	//フィールドのビルの更新処理
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i]->Update({ 0.2f,0.2f,0.3f,1.0f });
+		FieldBills[i]->Update({ 0.9f,0.9f,0.9f,1.0f });
 	}
 	//天球の更新処理
 	Sphere->Update({ 1,1,1,1 }, true);
@@ -239,9 +245,7 @@ void GameScene::AllUpdata()
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
-
-
-
+	Action::GetInstance()->DebugMove(FieldSpotLightPos);
 
 
 	if (GameStartFlag == false) {

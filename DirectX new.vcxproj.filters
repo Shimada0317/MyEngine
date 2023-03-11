@@ -79,9 +79,6 @@
     <Filter Include="ヘッダー ファイル\Application\Enemy">
       <UniqueIdentifier>{8406a0ff-1b46-4089-bcfb-e7b7407243cf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Application\Player">
-      <UniqueIdentifier>{67bf0d43-fec0-4ed1-bb95-5446e19f8abc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ヘッダー ファイル\Application\Particle">
       <UniqueIdentifier>{ee0a7b41-611b-460b-8bd6-8dc2c1b04fa7}</UniqueIdentifier>
     </Filter>
@@ -180,6 +177,9 @@
     </Filter>
     <Filter Include="ソース ファイル\Application\Actor">
       <UniqueIdentifier>{5ad37fe8-fdcf-44c1-b263-e00785be1b68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Application\Player">
+      <UniqueIdentifier>{67bf0d43-fec0-4ed1-bb95-5446e19f8abc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -332,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="GameEngine\Light\SpotLight\SpotLight.cpp">
       <Filter>ソース ファイル\GameEngine\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -584,6 +587,9 @@
     </ClInclude>
     <ClInclude Include="GameEngine\Light\SpotLight\SpotLight.h">
       <Filter>ヘッダー ファイル\GameEngine\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

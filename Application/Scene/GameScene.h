@@ -149,7 +149,7 @@ private://メンバ変数
 
 	XMFLOAT3 FieldSpotLightDir = { 0,-10,0 };
 	XMFLOAT3 FieldSpotLightPos = { 0,505,50 };
-	XMFLOAT3 FieldSpotLightColor = { 1.0,0.5f,0.f };
+	XMFLOAT3 FieldSpotLightColor = { 0.9,0.5f,0.f };
 	XMFLOAT3 FieldSpotLightAtten = { 0.f,0.f,0.f };
 	XMFLOAT2 FieldSpotLightFactorAngle = { 20.0f,30.0f };
 

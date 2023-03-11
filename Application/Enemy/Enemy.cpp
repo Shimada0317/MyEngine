@@ -25,7 +25,7 @@ const XMFLOAT4 operator+(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& 
 Enemy::~Enemy()
 {
 	Shadow.reset();
-
+	Center.reset();
 	HeadPart.reset();
 	BodyPart.reset();
 	ArmsPart.reset();
@@ -447,7 +447,7 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			AttackShakeDownFlag = false;
 			AttackFaseFlag = false;
 			attacktimer = 0;
-			playerhp -= 1;
+			//playerhp -= 1;
 
 		}
 	}

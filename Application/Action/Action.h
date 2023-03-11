@@ -88,6 +88,8 @@ public:
 	/// <param name="addvalue">‰ÁŽZ‚·‚é’l</param>
 	/// <returns></returns>
 	DirectX::XMFLOAT3 ConvertToXMFLOAT3(float SourceValue);
+
+	void DebugMove(XMFLOAT3& Value);
 private:
 };
 

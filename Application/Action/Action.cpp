@@ -104,6 +104,35 @@ DirectX::XMFLOAT3 Action::ConvertToXMFLOAT3(float SourceValue)
 	return ConvertValue;
 }
 
+void Action::DebugMove(XMFLOAT3& Value)
+{
+	float movevalue = 5.0f;
+
+	if (Input::GetInstance()->PushKey(DIK_W)) {
+		Value.y += movevalue;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_S)) {
+		Value.y -= movevalue;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_A)) {
+		Value.x -= movevalue;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_D)) {
+		Value.x += movevalue;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_Q)) {
+		Value.z -= movevalue;
+	}
+
+	if (Input::GetInstance()->PushKey(DIK_E)) {
+		Value.z += movevalue;
+	}
+}
+
 
 
 
