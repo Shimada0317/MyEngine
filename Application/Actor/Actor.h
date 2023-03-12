@@ -34,6 +34,8 @@ public:
 	void LoadEnemyPopData();
 
 	void UpdataEnemyPopCommands();
+
+	void CheckSameTrackPosition();
 public:
 	void SetPatern(int patern) { this->Patern = patern; }
 

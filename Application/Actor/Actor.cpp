@@ -17,14 +17,14 @@ Actor::~Actor()
 
 void Actor::Initialize()
 {
-	
+
 	Sprite::LoadTexture(13, L"Resources/one.png");
 	Sprite::LoadTexture(14, L"Resources/two.png");
 	Sprite::LoadTexture(15, L"Resources/three.png");
 	Sprite::LoadTexture(16, L"Resources/four.png");
 	Sprite::LoadTexture(17, L"Resources/five.png");
 	Sprite::LoadTexture(18, L"Resources/Hpber.png");
-	
+
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
 	player = std::make_unique<Player>();
@@ -34,7 +34,7 @@ void Actor::Initialize()
 	Wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
 	MaxCount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
 	HpBer = Sprite::SpriteCreate(18, { 10.0f,10.0f });
-	
+
 
 	for (int i = 0; i < 5; i++) {
 		ChangeCount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
@@ -50,7 +50,7 @@ void Actor::Initialize()
 
 	PlayerHp = player->GetHp();
 	GetCamWorkFlag = player->GetCamWork();
-	
+
 
 	heriFry = new Audio();
 	heriFry->Initialize();
@@ -75,7 +75,7 @@ void Actor::SetPSR()
 	}
 	//Hpバー
 	HpBer->SetSize({ 224,96 });
-	HpBer->SetPosition({ WinApp::window_width-228,WinApp::window_height-100 });
+	HpBer->SetPosition({ WinApp::window_width - 228,WinApp::window_height - 100 });
 	player->SetHp(PlayerHp);
 
 	Heri->SetPosition(Heripos);
@@ -146,6 +146,9 @@ void Actor::Update()
 			GoalPos.m128_f32[1] += velo.m128_f32[1];
 		}
 	}
+	
+	CheckSameTrackPosition();
+
 	XMFLOAT2 Player2DPos = player->GetRetPosition();
 	bool PlayerBulletShot_F = player->GetBulletShot();
 	//敵の更新処理
@@ -157,7 +160,7 @@ void Actor::Update()
 	//座標の設定
 	SetPSR();
 	//プレイヤーの更新処理
-	player->Update( camera, Patern);
+	player->Update(camera, Patern);
 
 
 	camera->RecalculationMatrix();
@@ -182,7 +185,7 @@ void Actor::Draw(DirectXCommon* dxCommon)
 void Actor::SpriteDraw()
 {
 	if (GetCamWorkFlag == true) {
-		
+
 		HpBer->Draw();
 
 		if (PlayerHp == 1) {
@@ -386,4 +389,22 @@ void Actor::UpdataEnemyPopCommands()
 		}
 
 	}
+}
+
+void Actor::CheckSameTrackPosition()
+{
+	for (std::unique_ptr<Enemy>& FirstEnemy : Robot) {
+		for (std::unique_ptr<Enemy>& SecondEnemy : Robot) {
+			if (FirstEnemy.get() != SecondEnemy.get()) {
+				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
+				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
+				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
+					bool WaitFlag = true;
+				}
+			}
+		}
+
+	}
+	
+
 }

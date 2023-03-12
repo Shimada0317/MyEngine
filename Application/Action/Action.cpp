@@ -104,6 +104,17 @@ DirectX::XMFLOAT3 Action::ConvertToXMFLOAT3(float SourceValue)
 	return ConvertValue;
 }
 
+bool Action::CompletelyTogetherXMVECTOR(const XMVECTOR& FirstValue, const XMVECTOR& SecondValue)
+{
+	if (FirstValue.m128_f32[0] == SecondValue.m128_f32[0] &&
+		FirstValue.m128_f32[1] == SecondValue.m128_f32[1] &&
+		FirstValue.m128_f32[2] == SecondValue.m128_f32[2]) {
+		return true;
+	}
+
+	return false;
+}
+
 void Action::DebugMove(XMFLOAT3& Value)
 {
 	float movevalue = 5.0f;

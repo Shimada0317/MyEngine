@@ -102,6 +102,12 @@ public://Getter Setter
 	void SetTrackPoint(const XMVECTOR& trackpoint) { this->TrackPoint = trackpoint; }
 
 	/// <summary>
+	/// 追尾先のゲッター
+	/// </summary>
+	/// <returns></returns>
+	const XMVECTOR& GetTrackPos() { return TrackPoint; }
+
+	/// <summary>
 	/// 中心のワールド座標のゲッター
 	/// </summary>
 	/// <returns></returns>

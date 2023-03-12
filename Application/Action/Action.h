@@ -89,6 +89,14 @@ public:
 	/// <returns></returns>
 	DirectX::XMFLOAT3 ConvertToXMFLOAT3(float SourceValue);
 
+	/// <summary>
+	/// ベクター同士の比較
+	/// </summary>
+	/// <param name="FirstValue">1つ目の値</param>
+	/// <param name="SecondValue">2つ目の値</param>
+	/// <returns></returns>
+	bool CompletelyTogetherXMVECTOR(const XMVECTOR& FirstValue, const XMVECTOR& SecondValue);
+
 	void DebugMove(XMFLOAT3& Value);
 private:
 };
