@@ -5,3 +5,4 @@ BaseScene::BaseScene(SceneManager* sceneManager)
 {
 
 }
+

@@ -25,10 +25,10 @@ public:
 	/// 初期化処理
 	/// </summary>
 	/// <param name="allRot">回転</param>
-	/// <param name="AllPos">座標</param>
+	/// <param name="allPos">座標</param>
 	/// <param name="came">カメラ</param>
 	/// <param name="Step">移動時に横移動するか</param>
-	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& qllPos, Camera* camera, const bool& movement= false);
+	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& allPos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement= false);
 
 	/// <summary>
 	/// ステータスをセット
@@ -82,8 +82,6 @@ public:
 	/// <param name="Set3dPosition">表示したい3D座標の場所</param>
 	XMFLOAT2 WorldtoScreen(const XMVECTOR& set3Dposition);
 
-
-
 	/// <summary>
 	/// ビュー変換
 	/// </summary>
@@ -94,18 +92,20 @@ public:
 	/// </summary>
 	void ParticleEfect();
 
+	void WaitTrack(bool otherenemyarive);
+
 public://Getter Setter
 	/// <summary>
 	/// 追尾先のセッター
 	/// </summary>
 	/// <param name="TrackPoint">追尾先</param>
-	void SetTrackPoint(const XMVECTOR& trackpoint) { this->TrackPoint = trackpoint; }
+	void SetTrackPoint(const XMVECTOR& trackpoint) { this->OldTrackPoint = trackpoint; }
 
 	/// <summary>
 	/// 追尾先のゲッター
 	/// </summary>
 	/// <returns></returns>
-	const XMVECTOR& GetTrackPos() { return TrackPoint; }
+	const XMVECTOR& GetTrackPos() { return OldTrackPoint; }
 
 	/// <summary>
 	/// 中心のワールド座標のゲッター
@@ -124,6 +124,8 @@ public://Getter Setter
 	/// </summary>
 	/// <returns></returns>
 	bool IsDead() const { return DeadFlag; }
+
+	bool GetArive() { return RobotAriveFlag; }
 
 private:
 	//Obj
@@ -167,6 +169,8 @@ private:
 	int OldHp = 0;
 	bool RobotAriveFlag = false;
 	XMVECTOR TrackPoint = { 0,0,0 };
+	XMVECTOR OldTrackPoint = { 0,0,0 };
+	XMVECTOR FakeTrackPoint = { 0,0,0 };
 
 	//パーツごとのスケール
 	XMFLOAT3 HeadPartScl = { 0.3f,0.3f,0.3f };
@@ -266,5 +270,7 @@ private:
 	float AttackTimeMax = 40;
 
 	bool ParticleEfectFlag = false;
+	//同じ追従先に別の敵がいるかいないか
+	bool WaitFlag = false;
 };
 

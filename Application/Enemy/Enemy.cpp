@@ -34,11 +34,9 @@ Enemy::~Enemy()
 }
 
 //初期化処理
-void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const bool& movement)
+void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement)
 {
-	HeadPartRot = allrot;
-	BodyPartRot = allrot;
-	ArmsPartRot = allrot;
+	HeadPartRot =BodyPartRot = ArmsPartRot = allrot;
 
 	AllPos = allpos;
 	BringUpCamera = camera;
@@ -51,12 +49,8 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 
 	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
 	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
-
-
 	HeadPart = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
-
 	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
-
 	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
 
 	PartGreen = ParticleManager::Create(camera);
@@ -72,12 +66,13 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 	HeadPartScl = { 0.0f,0.0f,0.0f };
 	ArmsPartScl = { 0.0f,0.0f,0.0f };
 
+	TrackPoint = OldTrackPoint = trackpoint;
+
 	Hp = 160;
 	OldHp = Hp;
 	RandomFlag = true;
 	TimerLimit = 8;
 	RobotAriveFlag = true;
-	Center->SetRotation(AllRot);
 	MovementFlag = movement;
 	Center->SetPosition(CenterWorldPos);
 }
@@ -220,7 +215,7 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 			TrackPlayerMode();
 		}
 		//プレイヤーの前まで来たとき
-		else if (Length <= LengthLimit) {
+		else if (Length <= LengthLimit&&WaitFlag==false) {
 			BodyPartPos.m128_f32[2] -= 1.f;
 			AtttackTimer += 0.1f;
 			Motion();
@@ -529,5 +524,19 @@ void Enemy::ParticleEfect()
 		PartGreen->Add(200, pos, vel, acc, 3.7f, 0.0f, 150.0f);
 	}
 	ParticleEfectFlag = false;
+
+}
+
+void Enemy::WaitTrack(bool otherenemyarive)
+{
+	if (otherenemyarive == true) {
+		LengthLimit = 4.8f;
+		OldTrackPoint.m128_f32[2] = OldTrackPoint.m128_f32[2] - 2;
+		WaitFlag = true;
+	}
+	else {
+		OldTrackPoint = TrackPoint;
+		WaitFlag = false;
+	}
 
 }

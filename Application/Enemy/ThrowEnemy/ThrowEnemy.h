@@ -1,12 +1,10 @@
 #pragma once
-#include"Audio.h"
 #include"Camera.h"
-#include"DirectXCommon.h"
 #include"Object3d.h"
-#include"ObjParticle.h"
 #include"ParticleManager.h"
 #include"Sprite.h"
 #include<DirectXMath.h>
+#include<list>
 
 class ThrowEnemy
 {
@@ -17,101 +15,56 @@ private:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
-	~ThrowEnemy();
+	/// <summary>
+	/// 初期か
+	/// </summary>
+	/// <param name="allrot">共通の角度</param>
+	/// <param name="allpos">共通の座標</param>
+	/// <param name="camera">カメラ</param>
+	/// <param name="trackpos">追従先の座標</param>
+	void Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpos);
 
-	void Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const bool& movement);
+	/// <summary>
+	/// ロボットの更新処理
+	/// </summary>
+	/// <param name="bull">プレイヤーの弾</param>
+	/// <param name="playerHp">プレイヤーのHP</param>
+	void Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
 
-	void StatusSet();
-
-	void AllUpdate();
-
-	void Update();
-
-	void Draw(DirectXCommon* dxCommon);
-
-	void ChangeViewPort(XMMATRIX& matviewport);
-
-	XMFLOAT2 WorldtoScreen(const XMVECTOR& set3Dposition);
-private:
-	//Obj
-	//頭
+public:
+	//オブジェクト
 	std::unique_ptr<Object3d> HeadPart;
-	//両腕
-	std::unique_ptr<Object3d> ArmsPart;
-	//体
-	std::unique_ptr<Object3d> BodyPart;
-	//影
-	std::unique_ptr<Object3d> Shadow;
-	//中心
-	std::unique_ptr<Object3d> Center;
-
-	//Objパーティクル
-	std::list<std::unique_ptr<ObjParticle>>Obj_Particle;
-
+	std::unique_ptr<Object3d>BodyPart;
+	std::unique_ptr<Object3d>BothArmsPart;
+	std::unique_ptr<Object3d>Shadow;
+	std::unique_ptr<Object3d>Center;
+	
 	//スプライト
-	//体
 	std::unique_ptr<Sprite> RockOn;
-	//頭
-	std::unique_ptr<Sprite> RockOnHead;
-
-	//ダメージを食らったときのエフェクト
-	ParticleManager* PartGreen = nullptr;
-	ParticleManager* PartRed = nullptr;
-
 	//カメラ
-	Camera* BringUpCamera;
+	Camera* HaveCamera = nullptr;
 
-	//敵の中心部分のステータス
-	XMVECTOR CenterWorldPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 CenterRot = { 0.0f,0.0f,0.0f };
+	//パーツごとのステータス
+	//敵の中心部分
+	XMVECTOR CenterWorldPos = { 0.f,0.f,0.f };
+	XMVECTOR AllPos = { 0.f,0.f,0.f };
+	XMFLOAT3 CenterRot = { 0.f,0.f,0.f };
 	XMMATRIX CenterMat;
+	//頭
+	XMVECTOR HeadPos = { 0.f,0.f,0.f };
+	XMFLOAT3 HeadRot = { 0.f,0.f,0.f };
+	XMFLOAT3 HeadScl = { 0.f,0.f,0.f };
+	//体
+	XMVECTOR BodyPos = { 0.f,0.f,0.f };
+	XMFLOAT3 BodyRot = { 0.f,0.f,0.f };
+	XMFLOAT3 BodyScl = { 0.f,0.f,0.f };
+	//腕
+	XMVECTOR ArmsPos = { 0.f,0.f,0.f };
+	XMFLOAT3 ArmsRot = { 0.f,0.f,0.f };
+	XMFLOAT3 ArmsScl = { 0.f,0.f,0.f };
 
-	//敵が持っているステータス
-	int Hp = 50;
+
+	int Hp = 160;
 	int OldHp = 0;
-	bool RobotAriveFlag = false;
-	XMVECTOR TrackPoint = { 0,0,0 };
-
-	//パーツごとのスケール
-	XMFLOAT3 HeadPartScl = { 0.3f,0.3f,0.3f };
-	XMFLOAT3 BodyPartScl = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 ArmsPartScl = { 0.2f,0.2f,0.2f };
-
-	//パーツごとのポジション
-	XMVECTOR HeadPartPos = { 0.0f,0.0f,0.0f };
-	XMVECTOR BodyPartPos = { 0.0f,0.0f,0.0f };
-	XMVECTOR ArmsPartPos = { 0.0f,0.0f,0.0f };
-
-	//パーツごとの色
-	XMFLOAT4 ArmsPartColor = { 1.0f,1.0f,1.0f,1.0f };
-	XMFLOAT4 HeadPartColor = { 1.0f,1.0f,1.0f,1.0f };
-	XMFLOAT4 BodyPartColor = { 1.0f,1.0f,1.0f,1.0f };
-
-	//パーツごとの回転
-	XMFLOAT3 ArmsPartRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 HeadPartRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 BodyPartRot = { 0.0f,0.0f,0.0f };
-
-	//パーツごとに渡すステータス
-	XMVECTOR AllPos = { 0.0f,0.0f,-10.0f };
-	XMFLOAT3 AllRot;
-
-	//影のステータス
-	XMVECTOR ShadowPos = { 0,0,0 };
-	XMFLOAT4 ShadowCol = { 0.0f,0.0f,0.0f,0.1f };
-
-	//敵が持つ2D系のステータス
-	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
-	XMFLOAT2 RockOnAnchorPoint = { 0.5f,0.5f };
-	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
-	XMFLOAT2 RockOnHeadPos = { 0.0f,0.0f };
-
-	//2D座標を持たせる計算で使う変数
-	XMVECTOR offset;
-	XMMATRIX MatViewPort;
-
-	//変形用のフラグ
-	bool DefomationFlag = false;
-	float DefomationCount = 0.0f;
 };
 

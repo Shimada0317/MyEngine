@@ -5,6 +5,7 @@
 #include"ClearScene.h"
 #include<sstream>
 #include"Enemy.h"
+#include"ThrowEnemy/ThrowEnemy.h"
 
 #include<memory>
 

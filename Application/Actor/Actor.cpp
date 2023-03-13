@@ -4,6 +4,9 @@
 #include"ModelManager.h"
 #include<fstream>
 
+
+bool otherenemyarive = true;
+
 Actor::~Actor()
 {
 	player.reset();
@@ -147,7 +150,7 @@ void Actor::Update()
 		}
 	}
 	
-	CheckSameTrackPosition();
+	//CheckSameTrackPosition();
 
 	XMFLOAT2 Player2DPos = player->GetRetPosition();
 	bool PlayerBulletShot_F = player->GetBulletShot();
@@ -368,8 +371,7 @@ void Actor::UpdataEnemyPopCommands()
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
-				newRobot->Initialize(ROTATION, POSITION, camera, step);
-				newRobot->SetTrackPoint(TRACK);
+				newRobot->Initialize(ROTATION, POSITION, camera,TRACK ,step);
 				Robot.push_back(std::move(newRobot));
 
 				POPSkip = false;
@@ -391,20 +393,28 @@ void Actor::UpdataEnemyPopCommands()
 	}
 }
 
-void Actor::CheckSameTrackPosition()
-{
-	for (std::unique_ptr<Enemy>& FirstEnemy : Robot) {
-		for (std::unique_ptr<Enemy>& SecondEnemy : Robot) {
-			if (FirstEnemy.get() != SecondEnemy.get()) {
-				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
-				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
-				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
-					bool WaitFlag = true;
-				}
-			}
-		}
-
-	}
-	
-
-}
+//void Actor::CheckSameTrackPosition()
+//{
+//	for (std::unique_ptr<Enemy>& FirstEnemy : Robot) {
+//		for (std::unique_ptr<Enemy>& SecondEnemy : Robot) {
+//			if (FirstEnemy.get() != SecondEnemy.get()) {
+//				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
+//				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
+//				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
+//					bool secondenemyarive = SecondEnemy->GetArive();
+//					if (secondenemyarive == true) {
+//						otherenemyarive = true;
+//					}
+//					else
+//					{
+//						otherenemyarive = false;
+//					}
+//					SecondEnemy->WaitTrack(otherenemyarive);
+//				}
+//			}
+//		}
+//
+//	}
+//	
+//
+//}

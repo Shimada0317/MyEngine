@@ -20,6 +20,7 @@ public:
 	virtual void Update() = 0;
 
 	virtual void Draw(DirectXCommon* dxCommon) = 0;
+
 protected:
 	//シーンマネージャー(借りてくる)
 	SceneManager* sceneManager_ = nullptr;
