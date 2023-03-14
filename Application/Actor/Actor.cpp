@@ -150,14 +150,13 @@ void Actor::Update()
 		}
 	}
 	
-	//CheckSameTrackPosition();
-
 	XMFLOAT2 Player2DPos = player->GetRetPosition();
 	bool PlayerBulletShot_F = player->GetBulletShot();
 	//“G‚ÌXVˆ—
 	for (std::unique_ptr<Enemy>& Enemy : Robot) {
 		Enemy->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
 	}
+	CheckSameTrackPosition();
 	player->SetBulletShot(PlayerBulletShot_F);
 	player->PlayerMove(MoveFlag, Patern);
 	//À•W‚Ìİ’è
@@ -393,28 +392,29 @@ void Actor::UpdataEnemyPopCommands()
 	}
 }
 
-//void Actor::CheckSameTrackPosition()
-//{
-//	for (std::unique_ptr<Enemy>& FirstEnemy : Robot) {
-//		for (std::unique_ptr<Enemy>& SecondEnemy : Robot) {
-//			if (FirstEnemy.get() != SecondEnemy.get()) {
-//				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
-//				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
-//				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
-//					bool secondenemyarive = SecondEnemy->GetArive();
-//					if (secondenemyarive == true) {
-//						otherenemyarive = true;
-//					}
-//					else
-//					{
-//						otherenemyarive = false;
-//					}
-//					SecondEnemy->WaitTrack(otherenemyarive);
-//				}
-//			}
-//		}
-//
-//	}
-//	
-//
-//}
+void Actor::CheckSameTrackPosition()
+{
+	for (std::unique_ptr<Enemy>& FirstEnemy : Robot) {
+		for (std::unique_ptr<Enemy>& SecondEnemy : Robot) {
+			if (FirstEnemy.get() != SecondEnemy.get()) {
+				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
+				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
+				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
+					bool secondenemyarive = SecondEnemy->GetArive();
+					bool CountZero = SecondEnemy->GetCountZero();
+					if (secondenemyarive == true) {
+						otherenemyarive = true;
+					}
+					else if(secondenemyarive==false||CountZero == true)
+					{
+						otherenemyarive = false;
+					}
+					SecondEnemy->WaitTrack(otherenemyarive);
+				}
+			}
+		}
+
+	}
+	
+
+}

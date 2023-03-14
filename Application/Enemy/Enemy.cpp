@@ -110,14 +110,12 @@ void Enemy::StatusSet()
 	Center->SetPosition(CenterWorldPos);
 
 	ShadowPos = CenterWorldPos;
-	ShadowPos.m128_f32[1] = -0.8;
+	ShadowPos.m128_f32[1] = -0.8f;
 	Shadow->SetPosition(ShadowPos);
 	Shadow->SetRotation({ 0.0f,0.0f,0.0f });
 	Shadow->SetScale({ 1.0f,1.0f,1.0f });
 
-	HeadPartPos = CenterWorldPos;
-	ArmsPartPos = CenterWorldPos;
-	BodyPartPos = CenterWorldPos;
+	HeadPartPos = ArmsPartPos = BodyPartPos = CenterWorldPos;
 	HeadPartPos.m128_f32[1] = CenterWorldPos.m128_f32[1] + 1.0f;
 	ArmsPartPos.m128_f32[1] = CenterWorldPos.m128_f32[1] + 0.2f;
 
@@ -225,11 +223,13 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 	}
 	else {
 		AttackFaseFlag = false;
-		TrackPoint.m128_f32[1] = 100;
+		//TrackPoint.m128_f32[1] = 100;
 	}
 
 	//ê∂Ç´ÇƒÇ¢ÇÈÇ∆Ç´Ç…HPÇ™0Ç…Ç»Ç¡ÇΩÇÁ
 	if (Hp <= 0) {
+		OldTrackPoint = TrackPoint;
+		CountZeroFlag = true;
 		Hp = 0;
 		ShadowCol.w -= Subtraction;
 		ArmsPartColor.w -= Subtraction;
@@ -530,11 +530,12 @@ void Enemy::ParticleEfect()
 void Enemy::WaitTrack(bool otherenemyarive)
 {
 	if (otherenemyarive == true) {
-		LengthLimit = 4.8f;
+		LengthLimit = 4.0f;
 		OldTrackPoint.m128_f32[2] = OldTrackPoint.m128_f32[2] - 2;
 		WaitFlag = true;
 	}
 	else {
+		LengthLimit = 1.5f;
 		OldTrackPoint = TrackPoint;
 		WaitFlag = false;
 	}

@@ -98,6 +98,10 @@ public:
 	bool CompletelyTogetherXMVECTOR(const XMVECTOR& FirstValue, const XMVECTOR& SecondValue);
 
 	void DebugMove(XMFLOAT3& Value);
+
+	void XMvectorAddXMvector(XMVECTOR& FirstValue, const XMVECTOR& AddValue);
+
+	void XMvectorSubXMVector(XMVECTOR& FirstValue, const XMVECTOR& AddValue);
 private:
 };
 

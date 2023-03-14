@@ -44,7 +44,7 @@ struct DirLight
 };
 
 //スポットライトの数
-static const int SPOTLIGHT_NUM = 3;
+static const int SPOTLIGHT_NUM = 5;
 
 struct SpotLight
 {

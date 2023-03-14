@@ -1,5 +1,6 @@
 #pragma once
 #include"Camera.h"
+#include"DirectXCommon.h"
 #include"Object3d.h"
 #include"ParticleManager.h"
 #include"Sprite.h"
@@ -15,6 +16,10 @@ private:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
+
+	//デストラクタ
+	~ThrowEnemy();
+
 	/// <summary>
 	/// 初期か
 	/// </summary>
@@ -24,6 +29,10 @@ public:
 	/// <param name="trackpos">追従先の座標</param>
 	void Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpos);
 
+	void StatusSet();
+
+	void AllUpdate();
+
 	/// <summary>
 	/// ロボットの更新処理
 	/// </summary>
@@ -31,14 +40,20 @@ public:
 	/// <param name="playerHp">プレイヤーのHP</param>
 	void Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
 
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="dxCommon"></param>
+	void Draw(DirectXCommon* dxCommon);
+
 public:
 	//オブジェクト
-	std::unique_ptr<Object3d> HeadPart;
+	std::unique_ptr<Object3d>HeadPart;
 	std::unique_ptr<Object3d>BodyPart;
-	std::unique_ptr<Object3d>BothArmsPart;
+	std::unique_ptr<Object3d>ArmsPart;
 	std::unique_ptr<Object3d>Shadow;
 	std::unique_ptr<Object3d>Center;
-	
+
 	//スプライト
 	std::unique_ptr<Sprite> RockOn;
 	//カメラ
@@ -62,7 +77,9 @@ public:
 	XMVECTOR ArmsPos = { 0.f,0.f,0.f };
 	XMFLOAT3 ArmsRot = { 0.f,0.f,0.f };
 	XMFLOAT3 ArmsScl = { 0.f,0.f,0.f };
-
+	//影のステータス
+	XMVECTOR ShadowPos = { 0,0,0 };
+	XMFLOAT4 ShadowCol = { 0.0f,0.0f,0.0f,0.1f };
 
 	int Hp = 160;
 	int OldHp = 0;

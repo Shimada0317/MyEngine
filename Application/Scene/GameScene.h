@@ -159,12 +159,14 @@ private://メンバ変数
 	XMFLOAT3 PlayerSpotLightAtten = { 0.f,0.f,0.f };
 	XMFLOAT2 PlayerSpotLightFactorAngle = { 20.0f,30.0f };
 
-	XMFLOAT3 SpotLightDir3 = { 0,-10,0 };
-	XMFLOAT3 SpotLightPos3 = { 0,50,20 };
-	XMFLOAT3 SpotLightColor3 = { 1,1,1 };
-	XMFLOAT3 SpotLightAtten3 = { 0.f,0.f,0.f };
-	XMFLOAT2 SpotLightFactorAngle3 = { 20.0f,30.0f };
-	bool SpotLightPositionChange = false;
-
+	XMFLOAT3 SearchLightDir = { 0,-10,0 };
+	XMFLOAT3 SearchLightPos[3];
+	XMFLOAT3 SearchLightColor = { 1,1,1 };
+	XMFLOAT3 SearchLightAtten = { 0.f,0.f,0.f };
+	XMFLOAT2 SearchLightFactorAngle = { 20.0f,30.0f };
+	
+	bool SpotLightPositionChange;
+	bool LightPositionChangeX[2];
+	bool LightPositionChangeZ[2];
 };
 

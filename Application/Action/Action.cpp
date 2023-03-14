@@ -144,6 +144,22 @@ void Action::DebugMove(XMFLOAT3& Value)
 	}
 }
 
+void Action::XMvectorAddXMvector(XMVECTOR& FirstValue, const XMVECTOR& AddValue)
+{
+	FirstValue.m128_f32[0] = FirstValue.m128_f32[0] + AddValue.m128_f32[0];
+	FirstValue.m128_f32[1] = FirstValue.m128_f32[1] + AddValue.m128_f32[1];
+	FirstValue.m128_f32[2] = FirstValue.m128_f32[2] + AddValue.m128_f32[2];
+}
+
+void Action::XMvectorSubXMVector(XMVECTOR& FirstValue, const XMVECTOR& AddValue)
+{
+	FirstValue.m128_f32[0] = FirstValue.m128_f32[0] - AddValue.m128_f32[0];
+	FirstValue.m128_f32[1] = FirstValue.m128_f32[1] - AddValue.m128_f32[1];
+	FirstValue.m128_f32[2] = FirstValue.m128_f32[2] - AddValue.m128_f32[2];
+}
+
+
+
 
 
 

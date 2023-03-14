@@ -25,7 +25,7 @@ public: // 定数
 	//点光源の数
 	static const int PointLightNum = 3;
 	//スポットライトの数
-	static const int SpotLightNum = 3;
+	static const int SpotLightNum = 5;
 public: // サブクラス
 
 	// 定数バッファ用データ構造体
