@@ -31,8 +31,7 @@ void Player::Initalize(Camera* camera)
 	Sprite::LoadTexture(21, L"Resources/curtain.png");
 	Sprite::LoadTexture(22, L"Resources/Skip.png");
 	Sprite::LoadTexture(23, L"Resources/bullet.png");
-	Sprite::LoadTexture(24, L"Resources/Smoke.png");
-	Sprite::LoadTexture(25, L"Resources/Reload.png");
+	Sprite::LoadTexture(24, L"Resources/Reload.png");
 	//スプライトの読み込み
 	SpriteReticle.reset(Sprite::SpriteCreate(20, ReticlePos2D, ReticleColor, ReticleAncorPoint));
 	CurtainUp.reset(Sprite::SpriteCreate(21, CurtainUpPos));
@@ -43,10 +42,9 @@ void Player::Initalize(Camera* camera)
 		SpriteRot[i] = 0;
 		Time[i] = 0;
 		bulletHUD[i].reset(Sprite::SpriteCreate(23, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
-		Smoke[i].reset(Sprite::SpriteCreate(24, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
 		DropBulletFlag[i] = false;
 	}
-	Reload.reset(Sprite::SpriteCreate(25, ReloadSpritePos, ReloadSpriteColor, AnchorPoint));
+	Reload.reset(Sprite::SpriteCreate(24, ReloadSpritePos, ReloadSpriteColor, AnchorPoint));
 
 	Gun = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
 	Body = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
@@ -158,7 +156,7 @@ void Player::Update(Camera* camera, int paterncount)
 		GunRot.x = (ReticlePos2D.y - WinApp::window_height / 2) / 50;
 	}
 	else {
-		GunRot.x += 10.0f;
+		GunRot.x -= 9.5f;
 	}
 
 	//カメラが動いていないとき
@@ -199,7 +197,6 @@ void Player::SpriteDraw()
 		SpriteReticle->Draw();
 		for (int i = 0; i < 8; i++) {
 			if (Remaining <= 8 && ReloadFlag == false) {
-				//Smoke[i]->Draw();
 				bulletHUD[i]->Draw();
 			}
 		}

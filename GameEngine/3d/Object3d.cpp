@@ -308,7 +308,7 @@ void Object3d::Update(const XMFLOAT4 color,bool UvScroll)
 	const XMFLOAT3& cameraPos = camera->GetEye();
 
 	if (UvScroll == true) {
-		timer += 0.0001f;
+		timer += 0.0005f;
 	}
 	// 定数バッファへデータ転送
 	ConstBufferDataB0* constMap = nullptr;

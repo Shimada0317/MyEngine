@@ -121,10 +121,10 @@ void Actor::Update()
 
 	GetCamWorkFlag = player->GetCamWork();
 	if (GetCamWorkFlag == true) {
-		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
+		ThrowRobot.remove_if([](std::unique_ptr<ThrowEnemy>& robot) {
 			return robot->IsDead();
 			});
-		if (Robot.empty()) {
+		if (ThrowRobot.empty()) {
 			MoveFlag = true;
 		}
 		StopFlag = player->GetFinish();
@@ -149,11 +149,11 @@ void Actor::Update()
 			GoalPos.m128_f32[1] += velo.m128_f32[1];
 		}
 	}
-	
+
 	XMFLOAT2 Player2DPos = player->GetRetPosition();
 	bool PlayerBulletShot_F = player->GetBulletShot();
 	//ìGÇÃçXêVèàóù
-	for (std::unique_ptr<Enemy>& Enemy : Robot) {
+	for (std::unique_ptr<ThrowEnemy>& Enemy : ThrowRobot) {
 		Enemy->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
 	}
 	CheckSameTrackPosition();
@@ -178,7 +178,7 @@ void Actor::Draw(DirectXCommon* dxCommon)
 	}
 	player->ObjDraw();
 	Object3d::PostDraw();
-	for (std::unique_ptr<Enemy>& robot : Robot) {
+	for (std::unique_ptr<ThrowEnemy>& robot : ThrowRobot) {
 		robot->Draw(dxCommon);
 	}
 	player->ParticleDraw(dxCommon->GetCmdList());
@@ -369,9 +369,9 @@ void Actor::UpdataEnemyPopCommands()
 			}
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
-				std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
-				newRobot->Initialize(ROTATION, POSITION, camera,TRACK ,step);
-				Robot.push_back(std::move(newRobot));
+				std::unique_ptr<ThrowEnemy> newRobot = std::make_unique<ThrowEnemy>();
+				newRobot->Initialize(ROTATION, POSITION, camera, TRACK);
+				ThrowRobot.push_back(std::move(newRobot));
 
 				POPSkip = false;
 				TRACKSkip = false;
@@ -399,22 +399,26 @@ void Actor::CheckSameTrackPosition()
 			if (FirstEnemy.get() != SecondEnemy.get()) {
 				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
 				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
+				bool secondenemyarive = SecondEnemy->GetArive();
+				bool firstenemyarive = FirstEnemy->GetArive();
 				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
-					bool secondenemyarive = SecondEnemy->GetArive();
-					bool CountZero = SecondEnemy->GetCountZero();
-					if (secondenemyarive == true) {
-						otherenemyarive = true;
-					}
-					else if(secondenemyarive==false||CountZero == true)
-					{
+
+					otherenemyarive = true;
+					FirstEnemy->WaitTrack(otherenemyarive);
+
+				}
+				if (secondenemyarive == false) {
+					XMVECTOR firstenemytrack = FirstEnemy->CheckTrackPoint();
+					XMVECTOR secondenemytrack = SecondEnemy->CheckTrackPoint();
+					if (Action::GetInstance()->CompletelyTogetherXMVECTOR(firstenemytrack, secondenemytrack)) {
 						otherenemyarive = false;
+						FirstEnemy->WaitTrack(otherenemyarive);
 					}
-					SecondEnemy->WaitTrack(otherenemyarive);
 				}
 			}
 		}
 
 	}
-	
+
 
 }

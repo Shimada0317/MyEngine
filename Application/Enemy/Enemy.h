@@ -107,6 +107,8 @@ public://Getter Setter
 	/// <returns></returns>
 	const XMVECTOR& GetTrackPos() { return OldTrackPoint; }
 
+	const XMVECTOR& CheckTrackPoint() { return TrackPoint; }
+
 	/// <summary>
 	/// 中心のワールド座標のゲッター
 	/// </summary>

@@ -150,7 +150,6 @@ private:
 	std::unique_ptr<Sprite> Window;
 	std::unique_ptr<Sprite> Skip;
 	std::unique_ptr<Sprite> bulletHUD[9];
-	std::unique_ptr<Sprite> Smoke[9];
 	std::unique_ptr<Sprite> Reload;
 	//発砲時のエフェクト
 	ParticleManager* PartGreen = nullptr;

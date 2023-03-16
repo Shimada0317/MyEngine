@@ -164,6 +164,7 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 
 		});
 
+	//“–‚½‚è”»’è
 	if (plyerbulletshot == true && Hp > 0) {
 		if (player2Dpos.x - Distance < RockOnPos.x && player2Dpos.x + Distance > RockOnPos.x &&
 			player2Dpos.y - Distance<RockOnPos.y && player2Dpos.y + Distance>RockOnPos.y) {
@@ -442,7 +443,7 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			AttackShakeDownFlag = false;
 			AttackFaseFlag = false;
 			attacktimer = 0;
-			//playerhp -= 1;
+			playerhp -= 1;
 
 		}
 	}
@@ -530,7 +531,7 @@ void Enemy::ParticleEfect()
 void Enemy::WaitTrack(bool otherenemyarive)
 {
 	if (otherenemyarive == true) {
-		LengthLimit = 4.0f;
+		LengthLimit = 1.8f;
 		OldTrackPoint.m128_f32[2] = OldTrackPoint.m128_f32[2] - 2;
 		WaitFlag = true;
 	}
@@ -538,6 +539,7 @@ void Enemy::WaitTrack(bool otherenemyarive)
 		LengthLimit = 1.5f;
 		OldTrackPoint = TrackPoint;
 		WaitFlag = false;
+		AtttackTimer = 0;
 	}
 
 }

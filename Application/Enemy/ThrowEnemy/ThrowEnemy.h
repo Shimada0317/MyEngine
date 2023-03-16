@@ -46,6 +46,13 @@ public:
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
 
+	void ThrowAttack();
+
+	/// <summary>
+	/// 倒されているか
+	/// </summary>
+	/// <returns></returns>
+	bool IsDead() const { return DeadFlag; }
 public:
 	//オブジェクト
 	std::unique_ptr<Object3d>HeadPart;
@@ -53,6 +60,7 @@ public:
 	std::unique_ptr<Object3d>ArmsPart;
 	std::unique_ptr<Object3d>Shadow;
 	std::unique_ptr<Object3d>Center;
+	std::unique_ptr<Object3d>ThrowBox;
 
 	//スプライト
 	std::unique_ptr<Sprite> RockOn;
@@ -72,16 +80,38 @@ public:
 	//体
 	XMVECTOR BodyPos = { 0.f,0.f,0.f };
 	XMFLOAT3 BodyRot = { 0.f,0.f,0.f };
-	XMFLOAT3 BodyScl = { 0.f,0.f,0.f };
+	XMFLOAT3 BodyScl = { 1.f,1.f,1.f };
 	//腕
 	XMVECTOR ArmsPos = { 0.f,0.f,0.f };
 	XMFLOAT3 ArmsRot = { 0.f,0.f,0.f };
 	XMFLOAT3 ArmsScl = { 0.f,0.f,0.f };
 	//影のステータス
-	XMVECTOR ShadowPos = { 0,0,0 };
-	XMFLOAT4 ShadowCol = { 0.0f,0.0f,0.0f,0.1f };
+	XMVECTOR ShadowPos = { 0.f,0.f,0.f };
+	XMFLOAT4 ShadowCol = { 0.f,0.f,0.f,0.1f };
+	//着弾地点
+	XMVECTOR LandingPoint = { 0.f,0.f,0.f };
+	//投擲物の座標
+	XMVECTOR ThrowBoxPos = { 0.f,0.f,0.f };
+	XMFLOAT3 ThrowBoxRot = { 0.f,0.f,0.f };
+	XMFLOAT3 ThrowBoxScl = { 0.f,0.f,0.f };
+
 
 	int Hp = 160;
 	int OldHp = 0;
+	float Length = 0.f;
+	float MoveSpeed = 0.1f;
+	//敵とプレイヤーの距離
+	float OriginDistance;
+	float OriginHeadDistance;
+	float OriginBoxDistance;
+	float Distance = 60.0f;
+	float HeadDistance = 30.0f;
+	float BoxDistance = 0.f;
+	//Hpが0以上か
+	bool DeadFlag = false;
+	//変形用のフラグ
+	bool DefomationFlag = false;
+	float DefomationCount = 0.0f;
+
 };
 
