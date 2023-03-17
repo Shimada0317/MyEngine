@@ -156,20 +156,19 @@ void GameScene::StatusSet()
 	
 	if (easing == true) {
 		if (duration > time) {
-			time += 0.0001f;
+			time += 0.01f;
 		}
 	}
 
 
 	if (Wave <= 4 && Wave < 5) {
-		value=Action::GetInstance()->EasingOut(time,StartPoint,EndPoint-StartPoint,duration);
+		SearchLightDir.z =Action::GetInstance()->EasingOut(time,StartPoint,EndPoint-StartPoint,duration);
 		if (SpotLightPositionChange == false) {
-			if (SearchLightDir.z >= 60) {
+			if (time>= 1.f) {
 				SpotLightPositionChange = true;
 				time = 0;
 				StartPoint = SearchLightDir.z;
 				EndPoint = -20;
-				value = 0;
 				easing = false;
 			}
 		}
@@ -179,11 +178,9 @@ void GameScene::StatusSet()
 				time = 0;
 				StartPoint = SearchLightDir.z;
 				EndPoint = 60;
-				value = 0;
 				easing = false;
 			}
 		}
-		SearchLightDir.z += value;
 	}
 	if (Wave > 4 && Wave < 8) {
 		SearchLightPos[0].z = 45;
@@ -466,7 +463,8 @@ void GameScene::ImgDraw()
 	ImGui::SliderFloat("LightDirX", &SearchLightDir.x, -100.0f, 100.0f);
 	ImGui::SliderFloat("LightDirY", &SearchLightDir.y, -100.0f, 100.0f);
 	ImGui::SliderFloat("LightDirZ", &SearchLightDir.z, -100.0f, 100.0f);
-	ImGui::SliderFloat("value", &value, -100.0f, 100.0f);
+	ImGui::SliderFloat("value", &value, 0.0f, 60.0f);
+	ImGui::SliderFloat("time", &time, -0.0f, 1.0f);
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();

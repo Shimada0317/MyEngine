@@ -85,9 +85,7 @@ void Action::EaseOut(float& MoveValue, float PurposeValue)
 
 float Action::EasingOut(float time, float start, float addvalue, float animationtime)
 {
-	float ts = (time /= animationtime) * time;
-	float tc = ts * time;
-	return start + addvalue * (tc + -3 * ts + 3 * time);
+	return addvalue * sinf((time * DirectX::XM_PI) / 2);
 }
 
 void Action::Flash(float& color, float transparent)
