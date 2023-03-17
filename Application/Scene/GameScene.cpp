@@ -81,7 +81,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 
 	for (int i = 0; i < 3; i++) {
-		SearchLightPos[i] = { 0, 70, 20 };
+		SearchLightPos[i] = { 0, 20, 20 };
 	}
 
 	for (int i = 0; i < 2; i++) {
@@ -89,11 +89,14 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 		LightPositionChangeZ[i] = false;
 	}
 
+	StartPoint = FieldSpotLightDir.x;
+	EndPoint = 60;
+
 	lightGroupe->SetSpotLightActive(0, true);
 	lightGroupe->SetSpotLightActive(1, true);
 	lightGroupe->SetSpotLightActive(2, true);
-	lightGroupe->SetSpotLightActive(3, true);
-	lightGroupe->SetSpotLightActive(4, true);
+	lightGroupe->SetSpotLightActive(3, false);
+	lightGroupe->SetSpotLightActive(4, false);
 }
 
 //ステータスセット
@@ -150,19 +153,37 @@ void GameScene::StatusSet()
 	//Action::GetInstance()->XMvectorAddXMvector(XMVECTOR{ PlayerSpotLightPos.x,PlayerSpotLightPos.y,PlayerSpotLightPos.z }, velocity);
 	PlayerSpotLightPos.x += velocity.m128_f32[0];
 	PlayerSpotLightPos.z += velocity.m128_f32[2];
+	
+	if (easing == true) {
+		if (duration > time) {
+			time += 0.0001f;
+		}
+	}
+
+
 	if (Wave <= 4 && Wave < 5) {
+		value=Action::GetInstance()->EasingOut(time,StartPoint,EndPoint-StartPoint,duration);
 		if (SpotLightPositionChange == false) {
-			Action::GetInstance()->EaseOut(SearchLightPos[0].z, 61);
-			if (SearchLightPos[0].z >= 60) {
+			if (SearchLightDir.z >= 60) {
 				SpotLightPositionChange = true;
+				time = 0;
+				StartPoint = SearchLightDir.z;
+				EndPoint = -20;
+				value = 0;
+				easing = false;
 			}
 		}
 		else {
-			Action::GetInstance()->EaseOut(SearchLightPos[0].z, -11);
-			if (SearchLightPos[0].z <= -10) {
+			if (SearchLightDir.z <= -20) {
 				SpotLightPositionChange = false;
+				time = 0;
+				StartPoint = SearchLightDir.z;
+				EndPoint = 60;
+				value = 0;
+				easing = false;
 			}
 		}
+		SearchLightDir.z += value;
 	}
 	if (Wave > 4 && Wave < 8) {
 		SearchLightPos[0].z = 45;
@@ -438,7 +459,17 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 //ImgUiの描画処理
 void GameScene::ImgDraw()
 {
-
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Light");
+	ImGui::SliderFloat("LightDirX", &SearchLightDir.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirY", &SearchLightDir.y, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirZ", &SearchLightDir.z, -100.0f, 100.0f);
+	ImGui::SliderFloat("value", &value, -100.0f, 100.0f);
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 }
 
 //ポストエフェクトの描画処理

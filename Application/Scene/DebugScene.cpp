@@ -90,12 +90,14 @@ void DebugScene::Update()
 	else if(Input::GetInstance()->PushKey(DIK_S)) { SpotLightPos.z -= 1.0f; }
 	if (Input::GetInstance()->PushKey(DIK_D)) { SpotLightPos.x += 1.0f; }
 	else if (Input::GetInstance()->PushKey(DIK_A)) { SpotLightPos.x -= 1.0f; }
+	if (Input::GetInstance()->PushKey(DIK_Q)) { SpotLightPos.y += 1.0f; }
+	else if (Input::GetInstance()->PushKey(DIK_E)) { SpotLightPos.y -= 1.0f; }
 
 
-	if (Input::GetInstance()->PushKey(DIK_UP)) { SpotLightDir.y += 1.0f; }
-	else if (Input::GetInstance()->PushKey(DIK_DOWN)) { SpotLightDir.y -= 1.0f; }
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) { SpotLightDir.x += 0.01f; }
-	else if (Input::GetInstance()->PushKey(DIK_LEFT)) { SpotLightDir.x -= 0.01f; }
+	if (Input::GetInstance()->PushKey(DIK_UP)) { SpotLightDir.z += 0.1f; }
+	else if (Input::GetInstance()->PushKey(DIK_DOWN)) { SpotLightDir.z -= 0.1f; }
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) { SpotLightDir.x += 0.1f; }
+	else if (Input::GetInstance()->PushKey(DIK_LEFT)) { SpotLightDir.x -= 0.1f; }
 
 //	light->SetLightDir(lightDir);
 
@@ -118,7 +120,23 @@ void DebugScene::Draw(DirectXCommon* dxCommon)
 	Ground->Draw();
 	Sphere->Draw();
 	Object3d::PostDraw();
+	ImguiDraw();
 	dxCommon->PostDraw();
+}
+
+void DebugScene::ImguiDraw()
+{
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Light");
+	ImGui::SliderFloat("LightDirX", &SpotLightDir.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("LightDirZ", &SpotLightDir.z, -360.0f, 360.0f);
+	ImGui::SliderFloat("LightFactorX", &SpotLightFactorAngle.x, -360.0f, 360.0f);
+	ImGui::SliderFloat("LightFactorY", &SpotLightFactorAngle.y, -360.0f, 360.0f);
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
 }
 
 void DebugScene::Finalize()

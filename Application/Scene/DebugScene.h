@@ -39,6 +39,8 @@ public://ƒƒ“ƒo•Ï”
 
 	void Draw(DirectXCommon* dxCommon)override;
 
+	void ImguiDraw();
+
 	void Finalize() override;
 private:
 	std::unique_ptr<Object3d> Sphere;

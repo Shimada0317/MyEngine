@@ -165,8 +165,16 @@ private://メンバ変数
 	XMFLOAT3 SearchLightAtten = { 0.f,0.f,0.f };
 	XMFLOAT2 SearchLightFactorAngle = { 20.0f,30.0f };
 	
-	bool SpotLightPositionChange;
+	bool SpotLightPositionChange=false;
 	bool LightPositionChangeX[2];
 	bool LightPositionChangeZ[2];
+
+	float duration = 1.f;
+	float time = 0.0f;
+	float value = 0.f;
+	float StartPoint = 0.f;
+	float EndPoint = -100.f;
+
+	bool easing = true;
 };
 

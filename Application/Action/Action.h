@@ -65,6 +65,8 @@ public:
 	/// <param name="PurposeValue">–Ú“I’n‚Ì’l</param>
 	void EaseOut(float& MoveValue, float PurposeValue);
 
+	float EasingOut(float time, float start, float subvalue, float animationtime);
+
 	/// <summary>
 	/// “§–¾‚É‚·‚é
 	/// </summary>
