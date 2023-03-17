@@ -443,7 +443,7 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			AttackShakeDownFlag = false;
 			AttackFaseFlag = false;
 			attacktimer = 0;
-			playerhp -= 1;
+			//playerhp -= 1;
 
 		}
 	}
@@ -531,7 +531,7 @@ void Enemy::ParticleEfect()
 void Enemy::WaitTrack(bool otherenemyarive)
 {
 	if (otherenemyarive == true) {
-		LengthLimit = 1.8f;
+		LengthLimit = 2.5f;
 		OldTrackPoint.m128_f32[2] = OldTrackPoint.m128_f32[2] - 2;
 		WaitFlag = true;
 	}

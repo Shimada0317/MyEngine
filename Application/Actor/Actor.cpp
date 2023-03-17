@@ -121,10 +121,10 @@ void Actor::Update()
 
 	GetCamWorkFlag = player->GetCamWork();
 	if (GetCamWorkFlag == true) {
-		ThrowRobot.remove_if([](std::unique_ptr<ThrowEnemy>& robot) {
+		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
 			});
-		if (ThrowRobot.empty()) {
+		if (Robot.empty()) {
 			MoveFlag = true;
 		}
 		StopFlag = player->GetFinish();
@@ -153,7 +153,7 @@ void Actor::Update()
 	XMFLOAT2 Player2DPos = player->GetRetPosition();
 	bool PlayerBulletShot_F = player->GetBulletShot();
 	//ìGÇÃçXêVèàóù
-	for (std::unique_ptr<ThrowEnemy>& Enemy : ThrowRobot) {
+	for (std::unique_ptr<Enemy>& Enemy : Robot) {
 		Enemy->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
 	}
 	CheckSameTrackPosition();
@@ -178,7 +178,7 @@ void Actor::Draw(DirectXCommon* dxCommon)
 	}
 	player->ObjDraw();
 	Object3d::PostDraw();
-	for (std::unique_ptr<ThrowEnemy>& robot : ThrowRobot) {
+	for (std::unique_ptr<Enemy>& robot : Robot) {
 		robot->Draw(dxCommon);
 	}
 	player->ParticleDraw(dxCommon->GetCmdList());
@@ -369,9 +369,9 @@ void Actor::UpdataEnemyPopCommands()
 			}
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
-				std::unique_ptr<ThrowEnemy> newRobot = std::make_unique<ThrowEnemy>();
-				newRobot->Initialize(ROTATION, POSITION, camera, TRACK);
-				ThrowRobot.push_back(std::move(newRobot));
+				std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
+				newRobot->Initialize(ROTATION, POSITION, camera, TRACK,step);
+				Robot.push_back(std::move(newRobot));
 
 				POPSkip = false;
 				TRACKSkip = false;

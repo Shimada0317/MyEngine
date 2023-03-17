@@ -28,6 +28,7 @@ void ThrowEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Came
 	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
 	Center= Object3d::Create(ModelManager::GetInstance()->GetModel(2));
 	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
+	ThrowBox = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
 
 	HeadRot = BodyRot = ArmsRot = allrot;
 	AllPos = allpos;
@@ -119,6 +120,35 @@ void ThrowEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& player
 	AllUpdate();
 }
 
+XMFLOAT2 ThrowEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
+{
+	Center->SetRotation(CenterRot);
+	CenterMat = Center->GetMatrix();
+	const float kDistancePlayerTo3DReticle = 50.0f;
+	offset = { 0.0,0.0,1.0f };
+	offset = XMVector3TransformNormal(offset, CenterMat);
+	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
+
+	XMVECTOR PositionRet = set3Dposition;
+
+	ChangeViewPort(MatViewPort);
+
+	XMMATRIX MatVP = MatViewPort;
+
+	XMMATRIX View = HaveCamera->GetViewMatrix();
+	XMMATRIX Pro = HaveCamera->GetProjectionMatrix();
+
+	XMMATRIX MatViewProjectionViewport = View * Pro * MatVP;
+
+	PositionRet = XMVector3TransformCoord(PositionRet, MatViewProjectionViewport);
+
+	XMFLOAT2 get2dposition;
+	get2dposition.x = PositionRet.m128_f32[0];
+	get2dposition.y = PositionRet.m128_f32[1];
+
+	return get2dposition;
+}
+
 void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 {
 	Object3d::PreDraw(dxCommon->GetCmdList());
@@ -130,15 +160,38 @@ void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 	Object3d::PostDraw();
 }
 
+void ThrowEnemy::ChangeViewPort(XMMATRIX& matviewport)
+{
+	matviewport.r[0].m128_f32[0] = WinApp::window_width / 2;
+	matviewport.r[0].m128_f32[1] = 0;
+	matviewport.r[0].m128_f32[2] = 0;
+	matviewport.r[0].m128_f32[3] = 0;
+
+	matviewport.r[1].m128_f32[0] = 0;
+	matviewport.r[1].m128_f32[1] = -(WinApp::window_height / 2);
+	matviewport.r[1].m128_f32[2] = 0;
+	matviewport.r[1].m128_f32[3] = 0;
+
+	matviewport.r[2].m128_f32[0] = 0;
+	matviewport.r[2].m128_f32[1] = 0;
+	matviewport.r[2].m128_f32[2] = 1;
+	matviewport.r[2].m128_f32[3] = 0;
+
+	matviewport.r[3].m128_f32[0] = WinApp::window_width / 2 + offset.m128_f32[0];
+	matviewport.r[3].m128_f32[1] = WinApp::window_height / 2 + offset.m128_f32[1];
+	matviewport.r[3].m128_f32[2] = 0;
+	matviewport.r[3].m128_f32[3] = 1;
+}
+
 void ThrowEnemy::ThrowAttack()
 {
 	float vx = 0;
 	float vy = 0;
 	float vz = 0;
 
-	vx = (AllPos.m128_f32[0] - LandingPoint.m128_f32[0]);
-	vy = (AllPos.m128_f32[1] - LandingPoint.m128_f32[1]);
-	vz = (AllPos.m128_f32[2] - LandingPoint.m128_f32[2]);
+	vx = (ThrowBoxPos.m128_f32[0] - LandingPoint.m128_f32[0]);
+	vy = (ThrowBoxPos.m128_f32[1] - LandingPoint.m128_f32[1]);
+	vz = (ThrowBoxPos.m128_f32[2] - LandingPoint.m128_f32[2]);
 
 	float v2x = pow(vx, 2);
 	float v2y = pow(vy, 2);

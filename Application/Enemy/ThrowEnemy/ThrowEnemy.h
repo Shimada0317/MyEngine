@@ -41,10 +41,21 @@ public:
 	void Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
 
 	/// <summary>
+	/// 2D→3D座標
+	/// </summary>
+	/// <param name="Set3dPosition">表示したい3D座標の場所</param>
+	XMFLOAT2 WorldtoScreen(const XMVECTOR& set3Dposition);
+
+	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
+
+	/// <summary>
+	/// ビュー変換
+	/// </summary>
+	void ChangeViewPort(XMMATRIX& matviewport);
 
 	void ThrowAttack();
 
@@ -94,7 +105,15 @@ public:
 	XMVECTOR ThrowBoxPos = { 0.f,0.f,0.f };
 	XMFLOAT3 ThrowBoxRot = { 0.f,0.f,0.f };
 	XMFLOAT3 ThrowBoxScl = { 0.f,0.f,0.f };
-
+	//2D座標を持たせる計算で使う変数
+	XMVECTOR offset;
+	XMMATRIX MatViewPort;
+	//敵が持つ2D系のステータス
+	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
+	XMFLOAT2 RockOnAnchorPoint = { 0.5f,0.5f };
+	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT2 RockOnHeadPos = { 0.0f,0.0f };
+	XMFLOAT2 RockOnBoxPoss = { 0.f,0.f };
 
 	int Hp = 160;
 	int OldHp = 0;

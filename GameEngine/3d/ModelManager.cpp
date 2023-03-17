@@ -24,7 +24,7 @@ void ModelManager::Initialize()
     CallModel("BothArm",true);
     CallModel("skydome");
     CallModel("bills");
-    CallModel("bil",true);
+    CallModel("bil");
     CallModel("World");
     CallModel("gun");
     CallModel("heri", true);

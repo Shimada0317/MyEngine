@@ -11,6 +11,7 @@
 #include"ModelManager.h"
 
 const float AddPosetEfectColor = 0.05f;
+const XMFLOAT4 BillColor = { 1.f,1.f,1.f,1.f };
 
 using namespace DirectX;
 //コンストラクタ
@@ -89,7 +90,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	}
 
 	lightGroupe->SetSpotLightActive(0, true);
-	lightGroupe->SetSpotLightActive(1, false);
+	lightGroupe->SetSpotLightActive(1, true);
 	lightGroupe->SetSpotLightActive(2, true);
 	lightGroupe->SetSpotLightActive(3, true);
 	lightGroupe->SetSpotLightActive(4, true);
@@ -291,24 +292,26 @@ void GameScene::AllUpdata()
 	}
 	//左右のビルの更新処理
 	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->Update({ 0.9f,0.9f,0.9f,1.0f });
-		BillsLowAlpha[i]->Update({ 0.9f,0.6f,0.2f,1.0f });
+		BillsHighAlpha[i]->Update(BillColor);
+		BillsLowAlpha[i]->Update(BillColor);
 	}
 	//フィールドのビルの更新処理
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i]->Update({ 0.9f,0.9f,0.9f,1.0f });
+		FieldBills[i]->Update(BillColor);
 	}
 	//天球の更新処理
 	Sphere->Update({ 1,1,1,1 }, true);
 	//地面の更新処理
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理
-	Start->Update();
+	Start->Update(BillColor);
 }
 
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
+	Action::GetInstance()->DebugMove(FieldSpotLightPos);
+
 	if (GameStartFlag == false) {
 		PostCol.x += AddPosetEfectColor;
 		PostCol.y += AddPosetEfectColor;
