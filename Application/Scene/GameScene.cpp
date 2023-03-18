@@ -81,7 +81,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 
 	for (int i = 0; i < 3; i++) {
-		SearchLightPos[i] = { 0, 20, 20 };
+		SearchLightPos[i] = { -20, 20, 20 };
 	}
 
 	for (int i = 0; i < 2; i++) {
@@ -89,8 +89,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 		LightPositionChangeZ[i] = false;
 	}
 
-	StartPoint = FieldSpotLightDir.x;
-	EndPoint = 60;
+	StartPointZ = 60;
+	EndPointZ = -20;
 
 	lightGroupe->SetSpotLightActive(0, true);
 	lightGroupe->SetSpotLightActive(1, true);
@@ -153,38 +153,59 @@ void GameScene::StatusSet()
 	//Action::GetInstance()->XMvectorAddXMvector(XMVECTOR{ PlayerSpotLightPos.x,PlayerSpotLightPos.y,PlayerSpotLightPos.z }, velocity);
 	PlayerSpotLightPos.x += velocity.m128_f32[0];
 	PlayerSpotLightPos.z += velocity.m128_f32[2];
-	
+
+	if (easing == false) {
+		
+		EasingWaitTimeR += 0.1f;
+		if (EasingWaitTimeR >= 1) {
+			easing = true;
+			EasingWaitTimeR = 0.f;
+		}
+
+	}
+
 	if (easing == true) {
-		if (duration > time) {
-			time += 0.01f;
+		if (EasingChange == false) {
+			duration = 1;
+			if (duration > time) {
+				time += 0.01f;
+			}
+		}
+		else {
+			duration = -1;
+			if (duration < time) {
+				time -= 0.01f;
+			}
 		}
 	}
 
 
 	if (Wave <= 4 && Wave < 5) {
-		SearchLightDir.z =Action::GetInstance()->EasingOut(time,StartPoint,EndPoint-StartPoint,duration);
+		SearchLightDir.z = Action::GetInstance()->EasingOut(time, StartPointZ, EndPointZ - StartPointZ, duration);
 		if (SpotLightPositionChange == false) {
-			if (time>= 1.f) {
+			if (time >= 1.f) {
 				SpotLightPositionChange = true;
-				time = 0;
-				StartPoint = SearchLightDir.z;
-				EndPoint = -20;
+				EndPointZ = -20;
+				StartPointZ = 60;
 				easing = false;
+				EasingChange = true;
 			}
 		}
 		else {
-			if (SearchLightDir.z <= -20) {
+			if (time <= -1.f) {
 				SpotLightPositionChange = false;
-				time = 0;
-				StartPoint = SearchLightDir.z;
-				EndPoint = 60;
+				StartPointZ = 60;
+				EndPointZ = -20;
 				easing = false;
+				EasingChange = false;
 			}
 		}
 	}
+	
+	
 	if (Wave > 4 && Wave < 8) {
 		SearchLightPos[0].z = 45;
-		if (SpotLightPositionChange == false) {
+		/*if (SpotLightPositionChange == false) {
 			Action::GetInstance()->EaseOut(SearchLightPos[0].x, 61);
 			if (SearchLightPos[0].x >= 60) {
 				SpotLightPositionChange = true;
@@ -265,7 +286,7 @@ void GameScene::StatusSet()
 		Action::GetInstance()->EaseOut(SearchLightPos[2].z, -1);
 		if (SearchLightPos[1].z <= 0) {
 			LightPositionChangeZ[1] = true;
-		}
+		}*/
 	}
 
 

@@ -153,7 +153,7 @@ private://メンバ変数
 	XMFLOAT3 FieldSpotLightAtten = { 0.f,0.f,0.f };
 	XMFLOAT2 FieldSpotLightFactorAngle = { 20.0f,30.0f };
 
-	XMFLOAT3 PlayerSpotLightDir = { 0,-10,0 };
+	XMFLOAT3 PlayerSpotLightDir = { 0,-20,0 };
 	XMFLOAT3 PlayerSpotLightPos = { 0,35,0 };
 	XMFLOAT3 PlayerSpotLightColor = { 1.f,1.f,1.f };
 	XMFLOAT3 PlayerSpotLightAtten = { 0.f,0.f,0.f };
@@ -170,11 +170,15 @@ private://メンバ変数
 	bool LightPositionChangeZ[2];
 
 	float duration = 1.f;
-	float time = 0.0f;
+	float time = -1.0f;
 	float value = 0.f;
-	float StartPoint = 0.f;
-	float EndPoint = -100.f;
+	float StartPointZ = 0.f;
+	float EndPointZ = -100.f;
+	float StartPointX = -20;
+	float EndPointX = 20;
 
 	bool easing = true;
+	float EasingWaitTimeR = 0.f;
+	bool EasingChange = false;
 };
 
