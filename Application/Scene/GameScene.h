@@ -93,6 +93,8 @@ public://メンバ関数
 	/// 終了処理
 	/// </summary>
 	void Finalize() override;
+
+	void SpotLightMove();
 private://メンバ変数
 	//Obj
 	unique_ptr <Object3d> Sphere;
@@ -159,7 +161,7 @@ private://メンバ変数
 	XMFLOAT3 PlayerSpotLightAtten = { 0.f,0.f,0.f };
 	XMFLOAT2 PlayerSpotLightFactorAngle = { 20.0f,30.0f };
 
-	XMFLOAT3 SearchLightDir = { 0,-10,0 };
+	XMFLOAT3 SearchLightDir[3];
 	XMFLOAT3 SearchLightPos[3];
 	XMFLOAT3 SearchLightColor = { 1,1,1 };
 	XMFLOAT3 SearchLightAtten = { 0.f,0.f,0.f };
@@ -172,10 +174,10 @@ private://メンバ変数
 	float duration = 1.f;
 	float time = -1.0f;
 	float value = 0.f;
-	float StartPointZ = 0.f;
-	float EndPointZ = -100.f;
-	float StartPointX = -20;
-	float EndPointX = 20;
+	float StartPointZ = 60.f;
+	float EndPointZ = -20.f;
+	float StartPointX = -10;
+	float EndPointX = 10;
 
 	bool easing = true;
 	float EasingWaitTimeR = 0.f;

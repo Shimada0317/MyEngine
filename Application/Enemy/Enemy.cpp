@@ -250,6 +250,10 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 		}
 	}
 	
+	if (Input::GetInstance()->PushKey(DIK_O)) {
+		Hp = 0;
+	}
+
 	StatusSet();
 	AllUpdate();
 }

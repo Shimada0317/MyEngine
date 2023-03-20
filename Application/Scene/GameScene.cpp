@@ -81,8 +81,10 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 
 	for (int i = 0; i < 3; i++) {
-		SearchLightPos[i] = { -20, 20, 20 };
+		SearchLightPos[i] = { 0, 20, 20 };
+		SearchLightDir[i] = { 0,-10,0 };
 	}
+	SearchLightPos[1] = { 0, 20, 45 };
 
 	for (int i = 0; i < 2; i++) {
 		LightPositionChangeX[i] = false;
@@ -95,7 +97,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightGroupe->SetSpotLightActive(0, true);
 	lightGroupe->SetSpotLightActive(1, true);
 	lightGroupe->SetSpotLightActive(2, true);
-	lightGroupe->SetSpotLightActive(3, false);
+	lightGroupe->SetSpotLightActive(3, true);
 	lightGroupe->SetSpotLightActive(4, false);
 }
 
@@ -148,147 +150,7 @@ void GameScene::StatusSet()
 	}
 
 	DamageEfectSp->SetColor(DamageEfectColor);
-	int Wave = Act->GetPatern();
-	XMVECTOR velocity = Act->GetVelocity();
-	//Action::GetInstance()->XMvectorAddXMvector(XMVECTOR{ PlayerSpotLightPos.x,PlayerSpotLightPos.y,PlayerSpotLightPos.z }, velocity);
-	PlayerSpotLightPos.x += velocity.m128_f32[0];
-	PlayerSpotLightPos.z += velocity.m128_f32[2];
-
-	if (easing == false) {
-		
-		EasingWaitTimeR += 0.1f;
-		if (EasingWaitTimeR >= 1) {
-			easing = true;
-			EasingWaitTimeR = 0.f;
-		}
-
-	}
-
-	if (easing == true) {
-		if (EasingChange == false) {
-			duration = 1;
-			if (duration > time) {
-				time += 0.01f;
-			}
-		}
-		else {
-			duration = -1;
-			if (duration < time) {
-				time -= 0.01f;
-			}
-		}
-	}
-
-
-	if (Wave <= 4 && Wave < 5) {
-		SearchLightDir.z = Action::GetInstance()->EasingOut(time, StartPointZ, EndPointZ - StartPointZ, duration);
-		if (SpotLightPositionChange == false) {
-			if (time >= 1.f) {
-				SpotLightPositionChange = true;
-				EndPointZ = -20;
-				StartPointZ = 60;
-				easing = false;
-				EasingChange = true;
-			}
-		}
-		else {
-			if (time <= -1.f) {
-				SpotLightPositionChange = false;
-				StartPointZ = 60;
-				EndPointZ = -20;
-				easing = false;
-				EasingChange = false;
-			}
-		}
-	}
 	
-	
-	if (Wave > 4 && Wave < 8) {
-		SearchLightPos[0].z = 45;
-		/*if (SpotLightPositionChange == false) {
-			Action::GetInstance()->EaseOut(SearchLightPos[0].x, 61);
-			if (SearchLightPos[0].x >= 60) {
-				SpotLightPositionChange = true;
-			}
-		}
-		else {
-			Action::GetInstance()->EaseOut(SearchLightPos[0].x, -11);
-			if (SearchLightPos[0].x <= -10) {
-				SpotLightPositionChange = false;
-			}
-		}
-	}
-	if (Wave == 8 || Wave == 9) {
-		if (SearchLightPos[0].x <= 60) {
-			Action::GetInstance()->EaseOut(SearchLightPos[0].x, 61);
-		}
-
-		if (SpotLightPositionChange == false) {
-			Action::GetInstance()->EaseOut(SearchLightPos[0].z, 111);
-			if (SearchLightPos[0].z >= 110) {
-				SpotLightPositionChange = true;
-			}
-		}
-		else {
-			Action::GetInstance()->EaseOut(SearchLightPos[0].z, 49);
-			if (SearchLightPos[0].z <= 50) {
-				SpotLightPositionChange = false;
-			}
-		}
-	}
-
-	if (LightPositionChangeX[0] == false) {
-		Action::GetInstance()->EaseOut(SearchLightPos[1].x, -11);
-		if (SearchLightPos[1].x <= -10) {
-			LightPositionChangeX[0] = true;
-		}
-	}
-	else {
-		Action::GetInstance()->EaseOut(SearchLightPos[1].x, 61);
-		if (SearchLightPos[1].x >= 60) {
-			LightPositionChangeX[0] = false;
-		}
-	}
-
-	if (LightPositionChangeX[1] == false) {
-		Action::GetInstance()->EaseOut(SearchLightPos[2].x, 61);
-		if (SearchLightPos[2].x >= 60) {
-			LightPositionChangeX[1] = true;
-		}
-	}
-	else {
-		Action::GetInstance()->EaseOut(SearchLightPos[2].x, -11);
-		if (SearchLightPos[2].x <= -10) {
-			LightPositionChangeX[1] = false;
-		}
-	}
-
-	if (LightPositionChangeZ[0] == false) {
-		Action::GetInstance()->EaseOut(SearchLightPos[1].z, -1);
-		if (SearchLightPos[1].z <= 0) {
-			LightPositionChangeZ[0] = true;
-		}
-	}
-	else {
-		Action::GetInstance()->EaseOut(SearchLightPos[1].z, 61);
-		if (SearchLightPos[1].z >= 60) {
-			LightPositionChangeZ[0] = false;
-		}
-	}
-
-	if (LightPositionChangeZ[1] == false) {
-		Action::GetInstance()->EaseOut(SearchLightPos[2].z, 61);
-		if (SearchLightPos[1].z >= 60) {
-			LightPositionChangeZ[1] = true;
-		}
-	}
-	else {
-		Action::GetInstance()->EaseOut(SearchLightPos[2].z, -1);
-		if (SearchLightPos[1].z <= 0) {
-			LightPositionChangeZ[1] = true;
-		}*/
-	}
-
 
 	lightGroupe->SetSpotLightDir(0, XMVECTOR({ FieldSpotLightDir.x, FieldSpotLightDir.y, FieldSpotLightDir.z }));
 	lightGroupe->SetSpotLightPos(0, FieldSpotLightPos);
@@ -302,29 +164,20 @@ void GameScene::StatusSet()
 	lightGroupe->SetSpotLightAtten(1, PlayerSpotLightAtten);
 	lightGroupe->SetSpotLightFactorAngle(1, PlayerSpotLightFactorAngle);
 
+	for (int i = 2; i < 4; i++) {
+		lightGroupe->SetSpotLightDir(i, XMVECTOR({ SearchLightDir[i-2].x, SearchLightDir[i-2].y, SearchLightDir[i-2].z}));
+		lightGroupe->SetSpotLightPos(i, SearchLightPos[i-2]);
+		lightGroupe->SetSpotLightColor(i, SearchLightColor);
+		lightGroupe->SetSpotLightAtten(i, SearchLightAtten);
+		lightGroupe->SetSpotLightFactorAngle(i, SearchLightFactorAngle);
+	}
 
-	lightGroupe->SetSpotLightDir(2, XMVECTOR({ SearchLightDir.x, SearchLightDir.y, SearchLightDir.z }));
-	lightGroupe->SetSpotLightPos(2, SearchLightPos[0]);
-	lightGroupe->SetSpotLightColor(2, SearchLightColor);
-	lightGroupe->SetSpotLightAtten(2, SearchLightAtten);
-	lightGroupe->SetSpotLightFactorAngle(2, SearchLightFactorAngle);
-
-	lightGroupe->SetSpotLightDir(3, XMVECTOR({ SearchLightDir.x, SearchLightDir.y, SearchLightDir.z }));
-	lightGroupe->SetSpotLightPos(3, SearchLightPos[1]);
-	lightGroupe->SetSpotLightColor(3, SearchLightColor);
-	lightGroupe->SetSpotLightAtten(3, SearchLightAtten);
-	lightGroupe->SetSpotLightFactorAngle(3, SearchLightFactorAngle);
-
-	lightGroupe->SetSpotLightDir(4, XMVECTOR({ SearchLightDir.x, SearchLightDir.y, SearchLightDir.z }));
-	lightGroupe->SetSpotLightPos(4, SearchLightPos[2]);
-	lightGroupe->SetSpotLightColor(4, SearchLightColor);
-	lightGroupe->SetSpotLightAtten(4, SearchLightAtten);
-	lightGroupe->SetSpotLightFactorAngle(4, SearchLightFactorAngle);
 };
 
 //オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
+	Action::GetInstance()->DebugMove(SearchLightDir[1]);
 	//ゲーム開始時にアクターを更新処理
 	if (GameStartFlag == true) {
 		Act->Update();
@@ -349,7 +202,8 @@ void GameScene::AllUpdata()
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
-	Action::GetInstance()->DebugMove(FieldSpotLightPos);
+	
+	SpotLightMove();
 
 	if (GameStartFlag == false) {
 		PostCol.x += AddPosetEfectColor;
@@ -481,9 +335,13 @@ void GameScene::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Light");
-	ImGui::SliderFloat("LightDirX", &SearchLightDir.x, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirY", &SearchLightDir.y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirZ", &SearchLightDir.z, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirX", &SearchLightDir[0].x,-100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirY", &SearchLightDir[0].y, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirZ", &SearchLightDir[0].z, -100.0f, 100.0f);
+
+	ImGui::SliderFloat("LightDirX2", &SearchLightDir[1].x, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirY2", &SearchLightDir[1].y, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirZ2", &SearchLightDir[1].z, -100.0f, 100.0f);
 	ImGui::SliderFloat("value", &value, 0.0f, 60.0f);
 	ImGui::SliderFloat("time", &time, -0.0f, 1.0f);
 	ImGui::End();
@@ -531,5 +389,57 @@ void GameScene::Finalize()
 		FieldBills[i].reset();
 	}
 	Act.reset();
+}
+
+void GameScene::SpotLightMove()
+{
+	
+	XMVECTOR velocity = Act->GetVelocity();
+	PlayerSpotLightPos.x += velocity.m128_f32[0];
+	PlayerSpotLightPos.z += velocity.m128_f32[2];
+
+	if (easing == false) {
+		EasingWaitTimeR += 0.1f;
+		if (EasingWaitTimeR >= 1) {
+			easing = true;
+			EasingWaitTimeR = 0.f;
+		}
+	}
+
+	if (easing == true) {
+		if (EasingChange == false) {
+			duration = 1;
+			if (duration > time) {
+				time += 0.01f;
+			}
+		}
+		else {
+			duration = -1;
+			if (duration < time) {
+				time -= 0.01f;
+			}
+		}
+	}
+
+
+	SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
+	SearchLightDir[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
+	if (SpotLightPositionChange == false) {
+		if (time >= 1.f) {
+			SpotLightPositionChange = true;
+			easing = false;
+			EasingChange = true;
+		}
+	}
+	else {
+		if (time <= -1.f) {
+			SpotLightPositionChange = false;
+			easing = false;
+			EasingChange = false;
+		}
+	}
+
+	
+	
 }
 

@@ -83,7 +83,7 @@ void Action::EaseOut(float& MoveValue, float PurposeValue)
 	MoveValue += easevalue;
 }
 
-float Action::EasingOut(float time, float start, float addvalue, float animationtime)
+float Action::EasingOut(float time,float addvalue)
 {
 	return addvalue * sinf((time * DirectX::XM_PI) / 2);
 }
@@ -122,8 +122,7 @@ bool Action::CompletelyTogetherXMVECTOR(const XMVECTOR& FirstValue, const XMVECT
 
 void Action::DebugMove(XMFLOAT3& Value)
 {
-	float movevalue = 5.0f;
-
+	float movevalue = 0.1f;
 	if (Input::GetInstance()->PushKey(DIK_W)) {
 		Value.y += movevalue;
 	}
