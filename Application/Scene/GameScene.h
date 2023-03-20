@@ -178,6 +178,8 @@ private://メンバ変数
 	float EndPointZ = -20.f;
 	float StartPointX = -10;
 	float EndPointX = 10;
+	float EbdPointZ2 = 90.0f;
+	float StartPointZ2 = 50.f;
 
 	bool easing = true;
 	float EasingWaitTimeR = 0.f;

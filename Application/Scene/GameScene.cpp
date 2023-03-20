@@ -85,7 +85,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 		SearchLightDir[i] = { 0,-10,0 };
 	}
 	SearchLightPos[1] = { 0, 20, 45 };
-
+	SearchLightPos[2] = { 54,20,43 };
 	for (int i = 0; i < 2; i++) {
 		LightPositionChangeX[i] = false;
 		LightPositionChangeZ[i] = false;
@@ -98,7 +98,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightGroupe->SetSpotLightActive(1, true);
 	lightGroupe->SetSpotLightActive(2, true);
 	lightGroupe->SetSpotLightActive(3, true);
-	lightGroupe->SetSpotLightActive(4, false);
+	lightGroupe->SetSpotLightActive(4, true);
 }
 
 //ステータスセット
@@ -164,7 +164,7 @@ void GameScene::StatusSet()
 	lightGroupe->SetSpotLightAtten(1, PlayerSpotLightAtten);
 	lightGroupe->SetSpotLightFactorAngle(1, PlayerSpotLightFactorAngle);
 
-	for (int i = 2; i < 4; i++) {
+	for (int i = 2; i < 5; i++) {
 		lightGroupe->SetSpotLightDir(i, XMVECTOR({ SearchLightDir[i-2].x, SearchLightDir[i-2].y, SearchLightDir[i-2].z}));
 		lightGroupe->SetSpotLightPos(i, SearchLightPos[i-2]);
 		lightGroupe->SetSpotLightColor(i, SearchLightColor);
@@ -177,7 +177,7 @@ void GameScene::StatusSet()
 //オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
-	Action::GetInstance()->DebugMove(SearchLightDir[1]);
+	Action::GetInstance()->DebugMove(SearchLightPos[2]);
 	//ゲーム開始時にアクターを更新処理
 	if (GameStartFlag == true) {
 		Act->Update();
@@ -339,9 +339,9 @@ void GameScene::ImgDraw()
 	ImGui::SliderFloat("LightDirY", &SearchLightDir[0].y, -100.0f, 100.0f);
 	ImGui::SliderFloat("LightDirZ", &SearchLightDir[0].z, -100.0f, 100.0f);
 
-	ImGui::SliderFloat("LightDirX2", &SearchLightDir[1].x, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirY2", &SearchLightDir[1].y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirZ2", &SearchLightDir[1].z, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightPosX", &SearchLightPos[2].x, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightPosY", &SearchLightPos[2].y, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightPosZ", &SearchLightPos[2].z, -100.0f, 100.0f);
 	ImGui::SliderFloat("value", &value, 0.0f, 60.0f);
 	ImGui::SliderFloat("time", &time, -0.0f, 1.0f);
 	ImGui::End();
@@ -424,6 +424,7 @@ void GameScene::SpotLightMove()
 
 	SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
 	SearchLightDir[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
+	SearchLightDir[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
 	if (SpotLightPositionChange == false) {
 		if (time >= 1.f) {
 			SpotLightPositionChange = true;
