@@ -81,18 +81,15 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 
 	for (int i = 0; i < 3; i++) {
-		SearchLightPos[i] = { 0, 20, 20 };
 		SearchLightDir[i] = { 0,-10,0 };
 	}
-	SearchLightPos[1] = { 0, 20, 45 };
-	SearchLightPos[2] = { 54,20,43 };
+	SearchLightPos[0] = { 0, 10, 20 };
+	SearchLightPos[1] = { 0, 10, 45 };
+	SearchLightPos[2] = { 54,10,43 };
 	for (int i = 0; i < 2; i++) {
 		LightPositionChangeX[i] = false;
 		LightPositionChangeZ[i] = false;
 	}
-
-	StartPointZ = 60;
-	EndPointZ = -20;
 
 	lightGroupe->SetSpotLightActive(0, true);
 	lightGroupe->SetSpotLightActive(1, true);
@@ -177,7 +174,7 @@ void GameScene::StatusSet()
 //オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
-	Action::GetInstance()->DebugMove(SearchLightPos[2]);
+	Action::GetInstance()->DebugMove(SearchLightPos[0]);
 	//ゲーム開始時にアクターを更新処理
 	if (GameStartFlag == true) {
 		Act->Update();
@@ -335,13 +332,9 @@ void GameScene::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Light");
-	ImGui::SliderFloat("LightDirX", &SearchLightDir[0].x,-100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirY", &SearchLightDir[0].y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirZ", &SearchLightDir[0].z, -100.0f, 100.0f);
-
-	ImGui::SliderFloat("LightPosX", &SearchLightPos[2].x, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightPosY", &SearchLightPos[2].y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightPosZ", &SearchLightPos[2].z, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirX", &SearchLightPos[0].x,-100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirY", &SearchLightPos[0].y, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirZ", &SearchLightPos[0].z, -100.0f, 100.0f);
 	ImGui::SliderFloat("value", &value, 0.0f, 60.0f);
 	ImGui::SliderFloat("time", &time, -0.0f, 1.0f);
 	ImGui::End();
@@ -393,20 +386,19 @@ void GameScene::Finalize()
 
 void GameScene::SpotLightMove()
 {
-	
 	XMVECTOR velocity = Act->GetVelocity();
 	PlayerSpotLightPos.x += velocity.m128_f32[0];
 	PlayerSpotLightPos.z += velocity.m128_f32[2];
 
-	if (easing == false) {
+	if (Easing == false) {
 		EasingWaitTimeR += 0.1f;
 		if (EasingWaitTimeR >= 1) {
-			easing = true;
+			Easing = true;
 			EasingWaitTimeR = 0.f;
 		}
 	}
 
-	if (easing == true) {
+	if (Easing == true) {
 		if (EasingChange == false) {
 			duration = 1;
 			if (duration > time) {
@@ -420,27 +412,42 @@ void GameScene::SpotLightMove()
 			}
 		}
 	}
+	if (ChangeTimerFlag == false) {
+		LightAddPosChangeTimer += 0.01f;
+	}
+	else {
+		LightAddPosChangeTimer -= 0.01f;
+	}
+	if (LightAddPosChangeTimer >= 1) {
+		Action::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
+		ChangeTimerFlag = true;
+	}
+	else if (LightAddPosChangeTimer <= -1) {
+		Action::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
+		ChangeTimerFlag = false;
+	}
 
+	for (int i = 0; i < 3; i++) {
+		Action::GetInstance()->XMFLOAT3SubXMFLOAT3(SearchLightPos[i], SearchLightAddPos);
+	}
 
 	SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
 	SearchLightDir[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
 	SearchLightDir[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
+
 	if (SpotLightPositionChange == false) {
 		if (time >= 1.f) {
 			SpotLightPositionChange = true;
-			easing = false;
+			Easing = false;
 			EasingChange = true;
 		}
 	}
 	else {
 		if (time <= -1.f) {
 			SpotLightPositionChange = false;
-			easing = false;
+			Easing = false;
 			EasingChange = false;
 		}
-	}
-
-	
-	
+	}	
 }
 

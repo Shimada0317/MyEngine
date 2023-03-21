@@ -162,6 +162,27 @@ void Action::XMvectorSubXMVector(XMVECTOR& FirstValue, const XMVECTOR& SubValue)
 	FirstValue.m128_f32[2] = FirstValue.m128_f32[2] - SubValue.m128_f32[2];
 }
 
+void Action::XMFLOAT3AddXMFLOAT3(XMFLOAT3& FirstValue, const XMFLOAT3& AddValue)
+{
+	FirstValue.x = FirstValue.x + AddValue.x;
+	FirstValue.y = FirstValue.y + AddValue.y;
+	FirstValue.z = FirstValue.z + AddValue.z;
+}
+
+void Action::XMFLOAT3SubXMFLOAT3(XMFLOAT3& FirstValue, const XMFLOAT3& SubValue)
+{
+	FirstValue.x = FirstValue.x - SubValue.x;
+	FirstValue.y = FirstValue.y - SubValue.y;
+	FirstValue.z = FirstValue.z - SubValue.z;
+}
+
+void Action::XMFLOAT3ChangeValue(XMFLOAT3& ChangeValue)
+{
+	ChangeValue.x = -ChangeValue.x;
+	ChangeValue.y = -ChangeValue.y;
+	ChangeValue.z = -ChangeValue.z;
+}
+
 
 
 

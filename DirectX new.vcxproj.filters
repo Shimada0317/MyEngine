@@ -291,9 +291,6 @@
     <ClCompile Include="Application\Player\Player.cpp">
       <Filter>ソース ファイル\Application\Player</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Action\Action.cpp">
-      <Filter>ソース ファイル\Application\Action</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Particle\ObjParticle.cpp">
       <Filter>ソース ファイル\Application\Particle</Filter>
     </ClCompile>
@@ -335,6 +332,9 @@
     </ClCompile>
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Action\Action.cpp">
+      <Filter>ソース ファイル\Application\Action</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
