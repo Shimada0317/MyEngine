@@ -83,8 +83,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	for (int i = 0; i < 3; i++) {
 		SearchLightDir[i] = { 0,-10,0 };
 	}
-	SearchLightPos[0] = { 0, 10, 20 };
-	SearchLightPos[1] = { 0, 10, 45 };
+	SearchLightPos[0] = { 0, 20, 20 };
+	SearchLightPos[1] = { 20, 10, 45 };
 	SearchLightPos[2] = { 54,10,43 };
 	for (int i = 0; i < 2; i++) {
 		LightPositionChangeX[i] = false;
@@ -386,9 +386,6 @@ void GameScene::Finalize()
 
 void GameScene::SpotLightMove()
 {
-	XMVECTOR velocity = Act->GetVelocity();
-	PlayerSpotLightPos.x += velocity.m128_f32[0];
-	PlayerSpotLightPos.z += velocity.m128_f32[2];
 
 	if (Easing == false) {
 		EasingWaitTimeR += 0.1f;
@@ -428,7 +425,7 @@ void GameScene::SpotLightMove()
 	}
 
 	for (int i = 0; i < 3; i++) {
-		Action::GetInstance()->XMFLOAT3SubXMFLOAT3(SearchLightPos[i], SearchLightAddPos);
+		//Action::GetInstance()->XMFLOAT3SubXMFLOAT3(SearchLightPos[i], SearchLightAddPos);
 	}
 
 	SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);

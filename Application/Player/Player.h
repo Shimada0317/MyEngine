@@ -251,8 +251,6 @@ private:
 
 	int PaternCount = 0;
 
-	const float  M_PI = 3.14;
-
 	bool BulletShotFlag = false;
 	float ShotCoolTime = 0.0f;
 	bool RecoilFlag = false;

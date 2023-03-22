@@ -402,10 +402,8 @@ void Actor::CheckSameTrackPosition()
 				bool secondenemyarive = SecondEnemy->GetArive();
 				bool firstenemyarive = FirstEnemy->GetArive();
 				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
-
 					otherenemyarive = true;
-					FirstEnemy->WaitTrack(otherenemyarive);
-
+					SecondEnemy->WaitTrack(otherenemyarive);
 				}
 				if (secondenemyarive == false) {
 					XMVECTOR firstenemytrack = FirstEnemy->CheckTrackPoint();

@@ -3,10 +3,9 @@
 #include<random>
 
 using namespace DirectX;
-
 const int HeadDamage = 80;
 const int BodyDamage = 50;
-const float Subtraction = 0.05f;
+const float Subtraction = 0.1f;
 const float FallSpeed = 0.25f;
 const float AddDefomationValue = 0.04f;
 const XMFLOAT4 AddColor = { 0.1f,0.1f,0.1f,0.0f };
@@ -158,7 +157,7 @@ void Enemy::AllUpdate()
 //更新処理
 void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbulletshot)
 {
-
+	
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 
@@ -170,33 +169,19 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 			player2Dpos.y - Distance<RockOnPos.y && player2Dpos.y + Distance>RockOnPos.y) {
 			Hp -= BodyDamage;
 			plyerbulletshot = false;
-			for (int i = 0; i < 5; i++) {
-				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
-				newparticle->Initialize(1, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
-				Obj_Particle.push_back(std::move(newparticle));
-			}
 		}
 
 		if (player2Dpos.x - HeadDistance < RockOnHeadPos.x && player2Dpos.x + HeadDistance > RockOnHeadPos.x &&
 			player2Dpos.y - HeadDistance<RockOnHeadPos.y && player2Dpos.y + HeadDistance>RockOnHeadPos.y) {
 			Hp -= HeadDamage;
 			plyerbulletshot = false;
-			for (int i = 0; i < 5; i++) {
-				std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
-				newparticle->Initialize(1, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
-				Obj_Particle.push_back(std::move(newparticle));
-			}
+			
 		}
 	}
 
-	//ダメージを受けたとき
-	if (OldHp > Hp && Hp >= 0) {
-		OldHp = Hp;
-		HeadPartColor.y -= 0.2f;
-		HeadPartColor.z -= 0.2f;
-		BodyPartColor.y -= 0.2f;
-		BodyPartColor.z -= 0.2f;
-	}
+	Damage();
+
+	Death();
 
 	if (Hp < 50) {
 		AttackTimeMin = 15;
@@ -224,31 +209,9 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 	}
 	else {
 		AttackFaseFlag = false;
-		//TrackPoint.m128_f32[1] = 100;
 	}
 
-	//生きているときにHPが0になったら
-	if (Hp <= 0) {
-		OldTrackPoint = TrackPoint;
-		CountZeroFlag = true;
-		Hp = 0;
-		ShadowCol.w -= Subtraction;
-		ArmsPartColor.w -= Subtraction;
-		BodyPartColor.w -= Subtraction;
-		HeadPartColor.w -= Subtraction;
-		ParticleEfectFlag = true;
-		if (ParticleEfectFlag == true&&RobotAriveFlag==true) {
-			ParticleEfect();
-		}
-		RobotAriveFlag = false;
-		AttackPreparationTime = 0;
-		AttackChanse = 0;
-		Rand = 0;
-		
-		if (ArmsPartColor.w <= 0 && Obj_Particle.empty()) {
-			DeadFlag = true;
-		}
-	}
+	
 	
 	if (Input::GetInstance()->PushKey(DIK_O)) {
 		Hp = 0;
@@ -270,10 +233,12 @@ void Enemy::Draw(DirectXCommon* dxCommon)
 	for (std::unique_ptr<ObjParticle>& particle : Obj_Particle) {
 		particle->Draw();
 	}
-	HeadPart->Draw();
-	BodyPart->Draw();
-	ArmsPart->Draw();
-	Shadow->Draw();
+	if (Hp > 0) {
+		HeadPart->Draw();
+		BodyPart->Draw();
+		ArmsPart->Draw();
+		Shadow->Draw();
+	}
 	//Center->Draw();
 	Object3d::PostDraw();
 
@@ -326,46 +291,7 @@ void Enemy::TrackPlayerMode()
 
 void Enemy::Motion()
 {
-	XMFLOAT3 hypertrophy = { 0.00001f,0.00001f,0.00001f };
-
-	MotionTime += 0.0001f;
-
-	if (MotionChangeFlag == true) {
-		BodyPartScl.x += hypertrophy.x;
-		ArmsPartScl.x += hypertrophy.x;
-		HeadPartScl.x += hypertrophy.x;
-
-		BodyPartScl.y += hypertrophy.y;
-		ArmsPartScl.y += hypertrophy.y;
-		HeadPartScl.y += hypertrophy.y;
-
-		BodyPartScl.z += hypertrophy.z;
-		ArmsPartScl.z += hypertrophy.z;
-		HeadPartScl.z += hypertrophy.z;
-
-		if (MotionTime >= 1) {
-			MotionChangeFlag = false;
-			MotionTime = 0.0f;
-		}
-	}
-
-	else {
-		BodyPartScl.x -= hypertrophy.x;
-		ArmsPartScl.x -= hypertrophy.x;
-		HeadPartScl.x -= hypertrophy.x;
-
-		BodyPartScl.y -= hypertrophy.y;
-		ArmsPartScl.y -= hypertrophy.y;
-		HeadPartScl.y -= hypertrophy.y;
-
-		BodyPartScl.z -= hypertrophy.z;
-		ArmsPartScl.z -= hypertrophy.z;
-		HeadPartScl.z -= hypertrophy.z;
-		if (MotionTime >= 1) {
-			MotionChangeFlag = true;
-			MotionTime = 0.0f;
-		}
-	}
+	
 
 }
 
@@ -380,15 +306,12 @@ void Enemy::AttackMode(int& playerhp)
 	//攻撃フェイズに移行した時
 	if (AttackFaseFlag == true) {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);
-		LengthLimit = 0.5f;
-
 		if (HeadPartRot.y >= PursePositiveRot) {
 			HeadPartRot.y = PursePositiveRot;
 		}
 		Attack(playerhp, AtttackTimer);
 	}
 	else {
-		LengthLimit = 1.5f;
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PurseNegativeeRot - 1);
 		if (HeadPartRot.y <= PurseNegativeeRot) {
 			HeadPartRot.y = PurseNegativeeRot;
@@ -401,29 +324,28 @@ void Enemy::AttackMode(int& playerhp)
 void Enemy::Attack(int& playerhp, float& attacktimer)
 {
 	//巨大化していく値
-	float gigantic = 0.0002f;
+	XMFLOAT3 gigantic = { 0.0002f ,0.0002f ,0.0002f };
 	float discoloration = 0.01f;
 	if (AttackShakeDownFlag == false) {
 		ArmsPartRot.x += 1.5f;
-		ArmsPartScl.x += gigantic;
-		ArmsPartScl.y += gigantic;
-		ArmsPartScl.z += gigantic;
-
+		Action::GetInstance()->XMFLOAT3AddXMFLOAT3(ArmsPartScl, gigantic);
+		Action::GetInstance()->XMFLOAT3AddXMFLOAT3(BodyPartScl, gigantic);
+		Action::GetInstance()->XMFLOAT3AddXMFLOAT3(HeadPartScl, gigantic);
 		ArmsPartColor.y -= discoloration;
 		ArmsPartColor.z -= discoloration;
 		//腕が最大点に達した時
 		if (ArmsPartRot.x >= 40.0f) {
 			ArmsPartRot.x = 40;
-
+			LengthLimit = 0.1f;
 			if (VibrationChangeFlag == true) {
-				Vibration -= 2.2f;
-				if (Vibration <= -2.2f) {
+				Vibration -= 4.2f;
+				if (Vibration <= -4.2f) {
 					VibrationChangeFlag = false;
 				}
 			}
 			else {
-				Vibration += 2.2f;
-				if (Vibration >= 2.2f) {
+				Vibration += 4.2f;
+				if (Vibration >= 4.2f) {
 					VibrationChangeFlag = true;
 				}
 			}
@@ -447,8 +369,49 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			AttackShakeDownFlag = false;
 			AttackFaseFlag = false;
 			attacktimer = 0;
-			//playerhp -= 1;
+			playerhp -= 1;
+			Hp = 0;
 
+		}
+	}
+}
+
+void Enemy::Damage()
+{
+	//ダメージを受けたとき
+	if (OldHp > Hp && Hp >= 0) {
+		OldHp = Hp;
+		HeadPartColor.y -= 0.2f;
+		HeadPartColor.z -= 0.2f;
+		BodyPartColor.y -= 0.2f;
+		BodyPartColor.z -= 0.2f;
+		for (int i = 0; i < 5; i++) {
+			std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
+			newparticle->Initialize(1, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
+			Obj_Particle.push_back(std::move(newparticle));
+		}
+	}
+}
+
+void Enemy::Death()
+{
+	//生きているときにHPが0になったら
+	if (Hp <= 0) {
+		OldTrackPoint = TrackPoint;
+		NotLifeFlag = true;
+		Hp = 0;
+		ShadowCol.w -= Subtraction;
+		ArmsPartColor.w -= Subtraction;
+		BodyPartColor.w -= Subtraction;
+		HeadPartColor.w -= Subtraction;
+		if (ParticleEfectFlag == true) {
+			ParticleEfect();
+		}
+		RobotAriveFlag = false;
+
+
+		if (Obj_Particle.empty()) {
+			DeadFlag = true;
 		}
 	}
 }
@@ -518,9 +481,9 @@ void Enemy::ParticleEfect()
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};
-		vel.x = Action::GetInstance()->GetRangRand(-0.03f,0.03f);
-		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.06f);
-		vel.z = Action::GetInstance()->GetRangRand(-0.03f, 0.03f);
+		vel.x = Action::GetInstance()->GetRangRand(-0.09f,0.09f);
+		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.12f);
+		vel.z = Action::GetInstance()->GetRangRand(-0.03f, 0.09f);
 
 		XMFLOAT3 acc{};
 		acc.y = 0.0;

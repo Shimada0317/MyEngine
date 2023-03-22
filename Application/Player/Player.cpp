@@ -744,8 +744,8 @@ void Player::ParticleEfect()
 {
 	if (ParticleFlag == true) {
 		for (int i = 0; i < 10; i++) {
-			double radX = ReticleRot.y * M_PI / 180;
-			double radY = GunRot.x * M_PI / 180;
+			double radX = ReticleRot.y * XM_PI / 180;
+			double radY = GunRot.x * XM_PI / 180;
 			float sinradX = sinf(radX);
 			float cosradX = cosf(radX);
 
@@ -765,7 +765,7 @@ void Player::ParticleEfect()
 			else if (PaternCount == 1 || PaternCount == 9) {
 				pos.x = GunWorldPos.m128_f32[0] - sinradX * 3.5f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-				pos.z = GunWorldPos.m128_f32[2] - 3.0f;
+				pos.z = GunWorldPos.m128_f32[2] - 2.0f;
 			}
 			else if (PaternCount == 4) {
 				pos.x = GunWorldPos.m128_f32[0] - 2.3f;

@@ -76,6 +76,10 @@ public:
 	/// <param name="playerhp">プレイヤーのHp</param>
 	void Attack(int& playerhp,float& attacktimer);
 
+	void Damage();
+
+	void Death();
+
 	/// <summary>
 	/// 2D→3D座標
 	/// </summary>
@@ -129,7 +133,7 @@ public://Getter Setter
 
 	bool GetArive() { return RobotAriveFlag; }
 
-	bool GetCountZero() { return CountZeroFlag; }
+	bool GetCountZero() { return NotLifeFlag; }
 
 private:
 	//Obj
@@ -215,13 +219,9 @@ private:
 	XMMATRIX MatViewPort;
 
 	//攻撃モードで使用される変数
-	float AttackTime = 0.0f;
-	int AttackChanse = 0;
-	float Rand = 0;
 	bool AttackFaseFlag = false;
 
 	//攻撃の準備時間
-	float AttackPreparationTime = 0;
 	bool AttackShakeDownFlag = false;
 	float AttackCharge = 0.0f;
 
@@ -273,10 +273,12 @@ private:
 	float AttackTimeMin = 20;
 	float AttackTimeMax = 40;
 
-	bool ParticleEfectFlag = false;
+	bool ParticleEfectFlag = true;
 	//同じ追従先に別の敵がいるかいないか
 	bool WaitFlag = false;
 
-	bool CountZeroFlag = false;
+	bool NotLifeFlag = false;
+
+	bool ObjParticleFlag = false;
 };
 
