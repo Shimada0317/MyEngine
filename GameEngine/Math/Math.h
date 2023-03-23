@@ -1,0 +1,45 @@
+#pragma once
+#include<DirectXMath.h>
+
+using namespace DirectX;
+
+class Math
+{
+private:
+	// Microsoft::WRL::‚ğÈ—ª
+	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
+	// DirectX::‚ğÈ—ª
+	using XMFLOAT2 = DirectX::XMFLOAT2;
+	using XMFLOAT3 = DirectX::XMFLOAT3;
+	using XMFLOAT4 = DirectX::XMFLOAT4;
+	using XMMATRIX = DirectX::XMMATRIX;
+	using XMVECTOR = DirectX::XMVECTOR;
+public:
+	/// <summary>
+	/// ƒCƒ“ƒXƒ^ƒ“ƒX¶¬
+	/// </summary>
+	/// <returns></returns>
+	static Math* GetInstance();
+
+	/// <summary>
+	/// XMVECTOR“¯m‚Ì‰ÁZ
+	/// </summary>
+	XMVECTOR XMvectorAddXMvector(const XMVECTOR& FirstValue, const XMVECTOR& AddValue);
+	/// <summary>
+	/// XMVECTOR“¯m‚ÌŒ¸Z
+	/// </summary>
+	XMVECTOR XMvectorSubXMVector(const XMVECTOR& FirstValue, const XMVECTOR& SubValue);
+	/// <summary>
+	/// XMFLOAT3“¯m‚Ì‰ÁZ
+	/// </summary>
+	XMFLOAT3 XMFLOAT3AddXMFLOAT3(const XMFLOAT3& FirstValue, const XMFLOAT3& AddValue);
+	/// <summary>
+	/// XMFLOAT3“¯m‚ÌŒ¸Z
+	/// </summary>
+	XMFLOAT3 XMFLOAT3SubXMFLOAT3(const XMFLOAT3& FirstValue, const XMFLOAT3& SubValue);
+	/// <summary>
+	/// XMFLOAT3‚Ì³•‰‚Ì”½“]
+	/// </summary>
+	XMFLOAT3 XMFLOAT3ChangeValue(const XMFLOAT3& ChangeValue);
+};
+
