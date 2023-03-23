@@ -101,15 +101,6 @@ public:
 
 	void DebugMove(XMFLOAT3& Value);
 
-	void XMvectorAddXMvector(XMVECTOR& FirstValue, const XMVECTOR& AddValue);
-
-	void XMvectorSubXMVector(XMVECTOR& FirstValue, const XMVECTOR& SubValue);
-
-	void XMFLOAT3AddXMFLOAT3(XMFLOAT3& FirstValue, const XMFLOAT3& AddValue);
-
-	void XMFLOAT3SubXMFLOAT3(XMFLOAT3& FirstValue, const XMFLOAT3& SubValue);
-
-	void XMFLOAT3ChangeValue(XMFLOAT3& ChangeValue);
 private:
 };
 

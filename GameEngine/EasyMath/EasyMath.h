@@ -1,9 +1,10 @@
 #pragma once
+#include<wrl.h>
 #include<DirectXMath.h>
 
 using namespace DirectX;
 
-class Math
+class EasyMath
 {
 private:
 	// Microsoft::WRL::を省略
@@ -19,7 +20,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static Math* GetInstance();
+	static EasyMath* GetInstance();
 
 	/// <summary>
 	/// XMVECTOR同士の加算

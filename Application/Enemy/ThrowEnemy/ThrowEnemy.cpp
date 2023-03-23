@@ -1,5 +1,6 @@
 #include "ThrowEnemy.h"
 #include"Action.h"
+#include"EasyMath.h"
 #include"ModelManager.h"
 
 using namespace DirectX;
@@ -211,5 +212,5 @@ void ThrowEnemy::ThrowAttack()
 	HeadDistance -= Length;
 	BoxDistance -= Length *2.f;
 
-	Action::GetInstance()->XMvectorSubXMVector(AllPos,v3);
+	AllPos=EasyMath::GetInstance()->XMvectorSubXMVector(AllPos,v3);
 }

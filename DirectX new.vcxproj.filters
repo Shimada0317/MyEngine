@@ -181,6 +181,12 @@
     <Filter Include="ヘッダー ファイル\Application\Player">
       <UniqueIdentifier>{67bf0d43-fec0-4ed1-bb95-5446e19f8abc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameEngine\EasyMath">
+      <UniqueIdentifier>{6442672c-6b69-431a-856d-12a2d57825e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameEngine\EasyMath">
+      <UniqueIdentifier>{7b176d7f-cc5f-451d-ae9c-4c80e01d9a90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -335,6 +341,9 @@
     </ClCompile>
     <ClCompile Include="Application\Action\Action.cpp">
       <Filter>ソース ファイル\Application\Action</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\EasyMath\EasyMath.cpp">
+      <Filter>ソース ファイル\GameEngine\EasyMath</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -590,6 +599,9 @@
     </ClInclude>
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\EasyMath\EasyMath.h">
+      <Filter>ヘッダー ファイル\GameEngine\EasyMath</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
