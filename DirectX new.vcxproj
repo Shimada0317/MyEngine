@@ -125,6 +125,7 @@
     <ClCompile Include="GameEngine\DirectXCommon\DirectXCommon.cpp" />
     <ClCompile Include="GameEngine\EasyMath\EasyMath.cpp" />
     <ClCompile Include="GameEngine\Framework\Framework.cpp" />
+    <ClCompile Include="GameEngine\GenericProcess\GenericProcess.cpp" />
     <ClCompile Include="GameEngine\Input\Contoroller\Contoroller.cpp" />
     <ClCompile Include="GameEngine\Input\Key\Input.cpp" />
     <ClCompile Include="GameEngine\Input\Mouse\Mouse.cpp" />
@@ -317,6 +318,7 @@
     <ClInclude Include="GameEngine\DirectXCommon\DirectXCommon.h" />
     <ClInclude Include="GameEngine\EasyMath\EasyMath.h" />
     <ClInclude Include="GameEngine\Framework\Framework.h" />
+    <ClInclude Include="GameEngine\GenericProcess\GenericProcess.h" />
     <ClInclude Include="GameEngine\Input\Contoroller\Contoroller.h" />
     <ClInclude Include="GameEngine\Input\Key\Input.h" />
     <ClInclude Include="GameEngine\Input\Mouse\Mouse.h" />

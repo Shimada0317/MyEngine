@@ -345,6 +345,9 @@
     <ClCompile Include="GameEngine\EasyMath\EasyMath.cpp">
       <Filter>ソース ファイル\GameEngine\EasyMath</Filter>
     </ClCompile>
+    <ClCompile Include="GameEngine\GenericProcess\GenericProcess.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -602,6 +605,9 @@
     </ClInclude>
     <ClInclude Include="GameEngine\EasyMath\EasyMath.h">
       <Filter>ヘッダー ファイル\GameEngine\EasyMath</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\GenericProcess\GenericProcess.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

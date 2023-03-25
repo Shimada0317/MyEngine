@@ -174,7 +174,7 @@ private://メンバ変数
 	float duration = 1.f;
 	float time = -1.0f;
 	float value = 0.f;
-	float StartPointZ = 30.f;
+	float StartPointZ = 50.f;
 	float EndPointZ = 0.f;
 	float StartPointX = -30;
 	float EndPointX = 30;
@@ -185,7 +185,7 @@ private://メンバ変数
 	float EasingWaitTimeR = 0.f;
 	bool EasingChange = false;
 
-	XMFLOAT3 SearchLightAddPos = { 0.1f,0.05f,0.0f };
+	XMFLOAT3 SearchLightAddPos = { 0.1f,-0.1f,0.05f };
 	float LightAddPosChangeTimer = 0.0f;
 	bool ChangeTimerFlag = false;
 };

@@ -62,6 +62,7 @@ private:
 	float RandomZ;
 	float RandomY;
 	float RandomX;
+	float RandomRot;
 	float SmoleScl;
 	//ŽžŠÔ
 	float time = 0.0f;

@@ -60,7 +60,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	Act = std::make_unique <Actor>();
 	Act->Initialize();
-	Patern = Act->GetPatern();
 	PlayerHp = Act->GetHp();
 	OldHp = PlayerHp;
 
@@ -353,8 +352,8 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
-	ImgDraw();
 	//描画後処理
+	ImgDraw();
 	dxCommon->PostDraw();
 }
 
@@ -387,7 +386,6 @@ void GameScene::Finalize()
 
 void GameScene::SpotLightMove()
 {
-
 	if (Easing == false) {
 		EasingWaitTimeR += 0.1f;
 		if (EasingWaitTimeR >= 1) {
@@ -425,13 +423,34 @@ void GameScene::SpotLightMove()
 		ChangeTimerFlag = false;
 	}
 
-	for (int i = 0; i < 3; i++) {
-		//Action::GetInstance()->XMFLOAT3SubXMFLOAT3(SearchLightPos[i], SearchLightAddPos);
+
+	Action::GetInstance()->DebugMove(SearchLightPos[0]);
+
+	if (Input::GetInstance()->PushKey(DIK_UP)) {
+		SearchLightDir[0].y += 0.1f;
+	}
+	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
+		SearchLightDir[0].y -= 0.1f;
+	}
+	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+		SearchLightDir[0].x += 0.1f;
+	}
+	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+		SearchLightDir[0].x -= 0.1f;
 	}
 
-	SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
+
+	//SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
 	SearchLightDir[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
 	SearchLightDir[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
+
+	if (Patern == 9) {
+		SearchLightColor = { 1.0f,1.0f,0.0f };
+	}
+
+	for (int i = 0; i < 3; i++) {
+		//SearchLightPos[i] = EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(SearchLightPos[i], SearchLightAddPos);
+	}
 
 	if (SpotLightPositionChange == false) {
 		if (time >= 1.f) {

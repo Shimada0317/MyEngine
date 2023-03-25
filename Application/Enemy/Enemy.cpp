@@ -212,8 +212,6 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& plyerbullet
 		AttackFaseFlag = false;
 	}
 
-	
-	
 	if (Input::GetInstance()->PushKey(DIK_O)) {
 		Hp = 0;
 	}
@@ -370,8 +368,8 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			AttackShakeDownFlag = false;
 			AttackFaseFlag = false;
 			attacktimer = 0;
-			playerhp -= 1;
-			Hp = 0;
+			//playerhp -= 1;
+			//Hp = 0;
 
 		}
 	}

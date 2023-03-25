@@ -34,6 +34,7 @@ void ObjParticle::Initialize(int ModelNumber, const XMVECTOR& particlepos, const
 	RandomY= Action::GetInstance()->GetRangRand(0.1f, 0.3f);
 	RandomX = Action::GetInstance()->GetRangRand(-0.05f, 0.05f);
 	SmoleScl = Action::GetInstance()->GetRangRand(0.5f, 0.7f);
+	RandomRot = Action::GetInstance()->GetRangRand(5.0f, 10.0f);
 	ParticlePos = particlepos;
 	ParticleScl = particlescl;
 	ParticleRot = particlerot;
@@ -55,8 +56,8 @@ void ObjParticle::Update()
 	ParticlePos.m128_f32[2] += RandomZ;
 	ParticlePos.m128_f32[1] += RandomY-gravity*time;
 	ParticlePos.m128_f32[0] += RandomX;
-	ParticleRot.x += RandomX;
-	ParticleRot.y += RandomY;
+	ParticleRot.x += RandomRot;
+	ParticleRot.y += RandomRot;
 	ParticleScl = ParticleScl - ConvertValue;
 	if (ParticleScl.x <= 0 && ParticleScl.y <= 0 && ParticleScl.z <= 0) {
 		Delete_ = true;
