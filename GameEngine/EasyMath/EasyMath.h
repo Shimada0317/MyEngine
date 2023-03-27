@@ -42,5 +42,11 @@ public:
 	/// XMFLOAT3の正負の反転
 	/// </summary>
 	XMFLOAT3 XMFLOAT3ChangeValue(const XMFLOAT3& ChangeValue);
+	/// <summary>
+	/// 全て同じ値に置き換える
+	/// </summary>
+	/// <param name="SourceValue">書き換える値</param>
+	/// <returns></returns>
+	XMFLOAT3 ConvertToXMFLOAT3(float SourceValue);
 };
 

@@ -63,3 +63,14 @@ XMFLOAT3 EasyMath::XMFLOAT3ChangeValue(const XMFLOAT3& ChangeValue)
 
     return valueresult;
 }
+
+XMFLOAT3 EasyMath::ConvertToXMFLOAT3(float SourceValue)
+{
+    XMFLOAT3 ConvertValue;
+
+    ConvertValue.x = SourceValue;
+    ConvertValue.y = SourceValue;
+    ConvertValue.z = SourceValue;
+
+    return ConvertValue;
+}

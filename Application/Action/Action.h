@@ -6,6 +6,8 @@
 #include<DirectXMath.h>
 #include"Input.h"
 
+using namespace DirectX;
+
 class Action
 {
 private: // エイリアス
@@ -67,6 +69,8 @@ public:
 
 	float EasingOut(float time, float addvalue);
 
+	XMFLOAT3 EasingOutXMFLOAT3(float time, const XMFLOAT3& addvalue);
+
 	/// <summary>
 	/// 透明にする
 	/// </summary>
@@ -82,14 +86,6 @@ public:
 	/// <param name="upper">投げ上げる値</param>
 	/// <param name="position">現在地</param>
 	void ThrowUp(float gravity, float time, float upper, float& position);
-
-	/// <summary>
-	/// XMFLOAT3の全要素に同じ値を加算する
-	/// </summary>
-	/// <param name="value">加算される値</param>
-	/// <param name="addvalue">加算する値</param>
-	/// <returns></returns>
-	DirectX::XMFLOAT3 ConvertToXMFLOAT3(float SourceValue);
 
 	/// <summary>
 	/// ベクター同士の比較

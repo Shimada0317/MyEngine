@@ -163,7 +163,7 @@ private://メンバ変数
 
 	XMFLOAT3 SearchLightDir[3];
 	XMFLOAT3 SearchLightPos[3];
-	XMFLOAT3 SearchLightColor = { 1,1,1 };
+	XMFLOAT3 SearchLightColor[3];
 	XMFLOAT3 SearchLightAtten = { 0.f,0.f,0.f };
 	XMFLOAT2 SearchLightFactorAngle = { 20.0f,30.0f };
 	
@@ -188,5 +188,13 @@ private://メンバ変数
 	XMFLOAT3 SearchLightAddPos = { 0.1f,-0.1f,0.05f };
 	float LightAddPosChangeTimer = 0.0f;
 	bool ChangeTimerFlag = false;
+
+	float StartColor = -1.0f;
+	float EndColor = 0.0f;
+
+	float StartRed = 0.f;
+	float EndRed = 2.f;
+
+	float ColorTime = 1.0f;
 };
 

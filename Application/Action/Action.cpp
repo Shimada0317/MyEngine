@@ -88,6 +88,17 @@ float Action::EasingOut(float time,float addvalue)
 	return addvalue * sinf((time * DirectX::XM_PI) / 2);
 }
 
+XMFLOAT3 Action::EasingOutXMFLOAT3(float time, const XMFLOAT3& addvalue)
+{
+	XMFLOAT3 valueresult;
+
+	valueresult.x = EasingOut(time, addvalue.x);
+	valueresult.y = EasingOut(time, addvalue.x);
+	valueresult.z = EasingOut(time, addvalue.x);
+
+	return valueresult;
+}
+
 void Action::Flash(float& color, float transparent)
 {
 	color -= transparent;
@@ -98,16 +109,6 @@ void Action::ThrowUp(float gravity, float time, float upper, float& position)
 	position += gravity * time - upper;
 }
 
-DirectX::XMFLOAT3 Action::ConvertToXMFLOAT3(float SourceValue)
-{
-	XMFLOAT3 ConvertValue;
-	
-	ConvertValue.x = SourceValue;
-	ConvertValue.y = SourceValue;
-	ConvertValue.z = SourceValue;
-
-	return ConvertValue;
-}
 
 bool Action::CompletelyTogetherXMVECTOR(const XMVECTOR& FirstValue, const XMVECTOR& SecondValue)
 {

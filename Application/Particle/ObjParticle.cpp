@@ -1,6 +1,7 @@
 #include "ObjParticle.h"
 #include<time.h>
 #include"Action.h"
+#include"EasyMath.h"
 
 using namespace DirectX;
 
@@ -50,7 +51,7 @@ void ObjParticle::Set()
 void ObjParticle::Update()
 {
 	Set();
-	XMFLOAT3 ConvertValue = Action::GetInstance()->ConvertToXMFLOAT3(SmoleScl);
+	XMFLOAT3 ConvertValue = EasyMath::GetInstance()->ConvertToXMFLOAT3(SmoleScl);
 	ConvertValue = ConvertValue / 200;
 	time += 0.005;
 	ParticlePos.m128_f32[2] += RandomZ;
