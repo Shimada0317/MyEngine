@@ -147,7 +147,7 @@ void GameScene::StatusSet()
 	}
 
 	DamageEfectSp->SetColor(DamageEfectColor);
-	
+
 
 	lightGroupe->SetSpotLightDir(0, XMVECTOR({ FieldSpotLightDir.x, FieldSpotLightDir.y, FieldSpotLightDir.z }));
 	lightGroupe->SetSpotLightPos(0, FieldSpotLightPos);
@@ -162,8 +162,8 @@ void GameScene::StatusSet()
 	lightGroupe->SetSpotLightFactorAngle(1, PlayerSpotLightFactorAngle);
 
 	for (int i = 2; i < 5; i++) {
-		lightGroupe->SetSpotLightDir(i, XMVECTOR({ SearchLightDir[i-2].x, SearchLightDir[i-2].y, SearchLightDir[i-2].z}));
-		lightGroupe->SetSpotLightPos(i, SearchLightPos[i-2]);
+		lightGroupe->SetSpotLightDir(i, XMVECTOR({ SearchLightDir[i - 2].x, SearchLightDir[i - 2].y, SearchLightDir[i - 2].z }));
+		lightGroupe->SetSpotLightPos(i, SearchLightPos[i - 2]);
 		lightGroupe->SetSpotLightColor(i, SearchLightColor);
 		lightGroupe->SetSpotLightAtten(i, SearchLightAtten);
 		lightGroupe->SetSpotLightFactorAngle(i, SearchLightFactorAngle);
@@ -199,7 +199,7 @@ void GameScene::AllUpdata()
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
-	
+
 	SpotLightMove();
 
 	if (GameStartFlag == false) {
@@ -332,9 +332,13 @@ void GameScene::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Light");
-	ImGui::SliderFloat("LightDirX", &SearchLightPos[0].x,-100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirY", &SearchLightPos[0].y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirZ", &SearchLightPos[0].z, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightPosX", &SearchLightPos[0].x, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightPosY", &SearchLightPos[0].y, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightPosZ", &SearchLightPos[0].z, -100.0f, 100.0f);
+
+	ImGui::SliderFloat("LightDirX", &SearchLightDir[0].x, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirY", &SearchLightDir[0].y, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightDirZ", &SearchLightDir[0].z, -100.0f, 100.0f);
 	ImGui::SliderFloat("value", &value, 0.0f, 60.0f);
 	ImGui::SliderFloat("time", &time, -0.0f, 1.0f);
 	ImGui::End();
@@ -415,16 +419,17 @@ void GameScene::SpotLightMove()
 		LightAddPosChangeTimer -= 0.01f;
 	}
 	if (LightAddPosChangeTimer >= 1) {
-		SearchLightAddPos=EasyMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
+		SearchLightAddPos = EasyMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
 		ChangeTimerFlag = true;
 	}
 	else if (LightAddPosChangeTimer <= -1) {
-		SearchLightAddPos=EasyMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
+		SearchLightAddPos = EasyMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
 		ChangeTimerFlag = false;
 	}
 
 
 	Action::GetInstance()->DebugMove(SearchLightPos[0]);
+	Action::GetInstance()->DebugMove(SearchLightDir[0]);
 
 	if (Input::GetInstance()->PushKey(DIK_UP)) {
 		SearchLightDir[0].y += 0.1f;
@@ -438,14 +443,23 @@ void GameScene::SpotLightMove()
 	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
 		SearchLightDir[0].x -= 0.1f;
 	}
-
+	if (Input::GetInstance()->PushKey(DIK_L)) {
+		SearchLightDir[0].z += 0.1f;
+	}
+	if (Input::GetInstance()->PushKey(DIK_M)) {
+		SearchLightDir[0].z -= 0.1f;
+	}
 
 	//SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
 	SearchLightDir[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
 	SearchLightDir[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
 
-	if (Patern == 9) {
-		SearchLightColor = { 1.0f,1.0f,0.0f };
+	bool MoveFlag = Act->GetMove();
+	if (Patern == 8 && MoveFlag == true) {
+		SearchLightColor = { 1.0f,0.0f,0.0f };
+		for (int i = 0; i < 3; i++) {
+			SearchLightPos[i].y = FieldSpotLightPos.y;
+		}
 	}
 
 	for (int i = 0; i < 3; i++) {
@@ -465,6 +479,6 @@ void GameScene::SpotLightMove()
 			Easing = false;
 			EasingChange = false;
 		}
-	}	
+	}
 }
 

@@ -230,7 +230,7 @@ private:
 
 	//プレイヤーと敵の距離
 	float Length = 3.0f;
-	float LengthLimit = 1.5f;
+	float LengthLimit =	1.5f;
 
 	//待機時のモーション変数
 	float MotionTime = 0.0f;

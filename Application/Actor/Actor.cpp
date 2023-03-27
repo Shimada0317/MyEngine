@@ -124,14 +124,14 @@ void Actor::Update()
 		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
 			});
+		//目の前の敵を全て倒した時プレイヤーを動かす
 		if (Robot.empty()) {
 			MoveFlag = true;
 		}
 		StopFlag = player->GetFinish();
+		//プレイヤーが目的地点に着いたとき
 		if (StopFlag == true) {
 			MoveFlag = false;
-		}
-		if (MoveFlag == false && StopFlag == true) {
 			UpdataEnemyPopCommands();
 			Patern += 1;
 			StopFlag = false;

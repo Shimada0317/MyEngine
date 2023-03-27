@@ -46,6 +46,10 @@ public:
 
 	const XMVECTOR& GetGoalPos() { return GoalPos; }
 
+	bool GetStop() { return StopFlag; }
+
+	bool GetMove() { return MoveFlag; }
+
 	int GetHp() { return PlayerHp; }
 
 	void SetVelocity(const XMVECTOR& Velocity) { this->Velo = Velocity; }
