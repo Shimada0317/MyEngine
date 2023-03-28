@@ -458,25 +458,21 @@ void GameScene::SpotLightMove()
 		SearchLightDir[0].z -= 0.1f;
 	}
 
-	if (Patern < 8) {
-		SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
-		SearchLightDir[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
-		SearchLightDir[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
-	}
+
+	SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
+	SearchLightDir[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
+	SearchLightDir[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
+
 	
 
 	bool MoveFlag = Act->GetMove();
 
 	if (Patern == 8 && MoveFlag == true) {
-		if (ColorTime >= -1) {
+		if (ColorTime >= 0) {
 			ColorTime -= 0.01f;
 		}
-		SearchLightColor[0].y = Action::GetInstance()->EasingOut(ColorTime, EndColor - StartColor);
-		SearchLightColor[0].z = Action::GetInstance()->EasingOut(ColorTime, EndColor - StartColor);
-		for (int i = 0; i < 3; i++) {
-			SearchLightPos[i] = FieldSpotLightPos;
-			SearchLightDir[i] = FieldSpotLightDir;
-		}
+
+		FieldSpotLightColor.y = Action::GetInstance()->EasingOut(ColorTime, EndColor - StartColor);
 	}
 
 	if (SpotLightPositionChange == false) {

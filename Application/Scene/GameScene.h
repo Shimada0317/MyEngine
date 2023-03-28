@@ -147,8 +147,6 @@ private://メンバ変数
 	XMFLOAT4 DamageEfectColor = { 1.f,1.f,1.f,1.f };
 
 
-	XMVECTOR lightDir = { 0,0,0,0 };
-
 	XMFLOAT3 FieldSpotLightDir = { 0,-10,0 };
 	XMFLOAT3 FieldSpotLightPos = { 0,505,50 };
 	XMFLOAT3 FieldSpotLightColor = { 0.9,0.5f,0.f };
@@ -189,12 +187,8 @@ private://メンバ変数
 	float LightAddPosChangeTimer = 0.0f;
 	bool ChangeTimerFlag = false;
 
-	float StartColor = -1.0f;
+	float StartColor = -0.5f;
 	float EndColor = 0.0f;
-
-	float StartRed = 0.f;
-	float EndRed = 2.f;
-
 	float ColorTime = 1.0f;
 };
 
