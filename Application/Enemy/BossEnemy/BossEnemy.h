@@ -1,5 +1,4 @@
 #pragma once
-#include"Audio.h"
 #include"ObjParticle.h"
 #include"DirectXCommon.h"
 #include"Sprite.h"
@@ -9,7 +8,7 @@
 #include<memory>
 #include<list>
 
-class Enemy
+class BossEnemy
 {
 private:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -19,50 +18,22 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
 	//デストラクタ
-	~Enemy();
+	~BossEnemy();
 
-	/// <summary>
-	/// 初期化処理
-	/// </summary>
-	/// <param name="allRot">回転</param>
-	/// <param name="allPos">座標</param>
-	/// <param name="came">カメラ</param>
-	/// <param name="Step">移動時に横移動するか</param>
-	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& allPos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement= false);
+	void Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint);
 
-	/// <summary>
-	/// ステータスをセット
-	/// </summary>
 	void StatusSet();
 
-	/// <summary>
-	/// Obj等のUpdateはこの中で
-	/// </summary>
-	/// <param name="bull">プレイヤーの弾</param>
 	void AllUpdate();
 
-	/// <summary>
-	/// ロボットの更新処理
-	/// </summary>
-	/// <param name="bull">プレイヤーの弾</param>
-	/// <param name="playerHp">プレイヤーのHP</param>
-	void Update(const XMFLOAT2& player2Dpos, int& playerhp,bool& playerbulletshot);
+	void Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
 
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
 
 	/// <summary>
-	/// プレイヤー追尾モード
-	/// </summary>
+/// プレイヤー追尾モード
+/// </summary>
 	void TrackPlayerMode();
-
-	/// <summary>
-	/// 待機モーション
-	/// </summary>
-	void Motion();
 
 	/// <summary>
 	/// 攻撃モード
@@ -74,7 +45,7 @@ public:
 	/// 攻撃
 	/// </summary>
 	/// <param name="playerhp">プレイヤーのHp</param>
-	void Attack(int& playerhp,float& attacktimer);
+	void Attack(int& playerhp, float& attacktimer);
 
 	void Damage();
 
@@ -87,52 +58,20 @@ public:
 	XMFLOAT2 WorldtoScreen(const XMVECTOR& set3Dposition);
 
 	/// <summary>
+	/// ビュー変換
+	/// </summary>
+	void ChangeViewPort(XMMATRIX& matviewport);
+
+	/// <summary>
 	/// パーティクル発生
 	/// </summary>
 	void ParticleEfect();
 
 	void WaitTrack(bool otherenemyarive);
 
-public://Getter Setter
-	/// <summary>
-	/// 追尾先のセッター
-	/// </summary>
-	/// <param name="TrackPoint">追尾先</param>
-	void SetTrackPoint(const XMVECTOR& trackpoint) { this->OldTrackPoint = trackpoint; }
-
-	/// <summary>
-	/// 追尾先のゲッター
-	/// </summary>
-	/// <returns></returns>
-	const XMVECTOR& GetTrackPos() { return OldTrackPoint; }
-
-	const XMVECTOR& CheckTrackPoint() { return TrackPoint; }
-
-	/// <summary>
-	/// 中心のワールド座標のゲッター
-	/// </summary>
-	/// <returns></returns>
-	const XMVECTOR& GetPosition() { return CenterWorldPos; }
-
-	/// <summary>
-	/// 2D座標のゲッター
-	/// </summary>
-	/// <returns></returns>
-	const XMFLOAT2& Get2DPosition() { return RockOnPos; }
-
-	/// <summary>
-	/// 倒されているか
-	/// </summary>
-	/// <returns></returns>
-	bool IsDead() const { return DeadFlag; }
-
-	bool GetArive() { return RobotAriveFlag; }
-
-	bool GetCountZero() { return NotLifeFlag; }
-
 private:
 	//Obj
-	//頭
+//頭
 	std::unique_ptr<Object3d> HeadPart;
 	//両腕
 	std::unique_ptr<Object3d> ArmsPart;
@@ -156,12 +95,8 @@ private:
 	ParticleManager* PartGreen = nullptr;
 	ParticleManager* PartRed = nullptr;
 
-	//その他
-	//サウンドエフェクト
-	Audio* ClushSe;
 	//カメラ
-	Camera* BringUpCamera;
-
+	Camera* GetCamera;
 	//敵の中心部分のステータス
 	XMVECTOR CenterWorldPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 CenterRot = { 0.0f,0.0f,0.0f };
@@ -225,17 +160,11 @@ private:
 
 	//プレイヤーと敵の距離
 	float Length = 3.0f;
-	float LengthLimit =	1.5f;
+	float LengthLimit = 1.5f;
 
 	//待機時のモーション変数
 	float MotionTime = 0.0f;
 	bool MotionChangeFlag = true;
-
-	//サイドステップ
-	float MovementChangeTime = 0.0f;
-	bool ReversalFlag = false;
-	float SideStepSpeed = 0.001f;
-	bool MovementFlag = false;
 
 	//Hpが0以上か
 	bool DeadFlag = false;
@@ -256,7 +185,7 @@ private:
 	float DefomationCount = 0.0f;
 
 	//振動
-	float Vibration=0.0f;
+	float Vibration = 0.0f;
 	bool VibrationChangeFlag = false;
 
 	XMVECTOR AttackBeforePos = { 0.0f,0.0f,0.0f };
@@ -275,5 +204,6 @@ private:
 	bool NotLifeFlag = false;
 
 	bool ObjParticleFlag = false;
+
 };
 

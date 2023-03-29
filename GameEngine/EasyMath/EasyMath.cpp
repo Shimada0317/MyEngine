@@ -1,4 +1,5 @@
 #include "EasyMath.h"
+#include"WinApp.h"
 
 
 
@@ -73,4 +74,27 @@ XMFLOAT3 EasyMath::ConvertToXMFLOAT3(float SourceValue)
     ConvertValue.z = SourceValue;
 
     return ConvertValue;
+}
+
+void EasyMath::ChangeViewPort(XMMATRIX& matviewport, const XMVECTOR& offset)
+{
+    matviewport.r[0].m128_f32[0] = WinApp::window_width / 2;
+    matviewport.r[0].m128_f32[1] = 0;
+    matviewport.r[0].m128_f32[2] = 0;
+    matviewport.r[0].m128_f32[3] = 0;
+
+    matviewport.r[1].m128_f32[0] = 0;
+    matviewport.r[1].m128_f32[1] = -(WinApp::window_height / 2);
+    matviewport.r[1].m128_f32[2] = 0;
+    matviewport.r[1].m128_f32[3] = 0;
+
+    matviewport.r[2].m128_f32[0] = 0;
+    matviewport.r[2].m128_f32[1] = 0;
+    matviewport.r[2].m128_f32[2] = 1;
+    matviewport.r[2].m128_f32[3] = 0;
+
+    matviewport.r[3].m128_f32[0] = WinApp::window_width / 2 + offset.m128_f32[0];
+    matviewport.r[3].m128_f32[1] = WinApp::window_height / 2 + offset.m128_f32[1];
+    matviewport.r[3].m128_f32[2] = 0;
+    matviewport.r[3].m128_f32[3] = 1;
 }

@@ -471,7 +471,11 @@ void GameScene::SpotLightMove()
 		if (ColorTime >= 0) {
 			ColorTime -= 0.01f;
 		}
+		if (ColorTimeRed <= 1) {
+			ColorTimeRed += 0.01f;
+		}
 
+		FieldSpotLightColor.x = Action::GetInstance()->EasingOut(ColorTimeRed,EndColorRed-StartColorRed ) + 0.9f;
 		FieldSpotLightColor.y = Action::GetInstance()->EasingOut(ColorTime, EndColor - StartColor);
 	}
 

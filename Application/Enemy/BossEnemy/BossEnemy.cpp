@@ -1,4 +1,4 @@
-#include "Enemy.h"
+#include "BossEnemy.h"
 #include"Action.h"
 #include"EasyMath.h"
 
@@ -10,35 +10,23 @@ const float FallSpeed = 0.25f;
 const float AddDefomationValue = 0.04f;
 const XMFLOAT4 AddColor = { 0.1f,0.1f,0.1f,0.0f };
 
-const XMFLOAT4 operator+(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& rhs)
-{
-	XMFLOAT4 result;
-	result.x = lhs.x + rhs.x;
-	result.y = lhs.y + rhs.y;
-	result.z = lhs.z + rhs.z;
-	result.w = lhs.w + rhs.w;
-	return result;
-}
-
-//デストラクタ
-Enemy::~Enemy()
+BossEnemy::~BossEnemy()
 {
 	Shadow.reset();
 	Center.reset();
 	HeadPart.reset();
 	BodyPart.reset();
 	ArmsPart.reset();
+	delete GetCamera;
 
-	delete ClushSe;
 }
 
-//初期化処理
-void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement)
+void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint)
 {
-	HeadPartRot =BodyPartRot = ArmsPartRot = allrot;
+	HeadPartRot = BodyPartRot = ArmsPartRot = allrot;
 
 	AllPos = allpos;
-	BringUpCamera = camera;
+	GetCamera = camera;
 
 	PursePositiveRot += HeadPartRot.y;
 	PurseNegativeeRot += HeadPartRot.y;
@@ -52,8 +40,8 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
 	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
 
-	PartGreen = ParticleManager::Create(BringUpCamera);
-	PartRed = ParticleManager::Create(BringUpCamera);
+	PartGreen = ParticleManager::Create(camera);
+	PartRed = ParticleManager::Create(camera);
 
 	CenterMat = Center->GetMatrix();
 	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
@@ -72,16 +60,15 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 	RandomFlag = true;
 	TimerLimit = 8;
 	RobotAriveFlag = true;
-	MovementFlag = movement;
 	Center->SetPosition(CenterWorldPos);
+
 }
 
-//ステータスセット
-void Enemy::StatusSet()
+void BossEnemy::StatusSet()
 {
 	//変形前なら
 	if (DefomationFlag == false) {
-		AllPos.m128_f32[1] -=FallSpeed;
+		AllPos.m128_f32[1] -= FallSpeed;
 		//地面に着いたとき
 		if (AllPos.m128_f32[1] <= 0) {
 			AllPos.m128_f32[1] = 0;
@@ -136,8 +123,7 @@ void Enemy::StatusSet()
 	RockOnHead->SetPosition(RockOnHeadPos);
 }
 
-//Obj等の更新処理をまとめる
-void Enemy::AllUpdate()
+void BossEnemy::AllUpdate()
 {
 	Shadow->Update(ShadowCol);
 	Center->Update();
@@ -154,10 +140,9 @@ void Enemy::AllUpdate()
 	}
 }
 
-//更新処理
-void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
 {
-	
+
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 
@@ -175,7 +160,6 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulle
 			player2Dpos.y - HeadDistance<RockOnHeadPos.y && player2Dpos.y + HeadDistance>RockOnHeadPos.y) {
 			Hp -= HeadDamage;
 			playerbulletshot = false;
-			
 		}
 	}
 
@@ -199,11 +183,9 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulle
 			TrackPlayerMode();
 		}
 		//プレイヤーの前まで来たとき
-		else if (Length <= LengthLimit&&WaitFlag==false) {
+		else if (Length <= LengthLimit && WaitFlag == false) {
 			BodyPartPos.m128_f32[2] -= 1.f;
 			AtttackTimer += 0.1f;
-			Motion();
-			MovementFlag = false;
 			AttackMode(playerhp);
 		}
 	}
@@ -217,10 +199,10 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulle
 
 	StatusSet();
 	AllUpdate();
+
 }
 
-//描画処理
-void Enemy::Draw(DirectXCommon* dxCommon)
+void BossEnemy::Draw(DirectXCommon* dxCommon)
 {
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
 	PartGreen->Draw();
@@ -239,12 +221,9 @@ void Enemy::Draw(DirectXCommon* dxCommon)
 	}
 	//Center->Draw();
 	Object3d::PostDraw();
-
-
 }
 
-//プレイヤーへの追尾モードの時
-void Enemy::TrackPlayerMode()
+void BossEnemy::TrackPlayerMode()
 {
 	float vx = 0;
 	float vy = 0;
@@ -270,37 +249,15 @@ void Enemy::TrackPlayerMode()
 
 	AllPos.m128_f32[0] -= v3x;
 	AllPos.m128_f32[2] -= v3z;
-	//サイドステップ
-	if (MovementFlag == true) {
-		AllPos.m128_f32[0] += SideStepSpeed;
-		MovementChangeTime += 0.01f;
-		if (MovementChangeTime <= 2 && ReversalFlag == false) {
-			SideStepSpeed = -SideStepSpeed;
-			MovementChangeTime = 0;
-			ReversalFlag = true;
-		}
-		else if (MovementChangeTime >= 2 && ReversalFlag == true) {
-			SideStepSpeed = +SideStepSpeed;
-			MovementChangeTime = 0;
-			ReversalFlag = false;
-		}
-	}
 }
 
-void Enemy::Motion()
-{
-	
-
-}
-
-//攻撃モードの時
-void Enemy::AttackMode(int& playerhp)
+void BossEnemy::AttackMode(int& playerhp)
 {
 	if (AtttackTimer >= TimerLimit) {
 		AttackFaseFlag = true;
 		RandomFlag = false;
 	}
-	
+
 	//攻撃フェイズに移行した時
 	if (AttackFaseFlag == true) {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);
@@ -314,21 +271,19 @@ void Enemy::AttackMode(int& playerhp)
 		if (HeadPartRot.y <= PurseNegativeeRot) {
 			HeadPartRot.y = PurseNegativeeRot;
 		}
-
 	}
 }
 
-//攻撃する時
-void Enemy::Attack(int& playerhp, float& attacktimer)
+void BossEnemy::Attack(int& playerhp, float& attacktimer)
 {
 	//巨大化していく値
 	XMFLOAT3 gigantic = { 0.0002f ,0.0002f ,0.0002f };
 	float discoloration = 0.01f;
 	if (AttackShakeDownFlag == false) {
 		ArmsPartRot.x += 1.5f;
-		ArmsPartScl=EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(ArmsPartScl, gigantic);
-		BodyPartScl=EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(BodyPartScl, gigantic);
-		HeadPartScl=EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(HeadPartScl, gigantic);
+		ArmsPartScl = EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(ArmsPartScl, gigantic);
+		BodyPartScl = EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(BodyPartScl, gigantic);
+		HeadPartScl = EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(HeadPartScl, gigantic);
 		ArmsPartColor.y -= discoloration;
 		ArmsPartColor.z -= discoloration;
 		//腕が最大点に達した時
@@ -369,12 +324,11 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 			attacktimer = 0;
 			//playerhp -= 1;
 			//Hp = 0;
-
 		}
 	}
 }
 
-void Enemy::Damage()
+void BossEnemy::Damage()
 {
 	//ダメージを受けたとき
 	if (OldHp > Hp && Hp >= 0) {
@@ -391,7 +345,7 @@ void Enemy::Damage()
 	}
 }
 
-void Enemy::Death()
+void BossEnemy::Death()
 {
 	//生きているときにHPが0になったら
 	if (Hp <= 0) {
@@ -414,8 +368,7 @@ void Enemy::Death()
 	}
 }
 
-//3D座標から2D座標を取得する
-XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& set3Dposition)
+XMFLOAT2 BossEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 {
 	Center->SetRotation(CenterRot);
 	CenterMat = Center->GetMatrix();
@@ -430,8 +383,8 @@ XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 
 	XMMATRIX MatVP = MatViewPort;
 
-	XMMATRIX View = BringUpCamera->GetViewMatrix();
-	XMMATRIX Pro = BringUpCamera->GetProjectionMatrix();
+	XMMATRIX View = GetCamera->GetViewMatrix();
+	XMMATRIX Pro = GetCamera->GetProjectionMatrix();
 
 	XMMATRIX MatViewProjectionViewport = View * Pro * MatVP;
 
@@ -445,7 +398,7 @@ XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 }
 
 
-void Enemy::ParticleEfect()
+void BossEnemy::ParticleEfect()
 {
 	for (int i = 0; i < 50; i++) {
 		XMFLOAT3 pos;
@@ -456,7 +409,7 @@ void Enemy::ParticleEfect()
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};
-		vel.x = Action::GetInstance()->GetRangRand(-0.09f,0.09f);
+		vel.x = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
 		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.12f);
 		vel.z = Action::GetInstance()->GetRangRand(-0.03f, 0.09f);
 
@@ -467,10 +420,9 @@ void Enemy::ParticleEfect()
 		PartGreen->Add(200, pos, vel, acc, 3.7f, 0.0f, 150.0f);
 	}
 	ParticleEfectFlag = false;
-
 }
 
-void Enemy::WaitTrack(bool otherenemyarive)
+void BossEnemy::WaitTrack(bool otherenemyarive)
 {
 	if (otherenemyarive == true) {
 		LengthLimit = 2.5f;
@@ -483,5 +435,6 @@ void Enemy::WaitTrack(bool otherenemyarive)
 		WaitFlag = false;
 		AtttackTimer = 0;
 	}
-
 }
+
+

@@ -48,5 +48,7 @@ public:
 	/// <param name="SourceValue">‘‚«Š·‚¦‚é’l</param>
 	/// <returns></returns>
 	XMFLOAT3 ConvertToXMFLOAT3(float SourceValue);
+
+	void ChangeViewPort(XMMATRIX& matviewport, const XMVECTOR& offset);
 };
 

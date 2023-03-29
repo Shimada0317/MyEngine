@@ -94,9 +94,6 @@
     <Filter Include="ソース ファイル\GameEngine\3d">
       <UniqueIdentifier>{9c49c2cd-481e-4acd-841c-73d6c2fd7d76}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameEngine\Audio">
-      <UniqueIdentifier>{d0b4aaa6-75c0-4b77-b27f-33dd68d67ff5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameEngine\Camera">
       <UniqueIdentifier>{ec553963-e5fd-49d2-8a0e-ab14d1a9f9d1}</UniqueIdentifier>
     </Filter>
@@ -186,6 +183,21 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\GameEngine\EasyMath">
       <UniqueIdentifier>{7b176d7f-cc5f-451d-ae9c-4c80e01d9a90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Application\Enemy\ThrowEnemy">
+      <UniqueIdentifier>{0d35135d-85b9-45f3-9430-c0863a9564cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Application\Enemy\ThrowEnemy">
+      <UniqueIdentifier>{efeb871f-aeba-498d-872d-7b017d5045c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Application\Enemy\BossEnemy">
+      <UniqueIdentifier>{e5f6800e-636c-440a-b141-e3d43dc964ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Application\Enemy\BossEnemy">
+      <UniqueIdentifier>{eb292748-92d8-400a-952c-d295063ccb24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameEngine\Audio">
+      <UniqueIdentifier>{d0b4aaa6-75c0-4b77-b27f-33dd68d67ff5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -336,9 +348,6 @@
     <ClCompile Include="GameEngine\Light\SpotLight\SpotLight.cpp">
       <Filter>ソース ファイル\GameEngine\Light</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Action\Action.cpp">
       <Filter>ソース ファイル\Application\Action</Filter>
     </ClCompile>
@@ -347,6 +356,12 @@
     </ClCompile>
     <ClCompile Include="GameEngine\GenericProcess\GenericProcess.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
+      <Filter>ソース ファイル\Application\Enemy\ThrowEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp">
+      <Filter>ソース ファイル\Application\Enemy\BossEnemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -600,14 +615,17 @@
     <ClInclude Include="GameEngine\Light\SpotLight\SpotLight.h">
       <Filter>ヘッダー ファイル\GameEngine\Light</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngine\EasyMath\EasyMath.h">
       <Filter>ヘッダー ファイル\GameEngine\EasyMath</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\GenericProcess\GenericProcess.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
+      <Filter>ヘッダー ファイル\Application\Enemy\ThrowEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h">
+      <Filter>ヘッダー ファイル\Application\Enemy\BossEnemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
