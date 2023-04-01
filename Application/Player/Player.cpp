@@ -2,6 +2,7 @@
 #include<cassert>
 #include "imgui.h"
 #include"imconfig.h"
+#include"Action.h"
 #include"ModelManager.h"
 #include"Mouse.h"
 #include"WinApp.h"
@@ -143,9 +144,9 @@ void Player::AllUpdate(Camera* camera)
 
 
 //更新処理
-void Player::Update(Camera* camera, int paterncount)
+void Player::Update(Camera* camera, Phase paterncount,bool moveflag)
 {
-	PaternCount = paterncount;
+	PlayerMove(moveflag, paterncount);
 
 	DamageProcess();
 
@@ -166,7 +167,7 @@ void Player::Update(Camera* camera, int paterncount)
 
 		ScreenShake(ShakingValue, 0.1f);
 
-		ParticleEfect();
+		ParticleEfect(paterncount);
 
 		ReloadProcess();
 	}
@@ -318,14 +319,13 @@ void Player::CameraWork()
 }
 
 //プレイヤー移動
-void Player::PlayerMove(bool& move, int patern)
+void Player::PlayerMove(bool& move, Phase paterncount)
 {
 	XMMATRIX camMat = RailCam->GetWorld();
 	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
 
 	camvec = XMVector3Transform(camvec, camMat);
 
-	PaternCount = patern;
 	//敵をすべて倒した時
 	if (move == true) {
 		MoveFlag = true;
@@ -334,7 +334,7 @@ void Player::PlayerMove(bool& move, int patern)
 	if (MoveFlag == true) {
 		MoveSpeed = 0.5f;
 		MoveShakingHead();
-		if (patern == 0) {
+		if (paterncount == LANDINGPOINT_BACK) {
 			Velocity = { 0, 0, MoveSpeed };
 			if (camvec.m128_f32[2] >= 20) {
 				Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
@@ -347,7 +347,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 
-		else if (patern == 1) {
+		else if (paterncount == LANDINGPOINT_FRONT) {
 			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
 			if (EyeRot.y <= 0) {
 				Velocity = { 0, 0, 0 };
@@ -357,7 +357,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 
-		else if (patern == 2) {
+		else if (paterncount == MOVEDPOINT_A) {
 			Velocity = { 0, 0, MoveSpeed };
 			if (camvec.m128_f32[2] >= 40) {
 				Velocity = { 0.f,0.f,0.f };
@@ -368,11 +368,11 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 
 
-		else if (patern == 3) {
+		else if (paterncount == MOVEDPOINT_A_LEFT) {
 			Action::GetInstance()->EaseOut(EyeRot.y, -95.0f);
 			if (EyeRot.y <= -90) {
-				EyeRot.y = -90;
-				ChangeRot = -90;
+				EyeRot.y = max(EyeRot.y, -90.0f);
+				ChangeRot = EyeRot.y;
 				Velocity = { 0, 0, 0 };
 				move = false;
 				MoveFlag = false;
@@ -381,7 +381,7 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 
 
-		else if (patern == 4) {
+		else if (paterncount == MOVEDPOINT_B) {
 			Action::GetInstance()->EaseOut(EyeRot.y, 95.0f);
 			if (EyeRot.y >= 90) {
 				ChangeRot = 90;
@@ -396,7 +396,7 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 
 
-		else if (patern == 5) {
+		else if (paterncount == MOVEDPOINT_C) {
 			Velocity = { 0, 0, MoveSpeed };
 			if (camvec.m128_f32[0] >= 45) {
 				move = false;
@@ -407,7 +407,7 @@ void Player::PlayerMove(bool& move, int patern)
 		}
 
 
-		else if (patern == 6) {
+		else if (paterncount == MOVEDPOINT_C_OBLIQUE) {
 			Velocity = { 0, 0, MoveSpeed };
 			if (camvec.m128_f32[0] >= 50) {
 				Velocity = { 0, 0, 0 };
@@ -423,7 +423,7 @@ void Player::PlayerMove(bool& move, int patern)
 
 		}
 
-		else if (patern == 7) {
+		else if (paterncount == MOVEDPOINT_C_FRONT) {
 			if (camvec.m128_f32[0] <= 55) {
 				Velocity = { 0, 0, MoveSpeed };
 			}
@@ -437,7 +437,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 
-		else if (patern == 8) {
+		else if (paterncount == GOALPOINT_BACK) {
 			ActionCount = 0;
 			Velocity = { 0.f,0.f,MoveSpeed };
 			if (camvec.m128_f32[2] >= 80) {
@@ -457,7 +457,7 @@ void Player::PlayerMove(bool& move, int patern)
 			}
 		}
 
-		else if (patern == 9) {
+		else if (paterncount == GOALPOINT) {
 			StanbyFlag = false;
 			Velocity = { 0, 0, 0.1 };
 			ShakeHeadFlag = false;
@@ -740,7 +740,7 @@ void Player::MoveShakingHead()
 }
 
 //マズルエフェクト
-void Player::ParticleEfect()
+void Player::ParticleEfect(Phase paterncount)
 {
 	if (ParticleFlag == true) {
 		for (int i = 0; i < 10; i++) {
@@ -752,27 +752,30 @@ void Player::ParticleEfect()
 			float sinradY = sinf(radY);
 			float cosradY = cosf(radY);
 
-			if (PaternCount == 5 || PaternCount == 6) {
+			if (paterncount == MOVEDPOINT_C || paterncount == MOVEDPOINT_C_OBLIQUE) {
 				pos.x = GunWorldPos.m128_f32[0] + 2.3f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
 				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
 			}
-			else if (PaternCount == 0 || PaternCount == 2 || PaternCount == 3 || PaternCount == 8) {
+			else if (paterncount == LANDINGPOINT_BACK ||
+					paterncount == MOVEDPOINT_A ||
+				paterncount == MOVEDPOINT_A_LEFT ||
+				paterncount == GOALPOINT_BACK) {
 				pos.x = GunWorldPos.m128_f32[0] + sinradX * 3.5f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
 				pos.z = GunWorldPos.m128_f32[2] + 3.0f;
 			}
-			else if (PaternCount == 1 || PaternCount == 9) {
+			else if (paterncount == LANDINGPOINT_FRONT || paterncount == GOALPOINT) {
 				pos.x = GunWorldPos.m128_f32[0] - sinradX * 3.5f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
 				pos.z = GunWorldPos.m128_f32[2] - 2.0f;
 			}
-			else if (PaternCount == 4) {
+			else if (paterncount == MOVEDPOINT_B) {
 				pos.x = GunWorldPos.m128_f32[0] - 2.3f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
 				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
 			}
-			else if (PaternCount == 7) {
+			else if (paterncount == MOVEDPOINT_C_FRONT) {
 				pos.x = GunWorldPos.m128_f32[0] + 2.3f*sinradX;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
 				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;

@@ -2,6 +2,7 @@
 #include"Audio.h"
 #include"Player.h"
 #include"BaseScene.h"
+#include"BossEnemy/BossEnemy.h"
 #include"ClearScene.h"
 #include<sstream>
 #include"Enemy.h"
@@ -65,10 +66,9 @@ private:
 	
 	Sprite* Wave = nullptr;
 	Sprite* MaxCount = nullptr;
-	Sprite* ChangeCount[5];
 	Sprite* LifeCount[5];
 	Sprite* HpBer;
-	
+	Sprite* hart;
 
 	Audio* heriFry = nullptr;
 	//ヘリステータス
@@ -97,6 +97,7 @@ private:
 
 	//DebugSceneのやつを持ってきた
 	std::list<std::unique_ptr<Enemy>>Robot;
+	std::unique_ptr<BossEnemy> Boss;
 	std::list<std::unique_ptr<ThrowEnemy>>ThrowRobot;
 	std::unique_ptr<Player>player;
 
@@ -114,6 +115,11 @@ private:
 
 	Camera* camera;
 
+	XMFLOAT2 HartSize = { 64,64 };
+	XMFLOAT2 MotValue = { 0.f,0.f };
+	bool ReversFlag = true;
+	float EasingTimer = 0.0f;
+	float AddTimer = 0.01f;
 	
 };
 

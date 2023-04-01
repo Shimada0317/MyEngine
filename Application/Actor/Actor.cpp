@@ -1,8 +1,8 @@
 #include "Actor.h"
 #include "imgui.h"
 #include"imconfig.h"
-#include"ModelManager.h"
 #include<fstream>
+#include <Application/Action/Action.h>
 
 
 bool otherenemyarive = true;
@@ -13,20 +13,19 @@ Actor::~Actor()
 	delete Wave;
 	delete HpBer;
 	for (int i = 0; i < 5; i++) {
-		delete ChangeCount[i];
 		delete LifeCount[i];
 	}
 }
 
 void Actor::Initialize()
 {
-
 	Sprite::LoadTexture(13, L"Resources/one.png");
 	Sprite::LoadTexture(14, L"Resources/two.png");
 	Sprite::LoadTexture(15, L"Resources/three.png");
 	Sprite::LoadTexture(16, L"Resources/four.png");
 	Sprite::LoadTexture(17, L"Resources/five.png");
 	Sprite::LoadTexture(18, L"Resources/Hpber.png");
+	Sprite::LoadTexture(19, L"Resources/hart.png");
 
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
@@ -37,11 +36,9 @@ void Actor::Initialize()
 	Wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
 	MaxCount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
 	HpBer = Sprite::SpriteCreate(18, { 10.0f,10.0f });
+	hart = Sprite::SpriteCreate(19, { 10.0f,10.0f }, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
 
-
-	for (int i = 0; i < 5; i++) {
-		ChangeCount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
-	}
+	MotValue = HartSize;
 	for (int i = 0; i < 5; i++) {
 		LifeCount[i] = Sprite::SpriteCreate(13 + i, { 10.0f,10.0f });
 	}
@@ -71,11 +68,12 @@ void Actor::SetPSR()
 	MaxCount->SetPosition({ 320, 630 });
 	//変動するカウンター
 	for (int i = 0; i < 5; i++) {
-		ChangeCount[i]->SetSize({ 80,80 });
-		ChangeCount[i]->SetPosition({ 240,630 });
 		LifeCount[i]->SetSize({ 80,80 });
 		LifeCount[i]->SetPosition({ 1160,630 });
 	}
+
+	hart->SetSize(HartSize);
+	hart->SetPosition({ WinApp::window_width - 173,WinApp::window_height - 50 });
 	//Hpバー
 	HpBer->SetSize({ 224,96 });
 	HpBer->SetPosition({ WinApp::window_width - 228,WinApp::window_height - 100 });
@@ -102,10 +100,47 @@ void Actor::SetPSR()
 	Heri->Update({ 0.7f,0.7f,0.6f,1.0f });
 	Goal->Update({ 0.7f,0.7f,0.6f,1.0f });
 	Hane->Update({ 0.0f,0.0f,0.0f,1.0f });
+
+
 }
 
 void Actor::Update()
 {
+	EasingTimer += AddTimer;
+	if (ReversFlag == true) {
+		HartSize.x = Action::GetInstance()->EasingOut(EasingTimer, 40) + MotValue.x;
+		HartSize.y = Action::GetInstance()->EasingOut(EasingTimer, 40) + MotValue.y;
+		if (EasingTimer >= 1) {
+			EasingTimer = 0;
+			MotValue = HartSize;
+			ReversFlag = false;
+		}
+	}
+	else {
+		HartSize.x = -Action::GetInstance()->EasingOut(EasingTimer, 40) + MotValue.x;
+		HartSize.y = -Action::GetInstance()->EasingOut(EasingTimer, 40) + MotValue.y;
+		if (EasingTimer >= 1) {
+			EasingTimer = 0;
+			MotValue = HartSize;
+			ReversFlag = true;
+		}
+	}
+
+
+	if (PlayerHp == 4) {
+		AddTimer = 0.01;
+	}
+	else if (PlayerHp == 3) {
+		AddTimer = 0.05;
+	}
+	else if (PlayerHp == 2) {
+		AddTimer = 0.1;
+	}
+	else if (PlayerHp == 1) {
+		AddTimer = 0.5;
+	}
+
+
 	XMVECTOR velo = player->GetVelocity();
 	SetVelocity(velo);
 
@@ -125,7 +160,7 @@ void Actor::Update()
 			return robot->IsDead();
 			});
 		//目の前の敵を全て倒した時プレイヤーを動かす
-		if (Robot.empty()) {
+		if (Robot.empty() && Boss == NULL) {
 			MoveFlag = true;
 		}
 		StopFlag = player->GetFinish();
@@ -143,6 +178,11 @@ void Actor::Update()
 		HeriY += 15.0f;
 	}
 
+
+
+
+
+
 	if (Patern >= 6) {
 		bool fring = player->GetFring();
 		if (fring == true) {
@@ -156,13 +196,18 @@ void Actor::Update()
 	for (std::unique_ptr<Enemy>& Enemy : Robot) {
 		Enemy->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
 	}
+
+	if (Patern > 8) {
+		//Boss->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
+	}
+
 	CheckSameTrackPosition();
 	player->SetBulletShot(PlayerBulletShot_F);
-	player->PlayerMove(MoveFlag, Patern);
+
 	//座標の設定
 	SetPSR();
 	//プレイヤーの更新処理
-	player->Update(camera, Patern);
+	player->Update(camera, (Phase)Patern, MoveFlag);
 
 
 	camera->RecalculationMatrix();
@@ -177,9 +222,13 @@ void Actor::Draw(DirectXCommon* dxCommon)
 		Heri->Draw();
 	}
 	player->ObjDraw();
+
 	Object3d::PostDraw();
 	for (std::unique_ptr<Enemy>& robot : Robot) {
 		robot->Draw(dxCommon);
+	}
+	if (Patern > 8) {
+		Boss->Draw(dxCommon);
 	}
 	player->ParticleDraw(dxCommon->GetCmdList());
 }
@@ -187,9 +236,7 @@ void Actor::Draw(DirectXCommon* dxCommon)
 void Actor::SpriteDraw()
 {
 	if (GetCamWorkFlag == true) {
-
-		HpBer->Draw();
-
+		//HpBer->Draw();
 		if (PlayerHp == 1) {
 			LifeCount[0]->Draw();
 		}
@@ -205,23 +252,25 @@ void Actor::SpriteDraw()
 		else if (PlayerHp == 5) {
 			LifeCount[4]->Draw();
 		}
+		hart->Draw();
 	}
+	
 	player->SpriteDraw();
 }
 
 void Actor::ImGuiDraw()
 {
-
-	/*for (std::unique_ptr<Enemy>& robot : Robot) {
-		robot->ImgDraw();
-	}*/
-	player->ImGuiDraw();
 	float a = Patern;
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Patern");
-	ImGui::SliderFloat("Patern", &a, 0.0f, 10.0f);
+	ImGui::SliderFloat("EasingTimer", &EasingTimer, 0.0f, 10.0f);
+	ImGui::SliderFloat("ValueX", &MotValue.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("ValueY", &MotValue.y, -100.0f, 100.0f);
+
+	ImGui::SliderFloat("HartX", &HartSize.x, -100.0f, 100.0f);
+	ImGui::SliderFloat("HartY", &HartSize.y, -100.0f, 100.0f);
 
 
 
@@ -369,14 +418,22 @@ void Actor::UpdataEnemyPopCommands()
 			}
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
-				std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
-				newRobot->Initialize(ROTATION, POSITION, camera, TRACK,step);
-				Robot.push_back(std::move(newRobot));
-
+				if (Patern < 8) {
+					std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
+					newRobot->Initialize(ROTATION, POSITION, camera, TRACK, step);
+					Robot.push_back(std::move(newRobot));
+				}
+				else {
+					Boss = std::make_unique<BossEnemy>();
+					Boss->Initialize(ROTATION, POSITION, camera, TRACK);
+					break;
+				}
 				POPSkip = false;
 				TRACKSkip = false;
 				ARIVESkip = false;
 			}
+
+
 		}
 
 		if (Patern < count) {

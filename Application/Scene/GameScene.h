@@ -192,7 +192,7 @@ private://メンバ変数
 	float ColorTime = 1.0f;
 
 	float StartColorRed = 0.0f;
-	float EndColorRed = 0.5f;
+	float EndColorRed = 0.8f;
 	float ColorTimeRed = 0.0f;
 };
 

@@ -17,17 +17,16 @@ BossEnemy::~BossEnemy()
 	HeadPart.reset();
 	BodyPart.reset();
 	ArmsPart.reset();
-	delete GetCamera;
 
 }
 
 void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint)
 {
-	HeadPartRot = BodyPartRot = ArmsPartRot = allrot;
-
 	AllPos = allpos;
+
 	GetCamera = camera;
 
+	HeadPartRot = BodyPartRot = ArmsPartRot = allrot;
 	PursePositiveRot += HeadPartRot.y;
 	PurseNegativeeRot += HeadPartRot.y;
 
@@ -142,7 +141,6 @@ void BossEnemy::AllUpdate()
 
 void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
 {
-
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 
@@ -193,13 +191,8 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 		AttackFaseFlag = false;
 	}
 
-	if (Input::GetInstance()->PushKey(DIK_O)) {
-		Hp = 0;
-	}
-
 	StatusSet();
 	AllUpdate();
-
 }
 
 void BossEnemy::Draw(DirectXCommon* dxCommon)
@@ -322,8 +315,8 @@ void BossEnemy::Attack(int& playerhp, float& attacktimer)
 			AttackShakeDownFlag = false;
 			AttackFaseFlag = false;
 			attacktimer = 0;
-			//playerhp -= 1;
-			//Hp = 0;
+			playerhp -= 1;
+			Hp = 0;
 		}
 	}
 }

@@ -6,7 +6,7 @@ using namespace DirectX;
 
 class EasyMath
 {
-private:
+public:
 	// Microsoft::WRL::‚ğÈ—ª
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
 	// DirectX::‚ğÈ—ª

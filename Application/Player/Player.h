@@ -4,15 +4,30 @@
 #include"Sprite.h"
 #include<vector>
 #include"Audio.h"
-#include"Bullet.h"
+#include"EasyMath.h"
 #include"ParticleManager.h"
 #include"RailCamera.h"
-
 #include<memory>
 #include<list>
 
+enum  Phase{
+	LANDINGPOINT_BACK = 0,
+	LANDINGPOINT_FRONT,
+	MOVEDPOINT_A,
+	MOVEDPOINT_A_LEFT,
+	MOVEDPOINT_B,
+	MOVEDPOINT_C,
+	MOVEDPOINT_C_OBLIQUE,
+	MOVEDPOINT_C_FRONT,
+	GOALPOINT_BACK,
+	GOALPOINT,
+
+};
+
 class Player
 {
+public:
+
 public:
 	~Player();
 	/// <summary>
@@ -38,7 +53,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(Camera* camera, int patern);
+	void Update(Camera* camera, Phase patern,bool moveflag=false);
 	/// <summary>
 	/// パーティクルの描画
 	/// </summary>
@@ -57,7 +72,7 @@ public:
 	/// </summary>
 	/// <param name="move"></param>
 	/// <param name="patern">フェイズ番号</param>
-	void PlayerMove(bool& move, int patern);
+	void PlayerMove(bool& move,Phase patern);
 	/// <summary>
 	/// Objの描画
 	/// </summary>
@@ -103,7 +118,7 @@ public:
 	/// <summary>
 	/// パーティクル発生
 	/// </summary>
-	void ParticleEfect();
+	void ParticleEfect(Phase paterncount);
 #pragma region Get
 	const bool& GetFinish() { return StopFlag; }
 	//三次元座標
@@ -249,7 +264,6 @@ private:
 
 	float ChangeRot = 0;
 
-	int PaternCount = 0;
 
 	bool BulletShotFlag = false;
 	float ShotCoolTime = 0.0f;

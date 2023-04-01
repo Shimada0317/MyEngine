@@ -365,6 +365,7 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
 	//描画後処理
+	Act->ImGuiDraw();
 	ImgDraw();
 	dxCommon->PostDraw();
 }

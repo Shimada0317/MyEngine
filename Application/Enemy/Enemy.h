@@ -28,7 +28,7 @@ public:
 	/// <param name="allPos">座標</param>
 	/// <param name="came">カメラ</param>
 	/// <param name="Step">移動時に横移動するか</param>
-	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& allPos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement= false);
+	void Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint,float hp=150,const XMFLOAT3& allscl={1.f,1.f,1.f}, const bool& movement = false);
 
 	/// <summary>
 	/// ステータスをセット
@@ -176,9 +176,9 @@ private:
 	XMVECTOR FakeTrackPoint = { 0,0,0 };
 
 	//パーツごとのスケール
-	XMFLOAT3 HeadPartScl = { 0.3f,0.3f,0.3f };
-	XMFLOAT3 BodyPartScl = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 ArmsPartScl = { 0.2f,0.2f,0.2f };
+	XMFLOAT3 HeadPartScl = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 BodyPartScl = { 3.0f,3.0f,3.0f };
+	XMFLOAT3 ArmsPartScl = { 0.0f,0.0f,0.0f };
 
 	//パーツごとのポジション
 	XMVECTOR HeadPartPos = { 0.0f,0.0f,0.0f };
@@ -275,5 +275,7 @@ private:
 	bool NotLifeFlag = false;
 
 	bool ObjParticleFlag = false;
+
+	bool FallFlag = true;
 };
 
