@@ -4,6 +4,23 @@
 
 using namespace std;
 
+enum Model {
+	WORM=0,
+	GEAR,
+	SHADOW,
+	HEAD,
+	BODY,
+	ARMS,
+	SKYDOME,
+	BUILS,
+	BUIL,
+	GROUND,
+	GUN,
+	HERI,
+	HANE,
+	SPHERE,
+};
+
 class ModelManager final
 {
 private:
@@ -29,4 +46,3 @@ private:
 	vector<ObjModel*> model_;
 	vector<int> contena;
 };
-

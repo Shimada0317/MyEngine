@@ -33,9 +33,9 @@ Enemy::~Enemy()
 }
 
 //初期化処理
-void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint, float hp, const XMFLOAT3& allscl, const bool& movement)
+void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement)
 {
-	HeadPartRot = BodyPartRot = ArmsPartRot = allrot;
+	HeadPartRot =BodyPartRot = ArmsPartRot = allrot;
 
 	AllPos = allpos;
 	BringUpCamera = camera;
@@ -46,11 +46,11 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 	OriginDistance = Distance;
 	OriginHeadDistance = HeadDistance;
 
-	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
-	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
-	HeadPart = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
-	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
-	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
+	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(SHADOW));
+	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(SHADOW));
+	HeadPart = Object3d::Create(ModelManager::GetInstance()->GetModel(HEAD));
+	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(BODY));
+	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(ARMS));
 
 	PartGreen = ParticleManager::Create(BringUpCamera);
 	PartRed = ParticleManager::Create(BringUpCamera);
@@ -79,15 +79,12 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 //ステータスセット
 void Enemy::StatusSet()
 {
-	if (FallFlag == true) {
-		AllPos.m128_f32[1] -= FallSpeed;
-
-	}
 	//変形前なら
 	if (DefomationFlag == false) {
+		AllPos.m128_f32[1] -=FallSpeed;
 		//地面に着いたとき
-		if (AllPos.m128_f32[1] - BodyPartScl.y/2 <= 0) {
-			FallFlag = false;
+		if (AllPos.m128_f32[1] <= 0) {
+			AllPos.m128_f32[1] = 0;
 			DefomationCount += AddDefomationValue;
 			if (HeadPartScl.z <= 0.3f && ArmsPartScl.z <= 0.2f) {
 				Action::GetInstance()->EaseOut(HeadPartScl.x, 1.0f);
@@ -160,7 +157,7 @@ void Enemy::AllUpdate()
 //更新処理
 void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
 {
-
+	
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 
@@ -178,7 +175,7 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulle
 			player2Dpos.y - HeadDistance<RockOnHeadPos.y && player2Dpos.y + HeadDistance>RockOnHeadPos.y) {
 			Hp -= HeadDamage;
 			playerbulletshot = false;
-
+			
 		}
 	}
 
@@ -202,7 +199,7 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulle
 			TrackPlayerMode();
 		}
 		//プレイヤーの前まで来たとき
-		else if (Length <= LengthLimit && WaitFlag == false) {
+		else if (Length <= LengthLimit&&WaitFlag==false) {
 			BodyPartPos.m128_f32[2] -= 1.f;
 			AtttackTimer += 0.1f;
 			Motion();
@@ -292,7 +289,7 @@ void Enemy::TrackPlayerMode()
 
 void Enemy::Motion()
 {
-
+	
 
 }
 
@@ -303,7 +300,7 @@ void Enemy::AttackMode(int& playerhp)
 		AttackFaseFlag = true;
 		RandomFlag = false;
 	}
-
+	
 	//攻撃フェイズに移行した時
 	if (AttackFaseFlag == true) {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);
@@ -329,9 +326,9 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 	float discoloration = 0.01f;
 	if (AttackShakeDownFlag == false) {
 		ArmsPartRot.x += 1.5f;
-		ArmsPartScl = EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(ArmsPartScl, gigantic);
-		BodyPartScl = EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(BodyPartScl, gigantic);
-		HeadPartScl = EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(HeadPartScl, gigantic);
+		ArmsPartScl=EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(ArmsPartScl, gigantic);
+		BodyPartScl=EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(BodyPartScl, gigantic);
+		HeadPartScl=EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(HeadPartScl, gigantic);
 		ArmsPartColor.y -= discoloration;
 		ArmsPartColor.z -= discoloration;
 		//腕が最大点に達した時
@@ -429,7 +426,7 @@ XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 
 	XMVECTOR PositionRet = set3Dposition;
 
-	EasyMath::GetInstance()->ChangeViewPort(MatViewPort, offset);
+	EasyMath::GetInstance()->ChangeViewPort(MatViewPort,offset);
 
 	XMMATRIX MatVP = MatViewPort;
 
@@ -459,7 +456,7 @@ void Enemy::ParticleEfect()
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};
-		vel.x = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
+		vel.x = Action::GetInstance()->GetRangRand(-0.09f,0.09f);
 		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.12f);
 		vel.z = Action::GetInstance()->GetRangRand(-0.03f, 0.09f);
 

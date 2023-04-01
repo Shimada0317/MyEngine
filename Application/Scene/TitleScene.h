@@ -18,7 +18,7 @@
 
 using namespace std;
 
-const int BILL = 16;
+const int BUILAMOUNT = 16;
 
 class TitleScene :public BaseScene
 {
@@ -110,8 +110,8 @@ public://ÉÅÉìÉoä÷êî
 private:
 	//Obj
 	unique_ptr <Object3d> Sphere;
-	unique_ptr<Object3d> BillsHighAlpha[BILL];
-	unique_ptr<Object3d> BillsLowAlpha[BILL];
+	unique_ptr<Object3d> BillsHighAlpha[BUILAMOUNT];
+	unique_ptr<Object3d> BillsLowAlpha[BUILAMOUNT];
 	unique_ptr <Object3d> GroundObj;
 	unique_ptr <Object3d >World;
 	unique_ptr<Object3d> Start;
