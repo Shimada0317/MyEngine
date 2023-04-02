@@ -49,12 +49,9 @@ void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camer
 	RockOn.reset(Sprite::SpriteCreate(40, RockOnPos, RockOnCol, RockOnAnchorPoint));
 	RockOnHead.reset(Sprite::SpriteCreate(40, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
 
-	HeadPartScl = { 0.0f,0.0f,0.0f };
-	ArmsPartScl = { 0.0f,0.0f,0.0f };
-
 	TrackPoint = OldTrackPoint = trackpoint;
 
-	Hp = 160;
+	Hp = 800;
 	OldHp = Hp;
 	RandomFlag = true;
 	TimerLimit = 8;
@@ -65,29 +62,16 @@ void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camer
 
 void BossEnemy::StatusSet()
 {
-	//変形前なら
+	////変形前なら
 	if (DefomationFlag == false) {
 		AllPos.m128_f32[1] -= FallSpeed;
 		//地面に着いたとき
-		if (AllPos.m128_f32[1] <= 0) {
-			AllPos.m128_f32[1] = 0;
-			DefomationCount += AddDefomationValue;
-			if (HeadPartScl.z <= 0.3f && ArmsPartScl.z <= 0.2f) {
-				Action::GetInstance()->EaseOut(HeadPartScl.x, 1.0f);
-				Action::GetInstance()->EaseOut(HeadPartScl.y, 1.0f);
-				Action::GetInstance()->EaseOut(HeadPartScl.z, 1.0f);
-
-				Action::GetInstance()->EaseOut(ArmsPartScl.x, 0.8f);
-				Action::GetInstance()->EaseOut(ArmsPartScl.y, 0.8f);
-				Action::GetInstance()->EaseOut(ArmsPartScl.z, 0.8f);
-			}
+		if (AllPos.m128_f32[1] <= 2) {
+			AllPos.m128_f32[1] = 2;
+			DefomationFlag = true;
 		}
 	}
 
-	if (DefomationCount >= 1) {
-		DefomationCount = 1;
-		DefomationFlag = true;
-	}
 	Center->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(CenterMat);
 	CenterMat = Center->GetMatrix();
@@ -98,10 +82,10 @@ void BossEnemy::StatusSet()
 	ShadowPos.m128_f32[1] = -0.8f;
 	Shadow->SetPosition(ShadowPos);
 	Shadow->SetRotation({ 0.0f,0.0f,0.0f });
-	Shadow->SetScale({ 1.0f,1.0f,1.0f });
+	Shadow->SetScale({ 5.0f,1.0f,5.0f });
 
 	HeadPartPos = ArmsPartPos = BodyPartPos = CenterWorldPos;
-	HeadPartPos.m128_f32[1] = CenterWorldPos.m128_f32[1] + 1.0f;
+	HeadPartPos.m128_f32[1] = CenterWorldPos.m128_f32[1] + 4.0f;
 	ArmsPartPos.m128_f32[1] = CenterWorldPos.m128_f32[1] + 0.2f;
 
 	HeadPart->SetPosition(HeadPartPos);
@@ -143,19 +127,18 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 {
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
-
 		});
 
 	//当たり判定
 	if (playerbulletshot == true && Hp > 0) {
-		if (player2Dpos.x - Distance < RockOnPos.x && player2Dpos.x + Distance > RockOnPos.x &&
-			player2Dpos.y - Distance<RockOnPos.y && player2Dpos.y + Distance>RockOnPos.y) {
+		if (player2Dpos.x - Distance * 4 < RockOnPos.x && player2Dpos.x + Distance * 4 > RockOnPos.x &&
+			player2Dpos.y - Distance * 4 < RockOnPos.y && player2Dpos.y + Distance * 4 > RockOnPos.y) {
 			Hp -= BodyDamage;
 			playerbulletshot = false;
 		}
 
-		if (player2Dpos.x - HeadDistance < RockOnHeadPos.x && player2Dpos.x + HeadDistance > RockOnHeadPos.x &&
-			player2Dpos.y - HeadDistance<RockOnHeadPos.y && player2Dpos.y + HeadDistance>RockOnHeadPos.y) {
+		if (player2Dpos.x - HeadDistance * 4 < RockOnHeadPos.x && player2Dpos.x + HeadDistance * 4 > RockOnHeadPos.x &&
+			player2Dpos.y - HeadDistance * 4 < RockOnHeadPos.y && player2Dpos.y + HeadDistance * 4 > RockOnHeadPos.y) {
 			Hp -= HeadDamage;
 			playerbulletshot = false;
 		}
@@ -197,6 +180,11 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 
 void BossEnemy::Draw(DirectXCommon* dxCommon)
 {
+	Sprite::PreDraw(dxCommon->GetCmdList());
+	RockOnHead->Draw();
+	RockOn->Draw();
+	Sprite::PostDraw();
+
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
 	PartGreen->Draw();
 	PartRed->Draw();
@@ -237,7 +225,7 @@ void BossEnemy::TrackPlayerMode()
 	Distance = OriginDistance;
 	HeadDistance = OriginHeadDistance;
 
-	Distance -= Length * 2.0f;
+	Distance -= Length * 2.f;
 	HeadDistance -= Length;
 
 	AllPos.m128_f32[0] -= v3x;
@@ -250,7 +238,6 @@ void BossEnemy::AttackMode(int& playerhp)
 		AttackFaseFlag = true;
 		RandomFlag = false;
 	}
-
 	//攻撃フェイズに移行した時
 	if (AttackFaseFlag == true) {
 		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);
@@ -282,7 +269,6 @@ void BossEnemy::Attack(int& playerhp, float& attacktimer)
 		//腕が最大点に達した時
 		if (ArmsPartRot.x >= 40.0f) {
 			ArmsPartRot.x = 40;
-			LengthLimit = 0.1f;
 			if (VibrationChangeFlag == true) {
 				Vibration -= 4.2f;
 				if (Vibration <= -4.2f) {
@@ -315,8 +301,9 @@ void BossEnemy::Attack(int& playerhp, float& attacktimer)
 			AttackShakeDownFlag = false;
 			AttackFaseFlag = false;
 			attacktimer = 0;
-			playerhp -= 1;
+			playerhp -= 5;
 			Hp = 0;
+			SelfDestructingEfect();
 		}
 	}
 }
@@ -332,7 +319,7 @@ void BossEnemy::Damage()
 		BodyPartColor.z -= 0.2f;
 		for (int i = 0; i < 5; i++) {
 			std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
-			newparticle->Initialize(1, BodyPartPos, { 0.3f,0.3f,0.3f }, { BodyPartRot });
+			newparticle->Initialize(1, BodyPartPos, { 1.3f,1.3f,1.3f }, { BodyPartRot });
 			Obj_Particle.push_back(std::move(newparticle));
 		}
 	}
@@ -350,11 +337,9 @@ void BossEnemy::Death()
 		BodyPartColor.w -= Subtraction;
 		HeadPartColor.w -= Subtraction;
 		if (ParticleEfectFlag == true) {
-			ParticleEfect();
+			//ParticleEfect();
 		}
 		RobotAriveFlag = false;
-
-
 		if (Obj_Particle.empty()) {
 			DeadFlag = true;
 		}
@@ -372,7 +357,7 @@ XMFLOAT2 BossEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 
 	XMVECTOR PositionRet = set3Dposition;
 
-	EasyMath::GetInstance()->ChangeViewPort(MatViewPort,offset);
+	EasyMath::GetInstance()->ChangeViewPort(MatViewPort, offset);
 
 	XMMATRIX MatVP = MatViewPort;
 
@@ -409,25 +394,34 @@ void BossEnemy::ParticleEfect()
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		PartRed->Add(200, pos, vel, acc, 4.0f, 0.0f, 150.0f);
-		PartGreen->Add(200, pos, vel, acc, 3.7f, 0.0f, 150.0f);
+		PartRed->Add(400, pos, vel, acc, 120.0f, 0.0f, 150.0f);
+		PartGreen->Add(400, pos, vel, acc, 110.1f, 0.0f, 150.0f);
 	}
 	ParticleEfectFlag = false;
 }
 
-void BossEnemy::WaitTrack(bool otherenemyarive)
+void BossEnemy::SelfDestructingEfect()
 {
-	if (otherenemyarive == true) {
-		LengthLimit = 2.5f;
-		OldTrackPoint.m128_f32[2] = OldTrackPoint.m128_f32[2] - 2;
-		WaitFlag = true;
+	for (int i = 0; i < 50; i++) {
+		XMFLOAT3 pos;
+
+		pos.x = CenterWorldPos.m128_f32[0];
+		pos.y = CenterWorldPos.m128_f32[1];
+		pos.z = CenterWorldPos.m128_f32[2];
+
+		const float rnd_vel = 0.04f;
+		XMFLOAT3 vel{};
+		vel.x = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
+		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.12f);
+		vel.z = Action::GetInstance()->GetRangRand(-0.03f, 0.09f);
+
+		XMFLOAT3 acc{};
+		acc.y = 0.0;
+
+		PartRed->Add(400, pos, vel, acc, 120.0f, 0.0f, 150.0f);
+		PartGreen->Add(400, pos, vel, acc, 110.1f, 0.0f, 150.0f);
 	}
-	else {
-		LengthLimit = 1.5f;
-		OldTrackPoint = TrackPoint;
-		WaitFlag = false;
-		AtttackTimer = 0;
-	}
+	ParticleEfectFlag = false;
 }
 
 

@@ -54,6 +54,12 @@ public:
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
 
+
+	/// <summary>
+	/// 変形
+	/// </summary>
+	void Defomation();
+
 	/// <summary>
 	/// プレイヤー追尾モード
 	/// </summary>

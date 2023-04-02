@@ -159,8 +159,11 @@ void Actor::Update()
 		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
 			});
+		Boss.remove_if([](std::unique_ptr<BossEnemy>& boss) {
+			return boss->IsDead();
+			});
 		//目の前の敵を全て倒した時プレイヤーを動かす
-		if (Robot.empty() && Boss == NULL) {
+		if (Robot.empty() && Boss.empty()) {
 			MoveFlag = true;
 		}
 		StopFlag = player->GetFinish();
@@ -179,10 +182,6 @@ void Actor::Update()
 	}
 
 
-
-
-
-
 	if (Patern >= 6) {
 		bool fring = player->GetFring();
 		if (fring == true) {
@@ -197,8 +196,8 @@ void Actor::Update()
 		Enemy->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
 	}
 
-	if (Patern > 8) {
-		//Boss->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
+	for (std::unique_ptr<BossEnemy>& boss : Boss) {
+		boss->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
 	}
 
 	CheckSameTrackPosition();
@@ -227,8 +226,8 @@ void Actor::Draw(DirectXCommon* dxCommon)
 	for (std::unique_ptr<Enemy>& robot : Robot) {
 		robot->Draw(dxCommon);
 	}
-	if (Patern > 8) {
-		Boss->Draw(dxCommon);
+	for (std::unique_ptr<BossEnemy>& boss : Boss) {
+		boss->Draw(dxCommon);
 	}
 	player->ParticleDraw(dxCommon->GetCmdList());
 }
@@ -419,13 +418,14 @@ void Actor::UpdataEnemyPopCommands()
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				if (Patern < 8) {
-					std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
-					newRobot->Initialize(ROTATION, POSITION, camera, TRACK, step);
-					Robot.push_back(std::move(newRobot));
+					//std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
+					//newRobot->Initialize(ROTATION, POSITION, camera, TRACK, step);
+					//Robot.push_back(std::move(newRobot));
 				}
 				else {
-					Boss = std::make_unique<BossEnemy>();
-					Boss->Initialize(ROTATION, POSITION, camera, TRACK);
+					std::unique_ptr<BossEnemy> boss = std::make_unique<BossEnemy>();
+					boss->Initialize(ROTATION, POSITION, camera, TRACK);
+					Boss.push_back(std::move(boss));
 					break;
 				}
 				POPSkip = false;

@@ -12,7 +12,7 @@
 #include"ModelManager.h"
 
 const float AddPosetEfectColor = 0.05f;
-const XMFLOAT4 BillColor = { 1.f,1.f,1.f,1.f };
+const XMFLOAT4 BillColor = { 0.8f,0.6f,0.3f,1.0f };
 
 using namespace DirectX;
 //コンストラクタ
@@ -190,7 +190,7 @@ void GameScene::AllUpdata()
 		FieldBills[i]->Update(BillColor);
 	}
 	//天球の更新処理
-	Sphere->Update({ 1,1,1,1 }, true);
+	Sphere->Update({ 1,1,1,1 });
 	//地面の更新処理
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理
@@ -366,7 +366,7 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 	postEffect->Draw(dxCommon->GetCmdList());
 	//描画後処理
 	Act->ImGuiDraw();
-	ImgDraw();
+	//ImgDraw();
 	dxCommon->PostDraw();
 }
 

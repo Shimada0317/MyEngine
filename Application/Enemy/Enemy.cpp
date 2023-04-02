@@ -79,29 +79,7 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 //ステータスセット
 void Enemy::StatusSet()
 {
-	//変形前なら
-	if (DefomationFlag == false) {
-		AllPos.m128_f32[1] -=FallSpeed;
-		//地面に着いたとき
-		if (AllPos.m128_f32[1] <= 0) {
-			AllPos.m128_f32[1] = 0;
-			DefomationCount += AddDefomationValue;
-			if (HeadPartScl.z <= 0.3f && ArmsPartScl.z <= 0.2f) {
-				Action::GetInstance()->EaseOut(HeadPartScl.x, 1.0f);
-				Action::GetInstance()->EaseOut(HeadPartScl.y, 1.0f);
-				Action::GetInstance()->EaseOut(HeadPartScl.z, 1.0f);
-
-				Action::GetInstance()->EaseOut(ArmsPartScl.x, 0.8f);
-				Action::GetInstance()->EaseOut(ArmsPartScl.y, 0.8f);
-				Action::GetInstance()->EaseOut(ArmsPartScl.z, 0.8f);
-			}
-		}
-	}
-
-	if (DefomationCount >= 1) {
-		DefomationCount = 1;
-		DefomationFlag = true;
-	}
+	
 	Center->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(CenterMat);
 	CenterMat = Center->GetMatrix();
@@ -157,6 +135,8 @@ void Enemy::AllUpdate()
 //更新処理
 void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
 {
+	//変形
+	Defomation();
 	
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
@@ -239,8 +219,33 @@ void Enemy::Draw(DirectXCommon* dxCommon)
 	}
 	//Center->Draw();
 	Object3d::PostDraw();
+}
 
+void Enemy::Defomation()
+{
+	//変形前なら
+	if (DefomationFlag == false) {
+		AllPos.m128_f32[1] -= FallSpeed;
+		//地面に着いたとき
+		if (AllPos.m128_f32[1] <= 0) {
+			AllPos.m128_f32[1] = 0;
+			DefomationCount += AddDefomationValue;
+			if (HeadPartScl.z <= 0.3f && ArmsPartScl.z <= 0.2f) {
+				Action::GetInstance()->EaseOut(HeadPartScl.x, 1.0f);
+				Action::GetInstance()->EaseOut(HeadPartScl.y, 1.0f);
+				Action::GetInstance()->EaseOut(HeadPartScl.z, 1.0f);
 
+				Action::GetInstance()->EaseOut(ArmsPartScl.x, 0.8f);
+				Action::GetInstance()->EaseOut(ArmsPartScl.y, 0.8f);
+				Action::GetInstance()->EaseOut(ArmsPartScl.z, 0.8f);
+			}
+		}
+	}
+
+	if (DefomationCount >= 1) {
+		DefomationCount = 1;
+		DefomationFlag = true;
+	}
 }
 
 //プレイヤーへの追尾モードの時

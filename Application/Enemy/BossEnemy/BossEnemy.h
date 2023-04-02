@@ -58,16 +58,23 @@ public:
 	XMFLOAT2 WorldtoScreen(const XMVECTOR& set3Dposition);
 
 	/// <summary>
-	/// ビュー変換
-	/// </summary>
-	void ChangeViewPort(XMMATRIX& matviewport);
-
-	/// <summary>
 	/// パーティクル発生
 	/// </summary>
 	void ParticleEfect();
 
+	/// <summary>
+	/// パーティクル発生
+	/// </summary>
+	void SelfDestructingEfect();
+
 	void WaitTrack(bool otherenemyarive);
+public:
+
+	/// <summary>
+/// 倒されているか
+/// </summary>
+/// <returns></returns>
+	bool IsDead() const { return DeadFlag; }
 
 private:
 	//Obj
@@ -111,14 +118,14 @@ private:
 	XMVECTOR FakeTrackPoint = { 0,0,0 };
 
 	//パーツごとのスケール
-	XMFLOAT3 HeadPartScl = { 0.3f,0.3f,0.3f };
-	XMFLOAT3 BodyPartScl = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 ArmsPartScl = { 0.2f,0.2f,0.2f };
+	XMFLOAT3 HeadPartScl = { 1.2f,1.2f,1.2f };
+	XMFLOAT3 BodyPartScl = { 4.0f,4.0f,4.0f };
+	XMFLOAT3 ArmsPartScl = { 0.8f,0.8f,0.8f };
 
 	//パーツごとのポジション
-	XMVECTOR HeadPartPos = { 0.0f,0.0f,0.0f };
-	XMVECTOR BodyPartPos = { 0.0f,0.0f,0.0f };
-	XMVECTOR ArmsPartPos = { 0.0f,0.0f,0.0f };
+	XMVECTOR HeadPartPos = { 0.0f,-1000.0f,0.0f };
+	XMVECTOR BodyPartPos = { 0.0f,-1000.0f,0.0f };
+	XMVECTOR ArmsPartPos = { 0.0f,-1000.0f,0.0f };
 
 	//パーツごとの色
 	XMFLOAT4 ArmsPartColor = { 1.0f,1.0f,1.0f,1.0f };
@@ -156,11 +163,11 @@ private:
 	float AttackCharge = 0.0f;
 
 	//移動速度
-	float MoveSpeed = 0.09f;
+	float MoveSpeed = 0.03f;
 
 	//プレイヤーと敵の距離
-	float Length = 3.0f;
-	float LengthLimit = 1.5f;
+	float Length = 13.0f;
+	float LengthLimit = 7.0f;
 
 	//待機時のモーション変数
 	float MotionTime = 0.0f;

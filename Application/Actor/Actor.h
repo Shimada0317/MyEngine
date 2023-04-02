@@ -97,7 +97,7 @@ private:
 
 	//DebugScene‚Ì‚â‚Â‚ğ‚Á‚Ä‚«‚½
 	std::list<std::unique_ptr<Enemy>>Robot;
-	std::unique_ptr<BossEnemy> Boss;
+	std::list<std::unique_ptr<BossEnemy>> Boss;
 	std::list<std::unique_ptr<ThrowEnemy>>ThrowRobot;
 	std::unique_ptr<Player>player;
 
