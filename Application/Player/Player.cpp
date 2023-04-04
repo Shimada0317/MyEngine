@@ -105,8 +105,6 @@ void Player::StatusSet(Camera* camera)
 	Body->SetScale(BodyScl);
 	Body->SetParent(camera);
 
-
-	//GunNotParentPos.m128_f32[2] = -1.0f;
 	GunMat = Gun->GetMatrix();
 	GunWorldPos = XMVector3Transform(GunPos, GunMat);
 
@@ -676,16 +674,16 @@ void Player::ReloadProcess()
 
 	if (Remaining >= 8) {
 		if (ReversFlag == false) {
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 210);
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 140);
-			if (ReloadSpriteSize.x >= 200) {
+			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 260);
+			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 190);
+			if (ReloadSpriteSize.x >= 250) {
 				ReversFlag = true;
 			}
 		}
 		else {
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 150);
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 80);
-			if (ReloadSpriteSize.x <= 160) {
+			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 200);
+			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 130);
+			if (ReloadSpriteSize.x <= 210) {
 				ReversFlag = false;
 			}
 		}

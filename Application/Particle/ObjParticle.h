@@ -34,7 +34,7 @@ public:
 	/// <summary>
 	/// XVˆ—
 	/// </summary>
-	void Update();
+	void Update(int smole=200);
 	/// <summary>
 	/// •`‰æˆ—
 	/// </summary>

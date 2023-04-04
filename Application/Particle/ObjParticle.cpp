@@ -48,11 +48,11 @@ void ObjParticle::Set()
 	Particle->SetScale(ParticleScl);
 }
 
-void ObjParticle::Update()
+void ObjParticle::Update(int smole)
 {
 	Set();
 	XMFLOAT3 ConvertValue = EasyMath::GetInstance()->ConvertToXMFLOAT3(SmoleScl);
-	ConvertValue = ConvertValue / 200;
+	ConvertValue = ConvertValue / smole;
 	time += 0.005;
 	ParticlePos.m128_f32[2] += RandomZ;
 	ParticlePos.m128_f32[1] += RandomY-gravity*time;

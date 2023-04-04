@@ -119,7 +119,7 @@ void BossEnemy::AllUpdate()
 	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
 
 	for (std::unique_ptr<ObjParticle>& patrticle : Obj_Particle) {
-		patrticle->Update();
+		patrticle->Update(50);
 	}
 }
 

@@ -418,9 +418,9 @@ void Actor::UpdataEnemyPopCommands()
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				if (Patern < 8) {
-					//std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
-					//newRobot->Initialize(ROTATION, POSITION, camera, TRACK, step);
-					//Robot.push_back(std::move(newRobot));
+					std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
+					newRobot->Initialize(ROTATION, POSITION, camera, TRACK, step);
+					Robot.push_back(std::move(newRobot));
 				}
 				else {
 					std::unique_ptr<BossEnemy> boss = std::make_unique<BossEnemy>();

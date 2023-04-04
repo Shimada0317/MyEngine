@@ -294,10 +294,10 @@ private:
 
 
 	//Spriteのステータス
-	XMFLOAT4 ReloadSpriteColor = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT4 ReloadSpriteColor = { 1.0f,1.0f,1.0f,0.9f };
 	XMFLOAT2 AnchorPoint = { 0.5f,0.5f };
-	XMFLOAT2 ReloadSpritePos = { 1070,310 };
-	XMFLOAT2 ReloadSpriteSize = { 160,90 };
+	XMFLOAT2 ReloadSpritePos = { WinApp::window_width/2,210 };
+	XMFLOAT2 ReloadSpriteSize = { 210,140 };
 
 	bool ReversFlag = false;
 

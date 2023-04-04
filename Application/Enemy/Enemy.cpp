@@ -145,14 +145,14 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulle
 
 	//“–‚½‚è”»’è
 	if (playerbulletshot == true && Hp > 0) {
-		if (player2Dpos.x - Distance < RockOnPos.x && player2Dpos.x + Distance > RockOnPos.x &&
-			player2Dpos.y - Distance<RockOnPos.y && player2Dpos.y + Distance>RockOnPos.y) {
+		if (player2Dpos.x - Distance*1.3 < RockOnPos.x && player2Dpos.x + Distance * 1.3 > RockOnPos.x &&
+			player2Dpos.y - Distance * 1.3 <RockOnPos.y && player2Dpos.y + Distance * 1.3 >RockOnPos.y) {
 			Hp -= BodyDamage;
 			playerbulletshot = false;
 		}
 
-		if (player2Dpos.x - HeadDistance < RockOnHeadPos.x && player2Dpos.x + HeadDistance > RockOnHeadPos.x &&
-			player2Dpos.y - HeadDistance<RockOnHeadPos.y && player2Dpos.y + HeadDistance>RockOnHeadPos.y) {
+		if (player2Dpos.x - HeadDistance * 1.3 < RockOnHeadPos.x && player2Dpos.x + HeadDistance * 1.3 > RockOnHeadPos.x &&
+			player2Dpos.y - HeadDistance * 1.3 <RockOnHeadPos.y && player2Dpos.y + HeadDistance * 1.3 >RockOnHeadPos.y) {
 			Hp -= HeadDamage;
 			playerbulletshot = false;
 			
