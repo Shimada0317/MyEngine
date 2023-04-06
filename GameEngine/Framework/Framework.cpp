@@ -39,7 +39,7 @@ void Framework::Initialize()
 	dxCommon->Initialize(winApp);
 	input = Input::GetInstance();
 	input->Initialize(winApp);
-	mouse = Mouse::GetInstance();
+	mouse = Mouth::GetInstance();
 	mouse->Initialize(winApp);
 	camera = new DebugCamera(WinApp::window_width,WinApp::window_height);
 

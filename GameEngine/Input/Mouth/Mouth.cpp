@@ -1,15 +1,15 @@
-#include "Mouse.h"
+#include "Mouth.h"
 
 using namespace DirectX;
 
-Mouse* Mouse::GetInstance()
+Mouth* Mouth::GetInstance()
 {
-	static Mouse instance;
+	static Mouth instance;
 
 	return &instance;
 }
 
-void Mouse::Initialize(WinApp* winApp)
+void Mouth::Initialize(WinApp* winApp)
 {
 	HRESULT result;
 
@@ -27,7 +27,7 @@ void Mouse::Initialize(WinApp* winApp)
 	//ShowCursor(false);
 }
 
-void Mouse::Update()
+void Mouth::Update()
 {
 	clipre = cli;
 	HRESULT result= Onclick->GetDeviceState(sizeof(DIMOUSESTATE), &cli);
@@ -44,7 +44,7 @@ void Mouse::Update()
 //	result = Onclick->Acquire();
 }
 
-bool Mouse::PushClick(BYTE click)
+bool Mouth::PushClick(BYTE click)
 {
 	if (!(clipre.rgbButtons[click]&(0x80))) {
 		if ((cli.rgbButtons[click] & (0x80))) {
@@ -55,9 +55,8 @@ bool Mouse::PushClick(BYTE click)
     return false;
 }
 
-void Mouse::MouseMoveSprite(XMFLOAT2& spritePos)
+void Mouth::MouthMoveSprite(XMFLOAT2& spritePos)
 {
-
 	POINT mousePosition;
 
 	GetCursorPos(&mousePosition);
@@ -68,11 +67,9 @@ void Mouse::MouseMoveSprite(XMFLOAT2& spritePos)
 
 	spritePos.x = mousePosition.x;
 	spritePos.y = mousePosition.y;
-
-	
 }
 
-void Mouse::RecoilMouse(XMFLOAT2& spritepos)
+void Mouth::RecoilMouth(XMFLOAT2& spritepos)
 {
 	HWND hwnd = winApp->GetHwnd();
 
@@ -89,11 +86,9 @@ void Mouse::RecoilMouse(XMFLOAT2& spritepos)
 
 
 	SetCursorPos(posX, posY);
-
-
 }
 
-void Mouse::MouseGetSpritePos(XMFLOAT2& spritePos)
+void Mouth::MouthGetSpritePos(XMFLOAT2& spritePos)
 {
 	POINT mousePosition;
 
@@ -107,35 +102,33 @@ void Mouse::MouseGetSpritePos(XMFLOAT2& spritePos)
 	ScreenToClient(hwnd, &mousePosition);
 }
 
-void Mouse::Mousemove(const XMMATRIX& View, const XMMATRIX& Pro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet,float Distance=11)
+void Mouth::Mouthmove(const XMMATRIX& view, const XMMATRIX& Pro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet, float Distance)
 {
-
 	XMVECTOR posNear = { spritePos.x,spritePos.y, 0 };
 	XMVECTOR posFar = { spritePos.x, spritePos.y,1 };
 
 	//ビュー、プロジェクション、ビューポート3つの行列の乗算
 	//XMMATRIX matVPV = View * Pro * viewPort;
-	XMMATRIX InverseviewPort= XMMatrixInverse(nullptr, viewPort);
+	XMMATRIX InverseviewPort = XMMatrixInverse(nullptr, viewPort);
 
-	XMMATRIX InversePro= XMMatrixInverse(nullptr, Pro);
+	XMMATRIX InversePro = XMMatrixInverse(nullptr, Pro);
 
-	XMMATRIX InverseView= XMMatrixInverse(nullptr, View);
+	XMMATRIX InverseView = XMMatrixInverse(nullptr, view);
 
-	XMMATRIX mataa = View* Pro * viewPort;
+	XMMATRIX mataa = view * Pro * viewPort;
 
 	XMMATRIX Inversemataa = XMMatrixInverse(nullptr, mataa);
 
 	posNear = XMVector3TransformCoord(posNear, Inversemataa);
-	posFar = XMVector3TransformCoord(posFar,Inversemataa);
+	posFar = XMVector3TransformCoord(posFar, Inversemataa);
 
 	XMVECTOR mouseDirection = posNear - posFar;
 	mouseDirection = XMVector3Normalize(mouseDirection);
 
 	const float kDistanceTestObject = Distance;
 
-	positionRet = posNear - mouseDirection * kDistanceTestObject ;
-
-	//player->SetPosition(positionRet);
+	positionRet = posNear - mouseDirection * kDistanceTestObject;
 
 }
+
 	

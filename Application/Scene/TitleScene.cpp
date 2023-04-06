@@ -4,7 +4,7 @@
 #include <sstream>
 #include <iomanip>
 #include"GameScene.h"
-#include"Mouse.h"
+#include"Mouth.h"
 
 const float SubColor = 0.01f;
 const float CameraMoveValueXandY = 0.4f;
@@ -45,6 +45,7 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(11, L"Resources/arrowLeft.png");
 	Sprite::LoadTexture(12, L"Resources/arrowRightTrue.png");
 	Sprite::LoadTexture(13, L"Resources/arrowLeftTrue.png");
+
 
 	//スプライトの生成
 	Title.reset(Sprite::SpriteCreate(1, { 1.0f,1.0f }));
@@ -164,7 +165,7 @@ void TitleScene::AllUpdate()
 	//地面の更新処理
 	World->Update();
 	//カメラの移動先のビルの更新処理
-	Start->Update();
+	Start->Update({0.4f,0.4f,0.4f,1.f});
 	//ライトグループ更新
 	lightGroupe->Update();
 }
@@ -172,14 +173,14 @@ void TitleScene::AllUpdate()
 //更新処理
 void TitleScene::Update()
 {
-	Mouse::GetInstance()->MouseMoveSprite(ReticlePos);
+	Mouth::GetInstance()->MouthMoveSprite(ReticlePos);
 	//カメラのムーブ関数
 	CameraDirection();
 	//カーソルがスプライトの範囲内であるか
 	CheckCursorIn(ReticlePos, ClickPos, 500, 75);
 	//最初のクリック
 	if (CursorIn_F == true && TitleDisplay_F == true) {
-		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
+		if (Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1)) {
 			TitleSprite_F = false;
 			CameraEyeMove_F = true;
 			TitleDisplay_F = false;
@@ -247,7 +248,7 @@ void TitleScene::DescriptionPageProces()
 		if (NextorBack(ReticlePos, ArrowRightPos, 35, 35)) {
 			RightTrueIn_F = true;
 			//矢印を押された時
-			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
+			if ((Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1))) {
 				ClickSe->LoadFile("Resources/Sound/SE/click.wav", Volume);
 				DescriptionPage += 1;
 			}
@@ -261,7 +262,7 @@ void TitleScene::DescriptionPageProces()
 	if (DescriptionPage > 0) {
 		if (NextorBack(ReticlePos, ArrowLeftPos, 35, 35)) {
 			LeftTrueIn_F = true;
-			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
+			if ((Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1))) {
 				ClickSe->LoadFile("Resources/Sound/SE/click.wav", Volume);
 				DescriptionPage -= 1;
 			}
@@ -273,7 +274,7 @@ void TitleScene::DescriptionPageProces()
 
 	//救援ヘリを呼ぶとき
 	if (CameraChange_F == true && CursorIn_F == true && DescriptionPage == 2) {
-		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
+		if (Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1)) {
 			if (Click_F == true) {
 				ClickSe->LoadFile("Resources/Sound/SE/MorseCode.wav", Volume);
 				Click_F = false;

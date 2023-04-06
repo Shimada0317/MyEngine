@@ -38,63 +38,61 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="sceneManager_"></param>
 	GameScene(SceneManager* sceneManager_);
-
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
 	/// <param name="dxComon"></param>
 	void Initialize(DirectXCommon* dxComon) override;
-
 	/// <summary>
 	/// ステータスセット
 	/// </summary>
 	void StatusSet();
-
 	/// <summary>
 	/// オブジェクト等の全ての更新処理
 	/// </summary>
 	void AllUpdata();
-
 	/// <summary>
 	/// 更新処理
 	/// </summary>
 	void Update() override;
-
 	/// <summary>
 	/// オブジェクトの描画
 	/// </summary>
 	/// <param name="dxCommon">dxCommonからコマンドリストをゲット</param>
 	void ObjDraw(DirectXCommon* dxCommon);
-
 	/// <summary>
 	/// スプライトの描画
 	/// </summary>
 	/// <param name="dxCommon">dxCommonからコマンドリストをゲット</param>
 	void SpriteDraw(DirectXCommon* dxCommon);
-
 	/// <summary>
 	/// ImgUI描画
 	/// </summary>
 	void ImgDraw();
-
 	/// <summary>
 	/// ポストエフェクトの描画
 	/// </summary>
 	/// <param name="dxCommon">dxCommonからコマンドリストをゲット</param>
 	void PostEffectDraw(DirectXCommon* dxCommon);
-
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="dxCommon">dxCommonからコマンドリストをゲット</param>
 	void Draw(DirectXCommon* dxCommon)override;
-
 	/// <summary>
 	/// 終了処理
 	/// </summary>
 	void Finalize() override;
-
+	/// <summary>
+	/// スポットライトの動き
+	/// </summary>
 	void SpotLightMove();
+	/// <summary>
+	/// ゲームオーバー時の処理
+	/// </summary>
+	void GameOverProcess();
+
+	void CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY,bool& CheckFlag);
 private://メンバ変数
 	//Obj
 	unique_ptr <Object3d> Sphere;
@@ -107,6 +105,10 @@ private://メンバ変数
 	unique_ptr<Sprite> Clear = nullptr;
 	unique_ptr<Sprite> Conteniu = nullptr;
 	unique_ptr<Sprite> DamageEfectSp = nullptr;
+	unique_ptr<Sprite> Shot = nullptr;
+	unique_ptr<Sprite> ReticleForGameOver = nullptr;
+	unique_ptr<Sprite> Yes = nullptr;
+	unique_ptr<Sprite> No = nullptr;
 	//その他の機能
 	Audio* Bgm = nullptr;
 	PostEffect* postEffect = nullptr;
@@ -164,8 +166,8 @@ private://メンバ変数
 	XMFLOAT3 SearchLightColor[3];
 	XMFLOAT3 SearchLightAtten = { 0.f,0.f,0.f };
 	XMFLOAT2 SearchLightFactorAngle = { 20.0f,30.0f };
-	
-	bool SpotLightPositionChange=false;
+
+	bool SpotLightPositionChange = false;
 	bool LightPositionChangeX[2];
 	bool LightPositionChangeZ[2];
 
@@ -197,5 +199,17 @@ private://メンバ変数
 
 	float LightDirEasingTime = 0.f;
 	bool LightDirEasingChane = false;
+
+	XMFLOAT2 ReticlePosition{ 0.f,0.f };
+	XMFLOAT4 ReticleColor{ 1.f,1.f,1.f,1.f };
+	XMFLOAT2 SpriteAnchorPoint{ 0.5f,0.5f };
+
+	XMFLOAT2 YesPosition{ WinApp::window_width / 2 - 200,WinApp::window_height / 2 + 100 };
+	XMFLOAT2 NoPosition{ WinApp::window_width / 2 + 200,WinApp::window_height / 2 + 100 };
+	XMFLOAT2 SpriteSize{ 240.f,240.f };
+	XMFLOAT4 YesColor{ 1.f,1.f,1.f,1.f };
+	XMFLOAT4 NoColor{ 1.f,1.f,1.f,1.f };
+	bool YesCursorInFlag = false;
+	bool NoCursorInFlag = false;
 };
 

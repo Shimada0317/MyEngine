@@ -112,9 +112,6 @@
     <Filter Include="ソース ファイル\GameEngine\Input\Key">
       <UniqueIdentifier>{958346c8-696a-4d86-990e-622193083622}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\GameEngine\Input\Mouse">
-      <UniqueIdentifier>{73c75994-1cfd-46b3-822b-1ea5887904dd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\GameEngine\Input\Contoroller">
       <UniqueIdentifier>{d6d5883e-d04a-4eb3-ab3b-cfe505f91cb4}</UniqueIdentifier>
     </Filter>
@@ -199,6 +196,9 @@
     <Filter Include="ソース ファイル\GameEngine\Audio">
       <UniqueIdentifier>{d0b4aaa6-75c0-4b77-b27f-33dd68d67ff5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameEngine\Input\Mouth">
+      <UniqueIdentifier>{73c75994-1cfd-46b3-822b-1ea5887904dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -245,9 +245,6 @@
     </ClCompile>
     <ClCompile Include="GameEngine\Input\Key\Input.cpp">
       <Filter>ソース ファイル\GameEngine\Input\Key</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\Input\Mouse\Mouse.cpp">
-      <Filter>ソース ファイル\GameEngine\Input\Mouse</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\Input\Contoroller\Contoroller.cpp">
       <Filter>ソース ファイル\GameEngine\Input\Contoroller</Filter>
@@ -362,6 +359,9 @@
     </ClCompile>
     <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp">
       <Filter>ソース ファイル\Application\Enemy\BossEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\Input\Mouth\Mouth.cpp">
+      <Filter>ソース ファイル\GameEngine\Input\Mouth</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -498,9 +498,6 @@
     <ClInclude Include="GameEngine\2d\Texture\TextureModel.h">
       <Filter>ヘッダー ファイル\GameEngine\2d</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngine\Input\Mouse\Mouse.h">
-      <Filter>ヘッダー ファイル\GameEngine\Input</Filter>
-    </ClInclude>
     <ClInclude Include="GameEngine\Input\Key\Input.h">
       <Filter>ヘッダー ファイル\GameEngine\Input</Filter>
     </ClInclude>
@@ -626,6 +623,9 @@
     </ClInclude>
     <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h">
       <Filter>ヘッダー ファイル\Application\Enemy\BossEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Input\Mouth\Mouth.h">
+      <Filter>ヘッダー ファイル\GameEngine\Input</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

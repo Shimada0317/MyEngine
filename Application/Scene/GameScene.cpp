@@ -40,10 +40,20 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(30, L"Resources/DamageEfect.png");
 	Sprite::LoadTexture(31, L"Resources/Mision.png");
 	Sprite::LoadTexture(32, L"Resources/CONTINUE.png");
+	Sprite::LoadTexture(33, L"Resources/Shot.png");
+	Sprite::LoadTexture(34, L"Resources/mark2.png");
+	Sprite::LoadTexture(35, L"Resources/Yes.png");
+	Sprite::LoadTexture(36, L"Resources/No.png");
+
 	//スプライトの生成
 	DamageEfectSp.reset(Sprite::SpriteCreate(30, { 0.0f, 0.0f }, DamageEfectColor));
 	Clear.reset(Sprite::SpriteCreate(31, { 0.0f,0.0f }));
 	Conteniu.reset(Sprite::SpriteCreate(32, { 0.0f,0.0f }));
+	Shot.reset(Sprite::SpriteCreate(33, { 0.f,WinApp::window_height - 150 }));
+	ReticleForGameOver.reset(Sprite::SpriteCreate(34, ReticlePosition, ReticleColor, SpriteAnchorPoint));
+	Yes.reset(Sprite::SpriteCreate(35, YesPosition,YesColor,SpriteAnchorPoint));
+	No.reset(Sprite::SpriteCreate(36, NoPosition,NoColor,SpriteAnchorPoint));
+
 
 	//モデルの読み込み
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
@@ -165,7 +175,7 @@ void GameScene::StatusSet()
 	for (int i = 2; i < 5; i++) {
 		lightGroupe->SetSpotLightDir(i, XMVECTOR({ SearchLightDir[i - 2].x, SearchLightDir[i - 2].y, SearchLightDir[i - 2].z }));
 		lightGroupe->SetSpotLightPos(i, SearchLightPos[i - 2]);
-		lightGroupe->SetSpotLightColor(i, SearchLightColor[i-2]);
+		lightGroupe->SetSpotLightColor(i, SearchLightColor[i - 2]);
 		lightGroupe->SetSpotLightAtten(i, SearchLightAtten);
 		lightGroupe->SetSpotLightFactorAngle(i, SearchLightFactorAngle);
 	}
@@ -247,17 +257,7 @@ void GameScene::Update()
 			}
 		}
 	}
-	if (DethFlag == true) {
-		PostCol.x = 0;
-		if (Mouse::GetInstance()->PushClick(1)) {
-			BaseScene* scene_ = new TitleScene(sceneManager_);
-			sceneManager_->SetNextScene(scene_);
-		}
-		else if (Mouse::GetInstance()->PushClick(0)) {
-			BaseScene* scene_ = new GameScene(sceneManager_);
-			sceneManager_->SetNextScene(scene_);
-		}
-	}
+
 
 	if (DamageHitFlag == true) {
 		DamageEfectColor.w -= 0.02f;
@@ -277,15 +277,21 @@ void GameScene::Update()
 		StatusSet();
 		AllUpdata();
 	}
+	else if(StopUpdateFlag==true&&ClearFlag==false)
+	{
+		GameOverProcess();
+	}
 	//ゴールに着いたらクリア画面を表示
 	if (ClearFlag == true) {
-		if (Mouse::GetInstance()->PushClick(0)) {
+		if (Mouth::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
 		}
 	}
 	postEffect->Update(PostCol);
 	lightGroupe->Update();
+
+	
 }
 
 //オブジェクトの描画処理
@@ -313,6 +319,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
+	Shot->Draw();
 	Act->SpriteDraw();
 	if (DamageHitFlag == true) {
 		DamageEfectSp->Draw();
@@ -322,6 +329,19 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 	}
 	if (DethFlag == true) {
 		Conteniu->Draw();
+		//if (NoCursorInFlag == false) {
+			No->Draw();
+		//}
+		/*else {
+			NoAfter->Draw();
+		}*/
+		//if (YesCursorInFlag == false) {
+			Yes->Draw();
+		//}
+		/*else {
+			YesAfter->Draw();
+		}*/
+		ReticleForGameOver->Draw();
 	}
 	Sprite::PostDraw();
 }
@@ -382,6 +402,7 @@ void GameScene::Finalize()
 	delete postEffect;
 	Conteniu.reset();
 	Clear.reset();
+	Shot.reset();
 	delete Bgm;
 	delete light;
 	delete lightGroupe;
@@ -447,34 +468,11 @@ void GameScene::SpotLightMove()
 	SearchLightDir[1].z = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
 	SearchLightDir[2].x = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
 
-	Action::GetInstance()->DebugMove(SearchLightPos[0]);
-	Action::GetInstance()->DebugMove(SearchLightDir[0]);
-
-	if (Input::GetInstance()->PushKey(DIK_UP)) {
-		SearchLightDir[0].y += 0.1f;
-	}
-	if (Input::GetInstance()->PushKey(DIK_DOWN)) {
-		SearchLightDir[0].y -= 0.1f;
-	}
-	if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
-		SearchLightDir[0].x += 0.1f;
-	}
-	if (Input::GetInstance()->PushKey(DIK_LEFT)) {
-		SearchLightDir[0].x -= 0.1f;
-	}
-	if (Input::GetInstance()->PushKey(DIK_L)) {
-		SearchLightDir[0].z += 0.1f;
-	}
-	if (Input::GetInstance()->PushKey(DIK_M)) {
-		SearchLightDir[0].z -= 0.1f;
-	}
-
-
 	SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
 	SearchLightDir[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
 	SearchLightDir[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
 
-	
+
 
 	bool MoveFlag = Act->GetMove();
 
@@ -486,7 +484,7 @@ void GameScene::SpotLightMove()
 			ColorTimeRed += 0.01f;
 		}
 
-		FieldSpotLightColor.x = Action::GetInstance()->EasingOut(ColorTimeRed,EndColorRed-StartColorRed ) + 0.9f;
+		FieldSpotLightColor.x = Action::GetInstance()->EasingOut(ColorTimeRed, EndColorRed - StartColorRed) + 0.9f;
 		FieldSpotLightColor.y = Action::GetInstance()->EasingOut(ColorTime, EndColor - StartColor);
 	}
 
@@ -503,6 +501,53 @@ void GameScene::SpotLightMove()
 			Easing = false;
 			EasingChange = false;
 		}
+	}
+}
+
+void GameScene::GameOverProcess()
+{
+
+	Mouth::GetInstance()->MouthMoveSprite(ReticlePosition);
+	ReticleForGameOver->SetPosition(ReticlePosition);
+	if (DethFlag == true) {
+		PostCol.x = 0;
+		CheckcCursorIn(ReticlePosition, YesPosition, 100, 50, YesCursorInFlag);
+		CheckcCursorIn(ReticlePosition, NoPosition, 100, 50, NoCursorInFlag);
+
+		if (YesCursorInFlag == true) {
+			YesColor = { 1.f,0.f,0.f,1.f };
+			if (Mouth::GetInstance()->PushClick(0)) {
+				BaseScene* scene_ = new GameScene(sceneManager_);
+				sceneManager_->SetNextScene(scene_);
+			}
+		}
+		else {
+			YesColor = { 1.f,1.f,1.f,1.f };
+		}
+
+		if (NoCursorInFlag == true) {
+			NoColor = { 1.f,0.f,0.f,1.f };
+			if (Mouth::GetInstance()->PushClick(0)) {
+				BaseScene* scene_ = new TitleScene(sceneManager_);
+				sceneManager_->SetNextScene(scene_);
+			}
+		}
+		else {
+			NoColor = { 1.f,1.f,1.f,1.f };
+		}
+		Yes->SetColor(YesColor);
+		No->SetColor(NoColor);
+	}
+}
+
+void GameScene::CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
+{
+	if ((check_Pos.x-radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x)
+		&& (check_Pos.y-radY<= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
+		CheckFlag = true;
+	}
+	else {
+		CheckFlag = false;
 	}
 }
 

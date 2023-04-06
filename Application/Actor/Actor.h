@@ -16,27 +16,42 @@ class Actor
 {
 public: 
 	~Actor();
-
+	/// <summary>
+	/// 初期化
+	/// </summary>
 	void Initialize();
-
+	/// <summary>
+	/// ステータスセット
+	/// </summary>
 	void SetPSR();
-
+	/// <summary>
+	/// 更新
+	/// </summary>
 	void Update();
-
+	/// <summary>
+	/// 描画
+	/// </summary>
+	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
-
+	/// <summary>
+	/// スプライト描画
+	/// </summary>
 	void SpriteDraw();
-
+	/// <summary>
+	/// ImGui描画
+	/// </summary>
 	void ImGuiDraw();
-
-	void SetEnemyPos();
-
-	void Enemy2Enemy();
-
+	/// <summary>
+	/// csv読み込み
+	/// </summary>
 	void LoadEnemyPopData();
-
+	/// <summary>
+	/// 敵の生成
+	/// </summary>
 	void UpdataEnemyPopCommands();
-
+	/// <summary>
+	/// 敵同士の追尾先が被った時の確認とその場合の処理
+	/// </summary>
 	void CheckSameTrackPosition();
 public:
 	void SetPatern(int patern) { this->Patern = patern; }

@@ -4,7 +4,7 @@
 #include"imconfig.h"
 #include"Action.h"
 #include"ModelManager.h"
-#include"Mouse.h"
+#include"Mouth.h"
 #include"WinApp.h"
 
 const int ReaminingBullet = 8;
@@ -257,7 +257,7 @@ void Player::CameraWork()
 
 	}
 
-	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && StanbyFlag == true && CameraWorkFlag == false) {
+	if ((Mouth::GetInstance()->PushClick(1) || Mouth::GetInstance()->PushClick(0)) && StanbyFlag == true && CameraWorkFlag == false) {
 		MovieFlag = true;
 		ActionCount = 100;
 		EyeRot.x = 0;
@@ -571,9 +571,9 @@ void Player::SoundEffect()
 void Player::MouthContoroll()
 {
 	//マウス座標の取得
-	Mouse::GetInstance()->MouseMoveSprite(ReticlePos2D);
+	Mouth::GetInstance()->MouthMoveSprite(ReticlePos2D);
 	if (RecoilFlag == true) {
-		Mouse::GetInstance()->RecoilMouse(ReticlePos2D);
+		Mouth::GetInstance()->RecoilMouth(ReticlePos2D);
 		RecoilFlag = false;
 	}
 	else {
@@ -626,7 +626,7 @@ void Player::DamageProcess()
 void Player::GunShotProcess()
 {
 	//弾の発射前
-	if (Mouse::GetInstance()->PushClick(0)) {
+	if (Mouth::GetInstance()->PushClick(0)) {
 		if (Remaining < ReaminingBullet && ReloadFlag == false && BulletShotFlag == false) {
 			Remaining += 1;
 			//パーティクル発生フラグ
@@ -663,7 +663,7 @@ void Player::GunShotProcess()
 void Player::ReloadProcess()
 {
 	//右クリックを押した時
-	if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
+	if ((Mouth::GetInstance()->PushClick(1)) && Remaining != 0) {
 		if (ReloadSoundFlag == true) {
 			ReloadSe->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
 			ReloadSoundFlag = false;
