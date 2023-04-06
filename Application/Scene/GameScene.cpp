@@ -337,11 +337,11 @@ void GameScene::ImgDraw()
 	ImGui::Begin("Light");
 	/*ImGui::SliderFloat("LightPosX", &SearchLightPos[0].x, -100.0f, 100.0f);
 	ImGui::SliderFloat("LightPosY", &SearchLightPos[0].y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightPosZ", &SearchLightPos[0].z, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightPosZ", &SearchLightPos[0].z, -100.0f, 100.0f);*/
 
 	ImGui::SliderFloat("LightDirX", &SearchLightDir[0].x, -100.0f, 100.0f);
 	ImGui::SliderFloat("LightDirY", &SearchLightDir[0].y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirZ", &SearchLightDir[0].z, -100.0f, 100.0f);*/
+	ImGui::SliderFloat("LightDirZ", &SearchLightDir[0].z, -100.0f, 100.0f);
 	ImGui::SliderFloat("Red", &FieldSpotLightColor.x, -60.0f, 60.0f);
 	ImGui::SliderFloat("Green", &FieldSpotLightColor.y, -60.0f, 60.0f);
 	ImGui::SliderFloat("Blue", &FieldSpotLightColor.z, -60.0f, 60.0f);
@@ -365,8 +365,8 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
 	//描画後処理
-	Act->ImGuiDraw();
-	//ImgDraw();
+	//Act->ImGuiDraw();
+	ImgDraw();
 	dxCommon->PostDraw();
 }
 
@@ -436,6 +436,16 @@ void GameScene::SpotLightMove()
 		ChangeTimerFlag = false;
 	}
 
+	if (LightDirEasingChane == false) {
+		LightDirEasingTime += 0.05f;
+	}
+	else {
+		LightDirEasingTime -= 0.05f;
+	}
+
+	SearchLightDir[0].x = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
+	SearchLightDir[1].z = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
+	SearchLightDir[2].x = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
 
 	Action::GetInstance()->DebugMove(SearchLightPos[0]);
 	Action::GetInstance()->DebugMove(SearchLightDir[0]);

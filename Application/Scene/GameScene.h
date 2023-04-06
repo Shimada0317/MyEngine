@@ -194,5 +194,8 @@ private://メンバ変数
 	float StartColorRed = 0.0f;
 	float EndColorRed = 0.8f;
 	float ColorTimeRed = 0.0f;
+
+	float LightDirEasingTime = 0.f;
+	bool LightDirEasingChane = false;
 };
 
