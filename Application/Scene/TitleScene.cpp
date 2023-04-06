@@ -3,6 +3,7 @@
 #include<cassert>
 #include <sstream>
 #include <iomanip>
+#include"Action.h"
 #include"GameScene.h"
 #include"Mouth.h"
 
@@ -43,13 +44,12 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(9, L"Resources/setumei3.png");
 	Sprite::LoadTexture(10, L"Resources/arrowRight.png");
 	Sprite::LoadTexture(11, L"Resources/arrowLeft.png");
-	Sprite::LoadTexture(12, L"Resources/arrowRightTrue.png");
-	Sprite::LoadTexture(13, L"Resources/arrowLeftTrue.png");
+
 
 
 	//スプライトの生成
 	Title.reset(Sprite::SpriteCreate(1, { 1.0f,1.0f }));
-	Cursor.reset( Sprite::SpriteCreate(2, ReticlePos, SpriteCol, Anchorpoint));
+	Cursor.reset(Sprite::SpriteCreate(2, ReticlePos, SpriteCol, Anchorpoint));
 	ClickBefore.reset(Sprite::SpriteCreate(3, ClickPos));
 	ClickAfter.reset(Sprite::SpriteCreate(4, ClickPos));
 	SignalBefore.reset(Sprite::SpriteCreate(5, ClickPos));
@@ -57,10 +57,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	DescriptionOperation.reset(Sprite::SpriteCreate(7, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint));
 	EnemyOverview.reset(Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint));
 	GameStartPreparation.reset(Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint));
-	ArrowRight.reset(Sprite::SpriteCreate(10, ArrowRightPos));
-	ArrowLeft.reset(Sprite::SpriteCreate(11, ArrowLeftPos));
-	ArrowRightTrue.reset(Sprite::SpriteCreate(12, ArrowRightPos));
-	ArrowLeftTrue.reset(Sprite::SpriteCreate(13, ArrowLeftPos));
+	ArrowRight.reset(Sprite::SpriteCreate(10, ArrowRightPos, ArrowRightColor,Anchorpoint));
+	ArrowLeft.reset(Sprite::SpriteCreate(11, ArrowLeftPos, ArrowLeftColor,Anchorpoint));
+
 
 	//オブジェクトの生成
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
@@ -134,7 +133,7 @@ void TitleScene::StatusSet()
 	lightGroupe->SetSpotLightColor(0, SpotLightColor);
 	lightGroupe->SetSpotLightAtten(0, SpotLightAtten);
 	lightGroupe->SetSpotLightFactorAngle(0, SpotLightFactorAngle);
-	
+
 	//2つ目のスポットライトを設定
 	lightGroupe->SetSpotLightDir(1, XMVECTOR({ SpotLightDir2.x, SpotLightDir2.y, SpotLightDir2.z }));
 	lightGroupe->SetSpotLightPos(1, SpotLightPos2);
@@ -148,6 +147,12 @@ void TitleScene::StatusSet()
 	lightGroupe->SetSpotLightColor(2, SpotLightColor);
 	lightGroupe->SetSpotLightAtten(2, SpotLightAtten);
 	lightGroupe->SetSpotLightFactorAngle(2, SpotLightFactorAngle);
+
+
+	ArrowLeft->SetSize(ArrowSize);
+	ArrowRight->SetSize(ArrowSize);
+	ArrowLeft->SetColor(ArrowLeftColor);
+	ArrowRight->SetColor(ArrowRightColor);
 }
 
 //全ての更新処理をまとめる
@@ -161,11 +166,11 @@ void TitleScene::AllUpdate()
 	//ポストエフェクトの更新処理
 	Post->Update(PostEfectColor);
 	//天球の更新処理
-	Sphere->Update({1,1,1,1}, true);
+	Sphere->Update({ 1,1,1,1 }, true);
 	//地面の更新処理
 	World->Update();
 	//カメラの移動先のビルの更新処理
-	Start->Update({0.4f,0.4f,0.4f,1.f});
+	Start->Update({ 0.4f,0.4f,0.4f,1.f });
 	//ライトグループ更新
 	lightGroupe->Update();
 }
@@ -173,13 +178,28 @@ void TitleScene::AllUpdate()
 //更新処理
 void TitleScene::Update()
 {
+	if (EasingChangeFlag == false) {
+		EasingTimer += 0.05f;
+		if (EasingTimer >= 1) {
+			EasingChangeFlag = true;
+		}
+	}
+	else {
+		EasingTimer -= 0.05f;
+		if (EasingTimer <= -1) {
+			EasingChangeFlag = false;
+		}
+	}
+	ArrowSize.x = Action::GetInstance()->EasingOut(EasingTimer, 5) + 32;
+	ArrowSize.y = Action::GetInstance()->EasingOut(EasingTimer, 5) + 32;
+
 	Mouth::GetInstance()->MouthMoveSprite(ReticlePos);
 	//カメラのムーブ関数
 	CameraDirection();
 	//カーソルがスプライトの範囲内であるか
-	CheckCursorIn(ReticlePos, ClickPos, 500, 75);
+	CheckCursorIn(ReticlePos, ClickPos, 500, 75,SignalCurorInFlag);
 	//最初のクリック
-	if (CursorIn_F == true && TitleDisplay_F == true) {
+	if (SignalCurorInFlag == true && TitleDisplay_F == true) {
 		if (Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1)) {
 			TitleSprite_F = false;
 			CameraEyeMove_F = true;
@@ -220,20 +240,21 @@ void TitleScene::CameraDirection()
 }
 
 //カーソルが範囲内に入っているか
-void TitleScene::CheckCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
+void TitleScene::CheckCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
 {
 	if ((check_Pos.x <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && (check_Pos.y <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
-		CursorIn_F = true;
+		CheckFlag = true;
 	}
 	else {
-		CursorIn_F = false;
+		CheckFlag= false;
 	}
 }
 
 //矢印のスプライトの範囲
 bool TitleScene::NextorBack(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
 {
-	if ((check_Pos.x <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && (check_Pos.y <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
+	if ((check_Pos.x -radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && 
+		(check_Pos.y - radY <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
 		return true;
 	}
 
@@ -245,7 +266,8 @@ void TitleScene::DescriptionPageProces()
 {
 	//カメラが移動した後の画面
 	if (DescriptionPage < 2 && TitleDisplay_F == false && CameraChange_F == true) {
-		if (NextorBack(ReticlePos, ArrowRightPos, 35, 35)) {
+		if (NextorBack(ReticlePos, ArrowRightPos, 16, 16)) {
+			ArrowRightColor = { 1.f,0.f,0.f,1.f };
 			RightTrueIn_F = true;
 			//矢印を押された時
 			if ((Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1))) {
@@ -254,13 +276,15 @@ void TitleScene::DescriptionPageProces()
 			}
 		}
 		else {
+			ArrowRightColor = { 1.f,1.f,1.f,1.f };
 			RightTrueIn_F = false;
 		}
 	}
 
 	//ページが0以上であれば
 	if (DescriptionPage > 0) {
-		if (NextorBack(ReticlePos, ArrowLeftPos, 35, 35)) {
+		if (NextorBack(ReticlePos, ArrowLeftPos, 16, 16)) {
+			ArrowLeftColor = { 1.f,0.f,0.f,1.f };
 			LeftTrueIn_F = true;
 			if ((Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1))) {
 				ClickSe->LoadFile("Resources/Sound/SE/click.wav", Volume);
@@ -268,12 +292,13 @@ void TitleScene::DescriptionPageProces()
 			}
 		}
 		else {
+			ArrowLeftColor = { 1.f,1.f,1.f,1.f };
 			LeftTrueIn_F = false;
 		}
 	}
 
 	//救援ヘリを呼ぶとき
-	if (CameraChange_F == true && CursorIn_F == true && DescriptionPage == 2) {
+	if (CameraChange_F == true && SignalCurorInFlag == true && DescriptionPage == 2) {
 		if (Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1)) {
 			if (Click_F == true) {
 				ClickSe->LoadFile("Resources/Sound/SE/MorseCode.wav", Volume);
@@ -321,29 +346,22 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 		Title->Draw();
 	}
 	if (CameraEyeMove_F == false) {
-		if (CursorIn_F == false) {
+		if (SignalCurorInFlag == false) {
 			ClickBefore->Draw();
 		}
-		else if (CursorIn_F == true) {
+		else if (SignalCurorInFlag == true) {
 			ClickAfter->Draw();
 		}
 	}
 	else if (CameraChange_F == true) {
 		if (DescriptionPage < 2) {
-			if (RightTrueIn_F == false) {
-				ArrowRight->Draw();
-			}
-			else {
-				ArrowRightTrue->Draw();
-			}
+			ArrowRight->Draw();
 		}
 		if (DescriptionPage > 0) {
-			if (LeftTrueIn_F == false) {
-				ArrowLeft->Draw();
-			}
-			else {
-				ArrowLeftTrue->Draw();
-			}
+
+			ArrowLeft->Draw();
+
+
 		}
 		if (DescriptionPage == 0) {
 			DescriptionOperation->Draw();
@@ -355,10 +373,10 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 			GameStartPreparation->Draw();
 		}
 		if (DescriptionPage == 2) {
-			if (CursorIn_F == false) {
+			if (SignalCurorInFlag == false) {
 				SignalBefore->Draw();
 			}
-			else if (CursorIn_F == true) {
+			else if (SignalCurorInFlag == true) {
 				SignalAfter->Draw();
 			}
 		}
@@ -385,8 +403,7 @@ void TitleScene::Finalize()
 	Title.reset();
 	ArrowLeft.reset();
 	ArrowRight.reset();
-	ArrowLeftTrue.reset();
-	ArrowRightTrue.reset();
+
 	EnemyOverview.reset();
 	DescriptionOperation.reset();
 	GameStartPreparation.reset();

@@ -74,7 +74,8 @@ public://メンバ関数
 	/// <param name="checkPos">押せるスプライトの座標</param>
 	/// <param name="radX">スプライトの横の範囲</param>
 	/// <param name="radY">スプライトの縦の範囲</param>
-	void CheckCursorIn(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY);
+	/// <param name="CheckFlag">範囲内に入っている場合フラグをtrueにする</param>
+	void CheckCursorIn(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY,bool& CheckFlag);
 
 	/// <summary>
 	/// 矢印のスプライトの範囲
@@ -171,14 +172,17 @@ private:
 	XMFLOAT2 TitlePos = { 0.0f,0.0f };
 	bool TitleSprite_F = true;
 	//説明の矢印座標
-	XMFLOAT2 ArrowRightPos = { 1220.0f,300 };
-	XMFLOAT2 ArrowLeftPos = { 30.0f,300 };
+	XMFLOAT2 ArrowRightPos = { 1240.0f,300 };
+	XMFLOAT2 ArrowLeftPos = { 35.0f,300 };
+	XMFLOAT2 ArrowSize = { 32.f,32.f};
+	XMFLOAT4 ArrowRightColor = { 1.f,1.f,1.f,1.f };
+	XMFLOAT4 ArrowLeftColor = { 1.f,1.f,1.f,1.f };
 	bool RightTrueIn_F = false;
 	bool LeftTrueIn_F = false;
 	//ポストエフェクトの色
 	XMFLOAT4 PostEfectColor = { 0.0f,0.0f,0.0f,1.0f };
 	//カーソルが入っているか
-	bool CursorIn_F = false;
+	bool SignalCurorInFlag = false;
 	//フェードを掛けるか掛けないか
 	bool FadeOut_F = false;
 	bool TitleDisplay_F = true;
@@ -205,5 +209,8 @@ private:
 	XMFLOAT3 SpotLightColor2 = { 0,0,1 };
 	XMFLOAT3 SpotLightAtten2 = { 0.f,0.f,0.f };
 	XMFLOAT2 SpotLightFactorAngle2 = { 20.0f,30.0f };
+
+	float EasingTimer = 0.f;
+	bool EasingChangeFlag=false;
 };
 
