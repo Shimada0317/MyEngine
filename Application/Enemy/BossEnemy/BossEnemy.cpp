@@ -181,8 +181,8 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 void BossEnemy::Draw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	RockOnHead->Draw();
-	RockOn->Draw();
+	//RockOnHead->Draw();
+	//RockOn->Draw();
 	Sprite::PostDraw();
 
 	ParticleManager::PreDraw(dxCommon->GetCmdList());

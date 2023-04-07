@@ -10,6 +10,7 @@
 #include"TitleScene.h"
 #include"DebugScene.h"
 #include"ModelManager.h"
+#include"Mouse.h"
 
 const float AddPosetEfectColor = 0.05f;
 const XMFLOAT4 BillColor = { 0.8f,0.6f,0.3f,1.0f };
@@ -386,7 +387,7 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 	postEffect->Draw(dxCommon->GetCmdList());
 	//描画後処理
 	//Act->ImGuiDraw();
-	ImgDraw();
+	//ImgDraw();
 	dxCommon->PostDraw();
 }
 
@@ -506,8 +507,7 @@ void GameScene::SpotLightMove()
 
 void GameScene::GameOverProcess()
 {
-
-	Mouse::GetInstance()->MouseGetSpritePos(ReticlePosition);
+	Mouse::GetInstance()->MouseMoveSprite(ReticlePosition);
 	ReticleForGameOver->SetPosition(ReticlePosition);
 	if (DethFlag == true) {
 		PostCol.x = 0;
