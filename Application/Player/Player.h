@@ -93,7 +93,7 @@ public:
 	/// <summary>
 	/// ƒ}ƒEƒX‚ÌŽæ“¾
 	/// </summary>
-	void MouthContoroll();
+	void MouseContoroll();
 	/// <summary>
 	/// ‰æ–Ê—h‚ê
 	/// </summary>

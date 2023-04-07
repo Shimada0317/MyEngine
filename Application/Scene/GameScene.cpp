@@ -283,7 +283,7 @@ void GameScene::Update()
 	}
 	//ゴールに着いたらクリア画面を表示
 	if (ClearFlag == true) {
-		if (Mouth::GetInstance()->PushClick(0)) {
+		if (Mouse::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
 		}
@@ -507,7 +507,7 @@ void GameScene::SpotLightMove()
 void GameScene::GameOverProcess()
 {
 
-	Mouth::GetInstance()->MouthMoveSprite(ReticlePosition);
+	Mouse::GetInstance()->MouseGetSpritePos(ReticlePosition);
 	ReticleForGameOver->SetPosition(ReticlePosition);
 	if (DethFlag == true) {
 		PostCol.x = 0;
@@ -516,7 +516,7 @@ void GameScene::GameOverProcess()
 
 		if (YesCursorInFlag == true) {
 			YesColor = { 1.f,0.f,0.f,1.f };
-			if (Mouth::GetInstance()->PushClick(0)) {
+			if (Mouse::GetInstance()->PushClick(0)) {
 				BaseScene* scene_ = new GameScene(sceneManager_);
 				sceneManager_->SetNextScene(scene_);
 			}
@@ -527,7 +527,7 @@ void GameScene::GameOverProcess()
 
 		if (NoCursorInFlag == true) {
 			NoColor = { 1.f,0.f,0.f,1.f };
-			if (Mouth::GetInstance()->PushClick(0)) {
+			if (Mouse::GetInstance()->PushClick(0)) {
 				BaseScene* scene_ = new TitleScene(sceneManager_);
 				sceneManager_->SetNextScene(scene_);
 			}

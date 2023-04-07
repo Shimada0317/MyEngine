@@ -1,15 +1,15 @@
-#include "Mouth.h"
+#include "Mouse.h"
 
 using namespace DirectX;
 
-Mouth* Mouth::GetInstance()
+Mouse* Mouse::GetInstance()
 {
-	static Mouth instance;
+	static Mouse instance;
 
 	return &instance;
 }
 
-void Mouth::Initialize(WinApp* winApp)
+void Mouse::Initialize(WinApp* winApp)
 {
 	HRESULT result;
 
@@ -27,7 +27,7 @@ void Mouth::Initialize(WinApp* winApp)
 	//ShowCursor(false);
 }
 
-void Mouth::Update()
+void Mouse::Update()
 {
 	clipre = cli;
 	HRESULT result= Onclick->GetDeviceState(sizeof(DIMOUSESTATE), &cli);
@@ -44,7 +44,7 @@ void Mouth::Update()
 //	result = Onclick->Acquire();
 }
 
-bool Mouth::PushClick(BYTE click)
+bool Mouse::PushClick(BYTE click)
 {
 	if (!(clipre.rgbButtons[click]&(0x80))) {
 		if ((cli.rgbButtons[click] & (0x80))) {
@@ -55,7 +55,7 @@ bool Mouth::PushClick(BYTE click)
     return false;
 }
 
-void Mouth::MouthMoveSprite(XMFLOAT2& spritePos)
+void Mouse::MouseMoveSprite(XMFLOAT2& spritePos)
 {
 	POINT mousePosition;
 
@@ -69,7 +69,7 @@ void Mouth::MouthMoveSprite(XMFLOAT2& spritePos)
 	spritePos.y = mousePosition.y;
 }
 
-void Mouth::RecoilMouth(XMFLOAT2& spritepos)
+void Mouse::RecoilMouse(XMFLOAT2& spritepos)
 {
 	HWND hwnd = winApp->GetHwnd();
 
@@ -88,7 +88,7 @@ void Mouth::RecoilMouth(XMFLOAT2& spritepos)
 	SetCursorPos(posX, posY);
 }
 
-void Mouth::MouthGetSpritePos(XMFLOAT2& spritePos)
+void Mouse::MouseGetSpritePos(XMFLOAT2& spritePos)
 {
 	POINT mousePosition;
 
@@ -102,7 +102,7 @@ void Mouth::MouthGetSpritePos(XMFLOAT2& spritePos)
 	ScreenToClient(hwnd, &mousePosition);
 }
 
-void Mouth::Mouthmove(const XMMATRIX& view, const XMMATRIX& Pro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet, float Distance)
+void Mouse::Mousemove(const XMMATRIX& view, const XMMATRIX& Pro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet, float Distance)
 {
 	XMVECTOR posNear = { spritePos.x,spritePos.y, 0 };
 	XMVECTOR posFar = { spritePos.x, spritePos.y,1 };

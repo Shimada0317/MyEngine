@@ -5,12 +5,14 @@
 #include <iomanip>
 #include"Action.h"
 #include"GameScene.h"
-#include"Mouth.h"
+#include"Mouse.h"
 
 const float SubColor = 0.01f;
 const float CameraMoveValueXandY = 0.4f;
 const float CameraMoveValueZ = 0.1f;
 const float CameraEyeMoveValue = 0.01f;
+const XMFLOAT4 RegularColor = { 1.f,1.f,1.f,1.f };
+const XMFLOAT2 DescriptionScreenPosition = { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f };
 
 //コンストラクタ
 TitleScene::TitleScene(SceneManager* sceneManager_)
@@ -50,15 +52,15 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	//スプライトの生成
 	Title.reset(Sprite::SpriteCreate(1, { 1.0f,1.0f }));
 	Cursor.reset(Sprite::SpriteCreate(2, ReticlePos, SpriteCol, Anchorpoint));
-	ClickBefore.reset(Sprite::SpriteCreate(3, ClickPos));
-	ClickAfter.reset(Sprite::SpriteCreate(4, ClickPos));
-	SignalBefore.reset(Sprite::SpriteCreate(5, ClickPos));
-	SignalAfter.reset(Sprite::SpriteCreate(6, ClickPos));
-	DescriptionOperation.reset(Sprite::SpriteCreate(7, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint));
-	EnemyOverview.reset(Sprite::SpriteCreate(8, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint));
-	GameStartPreparation.reset(Sprite::SpriteCreate(9, { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f }, SpriteCol, Anchorpoint));
-	ArrowRight.reset(Sprite::SpriteCreate(10, ArrowRightPos, ArrowRightColor,Anchorpoint));
-	ArrowLeft.reset(Sprite::SpriteCreate(11, ArrowLeftPos, ArrowLeftColor,Anchorpoint));
+	ClickBefore.reset(Sprite::SpriteCreate(3, ClickPos, RegularColor, Anchorpoint));
+	ClickAfter.reset(Sprite::SpriteCreate(4, ClickPos, RegularColor, Anchorpoint));
+	SignalBefore.reset(Sprite::SpriteCreate(5, ClickPos, RegularColor, Anchorpoint));
+	SignalAfter.reset(Sprite::SpriteCreate(6, ClickPos, RegularColor, Anchorpoint));
+	DescriptionOperation.reset(Sprite::SpriteCreate(7, DescriptionScreenPosition, SpriteCol, Anchorpoint));
+	EnemyOverview.reset(Sprite::SpriteCreate(8, DescriptionScreenPosition, SpriteCol, Anchorpoint));
+	GameStartPreparation.reset(Sprite::SpriteCreate(9, DescriptionScreenPosition, SpriteCol, Anchorpoint));
+	ArrowRight.reset(Sprite::SpriteCreate(10, ArrowRightPos, ArrowRightColor, Anchorpoint));
+	ArrowLeft.reset(Sprite::SpriteCreate(11, ArrowLeftPos, ArrowLeftColor, Anchorpoint));
 
 
 	//オブジェクトの生成
@@ -153,6 +155,12 @@ void TitleScene::StatusSet()
 	ArrowRight->SetSize(ArrowSize);
 	ArrowLeft->SetColor(ArrowLeftColor);
 	ArrowRight->SetColor(ArrowRightColor);
+
+	ClickAfter->SetSize(ClickSize);
+	ClickBefore->SetSize(ClickSize);
+	SignalAfter->SetSize(ClickSize);
+	SignalBefore->SetSize(ClickSize);
+
 }
 
 //全ての更新処理をまとめる
@@ -166,7 +174,7 @@ void TitleScene::AllUpdate()
 	//ポストエフェクトの更新処理
 	Post->Update(PostEfectColor);
 	//天球の更新処理
-	Sphere->Update({ 1,1,1,1 }, true);
+	Sphere->Update({ 1,1,1,1 });
 	//地面の更新処理
 	World->Update();
 	//カメラの移動先のビルの更新処理
@@ -192,15 +200,16 @@ void TitleScene::Update()
 	}
 	ArrowSize.x = Action::GetInstance()->EasingOut(EasingTimer, 5) + 32;
 	ArrowSize.y = Action::GetInstance()->EasingOut(EasingTimer, 5) + 32;
-
-	Mouth::GetInstance()->MouthMoveSprite(ReticlePos);
+	ClickSize.x= Action::GetInstance()->EasingOut(EasingTimer, 5) + 550;
+	ClickSize.y= Action::GetInstance()->EasingOut(EasingTimer, 5) + 60;
+	Mouse::GetInstance()->MouseMoveSprite(ReticlePos);
 	//カメラのムーブ関数
 	CameraDirection();
 	//カーソルがスプライトの範囲内であるか
-	CheckCursorIn(ReticlePos, ClickPos, 500, 75,SignalCurorInFlag);
+	CheckCursorIn(ReticlePos, ClickPos, 250.f, 50.f, SignalCurorInFlag);
 	//最初のクリック
 	if (SignalCurorInFlag == true && TitleDisplay_F == true) {
-		if (Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1)) {
+		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			TitleSprite_F = false;
 			CameraEyeMove_F = true;
 			TitleDisplay_F = false;
@@ -242,18 +251,19 @@ void TitleScene::CameraDirection()
 //カーソルが範囲内に入っているか
 void TitleScene::CheckCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
 {
-	if ((check_Pos.x <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && (check_Pos.y <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
+	if ((check_Pos.x - radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) &&
+		(check_Pos.y - radY <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
 		CheckFlag = true;
 	}
 	else {
-		CheckFlag= false;
+		CheckFlag = false;
 	}
 }
 
 //矢印のスプライトの範囲
 bool TitleScene::NextorBack(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
 {
-	if ((check_Pos.x -radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) && 
+	if ((check_Pos.x - radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) &&
 		(check_Pos.y - radY <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
 		return true;
 	}
@@ -270,7 +280,7 @@ void TitleScene::DescriptionPageProces()
 			ArrowRightColor = { 1.f,0.f,0.f,1.f };
 			RightTrueIn_F = true;
 			//矢印を押された時
-			if ((Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1))) {
+			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				ClickSe->LoadFile("Resources/Sound/SE/click.wav", Volume);
 				DescriptionPage += 1;
 			}
@@ -286,7 +296,7 @@ void TitleScene::DescriptionPageProces()
 		if (NextorBack(ReticlePos, ArrowLeftPos, 16, 16)) {
 			ArrowLeftColor = { 1.f,0.f,0.f,1.f };
 			LeftTrueIn_F = true;
-			if ((Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1))) {
+			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				ClickSe->LoadFile("Resources/Sound/SE/click.wav", Volume);
 				DescriptionPage -= 1;
 			}
@@ -299,7 +309,7 @@ void TitleScene::DescriptionPageProces()
 
 	//救援ヘリを呼ぶとき
 	if (CameraChange_F == true && SignalCurorInFlag == true && DescriptionPage == 2) {
-		if (Mouth::GetInstance()->PushClick(0) || Mouth::GetInstance()->PushClick(1)) {
+		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			if (Click_F == true) {
 				ClickSe->LoadFile("Resources/Sound/SE/MorseCode.wav", Volume);
 				Click_F = false;

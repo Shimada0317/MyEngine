@@ -7,10 +7,10 @@
 #include<vector>
 #include<DirectXMath.h>
 
-class Mouth
+class Mouse
 {
 public:
-	struct MouthPos {
+	struct MousePos {
 		LONG lX;
 		LONG lY;
 	};
@@ -27,7 +27,7 @@ public:
 	using XMMATRIX = DirectX::XMMATRIX;
 	using XMVECTOR = DirectX::XMVECTOR;
 public://ƒƒ“ƒoŠÖ”
-	static Mouth* GetInstance();
+	static Mouse* GetInstance();
 
 	//‰Šú‰»
 	void Initialize(WinApp* winApp);
@@ -36,17 +36,17 @@ public://ƒƒ“ƒoŠÖ”
 
 	bool PushClick(BYTE click);
 
-	void MouthMoveSprite(XMFLOAT2& spritePos);
+	void MouseMoveSprite(XMFLOAT2& spritePos);
 
-	void RecoilMouth(XMFLOAT2& spritepos);
+	void RecoilMouse(XMFLOAT2& spritepos);
 
-	void MouthGetSpritePos(XMFLOAT2& spritePos);
+	void MouseGetSpritePos(XMFLOAT2& spritePos);
 
-	void Mouthmove(const XMMATRIX& view,const XMMATRIX& Pro,const XMMATRIX& viewPort,const XMFLOAT2& spritePos,XMVECTOR& positionRet,float Distance);
+	void Mousemove(const XMMATRIX& view,const XMMATRIX& Pro,const XMMATRIX& viewPort,const XMFLOAT2& spritePos,XMVECTOR& positionRet,float Distance);
 
-	MouthPos& GetPosition() { this->pos; }
+	MousePos& GetPosition() { this->pos; }
 
-	MouthPos GetMouthMove();
+	MousePos GetMouseMove();
 private:
 
 	ComPtr<IDirectInputDevice8> devkeyboard;

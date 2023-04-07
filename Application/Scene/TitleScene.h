@@ -166,7 +166,7 @@ private:
 	XMFLOAT4 SpriteCol = { 1,1,1,1 };
 	XMFLOAT2 Anchorpoint = { 0.5f,0.5f };
 	XMFLOAT2 ReticlePos = { 640.0f,360.0f };
-	XMFLOAT2 ClickPos = { 380,560 };
+	XMFLOAT2 ClickPos = { WinApp::window_width/2,600 };
 	//タイトルスプライトのステータス
 	XMFLOAT2 TitleSize = { 1280.0f,720.0f };
 	XMFLOAT2 TitlePos = { 0.0f,0.0f };
@@ -212,5 +212,6 @@ private:
 
 	float EasingTimer = 0.f;
 	bool EasingChangeFlag=false;
+	XMFLOAT2 ClickSize = { 550.f,60.f };
 };
 

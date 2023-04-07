@@ -4,7 +4,7 @@
 #include"imconfig.h"
 #include"Action.h"
 #include"ModelManager.h"
-#include"Mouth.h"
+#include"Mouse.h"
 #include"WinApp.h"
 
 const int ReaminingBullet = 8;
@@ -150,7 +150,7 @@ void Player::Update(Camera* camera, Phase paterncount,bool moveflag)
 
 	//マウス座標の取得
 	GunRot.y = (ReticlePos2D.x - WinApp::window_width / 2) / 10;
-	MouthContoroll();
+	MouseContoroll();
 	if (MouseStopFlag == false) {
 		GunRot.x = (ReticlePos2D.y - WinApp::window_height / 2) / 50;
 	}
@@ -257,7 +257,7 @@ void Player::CameraWork()
 
 	}
 
-	if ((Mouth::GetInstance()->PushClick(1) || Mouth::GetInstance()->PushClick(0)) && StanbyFlag == true && CameraWorkFlag == false) {
+	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && StanbyFlag == true && CameraWorkFlag == false) {
 		MovieFlag = true;
 		ActionCount = 100;
 		EyeRot.x = 0;
@@ -568,12 +568,12 @@ void Player::SoundEffect()
 }
 
 //マウス操作
-void Player::MouthContoroll()
+void Player::MouseContoroll()
 {
 	//マウス座標の取得
-	Mouth::GetInstance()->MouthMoveSprite(ReticlePos2D);
+	Mouse::GetInstance()->MouseMoveSprite(ReticlePos2D);
 	if (RecoilFlag == true) {
-		Mouth::GetInstance()->RecoilMouth(ReticlePos2D);
+		Mouse::GetInstance()->RecoilMouse(ReticlePos2D);
 		RecoilFlag = false;
 	}
 	else {
@@ -626,7 +626,7 @@ void Player::DamageProcess()
 void Player::GunShotProcess()
 {
 	//弾の発射前
-	if (Mouth::GetInstance()->PushClick(0)) {
+	if (Mouse::GetInstance()->PushClick(0)) {
 		if (Remaining < ReaminingBullet && ReloadFlag == false && BulletShotFlag == false) {
 			Remaining += 1;
 			//パーティクル発生フラグ
@@ -663,7 +663,7 @@ void Player::GunShotProcess()
 void Player::ReloadProcess()
 {
 	//右クリックを押した時
-	if ((Mouth::GetInstance()->PushClick(1)) && Remaining != 0) {
+	if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
 		if (ReloadSoundFlag == true) {
 			ReloadSe->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
 			ReloadSoundFlag = false;
