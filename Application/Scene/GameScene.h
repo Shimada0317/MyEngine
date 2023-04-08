@@ -113,7 +113,7 @@ private://メンバ変数
 	Audio* Bgm = nullptr;
 	PostEffect* postEffect = nullptr;
 	Light* light = nullptr;
-	LightGroup* lightGroupe = nullptr;
+	unique_ptr<LightGroup> lightGroupe = nullptr;
 	unique_ptr <Actor> Act = nullptr;
 	//最初のビルのステータス
 	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };

@@ -24,15 +24,14 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 //初期化処理
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
-	TitleCamera = new Camera(WinApp::window_width, WinApp::window_height);
-	Object3d::SetCamera(TitleCamera);
+	TitleCamera = make_unique<Camera>(WinApp::window_width, WinApp::window_height); 
+	Object3d::SetCamera(TitleCamera.get());
 
-	light = Light::Create();
-	light->SetLightColor({ 1.0f,1.0f,1.0f });
+
+	lightGroupe = make_unique<LightGroup>();
 	lightGroupe = LightGroup::Create();
 
-	Object3d::SetLight(light);
-	Object3d::SetLightGroup(lightGroupe);
+	Object3d::SetLightGroup(lightGroupe.get());
 
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/start.png");
@@ -72,13 +71,13 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Start = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
 	World = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
 	//SEの初期か
-	ClickSe = new Audio();
+	ClickSe = make_unique<Audio>();
 	ClickSe->Initialize();
-	Bgm = new Audio();
+	Bgm = make_unique<Audio>();
 	Bgm->Initialize();
 	Bgm->LoopWave("Resources/Sound/BGM/title.wav", 0.75f);
 	//ポストエフェクトの初期化
-	Post = new PostEffect();
+	Post = make_unique<PostEffect>();
 	Post->Initialize();
 	CameraEyeMove = { 0.0f,0.0f,0.0f };
 	//スポットライトをアクティブ状態
@@ -403,12 +402,6 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 //終了処理
 void TitleScene::Finalize()
 {
-	delete Post;
-	delete TitleCamera;
-	delete light;
-	delete ClickSe;
-	delete Bgm;
-	delete lightGroupe;
 
 	Title.reset();
 	ArrowLeft.reset();

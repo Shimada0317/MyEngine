@@ -32,10 +32,11 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	postEffect->Update(PostCol);
 
 	light = Light::Create();
+	lightGroupe = make_unique<LightGroup>();
 	lightGroupe = LightGroup::Create();
 
 	Object3d::SetLight(light);
-	Object3d::SetLightGroup(lightGroupe);
+	Object3d::SetLightGroup(lightGroupe.get());
 
 	//	スプライトの読み込み
 	Sprite::LoadTexture(30, L"Resources/DamageEfect.png");
@@ -406,7 +407,7 @@ void GameScene::Finalize()
 	Shot.reset();
 	delete Bgm;
 	delete light;
-	delete lightGroupe;
+
 	World.reset();
 	Start.reset();
 	for (int i = 0; i < BILLS; i++) {

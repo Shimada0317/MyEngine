@@ -16,13 +16,13 @@ void LightGroup::StaticInitialize(ID3D12Device* device)
 	LightGroup::device = device;
 }
 
-LightGroup* LightGroup::Create()
+std::unique_ptr<LightGroup> LightGroup::Create()
 {
 	LightGroup* instance = new LightGroup();
 
 	instance->Initialize();
 
-	return instance;
+	return std::unique_ptr<LightGroup>(instance);
 }
 
 void LightGroup::Initialize()

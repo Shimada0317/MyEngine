@@ -76,7 +76,7 @@ private:
 	float PoinLightColor[3] = { 1,1,1 };
 	float PointLightAtten[3] = { 0.03f,0.01f,0.01f };
 
-	LightGroup* lightGroupe;
+	unique_ptr<LightGroup>lightGroupe;
 	XMVECTOR lightDir = { 0,0,0,0 };
 
 	XMFLOAT3 SpotLightDir = { 0,-1,0};

@@ -53,7 +53,7 @@ public: // 静的メンバ関数
 	/// インスタンス生成
 	/// </summary>
 	/// <returns>インスタンス</returns>
-	static LightGroup* Create();
+	static std::unique_ptr<LightGroup> Create();
 
 private: // 静的メンバ変数
 	// デバイス

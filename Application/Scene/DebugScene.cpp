@@ -10,11 +10,12 @@ void DebugScene::Initialize(DirectXCommon* dxComon)
 {
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
 
+	lightGroupe = make_unique<LightGroup>();
 	lightGroupe = LightGroup::Create();
 
 
 	Object3d::SetCamera(camera);
-	Object3d::SetLightGroup(lightGroupe);
+	Object3d::SetLightGroup(lightGroupe.get());
 
 
 	SphereModel = ObjModel::CreateFromOBJ("skydome");

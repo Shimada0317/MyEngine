@@ -26,6 +26,7 @@ private://静的メンバ変数
 	//デバイス
 	static ID3D12Device* dev;
 public://静的メンバ関数
+
 	static void StaticInitialize(ID3D12Device* dev);
 
 	static Light* Create();

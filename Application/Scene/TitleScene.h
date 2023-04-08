@@ -117,27 +117,27 @@ private:
 	unique_ptr <Object3d >World;
 	unique_ptr<Object3d> Start;
 	//スプライト
-	std::unique_ptr<Sprite> Title = nullptr;
-	std::unique_ptr<Sprite> Cursor = nullptr;
-	std::unique_ptr<Sprite> ClickBefore = nullptr;
-	std::unique_ptr<Sprite> ClickAfter = nullptr;
-	std::unique_ptr<Sprite> SignalBefore = nullptr;
-	std::unique_ptr<Sprite> SignalAfter = nullptr;
-	std::unique_ptr<Sprite> DescriptionOperation = nullptr;
-	std::unique_ptr<Sprite> EnemyOverview = nullptr;
-	std::unique_ptr<Sprite> GameStartPreparation = nullptr;
-	std::unique_ptr<Sprite> ArrowRight = nullptr;
-	std::unique_ptr<Sprite> ArrowLeft = nullptr;
-	std::unique_ptr<Sprite> ArrowRightTrue = nullptr;
-	std::unique_ptr<Sprite> ArrowLeftTrue = nullptr;
+	unique_ptr<Sprite> Title = nullptr;
+	unique_ptr<Sprite> Cursor = nullptr;
+	unique_ptr<Sprite> ClickBefore = nullptr;
+	unique_ptr<Sprite> ClickAfter = nullptr;
+	unique_ptr<Sprite> SignalBefore = nullptr;
+	unique_ptr<Sprite> SignalAfter = nullptr;
+	unique_ptr<Sprite> DescriptionOperation = nullptr;
+	unique_ptr<Sprite> EnemyOverview = nullptr;
+	unique_ptr<Sprite> GameStartPreparation = nullptr;
+	unique_ptr<Sprite> ArrowRight = nullptr;
+	unique_ptr<Sprite> ArrowLeft = nullptr;
+	unique_ptr<Sprite> ArrowRightTrue = nullptr;
+	unique_ptr<Sprite> ArrowLeftTrue = nullptr;
 	//その他の機能
-	Light* light = nullptr;
-	LightGroup* lightGroupe = nullptr;
-	PostEffect* Post = nullptr;
-	Audio* ClickSe = nullptr;
-	Audio* MorseCodeSe = nullptr;
-	Audio* Bgm = nullptr;
-	Camera* TitleCamera = nullptr;
+	unique_ptr<Light> light = nullptr;
+	unique_ptr<LightGroup> lightGroupe = nullptr;
+	unique_ptr<PostEffect> Post = nullptr;
+	unique_ptr<Audio> ClickSe = nullptr;
+	unique_ptr<Audio> MorseCodeSe = nullptr;
+	unique_ptr<Audio> Bgm = nullptr;
+	unique_ptr<Camera> TitleCamera = nullptr;
 	//球体のステータス
 	XMVECTOR SpherePos = { 0,0,0 };
 	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
