@@ -1,16 +1,16 @@
-#include "EasyMath.h"
+#include "HelperMath.h"
 #include"WinApp.h"
 
 
 
-EasyMath* EasyMath::GetInstance()
+HelperMath* HelperMath::GetInstance()
 {
-    static EasyMath instance;
+    static HelperMath instance;
 
     return &instance;
 }
 
-XMVECTOR EasyMath::XMvectorAddXMvector(const XMVECTOR& FirstValue, const XMVECTOR& AddValue)
+XMVECTOR HelperMath::XMvectorAddXMvector(const XMVECTOR& FirstValue, const XMVECTOR& AddValue)
 {
     XMVECTOR valueresult={0.f,0.f,0.f};
 
@@ -21,7 +21,7 @@ XMVECTOR EasyMath::XMvectorAddXMvector(const XMVECTOR& FirstValue, const XMVECTO
     return valueresult;
 }
 
-XMVECTOR EasyMath::XMvectorSubXMVector(const XMVECTOR& FirstValue, const XMVECTOR& SubValue)
+XMVECTOR HelperMath::XMvectorSubXMVector(const XMVECTOR& FirstValue, const XMVECTOR& SubValue)
 {
     XMVECTOR valueresult={0.f,0.f,0.f};
 
@@ -32,7 +32,7 @@ XMVECTOR EasyMath::XMvectorSubXMVector(const XMVECTOR& FirstValue, const XMVECTO
     return valueresult;
 }
 
-XMFLOAT3 EasyMath::XMFLOAT3AddXMFLOAT3(const XMFLOAT3& FirstValue, const XMFLOAT3& AddValue)
+XMFLOAT3 HelperMath::XMFLOAT3AddXMFLOAT3(const XMFLOAT3& FirstValue, const XMFLOAT3& AddValue)
 {
     XMFLOAT3 valueresult = { 0.f,0.f,0.f };
 
@@ -43,7 +43,7 @@ XMFLOAT3 EasyMath::XMFLOAT3AddXMFLOAT3(const XMFLOAT3& FirstValue, const XMFLOAT
     return valueresult;
 }
 
-XMFLOAT3 EasyMath::XMFLOAT3SubXMFLOAT3(const XMFLOAT3& FirstValue, const XMFLOAT3& SubValue)
+XMFLOAT3 HelperMath::XMFLOAT3SubXMFLOAT3(const XMFLOAT3& FirstValue, const XMFLOAT3& SubValue)
 {
     XMFLOAT3 valueresult = { 0.f,0.f,0.f };
 
@@ -54,7 +54,7 @@ XMFLOAT3 EasyMath::XMFLOAT3SubXMFLOAT3(const XMFLOAT3& FirstValue, const XMFLOAT
     return valueresult;
 }
 
-XMFLOAT3 EasyMath::XMFLOAT3ChangeValue(const XMFLOAT3& ChangeValue)
+XMFLOAT3 HelperMath::XMFLOAT3ChangeValue(const XMFLOAT3& ChangeValue)
 {
     XMFLOAT3 valueresult = { 0.f,0.f,0.f };
 
@@ -65,7 +65,7 @@ XMFLOAT3 EasyMath::XMFLOAT3ChangeValue(const XMFLOAT3& ChangeValue)
     return valueresult;
 }
 
-XMFLOAT3 EasyMath::ConvertToXMFLOAT3(float SourceValue)
+XMFLOAT3 HelperMath::ConvertToXMFLOAT3(float SourceValue)
 {
     XMFLOAT3 ConvertValue;
 
@@ -76,7 +76,7 @@ XMFLOAT3 EasyMath::ConvertToXMFLOAT3(float SourceValue)
     return ConvertValue;
 }
 
-void EasyMath::ChangeViewPort(XMMATRIX& matviewport, const XMVECTOR& offset)
+void HelperMath::ChangeViewPort(XMMATRIX& matviewport, const XMVECTOR& offset)
 {
     matviewport.r[0].m128_f32[0] = WinApp::window_width / 2;
     matviewport.r[0].m128_f32[1] = 0;

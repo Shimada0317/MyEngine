@@ -135,9 +135,6 @@
     <ClCompile Include="GameEngine\DirectXCommon\DirectXCommon.cpp">
       <Filter>.cpp\GameEngine\DirectXCommon</Filter>
     </ClCompile>
-    <ClCompile Include="GameEngine\EasyMath\EasyMath.cpp">
-      <Filter>.cpp\GameEngine\EasyMath</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Enemy\Enemy.cpp">
       <Filter>.cpp\Application\Enemy</Filter>
     </ClCompile>
@@ -228,6 +225,9 @@
     <ClCompile Include="Application\Scene\TitleScene.cpp">
       <Filter>.cpp\Application\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="GameEngine\HelperMath\HelperMath.cpp">
+      <Filter>.cpp\GameEngine\HelperMath</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -301,9 +301,6 @@
     </ClInclude>
     <ClInclude Include="GameEngine\DirectXCommon\DirectXCommon.h">
       <Filter>.h\GameEngine\DirectXCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\EasyMath\EasyMath.h">
-      <Filter>.h\GameEngine\EasyMath</Filter>
     </ClInclude>
     <ClInclude Include="Application\Enemy\Enemy.h">
       <Filter>.h\Application\Enemy</Filter>
@@ -395,6 +392,9 @@
     <ClInclude Include="GameEngine\WinApp\WinApp.h">
       <Filter>.h\GameEngine\WinApp</Filter>
     </ClInclude>
+    <ClInclude Include="GameEngine\HelperMath\HelperMath.h">
+      <Filter>.h\GameEngine\HelperMath</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -461,9 +461,6 @@
     </Filter>
     <Filter Include=".cpp\GameEngine\DebugText">
       <UniqueIdentifier>{5dfbc0ce-a6e7-49b2-bf03-6643909fa0da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\EasyMath">
-      <UniqueIdentifier>{1bd30ae5-a798-448e-a209-f870b29b0a75}</UniqueIdentifier>
     </Filter>
     <Filter Include=".cpp\GameEngine\Framework">
       <UniqueIdentifier>{45675b40-78c4-4ac9-a99d-3cb080b74521}</UniqueIdentifier>
@@ -561,9 +558,6 @@
     <Filter Include=".h\GameEngine\DirectXCommon">
       <UniqueIdentifier>{4f0b12ca-a130-482a-8151-59ed0cd7741d}</UniqueIdentifier>
     </Filter>
-    <Filter Include=".h\GameEngine\EasyMath">
-      <UniqueIdentifier>{e3f6af70-8c42-4661-ab96-a9136ad8d866}</UniqueIdentifier>
-    </Filter>
     <Filter Include=".h\GameEngine\Framwork">
       <UniqueIdentifier>{3b43e994-b89b-4cab-a504-cda7b2ac734d}</UniqueIdentifier>
     </Filter>
@@ -620,6 +614,12 @@
     </Filter>
     <Filter Include="hlsl\Toon">
       <UniqueIdentifier>{4ead4d18-8985-453f-bf80-c5f9c186d62d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include=".h\GameEngine\HelperMath">
+      <UniqueIdentifier>{e3f6af70-8c42-4661-ab96-a9136ad8d866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include=".cpp\GameEngine\HelperMath">
+      <UniqueIdentifier>{1bd30ae5-a798-448e-a209-f870b29b0a75}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@
 
 using namespace DirectX;
 
-class EasyMath
+class HelperMath
 {
 public:
 	// Microsoft::WRL::を省略
@@ -20,7 +20,7 @@ public:
 	/// インスタンス生成
 	/// </summary>
 	/// <returns></returns>
-	static EasyMath* GetInstance();
+	static HelperMath* GetInstance();
 
 	/// <summary>
 	/// XMVECTOR同士の加算

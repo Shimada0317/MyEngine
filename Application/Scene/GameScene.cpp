@@ -4,7 +4,7 @@
 #include <sstream>
 #include <iomanip>
 #include"Action.h"
-#include"EasyMath.h"
+#include"HelperMath.h"
 #include"SceneManager.h"
 #include"ClearScene.h"
 #include"TitleScene.h"
@@ -451,11 +451,11 @@ void GameScene::SpotLightMove()
 		LightAddPosChangeTimer -= 0.01f;
 	}
 	if (LightAddPosChangeTimer >= 1) {
-		SearchLightAddPos = EasyMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
+		SearchLightAddPos = HelperMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
 		ChangeTimerFlag = true;
 	}
 	else if (LightAddPosChangeTimer <= -1) {
-		SearchLightAddPos = EasyMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
+		SearchLightAddPos = HelperMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
 		ChangeTimerFlag = false;
 	}
 

@@ -4,7 +4,7 @@
 #include"Sprite.h"
 #include<vector>
 #include"Audio.h"
-#include"EasyMath.h"
+#include"HelperMath.h"
 #include"ParticleManager.h"
 #include"RailCamera.h"
 #include<memory>

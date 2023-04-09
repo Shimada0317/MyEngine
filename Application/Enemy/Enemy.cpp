@@ -1,6 +1,6 @@
 #include "Enemy.h"
 #include"Action.h"
-#include"EasyMath.h"
+#include"HelperMath.h"
 
 using namespace DirectX;
 const int HeadDamage = 80;
@@ -331,9 +331,9 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 	float discoloration = 0.01f;
 	if (AttackShakeDownFlag == false) {
 		ArmsPartRot.x += 1.5f;
-		ArmsPartScl=EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(ArmsPartScl, gigantic);
-		BodyPartScl=EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(BodyPartScl, gigantic);
-		HeadPartScl=EasyMath::GetInstance()->XMFLOAT3AddXMFLOAT3(HeadPartScl, gigantic);
+		ArmsPartScl=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(ArmsPartScl, gigantic);
+		BodyPartScl=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(BodyPartScl, gigantic);
+		HeadPartScl=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(HeadPartScl, gigantic);
 		ArmsPartColor.y -= discoloration;
 		ArmsPartColor.z -= discoloration;
 		//˜r‚ªÅ‘å“_‚É’B‚µ‚½Žž
@@ -431,7 +431,7 @@ XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 
 	XMVECTOR PositionRet = set3Dposition;
 
-	EasyMath::GetInstance()->ChangeViewPort(MatViewPort,offset);
+	HelperMath::GetInstance()->ChangeViewPort(MatViewPort,offset);
 
 	XMMATRIX MatVP = MatViewPort;
 
