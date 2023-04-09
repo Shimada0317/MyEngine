@@ -202,7 +202,7 @@ void GameScene::AllUpdata()
 		FieldBills[i]->Update(BillColor);
 	}
 	//天球の更新処理
-	Sphere->Update({ 1,1,1,1 });
+	Sphere->Update({ 1,1,1,1 },true);
 	//地面の更新処理
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理

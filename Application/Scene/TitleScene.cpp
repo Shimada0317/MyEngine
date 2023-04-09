@@ -173,7 +173,7 @@ void TitleScene::AllUpdate()
 	//ポストエフェクトの更新処理
 	Post->Update(PostEfectColor);
 	//天球の更新処理
-	Sphere->Update({ 1,1,1,1 });
+	Sphere->Update({ 1,1,1,1 },true);
 	//地面の更新処理
 	World->Update();
 	//カメラの移動先のビルの更新処理
