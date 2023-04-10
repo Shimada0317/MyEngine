@@ -29,7 +29,7 @@ public://静的メンバ関数
 
 	static void StaticInitialize(ID3D12Device* dev);
 
-	static Light* Create();
+	static std::unique_ptr<Light>Create();
 private://メンバ変数
 	ComPtr<ID3D12Resource> constBuff;
 	//ライトの光源方向

@@ -228,6 +228,7 @@
     <ClCompile Include="GameEngine\HelperMath\HelperMath.cpp">
       <Filter>.cpp\GameEngine\HelperMath</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Rule\Rule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -395,6 +396,7 @@
     <ClInclude Include="GameEngine\HelperMath\HelperMath.h">
       <Filter>.h\GameEngine\HelperMath</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Rule\Rule.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

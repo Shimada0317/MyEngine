@@ -35,7 +35,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightGroupe = make_unique<LightGroup>();
 	lightGroupe = LightGroup::Create();
 
-	Object3d::SetLight(light);
+	Object3d::SetLight(light.get());
 	Object3d::SetLightGroup(lightGroupe.get());
 
 	//	スプライトの読み込み
@@ -406,7 +406,6 @@ void GameScene::Finalize()
 	Clear.reset();
 	Shot.reset();
 	delete Bgm;
-	delete light;
 
 	World.reset();
 	Start.reset();

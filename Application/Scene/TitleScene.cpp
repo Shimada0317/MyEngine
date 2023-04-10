@@ -26,12 +26,14 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 {
 	TitleCamera = make_unique<Camera>(WinApp::window_width, WinApp::window_height); 
 	Object3d::SetCamera(TitleCamera.get());
-
+	light = make_unique<Light>();
+	light = Light::Create();
 
 	lightGroupe = make_unique<LightGroup>();
 	lightGroupe = LightGroup::Create();
 
 	Object3d::SetLightGroup(lightGroupe.get());
+	Object3d::SetLight(light.get());
 
 	////スプライトの読み込み
 	Sprite::LoadTexture(1, L"Resources/start.png");
@@ -418,6 +420,6 @@ void TitleScene::Finalize()
 		BillsLowAlpha[i].reset();
 	}
 	Sphere.reset();
-	World.reset();
+	//World.reset();
 	Start.reset();
 }

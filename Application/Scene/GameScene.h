@@ -112,7 +112,7 @@ private://メンバ変数
 	//その他の機能
 	Audio* Bgm = nullptr;
 	PostEffect* postEffect = nullptr;
-	Light* light = nullptr;
+	unique_ptr<Light> light = nullptr;
 	unique_ptr<LightGroup> lightGroupe = nullptr;
 	unique_ptr <Actor> Act = nullptr;
 	//最初のビルのステータス

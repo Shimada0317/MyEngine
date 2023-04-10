@@ -16,13 +16,13 @@ void Light::StaticInitialize(ID3D12Device* dev)
 	
 }
 
-Light* Light::Create()
+std::unique_ptr<Light> Light::Create()
 {
 	Light* instance = new Light();
 
 	instance->Initialize();
 
-	return instance;
+	return std::unique_ptr<Light>(instance);
 }
 
 void Light::Initialize()

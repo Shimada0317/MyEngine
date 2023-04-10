@@ -161,11 +161,11 @@ void Player::Update(Camera* camera, Phase paterncount, bool moveflag)
 	//カメラが動いていないとき
 	if (CameraWorkFlag == true) {
 
-		GunShotProcess();
+		GunShotProcess(paterncount);
 
 		ScreenShake(ShakingValue, 0.1f);
 
-		ParticleEfect(paterncount);
+		
 
 		ReloadProcess();
 	}
@@ -319,8 +319,8 @@ void Player::CameraWork()
 //プレイヤー移動
 void Player::PlayerMove(bool& move, Phase paterncount)
 {
-	XMMATRIX camMat = RailCam->GetWorld();
-	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
+	camMat = RailCam->GetWorld();
+	camvec = { 0.0f,0.0f,0.0f,0.0f };
 
 	camvec = XMVector3Transform(camvec, camMat);
 
@@ -329,149 +329,13 @@ void Player::PlayerMove(bool& move, Phase paterncount)
 		MoveFlag = true;
 	}
 	if (MoveFlag == true) {
+		MoveShakingHead();
 		MoveSpeed = 0.5f;
-		switch (paterncount)
-		{
-		case LANDINGPOINT_BACK:
-			Velocity = { 0, 0, MoveSpeed };
-			if (camvec.m128_f32[2] >= 20) {
-				Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
-				Velocity = { 0.f,0.f,0.f };
-				if (EyeRot.y >= 180) {
-					StopFlag = true;
-					move = false;
-					MoveFlag = false;
-					
-				}
-			}
-			break;
-		case LANDINGPOINT_FRONT:
-
-			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-			if (EyeRot.y <= 0) {
-				Velocity = { 0, 0, 0 };
-				move = false;
-				MoveFlag = false;
-				StopFlag = true;
-			}
-			break;
-		case MOVEDPOINT_A:
-			Velocity = { 0, 0, MoveSpeed };
-			if (camvec.m128_f32[2] >= 40) {
-				Velocity = { 0.f,0.f,0.f };
-				MoveFlag = false;
-				move = false;
-				StopFlag = true;
-			}
-			break;
-		case MOVEDPOINT_A_LEFT:
-			Action::GetInstance()->EaseOut(EyeRot.y, -95.0f);
-			if (EyeRot.y <= -90) {
-				EyeRot.y = max(EyeRot.y, -90.0f);
-				ChangeRot = EyeRot.y;
-				Velocity = { 0, 0, 0 };
-				move = false;
-				MoveFlag = false;
-				StopFlag = true;
-			}
-			break;
-		case MOVEDPOINT_B:
-			Action::GetInstance()->EaseOut(EyeRot.y, 95.0f);
-			if (EyeRot.y >= 90) {
-				ChangeRot = 90;
-				EyeRot.y = 90;
-				Velocity = { 0, 0, MoveSpeed };
-			}
-			if (camvec.m128_f32[0] >= 30) {
-				move = false;
-				MoveFlag = false;
-				StopFlag = true;
-			}
-			break;
-		case MOVEDPOINT_C:
-			Velocity = { 0, 0, MoveSpeed };
-			if (camvec.m128_f32[0] >= 45) {
-				move = false;
-				MoveFlag = false;
-				StopFlag = true;
-				Velocity = { 0, 0, 0 };
-			}
-			break;
-		case MOVEDPOINT_C_OBLIQUE:
-			Velocity = { 0, 0, MoveSpeed };
-			if (camvec.m128_f32[0] >= 50) {
-				Velocity = { 0, 0, 0 };
-				Action::GetInstance()->EaseOut(EyeRot.y, 145.0f);
-				if (EyeRot.y >= 130) {
-					ChangeRot = 130;
-					move = false;
-					MoveFlag = false;
-					StopFlag = true;
-					Velocity = { 0, 0, 0 };
-				}
-			}
-			break;
-		case MOVEDPOINT_C_FRONT:
-			if (camvec.m128_f32[0] <= 55) {
-				Velocity = { 0, 0, MoveSpeed };
-			}
-			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-			if (EyeRot.y <= 0) {
-				ChangeRot = 0;
-				move = false;
-				MoveFlag = false;
-				StopFlag = true;
-				Velocity = { 0, 0, 0 };
-			}
-			break;
-		case GOALPOINT_BACK:
-			ActionCount = 0;
-			Velocity = { 0.f,0.f,MoveSpeed };
-			if (camvec.m128_f32[2] >= 80) {
-				Velocity = { 0,0.,0.1 };
-				if (camvec.m128_f32[2] >= 82) {
-					ShakeHeadFlag = false;
-					Velocity = { 0.0f,0.0f,0.0f };
-					Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
-					if (EyeRot.y >= 180) {
-						ChangeRot = 0;
-						move = false;
-						MoveFlag = false;
-						StopFlag = true;
-						Velocity = { 0, 0, 0 };
-					}
-				}
-			}
-			break;
-		case GOALPOINT:
-			StanbyFlag = false;
-			Velocity = { 0, 0, 0.1 };
-			ShakeHeadFlag = false;
-			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-			if (EyeRot.y <= 0) {
-				ChangeRot = 0;
-				EyeRot.y = 0;
-			}
-			if (camvec.m128_f32[2] >= 92) {
-				Velocity = { 0,0.05,0.1 };
-				if (camvec.m128_f32[2] >= 97) {
-					Velocity = { 0.0f,0.0f,0.0f };
-					FringFlag = true;
-					if (FringFlag == true) {
-						Velocity = { 0.0f,0.6683f,0.0f };
-					}
-				}
-			}
-			move = false;
-			CameraWorkFlag = false;
-			MovieFlag = false;
-			ActionCount = 0;
-			break;
-		}
+		(this->*MoveFuncTable[paterncount])();
 	}
-	
 	else if (MoveFlag == false) {
 
+	move = false;
 		Velocity = { 0.f,0.f,0.f };
 	}
 }
@@ -527,29 +391,6 @@ void Player::ImGuiDraw()
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
-}
-
-void Player::ChangeViewPort(XMMATRIX& matViewPort)
-{
-	matViewPort.r[0].m128_f32[0] = WinApp::window_width / 2;
-	matViewPort.r[0].m128_f32[1] = 0;
-	matViewPort.r[0].m128_f32[2] = 0;
-	matViewPort.r[0].m128_f32[3] = 0;
-
-	matViewPort.r[1].m128_f32[0] = 0;
-	matViewPort.r[1].m128_f32[1] = -(WinApp::window_height / 2);
-	matViewPort.r[1].m128_f32[2] = 0;
-	matViewPort.r[1].m128_f32[3] = 0;
-
-	matViewPort.r[2].m128_f32[0] = 0;
-	matViewPort.r[2].m128_f32[1] = 0;
-	matViewPort.r[2].m128_f32[2] = 1;
-	matViewPort.r[2].m128_f32[3] = 0;
-
-	matViewPort.r[3].m128_f32[0] = WinApp::window_width / 2 + offset.m128_f32[0];
-	matViewPort.r[3].m128_f32[1] = WinApp::window_height / 2 + offset.m128_f32[1];
-	matViewPort.r[3].m128_f32[2] = 0;
-	matViewPort.r[3].m128_f32[3] = 1;
 }
 
 void Player::SoundEffect()
@@ -613,14 +454,12 @@ void Player::DamageProcess()
 }
 
 //弾の発射処理
-void Player::GunShotProcess()
+void Player::GunShotProcess(Phase paterncount)
 {
 	//弾の発射前
 	if (Mouse::GetInstance()->PushClick(0)) {
 		if (Remaining < ReaminingBullet && ReloadFlag == false && BulletShotFlag == false) {
 			Remaining += 1;
-			//パーティクル発生フラグ
-			ParticleFlag = true;
 			//弾の発射フラグ
 			BulletShotFlag = true;
 			//2Dスプライトリコイルフラグ
@@ -630,6 +469,8 @@ void Player::GunShotProcess()
 			//銃オブジェクトリコイルフラグ
 			RecoilGunFlag = true;
 			ShakingValue = 0.6f;
+
+			ParticleEfect(paterncount);
 		}
 	}
 	else {
@@ -708,19 +549,19 @@ void Player::ReloadProcess()
 void Player::MoveShakingHead()
 {
 	//加算と減算する為の絶対値
-	const float EyeRotAbsouluteValue = 0.5f;
+	const float EyeRotAbsouluteValue = 0.05f;
 	//反転させるための絶対値
 	const float AbsoluteValue = 0.5f;
 	if (ShakeHeadFlag == true) {
-		if (Shake == false) {
-			EyeRot.x += 0.05f;
-			if (EyeRot.x >= 0.5f) {
-				Shake = true;
+		if (Shake == true) {
+			EyeRot.x += EyeRotAbsouluteValue;
+			if (EyeRot.x >= AbsoluteValue) {
+				Shake = false;
 			}
 		}
 		if (Shake == false) {
-			EyeRot.x -= 0.05;
-			if (EyeRot.x <= -0.5f) {
+			EyeRot.x -= EyeRotAbsouluteValue;
+			if (EyeRot.x <= -AbsoluteValue) {
 				Shake = true;
 			}
 		}
@@ -730,7 +571,6 @@ void Player::MoveShakingHead()
 //マズルエフェクト
 void Player::ParticleEfect(Phase paterncount)
 {
-	if (ParticleFlag == true) {
 		for (int i = 0; i < 10; i++) {
 			double radX = ReticleRot.y * XM_PI / 180;
 			double radY = GunRot.x * XM_PI / 180;
@@ -756,7 +596,7 @@ void Player::ParticleEfect(Phase paterncount)
 			else if (paterncount == LANDINGPOINT_FRONT || paterncount == GOALPOINT) {
 				pos.x = GunWorldPos.m128_f32[0] - sinradX * 3.5f;
 				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-				pos.z = GunWorldPos.m128_f32[2] - 2.0f;
+				pos.z = GunWorldPos.m128_f32[2] - 3.0f;
 			}
 			else if (paterncount == MOVEDPOINT_B) {
 				pos.x = GunWorldPos.m128_f32[0] - 2.3f;
@@ -789,9 +629,170 @@ void Player::ParticleEfect(Phase paterncount)
 			PartGreen->Add(20, pos, vel, acc, 0.5f, 0.2f, 1.0f);
 			PartSmoke->Add(50, pos, smokevel, acc, 0.5f, 0.0f, 1.0f);
 		}
-		ParticleFlag = false;
 		SoundEffect();
+
+}
+
+void Player::MoveStartBack()
+{
+	Velocity = { 0, 0, MoveSpeed };
+	if (camvec.m128_f32[2] >= 20) {
+		Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
+		Velocity = { 0.f,0.f,0.f };
+		if (EyeRot.y >= 180) {
+			StopFlag = true;
+			MoveFlag = false;
+
+		}
 	}
 }
 
+void Player::MoveStartFront()
+{
+	Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
+	if (EyeRot.y <= 0) {
+		Velocity = { 0, 0, 0 };
+
+		MoveFlag = false;
+		StopFlag = true;
+	}
+}
+
+void Player::MovePointA()
+{
+	Velocity = { 0, 0, MoveSpeed };
+	if (camvec.m128_f32[2] >= 40) {
+		Velocity = { 0.f,0.f,0.f };
+		MoveFlag = false;
+		StopFlag = true;
+	}
+}
+
+void Player::MovePointALeft()
+{
+	Action::GetInstance()->EaseOut(EyeRot.y, -95.0f);
+	if (EyeRot.y <= -90) {
+		EyeRot.y = max(EyeRot.y, -90.0f);
+		ChangeRot = EyeRot.y;
+		Velocity = { 0, 0, 0 };
+
+		MoveFlag = false;
+		StopFlag = true;
+	}
+}
+
+void Player::MovePointB()
+{
+	Action::GetInstance()->EaseOut(EyeRot.y, 95.0f);
+	if (EyeRot.y >= 90) {
+		ChangeRot = 90;
+		EyeRot.y = 90;
+		Velocity = { 0, 0, MoveSpeed };
+	}
+	if (camvec.m128_f32[0] >= 30) {
+
+		MoveFlag = false;
+		StopFlag = true;
+	}
+}
+
+void Player::MovePointC()
+{
+	Velocity = { 0, 0, MoveSpeed };
+	if (camvec.m128_f32[0] >= 45) {
+
+		MoveFlag = false;
+		StopFlag = true;
+		Velocity = { 0, 0, 0 };
+	}
+}
+
+void Player::MovePointCOblique()
+{
+	Velocity = { 0, 0, MoveSpeed };
+	if (camvec.m128_f32[0] >= 50) {
+		Velocity = { 0, 0, 0 };
+		Action::GetInstance()->EaseOut(EyeRot.y, 145.0f);
+		if (EyeRot.y >= 130) {
+			ChangeRot = 130;
+
+			MoveFlag = false;
+			StopFlag = true;
+			Velocity = { 0, 0, 0 };
+		}
+	}
+}
+
+void Player::MovePointCFront()
+{
+	if (camvec.m128_f32[0] <= 55) {
+		Velocity = { 0, 0, MoveSpeed };
+	}
+	Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
+	if (EyeRot.y <= 0) {
+		ChangeRot = 0;
+
+		MoveFlag = false;
+		StopFlag = true;
+		Velocity = { 0, 0, 0 };
+	}
+}
+
+void Player::GoalPointBack()
+{
+	ActionCount = 0;
+	Velocity = { 0.f,0.f,MoveSpeed };
+	if (camvec.m128_f32[2] >= 80) {
+		Velocity = { 0,0.,0.1 };
+		if (camvec.m128_f32[2] >= 82) {
+			Velocity = { 0.0f,0.0f,0.0f };
+			Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
+			if (EyeRot.y >= 180) {
+				ChangeRot = 0;
+
+				MoveFlag = false;
+				StopFlag = true;
+				Velocity = { 0, 0, 0 };
+			}
+		}
+	}
+}
+
+void Player::GoalPoint()
+{
+	StanbyFlag = false;
+	Velocity = { 0, 0, 0.1 };
+	ShakeHeadFlag = false;
+	Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
+	if (EyeRot.y <= 0) {
+		ChangeRot = 0;
+		EyeRot.y = 0;
+	}
+	if (camvec.m128_f32[2] >= 92) {
+		Velocity = { 0,0.05,0.1 };
+		if (camvec.m128_f32[2] >= 97) {
+			Velocity = { 0.0f,0.0f,0.0f };
+			FringFlag = true;
+			if (FringFlag == true) {
+				Velocity = { 0.0f,0.6683f,0.0f };
+			}
+		}
+	}
+	CameraWorkFlag = false;
+	MovieFlag = false;
+	ActionCount = 0;
+}
+
+void (Player::* Player::MoveFuncTable[])() = {
+	&Player::MoveStartBack,
+	&Player::MoveStartFront,
+	&Player::MovePointA,
+	&Player::MovePointALeft,
+	&Player::MovePointB,
+	&Player::MovePointC,
+	&Player::MovePointCOblique,
+	&Player::MovePointCFront,
+	&Player::GoalPointBack,
+	&Player::GoalPoint
+};
 

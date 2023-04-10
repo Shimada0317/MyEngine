@@ -97,6 +97,7 @@
     <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp" />
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp" />
     <ClCompile Include="Application\Particle\ObjParticle.cpp" />
+    <ClCompile Include="Application\Rule\Rule.cpp" />
     <ClCompile Include="Application\Scene\BaseClassIUDF.cpp" />
     <ClCompile Include="Application\Scene\BaseScene.cpp" />
     <ClCompile Include="Application\Scene\ClearScene.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h" />
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h" />
     <ClInclude Include="Application\Particle\ObjParticle.h" />
+    <ClInclude Include="Application\Rule\Rule.h" />
     <ClInclude Include="Application\Scene\BaseClassIUDF.h" />
     <ClInclude Include="Application\Scene\BaseScene.h" />
     <ClInclude Include="Application\Scene\ClearScene.h" />

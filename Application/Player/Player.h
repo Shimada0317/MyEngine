@@ -66,12 +66,14 @@ public:
 	/// <summary>
 	/// スタート時のカメラワーク
 	/// </summary>
+	///　プレイヤーから外すもの
 	void CameraWork();
 	/// <summary>
 	/// 敵を倒した時の移動
 	/// </summary>
 	/// <param name="move"></param>
 	/// <param name="patern">フェイズ番号</param>
+	/// プレイヤーから外す
 	void PlayerMove(bool& move,Phase patern);
 	/// <summary>
 	/// Objの描画
@@ -81,11 +83,6 @@ public:
 	/// Imguiの描画
 	/// </summary>
 	void ImGuiDraw();
-	/// <summary>
-	/// ビューポート行列の計算
-	/// </summary>
-	/// <param name="Track_Mat">追尾用の行列</param>
-	void ChangeViewPort(XMMATRIX& Track_Mat);
 	/// <summary>
 	/// SE呼び出し
 	/// </summary>
@@ -106,7 +103,7 @@ public:
 	/// <summary>
 	/// 発砲処理
 	/// </summary>
-	void GunShotProcess();
+	void GunShotProcess(Phase paterncount);
 	/// <summary>
 	/// リロード処理
 	/// </summary>
@@ -119,6 +116,50 @@ public:
 	/// パーティクル発生
 	/// </summary>
 	void ParticleEfect(Phase paterncount);
+public:
+#pragma region 関数テーブル
+
+	/// <summary>
+	/// 第1地点後ろ
+	/// </summary>
+	void MoveStartBack();
+	/// <summary>
+	/// 第1地点前
+	/// </summary>
+	void MoveStartFront();
+
+	void MovePointA();
+
+	void MovePointALeft();
+
+	void MovePointB();
+
+	void MovePointC();
+
+	void MovePointCOblique();
+
+	void MovePointCFront();
+
+	void GoalPointBack();
+
+	void GoalPoint();
+
+		/*LANDINGPOINT_BACK = 0,
+		LANDINGPOINT_FRONT,
+		MOVEDPOINT_A,
+		MOVEDPOINT_A_LEFT,
+		MOVEDPOINT_B,
+		MOVEDPOINT_C,
+		MOVEDPOINT_C_OBLIQUE,
+		MOVEDPOINT_C_FRONT,
+		GOALPOINT_BACK,
+		GOALPOINT,*/
+
+
+#pragma endregion
+private: 
+	static void (Player::* MoveFuncTable[])();
+public:
 #pragma region Get
 	const bool& GetFinish() { return StopFlag; }
 	//三次元座標
@@ -227,7 +268,6 @@ private:
 	//2D座標入の取得用変数
 	XMVECTOR offset = { 0,0,1.0f };
 
-	bool ParticleFlag = false;
 	int Hp = 5;
 	int OldHp = 0;
 	//Reload
@@ -302,5 +342,8 @@ private:
 	bool ReversFlag = false;
 
 	XMFLOAT3 pos;
+
+	XMVECTOR camvec{ 0.f,0.f,0.f };
+	XMMATRIX camMat;
 };
 
