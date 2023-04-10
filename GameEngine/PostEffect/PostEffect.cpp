@@ -356,8 +356,6 @@ void PostEffect::DSVDesc()
 
 void PostEffect::Initialize()
 {
-	HRESULT result;
-
 
 	CreateVertBuff();
 

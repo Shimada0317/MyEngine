@@ -128,16 +128,16 @@ void Actor::Update()
 
 
 	if (PlayerHp == 4) {
-		AddTimer = 0.01;
+		AddTimer = 0.01f;
 	}
 	else if (PlayerHp == 3) {
-		AddTimer = 0.05;
+		AddTimer = 0.05f;
 	}
 	else if (PlayerHp == 2) {
-		AddTimer = 0.1;
+		AddTimer = 0.1f;
 	}
 	else if (PlayerHp == 1) {
-		AddTimer = 0.5;
+		AddTimer = 0.5f;
 	}
 
 
@@ -259,7 +259,6 @@ void Actor::SpriteDraw()
 
 void Actor::ImGuiDraw()
 {
-	float a = Patern;
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);

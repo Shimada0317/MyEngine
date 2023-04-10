@@ -58,12 +58,6 @@
     <FxCompile Include="Resources\shaders\TextureVS.hlsl">
       <Filter>hlsl\Texture</Filter>
     </FxCompile>
-    <FxCompile Include="Resources\shaders\toonPS.hlsl">
-      <Filter>hlsl\Toon</Filter>
-    </FxCompile>
-    <FxCompile Include="Resources\shaders\toonVS.hlsl">
-      <Filter>hlsl\Toon</Filter>
-    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\imgui\imgui.cpp">
@@ -110,9 +104,6 @@
     </ClCompile>
     <ClCompile Include="GameEngine\camera\Camera.cpp">
       <Filter>.cpp\GameEngine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Scene\ClearScene.cpp">
-      <Filter>.cpp\Application\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Application\Collision\Collision.cpp">
       <Filter>.cpp\Application\Collision</Filter>
@@ -276,9 +267,6 @@
     <ClInclude Include="GameEngine\camera\Camera.h">
       <Filter>.h\GameEngine\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Scene\ClearScene.h">
-      <Filter>.h\Application\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Collision\Collision.h">
       <Filter>.h\Application\Collsion</Filter>
     </ClInclude>
@@ -425,9 +413,6 @@
     </None>
     <None Include="Resources\shaders\Texture.hlsli">
       <Filter>hlsl\Texture</Filter>
-    </None>
-    <None Include="Resources\shaders\toonL.hlsli">
-      <Filter>hlsl\Toon</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -43,7 +43,7 @@ public: // サブクラス
 
 		XMFLOAT3 accel = {};
 
-		int frame = 0;
+		float frame = 0.f;
 
 		int num_frame = 0;
 

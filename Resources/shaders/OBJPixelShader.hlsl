@@ -50,19 +50,19 @@ float4 main(VSOutput input) : SV_TARGET
 	}
 
 	//スポットライト
-	for (int i = 0; i < SPOTLIGHT_NUM; i++) {
-		if (spotLights[i].active) {
+	for (int j = 0; j < SPOTLIGHT_NUM; j++) {
+		if (spotLights[j].active) {
 			//ライトへの方向ベクトル
-			float3 lightv = spotLights[i].lightpos - input.world.xyz;
+			float3 lightv = spotLights[j].lightpos - input.world.xyz;
 			float d = length(lightv);
 			lightv = normalize(lightv);
 			//距離減衰係数
-			float atten = saturate(1.0f / (spotLights[i].lightatten.x + spotLights[i].lightatten.y * d + spotLights[i].lightatten.z * d*d));
+			float atten = saturate(1.0f / (spotLights[j].lightatten.x + spotLights[j].lightatten.y * d + spotLights[j].lightatten.z * d*d));
 			//角度減衰
-			float cos = dot(lightv, spotLights[i].lightv);
+			float cos = dot(lightv, spotLights[j].lightv);
 			//減衰開始角度から、減衰終了角度にかけて減衰
 			//減衰開始角度の内側は1倍減衰終了角度の外側は0倍の輝度
-			float angleatten = smoothstep(spotLights[i].lightfactoranglecos.y, spotLights[i].lightfactoranglecos.x, cos);
+			float angleatten = smoothstep(spotLights[j].lightfactoranglecos.y, spotLights[j].lightfactoranglecos.x, cos);
 			//角度減衰を乗算
 			atten *= angleatten;
 			//ライトに向かうベクトルと法線の内積
@@ -74,7 +74,7 @@ float4 main(VSOutput input) : SV_TARGET
 			//鏡面反射光
 			float3 specular = pow(saturate(dot(reflect, eyedir)), shininess) * m_specular;
 			//全て加算する
-			shadecolor.rgb += atten * (diffuse + specular) * spotLights[i].lightcolor;
+			shadecolor.rgb += atten * (diffuse + specular) * spotLights[j].lightcolor;
 		}
 	}
 	return shadecolor * texcolor * color;

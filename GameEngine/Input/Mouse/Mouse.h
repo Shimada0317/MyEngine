@@ -40,7 +40,7 @@ public://ÉÅÉìÉoä÷êî
 
 	void RecoilMouse(XMFLOAT2& spritepos);
 
-	void MouseGetSpritePos(XMFLOAT2& spritePos);
+	//void MouseGetSpritePos(XMFLOAT2& spritePos);
 
 	void Mousemove(const XMMATRIX& view,const XMMATRIX& Pro,const XMMATRIX& viewPort,const XMFLOAT2& spritePos,XMVECTOR& positionRet,float Distance);
 

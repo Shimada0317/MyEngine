@@ -65,8 +65,8 @@ void Mouse::MouseMoveSprite(XMFLOAT2& spritePos)
 
 	ScreenToClient(hwnd, &mousePosition);
 
-	spritePos.x = mousePosition.x;
-	spritePos.y = mousePosition.y;
+	spritePos.x = (float)mousePosition.x;
+	spritePos.y = (float)mousePosition.y;
 }
 
 void Mouse::RecoilMouse(XMFLOAT2& spritepos)
@@ -81,26 +81,26 @@ void Mouse::RecoilMouse(XMFLOAT2& spritepos)
 	windoInfo.cbSize = sizeof(WINDOWINFO);
 	GetWindowInfo(hwnd, &windoInfo);
 	//マウスの移動先の絶対座標
-	posX = spritepos.x + windoInfo.rcWindow.left + 10;
-	posY = spritepos.y + windoInfo.rcWindow.top + 5;
+	posX = spritepos.x + windoInfo.rcWindow.left + 10.f;
+	posY = spritepos.y + windoInfo.rcWindow.top + 5.f;
 
 
-	SetCursorPos(posX, posY);
+	SetCursorPos((int)posX, (int)posY);
 }
 
-void Mouse::MouseGetSpritePos(XMFLOAT2& spritePos)
-{
-	POINT mousePosition;
-
-	mousePosition.x = spritePos.x;
-	mousePosition.y = spritePos.y;
-
-	GetCursorPos(&mousePosition);
-
-	HWND hwnd = winApp->GetHwnd();
-
-	ScreenToClient(hwnd, &mousePosition);
-}
+//void Mouse::MouseGetSpritePos(XMFLOAT2& spritePos)
+//{
+//	POINT mousePosition{};
+//
+//	mousePosition.x = spritePos.x;
+//	mousePosition.y = spritePos.y;
+//
+//	GetCursorPos(&mousePosition);
+//
+//	HWND hwnd = winApp->GetHwnd();
+//
+//	ScreenToClient(hwnd, &mousePosition);
+//}
 
 void Mouse::Mousemove(const XMMATRIX& view, const XMMATRIX& Pro, const XMMATRIX& viewPort, const XMFLOAT2& spritePos, XMVECTOR& positionRet, float Distance)
 {

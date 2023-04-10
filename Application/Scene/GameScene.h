@@ -1,17 +1,17 @@
 #pragma once
-
-#include "DirectXCommon.h"
 #include <DirectXMath.h>
+#include "DirectXCommon.h"
+#include"Actor.h"
 #include"Audio.h"
-#include "Sprite.h"
-#include"Object3d.h"
-#include"ObjModel.h"
 #include"BaseScene.h"
 #include"DebugCamera.h"
+#include"Light.h"
+#include"Object3d.h"
+#include"ObjModel.h"
 #include"PostEffect.h"
 #include"ParticleManager.h"
-#include"Light.h"
-#include"Actor.h"
+#include"TitleScene.h"
+#include "Sprite.h"
 
 #include<memory>
 
@@ -19,12 +19,13 @@ using namespace std;
 
 const int BILLS = 16;
 
+
 class GameScene :public BaseScene
 {
-private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
-// Microsoft::WRL::ã‚’çœç•¥
+private: // ƒGƒCƒŠƒAƒX
+// Microsoft::WRL::‚ğÈ—ª
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::ã‚’çœç•¥
+	// DirectX::‚ğÈ—ª
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -32,68 +33,68 @@ private: // ã‚¨ã‚¤ãƒªã‚¢ã‚¹
 private:
 
 
-public://ãƒ¡ãƒ³ãƒé–¢æ•°
+public://ƒƒ“ƒoŠÖ”
 	/// <summary>
-	/// ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+	/// ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 	/// </summary>
 	/// <param name="sceneManager_"></param>
 	GameScene(SceneManager* sceneManager_);
 	/// <summary>
-	/// åˆæœŸåŒ–å‡¦ç†
+	/// ‰Šú‰»ˆ—
 	/// </summary>
 	/// <param name="dxComon"></param>
 	void Initialize(DirectXCommon* dxComon) override;
 	/// <summary>
-	/// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚»ãƒƒãƒˆ
+	/// ƒXƒe[ƒ^ƒXƒZƒbƒg
 	/// </summary>
 	void StatusSet();
 	/// <summary>
-	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆç­‰ã®å…¨ã¦ã®æ›´æ–°å‡¦ç†
+	/// ƒIƒuƒWƒFƒNƒg“™‚Ì‘S‚Ä‚ÌXVˆ—
 	/// </summary>
 	void AllUpdata();
 	/// <summary>
-	/// æ›´æ–°å‡¦ç†
+	/// XVˆ—
 	/// </summary>
 	void Update() override;
 	/// <summary>
-	/// ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»
+	/// ƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
 	/// </summary>
-	/// <param name="dxCommon">dxCommonã‹ã‚‰ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã‚’ã‚²ãƒƒãƒˆ</param>
+	/// <param name="dxCommon">dxCommon‚©‚çƒRƒ}ƒ“ƒhƒŠƒXƒg‚ğƒQƒbƒg</param>
 	void ObjDraw(DirectXCommon* dxCommon);
 	/// <summary>
-	/// ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»
+	/// ƒXƒvƒ‰ƒCƒg‚Ì•`‰æ
 	/// </summary>
-	/// <param name="dxCommon">dxCommonã‹ã‚‰ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã‚’ã‚²ãƒƒãƒˆ</param>
+	/// <param name="dxCommon">dxCommon‚©‚çƒRƒ}ƒ“ƒhƒŠƒXƒg‚ğƒQƒbƒg</param>
 	void SpriteDraw(DirectXCommon* dxCommon);
 	/// <summary>
-	/// ImgUIæç”»
+	/// ImgUI•`‰æ
 	/// </summary>
 	void ImgDraw();
 	/// <summary>
-	/// ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æç”»
+	/// ƒ|ƒXƒgƒGƒtƒFƒNƒg‚Ì•`‰æ
 	/// </summary>
-	/// <param name="dxCommon">dxCommonã‹ã‚‰ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã‚’ã‚²ãƒƒãƒˆ</param>
+	/// <param name="dxCommon">dxCommon‚©‚çƒRƒ}ƒ“ƒhƒŠƒXƒg‚ğƒQƒbƒg</param>
 	void PostEffectDraw(DirectXCommon* dxCommon);
 	/// <summary>
-	/// æç”»å‡¦ç†
+	/// •`‰æˆ—
 	/// </summary>
-	/// <param name="dxCommon">dxCommonã‹ã‚‰ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã‚’ã‚²ãƒƒãƒˆ</param>
+	/// <param name="dxCommon">dxCommon‚©‚çƒRƒ}ƒ“ƒhƒŠƒXƒg‚ğƒQƒbƒg</param>
 	void Draw(DirectXCommon* dxCommon)override;
 	/// <summary>
-	/// çµ‚äº†å‡¦ç†
+	/// I—¹ˆ—
 	/// </summary>
 	void Finalize() override;
 	/// <summary>
-	/// ã‚¹ãƒãƒƒãƒˆãƒ©ã‚¤ãƒˆã®å‹•ã
+	/// ƒXƒ|ƒbƒgƒ‰ƒCƒg‚Ì“®‚«
 	/// </summary>
 	void SpotLightMove();
 	/// <summary>
-	/// ã‚²ãƒ¼ãƒ ã‚ªãƒ¼ãƒãƒ¼æ™‚ã®å‡¦ç†
+	/// ƒQ[ƒ€ƒI[ƒo[‚Ìˆ—
 	/// </summary>
 	void GameOverProcess();
 
-	void CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY,bool& CheckFlag);
-private://ãƒ¡ãƒ³ãƒå¤‰æ•°
+	void CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag);
+private://ƒƒ“ƒo•Ï”
 	//Obj
 	unique_ptr <Object3d> Sphere;
 	unique_ptr <Object3d> World;
@@ -101,7 +102,7 @@ private://ãƒ¡ãƒ³ãƒå¤‰æ•°
 	unique_ptr<Object3d> BillsHighAlpha[BILLS];
 	unique_ptr<Object3d> BillsLowAlpha[BILLS];
 	unique_ptr<Object3d> FieldBills[5];
-	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆ
+	//ƒXƒvƒ‰ƒCƒg
 	unique_ptr<Sprite> Clear = nullptr;
 	unique_ptr<Sprite> Conteniu = nullptr;
 	unique_ptr<Sprite> DamageEfectSp = nullptr;
@@ -109,33 +110,33 @@ private://ãƒ¡ãƒ³ãƒå¤‰æ•°
 	unique_ptr<Sprite> ReticleForGameOver = nullptr;
 	unique_ptr<Sprite> Yes = nullptr;
 	unique_ptr<Sprite> No = nullptr;
-	//ãã®ä»–ã®æ©Ÿèƒ½
+	//‚»‚Ì‘¼‚Ì‹@”\
 	Audio* Bgm = nullptr;
 	PostEffect* postEffect = nullptr;
 	unique_ptr<Light> light = nullptr;
 	unique_ptr<LightGroup> lightGroupe = nullptr;
 	unique_ptr <Actor> Act = nullptr;
-	//æœ€åˆã®ãƒ“ãƒ«ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+	//Å‰‚Ìƒrƒ‹‚ÌƒXƒe[ƒ^ƒX
 	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 StartScl = { 15.0f,15.0f,15.0f };
 	XMFLOAT3 StartRot = { 0.0f,180.0f,0.0f };
-	//å¤©çƒã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+	//“V‹…‚ÌƒXƒe[ƒ^ƒX
 	XMVECTOR SpherePos = { 0,0,0 };
 	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
 	XMFLOAT3 SphereRot = { 0,90,0 };
-	//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+	//ƒtƒB[ƒ‹ƒh‚ÌƒXƒe[ƒ^ƒX
 	XMFLOAT3 FieldBillScl = { 6.0f,10.0f,7.0f };
 	XMVECTOR FieldBillPos[5];
 	XMFLOAT3 FieldBillRot[5];
-	//è¶³å ´ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+	//‘«ê‚ÌƒXƒe[ƒ^ƒX
 	XMVECTOR WorldPos = { 0.0f,-1.1f,0.0f };
 	XMFLOAT3 WorldScl = { 100,100,100 };
-	//ãƒ“ãƒ«ç¾¤ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+	//ƒrƒ‹ŒQ‚ÌƒXƒe[ƒ^ƒX
 	XMFLOAT3 BillsScl = { 10.0f,10.0f,10.0f };
 	XMVECTOR BillsHighAlphaPos = { 0.0f,0.0f,-16.5f };
 	XMVECTOR BillsLowAlphaPos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 BillsRot = { 0.0f,90.0f,0.0f };
-	//ãã®ä»–ã®å¤‰æ•°
+	//‚»‚Ì‘¼‚Ì•Ï”
 	XMFLOAT4 PostCol = { -1.0f,-1.0f,-1.0f,1.0f };
 	int Patern = 0;
 	int PlayerHp;
@@ -151,7 +152,7 @@ private://ãƒ¡ãƒ³ãƒå¤‰æ•°
 
 	XMFLOAT3 FieldSpotLightDir = { 0,-10,0 };
 	XMFLOAT3 FieldSpotLightPos = { 0,505,50 };
-	XMFLOAT3 FieldSpotLightColor = { 0.9,0.5f,0.f };
+	XMFLOAT3 FieldSpotLightColor = { 0.9f,0.5f,0.f };
 	XMFLOAT3 FieldSpotLightAtten = { 0.f,0.f,0.f };
 	XMFLOAT2 FieldSpotLightFactorAngle = { 20.0f,30.0f };
 

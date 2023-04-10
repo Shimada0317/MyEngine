@@ -572,8 +572,8 @@ void Player::MoveShakingHead()
 void Player::ParticleEfect(Phase paterncount)
 {
 		for (int i = 0; i < 10; i++) {
-			double radX = ReticleRot.y * XM_PI / 180;
-			double radY = GunRot.x * XM_PI / 180;
+			float radX = ReticleRot.y * XM_PI / 180.f;
+			float radY = GunRot.x * XM_PI / 180.f;
 			float sinradX = sinf(radX);
 			float cosradX = cosf(radX);
 
@@ -743,7 +743,7 @@ void Player::GoalPointBack()
 	ActionCount = 0;
 	Velocity = { 0.f,0.f,MoveSpeed };
 	if (camvec.m128_f32[2] >= 80) {
-		Velocity = { 0,0.,0.1 };
+		Velocity = { 0.f,0.f,0.1f };
 		if (camvec.m128_f32[2] >= 82) {
 			Velocity = { 0.0f,0.0f,0.0f };
 			Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
@@ -761,7 +761,7 @@ void Player::GoalPointBack()
 void Player::GoalPoint()
 {
 	StanbyFlag = false;
-	Velocity = { 0, 0, 0.1 };
+	Velocity = { 0.f, 0.f, 0.1f };
 	ShakeHeadFlag = false;
 	Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
 	if (EyeRot.y <= 0) {
@@ -769,7 +769,7 @@ void Player::GoalPoint()
 		EyeRot.y = 0;
 	}
 	if (camvec.m128_f32[2] >= 92) {
-		Velocity = { 0,0.05,0.1 };
+		Velocity = { 0.f,0.05f,0.1f };
 		if (camvec.m128_f32[2] >= 97) {
 			Velocity = { 0.0f,0.0f,0.0f };
 			FringFlag = true;

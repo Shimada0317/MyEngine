@@ -194,9 +194,9 @@ void ThrowEnemy::ThrowAttack()
 	vy = (ThrowBoxPos.m128_f32[1] - LandingPoint.m128_f32[1]);
 	vz = (ThrowBoxPos.m128_f32[2] - LandingPoint.m128_f32[2]);
 
-	float v2x = pow(vx, 2);
-	float v2y = pow(vy, 2);
-	float v2z = pow(vz, 2);
+	float v2x = powf(vx, 2.f);
+	float v2y = powf(vy, 2.f);
+	float v2z = powf(vz, 2.f);
 
 	Length = sqrtf(v2x + v2y + v2z);
 

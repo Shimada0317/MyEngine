@@ -1,10 +1,8 @@
 #include "TitleScene.h"
-#include"SceneManager.h"
 #include<cassert>
 #include <sstream>
 #include <iomanip>
 #include"Action.h"
-#include"GameScene.h"
 #include"Mouse.h"
 
 const float SubColor = 0.01f;

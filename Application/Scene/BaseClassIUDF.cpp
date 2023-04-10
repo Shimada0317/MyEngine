@@ -1,8 +1,5 @@
 #include "BaseClassIUDF.h"
-#include"GameScene.h"
-#include"TitleScene.h"
-#include"ClearScene.h"
-#include"DebugScene.h"
+
 
 void BaseClassIUDF::Initialize()
 {

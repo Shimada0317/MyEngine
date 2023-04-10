@@ -1,20 +1,19 @@
 #pragma once
-
-#pragma once
-
+#include <DirectXMath.h>
+#include<memory>
 #include"Audio.h"
 #include"BaseScene.h"
+#include"Camera.h"
 #include "DirectXCommon.h"
-#include <DirectXMath.h>
-#include "Sprite.h"
-#include"Object3d.h"
-#include"ObjModel.h"
-#include"ParticleManager.h"
-#include"PostEffect.h"
-#include<memory>
+#include"GameScene.h"
 #include"Light.h"
 #include"LightGroup.h"
-#include"Camera.h"
+#include"Object3d.h"
+#include"ObjModel.h"
+#include"SceneManager.h"
+#include"ParticleManager.h"
+#include"PostEffect.h"
+#include "Sprite.h"
 
 using namespace std;
 

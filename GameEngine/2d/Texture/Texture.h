@@ -223,10 +223,10 @@ private:
 public:
 	//コンストラクタ
 	Texture(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
-	Texture() {}
+
 	static bool LoadTexture(UINT texnumber, const wchar_t* filename);
 	static Texture* Create(UINT texNumber, XMFLOAT3 position, XMFLOAT3 size, XMFLOAT4 color);
-	void TransferVertices();
+
 };
 
 

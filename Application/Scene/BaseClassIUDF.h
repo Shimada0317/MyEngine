@@ -1,4 +1,6 @@
 #pragma once
+#include"TitleScene.h"
+#include"DebugScene.h"
 #include"Framework.h"
 
 class BaseClassIUDF:public Framework

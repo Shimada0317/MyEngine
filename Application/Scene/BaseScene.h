@@ -1,7 +1,6 @@
 #pragma once
 #include"DirectXCommon.h"
 
-
 //‘O•ûéŒ¾
 class SceneManager;
 

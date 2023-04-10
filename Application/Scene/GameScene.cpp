@@ -1,4 +1,3 @@
-
 #include "GameScene.h"
 #include<cassert>
 #include <sstream>
@@ -6,9 +5,6 @@
 #include"Action.h"
 #include"HelperMath.h"
 #include"SceneManager.h"
-#include"ClearScene.h"
-#include"TitleScene.h"
-#include"DebugScene.h"
 #include"ModelManager.h"
 #include"Mouse.h"
 
@@ -16,17 +12,17 @@ const float AddPosetEfectColor = 0.05f;
 const XMFLOAT4 BillColor = { 0.8f,0.6f,0.3f,1.0f };
 
 using namespace DirectX;
-//ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+//ƒRƒ“ƒXƒgƒ‰ƒNƒ^
 GameScene::GameScene(SceneManager* sceneManager_)
 	:BaseScene(sceneManager_)
 {
 
 }
 
-//åˆæœŸåŒ–å‡¦ç†
+//‰Šú‰»ˆ—
 void GameScene::Initialize(DirectXCommon* dxComon)
 {
-	//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
+	//ƒ|ƒXƒgƒGƒtƒFƒNƒg‚Ì¶¬
 	postEffect = new PostEffect();
 	postEffect->Initialize();
 	postEffect->Update(PostCol);
@@ -38,7 +34,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLight(light.get());
 	Object3d::SetLightGroup(lightGroupe.get());
 
-	//	ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®èª­ã¿è¾¼ã¿
+	//	ƒXƒvƒ‰ƒCƒg‚Ì“Ç‚İ‚İ
 	Sprite::LoadTexture(30, L"Resources/DamageEfect.png");
 	Sprite::LoadTexture(31, L"Resources/Mision.png");
 	Sprite::LoadTexture(32, L"Resources/CONTINUE.png");
@@ -47,7 +43,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Sprite::LoadTexture(35, L"Resources/Yes.png");
 	Sprite::LoadTexture(36, L"Resources/No.png");
 
-	//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®ç”Ÿæˆ
+	//ƒXƒvƒ‰ƒCƒg‚Ì¶¬
 	DamageEfectSp.reset(Sprite::SpriteCreate(30, { 0.0f, 0.0f }, DamageEfectColor));
 	Clear.reset(Sprite::SpriteCreate(31, { 0.0f,0.0f }));
 	Conteniu.reset(Sprite::SpriteCreate(32, { 0.0f,0.0f }));
@@ -57,7 +53,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	No.reset(Sprite::SpriteCreate(36, NoPosition,NoColor,SpriteAnchorPoint));
 
 
-	//ãƒ¢ãƒ‡ãƒ«ã®èª­ã¿è¾¼ã¿
+	//ƒ‚ƒfƒ‹‚Ì“Ç‚İ‚İ
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
 	for (int i = 0; i < BILLS; i++) {
 		BillsHighAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
@@ -111,28 +107,28 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightGroupe->SetSpotLightActive(4, true);
 }
 
-//ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚»ãƒƒãƒˆ
+//ƒXƒe[ƒ^ƒXƒZƒbƒg
 void GameScene::StatusSet()
 {
-	//å¤©çƒã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚»ãƒƒãƒˆ
+	//“V‹…‚ÌƒXƒe[ƒ^ƒXƒZƒbƒg
 	Sphere->SetRotation(SphereRot);
 	Sphere->SetPosition(SpherePos);
 	Sphere->SetScale(SphereScl);
 
-	//åœ°é¢ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚»ãƒƒãƒˆ
+	//’n–Ê‚ÌƒXƒe[ƒ^ƒXƒZƒbƒg
 	World->SetPosition(WorldPos);
 	World->SetScale(WorldScl);
 
-	//ã‚¢ã‚¯ã‚¿ãƒ¼ã‚¯ãƒ©ã‚¹ã‹ã‚‰ã‚²ãƒƒãƒˆ
+	//ƒAƒNƒ^[ƒNƒ‰ƒX‚©‚çƒQƒbƒg
 	Patern = Act->GetPatern();
 	PlayerHp = Act->GetHp();
 
-	//ã‚¹ã‚¿ãƒ¼ãƒˆåœ°ç‚¹ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚»ãƒƒãƒˆ
+	//ƒXƒ^[ƒg’n“_‚ÌƒXƒe[ƒ^ƒXƒZƒbƒg
 	Start->SetPosition(StartPos);
 	Start->SetScale(StartScl);
 	Start->SetRotation(StartRot);
 
-	//å·¦å³ã®ãƒ“ãƒ«ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚»ãƒƒãƒˆ
+	//¶‰E‚Ìƒrƒ‹‚ÌƒXƒe[ƒ^ƒXƒZƒbƒg
 	for (int i = 0; i < BILLS; i++) {
 		BillsHighAlpha[i]->SetScale(BillsScl);
 		BillsLowAlpha[i]->SetScale(BillsScl);
@@ -152,7 +148,7 @@ void GameScene::StatusSet()
 		BillsLowAlpha[i]->SetPosition(BillsLowAlphaPos);
 	}
 
-	//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®å»ºç‰©ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚»ãƒƒãƒˆ
+	//ƒtƒB[ƒ‹ƒh‚ÌŒš•¨‚ÌƒXƒe[ƒ^ƒXƒZƒbƒg
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i]->SetPosition(FieldBillPos[i]);
 		FieldBills[i]->SetRotation(FieldBillRot[i]);
@@ -184,32 +180,32 @@ void GameScene::StatusSet()
 
 };
 
-//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãªã©ã®æ›´æ–°å‡¦ç†
+//ƒIƒuƒWƒFƒNƒg‚È‚Ç‚ÌXVˆ—
 void GameScene::AllUpdata()
 {
 	Action::GetInstance()->DebugMove(SearchLightPos[0]);
-	//ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ã«ã‚¢ã‚¯ã‚¿ãƒ¼ã‚’æ›´æ–°å‡¦ç†
+	//ƒQ[ƒ€ŠJn‚ÉƒAƒNƒ^[‚ğXVˆ—
 	if (GameStartFlag == true) {
 		Act->Update();
 	}
-	//å·¦å³ã®ãƒ“ãƒ«ã®æ›´æ–°å‡¦ç†
+	//¶‰E‚Ìƒrƒ‹‚ÌXVˆ—
 	for (int i = 0; i < BILLS; i++) {
 		BillsHighAlpha[i]->Update(BillColor);
 		BillsLowAlpha[i]->Update(BillColor);
 	}
-	//ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ãƒ“ãƒ«ã®æ›´æ–°å‡¦ç†
+	//ƒtƒB[ƒ‹ƒh‚Ìƒrƒ‹‚ÌXVˆ—
 	for (int i = 0; i < 5; i++) {
 		FieldBills[i]->Update(BillColor);
 	}
-	//å¤©çƒã®æ›´æ–°å‡¦ç†
+	//“V‹…‚ÌXVˆ—
 	Sphere->Update({ 1,1,1,1 },true);
-	//åœ°é¢ã®æ›´æ–°å‡¦ç†
+	//’n–Ê‚ÌXVˆ—
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
-	//ã‚¹ã‚¿ãƒ¼ãƒˆåœ°ç‚¹ã®æ›´æ–°å‡¦ç†
+	//ƒXƒ^[ƒg’n“_‚ÌXVˆ—
 	Start->Update(BillColor);
 }
 
-//ã‚²ãƒ¼ãƒ ã‚·ãƒ¼ãƒ³ã®æ›´æ–°å‡¦ç†
+//ƒQ[ƒ€ƒV[ƒ“‚ÌXVˆ—
 void GameScene::Update()
 {
 
@@ -228,21 +224,21 @@ void GameScene::Update()
 	}
 	if (GameStartFlag == true) {
 		if (PlayerHp > 0) {
-			//ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’é£Ÿã‚‰ã£ãŸãŸã¨ã
+			//ƒ_ƒ[ƒW‚ğH‚ç‚Á‚½‚½‚Æ‚«
 			if (OldHp > PlayerHp) {
 				PostEffectOnFlag = true;
 				DamageHitFlag = true;
 				DamageEfectColor.w = 1;
 				OldHp = PlayerHp;
 			}
-			//ç”»é¢ã‚’èµ¤ãã™ã‚‹ãƒ•ãƒ©ã‚°ãŒç«‹ã£ãŸæ™‚
+			//‰æ–Ê‚ğÔ‚­‚·‚éƒtƒ‰ƒO‚ª—§‚Á‚½
 			if (PostEffectOnFlag == true) {
 				PostCol.x = 0.7f;
 				if (PostCol.x >= 0.7f) {
 					PostEffectOnFlag = false;
 				}
 			}
-			//ç”»é¢ã‚’èµ¤ãã™ã‚‹ãƒ•ãƒ©ã‚°ãŒç«‹ã£ã¦ã„ãªã„æ™‚
+			//‰æ–Ê‚ğÔ‚­‚·‚éƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚È‚¢
 			if (PostEffectOnFlag == false) {
 				PostCol.x -= 0.05f;
 				if (PostCol.x <= 0) {
@@ -250,7 +246,7 @@ void GameScene::Update()
 				}
 			}
 		}
-		//ä½“åŠ›ãŒ0ã«ãªã£ãŸã‚‰
+		//‘Ì—Í‚ª0‚É‚È‚Á‚½‚ç
 		else if (PlayerHp <= 0) {
 			StopUpdateFlag = true;
 			PostCol.x += 0.01f;
@@ -269,12 +265,12 @@ void GameScene::Update()
 	}
 
 	XMVECTOR GoalPos = Act->GetGoalPos();
-	//ã‚´ãƒ¼ãƒ«ã«ç€ã„ãŸã¨ã
+	//ƒS[ƒ‹‚É’…‚¢‚½‚Æ‚«
 	if (GoalPos.m128_f32[1] >= 100) {
 		ClearFlag = true;
 		StopUpdateFlag = true;
 	}
-	//ã‚´ãƒ¼ãƒ«ã«ã¤ã„ã¦ã„ãªã„ã¨ãæ›´æ–°ã‚’ç¶šã‘ã‚‹
+	//ƒS[ƒ‹‚É‚Â‚¢‚Ä‚¢‚È‚¢‚Æ‚«XV‚ğ‘±‚¯‚é
 	if (StopUpdateFlag == false) {
 		StatusSet();
 		AllUpdata();
@@ -283,7 +279,7 @@ void GameScene::Update()
 	{
 		GameOverProcess();
 	}
-	//ã‚´ãƒ¼ãƒ«ã«ç€ã„ãŸã‚‰ã‚¯ãƒªã‚¢ç”»é¢ã‚’è¡¨ç¤º
+	//ƒS[ƒ‹‚É’…‚¢‚½‚çƒNƒŠƒA‰æ–Ê‚ğ•\¦
 	if (ClearFlag == true) {
 		if (Mouse::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
@@ -296,10 +292,10 @@ void GameScene::Update()
 	
 }
 
-//ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®æç”»å‡¦ç†
+//ƒIƒuƒWƒFƒNƒg‚Ì•`‰æˆ—
 void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
-	////ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå‰å‡¦ç†
+	////ƒIƒuƒWƒFƒNƒg‘Oˆ—
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	Sphere->Draw();
 	World->Draw();
@@ -311,13 +307,13 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 		BillsHighAlpha[i]->Draw();
 		BillsLowAlpha[i]->Draw();
 	}
-	////ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå¾Œå‡¦ç†
+	////ƒIƒuƒWƒFƒNƒgŒãˆ—
 	Object3d::PostDraw();
 	Act->Draw(dxCommon);
 
 }
 
-//ã‚¹ãƒ—ãƒ©ã‚¤ãƒˆã®æç”»å‡¦ç†
+//ƒXƒvƒ‰ƒCƒg‚Ì•`‰æˆ—
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
@@ -348,10 +344,9 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 	Sprite::PostDraw();
 }
 
-//ImgUiã®æç”»å‡¦ç†
+//ImgUi‚Ì•`‰æˆ—
 void GameScene::ImgDraw()
 {
-	float p = Patern;
 
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
@@ -370,13 +365,13 @@ void GameScene::ImgDraw()
 
 	ImGui::SliderFloat("value", &value, 0.0f, 60.0f);
 	ImGui::SliderFloat("time", &time, -0.0f, 1.0f);
-	ImGui::SliderFloat("Patern", &p, -0.0f, 1.0f);
+	ImGui::SliderInt("Patern", &Patern, 0, 1);
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
 }
 
-//ãƒã‚¹ãƒˆã‚¨ãƒ•ã‚§ã‚¯ãƒˆã®æç”»å‡¦ç†
+//ƒ|ƒXƒgƒGƒtƒFƒNƒg‚Ì•`‰æˆ—
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 {
 	postEffect->PreDrawScene(dxCommon->GetCmdList());
@@ -386,19 +381,19 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
-	//æç”»å¾Œå‡¦ç†
+	//•`‰æŒãˆ—
 	//Act->ImGuiDraw();
 	//ImgDraw();
 	dxCommon->PostDraw();
 }
 
-//æç”»å‡¦ç†
+//•`‰æˆ—
 void GameScene::Draw(DirectXCommon* dxCommon)
 {
 	PostEffectDraw(dxCommon);
 }
 
-//çµ‚äº†å‡¦ç†
+//I—¹ˆ—
 void GameScene::Finalize()
 {
 	delete postEffect;

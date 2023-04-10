@@ -201,7 +201,7 @@ bool Collision::Player2Other(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVE
 	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
 	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z) / 4;
 
-	float length = sqrt(x * x + y * y + z * z);
+	float length = sqrtf(x * x + y * y + z * z);
 
 	if (length <= PlayerAllscale + EnemyAllscale) {
 		return true;
@@ -222,7 +222,7 @@ bool Collision::HeadShot(XMVECTOR Playerposition, XMFLOAT3 Playerscale, XMVECTOR
 	float PlayerAllscale = Playerscale.x + Playerscale.y + Playerscale.z;
 	float EnemyAllscale = (Otherscale.x + Otherscale.y + Otherscale.z) / 4;
 
-	float length = sqrt(x * x + y * y + z * z);
+	float length = sqrtf(x * x + y * y + z * z);
 
 	if (length <= PlayerAllscale + EnemyAllscale) {
 		return true;

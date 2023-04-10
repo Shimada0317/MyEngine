@@ -1,6 +1,5 @@
 #pragma once
 
-#include"GameScene.h"
 #include"WinApp.h"
 #include"DirectXCommon.h"
 #include"Input.h"
@@ -57,7 +56,6 @@ protected:
 	WinApp* winApp = nullptr;
 	Input* input = nullptr;
 	Mouse* mouse = nullptr;
-	GameScene* gamescene = nullptr;
 	Audio* audio = nullptr;
 	SceneManager* sceneManager_ = nullptr;
 	DebugCamera* camera = nullptr;
