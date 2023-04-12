@@ -3,6 +3,7 @@
 #include<DirectXMath.h>
 
 using namespace DirectX;
+using namespace std;
 
 class HelperMath
 {

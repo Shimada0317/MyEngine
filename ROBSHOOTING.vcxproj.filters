@@ -220,6 +220,9 @@
       <Filter>.cpp\GameEngine\HelperMath</Filter>
     </ClCompile>
     <ClCompile Include="Application\Rule\Rule.cpp" />
+    <ClCompile Include="GameEngine\2d\SpriteManager\SpriteManager.cpp">
+      <Filter>.cpp\GameEngine\2d\SpriteManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -385,6 +388,9 @@
       <Filter>.h\GameEngine\HelperMath</Filter>
     </ClInclude>
     <ClInclude Include="Application\Rule\Rule.h" />
+    <ClInclude Include="GameEngine\2d\SpriteManager\SpriteManager.h">
+      <Filter>.h\GameEngine\2d\SpriteManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -607,6 +613,12 @@
     </Filter>
     <Filter Include=".cpp\GameEngine\HelperMath">
       <UniqueIdentifier>{1bd30ae5-a798-448e-a209-f870b29b0a75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include=".cpp\GameEngine\2d\SpriteManager">
+      <UniqueIdentifier>{ff71a368-5c71-4b02-a08e-adb582188651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include=".h\GameEngine\2d\SpriteManager">
+      <UniqueIdentifier>{a2091573-d175-42ab-bd75-b72afa362e8b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

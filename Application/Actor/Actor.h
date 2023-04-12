@@ -77,11 +77,7 @@ private:
 	unique_ptr<Object3d> Goal;
 	unique_ptr<Object3d> Hane;
 
-	
-	Sprite* Wave = nullptr;
-	Sprite* MaxCount = nullptr;
 	Sprite* LifeCount[5];
-	Sprite* HpBer;
 	Sprite* hart;
 
 	Audio* heriFry = nullptr;

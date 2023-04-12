@@ -14,8 +14,8 @@
 #include"ParticleManager.h"
 #include"PostEffect.h"
 #include "Sprite.h"
-
-using namespace std;
+#include"HelperMath.h"
+#include"SpriteManager.h"
 
 const int BUILAMOUNT = 16;
 

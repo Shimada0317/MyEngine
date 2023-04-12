@@ -28,7 +28,7 @@ void RailCamera::MatrixIdentity(const XMVECTOR& Pos, const XMFLOAT3& Rot)
 
 
 
-void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot, Camera* NormalCam)
+void RailCamera::Update(const XMVECTOR& vel, const XMFLOAT3& rot,Camera* NormalCam)
 {
 	Position += vel;
 

@@ -5,6 +5,7 @@
 #include"Action.h"
 #include"Mouse.h"
 
+
 const float SubColor = 0.01f;
 const float CameraMoveValueXandY = 0.4f;
 const float CameraMoveValueZ = 0.1f;
@@ -33,24 +34,10 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLightGroup(lightGroupe.get());
 	Object3d::SetLight(light.get());
 
-	////スプライトの読み込み
-	Sprite::LoadTexture(1, L"Resources/start.png");
-	Sprite::LoadTexture(2, L"REsources/mark2.png");
-	Sprite::LoadTexture(3, L"Resources/Click.png");
-	Sprite::LoadTexture(4, L"Resources/Click2.png");
-	Sprite::LoadTexture(5, L"Resources/SIGNAL.png");
-	Sprite::LoadTexture(6, L"Resources/SIGNAL2.png");
-	Sprite::LoadTexture(7, L"Resources/setumei2.png");
-	Sprite::LoadTexture(8, L"Resources/setumei.png");
-	Sprite::LoadTexture(9, L"Resources/setumei3.png");
-	Sprite::LoadTexture(10, L"Resources/arrowRight.png");
-	Sprite::LoadTexture(11, L"Resources/arrowLeft.png");
-
-
-
+	
 	//スプライトの生成
-	Title.reset(Sprite::SpriteCreate(1, { 1.0f,1.0f }));
-	Cursor.reset(Sprite::SpriteCreate(2, ReticlePos, SpriteCol, Anchorpoint));
+	Title.reset(Sprite::SpriteCreate(Name::kTitle, { 1.0f,1.0f }));
+	Cursor.reset(Sprite::SpriteCreate(Name::kReticle, ReticlePos, SpriteCol, Anchorpoint));
 	ClickBefore.reset(Sprite::SpriteCreate(3, ClickPos, RegularColor, Anchorpoint));
 	ClickAfter.reset(Sprite::SpriteCreate(4, ClickPos, RegularColor, Anchorpoint));
 	SignalBefore.reset(Sprite::SpriteCreate(5, ClickPos, RegularColor, Anchorpoint));

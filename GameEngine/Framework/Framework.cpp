@@ -42,6 +42,7 @@ void Framework::Initialize()
 	mouse = Mouse::GetInstance();
 	mouse->Initialize(winApp);
 	camera = new DebugCamera(WinApp::window_width,WinApp::window_height);
+	
 
 	Object3d::StaticInitialize(dxCommon->GetDev(),camera);
 	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
@@ -51,15 +52,14 @@ void Framework::Initialize()
 	LightGroup::StaticInitialize(dxCommon->GetDev());
 	debugText = DebugText::GetInstance();
 	debugText->Initialize(debugTextNumber);
-
+	spritemanager_ = make_unique<SpriteManager>();
+	spritemanager_->SpriteName();
 	//シーンマネージャー
 	sceneManager_ = new SceneManager;
-
 	//Fbx
 	FbxLoader::GetInstance()->Initialize(dxCommon->GetDev());
 
 	ModelManager::GetInstance()->Initialize();
-
 }
 
 void Framework::Update()

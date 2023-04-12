@@ -11,6 +11,8 @@
 #include"ObjModel.h"
 #include<memory>
 
+using namespace std;
+
 class RailCamera
 {
 private: // エイリアス

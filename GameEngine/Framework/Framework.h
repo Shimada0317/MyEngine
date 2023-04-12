@@ -13,6 +13,9 @@
 #include"Texture.h"
 #include"Light.h"
 #include"Mouse.h"
+#include"SpriteManager.h"
+
+using namespace std;
 
 /// <summary>
 /// フレームワーク
@@ -58,6 +61,7 @@ protected:
 	Mouse* mouse = nullptr;
 	Audio* audio = nullptr;
 	SceneManager* sceneManager_ = nullptr;
+	unique_ptr<SpriteManager> spritemanager_ = nullptr;
 	DebugCamera* camera = nullptr;
 	PostEffect* postEffect = nullptr;
 	Texture* texture = nullptr;

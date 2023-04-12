@@ -10,8 +10,6 @@ bool otherenemyarive = true;
 Actor::~Actor()
 {
 	player.reset();
-	delete Wave;
-	delete HpBer;
 	for (int i = 0; i < 5; i++) {
 		delete LifeCount[i];
 	}
@@ -24,7 +22,6 @@ void Actor::Initialize()
 	Sprite::LoadTexture(15, L"Resources/three.png");
 	Sprite::LoadTexture(16, L"Resources/four.png");
 	Sprite::LoadTexture(17, L"Resources/five.png");
-	Sprite::LoadTexture(18, L"Resources/Hpber.png");
 	Sprite::LoadTexture(19, L"Resources/hart.png");
 
 	camera = new Camera(WinApp::window_width, WinApp::window_height);
@@ -33,9 +30,6 @@ void Actor::Initialize()
 	player->Initalize(camera);
 	camera->RecalculationMatrix();
 
-	Wave = Sprite::SpriteCreate(11, { 10.0f,10.0f });
-	MaxCount = Sprite::SpriteCreate(17, { 10.0f,10.0f });
-	HpBer = Sprite::SpriteCreate(18, { 10.0f,10.0f });
 	hart = Sprite::SpriteCreate(19, { 10.0f,10.0f }, { 1.0f,1.0f,1.0f,1.0f }, { 0.5f,0.5f });
 
 	MotValue = HartSize;
@@ -60,12 +54,6 @@ void Actor::Initialize()
 void Actor::SetPSR()
 {
 
-	//左下のwaveの文字
-	Wave->SetSize({ 256,128 });
-	Wave->SetPosition({ 0,600 });
-	//waveの最大数
-	MaxCount->SetSize({ 80,80 });
-	MaxCount->SetPosition({ 320, 630 });
 	//変動するカウンター
 	for (int i = 0; i < 5; i++) {
 		LifeCount[i]->SetSize({ 80,80 });
@@ -75,8 +63,6 @@ void Actor::SetPSR()
 	hart->SetSize(HartSize);
 	hart->SetPosition({ WinApp::window_width - 173,WinApp::window_height - 50 });
 	//Hpバー
-	HpBer->SetSize({ 224,96 });
-	HpBer->SetPosition({ WinApp::window_width - 228,WinApp::window_height - 100 });
 	player->SetHp(PlayerHp);
 
 	Heri->SetPosition(Heripos);
@@ -235,7 +221,6 @@ void Actor::Draw(DirectXCommon* dxCommon)
 void Actor::SpriteDraw()
 {
 	if (GetCamWorkFlag == true) {
-		//HpBer->Draw();
 		if (PlayerHp == 1) {
 			LifeCount[0]->Draw();
 		}

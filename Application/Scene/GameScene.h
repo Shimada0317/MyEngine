@@ -1,19 +1,24 @@
 #pragma once
+#include<fstream>
+#include<sstream>
 #include <DirectXMath.h>
-#include "DirectXCommon.h"
-#include"Actor.h"
+#include<memory>
+
 #include"Audio.h"
 #include"BaseScene.h"
+#include"BossEnemy/BossEnemy.h"
 #include"DebugCamera.h"
+#include"DirectXCommon.h"
+#include"Enemy.h"
 #include"Light.h"
 #include"Object3d.h"
 #include"ObjModel.h"
-#include"PostEffect.h"
 #include"ParticleManager.h"
+#include"Player.h"
+#include"PostEffect.h"
+#include"Sprite.h"
 #include"TitleScene.h"
-#include "Sprite.h"
 
-#include<memory>
 
 using namespace std;
 
@@ -22,6 +27,9 @@ const int BILLS = 16;
 
 class GameScene :public BaseScene
 {
+public:
+	
+
 private: // エイリアス
 // Microsoft::WRL::を省略
 	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
@@ -85,13 +93,37 @@ public://メンバ関数
 	/// </summary>
 	void Finalize() override;
 	/// <summary>
+	/// 徐々に明るくする
+	/// </summary>
+	void FadeIn();
+	/// <summary>
 	/// スポットライトの動き
 	/// </summary>
 	void SpotLightMove();
 	/// <summary>
+	/// 攻撃を食らったときの処理
+	/// </summary>
+	void DamageProcess();
+	/// <summary>
 	/// ゲームオーバー時の処理
 	/// </summary>
 	void GameOverProcess();
+	/// <summary>
+	/// ゲームクリア時の処理
+	/// </summary>
+	void GameClearProcesss();
+	/// <summary>
+	/// csv読み込み
+	/// </summary>
+	void LoadEnemyPopData();
+	/// <summary>
+	/// 敵の生成
+	/// </summary>
+	void UpdataEnemyPopCommands();
+	/// <summary>
+	/// 敵同士の追尾先が被った時の確認とその場合の処理
+	/// </summary>
+	void CheckSameTrackPosition();
 
 	void CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag);
 private://メンバ変数
@@ -102,6 +134,9 @@ private://メンバ変数
 	unique_ptr<Object3d> BillsHighAlpha[BILLS];
 	unique_ptr<Object3d> BillsLowAlpha[BILLS];
 	unique_ptr<Object3d> FieldBills[5];
+	unique_ptr<Object3d> Heri;
+	unique_ptr<Object3d> Goal;
+	unique_ptr<Object3d> Hane;
 	//スプライト
 	unique_ptr<Sprite> Clear = nullptr;
 	unique_ptr<Sprite> Conteniu = nullptr;
@@ -110,12 +145,20 @@ private://メンバ変数
 	unique_ptr<Sprite> ReticleForGameOver = nullptr;
 	unique_ptr<Sprite> Yes = nullptr;
 	unique_ptr<Sprite> No = nullptr;
+	unique_ptr<Sprite> LifeCount[5];
+	unique_ptr<Sprite> Hart;
+	//プレイヤーと敵
+	list<unique_ptr<Enemy>>Robot;
+	list<unique_ptr<BossEnemy>>Boss;
+	unique_ptr<Player> Hero;
+	stringstream EnemyPopCommands;
 	//その他の機能
-	Audio* Bgm = nullptr;
-	PostEffect* postEffect = nullptr;
+	unique_ptr <Audio> Bgm = nullptr;
+	unique_ptr <Audio> heriFry = nullptr;
+	unique_ptr <PostEffect> postEffect = nullptr;
 	unique_ptr<Light> light = nullptr;
 	unique_ptr<LightGroup> lightGroupe = nullptr;
-	unique_ptr <Actor> Act = nullptr;
+	unique_ptr<Camera> GameCamera = nullptr;
 	//最初のビルのステータス
 	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 StartScl = { 15.0f,15.0f,15.0f };
@@ -136,6 +179,13 @@ private://メンバ変数
 	XMVECTOR BillsHighAlphaPos = { 0.0f,0.0f,-16.5f };
 	XMVECTOR BillsLowAlphaPos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 BillsRot = { 0.0f,90.0f,0.0f };
+	//ヘリのステータス(スタートのムービーと終わりのムービー)
+	//スタート
+	XMVECTOR Heripos = { 0.0f,75.0f,-160.0f };
+	XMFLOAT3 Heriscl = { 10.0f,10.0f,10.0f };
+	//終わり
+	XMVECTOR GoalPos = { 56.f,3.0f,92.0f };
+	XMFLOAT3 GoalScl = { 3.0f,3.0f,3.0f };
 	//その他の変数
 	XMFLOAT4 PostCol = { -1.0f,-1.0f,-1.0f,1.0f };
 	int Patern = 0;
@@ -204,6 +254,7 @@ private://メンバ変数
 	XMFLOAT2 ReticlePosition{ 0.f,0.f };
 	XMFLOAT4 ReticleColor{ 1.f,1.f,1.f,1.f };
 	XMFLOAT2 SpriteAnchorPoint{ 0.5f,0.5f };
+	XMFLOAT2 HartPosition{ 10.f,10.f };
 
 	XMFLOAT2 YesPosition{ WinApp::window_width / 2 - 200,WinApp::window_height / 2 + 100 };
 	XMFLOAT2 NoPosition{ WinApp::window_width / 2 + 200,WinApp::window_height / 2 + 100 };
@@ -212,5 +263,37 @@ private://メンバ変数
 	XMFLOAT4 NoColor{ 1.f,1.f,1.f,1.f };
 	bool YesCursorInFlag = false;
 	bool NoCursorInFlag = false;
+
+
+#pragma region Acrtorから持ってくる変数(いらないものは全部消す)
+
+
+	float HeriY = 0.0f;
+	bool MoveFlag = false;
+	bool BackObjFlag = true;
+	float HeriX = 3.1f;
+
+	bool CountFlag = false;
+	//待機コマンド
+	bool WaitFlag = false;
+	int WaitT = 0;
+
+	XMVECTOR Velo;
+
+	bool StartMovieFlag = false;
+
+	bool StopFlag = false;
+
+	bool GetCamWorkFlag = false;
+
+	XMFLOAT2 HartSize = { 64,64 };
+	XMFLOAT2 MotValue = { 0.f,0.f };
+	bool ReversFlag = true;
+	float EasingTimer = 0.0f;
+	float AddTimer = 0.01f;
+	bool otherenemyarive = true;
+
+#pragma endregion
+
 };
 
