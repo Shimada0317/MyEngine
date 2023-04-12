@@ -1,6 +1,7 @@
 #include "BossEnemy.h"
 #include"Action.h"
 #include"HelperMath.h"
+#include"SpriteManager.h"
 
 using namespace DirectX;
 const int HeadDamage = 80;
@@ -45,9 +46,8 @@ void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camer
 	CenterMat = Center->GetMatrix();
 	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
 
-	Sprite::LoadTexture(40, L"Resources/mark.png");
-	RockOn.reset(Sprite::SpriteCreate(40, RockOnPos, RockOnCol, RockOnAnchorPoint));
-	RockOnHead.reset(Sprite::SpriteCreate(40, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
+	RockOn.reset(Sprite::SpriteCreate(Name::kEnemyMarker, RockOnPos, RockOnCol, RockOnAnchorPoint));
+	RockOnHead.reset(Sprite::SpriteCreate(Name::kEnemyMarker, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
 
 	TrackPoint = OldTrackPoint = trackpoint;
 

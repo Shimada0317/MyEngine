@@ -38,33 +38,17 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	GameCamera = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 
 
-
-	//	スプライトの読み込み
-	Sprite::LoadTexture(13, L"Resources/one.png");
-	Sprite::LoadTexture(14, L"Resources/two.png");
-	Sprite::LoadTexture(15, L"Resources/three.png");
-	Sprite::LoadTexture(16, L"Resources/four.png");
-	Sprite::LoadTexture(17, L"Resources/five.png");
-	Sprite::LoadTexture(19, L"Resources/hart.png");
-	Sprite::LoadTexture(30, L"Resources/DamageEfect.png");
-	Sprite::LoadTexture(31, L"Resources/Mision.png");
-	Sprite::LoadTexture(32, L"Resources/CONTINUE.png");
-	Sprite::LoadTexture(33, L"Resources/Shot.png");
-	Sprite::LoadTexture(34, L"Resources/mark2.png");
-	Sprite::LoadTexture(35, L"Resources/Yes.png");
-	Sprite::LoadTexture(36, L"Resources/No.png");
-
 	//スプライトの生成
-	DamageEfectSp.reset(Sprite::SpriteCreate(30, { 0.0f, 0.0f }, DamageEfectColor));
-	Clear.reset(Sprite::SpriteCreate(31, { 0.0f,0.0f }));
-	Conteniu.reset(Sprite::SpriteCreate(32, { 0.0f,0.0f }));
-	Shot.reset(Sprite::SpriteCreate(33, { 0.f,WinApp::window_height - 150 }));
-	ReticleForGameOver.reset(Sprite::SpriteCreate(34, ReticlePosition, ReticleColor, SpriteAnchorPoint));
-	Yes.reset(Sprite::SpriteCreate(35, YesPosition,YesColor,SpriteAnchorPoint));
-	No.reset(Sprite::SpriteCreate(36, NoPosition,NoColor,SpriteAnchorPoint));
-	Hart.reset(Sprite::SpriteCreate(19, HartPosition, { 1.f,1.f,1.f,1.f }, SpriteAnchorPoint));
+	DamageEfectSp.reset(Sprite::SpriteCreate(kDamageEffect, { 0.0f, 0.0f }, DamageEfectColor));
+	Clear.reset(Sprite::SpriteCreate(kGameClear, { 0.0f,0.0f }));
+	Conteniu.reset(Sprite::SpriteCreate(kGameOver, { 0.0f,0.0f }));
+	Shot.reset(Sprite::SpriteCreate(kShot, { 0.f,WinApp::window_height - 150 }));
+	ReticleForGameOver.reset(Sprite::SpriteCreate(kReticle, ReticlePosition, ReticleColor, SpriteAnchorPoint));
+	Yes.reset(Sprite::SpriteCreate(kYes, YesPosition,YesColor,SpriteAnchorPoint));
+	No.reset(Sprite::SpriteCreate(kNo, NoPosition,NoColor,SpriteAnchorPoint));
+	Hart.reset(Sprite::SpriteCreate(kHart, HartPosition, { 1.f,1.f,1.f,1.f }, SpriteAnchorPoint));
 	for (int i = 0; i < 5; i++) {
-		LifeCount[i].reset(Sprite::SpriteCreate(13 + i, HartPosition));
+		LifeCount[i].reset(Sprite::SpriteCreate(i, HartPosition));
 	}
 
 	//モデルの読み込み

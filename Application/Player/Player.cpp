@@ -7,6 +7,8 @@
 #include"Mouse.h"
 #include"WinApp.h"
 
+#include"SpriteManager.h"
+
 const int ReaminingBullet = 8;
 
 //デストラクタ
@@ -28,24 +30,20 @@ void Player::Initalize(Camera* camera)
 	Object3d::SetCamera(camera);
 
 	SkipPos = CurtainDownPos;
-	Sprite::LoadTexture(20, L"Resources/mark2.png");
-	Sprite::LoadTexture(21, L"Resources/curtain.png");
-	Sprite::LoadTexture(22, L"Resources/Skip.png");
-	Sprite::LoadTexture(23, L"Resources/bullet.png");
-	Sprite::LoadTexture(24, L"Resources/Reload.png");
+
 	//スプライトの読み込み
-	SpriteReticle.reset(Sprite::SpriteCreate(20, ReticlePos2D, ReticleColor, ReticleAncorPoint));
-	CurtainUp.reset(Sprite::SpriteCreate(21, CurtainUpPos));
-	CurtainDown.reset(Sprite::SpriteCreate(21, CurtainDownPos));
-	Skip.reset(Sprite::SpriteCreate(22, SkipPos));
+	SpriteReticle.reset(Sprite::SpriteCreate(Name::kReticle, ReticlePos2D, ReticleColor, ReticleAncorPoint));
+	CurtainUp.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainUpPos));
+	CurtainDown.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainDownPos));
+	Skip.reset(Sprite::SpriteCreate(Name::kSkip, SkipPos));
 	for (int i = 0; i < 9; i++) {
 		SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
 		SpriteRot[i] = 0;
 		Time[i] = 0;
-		bulletHUD[i].reset(Sprite::SpriteCreate(23, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
+		bulletHUD[i].reset(Sprite::SpriteCreate(Name::kBullet, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
 		DropBulletFlag[i] = false;
 	}
-	Reload.reset(Sprite::SpriteCreate(24, ReloadSpritePos, ReloadSpriteColor, AnchorPoint));
+	Reload.reset(Sprite::SpriteCreate(Name::kReload, ReloadSpritePos, ReloadSpriteColor, AnchorPoint));
 
 	Gun = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
 	Body = Object3d::Create(ModelManager::GetInstance()->GetModel(10));

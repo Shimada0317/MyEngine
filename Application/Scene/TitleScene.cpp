@@ -38,15 +38,15 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	//スプライトの生成
 	Title.reset(Sprite::SpriteCreate(Name::kTitle, { 1.0f,1.0f }));
 	Cursor.reset(Sprite::SpriteCreate(Name::kReticle, ReticlePos, SpriteCol, Anchorpoint));
-	ClickBefore.reset(Sprite::SpriteCreate(3, ClickPos, RegularColor, Anchorpoint));
-	ClickAfter.reset(Sprite::SpriteCreate(4, ClickPos, RegularColor, Anchorpoint));
-	SignalBefore.reset(Sprite::SpriteCreate(5, ClickPos, RegularColor, Anchorpoint));
-	SignalAfter.reset(Sprite::SpriteCreate(6, ClickPos, RegularColor, Anchorpoint));
-	DescriptionOperation.reset(Sprite::SpriteCreate(7, DescriptionScreenPosition, SpriteCol, Anchorpoint));
-	EnemyOverview.reset(Sprite::SpriteCreate(8, DescriptionScreenPosition, SpriteCol, Anchorpoint));
-	GameStartPreparation.reset(Sprite::SpriteCreate(9, DescriptionScreenPosition, SpriteCol, Anchorpoint));
-	ArrowRight.reset(Sprite::SpriteCreate(10, ArrowRightPos, ArrowRightColor, Anchorpoint));
-	ArrowLeft.reset(Sprite::SpriteCreate(11, ArrowLeftPos, ArrowLeftColor, Anchorpoint));
+	ClickBefore.reset(Sprite::SpriteCreate(Name::kClickStartBefore, ClickPos, RegularColor, Anchorpoint));
+	ClickAfter.reset(Sprite::SpriteCreate(Name::kClickStartAfter, ClickPos, RegularColor, Anchorpoint));
+	SignalBefore.reset(Sprite::SpriteCreate(Name::kSignalBefore, ClickPos, RegularColor, Anchorpoint));
+	SignalAfter.reset(Sprite::SpriteCreate(Name::kSignalAfter, ClickPos, RegularColor, Anchorpoint));
+	DescriptionOperation.reset(Sprite::SpriteCreate(Name::kOperationDescription, DescriptionScreenPosition, SpriteCol, Anchorpoint));
+	EnemyOverview.reset(Sprite::SpriteCreate(Name::kEnemyDescription, DescriptionScreenPosition, SpriteCol, Anchorpoint));
+	GameStartPreparation.reset(Sprite::SpriteCreate(Name::kStartScreen, DescriptionScreenPosition, SpriteCol, Anchorpoint));
+	ArrowRight.reset(Sprite::SpriteCreate(kArrowRight, ArrowRightPos, ArrowRightColor, Anchorpoint));
+	ArrowLeft.reset(Sprite::SpriteCreate(kArrowLeft, ArrowLeftPos, ArrowLeftColor, Anchorpoint));
 
 
 	//オブジェクトの生成

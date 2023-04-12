@@ -2,16 +2,35 @@
 #include"Sprite.h"
 
 enum Name {
-	kTitle=0,
-	kClickStartBefore,
+	kOne=0,
+	kTwo,
+	kThree,
+	kFour,
+	kFive,
+	kTitle,
 	kReticle,
+	kClickStartBefore,
 	kClickStartAfter,
+	kSignalBefore,
+	kSignalAfter,
 	kOperationDescription,
 	kEnemyDescription,
 	kStartScreen,
-	kSignalBefore,
-	kSignalAfter,
-
+	kArrowRight,
+	kArrowLeft,
+	kHart,
+	kBullet,
+	kReload,
+	kShot,
+	kEnemyMarker,
+	kWindow,
+	kDamageEffect,
+	kCurtain,
+	kSkip,
+	kGameClear,
+	kGameOver,
+	kYes,
+	kNo,
 };
 
 
