@@ -58,6 +58,8 @@ public:
 	};
 
 public:
+	~Audio();
+
 	bool Initialize();
 
 	void LoadFile(const char* filename, const float volume);

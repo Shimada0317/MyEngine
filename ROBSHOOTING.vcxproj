@@ -95,7 +95,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Application\Actor\Actor.cpp" />
     <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp" />
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp" />
     <ClCompile Include="Application\Particle\ObjParticle.cpp" />
@@ -275,7 +274,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application\Actor\Actor.h" />
     <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h" />
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h" />
     <ClInclude Include="Application\Particle\ObjParticle.h" />

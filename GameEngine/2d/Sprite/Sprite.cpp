@@ -20,6 +20,12 @@ ComPtr<ID3D12DescriptorHeap> Sprite::descHeap;
 ID3D12GraphicsCommandList* Sprite::cmdList = nullptr;
 XMMATRIX Sprite::matProjection;
 
+Sprite::~Sprite()
+{
+
+}
+
+
 bool Sprite::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
 {
 
@@ -342,6 +348,7 @@ Sprite* Sprite::SpriteCreate(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color, 
 
 	return sprite;
 }
+
 
 
 

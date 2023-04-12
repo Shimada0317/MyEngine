@@ -33,7 +33,7 @@ public:
 
 	void DrawAll();
 
-private:
+	public:
 	DebugText();
 	DebugText(const DebugText&) = delete;
 	~DebugText();

@@ -5,7 +5,6 @@
 #include"Input.h"
 #include"Audio.h"
 #include"Object3d.h"
-#include"DebugText.h"
 #include"SceneManager.h"
 #include"DebugCamera.h"
 #include"PostEffect.h"
@@ -54,16 +53,15 @@ private:
 	static const int debugTextNumber = 0;
 protected:
 	bool finish = false;
-	DebugText* debugText;
-	DirectXCommon* dxCommon = nullptr;
-	WinApp* winApp = nullptr;
+	unique_ptr <DirectXCommon> dxCommon = nullptr;
+	unique_ptr< WinApp> winApp = nullptr;
 	Input* input = nullptr;
 	Mouse* mouse = nullptr;
 	Audio* audio = nullptr;
 	SceneManager* sceneManager_ = nullptr;
 	unique_ptr<SpriteManager> spritemanager_ = nullptr;
-	DebugCamera* camera = nullptr;
-	PostEffect* postEffect = nullptr;
-	Texture* texture = nullptr;
+	unique_ptr <DebugCamera> camera = nullptr;
+	unique_ptr <PostEffect> postEffect = nullptr;
+	unique_ptr <Texture> texture = nullptr;
 };
 

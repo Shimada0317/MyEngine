@@ -66,6 +66,7 @@ protected://静的メンバ変数
 	static ComPtr<ID3D12DescriptorHeap> basicDescHeap;
 
 public://メンバ関数
+	~Sprite();
 
 	Sprite(UINT texnumber,XMFLOAT2 position, XMFLOAT2 size, XMFLOAT4 color, XMFLOAT2 anchorpoint, bool FlipX, bool FlipY);
 
@@ -89,7 +90,6 @@ public://メンバ関数
 	//色
 	void SetColor(XMFLOAT4 color);
 
-	void UpadteConstBuffer();
 	//描画
 	void Draw();
 

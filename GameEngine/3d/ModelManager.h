@@ -4,21 +4,21 @@
 
 using namespace std;
 
-enum Model {
-	WORM=0,
-	GEAR,
-	SHADOW,
-	HEAD,
-	BODY,
-	ARMS,
-	SKYDOME,
-	BUILS,
-	BUIL,
-	GROUND,
-	GUN,
-	HERI,
-	HANE,
-	SPHERE,
+enum ModelName {
+	kWorm = 0,
+	kGear,
+	kShadow,
+	kHead,
+	kBody,
+	kArms,
+	kSkydome,
+	kBuils,
+	kBuil,
+	kGround,
+	kGun,
+	kHeli,
+	kHane,
+	kSphere,
 };
 
 class ModelManager final

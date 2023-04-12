@@ -47,11 +47,11 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 	OriginDistance = Distance;
 	OriginHeadDistance = HeadDistance;
 
-	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(SHADOW));
-	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(SHADOW));
-	HeadPart = Object3d::Create(ModelManager::GetInstance()->GetModel(HEAD));
-	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(BODY));
-	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(ARMS));
+	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
+	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
+	HeadPart = Object3d::Create(ModelManager::GetInstance()->GetModel(kHead));
+	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(kBody));
+	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(kArms));
 
 	PartGreen = ParticleManager::Create(BringUpCamera);
 	PartRed = ParticleManager::Create(BringUpCamera);

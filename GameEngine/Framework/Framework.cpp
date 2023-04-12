@@ -26,32 +26,29 @@ void Framework::Run()
 
 void Framework::End()
 {
-	delete dxCommon;
-	delete winApp;
+
 	delete sceneManager_;
 }
 
 void Framework::Initialize()
 {
-	winApp = new WinApp();
+	winApp = make_unique<WinApp>();
 	winApp->Initialize();
-	dxCommon = new DirectXCommon();
-	dxCommon->Initialize(winApp);
+	dxCommon = make_unique<DirectXCommon>();
+	dxCommon->Initialize(winApp.get());
 	input = Input::GetInstance();
-	input->Initialize(winApp);
+	input->Initialize(winApp.get());
 	mouse = Mouse::GetInstance();
-	mouse->Initialize(winApp);
-	camera = new DebugCamera(WinApp::window_width,WinApp::window_height);
+	mouse->Initialize(winApp.get());
+	camera=make_unique<DebugCamera>(WinApp::window_width, WinApp::window_height);
 	
 
-	Object3d::StaticInitialize(dxCommon->GetDev(),camera);
+	Object3d::StaticInitialize(dxCommon->GetDev(),camera.get());
 	Sprite::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
-	ParticleManager::StaticInitialize(camera,dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
-	Texture::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height,camera);
+	ParticleManager::StaticInitialize(camera.get(), dxCommon->GetDev(), WinApp::window_width, WinApp::window_height);
+	Texture::StaticInitialize(dxCommon->GetDev(), WinApp::window_width, WinApp::window_height,camera.get());
 	Light::StaticInitialize(dxCommon->GetDev());
 	LightGroup::StaticInitialize(dxCommon->GetDev());
-	debugText = DebugText::GetInstance();
-	debugText->Initialize(debugTextNumber);
 	spritemanager_ = make_unique<SpriteManager>();
 	spritemanager_->SpriteName();
 	//シーンマネージャー
@@ -74,7 +71,7 @@ void Framework::Update()
 	mouse->Update();
 
 	//シーンの更新
-	sceneManager_->Update(dxCommon);
+	sceneManager_->Update(dxCommon.get());
 }
 
 
@@ -88,6 +85,8 @@ void Framework::Finalize()
 	OutputDebugStringA("Hello,DirectX!!\n");
 
 	FbxLoader::GetInstance()->Finalize();
+
+
 }
 
 
@@ -96,9 +95,8 @@ void Framework::Draw()
 	//描画前処理
 	//dxCommon->PreDraw();
 	//シーン描画
-	sceneManager_->Draw(dxCommon);
-	//デバッグテキスト描画
-	debugText->DrawAll();
+	sceneManager_->Draw(dxCommon.get());
+
 	//描画後処理
 	//dxCommon->PostDraw();
 }

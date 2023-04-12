@@ -22,7 +22,7 @@
 
 using namespace std;
 
-const int BILLS = 16;
+const int BUILS = 16;
 
 
 class GameScene :public BaseScene
@@ -131,9 +131,9 @@ private://メンバ変数
 	unique_ptr <Object3d> Sphere;
 	unique_ptr <Object3d> World;
 	unique_ptr<Object3d> Start;
-	unique_ptr<Object3d> BillsHighAlpha[BILLS];
-	unique_ptr<Object3d> BillsLowAlpha[BILLS];
-	unique_ptr<Object3d> FieldBills[5];
+	unique_ptr<Object3d> BuilsHighAlpha[BUILS];
+	unique_ptr<Object3d> BuilsLowAlpha[BUILS];
+	unique_ptr<Object3d> FieldBuils[5];
 	unique_ptr<Object3d> Heri;
 	unique_ptr<Object3d> Goal;
 	unique_ptr<Object3d> Hane;
@@ -168,17 +168,17 @@ private://メンバ変数
 	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
 	XMFLOAT3 SphereRot = { 0,90,0 };
 	//フィールドのステータス
-	XMFLOAT3 FieldBillScl = { 6.0f,10.0f,7.0f };
+	XMFLOAT3 FieldBuilscl = { 6.0f,10.0f,7.0f };
 	XMVECTOR FieldBillPos[5];
 	XMFLOAT3 FieldBillRot[5];
 	//足場のステータス
 	XMVECTOR WorldPos = { 0.0f,-1.1f,0.0f };
 	XMFLOAT3 WorldScl = { 100,100,100 };
 	//ビル群のステータス
-	XMFLOAT3 BillsScl = { 10.0f,10.0f,10.0f };
-	XMVECTOR BillsHighAlphaPos = { 0.0f,0.0f,-16.5f };
-	XMVECTOR BillsLowAlphaPos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 BillsRot = { 0.0f,90.0f,0.0f };
+	XMFLOAT3 BuilsScl = { 10.0f,10.0f,10.0f };
+	XMVECTOR BuilsHighAlphaPos = { 0.0f,0.0f,-16.5f };
+	XMVECTOR BuilsLowAlphaPos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 BuilsRot = { 0.0f,90.0f,0.0f };
 	//ヘリのステータス(スタートのムービーと終わりのムービー)
 	//スタート
 	XMVECTOR Heripos = { 0.0f,75.0f,-160.0f };

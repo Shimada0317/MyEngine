@@ -4,6 +4,10 @@
 
 #pragma comment(lib,"xaudio2.lib")
 
+Audio::~Audio()
+{
+}
+
 bool Audio::Initialize() {
 	HRESULT result;
 	result = XAudio2Create(&xAudio2, 0, XAUDIO2_DEFAULT_PROCESSOR);

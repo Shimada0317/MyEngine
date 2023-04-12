@@ -87,9 +87,6 @@
     <ClCompile Include="Application\Action\Action.cpp">
       <Filter>.cpp\Application\Action</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Actor\Actor.cpp">
-      <Filter>.cpp\Application\Actor</Filter>
-    </ClCompile>
     <ClCompile Include="GameEngine\Audio\Audio.cpp">
       <Filter>.cpp\GameEngine\Audio</Filter>
     </ClCompile>
@@ -251,9 +248,6 @@
     </ClInclude>
     <ClInclude Include="Application\Action\Action.h">
       <Filter>.h\Application\Action</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Actor\Actor.h">
-      <Filter>.h\Application\Actor</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\Audio\Audio.h">
       <Filter>.h\GameEngine\Audio</Filter>
@@ -485,9 +479,6 @@
     <Filter Include=".cpp\Application\Action">
       <UniqueIdentifier>{3b061a4d-2871-46bd-81c5-b0373f6853d9}</UniqueIdentifier>
     </Filter>
-    <Filter Include=".cpp\Application\Actor">
-      <UniqueIdentifier>{7b16bcd1-256f-4d22-9d57-d87927018d5b}</UniqueIdentifier>
-    </Filter>
     <Filter Include=".cpp\Application\Collision">
       <UniqueIdentifier>{a15bec51-068b-4bd3-9a4a-0a37751d4124}</UniqueIdentifier>
     </Filter>
@@ -514,9 +505,6 @@
     </Filter>
     <Filter Include=".h\Application\Action">
       <UniqueIdentifier>{782fac21-6f0a-4590-b260-566f021668b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\Application\Actor">
-      <UniqueIdentifier>{12001660-44fa-48cd-9352-af783dfc9d97}</UniqueIdentifier>
     </Filter>
     <Filter Include=".h\Application\Collsion">
       <UniqueIdentifier>{aace993c-695a-488b-9608-08f38cdd05de}</UniqueIdentifier>

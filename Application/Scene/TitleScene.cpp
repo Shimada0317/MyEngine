@@ -50,10 +50,10 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 
 
 	//オブジェクトの生成
-	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
-		BillsLowAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(kSkydome));
+	for (int i = 0; i < BUILSAMOUNT; i++) {
+		BuilsHighAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(kBuils));
+		BuilsLowAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(kBuils));
 	}
 	Start = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
 	World = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
@@ -87,23 +87,23 @@ void TitleScene::StatusSet()
 	World->SetPosition(WorldPos);
 	World->SetScale(WorldScl);
 	//左右のビルのステータスのセット
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->SetScale(BillsScl);
-		BillsLowAlpha[i]->SetScale(BillsScl);
+	for (int i = 0; i < BUILSAMOUNT; i++) {
+		BuilsHighAlpha[i]->SetScale(BuilsScl);
+		BuilsLowAlpha[i]->SetScale(BuilsScl);
 		if (i % 2 == 0) {
-			BillsHighAlphaPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
-			BillsLowAlphaPos = { 200.0f,0,-300.0f + (100 * i / 2) };
-			BillsRot = { 0.0f,90.0f,0.0f };
+			BuilsHighAlphaPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
+			BuilsLowAlphaPos = { 200.0f,0,-300.0f + (100 * i / 2) };
+			BuilsRot = { 0.0f,90.0f,0.0f };
 		}
 		else if (i % 2 == 1) {
-			BillsHighAlphaPos = { -100.0f,0,-300.0f + (100 * i / 2) };
-			BillsLowAlphaPos = { -200.0f, 0,-300.0f + (100 * i / 2) };
-			BillsRot = { 0.0f,270.0f,0.0f };
+			BuilsHighAlphaPos = { -100.0f,0,-300.0f + (100 * i / 2) };
+			BuilsLowAlphaPos = { -200.0f, 0,-300.0f + (100 * i / 2) };
+			BuilsRot = { 0.0f,270.0f,0.0f };
 		}
-		BillsHighAlpha[i]->SetRotation(BillsRot);
-		BillsHighAlpha[i]->SetPosition(BillsHighAlphaPos);
-		BillsLowAlpha[i]->SetRotation(BillsRot);
-		BillsLowAlpha[i]->SetPosition(BillsLowAlphaPos);
+		BuilsHighAlpha[i]->SetRotation(BuilsRot);
+		BuilsHighAlpha[i]->SetPosition(BuilsHighAlphaPos);
+		BuilsLowAlpha[i]->SetRotation(BuilsRot);
+		BuilsLowAlpha[i]->SetPosition(BuilsLowAlphaPos);
 	}
 	//カメラの移動先のビルのステータスセット
 	Start->SetPosition(StartPos);
@@ -153,9 +153,9 @@ void TitleScene::StatusSet()
 void TitleScene::AllUpdate()
 {
 	//左右のビルの更新処理
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->Update({ 0.8f,0.6f,0.3f,1.0f });
-		BillsLowAlpha[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
+	for (int i = 0; i < BUILSAMOUNT; i++) {
+		BuilsHighAlpha[i]->Update({ 0.8f,0.6f,0.3f,1.0f });
+		BuilsLowAlpha[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
 	}
 	//ポストエフェクトの更新処理
 	Post->Update(PostEfectColor);
@@ -330,9 +330,9 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	World->Draw();
 	Sphere->Draw();
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->Draw();
-		BillsLowAlpha[i]->Draw();
+	for (int i = 0; i < BUILSAMOUNT; i++) {
+		BuilsHighAlpha[i]->Draw();
+		BuilsLowAlpha[i]->Draw();
 	}
 	Start->Draw();
 	Object3d::PostDraw();
@@ -389,22 +389,24 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 //終了処理
 void TitleScene::Finalize()
 {
-
 	Title.reset();
 	ArrowLeft.reset();
 	ArrowRight.reset();
-
+	TitleCamera.reset();
 	EnemyOverview.reset();
 	DescriptionOperation.reset();
 	GameStartPreparation.reset();
 	SignalAfter.reset();
 	SignalBefore.reset();
 	Cursor.reset();
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i].reset();
-		BillsLowAlpha[i].reset();
+	lightGroupe.reset();
+	light.reset();
+	for (int i = 0; i < BUILSAMOUNT; i++) {
+		BuilsHighAlpha[i].reset();
+		BuilsLowAlpha[i].reset();
 	}
 	Sphere.reset();
-	//World.reset();
+	World.reset();
 	Start.reset();
+	
 }

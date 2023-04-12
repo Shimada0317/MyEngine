@@ -17,7 +17,7 @@
 #include"HelperMath.h"
 #include"SpriteManager.h"
 
-const int BUILAMOUNT = 16;
+const int BUILSAMOUNT = 16;
 
 class TitleScene :public BaseScene
 {
@@ -110,8 +110,8 @@ public://メンバ関数
 private:
 	//Obj
 	unique_ptr <Object3d> Sphere;
-	unique_ptr<Object3d> BillsHighAlpha[BUILAMOUNT];
-	unique_ptr<Object3d> BillsLowAlpha[BUILAMOUNT];
+	unique_ptr<Object3d> BuilsHighAlpha[BUILSAMOUNT];
+	unique_ptr<Object3d> BuilsLowAlpha[BUILSAMOUNT];
 	unique_ptr <Object3d> GroundObj;
 	unique_ptr <Object3d >World;
 	unique_ptr<Object3d> Start;
@@ -146,10 +146,10 @@ private:
 	XMFLOAT3 GroundScl = { 13,20,16 };
 	XMFLOAT3 GroundRot = { 0,0,0 };
 	//ビル群のステータス
-	XMFLOAT3 BillsScl = { 10.0f,10.0f,10.0f };
-	XMVECTOR BillsHighAlphaPos = { 0.0f,0.0f,-16.5f };
-	XMVECTOR BillsLowAlphaPos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 BillsRot = { 0.0f,90.0f,0.0f };
+	XMFLOAT3 BuilsScl = { 10.0f,10.0f,10.0f };
+	XMVECTOR BuilsHighAlphaPos = { 0.0f,0.0f,-16.5f };
+	XMVECTOR BuilsLowAlphaPos = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 BuilsRot = { 0.0f,90.0f,0.0f };
 	//カメラの移動先のステータス
 	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 StartScl = { 15.0f,15.0f,15.0f };

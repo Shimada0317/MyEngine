@@ -53,13 +53,13 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	//モデルの読み込み
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
-		BillsLowAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+	for (int i = 0; i < BUILS; i++) {
+		BuilsHighAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		BuilsLowAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 
 	}
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		FieldBuils[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 	}
 	World = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
 	Start = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
@@ -112,7 +112,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightGroupe->SetSpotLightActive(2, true);
 	lightGroupe->SetSpotLightActive(3, true);
 	lightGroupe->SetSpotLightActive(4, true);
-
+	MotValue = HartSize;
 	LoadEnemyPopData();
 }
 
@@ -175,30 +175,30 @@ void GameScene::StatusSet()
 	Start->SetRotation(StartRot);
 
 	//左右のビルのステータスセット
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->SetScale(BillsScl);
-		BillsLowAlpha[i]->SetScale(BillsScl);
+	for (int i = 0; i < BUILS; i++) {
+		BuilsHighAlpha[i]->SetScale(BuilsScl);
+		BuilsLowAlpha[i]->SetScale(BuilsScl);
 		if (i % 2 == 0) {
-			BillsHighAlphaPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
-			BillsLowAlphaPos = { 200.0f,0,-300.0f + (100 * i / 2) };
-			BillsRot = { 0.0f,90.0f,0.0f };
+			BuilsHighAlphaPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
+			BuilsLowAlphaPos = { 200.0f,0,-300.0f + (100 * i / 2) };
+			BuilsRot = { 0.0f,90.0f,0.0f };
 		}
 		else if (i % 2 == 1) {
-			BillsHighAlphaPos = { -100.0f,0,-300.0f + (100 * i / 2) };
-			BillsLowAlphaPos = { -200.0f, 0,-300.0f + (100 * i / 2) };
-			BillsRot = { 0.0f,270.0f,0.0f };
+			BuilsHighAlphaPos = { -100.0f,0,-300.0f + (100 * i / 2) };
+			BuilsLowAlphaPos = { -200.0f, 0,-300.0f + (100 * i / 2) };
+			BuilsRot = { 0.0f,270.0f,0.0f };
 		}
-		BillsHighAlpha[i]->SetRotation(BillsRot);
-		BillsHighAlpha[i]->SetPosition(BillsHighAlphaPos);
-		BillsLowAlpha[i]->SetRotation(BillsRot);
-		BillsLowAlpha[i]->SetPosition(BillsLowAlphaPos);
+		BuilsHighAlpha[i]->SetRotation(BuilsRot);
+		BuilsHighAlpha[i]->SetPosition(BuilsHighAlphaPos);
+		BuilsLowAlpha[i]->SetRotation(BuilsRot);
+		BuilsLowAlpha[i]->SetPosition(BuilsLowAlphaPos);
 	}
 
 	//フィールドの建物のステータスセット
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i]->SetPosition(FieldBillPos[i]);
-		FieldBills[i]->SetRotation(FieldBillRot[i]);
-		FieldBills[i]->SetScale(FieldBillScl);
+		FieldBuils[i]->SetPosition(FieldBillPos[i]);
+		FieldBuils[i]->SetRotation(FieldBillRot[i]);
+		FieldBuils[i]->SetScale(FieldBuilscl);
 	}
 
 	DamageEfectSp->SetColor(DamageEfectColor);
@@ -232,13 +232,13 @@ void GameScene::AllUpdata()
 	Action::GetInstance()->DebugMove(SearchLightPos[0]);
 
 	//左右のビルの更新処理
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->Update(BillColor);
-		BillsLowAlpha[i]->Update(BillColor);
+	for (int i = 0; i < BUILS; i++) {
+		BuilsHighAlpha[i]->Update(BillColor);
+		BuilsLowAlpha[i]->Update(BillColor);
 	}
 	//フィールドのビルの更新処理
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i]->Update(BillColor);
+		FieldBuils[i]->Update(BillColor);
 	}
 	//天球の更新処理
 	Sphere->Update({ 1,1,1,1 },true);
@@ -401,11 +401,11 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	World->Draw();
 	Start->Draw();
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i]->Draw();
+		FieldBuils[i]->Draw();
 	}
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i]->Draw();
-		BillsLowAlpha[i]->Draw();
+	for (int i = 0; i < BUILS; i++) {
+		BuilsHighAlpha[i]->Draw();
+		BuilsLowAlpha[i]->Draw();
 	}
 
 #pragma region ActorからDrawの処理を持ってくる(後で消す)
@@ -448,22 +448,26 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 		ReticleForGameOver->Draw();
 	}
 
-	if (PlayerHp == 1) {
-		LifeCount[0]->Draw();
+	if (GetCamWorkFlag == true) {
+		if (PlayerHp == 1) {
+			LifeCount[0]->Draw();
+		}
+		else if (PlayerHp == 2) {
+			LifeCount[1]->Draw();
+		}
+		else if (PlayerHp == 3) {
+			LifeCount[2]->Draw();
+		}
+		else if (PlayerHp == 4) {
+			LifeCount[3]->Draw();
+		}
+		else if (PlayerHp == 5) {
+			LifeCount[4]->Draw();
+		}
+		Hart->Draw();
 	}
-	else if (PlayerHp == 2) {
-		LifeCount[1]->Draw();
-	}
-	else if (PlayerHp == 3) {
-		LifeCount[2]->Draw();
-	}
-	else if (PlayerHp == 4) {
-		LifeCount[3]->Draw();
-	}
-	else if (PlayerHp == 5) {
-		LifeCount[4]->Draw();
-	}
-	Hart->Draw();
+
+	Hero->SpriteDraw();
 	Sprite::PostDraw();
 }
 
@@ -525,12 +529,12 @@ void GameScene::Finalize()
 
 	World.reset();
 	Start.reset();
-	for (int i = 0; i < BILLS; i++) {
-		BillsHighAlpha[i].reset();
-		BillsLowAlpha[i].reset();
+	for (int i = 0; i < BUILS; i++) {
+		BuilsHighAlpha[i].reset();
+		BuilsLowAlpha[i].reset();
 	}
 	for (int i = 0; i < 5; i++) {
-		FieldBills[i].reset();
+		FieldBuils[i].reset();
 	}
 }
 
