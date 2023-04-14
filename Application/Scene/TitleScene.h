@@ -7,6 +7,12 @@ const int BUILSAMOUNT = 16;
 
 class TitleScene :public BaseScene
 {
+private:
+	enum OperationPage {
+		DescriptionPage = 0,
+		EnemyOverViewPage,
+		GameStartPrepartionPage,
+	};
 
 private:
 	static const int debugTextNumber = 0;
@@ -43,6 +49,11 @@ public://メンバ関数
 	/// カメラの移動
 	/// </summary>
 	void CameraDirection();
+
+	/// <summary>
+	/// UIをイージングで拡大縮小させる処理
+	/// </summary>
+	void UiEasingProcess();
 
 	/// <summary>
 	/// カーソルが範囲内に入っているか

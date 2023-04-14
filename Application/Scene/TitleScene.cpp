@@ -173,22 +173,9 @@ void TitleScene::AllUpdate()
 //更新処理
 void TitleScene::Update()
 {
-	if (easingchangeflag_ == false) {
-		easingtimer_ += 0.05f;
-		if (easingtimer_ >= 1) {
-			easingchangeflag_ = true;
-		}
-	}
-	else {
-		easingtimer_ -= 0.05f;
-		if (easingtimer_ <= -1) {
-			easingchangeflag_ = false;
-		}
-	}
-	arrowsize_.x = Action::GetInstance()->EasingOut(easingtimer_, 5) + 32;
-	arrowsize_.y = Action::GetInstance()->EasingOut(easingtimer_, 5) + 32;
-	clicksize_.x= Action::GetInstance()->EasingOut(easingtimer_, 5) + 550;
-	clicksize_.y= Action::GetInstance()->EasingOut(easingtimer_, 5) + 60;
+
+	UiEasingProcess();
+	
 	Mouse::GetInstance()->MouseMoveSprite(reticlepos_);
 	//カメラのムーブ関数
 	CameraDirection();
@@ -234,6 +221,27 @@ void TitleScene::CameraDirection()
 	}
 }
 
+void TitleScene::UiEasingProcess()
+{
+
+	if (easingchangeflag_ == false) {
+		easingtimer_ += 0.05f;
+		if (easingtimer_ >= 1) {
+			easingchangeflag_ = true;
+		}
+	}
+	else {
+		easingtimer_ -= 0.05f;
+		if (easingtimer_ <= -1) {
+			easingchangeflag_ = false;
+		}
+	}
+	arrowsize_.x = Action::GetInstance()->EasingOut(easingtimer_, 5) + 32;
+	arrowsize_.y = Action::GetInstance()->EasingOut(easingtimer_, 5) + 32;
+	clicksize_.x = Action::GetInstance()->EasingOut(easingtimer_, 5) + 550;
+	clicksize_.y = Action::GetInstance()->EasingOut(easingtimer_, 5) + 60;
+}
+
 //カーソルが範囲内に入っているか
 void TitleScene::CheckCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
 {
@@ -261,7 +269,8 @@ bool TitleScene::NextorBack(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Po
 void TitleScene::DescriptionPageProces()
 {
 	//カメラが移動した後の画面
-	if (descriptionpage_ < 2 && camerachangeflag_ == true) {
+	if (descriptionpage_ < GameStartPrepartionPage &&
+		camerachangeflag_ == true) {
 		if (NextorBack(reticlepos_, arrowrightpos_, 16, 16)) {
 			arrowrightcolor_ = { 1.f,0.f,0.f,1.f };
 			righttrueinflag_ = true;
@@ -278,7 +287,7 @@ void TitleScene::DescriptionPageProces()
 	}
 
 	//ページが0以上であれば
-	if (descriptionpage_ > 0) {
+	if (descriptionpage_ > DescriptionPage) {
 		if (NextorBack(reticlepos_, arrowleftpos_, 16, 16)) {
 			arrowleftcolor_ = { 1.f,0.f,0.f,1.f };
 			lefttrueinflag_ = true;
@@ -294,7 +303,9 @@ void TitleScene::DescriptionPageProces()
 	}
 
 	//救援ヘリを呼ぶとき
-	if (camerachangeflag_ == true && signalcurorinflag_ == true && descriptionpage_ == 2) {
+	if (camerachangeflag_ == true &&
+		signalcurorinflag_ == true &&
+		descriptionpage_ == GameStartPrepartionPage) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			if (clickflag_ == true) {
 				clickse_->LoadFile("Resources/Sound/SE/MorseCode.wav", volume_);
@@ -350,25 +361,25 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 		}
 	}
 	else if (camerachangeflag_ == true) {
-		if (descriptionpage_ < 2) {
+		if (descriptionpage_ < GameStartPrepartionPage) {
 			arrowright_->Draw();
 		}
-		if (descriptionpage_ > 0) {
+		if (descriptionpage_ > DescriptionPage) {
 
 			arrowleft_->Draw();
 
 
 		}
-		if (descriptionpage_ == 0) {
+		if (descriptionpage_ == DescriptionPage) {
 			descriptionoperation_->Draw();
 		}
-		else if (descriptionpage_ == 1) {
+		else if (descriptionpage_ == EnemyOverViewPage) {
 			enemyoverview_->Draw();
 		}
-		else if (descriptionpage_ == 2) {
+		else if (descriptionpage_ == GameStartPrepartionPage) {
 			gamestartpreparation_->Draw();
 		}
-		if (descriptionpage_ == 2) {
+		if (descriptionpage_ == GameStartPrepartionPage) {
 			if (signalcurorinflag_ == false) {
 				signalbefore_->Draw();
 			}
