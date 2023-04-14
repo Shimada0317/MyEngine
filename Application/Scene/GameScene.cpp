@@ -2,10 +2,10 @@
 #include<cassert>
 #include <iomanip>
 #include"Action.h"
-#include"HelperMath.h"
-#include"SceneManager.h"
-#include"ModelManager.h"
 #include"Mouse.h"
+#include"HelperMath.h"
+
+#include"SceneManager.h"
 
 const float AddPosetEfectColor = 0.05f;
 const XMFLOAT4 BillColor = { 0.8f,0.6f,0.3f,1.0f };
@@ -39,7 +39,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 
 	//スプライトの生成
-	DamageEfectSp.reset(Sprite::SpriteCreate(kDamageEffect, { 0.0f, 0.0f }, DamageEfectColor));
+	DamageEfectSp.reset(Sprite::SpriteCreate(Name::kDamageEffect, { 0.0f, 0.0f }, DamageEfectColor));
 	Clear.reset(Sprite::SpriteCreate(kGameClear, { 0.0f,0.0f }));
 	Conteniu.reset(Sprite::SpriteCreate(kGameOver, { 0.0f,0.0f }));
 	Shot.reset(Sprite::SpriteCreate(kShot, { 0.f,WinApp::window_height - 150 }));

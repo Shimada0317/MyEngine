@@ -1,43 +1,21 @@
 #pragma once
 #include<fstream>
 #include<sstream>
-#include <DirectXMath.h>
 #include<memory>
-
-#include"Audio.h"
 #include"BaseScene.h"
 #include"BossEnemy/BossEnemy.h"
-#include"DebugCamera.h"
-#include"DirectXCommon.h"
 #include"Enemy.h"
-#include"Light.h"
-#include"Object3d.h"
-#include"ObjModel.h"
-#include"ParticleManager.h"
 #include"Player.h"
-#include"PostEffect.h"
-#include"Sprite.h"
 #include"TitleScene.h"
 
-
-using namespace std;
-
 const int BUILS = 16;
-
 
 class GameScene :public BaseScene
 {
 public:
 	
 
-private: // エイリアス
-// Microsoft::WRL::を省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
+
 private:
 
 

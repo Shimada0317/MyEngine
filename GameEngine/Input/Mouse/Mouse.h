@@ -7,6 +7,7 @@
 #include<vector>
 #include<DirectXMath.h>
 
+
 class Mouse
 {
 public:

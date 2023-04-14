@@ -1,6 +1,16 @@
 #pragma once
+#include"Audio.h"
 #include"DirectXCommon.h"
+#include"Light.h"
+#include"LightGroup.h"
+#include"Object3d.h"
+#include"PostEffect.h"
+#include"Sprite.h"
+#include"ParticleManager.h"
+#include"SpriteManager.h"
+#include"Camera.h"
 
+using namespace std;
 //‘O•ûéŒ¾
 class SceneManager;
 

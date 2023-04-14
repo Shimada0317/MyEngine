@@ -5,20 +5,12 @@
 #include<d3dx12.h>
 #include<DirectXMath.h>
 #include"Input.h"
+#include"HelperMath.h"
 
 using namespace DirectX;
 
 class Action
 {
-private: // エイリアス
-// Microsoft::WRL::を省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
-	using XMVECTOR = DirectX::XMVECTOR;
 private:
 	/// <summary>
 	/// コンストラクタ

@@ -1,35 +1,13 @@
 #pragma once
-#include <DirectXMath.h>
 #include<memory>
-#include"Audio.h"
 #include"BaseScene.h"
-#include"Camera.h"
-#include "DirectXCommon.h"
 #include"GameScene.h"
-#include"Light.h"
-#include"LightGroup.h"
-#include"Object3d.h"
-#include"ObjModel.h"
-#include"SceneManager.h"
-#include"ParticleManager.h"
-#include"PostEffect.h"
-#include "Sprite.h"
-#include"HelperMath.h"
-#include"SpriteManager.h"
 
 const int BUILSAMOUNT = 16;
 
 class TitleScene :public BaseScene
 {
-private: // エイリアス
-// Microsoft::WRL::を省略
-	template <class T> using ComPtr = Microsoft::WRL::ComPtr<T>;
-	// DirectX::を省略
-	using XMFLOAT2 = DirectX::XMFLOAT2;
-	using XMFLOAT3 = DirectX::XMFLOAT3;
-	using XMFLOAT4 = DirectX::XMFLOAT4;
-	using XMMATRIX = DirectX::XMMATRIX;
-	using XMVECTOR = DirectX::XMVECTOR;
+
 private:
 	static const int debugTextNumber = 0;
 
@@ -109,108 +87,107 @@ public://メンバ関数
 
 private:
 	//Obj
-	unique_ptr <Object3d> Sphere;
-	unique_ptr<Object3d> BuilsHighAlpha[BUILSAMOUNT];
-	unique_ptr<Object3d> BuilsLowAlpha[BUILSAMOUNT];
-	unique_ptr <Object3d> GroundObj;
-	unique_ptr <Object3d >World;
-	unique_ptr<Object3d> Start;
+	unique_ptr <Object3d> sphere_;
+	unique_ptr<Object3d> builshighalpha_[BUILSAMOUNT];
+	unique_ptr<Object3d> builslowalpha_[BUILSAMOUNT];
+	unique_ptr <Object3d> groundobj_;
+	unique_ptr <Object3d >world_;
+	unique_ptr<Object3d> start_;
 	//スプライト
-	unique_ptr<Sprite> Title = nullptr;
-	unique_ptr<Sprite> Cursor = nullptr;
-	unique_ptr<Sprite> ClickBefore = nullptr;
-	unique_ptr<Sprite> ClickAfter = nullptr;
-	unique_ptr<Sprite> SignalBefore = nullptr;
-	unique_ptr<Sprite> SignalAfter = nullptr;
-	unique_ptr<Sprite> DescriptionOperation = nullptr;
-	unique_ptr<Sprite> EnemyOverview = nullptr;
-	unique_ptr<Sprite> GameStartPreparation = nullptr;
-	unique_ptr<Sprite> ArrowRight = nullptr;
-	unique_ptr<Sprite> ArrowLeft = nullptr;
-	unique_ptr<Sprite> ArrowRightTrue = nullptr;
-	unique_ptr<Sprite> ArrowLeftTrue = nullptr;
+	unique_ptr<Sprite> title_ = nullptr;
+	unique_ptr<Sprite> cursor_ = nullptr;
+	unique_ptr<Sprite> clickbefore_ = nullptr;
+	unique_ptr<Sprite> clickafter_ = nullptr;
+	unique_ptr<Sprite> signalbefore_ = nullptr;
+	unique_ptr<Sprite> signalafter_ = nullptr;
+	unique_ptr<Sprite> descriptionoperation_ = nullptr;
+	unique_ptr<Sprite> enemyoverview_ = nullptr;
+	unique_ptr<Sprite> gamestartpreparation_ = nullptr;
+	unique_ptr<Sprite> arrowright_ = nullptr;
+	unique_ptr<Sprite> arrowleft_ = nullptr;
+	unique_ptr<Sprite> arrowrighttrue_ = nullptr;
+	unique_ptr<Sprite> arrowlefttrue_ = nullptr;
 	//その他の機能
-	unique_ptr<Light> light = nullptr;
-	unique_ptr<LightGroup> lightGroupe = nullptr;
-	unique_ptr<PostEffect> Post = nullptr;
-	unique_ptr<Audio> ClickSe = nullptr;
-	unique_ptr<Audio> MorseCodeSe = nullptr;
-	unique_ptr<Audio> Bgm = nullptr;
-	unique_ptr<Camera> TitleCamera = nullptr;
+	unique_ptr<Light> light_ = nullptr;
+	unique_ptr<LightGroup> lightgroupe_ = nullptr;
+	unique_ptr<PostEffect> posteffct_ = nullptr;
+	unique_ptr<Audio> clickse_ = nullptr;
+	unique_ptr<Audio> morsecodese_ = nullptr;
+	unique_ptr<Audio> bgm_ = nullptr;
+	unique_ptr<Camera> titlecamera_ = nullptr;
 	//球体のステータス
-	XMVECTOR SpherePos = { 0,0,0 };
-	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
-	XMFLOAT3 SphereRot = { 0,0,0 };
+	XMVECTOR spherepos_ = { 0,0,0 };
+	XMFLOAT3 spherescl_ = { 4.0f,4.0f,4.0f };
+	XMFLOAT3 sphererot_ = { 0,0,0 };
 	//フィールドのステータス
-	XMVECTOR GroundPos = { 22.5f,-1,40 };
-	XMFLOAT3 GroundScl = { 13,20,16 };
-	XMFLOAT3 GroundRot = { 0,0,0 };
+	XMVECTOR groundpos_ = { 22.5f,-1,40 };
+	XMFLOAT3 groundscl_ = { 13,20,16 };
+	XMFLOAT3 groundrot_ = { 0,0,0 };
 	//ビル群のステータス
-	XMFLOAT3 BuilsScl = { 10.0f,10.0f,10.0f };
-	XMVECTOR BuilsHighAlphaPos = { 0.0f,0.0f,-16.5f };
-	XMVECTOR BuilsLowAlphaPos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 BuilsRot = { 0.0f,90.0f,0.0f };
+	XMFLOAT3 builsscl_ = { 10.0f,10.0f,10.0f };
+	XMVECTOR builshighalphapos_ = { 0.0f,0.0f,-16.5f };
+	XMVECTOR builslowalphapos_ = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 builsrot_ = { 0.0f,90.0f,0.0f };
 	//カメラの移動先のステータス
-	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 StartScl = { 15.0f,15.0f,15.0f };
+	XMVECTOR startpos_ = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 startscl_ = { 15.0f,15.0f,15.0f };
 	//カメラのステータス
-	XMVECTOR CameraMove = { 0.0f,0.0f,0.0f };
-	XMVECTOR CameraEyeMove = { 0.0f,0.0f,0.0f };
-	bool CameraEyeMove_F = false;
-	bool CameraChange_F = false;
+	XMVECTOR cameramove_ = { 0.0f,0.0f,0.0f };
+	XMVECTOR cameraeyemove_ = { 0.0f,0.0f,0.0f };
+	bool cameraeyemoveflag_ = false;
+	bool camerachangeflag_ = false;
 	//足場のステータス
-	XMVECTOR WorldPos = { 0.0f,-1.1f,0.0f };
-	XMFLOAT3 WorldScl = { 100,100,100 };
+	XMVECTOR worldpos_ = { 0.0f,-1.1f,0.0f };
+	XMFLOAT3 worldscl_ = { 100,100,100 };
 	//スプライトのステータス
-	XMFLOAT4 SpriteCol = { 1,1,1,1 };
-	XMFLOAT2 Anchorpoint = { 0.5f,0.5f };
-	XMFLOAT2 ReticlePos = { 640.0f,360.0f };
-	XMFLOAT2 ClickPos = { WinApp::window_width/2,600 };
+	XMFLOAT4 spritecol_ = { 1,1,1,1 };
+	XMFLOAT2 anchorpoint_ = { 0.5f,0.5f };
+	XMFLOAT2 reticlepos_ = { 640.0f,360.0f };
+	XMFLOAT2 clickpos_ = { WinApp::window_width/2,600 };
 	//タイトルスプライトのステータス
-	XMFLOAT2 TitleSize = { 1280.0f,720.0f };
-	XMFLOAT2 TitlePos = { 0.0f,0.0f };
-	bool TitleSprite_F = true;
+	XMFLOAT2 titlesize_ = { 1280.0f,720.0f };
+	XMFLOAT2 titlepos_ = { 0.0f,0.0f };
+	bool titlespriteflag_ = true;
 	//説明の矢印座標
-	XMFLOAT2 ArrowRightPos = { 1240.0f,300 };
-	XMFLOAT2 ArrowLeftPos = { 35.0f,300 };
-	XMFLOAT2 ArrowSize = { 32.f,32.f};
-	XMFLOAT4 ArrowRightColor = { 1.f,1.f,1.f,1.f };
-	XMFLOAT4 ArrowLeftColor = { 1.f,1.f,1.f,1.f };
-	bool RightTrueIn_F = false;
-	bool LeftTrueIn_F = false;
+	XMFLOAT2 arrowrightpos_ = { 1240.0f,300 };
+	XMFLOAT2 arrowleftpos_ = { 35.0f,300 };
+	XMFLOAT2 arrowsize_ = { 32.f,32.f};
+	XMFLOAT4 arrowrightcolor_ = { 1.f,1.f,1.f,1.f };
+	XMFLOAT4 arrowleftcolor_ = { 1.f,1.f,1.f,1.f };
+	bool righttrueinflag_ = false;
+	bool lefttrueinflag_= false;
 	//ポストエフェクトの色
-	XMFLOAT4 PostEfectColor = { 0.0f,0.0f,0.0f,1.0f };
+	XMFLOAT4 postefectcolor_ = { 0.0f,0.0f,0.0f,1.0f };
 	//カーソルが入っているか
-	bool SignalCurorInFlag = false;
+	bool signalcurorinflag_ = false;
 	//フェードを掛けるか掛けないか
-	bool FadeOut_F = false;
-	bool TitleDisplay_F = true;
+	bool fadeoutflag_ = false;
 	//クリックしているかどうか
-	bool Click_F = true;
+	bool clickflag_ = true;
 	//音量
-	float Volume = 0.8f;
+	float volume_ = 0.8f;
 	//説明ページ
-	int DescriptionPage = 0;
+	int descriptionpage_ = 0;
 
-	float PointLightPos[3] = { 0.f,0.f,0.f };
-	float PointLightColor[3] = { 1.f,1.f,1.f };
-	float PointLightAtten[3] = { 0.3f,0.1f,0.1f };
+	float pointlightpos_[3] = { 0.f,0.f,0.f };
+	float pointlightcolor_[3] = { 1.f,1.f,1.f };
+	float pointlightatten_[3] = { 0.3f,0.1f,0.1f };
 
 
-	XMFLOAT3 SpotLightDir = { 0,-1,0 };
-	XMFLOAT3 SpotLightPos = { 0,1005,0 };
-	XMFLOAT3 SpotLightColor = { 1,1,1 };
-	XMFLOAT3 SpotLightAtten = { 0.f,0.f,0.f };
-	XMFLOAT2 SpotLightFactorAngle = { 20.0f,30.0f };
+	XMFLOAT3 spotlightdir_ = { 0,-1,0 };
+	XMFLOAT3 spotlightpos_ = { 0,1005,0 };
+	XMFLOAT3 spotlightcolor_ = { 1,1,1 };
+	XMFLOAT3 spotlightatten_ = { 0.f,0.f,0.f };
+	XMFLOAT2 spotlightfactorangle_ = { 20.0f,30.0f };
 
-	XMFLOAT3 SpotLightDir2 = { 0,0,0 };
-	XMFLOAT3 SpotLightPos2 = { 10,1005,160 };
-	XMFLOAT3 SpotLightColor2 = { 0,0,1 };
-	XMFLOAT3 SpotLightAtten2 = { 0.f,0.f,0.f };
-	XMFLOAT2 SpotLightFactorAngle2 = { 20.0f,30.0f };
+	XMFLOAT3 spotlightdir2_ = { 0,0,0 };
+	XMFLOAT3 spotlightpos2_ = { 10,1005,160 };
+	XMFLOAT3 spotlightcolor2_ = { 0,0,1 };
+	XMFLOAT3 spotlightatten2_ = { 0.f,0.f,0.f };
+	XMFLOAT2 spotlightfactorangle2_ = { 20.0f,30.0f };
 
-	float EasingTimer = 0.f;
-	bool EasingChangeFlag=false;
-	XMFLOAT2 ClickSize = { 550.f,60.f };
+	float easingtimer_ = 0.f;
+	bool easingchangeflag_=false;
+	XMFLOAT2 clicksize_ = { 550.f,60.f };
 };
 

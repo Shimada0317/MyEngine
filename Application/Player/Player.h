@@ -1,5 +1,4 @@
 #pragma once
-#include"ObjModel.h"
 #include"Object3d.h"
 #include"Sprite.h"
 #include<vector>
