@@ -25,8 +25,13 @@ enum  Phase{
 
 class Player
 {
-public:
-
+private:
+	enum State {
+		WAIT,
+		RELOAD,
+		SHOT,
+		MOVE,
+	};
 public:
 	~Player();
 	/// <summary>
@@ -179,6 +184,10 @@ public:
 	int GetHp() { return Hp; }
 	//撃った時
 	const bool& GetBulletShot() { return BulletShotFlag; }
+
+	const XMVECTOR& GetBodyWorldPos() { return BodyWorldPos; }
+	
+	const XMVECTOR& GetVelocity() { return Velocity; }
 #pragma endregion
 
 #pragma region Set
@@ -190,22 +199,22 @@ public:
 	void SetHp(int HP) { this->Hp = HP; }
 	void SetFinish(const bool& finish) { this->StopFlag = finish; }
 	void SetBulletShot(const bool& BulletShot_F) { this->BulletShotFlag = BulletShot_F; }
-	const XMVECTOR& GetVelocity() { return Velocity; }
+	void SetBodyWorldPos(const XMVECTOR& worldbodypos) { this->BodyWorldPos = worldbodypos; }
 #pragma endregion
 private:
 	//Obj
-	std::unique_ptr<Object3d> Track;
-	std::unique_ptr<Object3d> Gun;
-	std::unique_ptr<Object3d> Body;
-	std::unique_ptr<Object3d> Cartridge;
+	unique_ptr<Object3d> Track;
+	unique_ptr<Object3d> Gun;
+	unique_ptr<Object3d> Body;
+	unique_ptr<Object3d> Cartridge;
 	//スプライト
-	std::unique_ptr<Sprite> SpriteReticle;
-	std::unique_ptr<Sprite> CurtainUp;
-	std::unique_ptr<Sprite> CurtainDown;
-	std::unique_ptr<Sprite> Window;
-	std::unique_ptr<Sprite> Skip;
-	std::unique_ptr<Sprite> bulletHUD[9];
-	std::unique_ptr<Sprite> Reload;
+	unique_ptr<Sprite> SpriteReticle;
+	unique_ptr<Sprite> CurtainUp;
+	unique_ptr<Sprite> CurtainDown;
+	unique_ptr<Sprite> Skip;
+	unique_ptr<Sprite> Window;
+	unique_ptr<Sprite> bulletHUD[9];
+	unique_ptr<Sprite> Reload;
 	//発砲時のエフェクト
 	ParticleManager* PartGreen = nullptr;
 	ParticleManager* PartRed = nullptr;
@@ -249,7 +258,7 @@ private:
 	//ビューポート
 	XMMATRIX MatViewPort;
 	//カメラ
-	XMFLOAT3 EyeRot = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 EyeRot = { 0.0f,180.0f,0.0f };
 	XMFLOAT3 TargetPos = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 Up = { 0.0f,1.0f,0.0f };
 	//スプライト
@@ -344,5 +353,8 @@ private:
 
 	XMVECTOR camvec{ 0.f,0.f,0.f };
 	XMMATRIX camMat;
+
+
+	int PlayerState = WAIT;
 };
 

@@ -7,8 +7,12 @@
 #include"Enemy.h"
 #include"Player.h"
 #include"TitleScene.h"
+#include"RailCamera.h"
 
 const int BUILS = 16;
+
+
+
 
 class GameScene :public BaseScene
 {
@@ -103,6 +107,12 @@ public://メンバ関数
 	/// </summary>
 	void CheckSameTrackPosition();
 
+
+	void StartCameraWork();
+
+	void PlayerMove();
+
+
 	void CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag);
 private://メンバ変数
 	//Obj
@@ -125,6 +135,9 @@ private://メンバ変数
 	unique_ptr<Sprite> No = nullptr;
 	unique_ptr<Sprite> LifeCount[5];
 	unique_ptr<Sprite> Hart;
+	unique_ptr<Sprite> CurtainUp;
+	unique_ptr<Sprite> CurtainDown;
+	unique_ptr<Sprite> Skip;
 	//プレイヤーと敵
 	list<unique_ptr<Enemy>>Robot;
 	list<unique_ptr<BossEnemy>>Boss;
@@ -137,6 +150,7 @@ private://メンバ変数
 	unique_ptr<Light> light = nullptr;
 	unique_ptr<LightGroup> lightGroupe = nullptr;
 	unique_ptr<Camera> GameCamera = nullptr;
+	unique_ptr<RailCamera> railcamera_ = nullptr;
 	//最初のビルのステータス
 	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
 	XMFLOAT3 StartScl = { 15.0f,15.0f,15.0f };
@@ -272,6 +286,27 @@ private://メンバ変数
 	bool otherenemyarive = true;
 
 #pragma endregion
+
+#pragma region プレイヤーから移行
+	//始まりと終わりの演出使う黒いカーテン
+	XMFLOAT2 CurtainUpPos = { 0.0f,0.0f };
+	XMFLOAT2 CurtainSize = { 1280.0f,100.0f };
+	XMFLOAT2 CurtainDownPos = { 0.0f,620.0f };
+	//Skip文字の表示
+	XMFLOAT2 SkipPos = { 0.0f,620.0f };
+
+	XMVECTOR velocity_;
+	XMFLOAT3 eyerot_{ 0.f,0.f,0.f };
+
+	bool startflag_ = false;
+	bool stanbyflag_ = false;
+	int actioncount_ = 0;
+	float actiontimer_ = 0.f;
+	bool movieflag_ = false;
+	XMVECTOR l_reticlepos;
+
+#pragma endregion
+
 
 };
 

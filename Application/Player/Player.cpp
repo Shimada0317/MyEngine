@@ -52,16 +52,14 @@ void Player::Initalize(Camera* camera)
 	CurtainDown->SetSize(CurtainSize);
 
 	RailCam = new RailCamera();
-	RailCam->MatrixIdentity(ReticlePos, ReticleRot);
+ //	RailCam->MatrixIdentity(ReticlePos, ReticleRot);
 
 	Body->SetParent(camera);
 
 	PartGreen = ParticleManager::Create(camera);
 	PartRed = ParticleManager::Create(camera);
 	PartSmoke = ParticleManager::Create(camera);
-	EyeRot.y = 180;
 	OldHp = Hp;
-	RailCam->Update(Velocity, EyeRot, camera);
 
 	ShotSe = new Audio();
 	ShotSe->Initialize();
@@ -130,7 +128,7 @@ void Player::StatusSet(Camera* camera)
 
 void Player::AllUpdate(Camera* camera)
 {
-	RailCam->Update(Velocity, EyeRot, camera);
+	//RailCam->Update(Velocity, EyeRot, camera);
 	Body->Update();
 	Gun->Update();
 	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
@@ -163,14 +161,14 @@ void Player::Update(Camera* camera, Phase paterncount, bool moveflag)
 
 		ScreenShake(ShakingValue, 0.1f);
 
-		
+
 
 		ReloadProcess();
 	}
 
 	Velocity = XMVector3TransformNormal(Velocity, BodyMat);
 
-	CameraWork();
+	//CameraWork();
 
 	StatusSet(camera);
 
@@ -312,6 +310,7 @@ void Player::CameraWork()
 	CurtainUp->SetPosition(CurtainUpPos);
 	CurtainDown->SetPosition(CurtainDownPos);
 	Skip->SetPosition(SkipPos);
+
 }
 
 //プレイヤー移動
@@ -333,7 +332,7 @@ void Player::PlayerMove(bool& move, Phase paterncount)
 	}
 	else if (MoveFlag == false) {
 
-	move = false;
+		move = false;
 		Velocity = { 0.f,0.f,0.f };
 	}
 }
@@ -456,6 +455,10 @@ void Player::GunShotProcess(Phase paterncount)
 {
 	//弾の発射前
 	if (Mouse::GetInstance()->PushClick(0)) {
+		/*if (Remaining < ReaminingBullet && PlayerState == WAIT) {
+			PlayerState = SHOT;
+
+		}*/
 		if (Remaining < ReaminingBullet && ReloadFlag == false && BulletShotFlag == false) {
 			Remaining += 1;
 			//弾の発射フラグ
@@ -569,65 +572,65 @@ void Player::MoveShakingHead()
 //マズルエフェクト
 void Player::ParticleEfect(Phase paterncount)
 {
-		for (int i = 0; i < 10; i++) {
-			float radX = ReticleRot.y * XM_PI / 180.f;
-			float radY = GunRot.x * XM_PI / 180.f;
-			float sinradX = sinf(radX);
-			float cosradX = cosf(radX);
+	for (int i = 0; i < 10; i++) {
+		float radX = ReticleRot.y * XM_PI / 180.f;
+		float radY = GunRot.x * XM_PI / 180.f;
+		float sinradX = sinf(radX);
+		float cosradX = cosf(radX);
 
-			float sinradY = sinf(radY);
-			float cosradY = cosf(radY);
+		float sinradY = sinf(radY);
+		float cosradY = cosf(radY);
 
-			if (paterncount == MOVEDPOINT_C || paterncount == MOVEDPOINT_C_OBLIQUE) {
-				pos.x = GunWorldPos.m128_f32[0] + 2.3f;
-				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
-			}
-			else if (paterncount == LANDINGPOINT_BACK ||
-				paterncount == MOVEDPOINT_A ||
-				paterncount == MOVEDPOINT_A_LEFT ||
-				paterncount == GOALPOINT_BACK) {
-				pos.x = GunWorldPos.m128_f32[0] + sinradX * 3.5f;
-				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-				pos.z = GunWorldPos.m128_f32[2] + 3.0f;
-			}
-			else if (paterncount == LANDINGPOINT_FRONT || paterncount == GOALPOINT) {
-				pos.x = GunWorldPos.m128_f32[0] - sinradX * 3.5f;
-				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-				pos.z = GunWorldPos.m128_f32[2] - 3.0f;
-			}
-			else if (paterncount == MOVEDPOINT_B) {
-				pos.x = GunWorldPos.m128_f32[0] - 2.3f;
-				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
-			}
-			else if (paterncount == MOVEDPOINT_C_FRONT) {
-				pos.x = GunWorldPos.m128_f32[0] + 2.3f * sinradX;
-				pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-				pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
-			}
-
-			const float rnd_vel = 0.001f;
-			XMFLOAT3 vel{};
-			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-
-			const float smokernd_vel = 0.05f;
-			XMFLOAT3 smokevel{};
-			smokevel.x = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
-			smokevel.y = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
-			smokevel.z = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
-			XMFLOAT3 acc{};
-			acc.y = 0.0;
-
-			XMFLOAT3 Smokeacc{};
-			Smokeacc.y += 0.005f;
-			PartRed->Add(20, pos, vel, acc, 0.7f, 0.2f, 1.0f);
-			PartGreen->Add(20, pos, vel, acc, 0.5f, 0.2f, 1.0f);
-			PartSmoke->Add(50, pos, smokevel, acc, 0.5f, 0.0f, 1.0f);
+		if (paterncount == MOVEDPOINT_C || paterncount == MOVEDPOINT_C_OBLIQUE) {
+			pos.x = GunWorldPos.m128_f32[0] + 2.3f;
+			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
+			pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
 		}
-		SoundEffect();
+		else if (paterncount == LANDINGPOINT_BACK ||
+			paterncount == MOVEDPOINT_A ||
+			paterncount == MOVEDPOINT_A_LEFT ||
+			paterncount == GOALPOINT_BACK) {
+			pos.x = GunWorldPos.m128_f32[0] + sinradX * 3.5f;
+			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
+			pos.z = GunWorldPos.m128_f32[2] + 3.0f;
+		}
+		else if (paterncount == LANDINGPOINT_FRONT || paterncount == GOALPOINT) {
+			pos.x = GunWorldPos.m128_f32[0] - sinradX * 3.5f;
+			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
+			pos.z = GunWorldPos.m128_f32[2] - 3.0f;
+		}
+		else if (paterncount == MOVEDPOINT_B) {
+			pos.x = GunWorldPos.m128_f32[0] - 2.3f;
+			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
+			pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
+		}
+		else if (paterncount == MOVEDPOINT_C_FRONT) {
+			pos.x = GunWorldPos.m128_f32[0] + 2.3f * sinradX;
+			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
+			pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
+		}
+
+		const float rnd_vel = 0.001f;
+		XMFLOAT3 vel{};
+		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+
+		const float smokernd_vel = 0.05f;
+		XMFLOAT3 smokevel{};
+		smokevel.x = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
+		smokevel.y = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
+		smokevel.z = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
+		XMFLOAT3 acc{};
+		acc.y = 0.0;
+
+		XMFLOAT3 Smokeacc{};
+		Smokeacc.y += 0.005f;
+		PartRed->Add(20, pos, vel, acc, 0.7f, 0.2f, 1.0f);
+		PartGreen->Add(20, pos, vel, acc, 0.5f, 0.2f, 1.0f);
+		PartSmoke->Add(50, pos, smokevel, acc, 0.5f, 0.0f, 1.0f);
+	}
+	SoundEffect();
 
 }
 

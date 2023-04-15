@@ -47,9 +47,15 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Yes.reset(Sprite::SpriteCreate(kYes, YesPosition,YesColor,SpriteAnchorPoint));
 	No.reset(Sprite::SpriteCreate(kNo, NoPosition,NoColor,SpriteAnchorPoint));
 	Hart.reset(Sprite::SpriteCreate(kHart, HartPosition, { 1.f,1.f,1.f,1.f }, SpriteAnchorPoint));
+	CurtainUp.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainUpPos));
+	CurtainDown.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainDownPos));
+	Skip.reset(Sprite::SpriteCreate(Name::kSkip, SkipPos));
 	for (int i = 0; i < 5; i++) {
 		LifeCount[i].reset(Sprite::SpriteCreate(i, HartPosition));
 	}
+
+	CurtainUp->SetSize(CurtainSize);
+	CurtainDown->SetSize(CurtainSize);
 
 	//モデルの読み込み
 	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
@@ -72,6 +78,11 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Hero->Initalize(GameCamera.get());
 	PlayerHp = Hero->GetHp();
 	GetCamWorkFlag = Hero->GetCamWork();
+
+	railcamera_ = make_unique<RailCamera>();
+	railcamera_->MatrixIdentity(Hero->GetPosition(), Hero->GetRotation());
+
+	
 	OldHp = PlayerHp;
 
 	Bgm = make_unique<Audio>();
@@ -230,7 +241,7 @@ void GameScene::StatusSet()
 void GameScene::AllUpdata()
 {
 	Action::GetInstance()->DebugMove(SearchLightPos[0]);
-
+	railcamera_->Update(velocity_, eyerot_, GameCamera.get());
 	//左右のビルの更新処理
 	for (int i = 0; i < BUILS; i++) {
 		BuilsHighAlpha[i]->Update(BillColor);
@@ -253,6 +264,7 @@ void GameScene::AllUpdata()
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
+	StartCameraWork();
 
 	SpotLightMove();
 
@@ -330,7 +342,6 @@ void GameScene::Update()
 		HeriY += 15.0f;
 	}
 
-	GetCamWorkFlag = Hero->GetCamWork();
 	if (GetCamWorkFlag == true) {
 		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
@@ -478,21 +489,16 @@ void GameScene::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
-	ImGui::Begin("Light");
+	ImGui::Begin("Camera");
 	/*ImGui::SliderFloat("LightPosX", &SearchLightPos[0].x, -100.0f, 100.0f);
 	ImGui::SliderFloat("LightPosY", &SearchLightPos[0].y, -100.0f, 100.0f);
 	ImGui::SliderFloat("LightPosZ", &SearchLightPos[0].z, -100.0f, 100.0f);*/
 
-	ImGui::SliderFloat("LightDirX", &SearchLightDir[0].x, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirY", &SearchLightDir[0].y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightDirZ", &SearchLightDir[0].z, -100.0f, 100.0f);
-	ImGui::SliderFloat("Red", &FieldSpotLightColor.x, -60.0f, 60.0f);
-	ImGui::SliderFloat("Green", &FieldSpotLightColor.y, -60.0f, 60.0f);
-	ImGui::SliderFloat("Blue", &FieldSpotLightColor.z, -60.0f, 60.0f);
+	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
+	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
+	ImGui::SliderFloat("eyerot", &eyerot_.y, -100.0f, 100.0f);
 
-	ImGui::SliderFloat("value", &value, 0.0f, 60.0f);
-	ImGui::SliderFloat("time", &time, -0.0f, 1.0f);
-	ImGui::SliderInt("Patern", &Patern, 0, 1);
+
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
@@ -509,7 +515,7 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
 	//描画後処理
-	//ImgDraw();
+	ImgDraw();
 	dxCommon->PostDraw();
 }
 
@@ -916,6 +922,118 @@ void GameScene::CheckSameTrackPosition()
 			}
 		}
 	}
+}
+
+void GameScene::StartCameraWork()
+{
+	
+	
+	l_reticlepos = Hero->GetPosition();
+	if (GetCamWorkFlag == false && startflag_ == false) {
+		
+		XMVECTOR l_bodyworldpos = Hero->GetBodyWorldPos();
+		if (stanbyflag_ == false) {
+			eyerot_.y = 180;
+		}
+		else if (stanbyflag_ == true && actioncount_ == 0) {
+			Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
+			//後ろを向く
+			if (eyerot_.y <= 0) {
+				eyerot_.y = 0;
+				actiontimer_ += 0.2f;
+				if (actiontimer_ > 5) {
+					actiontimer_ = 5.0f;
+					Action::GetInstance()->EaseOut(eyerot_.x, 95.0f);
+				}
+			}
+			//下を向く
+			if (eyerot_.x >= 90) {
+				actiontimer_ = 0.0f;
+				eyerot_.x = 90;
+				actioncount_ = 1;
+			}
+		}
+		if (actioncount_ == 1) {
+
+			actiontimer_ += 0.15f;
+			velocity_ = { 0.0f,0.67f,0.4f };
+			if (actiontimer_ >= 5) {
+				velocity_ = { 0.0f,-0.6f,0.0f };
+				Action::GetInstance()->EaseOut(eyerot_.x, -5.0f);
+			}
+			if (eyerot_.x <= 0.0f) {
+				eyerot_.x = 0.0f;
+			}
+			if (l_bodyworldpos.m128_f32[1] <= 0.3f) {
+				velocity_ = { 0.0f,0.0f,0.0f };
+				l_reticlepos.m128_f32[1] = 0.0f;
+				movieflag_ = true;
+			}
+		}
+		Hero->SetBodyWorldPos(l_bodyworldpos);
+	}
+
+	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanbyflag_ == true && GetCamWorkFlag == false) {
+		movieflag_ = true;
+		actioncount_ = 100;
+		eyerot_.x = 0;
+		eyerot_.y = 0;
+		velocity_ = { 0.0f,0.0f,0.0f };
+		l_reticlepos = { 0.0f,-0.7f,13.0f };
+		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
+	}
+
+	if (stanbyflag_ == false) {
+		actiontimer_ += 0.01f;
+		if (actiontimer_ >= 1.0f) {
+			actiontimer_ = 0.0f;
+			stanbyflag_ = true;
+		}
+	}
+
+	if (movieflag_ == false) {
+		CurtainUpPos.y += 4;
+		CurtainDownPos.y -= 4;
+		SkipPos.y -= 2;
+
+		if (CurtainUpPos.y >= 0) {
+			CurtainUpPos.y = 0;
+		}
+
+		if (CurtainDownPos.y <= 620) {
+			CurtainDownPos.y = 620;
+		}
+
+		if (SkipPos.y <= 620) {
+			SkipPos.y = 620;
+		}
+	}
+	else {
+		CurtainUpPos.y -= 4;
+		CurtainDownPos.y += 4;
+		SkipPos.y += 4;
+
+		if (CurtainUpPos.y <= -100) {
+			CurtainUpPos.y = -100;
+		}
+
+		if (CurtainDownPos.y >= 720) {
+			CurtainDownPos.y = 720;
+			GetCamWorkFlag = true;
+			startflag_ = true;
+		}
+
+		if (SkipPos.y >= 720) {
+			SkipPos.y = 12000;
+		}
+	}
+	CurtainUp->SetPosition(CurtainUpPos);
+	CurtainDown->SetPosition(CurtainDownPos);
+	Skip->SetPosition(SkipPos);
+}
+
+void GameScene::PlayerMove()
+{
 }
 
 void GameScene::CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
