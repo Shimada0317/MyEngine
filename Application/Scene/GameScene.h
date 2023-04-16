@@ -11,7 +11,19 @@
 
 const int BUILS = 16;
 
+enum  class GamePhase {
+	LANDINGPOINT_BACK = 0,
+	LANDINGPOINT_FRONT,
+	MOVEDPOINT_A,
+	MOVEDPOINT_A_LEFT,
+	MOVEDPOINT_B,
+	MOVEDPOINT_C,
+	MOVEDPOINT_C_OBLIQUE,
+	MOVEDPOINT_C_FRONT,
+	GOALPOINT_BACK,
+	GOALPOINT,
 
+};
 
 
 class GameScene :public BaseScene
@@ -21,8 +33,7 @@ public:
 
 
 private:
-
-
+	static void (GameScene::* MoveFuncTable[])();
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
@@ -114,6 +125,38 @@ public://メンバ関数
 
 
 	void CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag);
+
+public:
+#pragma region 関数テーブル
+
+	/// <summary>
+	/// 第1地点後ろ
+	/// </summary>
+	void MoveStartBack();
+	/// <summary>
+	/// 第1地点前
+	/// </summary>
+	void MoveStartFront();
+
+	void MovePointA();
+
+	void MovePointALeft();
+
+	void MovePointB();
+
+	void MovePointC();
+
+	void MovePointCOblique();
+
+	void MovePointCFront();
+
+	void GoalPointBack();
+
+	void GoalPoint();
+
+
+#pragma endregion
+
 private://メンバ変数
 	//Obj
 	unique_ptr <Object3d> Sphere;
@@ -304,7 +347,10 @@ private://メンバ変数
 	float actiontimer_ = 0.f;
 	bool movieflag_ = false;
 	XMVECTOR l_reticlepos;
-
+	XMVECTOR cameravector_{ 0.f,0.f,0.f };
+	float movespeed_ = 0.f;
+	float changerotation_ = 0.f;
+	bool FringFlag = false;
 #pragma endregion
 
 

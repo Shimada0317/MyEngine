@@ -241,6 +241,7 @@ void GameScene::StatusSet()
 void GameScene::AllUpdata()
 {
 	Action::GetInstance()->DebugMove(SearchLightPos[0]);
+	velocity_ = XMVector3TransformNormal(velocity_, Hero->GetBodyMatrix());
 	railcamera_->Update(velocity_, eyerot_, GameCamera.get());
 	//左右のビルの更新処理
 	for (int i = 0; i < BUILS; i++) {
@@ -258,12 +259,14 @@ void GameScene::AllUpdata()
 	//スタート地点の更新処理
 	Start->Update(BillColor);
 
-	Hero->Update(GameCamera.get(), (Phase)Patern, MoveFlag);
+	Hero->Update(GameCamera.get(), (Phase)Patern,changerotation_, MoveFlag);
 }
 
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
+	PlayerMove();
+
 	StartCameraWork();
 
 	SpotLightMove();
@@ -446,6 +449,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	Shot->Draw();
+
 	if (DamageHitFlag == true) {
 		DamageEfectSp->Draw();
 	}
@@ -476,6 +480,13 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 			LifeCount[4]->Draw();
 		}
 		Hart->Draw();
+	}
+
+	if (GetCamWorkFlag == false && startflag_ == false) {
+		CurtainUp->Draw();
+		CurtainDown->Draw();
+		Skip->Draw();
+
 	}
 
 	Hero->SpriteDraw();
@@ -926,8 +937,6 @@ void GameScene::CheckSameTrackPosition()
 
 void GameScene::StartCameraWork()
 {
-	
-	
 	l_reticlepos = Hero->GetPosition();
 	if (GetCamWorkFlag == false && startflag_ == false) {
 		
@@ -1027,6 +1036,7 @@ void GameScene::StartCameraWork()
 			SkipPos.y = 12000;
 		}
 	}
+
 	CurtainUp->SetPosition(CurtainUpPos);
 	CurtainDown->SetPosition(CurtainDownPos);
 	Skip->SetPosition(SkipPos);
@@ -1034,6 +1044,19 @@ void GameScene::StartCameraWork()
 
 void GameScene::PlayerMove()
 {
+	XMMATRIX l_cameramatrix;
+	l_cameramatrix = railcamera_->GetWorld();
+	cameravector_={ 0.f,0.f,0.f,0.f };
+	cameravector_ = XMVector3Transform(cameravector_, l_cameramatrix);
+
+	if (MoveFlag == true) {
+		//MoveShakingHead();
+		movespeed_ = 0.5f;
+		(this->*MoveFuncTable[Patern])();
+	}
+	else if (MoveFlag == false) {
+		velocity_ = { 0.f,0.f,0.f };
+	}
 }
 
 void GameScene::CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
@@ -1047,3 +1070,164 @@ void GameScene::CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check
 	}
 }
 
+void GameScene::MoveStartBack()
+{
+	velocity_ = { 0, 0, movespeed_ };
+	if (cameravector_.m128_f32[2] >= 20) {
+		Action::GetInstance()->EaseOut(eyerot_.y, 185.0f);
+		velocity_ = { 0.f,0.f,0.f };
+		if (eyerot_.y >= 180) {
+			StopFlag = true;
+			MoveFlag = false;
+
+		}
+	}
+}
+
+void GameScene::MoveStartFront()
+{
+	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
+	if (eyerot_.y <= 0) {
+		velocity_ = { 0, 0, 0 };
+		MoveFlag = false;
+		StopFlag = true;
+	}
+}
+
+void GameScene::MovePointA()
+{
+	velocity_ = { 0, 0, movespeed_ };
+	if (cameravector_.m128_f32[2] >= 40) {
+		velocity_ = { 0.f,0.f,0.f };
+		MoveFlag = false;
+		StopFlag = true;
+	}
+}
+
+void GameScene::MovePointALeft()
+{
+	Action::GetInstance()->EaseOut(eyerot_.y, -95.0f);
+	if (eyerot_.y <= -90) {
+		eyerot_.y = max(eyerot_.y, -90.0f);
+		changerotation_ = eyerot_.y;
+		velocity_ = { 0, 0, 0 };
+
+		MoveFlag = false;
+		StopFlag = true;
+	}
+}
+
+void GameScene::MovePointB()
+{
+	Action::GetInstance()->EaseOut(eyerot_.y, 95.0f);
+	if (eyerot_.y >= 90) {
+		changerotation_ = 90;
+		eyerot_.y = 90;
+		velocity_ = { 0, 0, movespeed_ };
+	}
+	if (cameravector_.m128_f32[0] >= 30) {
+
+		MoveFlag = false;
+		StopFlag = true;
+	}
+}
+
+void GameScene::MovePointC()
+{
+	velocity_ = { 0, 0, movespeed_ };
+	if (cameravector_.m128_f32[0] >= 45) {
+
+		MoveFlag = false;
+		StopFlag = true;
+		velocity_ = { 0, 0, 0 };
+	}
+}
+
+void GameScene::MovePointCOblique()
+{
+	velocity_ = { 0, 0, movespeed_ };
+	if (cameravector_.m128_f32[0] >= 50) {
+		velocity_ = { 0, 0, 0 };
+		Action::GetInstance()->EaseOut(eyerot_.y, 145.0f);
+		if (eyerot_.y >= 130) {
+			changerotation_ = 130;
+
+			MoveFlag = false;
+			StopFlag = true;
+			velocity_ = { 0, 0, 0 };
+		}
+	}
+}
+
+void GameScene::MovePointCFront()
+{
+	if (cameravector_.m128_f32[0] <= 55) {
+		velocity_ = { 0, 0, movespeed_ };
+	}
+	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
+	if (eyerot_.y <= 0) {
+		changerotation_ = 0;
+
+		MoveFlag = false;
+		StopFlag = true;
+		velocity_ = { 0, 0, 0 };
+	}
+}
+
+void GameScene::GoalPointBack()
+{
+	actioncount_ = 0;
+	velocity_ = { 0.f,0.f,movespeed_ };
+	if (cameravector_.m128_f32[2] >= 80) {
+		velocity_ = { 0.f,0.f,0.1f };
+		if (cameravector_.m128_f32[2] >= 82) {
+			velocity_ = { 0.0f,0.0f,0.0f };
+			Action::GetInstance()->EaseOut(eyerot_.y, 185.0f);
+			if (eyerot_.y >= 180) {
+				changerotation_ = 0;
+
+				MoveFlag = false;
+				StopFlag = true;
+				velocity_ = { 0, 0, 0 };
+			}
+		}
+	}
+}
+
+void GameScene::GoalPoint()
+{
+	stanbyflag_ = false;
+	velocity_ = { 0.f, 0.f, 0.1f };
+	//ShakeHeadFlag = false;
+	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
+	if (eyerot_.y <= 0) {
+		changerotation_ = 0;
+		eyerot_.y = 0;
+	}
+	if (cameravector_.m128_f32[2] >= 92) {
+		velocity_ = { 0.f,0.05f,0.1f };
+		if (cameravector_.m128_f32[2] >= 97) {
+			velocity_ = { 0.0f,0.0f,0.0f };
+			FringFlag = true;
+			if (FringFlag == true) {
+				velocity_ = { 0.0f,0.6683f,0.0f };
+			}
+		}
+	}
+	GetCamWorkFlag = false;
+	movieflag_ = false;
+	actioncount_= 0;
+}
+
+void(GameScene::* GameScene::MoveFuncTable[])() {
+	&GameScene::MoveStartBack,
+		& GameScene::MoveStartFront,
+		& GameScene::MovePointA,
+		& GameScene::MovePointALeft,
+		& GameScene::MovePointB,
+		& GameScene::MovePointC,
+		& GameScene::MovePointCOblique,
+		& GameScene::MovePointCFront,
+		& GameScene::GoalPointBack,
+		& GameScene::GoalPoint
+};

@@ -57,7 +57,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(Camera* camera, Phase patern,bool moveflag=false);
+	void Update(Camera* camera, Phase patern, float changerotbool,bool moveflag=false);
 	/// <summary>
 	/// パーティクルの描画
 	/// </summary>
@@ -188,6 +188,8 @@ public:
 	const XMVECTOR& GetBodyWorldPos() { return BodyWorldPos; }
 	
 	const XMVECTOR& GetVelocity() { return Velocity; }
+
+	const XMMATRIX& GetBodyMatrix() { return BodyMat; }
 #pragma endregion
 
 #pragma region Set

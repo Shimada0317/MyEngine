@@ -138,9 +138,9 @@ void Player::AllUpdate(Camera* camera)
 
 
 //更新処理
-void Player::Update(Camera* camera, Phase paterncount, bool moveflag)
+void Player::Update(Camera* camera, Phase patern, float changerotbool, bool moveflag )
 {
-	PlayerMove(moveflag, paterncount);
+	PlayerMove(moveflag, patern);
 
 	DamageProcess();
 
@@ -157,7 +157,7 @@ void Player::Update(Camera* camera, Phase paterncount, bool moveflag)
 	//カメラが動いていないとき
 	if (CameraWorkFlag == true) {
 
-		GunShotProcess(paterncount);
+		GunShotProcess(patern);
 
 		ScreenShake(ShakingValue, 0.1f);
 
@@ -201,9 +201,9 @@ void Player::SpriteDraw()
 		}
 	}
 	else {
-		CurtainUp->Draw();
-		CurtainDown->Draw();
-		Skip->Draw();
+		//CurtainUp->Draw();
+		//CurtainDown->Draw();
+		//Skip->Draw();
 	}
 }
 
@@ -568,6 +568,7 @@ void Player::MoveShakingHead()
 		}
 	}
 }
+
 
 //マズルエフェクト
 void Player::ParticleEfect(Phase paterncount)
