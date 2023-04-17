@@ -241,7 +241,9 @@ void GameScene::StatusSet()
 void GameScene::AllUpdata()
 {
 	Action::GetInstance()->DebugMove(SearchLightPos[0]);
-	velocity_ = XMVector3TransformNormal(velocity_, Hero->GetBodyMatrix());
+	if (GetCamWorkFlag == true) {
+		velocity_ = XMVector3TransformNormal(velocity_, Hero->GetBodyMatrix());
+	}
 	railcamera_->Update(velocity_, eyerot_, GameCamera.get());
 	//左右のビルの更新処理
 	for (int i = 0; i < BUILS; i++) {
@@ -356,7 +358,6 @@ void GameScene::Update()
 		if (Robot.empty() && Boss.empty()) {
 			MoveFlag = true;
 		}
-		StopFlag = Hero->GetFinish();
 		//プレイヤーが目的地点に着いたとき
 		if (StopFlag == true) {
 			MoveFlag = false;
@@ -396,9 +397,6 @@ void GameScene::Update()
 
 	GameCamera->RecalculationMatrix();
 #pragma endregion
-
-
-
 
 	postEffect->Update(PostCol);
 	lightGroupe->Update();
@@ -973,6 +971,7 @@ void GameScene::StartCameraWork()
 			if (eyerot_.x <= 0.0f) {
 				eyerot_.x = 0.0f;
 			}
+			//地面に着いたとき
 			if (l_bodyworldpos.m128_f32[1] <= 0.3f) {
 				velocity_ = { 0.0f,0.0f,0.0f };
 				l_reticlepos.m128_f32[1] = 0.0f;
