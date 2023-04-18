@@ -10,6 +10,7 @@
 #include"SpriteManager.h"
 
 const int RemainingBullet = 8;
+const float Gravity = 9.8f;
 
 //デストラクタ
 Player::~Player()
@@ -142,7 +143,6 @@ void Player::Update(Camera* camera, Phase patern, float changerotbool)
 {
 	DamageProcess();
 
-
 	MouseContoroll();
 
 	WaitProcess();
@@ -261,6 +261,7 @@ void Player::MouseContoroll()
 	GunRot.y = (ReticlePos2D.x - WinApp::window_width / 2) / 10;
 	//マウス座標の取得
 	Mouse::GetInstance()->MouseMoveSprite(ReticlePos2D);
+	//銃を撃った時
 	if (RecoilGunFlag == true) {
 		ReticlePos2D.y += 15;
 		Mouse::GetInstance()->RecoilMouse(ReticlePos2D);
@@ -403,28 +404,6 @@ void Player::ReloadProcess()
 				playerstate_ = WAIT;
 				ReloadTime = 0;
 				MouseStopFlag = false;
-			}
-		}
-	}
-}
-
-void Player::MoveShakingHead()
-{
-	//加算と減算する為の絶対値
-	const float EyeRotAbsouluteValue = 0.05f;
-	//反転させるための絶対値
-	const float AbsoluteValue = 0.5f;
-	if (ShakeHeadFlag == true) {
-		if (Shake == true) {
-			EyeRot.x += EyeRotAbsouluteValue;
-			if (EyeRot.x >= AbsoluteValue) {
-				Shake = false;
-			}
-		}
-		if (Shake == false) {
-			EyeRot.x -= EyeRotAbsouluteValue;
-			if (EyeRot.x <= -AbsoluteValue) {
-				Shake = true;
 			}
 		}
 	}

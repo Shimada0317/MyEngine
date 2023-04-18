@@ -106,15 +106,32 @@ public://メンバ関数
 	/// 敵同士の追尾先が被った時の確認とその場合の処理
 	/// </summary>
 	void CheckSameTrackPosition();
-
-
+	/// <summary>
+	/// 始まりのカメラ演出
+	/// </summary>
 	void StartCameraWork();
-
+	/// <summary>
+	/// プレイヤーの移動
+	/// </summary>
 	void PlayerMove();
-
-
+	/// <summary>
+	/// 画面揺れ
+	/// </summary>
+	/// <param name="limitshakevalue">シェイクする値</param>
+	void ScreenShake(float shakevalue);
+	/// <summary>
+	/// 移動時にカメラ揺れ
+	/// </summary>
+	void MoveShakingHead();
+	/// <summary>
+	/// カーソルに入っているか
+	/// </summary>
+	/// <param name="cursor_Pos"></param>
+	/// <param name="check_Pos"></param>
+	/// <param name="radX"></param>
+	/// <param name="radY"></param>
+	/// <param name="CheckFlag"></param>
 	void CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag);
-
 public:
 #pragma region 関数テーブル
 
@@ -343,5 +360,11 @@ private://メンバ変数
 #pragma endregion
 
 	int GameState = MOVIE;
+	bool shakingstartflag_ = false;
+	float shakelimittime_ = 0.f;
+	bool shakingscreenflag_ = false;
+	float shakingscreenvalue_= 0.f;
+	bool shake_ = true;
+
 };
 

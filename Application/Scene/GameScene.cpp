@@ -1054,6 +1054,7 @@ void GameScene::PlayerMove()
 	cameravector_ = XMVector3Transform(cameravector_, l_cameramatrix);
 
 	if (MoveFlag == true) {
+		MoveShakingHead();
 		//MoveShakingHead();
 		movespeed_ = 0.5f;
 		(this->*MoveFuncTable[Patern])();
@@ -1061,6 +1062,59 @@ void GameScene::PlayerMove()
 	else if (MoveFlag == false) {
 		velocity_ = { 0.f,0.f,0.f };
 	}
+}
+
+void GameScene::ScreenShake(float shakevalue)
+{
+	if (shakingstartflag_ == true) {
+		if (shakelimittime_ <= 1) {
+			shakelimittime_ += 0.1f;
+			if (shakingscreenflag_ == true) {
+				shakingscreenvalue_ -= shakevalue;
+				if (shakingscreenvalue_ <= -shakevalue) {
+					shakingscreenflag_ = false;
+				}
+			}
+			else {
+				shakingscreenvalue_ += shakevalue;
+				if (shakingscreenvalue_ >= shakevalue) {
+					shakingscreenflag_ = true;
+				}
+			}
+			eyerot_.x += shakingscreenvalue_;
+		}
+		else {
+			shakingscreenflag_ = true;
+			shakelimittime_ = 0;
+			shakingstartflag_ = false;
+			shakingscreenvalue_ = 0;
+			eyerot_.x = 0;
+		}
+	}
+}
+
+void GameScene::MoveShakingHead()
+{
+	//‰ÁŽZ‚ÆŒ¸ŽZ‚·‚éˆ×‚Ìâ‘Î’l
+	const float EyeRotAbsouluteValue = 0.05f;
+	//”½“]‚³‚¹‚é‚½‚ß‚Ìâ‘Î’l
+	const float AbsoluteValue = 0.5f;
+	if (GameState == MOVE) {
+		if (shake_ == true) {
+			eyerot_.x += EyeRotAbsouluteValue;
+			if (eyerot_.x >= AbsoluteValue) {
+				shake_ = false;
+			}
+		}
+
+		else{
+			eyerot_.x -= EyeRotAbsouluteValue;
+			if (eyerot_.x <= -AbsoluteValue) {
+				shake_ = true;
+			}
+		}
+	}
+	
 }
 
 void GameScene::CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)

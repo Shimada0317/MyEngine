@@ -113,56 +113,9 @@ public:
 	/// </summary>
 	void ReloadProcess();
 	/// <summary>
-	/// 移動時にカメラ揺れ
-	/// </summary>
-	void MoveShakingHead();
-	/// <summary>
 	/// パーティクル発生
 	/// </summary>
 	void ParticleEfect(Phase paterncount);
-public:
-#pragma region 関数テーブル
-
-	/// <summary>
-	/// 第1地点後ろ
-	/// </summary>
-	void MoveStartBack();
-	/// <summary>
-	/// 第1地点前
-	/// </summary>
-	void MoveStartFront();
-
-	void MovePointA();
-
-	void MovePointALeft();
-
-	void MovePointB();
-
-	void MovePointC();
-
-	void MovePointCOblique();
-
-	void MovePointCFront();
-
-	void GoalPointBack();
-
-	void GoalPoint();
-
-		/*LANDINGPOINT_BACK = 0,
-		LANDINGPOINT_FRONT,
-		MOVEDPOINT_A,
-		MOVEDPOINT_A_LEFT,
-		MOVEDPOINT_B,
-		MOVEDPOINT_C,
-		MOVEDPOINT_C_OBLIQUE,
-		MOVEDPOINT_C_FRONT,
-		GOALPOINT_BACK,
-		GOALPOINT,*/
-
-
-#pragma endregion
-private: 
-	static void (Player::* MoveFuncTable[])();
 public:
 #pragma region Get
 	const bool& GetFinish() { return StopFlag; }
@@ -286,13 +239,12 @@ private:
 	int Anser = 0;
 	//移動
 	XMVECTOR Velocity;
-	bool MoveFlag = false;
 	//弾の速度
 	float MoveSpeed = 0;
 
 
 	//cam
-	bool Shake = 0;
+	bool Shake = false;
 	float ShakingValue = 0.0f;
 
 	bool StopFlag = false;
@@ -303,8 +255,6 @@ private:
 	bool StanbyFlag = false;
 	int ActionCount = 0;
 	float ActionTimer = 0.0f;
-
-	bool StartFlag = false;
 
 	bool FringFlag = false;
 
@@ -339,7 +289,7 @@ private:
 	XMFLOAT2 SpritePos[9];
 	bool DropBulletFlag[9];
 	float SpriteRot[9];
-	float Gravity = 9.8f;
+
 	float Time[9];
 
 
