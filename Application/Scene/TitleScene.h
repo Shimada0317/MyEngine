@@ -123,7 +123,6 @@ private:
 	unique_ptr<LightGroup> lightgroupe_ = nullptr;
 	unique_ptr<PostEffect> posteffct_ = nullptr;
 	unique_ptr<Audio> clickse_ = nullptr;
-	unique_ptr<Audio> morsecodese_ = nullptr;
 	unique_ptr<Audio> bgm_ = nullptr;
 	unique_ptr<Camera> titlecamera_ = nullptr;
 	//球体のステータス

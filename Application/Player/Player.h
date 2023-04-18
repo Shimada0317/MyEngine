@@ -27,7 +27,7 @@ class Player
 {
 private:
 	enum State {
-		WAIT,
+		WAIT = 0,
 		RELOAD,
 		SHOT,
 		MOVE,
@@ -47,7 +47,7 @@ public:
 	/// <summary>
 	///　オブジェクト等の更新処理
 	/// </summary>
-	void AllUpdate(Camera* camera);
+	void AllUpdate();
 	/// <summary>
 	/// 更新処理
 	/// </summary>
@@ -57,7 +57,11 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(Camera* camera, Phase patern, float changerotbool,bool moveflag=false);
+	void Update(Camera* camera, Phase patern, float changerotbool);
+	/// <summary>
+	/// 待機時の処理
+	/// </summary>
+	void WaitProcess();
 	/// <summary>
 	/// パーティクルの描画
 	/// </summary>
@@ -67,18 +71,6 @@ public:
 	/// スプライトの描画
 	/// </summary>
 	void SpriteDraw();
-	/// <summary>
-	/// スタート時のカメラワーク
-	/// </summary>
-	///　プレイヤーから外すもの
-	void CameraWork();
-	/// <summary>
-	/// 敵を倒した時の移動
-	/// </summary>
-	/// <param name="move"></param>
-	/// <param name="patern">フェイズ番号</param>
-	/// プレイヤーから外す
-	void PlayerMove(bool& move,Phase patern);
 	/// <summary>
 	/// Objの描画
 	/// </summary>
@@ -108,6 +100,14 @@ public:
 	/// 発砲処理
 	/// </summary>
 	void GunShotProcess(Phase paterncount);
+	/// <summary>
+	/// UIの動き処理
+	/// </summary>
+	void UIMotionProcess();
+	/// <summary>
+	/// リコイルの処理
+	/// </summary>
+	void RecoilProcess();
 	/// <summary>
 	/// リロード処理
 	/// </summary>
@@ -357,6 +357,6 @@ private:
 	XMMATRIX camMat;
 
 
-	int PlayerState = WAIT;
+	int playerstate_ = WAIT;
 };
 

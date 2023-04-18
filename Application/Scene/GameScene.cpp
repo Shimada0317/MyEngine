@@ -261,7 +261,7 @@ void GameScene::AllUpdata()
 	//スタート地点の更新処理
 	Start->Update(BillColor);
 
-	Hero->Update(GameCamera.get(), (Phase)Patern,changerotation_, MoveFlag);
+	Hero->Update(GameCamera.get(), (Phase)Patern,changerotation_);
 }
 
 //ゲームシーンの更新処理
@@ -426,7 +426,9 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	if (BackObjFlag == true) {
 		Heri->Draw();
 	}
-	Hero->ObjDraw();
+	if (GameState != MOVIE) {
+		Hero->ObjDraw();
+	}
 	
 	Hero->ParticleDraw(dxCommon->GetCmdList());
 #pragma endregion
@@ -486,8 +488,9 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 		Skip->Draw();
 
 	}
-
-	Hero->SpriteDraw();
+	if (GameState != MOVIE) {
+		Hero->SpriteDraw();
+	}
 	Sprite::PostDraw();
 }
 
@@ -976,6 +979,7 @@ void GameScene::StartCameraWork()
 				velocity_ = { 0.0f,0.0f,0.0f };
 				l_reticlepos.m128_f32[1] = 0.0f;
 				movieflag_ = true;
+				GameState = MOVE;
 			}
 		}
 		Hero->SetBodyWorldPos(l_bodyworldpos);
@@ -989,6 +993,7 @@ void GameScene::StartCameraWork()
 		velocity_ = { 0.0f,0.0f,0.0f };
 		l_reticlepos = { 0.0f,-0.7f,13.0f };
 		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
+		GameState = MOVE;
 	}
 
 	if (stanbyflag_ == false) {

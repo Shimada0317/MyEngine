@@ -11,26 +11,15 @@
 
 const int BUILS = 16;
 
-enum  class GamePhase {
-	LANDINGPOINT_BACK = 0,
-	LANDINGPOINT_FRONT,
-	MOVEDPOINT_A,
-	MOVEDPOINT_A_LEFT,
-	MOVEDPOINT_B,
-	MOVEDPOINT_C,
-	MOVEDPOINT_C_OBLIQUE,
-	MOVEDPOINT_C_FRONT,
-	GOALPOINT_BACK,
-	GOALPOINT,
-
-};
-
 
 class GameScene :public BaseScene
 {
-public:
-	
-
+private:
+	enum GamePhase {
+		MOVIE = 0,
+		FIGHT,
+		MOVE,
+	};
 
 private:
 	static void (GameScene::* MoveFuncTable[])();
@@ -353,6 +342,6 @@ private://ÉÅÉìÉoïœêî
 	bool FringFlag = false;
 #pragma endregion
 
-
+	int GameState = MOVIE;
 };
 

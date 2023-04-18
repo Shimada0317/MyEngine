@@ -9,7 +9,7 @@
 
 #include"SpriteManager.h"
 
-const int ReaminingBullet = 8;
+const int RemainingBullet = 8;
 
 //デストラクタ
 Player::~Player()
@@ -52,7 +52,7 @@ void Player::Initalize(Camera* camera)
 	CurtainDown->SetSize(CurtainSize);
 
 	RailCam = new RailCamera();
- //	RailCam->MatrixIdentity(ReticlePos, ReticleRot);
+	//	RailCam->MatrixIdentity(ReticlePos, ReticleRot);
 
 	Body->SetParent(camera);
 
@@ -126,7 +126,7 @@ void Player::StatusSet(Camera* camera)
 }
 
 
-void Player::AllUpdate(Camera* camera)
+void Player::AllUpdate()
 {
 	//RailCam->Update(Velocity, EyeRot, camera);
 	Body->Update();
@@ -138,41 +138,35 @@ void Player::AllUpdate(Camera* camera)
 
 
 //更新処理
-void Player::Update(Camera* camera, Phase patern, float changerotbool, bool moveflag )
+void Player::Update(Camera* camera, Phase patern, float changerotbool)
 {
-	PlayerMove(moveflag, patern);
-
 	DamageProcess();
 
-	//マウス座標の取得
-	GunRot.y = (ReticlePos2D.x - WinApp::window_width / 2) / 10;
+
 	MouseContoroll();
-	if (MouseStopFlag == false) {
-		GunRot.x = (ReticlePos2D.y - WinApp::window_height / 2) / 50;
-	}
-	else {
-		GunRot.x -= 9.5f;
-	}
 
-	//カメラが動いていないとき
-	if (CameraWorkFlag == true) {
+	WaitProcess();
 
-		GunShotProcess(patern);
+	GunShotProcess(patern);
 
-		ScreenShake(ShakingValue, 0.1f);
+	UIMotionProcess();
 
+	ScreenShake(ShakingValue, 0.1f);
 
-
-		ReloadProcess();
-	}
+	ReloadProcess();
 
 	Velocity = XMVector3TransformNormal(Velocity, BodyMat);
 
-	//CameraWork();
-
 	StatusSet(camera);
 
-	AllUpdate(camera);
+	AllUpdate();
+}
+
+void Player::WaitProcess()
+{
+	if (playerstate_ == WAIT) {
+		GunRot.x = (ReticlePos2D.y - WinApp::window_height / 2) / 50;
+	}
 }
 
 //パーティクル描画
@@ -188,159 +182,24 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 //スプライト描画
 void Player::SpriteDraw()
 {
-	if (CameraWorkFlag == true && MouseStopFlag == false) {
-		SpriteReticle->Draw();
+	if (MouseStopFlag == false) {
 		for (int i = 0; i < 8; i++) {
 			if (Remaining <= 8 && ReloadFlag == false) {
 				bulletHUD[i]->Draw();
 			}
 		}
-
 		if (Remaining >= 8) {
 			Reload->Draw();
 		}
 	}
-	else {
-		//CurtainUp->Draw();
-		//CurtainDown->Draw();
-		//Skip->Draw();
-	}
+	SpriteReticle->Draw();
 }
 
-//カメラワーク
-void Player::CameraWork()
-{
-	if (CameraWorkFlag == false && StartFlag == false) {
-
-		if (StanbyFlag == false) {
-			EyeRot.y = 180;
-		}
-		else if (StanbyFlag == true && ActionCount == 0) {
-			Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-			//後ろを向く
-			if (EyeRot.y <= 0) {
-				EyeRot.y = 0;
-				ActionTimer += 0.2f;
-				if (ActionTimer > 5) {
-					ActionTimer = 5.0f;
-					Action::GetInstance()->EaseOut(EyeRot.x, 95.0f);
-				}
-			}
-			//下を向く
-			if (EyeRot.x >= 90) {
-				ActionTimer = 0.0f;
-				EyeRot.x = 90;
-				ActionCount = 1;
-			}
-		}
-		if (ActionCount == 1) {
-
-			ActionTimer += 0.15f;
-			Velocity = { 0.0f,0.67f,0.4f };
-			if (ActionTimer >= 5) {
-				Velocity = { 0.0f,-0.6f,0.0f };
-				Action::GetInstance()->EaseOut(EyeRot.x, -5.0f);
-			}
-			if (EyeRot.x <= 0.0f) {
-				EyeRot.x = 0.0f;
-			}
-			if (BodyWorldPos.m128_f32[1] <= 0.3f) {
-				Velocity = { 0.0f,0.0f,0.0f };
-				ReticlePos.m128_f32[1] = 0.0f;
-				MovieFlag = true;
-			}
-		}
-
-	}
-
-	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && StanbyFlag == true && CameraWorkFlag == false) {
-		MovieFlag = true;
-		ActionCount = 100;
-		EyeRot.x = 0;
-		EyeRot.y = 0;
-		Velocity = { 0.0f,0.0f,0.0f };
-		ReticlePos = { 0.0f,-0.7f,13.0f };
-		RailCam->MatrixIdentity(ReticlePos, EyeRot);
-	}
-
-	if (StanbyFlag == false) {
-		ActionTimer += 0.01f;
-		if (ActionTimer >= 1.0f) {
-			ActionTimer = 0.0f;
-			StanbyFlag = true;
-		}
-	}
-
-	if (MovieFlag == false) {
-		CurtainUpPos.y += 4;
-		CurtainDownPos.y -= 4;
-		SkipPos.y -= 2;
-
-		if (CurtainUpPos.y >= 0) {
-			CurtainUpPos.y = 0;
-		}
-
-		if (CurtainDownPos.y <= 620) {
-			CurtainDownPos.y = 620;
-		}
-
-		if (SkipPos.y <= 620) {
-			SkipPos.y = 620;
-		}
-	}
-	else {
-		CurtainUpPos.y -= 4;
-		CurtainDownPos.y += 4;
-		SkipPos.y += 4;
-
-		if (CurtainUpPos.y <= -100) {
-			CurtainUpPos.y = -100;
-		}
-
-		if (CurtainDownPos.y >= 720) {
-			CurtainDownPos.y = 720;
-			CameraWorkFlag = true;
-			StartFlag = true;
-		}
-
-		if (SkipPos.y >= 720) {
-			SkipPos.y = 12000;
-		}
-	}
-	CurtainUp->SetPosition(CurtainUpPos);
-	CurtainDown->SetPosition(CurtainDownPos);
-	Skip->SetPosition(SkipPos);
-
-}
-
-//プレイヤー移動
-void Player::PlayerMove(bool& move, Phase paterncount)
-{
-	camMat = RailCam->GetWorld();
-	camvec = { 0.0f,0.0f,0.0f,0.0f };
-
-	camvec = XMVector3Transform(camvec, camMat);
-
-	//敵をすべて倒した時
-	if (move == true) {
-		MoveFlag = true;
-	}
-	if (MoveFlag == true) {
-		MoveShakingHead();
-		MoveSpeed = 0.5f;
-		(this->*MoveFuncTable[paterncount])();
-	}
-	else if (MoveFlag == false) {
-
-		move = false;
-		Velocity = { 0.f,0.f,0.f };
-	}
-}
 
 //オブジェクト描画
 void Player::ObjDraw()
 {
-	if (Hp >= 0 && CameraWorkFlag == true) {
+	if (Hp >= 0) {
 		Gun->Draw();
 	}
 }
@@ -398,11 +257,13 @@ void Player::SoundEffect()
 //マウス操作
 void Player::MouseContoroll()
 {
+	//マウス座標から角度の取得
+	GunRot.y = (ReticlePos2D.x - WinApp::window_width / 2) / 10;
 	//マウス座標の取得
 	Mouse::GetInstance()->MouseMoveSprite(ReticlePos2D);
-	if (RecoilFlag == true) {
+	if (RecoilGunFlag == true) {
+		ReticlePos2D.y += 15;
 		Mouse::GetInstance()->RecoilMouse(ReticlePos2D);
-		RecoilFlag = false;
 	}
 	else {
 		//取得した座標をレティクルにセット
@@ -454,56 +315,27 @@ void Player::DamageProcess()
 void Player::GunShotProcess(Phase paterncount)
 {
 	//弾の発射前
-	if (Mouse::GetInstance()->PushClick(0)) {
-		/*if (Remaining < ReaminingBullet && PlayerState == WAIT) {
-			PlayerState = SHOT;
-
-		}*/
-		if (Remaining < ReaminingBullet && ReloadFlag == false && BulletShotFlag == false) {
+	if (playerstate_ == WAIT && Remaining < RemainingBullet) {
+		if (Mouse::GetInstance()->PushClick(0)) {
+			playerstate_ = SHOT;
 			Remaining += 1;
-			//弾の発射フラグ
-			BulletShotFlag = true;
-			//2Dスプライトリコイルフラグ
-			RecoilFlag = true;
-			//画面揺れのフラグ
-			ShakingStartFlag = true;
-			//銃オブジェクトリコイルフラグ
 			RecoilGunFlag = true;
-			ShakingValue = 0.6f;
-
-			ParticleEfect(paterncount);
 		}
+	}
+	if (playerstate_ == SHOT) {
+		//弾が発射された
+		BulletShotFlag = true;
+		ParticleEfect(paterncount);
+		playerstate_ = WAIT;
 	}
 	else {
 		BulletShotFlag = false;
 	}
-
-	if (RecoilGunFlag == true) {
-		RecoveryTime += 0.2f;
-		GunRot.x = -25;
-		GunPos.m128_f32[2] = -3.1f;
-		if (RecoveryTime >= 1) {
-			GunRot.x = 0;
-			GunPos.m128_f32[2] = -3.0f;
-			RecoveryTime = 0.0f;
-			RecoilGunFlag = false;
-		}
-	}
+	RecoilProcess();
 }
 
-//リロード処理
-void Player::ReloadProcess()
+void Player::UIMotionProcess()
 {
-	//右クリックを押した時
-	if ((Mouse::GetInstance()->PushClick(1)) && Remaining != 0) {
-		if (ReloadSoundFlag == true) {
-			ReloadSe->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
-			ReloadSoundFlag = false;
-			MouseStopFlag = true;
-		}
-		ReloadFlag = true;
-	}
-
 	if (Remaining >= 8) {
 		if (ReversFlag == false) {
 			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 260);
@@ -529,8 +361,38 @@ void Player::ReloadProcess()
 			OldRemaining = Remaining;
 		}
 	}
+}
 
-	if (ReloadFlag == true) {
+void Player::RecoilProcess()
+{
+	if (RecoilGunFlag == true) {
+		RecoveryTime += 0.2f;
+		GunRot.x = -25;
+		GunPos.m128_f32[2] = -3.1f;
+		if (RecoveryTime >= 1) {
+			GunRot.x = 0;
+			GunPos.m128_f32[2] = -3.0f;
+			RecoveryTime = 0.0f;
+			RecoilGunFlag = false;
+		}
+	}
+
+}
+
+//リロード処理
+void Player::ReloadProcess()
+{
+
+	if (playerstate_ == WAIT && Remaining != 0) {
+		if (Mouse::GetInstance()->PushClick(1)) {
+			playerstate_ = RELOAD;
+			ReloadSe->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
+			MouseStopFlag = true;
+		}
+	}
+
+	if (playerstate_ == RELOAD) {
+		GunRot.x -= 9.5f;
 		Remaining = 8;
 		ReloadTime += 1;
 		Anser = ReloadTime % 40;
@@ -538,8 +400,7 @@ void Player::ReloadProcess()
 			Remaining = 0;
 			GunRot.x = 0;
 			if (Remaining == 0) {
-				ReloadFlag = false;
-				ReloadSoundFlag = true;
+				playerstate_ = WAIT;
 				ReloadTime = 0;
 				MouseStopFlag = false;
 			}
@@ -635,166 +496,4 @@ void Player::ParticleEfect(Phase paterncount)
 
 }
 
-void Player::MoveStartBack()
-{
-	Velocity = { 0, 0, MoveSpeed };
-	if (camvec.m128_f32[2] >= 20) {
-		Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
-		Velocity = { 0.f,0.f,0.f };
-		if (EyeRot.y >= 180) {
-			StopFlag = true;
-			MoveFlag = false;
-
-		}
-	}
-}
-
-void Player::MoveStartFront()
-{
-	Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-	if (EyeRot.y <= 0) {
-		Velocity = { 0, 0, 0 };
-
-		MoveFlag = false;
-		StopFlag = true;
-	}
-}
-
-void Player::MovePointA()
-{
-	Velocity = { 0, 0, MoveSpeed };
-	if (camvec.m128_f32[2] >= 40) {
-		Velocity = { 0.f,0.f,0.f };
-		MoveFlag = false;
-		StopFlag = true;
-	}
-}
-
-void Player::MovePointALeft()
-{
-	Action::GetInstance()->EaseOut(EyeRot.y, -95.0f);
-	if (EyeRot.y <= -90) {
-		EyeRot.y = max(EyeRot.y, -90.0f);
-		ChangeRot = EyeRot.y;
-		Velocity = { 0, 0, 0 };
-
-		MoveFlag = false;
-		StopFlag = true;
-	}
-}
-
-void Player::MovePointB()
-{
-	Action::GetInstance()->EaseOut(EyeRot.y, 95.0f);
-	if (EyeRot.y >= 90) {
-		ChangeRot = 90;
-		EyeRot.y = 90;
-		Velocity = { 0, 0, MoveSpeed };
-	}
-	if (camvec.m128_f32[0] >= 30) {
-
-		MoveFlag = false;
-		StopFlag = true;
-	}
-}
-
-void Player::MovePointC()
-{
-	Velocity = { 0, 0, MoveSpeed };
-	if (camvec.m128_f32[0] >= 45) {
-
-		MoveFlag = false;
-		StopFlag = true;
-		Velocity = { 0, 0, 0 };
-	}
-}
-
-void Player::MovePointCOblique()
-{
-	Velocity = { 0, 0, MoveSpeed };
-	if (camvec.m128_f32[0] >= 50) {
-		Velocity = { 0, 0, 0 };
-		Action::GetInstance()->EaseOut(EyeRot.y, 145.0f);
-		if (EyeRot.y >= 130) {
-			ChangeRot = 130;
-
-			MoveFlag = false;
-			StopFlag = true;
-			Velocity = { 0, 0, 0 };
-		}
-	}
-}
-
-void Player::MovePointCFront()
-{
-	if (camvec.m128_f32[0] <= 55) {
-		Velocity = { 0, 0, MoveSpeed };
-	}
-	Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-	if (EyeRot.y <= 0) {
-		ChangeRot = 0;
-
-		MoveFlag = false;
-		StopFlag = true;
-		Velocity = { 0, 0, 0 };
-	}
-}
-
-void Player::GoalPointBack()
-{
-	ActionCount = 0;
-	Velocity = { 0.f,0.f,MoveSpeed };
-	if (camvec.m128_f32[2] >= 80) {
-		Velocity = { 0.f,0.f,0.1f };
-		if (camvec.m128_f32[2] >= 82) {
-			Velocity = { 0.0f,0.0f,0.0f };
-			Action::GetInstance()->EaseOut(EyeRot.y, 185.0f);
-			if (EyeRot.y >= 180) {
-				ChangeRot = 0;
-
-				MoveFlag = false;
-				StopFlag = true;
-				Velocity = { 0, 0, 0 };
-			}
-		}
-	}
-}
-
-void Player::GoalPoint()
-{
-	StanbyFlag = false;
-	Velocity = { 0.f, 0.f, 0.1f };
-	ShakeHeadFlag = false;
-	Action::GetInstance()->EaseOut(EyeRot.y, -5.0f);
-	if (EyeRot.y <= 0) {
-		ChangeRot = 0;
-		EyeRot.y = 0;
-	}
-	if (camvec.m128_f32[2] >= 92) {
-		Velocity = { 0.f,0.05f,0.1f };
-		if (camvec.m128_f32[2] >= 97) {
-			Velocity = { 0.0f,0.0f,0.0f };
-			FringFlag = true;
-			if (FringFlag == true) {
-				Velocity = { 0.0f,0.6683f,0.0f };
-			}
-		}
-	}
-	CameraWorkFlag = false;
-	MovieFlag = false;
-	ActionCount = 0;
-}
-
-void (Player::* Player::MoveFuncTable[])() = {
-	&Player::MoveStartBack,
-	&Player::MoveStartFront,
-	&Player::MovePointA,
-	&Player::MovePointALeft,
-	&Player::MovePointB,
-	&Player::MovePointC,
-	&Player::MovePointCOblique,
-	&Player::MovePointCFront,
-	&Player::GoalPointBack,
-	&Player::GoalPoint
-};
 

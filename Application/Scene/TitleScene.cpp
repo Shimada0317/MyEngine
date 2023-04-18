@@ -419,5 +419,7 @@ void TitleScene::Finalize()
 	sphere_.reset();
 	world_.reset();
 	start_.reset();
+	bgm_.reset();
+	clickse_.reset();
 	
 }
