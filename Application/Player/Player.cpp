@@ -11,6 +11,7 @@
 
 const int RemainingBullet = 8;
 const float Gravity = 9.8f;
+const 	XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
 
 //デストラクタ
 Player::~Player()
@@ -52,8 +53,6 @@ void Player::Initalize(Camera* camera)
 	CurtainUp->SetSize(CurtainSize);
 	CurtainDown->SetSize(CurtainSize);
 
-	RailCam = new RailCamera();
-	//	RailCam->MatrixIdentity(ReticlePos, ReticleRot);
 
 	Body->SetParent(camera);
 
@@ -129,7 +128,6 @@ void Player::StatusSet(Camera* camera)
 
 void Player::AllUpdate()
 {
-	//RailCam->Update(Velocity, EyeRot, camera);
 	Body->Update();
 	Gun->Update();
 	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
@@ -139,7 +137,7 @@ void Player::AllUpdate()
 
 
 //更新処理
-void Player::Update(Camera* camera, Phase patern, float changerotbool)
+void Player::Update(Camera* camera, Phase patern)
 {
 	DamageProcess();
 
@@ -148,6 +146,8 @@ void Player::Update(Camera* camera, Phase patern, float changerotbool)
 	WaitProcess();
 
 	GunShotProcess(patern);
+
+	ParticleEfect(patern);
 
 	UIMotionProcess();
 
@@ -184,7 +184,7 @@ void Player::SpriteDraw()
 {
 	if (MouseStopFlag == false) {
 		for (int i = 0; i < 8; i++) {
-			if (Remaining <= 8 && ReloadFlag == false) {
+			if (Remaining <= 8 ) {
 				bulletHUD[i]->Draw();
 			}
 		}
@@ -208,10 +208,6 @@ void Player::ObjDraw()
 void Player::ImGuiDraw()
 {
 
-	XMMATRIX camMat = RailCam->GetWorld();
-	XMVECTOR camvec = { 0.0f,0.0f,0.0f,0.0f };
-
-	camvec = XMVector3Transform(camvec, camMat);
 
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
@@ -237,12 +233,6 @@ void Player::ImGuiDraw()
 		ImGui::TreePop();
 	}
 
-	if (ImGui::TreeNode("ParticlePos")) {
-		ImGui::SliderFloat("pos.x", &pos.x, -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.y", &pos.y, -100.0f, 100.0f);
-		ImGui::SliderFloat("pos.z", &pos.z, -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
 
 	ImGui::End();
 	ImGui::PopStyleColor();
@@ -326,7 +316,6 @@ void Player::GunShotProcess(Phase paterncount)
 	if (playerstate_ == SHOT) {
 		//弾が発射された
 		BulletShotFlag = true;
-		ParticleEfect(paterncount);
 		playerstate_ = WAIT;
 	}
 	else {
@@ -377,7 +366,6 @@ void Player::RecoilProcess()
 			RecoilGunFlag = false;
 		}
 	}
-
 }
 
 //リロード処理
@@ -413,7 +401,9 @@ void Player::ReloadProcess()
 //マズルエフェクト
 void Player::ParticleEfect(Phase paterncount)
 {
+
 	for (int i = 0; i < 10; i++) {
+		
 		float radX = ReticleRot.y * XM_PI / 180.f;
 		float radY = GunRot.x * XM_PI / 180.f;
 		float sinradX = sinf(radX);

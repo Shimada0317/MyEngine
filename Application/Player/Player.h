@@ -57,7 +57,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(Camera* camera, Phase patern, float changerotbool);
+	void Update(Camera* camera, Phase patern);
 	/// <summary>
 	/// 待機時の処理
 	/// </summary>
@@ -118,7 +118,6 @@ public:
 	void ParticleEfect(Phase paterncount);
 public:
 #pragma region Get
-	const bool& GetFinish() { return StopFlag; }
 	//三次元座標
 	const XMVECTOR& GetPosition() { return ReticlePos; }
 	//角度
@@ -129,10 +128,6 @@ public:
 	const XMFLOAT2& GetRetPosition() { return ReticlePos2D; }
 	//二次元スケール
 	const XMFLOAT2& GetRetSiz() { return ReticleSize; }
-	//カメラワーク
-	const bool& GetCamWork() { return CameraWorkFlag; }
-	//飛び立つ
-	const bool& GetFring() { return FringFlag; }
 	//Hp
 	int GetHp() { return Hp; }
 	//撃った時
@@ -152,7 +147,6 @@ public:
 	void SetRetPosition(const XMFLOAT2& position) { this->ReticlePos2D = position; }
 	void SetRetSiz(const XMFLOAT2& scale) { this->ReticleSize = scale; }
 	void SetHp(int HP) { this->Hp = HP; }
-	void SetFinish(const bool& finish) { this->StopFlag = finish; }
 	void SetBulletShot(const bool& BulletShot_F) { this->BulletShotFlag = BulletShot_F; }
 	void SetBodyWorldPos(const XMVECTOR& worldbodypos) { this->BodyWorldPos = worldbodypos; }
 #pragma endregion
@@ -234,7 +228,6 @@ private:
 	int Hp = 5;
 	int OldHp = 0;
 	//Reload
-	bool ReloadFlag = false;
 	int ReloadTime = 0;
 	int Anser = 0;
 	//移動
@@ -244,23 +237,12 @@ private:
 
 
 	//cam
-	bool Shake = false;
 	float ShakingValue = 0.0f;
 
-	bool StopFlag = false;
-
-	bool CameraWorkFlag = false;
-
-	bool MovieFlag = false;
-	bool StanbyFlag = false;
 	int ActionCount = 0;
 	float ActionTimer = 0.0f;
 
-	bool FringFlag = false;
-
 	bool ShakeHeadFlag = true;
-
-	bool ReloadSoundFlag = true;
 
 	float ChangeRot = 0;
 
@@ -285,7 +267,6 @@ private:
 	int Remaining = 0;
 	int OldRemaining = 0;
 
-	XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
 	XMFLOAT2 SpritePos[9];
 	bool DropBulletFlag[9];
 	float SpriteRot[9];

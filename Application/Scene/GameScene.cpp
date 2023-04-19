@@ -77,7 +77,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Hero = make_unique<Player>();
 	Hero->Initalize(GameCamera.get());
 	PlayerHp = Hero->GetHp();
-	GetCamWorkFlag = Hero->GetCamWork();
 
 	railcamera_ = make_unique<RailCamera>();
 	railcamera_->MatrixIdentity(Hero->GetPosition(), Hero->GetRotation());
@@ -260,8 +259,9 @@ void GameScene::AllUpdata()
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理
 	Start->Update(BillColor);
-
-	Hero->Update(GameCamera.get(), (Phase)Patern,changerotation_);
+	if (GameState != MOVIE) {
+		Hero->Update(GameCamera.get(), (Phase)Patern);
+	}
 }
 
 //ゲームシーンの更新処理
@@ -364,7 +364,6 @@ void GameScene::Update()
 			UpdataEnemyPopCommands();
 			Patern += 1;
 			StopFlag = false;
-			Hero->SetFinish(StopFlag);
 		}
 	}
 
@@ -374,7 +373,6 @@ void GameScene::Update()
 
 
 	if (Patern >= 6) {
-		bool fring = Hero->GetFring();
 		if (fring == true) {
 			GoalPos.m128_f32[1] += velo.m128_f32[1];
 		}
@@ -497,7 +495,6 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 //ImgUiの描画処理
 void GameScene::ImgDraw()
 {
-
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
@@ -509,7 +506,7 @@ void GameScene::ImgDraw()
 	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
 	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
 	ImGui::SliderFloat("eyerot", &eyerot_.y, -100.0f, 100.0f);
-
+	ImGui::SliderInt("Patern", &Patern, -100, 100);
 
 	ImGui::End();
 	ImGui::PopStyleColor();

@@ -319,6 +319,8 @@ private://ƒƒ“ƒo•Ï”
 	bool WaitFlag = false;
 	int WaitT = 0;
 
+	bool fring = false;
+
 	XMVECTOR Velo;
 
 	bool StartMovieFlag = false;
