@@ -9,130 +9,121 @@
 
 #include"SpriteManager.h"
 
-const int RemainingBullet = 8;
+const int MaxRemainingBullet = 9;
 const float Gravity = 9.8f;
 const 	XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
+const XMFLOAT4 Color{ 1.f,1.f,1.f,1.f };
+const int ten = 10;
 
 //デストラクタ
 Player::~Player()
 {
-	delete PartGreen;
-	delete PartRed;
-	delete PartSmoke;
-	delete ShotSe;
-	delete ReloadSe;
 
-	Gun.reset();
-	Body.reset();
+	gun_.reset();
+	body_.reset();
+	partgreen_.reset();
+	partred_.reset();
+	shotse_.reset();
+	reloadse_.reset();
 }
 
 //初期化処理
 void Player::Initalize(Camera* camera)
 {
+	//オブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
-
-	SkipPos = CurtainDownPos;
-
 	//スプライトの読み込み
-	SpriteReticle.reset(Sprite::SpriteCreate(Name::kReticle, ReticlePos2D, ReticleColor, ReticleAncorPoint));
-	CurtainUp.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainUpPos));
-	CurtainDown.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainDownPos));
-	Skip.reset(Sprite::SpriteCreate(Name::kSkip, SkipPos));
-	for (int i = 0; i < 9; i++) {
-		SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
-		SpriteRot[i] = 0;
-		Time[i] = 0;
-		bulletHUD[i].reset(Sprite::SpriteCreate(Name::kBullet, SpritePos[i], { 1.0f,1.0f,1.0f,1.0f }, AnchorPoint));
-		DropBulletFlag[i] = false;
+	spritereticle_.reset(Sprite::SpriteCreate(Name::kReticle, reticlepos2d_, reticlecolor_, reticleancorpoint_));
+	curtainup_.reset(Sprite::SpriteCreate(Name::kCurtain, curtainuppos_));
+	curtaindown_.reset(Sprite::SpriteCreate(Name::kCurtain, curtaindownpos_));
+	curtainup_->SetSize(curtainsize_);
+	curtaindown_->SetSize(curtainsize_);
+	skip_.reset(Sprite::SpriteCreate(Name::kSkip, skippos_));
+	reload_.reset(Sprite::SpriteCreate(Name::kReload, reloadspritepos_, reloadspritecolor_, anchorpoint_));
+	for (int i = {}; i < MaxRemainingBullet; i++) {
+		spritepos_[i] = { 1220.0f,25.0f + 32.0f * i };
+		spriterot_[i] = {};
+		time_[i] = {};
+		bulletHUD[i].reset(Sprite::SpriteCreate(Name::kBullet, spritepos_[i], Color, anchorpoint_));
+		dropbulletflag_[i] = false;
 	}
-	Reload.reset(Sprite::SpriteCreate(Name::kReload, ReloadSpritePos, ReloadSpriteColor, AnchorPoint));
-
-	Gun = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
-	Body = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
-
-	CurtainUp->SetSize(CurtainSize);
-	CurtainDown->SetSize(CurtainSize);
-
-
-	Body->SetParent(camera);
-
-	PartGreen = ParticleManager::Create(camera);
-	PartRed = ParticleManager::Create(camera);
-	PartSmoke = ParticleManager::Create(camera);
-	OldHp = Hp;
-
-	ShotSe = new Audio();
-	ShotSe->Initialize();
-
-	ReloadSe = new Audio();
-	ReloadSe->Initialize();
+	//オブジェクトの読み込み
+	gun_ = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
+	body_ = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
+	body_->SetParent(camera);
+	//パーティクルの生成
+	partred_.reset(ParticleManager::Create(camera));
+	partgreen_.reset(ParticleManager::Create(camera));
+	partsmoke_.reset(ParticleManager::Create(camera));
+	//音の生成
+	shotse_ = make_unique<Audio>();
+	reloadse_ = make_unique<Audio>();
+	shotse_->Initialize();
+	reloadse_->Initialize();
 };
 
 //ステータスセット
 void Player::StatusSet(Camera* camera)
 {
 
-	for (int i = 0; i < 8; i++) {
-		if (DropBulletFlag[i] == true && SpritePos[i].y <= 1300) {
-			SpritePos[i].y += 10;
-			Time[i] += 0.5f;
-			SpritePos[i].x += Action::GetInstance()->GetRangRand(-10, 10);
-			Action::GetInstance()->ThrowUp(Gravity, Time[i], 40, SpritePos[i].y);
-			SpriteRot[i] += 80;
+	for (int i = 0; i < MaxRemainingBullet; i++) {
+		if (dropbulletflag_[i] == true) {
+			spritepos_[i].y += 10;
+			time_[i] += 0.5f;
+			spritepos_[i].x += Action::GetInstance()->GetRangRand(-10, 10);
+			Action::GetInstance()->ThrowUp(Gravity, time_[i], 40, spritepos_[i].y);
+			spriterot_[i] += 80;
 		}
-		else if (SpritePos[i].y > 1300) {
-			Time[i] = 0;
+		else if (spritepos_[i].y > WinApp::window_height * 2) {
+			time_[i] = {};
 		}
 	}
 
-	if (OldRemaining < Remaining) {
-		DropBulletFlag[OldRemaining] = true;
-		OldRemaining = Remaining;
+	if (oldremaining_ < remaining_) {
+		dropbulletflag_[oldremaining_] = true;
+		oldremaining_ = remaining_;
 	}
 
-	BodyMat = Body->GetMatrix();
-	BodyWorldPos = { -10.0f,0.0f,-20.0f };
-	BodyWorldPos = XMVector3Transform(BodyWorldPos, BodyMat);
+	bodymat_ = body_->GetMatrix();
+	bodyworldpos_ = { -10.0f,0.0f,-20.0f };
+	bodyworldpos_ = XMVector3Transform(bodyworldpos_, bodymat_);
 
-	ReticleRot.y = (ReticlePos2D.x - 640) / 10 + ChangeRot;
+	reticlerot_.y = (reticlepos2d_.x - WinApp::window_width / 2) / 10 + changerot_;
 
-	Body->SetRotation(BodyRot);
-	Body->SetPosition(BodyPos);
-	Body->SetScale(BodyScl);
-	Body->SetParent(camera);
+	body_->SetRotation(bodyrot_);
+	body_->SetPosition(bodypos_);
+	body_->SetScale(bodyscl_);
+	body_->SetParent(camera);
 
-	GunMat = Gun->GetMatrix();
-	GunWorldPos = XMVector3Transform(GunPos, GunMat);
+	gunmat_ = gun_->GetMatrix();
+	gunworldpos_ = XMVector3Transform(gunpos_, gunmat_);
 
-	Gun->SetRotation(GunRot);
-	Gun->SetScale(GunScl);
-	Gun->SetParent(camera);
-	XMMATRIX GunNotParentMatrix = Gun->GetNotParentWorld();
+	gun_->SetRotation(gunrot_);
+	gun_->SetScale(gunscl_);
+	gun_->SetParent(camera);
+	XMMATRIX GunNotParentMatrix = gun_->GetNotParentWorld();
 
-	GunNotParentPos = XMVector3Transform(GunPos, GunNotParentMatrix);
-	Gun->SetPosition(GunPos);
-
+	gunnotparentpos_ = XMVector3Transform(gunpos_, GunNotParentMatrix);
+	gun_->SetPosition(gunpos_);
 	//HUDのポジションセット
-	for (int i = 0; i < 9; i++) {
+	for (int i = 0; i < MaxRemainingBullet; i++) {
 		bulletHUD[i]->SetSize({ SpriteSiz });
-		bulletHUD[i]->SetPosition(SpritePos[i]);
-		bulletHUD[i]->SetRotation(SpriteRot[i]);
+		bulletHUD[i]->SetPosition(spritepos_[i]);
+		bulletHUD[i]->SetRotation(spriterot_[i]);
 	}
-
-
 	//リロードの文字
-	Reload->SetSize(ReloadSpriteSize);
-	Reload->SetColor(ReloadSpriteColor);
+	reload_->SetSize(reloadspritesize_);
+	reload_->SetColor(reloadspritecolor_);
 }
 
 
 void Player::AllUpdate()
 {
-	Body->Update();
-	Gun->Update();
-	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
-	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
-	PartSmoke->Update({ 0.1f,0.1f,0.1f,0.0f });
+	body_->Update();
+	gun_->Update();
+	partred_->Update({ 1.0f,0.0f,0.0f,0.0f });
+	partgreen_->Update({ 0.0f,0.5f,0,0.0f });
+	partsmoke_->Update({ 0.1f,0.1f,0.1f,0.0f });
 }
 
 
@@ -147,15 +138,11 @@ void Player::Update(Camera* camera, Phase patern)
 
 	GunShotProcess(patern);
 
-	ParticleEfect(patern);
-
 	UIMotionProcess();
-
-	ScreenShake(ShakingValue, 0.1f);
 
 	ReloadProcess();
 
-	Velocity = XMVector3TransformNormal(Velocity, BodyMat);
+	velocity_ = XMVector3TransformNormal(velocity_, bodymat_);
 
 	StatusSet(camera);
 
@@ -165,7 +152,7 @@ void Player::Update(Camera* camera, Phase patern)
 void Player::WaitProcess()
 {
 	if (playerstate_ == WAIT) {
-		GunRot.x = (ReticlePos2D.y - WinApp::window_height / 2) / 50;
+		gunrot_.x = (reticlepos2d_.y - WinApp::window_height / 2) / 50;
 	}
 }
 
@@ -173,132 +160,67 @@ void Player::WaitProcess()
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
 	ParticleManager::PreDraw(cmdeList);
-	PartSmoke->Draw();
-	PartRed->Draw();
-	PartGreen->Draw();
+	partsmoke_->Draw();
+	partred_->Draw();
+	partgreen_->Draw();
 	ParticleManager::PostDraw();
 }
 
 //スプライト描画
 void Player::SpriteDraw()
 {
-	if (MouseStopFlag == false) {
-		for (int i = 0; i < 8; i++) {
-			if (Remaining <= 8 ) {
+	if (mousestopflag_ == false) {
+		for (int i = 0; i < MaxRemainingBullet; i++) {
+			if (remaining_ <= MaxRemainingBullet) {
 				bulletHUD[i]->Draw();
 			}
 		}
-		if (Remaining >= 8) {
-			Reload->Draw();
+		if (remaining_ >= MaxRemainingBullet) {
+			reload_->Draw();
 		}
 	}
-	SpriteReticle->Draw();
+	spritereticle_->Draw();
 }
 
 
 //オブジェクト描画
 void Player::ObjDraw()
 {
-	if (Hp >= 0) {
-		Gun->Draw();
+	if (hp_ >= 0) {
+		gun_->Draw();
 	}
-}
-
-//ImgUi描画
-void Player::ImGuiDraw()
-{
-
-
-	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
-	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
-	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
-	ImGui::Begin("Plyer");
-	if (ImGui::TreeNode("Shake")) {
-		ImGui::SliderFloat("ShakingValue", &ShakingValue, -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-
-	if (ImGui::TreeNode("gunpos")) {
-		ImGui::SliderFloat("gunpos.x", &GunPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunpos.y", &GunPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunpos.z", &GunPos.m128_f32[2], -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("gunWorldpos")) {
-		ImGui::SliderFloat("gunWordpos.x", &GunNotParentPos.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.y", &GunNotParentPos.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.z", &GunNotParentPos.m128_f32[2], -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-
-	ImGui::End();
-	ImGui::PopStyleColor();
-	ImGui::PopStyleColor();
 }
 
 void Player::SoundEffect()
 {
-	ShotSe->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
+	shotse_->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
 }
 
 //マウス操作
 void Player::MouseContoroll()
 {
 	//マウス座標から角度の取得
-	GunRot.y = (ReticlePos2D.x - WinApp::window_width / 2) / 10;
+	gunrot_.y = (reticlepos2d_.x - WinApp::window_width / 2) / 10;
 	//マウス座標の取得
-	Mouse::GetInstance()->MouseMoveSprite(ReticlePos2D);
+	Mouse::GetInstance()->MouseMoveSprite(reticlepos2d_);
 	//銃を撃った時
-	if (RecoilGunFlag == true) {
-		ReticlePos2D.y += 15;
-		Mouse::GetInstance()->RecoilMouse(ReticlePos2D);
+	if (recoilgunflag_ == true) {
+		reticlepos2d_.y += 15;
+		Mouse::GetInstance()->RecoilMouse(reticlepos2d_);
 	}
 	else {
 		//取得した座標をレティクルにセット
-		SpriteReticle->SetPosition(ReticlePos2D);
-	}
-}
-
-//画面揺れ
-void Player::ScreenShake(float shakevalue, float shakingtime)
-{
-	if (ShakingStartFlag == true) {
-		if (ShakeLimitTime <= 1) {
-			ShakeLimitTime += shakingtime;
-			if (ShakingScreenFlag == true) {
-				ShakingScreenValue -= shakevalue;
-				if (ShakingScreenValue <= -shakevalue) {
-					ShakingScreenFlag = false;
-				}
-			}
-			else {
-				ShakingScreenValue += shakevalue;
-				if (ShakingScreenValue >= shakevalue) {
-					ShakingScreenFlag = true;
-				}
-			}
-			EyeRot.x += ShakingScreenValue;
-		}
-		else {
-			ShakingScreenFlag = true;
-			ShakeLimitTime = 0;
-			ShakingStartFlag = false;
-			ShakingScreenValue = 0;
-			EyeRot.x = 0;
-		}
+		spritereticle_->SetPosition(reticlepos2d_);
 	}
 }
 
 //ダメージを受けたときの処理
 void Player::DamageProcess()
 {
-	if (OldHp > Hp) {
-		ShakingStartFlag = true;
-		ShakingValue = 3.5f;
-		OldHp = Hp;
+	if (oldhp_ > hp_) {
+		shakingstartflag_ = true;
+		shakingscreenvalue_ = 3.5f;
+		oldhp_ = hp_;
 	}
 }
 
@@ -306,64 +228,65 @@ void Player::DamageProcess()
 void Player::GunShotProcess(Phase paterncount)
 {
 	//弾の発射前
-	if (playerstate_ == WAIT && Remaining < RemainingBullet) {
+	if (playerstate_ == WAIT && remaining_ < MaxRemainingBullet) {
 		if (Mouse::GetInstance()->PushClick(0)) {
 			playerstate_ = SHOT;
-			Remaining += 1;
-			RecoilGunFlag = true;
+			remaining_ += 1;
+			recoilgunflag_ = true;
+			ParticleEfect(paterncount);
 		}
 	}
 	if (playerstate_ == SHOT) {
 		//弾が発射された
-		BulletShotFlag = true;
+		bulletshotflag_ = true;
 		playerstate_ = WAIT;
 	}
 	else {
-		BulletShotFlag = false;
+		bulletshotflag_ = false;
 	}
 	RecoilProcess();
 }
 
 void Player::UIMotionProcess()
 {
-	if (Remaining >= 8) {
-		if (ReversFlag == false) {
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 260);
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 190);
-			if (ReloadSpriteSize.x >= 250) {
-				ReversFlag = true;
+	if (remaining_ > MaxRemainingBullet) {
+		if (reversflag_ == false) {
+			Action::GetInstance()->EaseOut(reloadspritesize_.x, 260);
+			Action::GetInstance()->EaseOut(reloadspritesize_.y, 190);
+			if (reloadspritesize_.x >= 250) {
+				reversflag_ = true;
 			}
 		}
 		else {
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.x, 200);
-			Action::GetInstance()->EaseOut(ReloadSpriteSize.y, 130);
-			if (ReloadSpriteSize.x <= 210) {
-				ReversFlag = false;
+			Action::GetInstance()->EaseOut(reloadspritesize_.x, 200);
+			Action::GetInstance()->EaseOut(reloadspritesize_.y, 130);
+			if (reloadspritesize_.x <= 210) {
+				reversflag_ = false;
 			}
 		}
 	}
-	else if (Remaining == 0) {
-		for (int i = 0; i < 9; i++) {
-			SpritePos[i] = { 1220.0f,25.0f + 32.0f * i };
-			SpriteRot[i] = 0;
-			Time[i] = 0;
-			DropBulletFlag[i] = false;
-			OldRemaining = Remaining;
+	else if (remaining_ == 0) {
+		for (int i = 0; i < MaxRemainingBullet; i++) {
+			spritepos_[i] = { 1220.0f,25.0f + 32.0f * i };
+			spriterot_[i] = 0;
+			time_[i] = 0;
+			dropbulletflag_[i] = false;
+			oldremaining_ = remaining_;
 		}
 	}
 }
 
 void Player::RecoilProcess()
 {
-	if (RecoilGunFlag == true) {
-		RecoveryTime += 0.2f;
-		GunRot.x = -25;
-		GunPos.m128_f32[2] = -3.1f;
-		if (RecoveryTime >= 1) {
-			GunRot.x = 0;
-			GunPos.m128_f32[2] = -3.0f;
-			RecoveryTime = 0.0f;
-			RecoilGunFlag = false;
+	if (recoilgunflag_ == true) {
+		recoverytime_ += 0.2f;
+		gunrot_.x = -25;
+		gunpos_.m128_f32[2] = -3.1f;
+		if (recoverytime_ >= 1) {
+			gunrot_.x = 0;
+			gunpos_.m128_f32[2] = -3.0f;
+			recoverytime_ = 0.0f;
+			recoilgunflag_ = false;
 		}
 	}
 }
@@ -371,27 +294,26 @@ void Player::RecoilProcess()
 //リロード処理
 void Player::ReloadProcess()
 {
-
-	if (playerstate_ == WAIT && Remaining != 0) {
+	if (playerstate_ == WAIT && remaining_ != 0) {
 		if (Mouse::GetInstance()->PushClick(1)) {
 			playerstate_ = RELOAD;
-			ReloadSe->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
-			MouseStopFlag = true;
+			reloadse_->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
+			mousestopflag_ = true;
 		}
 	}
 
 	if (playerstate_ == RELOAD) {
-		GunRot.x -= 9.5f;
-		Remaining = 8;
-		ReloadTime += 1;
-		Anser = ReloadTime % 40;
-		if (Anser == 0) {
-			Remaining = 0;
-			GunRot.x = 0;
-			if (Remaining == 0) {
+		gunrot_.x -= 9.5f;
+		remaining_ = 8;
+		reloadtime_ += 1;
+		anser_ = reloadtime_ % 40;
+		if (anser_ == 0) {
+			remaining_ = {};
+			gunrot_.x = {};
+			if (remaining_ == 0) {
 				playerstate_ = WAIT;
-				ReloadTime = 0;
-				MouseStopFlag = false;
+				reloadtime_ = {};
+				mousestopflag_ = false;
 			}
 		}
 	}
@@ -403,9 +325,9 @@ void Player::ParticleEfect(Phase paterncount)
 {
 
 	for (int i = 0; i < 10; i++) {
-		
-		float radX = ReticleRot.y * XM_PI / 180.f;
-		float radY = GunRot.x * XM_PI / 180.f;
+		XMFLOAT3 pos;
+		float radX = reticlerot_.y * XM_PI / 180.f;
+		float radY = gunrot_.x * XM_PI / 180.f;
 		float sinradX = sinf(radX);
 		float cosradX = cosf(radX);
 
@@ -413,32 +335,32 @@ void Player::ParticleEfect(Phase paterncount)
 		float cosradY = cosf(radY);
 
 		if (paterncount == MOVEDPOINT_C || paterncount == MOVEDPOINT_C_OBLIQUE) {
-			pos.x = GunWorldPos.m128_f32[0] + 2.3f;
-			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-			pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
+			pos.x = gunworldpos_.m128_f32[0] + 2.3f;
+			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
 		}
 		else if (paterncount == LANDINGPOINT_BACK ||
 			paterncount == MOVEDPOINT_A ||
 			paterncount == MOVEDPOINT_A_LEFT ||
 			paterncount == GOALPOINT_BACK) {
-			pos.x = GunWorldPos.m128_f32[0] + sinradX * 3.5f;
-			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-			pos.z = GunWorldPos.m128_f32[2] + 3.0f;
+			pos.x = gunworldpos_.m128_f32[0] + sinradX * 3.5f;
+			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gunworldpos_.m128_f32[2] + 3.0f;
 		}
 		else if (paterncount == LANDINGPOINT_FRONT || paterncount == GOALPOINT) {
-			pos.x = GunWorldPos.m128_f32[0] - sinradX * 3.5f;
-			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-			pos.z = GunWorldPos.m128_f32[2] - 3.0f;
+			pos.x = gunworldpos_.m128_f32[0] - sinradX * 3.5f;
+			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gunworldpos_.m128_f32[2] - 3.0f;
 		}
 		else if (paterncount == MOVEDPOINT_B) {
-			pos.x = GunWorldPos.m128_f32[0] - 2.3f;
-			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-			pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
+			pos.x = gunworldpos_.m128_f32[0] - 2.3f;
+			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
 		}
 		else if (paterncount == MOVEDPOINT_C_FRONT) {
-			pos.x = GunWorldPos.m128_f32[0] + 2.3f * sinradX;
-			pos.y = GunWorldPos.m128_f32[1] - sinradY * 1.5f;
-			pos.z = GunWorldPos.m128_f32[2] + 2.8f * cosradX;
+			pos.x = gunworldpos_.m128_f32[0] + 2.3f * sinradX;
+			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
 		}
 
 		const float rnd_vel = 0.001f;
@@ -457,12 +379,36 @@ void Player::ParticleEfect(Phase paterncount)
 
 		XMFLOAT3 Smokeacc{};
 		Smokeacc.y += 0.005f;
-		PartRed->Add(20, pos, vel, acc, 0.7f, 0.2f, 1.0f);
-		PartGreen->Add(20, pos, vel, acc, 0.5f, 0.2f, 1.0f);
-		PartSmoke->Add(50, pos, smokevel, acc, 0.5f, 0.0f, 1.0f);
+		partred_->Add(20, pos, vel, acc, 0.7f, 0.2f, 1.0f);
+		partgreen_->Add(20, pos, vel, acc, 0.5f, 0.2f, 1.0f);
+		partsmoke_->Add(50, pos, smokevel, acc, 0.5f, 0.0f, 1.0f);
 	}
 	SoundEffect();
 
 }
+//ImgUi描画
+void Player::ImGuiDraw()
+{
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
+	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
+	ImGui::Begin("Plyer");
+	if (ImGui::TreeNode("gunpos")) {
+		ImGui::SliderFloat("gunpos.x", &gunpos_.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.y", &gunpos_.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunpos.z", &gunpos_.m128_f32[2], -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("gunWorldpos")) {
+		ImGui::SliderFloat("gunWordpos.x", &gunnotparentpos_.m128_f32[0], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.y", &gunnotparentpos_.m128_f32[1], -100.0f, 100.0f);
+		ImGui::SliderFloat("gunWordpos.z", &gunnotparentpos_.m128_f32[2], -100.0f, 100.0f);
+		ImGui::TreePop();
+	}
 
 
+	ImGui::End();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+}

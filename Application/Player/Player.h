@@ -9,7 +9,7 @@
 #include<memory>
 #include<list>
 
-enum  Phase{
+enum  Phase {
 	LANDINGPOINT_BACK = 0,
 	LANDINGPOINT_FRONT,
 	MOVEDPOINT_A,
@@ -76,10 +76,6 @@ public:
 	/// </summary>
 	void ObjDraw();
 	/// <summary>
-	/// Imguiの描画
-	/// </summary>
-	void ImGuiDraw();
-	/// <summary>
 	/// SE呼び出し
 	/// </summary>
 	void SoundEffect();
@@ -87,11 +83,6 @@ public:
 	/// マウスの取得
 	/// </summary>
 	void MouseContoroll();
-	/// <summary>
-	/// 画面揺れ
-	/// </summary>
-	/// <param name="limitshakevalue">シェイクする値</param>
-	void ScreenShake(float shakevalue, float shakingtime);
 	/// <summary>
 	/// ダメージ食らったときの処理
 	/// </summary>
@@ -116,176 +107,173 @@ public:
 	/// パーティクル発生
 	/// </summary>
 	void ParticleEfect(Phase paterncount);
+	/// <summary>
+	/// Imguiの描画
+	/// </summary>
+	void ImGuiDraw();
 public:
 #pragma region Get
 	//三次元座標
-	const XMVECTOR& GetPosition() { return ReticlePos; }
+	const XMVECTOR& GetPosition() { return reticlepos_; }
 	//角度
-	const XMFLOAT3& GetRotation() { return ReticleRot; }
+	const XMFLOAT3& GetRotation() { return reticlerot_; }
 	//スケール
-	const XMFLOAT3& GetScl() { return ReticleScl; }
+	const XMFLOAT3& GetScl() { return reticlescl_; }
 	//二次元座標
-	const XMFLOAT2& GetRetPosition() { return ReticlePos2D; }
+	const XMFLOAT2& GetRetPosition() { return reticlepos2d_; }
 	//二次元スケール
-	const XMFLOAT2& GetRetSiz() { return ReticleSize; }
+	const XMFLOAT2& GetRetSiz() { return reticlesize_; }
 	//Hp
-	int GetHp() { return Hp; }
+	int GetHp() { return hp_; }
 	//撃った時
-	const bool& GetBulletShot() { return BulletShotFlag; }
+	const bool& GetBulletShot() { return bulletshotflag_; }
 
-	const XMVECTOR& GetBodyWorldPos() { return BodyWorldPos; }
-	
-	const XMVECTOR& GetVelocity() { return Velocity; }
+	const XMVECTOR& GetBodyWorldPos() { return bodyworldpos_; }
 
-	const XMMATRIX& GetBodyMatrix() { return BodyMat; }
+	const XMVECTOR& GetVelocity() { return velocity_; }
+
+	const XMMATRIX& GetBodyMatrix() { return bodymat_; }
 #pragma endregion
 
 #pragma region Set
-	void SetPosition(const XMVECTOR& position) { this->ReticlePos = position; }
-	void SetRotation(const XMFLOAT3& rotation) { this->ReticleRot = rotation; }
-	void SetScl(const XMFLOAT3& scale) { this->ReticleScl = scale; }
-	void SetRetPosition(const XMFLOAT2& position) { this->ReticlePos2D = position; }
-	void SetRetSiz(const XMFLOAT2& scale) { this->ReticleSize = scale; }
-	void SetHp(int HP) { this->Hp = HP; }
-	void SetBulletShot(const bool& BulletShot_F) { this->BulletShotFlag = BulletShot_F; }
-	void SetBodyWorldPos(const XMVECTOR& worldbodypos) { this->BodyWorldPos = worldbodypos; }
+	void SetPosition(const XMVECTOR& position) { this->reticlepos_ = position; }
+	void SetRotation(const XMFLOAT3& rotation) { this->reticlerot_ = rotation; }
+	void SetScl(const XMFLOAT3& scale) { this->reticlescl_ = scale; }
+	void SetRetPosition(const XMFLOAT2& position) { this->reticlepos2d_ = position; }
+	void SetRetSiz(const XMFLOAT2& scale) { this->reticlesize_ = scale; }
+	void SetHp(int HP) { this->hp_ = HP; }
+	void SetBulletShot(const bool& BulletShot_F) { this->bulletshotflag_ = BulletShot_F; }
+	void SetBodyWorldPos(const XMVECTOR& worldbodypos) { this->bodyworldpos_ = worldbodypos; }
 #pragma endregion
 private:
 	//Obj
-	unique_ptr<Object3d> Track;
-	unique_ptr<Object3d> Gun;
-	unique_ptr<Object3d> Body;
-	unique_ptr<Object3d> Cartridge;
+	unique_ptr<Object3d> track_;
+	unique_ptr<Object3d> gun_;
+	unique_ptr<Object3d> body_;
+	unique_ptr<Object3d> cartridge_;
 	//スプライト
-	unique_ptr<Sprite> SpriteReticle;
-	unique_ptr<Sprite> CurtainUp;
-	unique_ptr<Sprite> CurtainDown;
-	unique_ptr<Sprite> Skip;
-	unique_ptr<Sprite> Window;
+	unique_ptr<Sprite> spritereticle_;
+	unique_ptr<Sprite> curtainup_;
+	unique_ptr<Sprite> curtaindown_;
+	unique_ptr<Sprite> skip_;
+	unique_ptr<Sprite> window_;
 	unique_ptr<Sprite> bulletHUD[9];
-	unique_ptr<Sprite> Reload;
+	unique_ptr<Sprite> reload_;
 	//発砲時のエフェクト
-	ParticleManager* PartGreen = nullptr;
-	ParticleManager* PartRed = nullptr;
-	ParticleManager* PartSmoke = nullptr;
+	unique_ptr <ParticleManager> partgreen_ = nullptr;
+	unique_ptr <ParticleManager> partred_ = nullptr;
+	unique_ptr <ParticleManager> partsmoke_ = nullptr;
 	//その他の機能
-	Audio* ShotSe;
-	Audio* ReloadSe;
-	RailCamera* RailCam;
+	unique_ptr<Audio> shotse_;
+	unique_ptr<Audio> reloadse_;
 	//ローカル
 		//レティクルObjのステータス
-	XMVECTOR ReticlePos = { 0.0f,55.0f,0.0f };
-	XMFLOAT3 ReticleRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 ReticleScl = { 0.3f,0.3f,0.3f };
+	XMVECTOR reticlepos_ = { 0.0f,55.0f,0.0f };
+	XMFLOAT3 reticlerot_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 reticlescl_ = { 0.3f,0.3f,0.3f };
 	//発射台Objのステータス
-	XMVECTOR GunPos = { 0.0f,0.0f,-3.0f };
-	XMVECTOR GunNotParentPos = { 0.0f,0.0f,-10.0f };
-	XMFLOAT3 GunRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 GunScl = { 0.3f,0.3f,0.3f };
+	XMVECTOR gunpos_ = { 0.0f,0.0f,-3.0f };
+	XMVECTOR gunnotparentpos_ = { 0.0f,0.0f,-10.0f };
+	XMFLOAT3 gunrot_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 gunscl_ = { 0.3f,0.3f,0.3f };
 	//薬莢Objステータス
-	XMVECTOR CartridgePos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 CartridgeRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 CartridgeScl = { 0.1f,0.1f,0.1f };
+	XMVECTOR cartridgepos_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 cartridgerot_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 cartridgescl_ = { 0.1f,0.1f,0.1f };
 	//プレイヤーObjのステータス
-	XMVECTOR BodyPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 BodyRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 BodyScl = { 0.3f,0.3f,0.3f };
+	XMVECTOR bodypos_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 bodyrot_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 bodyscl_ = { 0.3f,0.3f,0.3f };
 	//ワールド
 		//レティクルのステータス
-	XMVECTOR TrackWorldPos = { 0.0f,0.0f,0.0f };
-	XMMATRIX TrackMat;
-	XMVECTOR WorldFarPos = { 0.0f,0.0f,0.0f };
+	XMVECTOR trackworldpos_ = { 0.0f,0.0f,0.0f };
+	XMMATRIX trackmat_;
+	XMVECTOR worldfarpos_ = { 0.0f,0.0f,0.0f };
 	//発射台のステータス
-	XMVECTOR GunWorldPos = { 0.0f,0.0f,-5.0f };
-	XMMATRIX GunMat;
+	XMVECTOR gunworldpos_ = { 0.0f,0.0f,-5.0f };
+	XMMATRIX gunmat_;
 	//プレイヤーのステータス
-	XMVECTOR BodyWorldPos = { 0.0f,0.0f,-0.1f };
-	XMMATRIX BodyMat;
-	XMVECTOR ReticleWorldPos;
+	XMVECTOR bodyworldpos_ = { 0.0f,0.0f,-0.1f };
+	XMMATRIX bodymat_;
+	XMVECTOR reticleworldpos_;
 	//パーティクルのステータス
-	XMVECTOR ParticlePos = { 0.0f,0.0f,2.0f };
+	XMVECTOR particlepos_ = { 0.0f,0.0f,2.0f };
 	//ビューポート
-	XMMATRIX MatViewPort;
+	XMMATRIX matviewport_;
 	//カメラ
-	XMFLOAT3 EyeRot = { 0.0f,180.0f,0.0f };
-	XMFLOAT3 TargetPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 Up = { 0.0f,1.0f,0.0f };
+	XMFLOAT3 eyerot_ = { 0.0f,180.0f,0.0f };
+	XMFLOAT3 targetpos_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 up_ = { 0.0f,1.0f,0.0f };
 	//スプライト
 		//2Dレティクルのステータス
-	XMFLOAT4 ReticleColor = { 1,1,1,1 };
-	XMFLOAT2 ReticleAncorPoint = { 0.5f,0.5f };
-	XMFLOAT2 ReticlePos2D = { 640.0f,360.0f };
-	XMFLOAT2 ReticleSize = { 64.0f,64.0f };
+	XMFLOAT4 reticlecolor_ = { 1,1,1,1 };
+	XMFLOAT2 reticleancorpoint_ = { 0.5f,0.5f };
+	XMFLOAT2 reticlepos2d_ = { 640.0f,360.0f };
+	XMFLOAT2 reticlesize_ = { 64.0f,64.0f };
 	//始まりと終わりの演出使う黒いカーテン
-	XMFLOAT2 CurtainUpPos = { 0.0f,0.0f };
-	XMFLOAT2 CurtainSize = { 1280.0f,100.0f };
-	XMFLOAT2 CurtainDownPos = { 0.0f,620.0f };
+	XMFLOAT2 curtainuppos_ = { 0.0f,0.0f };
+	XMFLOAT2 curtainsize_ = { 1280.0f,100.0f };
+	XMFLOAT2 curtaindownpos_ = { 0.0f,620.0f };
 	//Skip文字の表示
-	XMFLOAT2 SkipPos = { 0.0f,620.0f };
+	XMFLOAT2 skippos_ = curtaindownpos_;
 	//2D座標入の取得用変数
-	XMVECTOR offset = { 0,0,1.0f };
+	XMVECTOR offset_ = { 0,0,1.0f };
 
-	int Hp = 5;
-	int OldHp = 0;
+	int hp_ = 5;
+	int oldhp_ = hp_;
 	//Reload
-	int ReloadTime = 0;
-	int Anser = 0;
+	int reloadtime_ = 0;
+	int anser_ = 0;
 	//移動
-	XMVECTOR Velocity;
+	XMVECTOR velocity_;
 	//弾の速度
-	float MoveSpeed = 0;
+	float movespeed_ = 0;
 
 
 	//cam
-	float ShakingValue = 0.0f;
+	float shakingvalue_ = 0.0f;
 
-	int ActionCount = 0;
-	float ActionTimer = 0.0f;
+	int actioncount_ = 0;
+	float actiontimer_ = 0.0f;
 
-	bool ShakeHeadFlag = true;
+	bool shakeheadflag_ = true;
 
-	float ChangeRot = 0;
+	float changerot_ = 0;
 
 
-	bool BulletShotFlag = false;
-	float ShotCoolTime = 0.0f;
-	bool RecoilFlag = false;
-	float RecoilTime = 0.0f;
-	float ShakingScreenValue = 0.0f;
-	bool ShakingScreenFlag = true;
-	XMFLOAT3 OldEyeRot;
+	bool bulletshotflag_ = false;
+	float shotcooltime_ = 0.0f;
+	bool recoilflag_ = false;
+	float recoiltime_ = 0.0f;
+	float shakingscreenvalue_ = 0.0f;
 
-	float easetimer = 0;
-
-	bool MouseStopFlag = false;
-	float ShakeLimitTime = 0;
-	bool ShakingStartFlag = false;
-	XMVECTOR OldPos;
-	bool RecoilGunFlag = false;
-	float RecoveryTime = 0.0f;
+	bool mousestopflag_ = false;
+	float shakelimittime_ = 0;
+	bool shakingstartflag_ = false;
+	XMVECTOR oldpos_;
+	bool recoilgunflag_ = false;
+	float recoverytime_ = 0.0f;
 	//持ってきたもの
-	int Remaining = 0;
-	int OldRemaining = 0;
+	int remaining_ = 0;
+	int oldremaining_ = 0;
 
-	XMFLOAT2 SpritePos[9];
-	bool DropBulletFlag[9];
-	float SpriteRot[9];
+	XMFLOAT2 spritepos_[9];
+	bool dropbulletflag_[9];
+	float spriterot_[9];
 
-	float Time[9];
+	float time_[9];
 
 
 	//Spriteのステータス
-	XMFLOAT4 ReloadSpriteColor = { 1.0f,1.0f,1.0f,0.9f };
-	XMFLOAT2 AnchorPoint = { 0.5f,0.5f };
-	XMFLOAT2 ReloadSpritePos = { WinApp::window_width/2,210 };
-	XMFLOAT2 ReloadSpriteSize = { 210,140 };
+	XMFLOAT4 reloadspritecolor_ = { 1.0f,1.0f,1.0f,0.9f };
+	XMFLOAT2 anchorpoint_ = { 0.5f,0.5f };
+	XMFLOAT2 reloadspritepos_ = { WinApp::window_width / 2,210 };
+	XMFLOAT2 reloadspritesize_ = { 210,140 };
 
-	bool ReversFlag = false;
+	bool reversflag_ = false;
 
-	XMFLOAT3 pos;
-
-	XMVECTOR camvec{ 0.f,0.f,0.f };
-	XMMATRIX camMat;
+	XMVECTOR camvec_{ 0.f,0.f,0.f };
+	XMMATRIX cammat_;
 
 
 	int playerstate_ = WAIT;

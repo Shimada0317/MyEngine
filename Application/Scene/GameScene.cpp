@@ -259,9 +259,8 @@ void GameScene::AllUpdata()
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理
 	Start->Update(BillColor);
-	if (GameState != MOVIE) {
-		Hero->Update(GameCamera.get(), (Phase)Patern);
-	}
+
+	Hero->Update(GameCamera.get(), (Phase)Patern);
 }
 
 //ゲームシーンの更新処理
@@ -371,7 +370,6 @@ void GameScene::Update()
 		HeriY += 15.0f;
 	}
 
-
 	if (Patern >= 6) {
 		if (fring == true) {
 			GoalPos.m128_f32[1] += velo.m128_f32[1];
@@ -392,14 +390,11 @@ void GameScene::Update()
 	CheckSameTrackPosition();
 	Hero->SetBulletShot(PlayerBulletShot_F);
 
-
 	GameCamera->RecalculationMatrix();
 #pragma endregion
 
 	postEffect->Update(PostCol);
 	lightGroupe->Update();
-
-	
 }
 
 //オブジェクトの描画処理
@@ -495,6 +490,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 //ImgUiの描画処理
 void GameScene::ImgDraw()
 {
+
 	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.7f, 1.0f));
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
@@ -506,7 +502,7 @@ void GameScene::ImgDraw()
 	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
 	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
 	ImGui::SliderFloat("eyerot", &eyerot_.y, -100.0f, 100.0f);
-	ImGui::SliderInt("Patern", &Patern, -100, 100);
+
 
 	ImGui::End();
 	ImGui::PopStyleColor();
