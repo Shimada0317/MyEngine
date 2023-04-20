@@ -44,8 +44,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Conteniu.reset(Sprite::SpriteCreate(kGameOver, { 0.0f,0.0f }));
 	Shot.reset(Sprite::SpriteCreate(kShot, { 0.f,WinApp::window_height - 150 }));
 	ReticleForGameOver.reset(Sprite::SpriteCreate(kReticle, ReticlePosition, ReticleColor, SpriteAnchorPoint));
-	Yes.reset(Sprite::SpriteCreate(kYes, YesPosition,YesColor,SpriteAnchorPoint));
-	No.reset(Sprite::SpriteCreate(kNo, NoPosition,NoColor,SpriteAnchorPoint));
+	Yes.reset(Sprite::SpriteCreate(kYes, YesPosition, YesColor, SpriteAnchorPoint));
+	No.reset(Sprite::SpriteCreate(kNo, NoPosition, NoColor, SpriteAnchorPoint));
 	Hart.reset(Sprite::SpriteCreate(kHart, HartPosition, { 1.f,1.f,1.f,1.f }, SpriteAnchorPoint));
 	CurtainUp.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainUpPos));
 	CurtainDown.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainDownPos));
@@ -81,7 +81,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	railcamera_ = make_unique<RailCamera>();
 	railcamera_->MatrixIdentity(Hero->GetPosition(), Hero->GetRotation());
 
-	
+
 	OldHp = PlayerHp;
 
 	Bgm = make_unique<Audio>();
@@ -254,7 +254,7 @@ void GameScene::AllUpdata()
 		FieldBuils[i]->Update(BillColor);
 	}
 	//天球の更新処理
-	Sphere->Update({ 1,1,1,1 },true);
+	Sphere->Update({ 1,1,1,1 }, true);
 	//地面の更新処理
 	World->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理
@@ -289,12 +289,16 @@ void GameScene::Update()
 		StatusSet();
 		AllUpdata();
 	}
-	else if(StopUpdateFlag==true&&ClearFlag==false)
+	else if (StopUpdateFlag == true && ClearFlag == false)
 	{
 		GameOverProcess();
 	}
-	
+
 	GameClearProcesss();
+
+	if (screenshakestate_ != NONE) {
+		ScreenShake(shakingscreenvalue_);
+	}
 
 #pragma region ActorからUpdate内の処理を持ってくる(後でこのコメントは消す)
 
@@ -422,7 +426,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	if (GameState != MOVIE) {
 		Hero->ObjDraw();
 	}
-	
+
 	Hero->ParticleDraw(dxCommon->GetCmdList());
 #pragma endregion
 
@@ -501,7 +505,7 @@ void GameScene::ImgDraw()
 
 	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
 	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
-	ImGui::SliderFloat("eyerot", &eyerot_.y, -100.0f, 100.0f);
+	ImGui::SliderFloat("eyerot", &eyerot_.y, -180.0f, 180.0f);
 
 
 	ImGui::End();
@@ -514,7 +518,7 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 {
 	postEffect->PreDrawScene(dxCommon->GetCmdList());
 	ObjDraw(dxCommon);
-	
+
 	postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 	dxCommon->PreDraw();
@@ -656,6 +660,8 @@ void GameScene::DamageProcess()
 			DamageHitFlag = true;
 			DamageEfectColor.w = 1;
 			OldHp = PlayerHp;
+			screenshakestate_ = DAMAGE;
+			shakingscreenvalue_ = 5.f;
 		}
 		//画面を赤くするフラグが立った時
 		if (PostEffectOnFlag == true) {
@@ -934,7 +940,7 @@ void GameScene::StartCameraWork()
 {
 	l_reticlepos = Hero->GetPosition();
 	if (GetCamWorkFlag == false && startflag_ == false) {
-		
+
 		XMVECTOR l_bodyworldpos = Hero->GetBodyWorldPos();
 		if (stanbyflag_ == false) {
 			eyerot_.y = 180;
@@ -1044,7 +1050,7 @@ void GameScene::PlayerMove()
 {
 	XMMATRIX l_cameramatrix;
 	l_cameramatrix = railcamera_->GetWorld();
-	cameravector_={ 0.f,0.f,0.f,0.f };
+	cameravector_ = { 0.f,0.f,0.f,0.f };
 	cameravector_ = XMVector3Transform(cameravector_, l_cameramatrix);
 
 	if (MoveFlag == true) {
@@ -1060,31 +1066,30 @@ void GameScene::PlayerMove()
 
 void GameScene::ScreenShake(float shakevalue)
 {
-	if (shakingstartflag_ == true) {
-		if (shakelimittime_ <= 1) {
-			shakelimittime_ += 0.1f;
-			if (shakingscreenflag_ == true) {
-				shakingscreenvalue_ -= shakevalue;
-				if (shakingscreenvalue_ <= -shakevalue) {
-					shakingscreenflag_ = false;
-				}
+	if (shakelimittime_ <= 1) {
+		shakelimittime_ += 0.1f;
+		if (shakingscreenflag_ == true) {
+			shakingscreenvalue_ -= shakevalue;
+			if (shakingscreenvalue_ <= -shakevalue) {
+				shakingscreenflag_ = false;
 			}
-			else {
-				shakingscreenvalue_ += shakevalue;
-				if (shakingscreenvalue_ >= shakevalue) {
-					shakingscreenflag_ = true;
-				}
-			}
-			eyerot_.x += shakingscreenvalue_;
 		}
 		else {
-			shakingscreenflag_ = true;
-			shakelimittime_ = 0;
-			shakingstartflag_ = false;
-			shakingscreenvalue_ = 0;
-			eyerot_.x = 0;
+			shakingscreenvalue_ += shakevalue;
+			if (shakingscreenvalue_ >= shakevalue) {
+				shakingscreenflag_ = true;
+			}
 		}
+		eyerot_.x += shakingscreenvalue_;
 	}
+	else {
+		shakingscreenflag_ = true;
+		shakelimittime_ = 0;
+		shakingscreenvalue_ = 0;
+		eyerot_.x = 0;
+		screenshakestate_ = NONE;
+	}
+
 }
 
 void GameScene::MoveShakingHead()
@@ -1101,20 +1106,20 @@ void GameScene::MoveShakingHead()
 			}
 		}
 
-		else{
+		else {
 			eyerot_.x -= EyeRotAbsouluteValue;
 			if (eyerot_.x <= -AbsoluteValue) {
 				shake_ = true;
 			}
 		}
 	}
-	
+
 }
 
 void GameScene::CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
 {
-	if ((check_Pos.x-radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x)
-		&& (check_Pos.y-radY<= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
+	if ((check_Pos.x - radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x)
+		&& (check_Pos.y - radY <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
 		CheckFlag = true;
 	}
 	else {
@@ -1201,8 +1206,8 @@ void GameScene::MovePointCOblique()
 	if (cameravector_.m128_f32[0] >= 50) {
 		velocity_ = { 0, 0, 0 };
 		Action::GetInstance()->EaseOut(eyerot_.y, 145.0f);
-		if (eyerot_.y >= 130) {
-			changerotation_ = 130;
+		if (eyerot_.y >= 135) {
+			changerotation_ = 135;
 
 			MoveFlag = false;
 			StopFlag = true;
@@ -1268,7 +1273,7 @@ void GameScene::GoalPoint()
 	}
 	GetCamWorkFlag = false;
 	movieflag_ = false;
-	actioncount_= 0;
+	actioncount_ = 0;
 }
 
 void(GameScene::* GameScene::MoveFuncTable[])() {

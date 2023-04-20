@@ -21,6 +21,12 @@ private:
 		MOVE,
 	};
 
+	enum ShakeScreenPatern {
+		NONE=0,
+		DAMAGE,
+		SHOT,
+	};
+
 private:
 	static void (GameScene::* MoveFuncTable[])();
 public://ƒƒ“ƒoŠÖ”
@@ -368,5 +374,6 @@ private://ƒƒ“ƒo•Ï”
 	float shakingscreenvalue_= 0.f;
 	bool shake_ = true;
 
+	int screenshakestate_ = NONE;
 };
 

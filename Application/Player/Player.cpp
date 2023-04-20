@@ -88,7 +88,7 @@ void Player::StatusSet(Camera* camera)
 	bodyworldpos_ = { -10.0f,0.0f,-20.0f };
 	bodyworldpos_ = XMVector3Transform(bodyworldpos_, bodymat_);
 
-	reticlerot_.y = (reticlepos2d_.x - WinApp::window_width / 2) / 10 + changerot_;
+	reticlerot_.y = (reticlepos2d_.x - WinApp::window_width / 2) / 10 ;
 
 	body_->SetRotation(bodyrot_);
 	body_->SetPosition(bodypos_);
@@ -347,8 +347,8 @@ void Player::ParticleEfect(Phase paterncount)
 		else if (paterncount == MOVEDPOINT_C ||
 			paterncount == MOVEDPOINT_C_OBLIQUE) {
 			pos.x = gunworldpos_.m128_f32[0] + 2.3f;
-			pos.y = gunworldpos_.m128_f32[1] ;
-			pos.z = gunworldpos_.m128_f32[2] ;
+			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gunworldpos_.m128_f32[2] - 3.f * sinradX;
 		}
 		//ê^Ç¡Ç∑ÇÆëOÇå¸Ç¢ÇƒÇ¢ÇÈÇ∆Ç´
 		else if (paterncount == LANDINGPOINT_FRONT || 
@@ -359,15 +359,15 @@ void Player::ParticleEfect(Phase paterncount)
 		}
 		//ç∂Çå¸Ç¢ÇƒÇ¢ÇÈÇ∆Ç´
 		else if (paterncount == MOVEDPOINT_B) {
-			pos.x = gunworldpos_.m128_f32[0] - 2.3f;
-			pos.y = gunworldpos_.m128_f32[1] ;
-			pos.z = gunworldpos_.m128_f32[2] + 3.f*sinradX;
+			pos.x = gunworldpos_.m128_f32[0] - 3.f*cosradX;
+			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gunworldpos_.m128_f32[2] + 3.f*cosradX;
 		}
 		//éŒÇﬂÇå¸Ç¢ÇƒÇ¢ÇÈÇ∆Ç´
 		else if (paterncount == MOVEDPOINT_C_FRONT) {
-			pos.x = gunworldpos_.m128_f32[0] + 2.3f * sinradX;
-			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
+			pos.x = gunworldpos_.m128_f32[0] +0.3f;
+			pos.y = gunworldpos_.m128_f32[1] - sinradY * 2.5f;
+			pos.z = gunworldpos_.m128_f32[2] -3.f*sinradX;
 		}
 
 		const float rnd_vel = 0.001f;
