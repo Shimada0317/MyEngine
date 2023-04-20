@@ -514,11 +514,12 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 {
 	postEffect->PreDrawScene(dxCommon->GetCmdList());
 	ObjDraw(dxCommon);
-	SpriteDraw(dxCommon);
+	
 	postEffect->PostDrawScene(dxCommon->GetCmdList());
 
 	dxCommon->PreDraw();
 	postEffect->Draw(dxCommon->GetCmdList());
+	SpriteDraw(dxCommon);
 	//•`‰æŒãˆ—
 	ImgDraw();
 	dxCommon->PostDraw();

@@ -325,7 +325,7 @@ void Player::ParticleEfect(Phase paterncount)
 {
 
 	for (int i = 0; i < 10; i++) {
-		XMFLOAT3 pos;
+		XMFLOAT3 pos{};
 		float radX = reticlerot_.y * XM_PI / 180.f;
 		float radY = gunrot_.x * XM_PI / 180.f;
 		float sinradX = sinf(radX);
@@ -334,12 +334,8 @@ void Player::ParticleEfect(Phase paterncount)
 		float sinradY = sinf(radY);
 		float cosradY = cosf(radY);
 
-		if (paterncount == MOVEDPOINT_C || paterncount == MOVEDPOINT_C_OBLIQUE) {
-			pos.x = gunworldpos_.m128_f32[0] + 2.3f;
-			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
-		}
-		else if (paterncount == LANDINGPOINT_BACK ||
+		//Œã‚ë‚ðŒü‚¢‚Ä‚¢‚é‚Æ‚«
+		if (paterncount == LANDINGPOINT_BACK ||
 			paterncount == MOVEDPOINT_A ||
 			paterncount == MOVEDPOINT_A_LEFT ||
 			paterncount == GOALPOINT_BACK) {
@@ -347,16 +343,27 @@ void Player::ParticleEfect(Phase paterncount)
 			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
 			pos.z = gunworldpos_.m128_f32[2] + 3.0f;
 		}
-		else if (paterncount == LANDINGPOINT_FRONT || paterncount == GOALPOINT) {
+		//‰E‚ðŒü‚¢‚Ä‚¢‚é‚Æ‚«
+		else if (paterncount == MOVEDPOINT_C ||
+			paterncount == MOVEDPOINT_C_OBLIQUE) {
+			pos.x = gunworldpos_.m128_f32[0] + 2.3f;
+			pos.y = gunworldpos_.m128_f32[1] ;
+			pos.z = gunworldpos_.m128_f32[2] ;
+		}
+		//^‚Á‚·‚®‘O‚ðŒü‚¢‚Ä‚¢‚é‚Æ‚«
+		else if (paterncount == LANDINGPOINT_FRONT || 
+			paterncount == GOALPOINT) {
 			pos.x = gunworldpos_.m128_f32[0] - sinradX * 3.5f;
 			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
 			pos.z = gunworldpos_.m128_f32[2] - 3.0f;
 		}
+		//¶‚ðŒü‚¢‚Ä‚¢‚é‚Æ‚«
 		else if (paterncount == MOVEDPOINT_B) {
 			pos.x = gunworldpos_.m128_f32[0] - 2.3f;
-			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
+			pos.y = gunworldpos_.m128_f32[1] ;
+			pos.z = gunworldpos_.m128_f32[2] + 3.f*sinradX;
 		}
+		//ŽÎ‚ß‚ðŒü‚¢‚Ä‚¢‚é‚Æ‚«
 		else if (paterncount == MOVEDPOINT_C_FRONT) {
 			pos.x = gunworldpos_.m128_f32[0] + 2.3f * sinradX;
 			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;

@@ -82,143 +82,142 @@
       <Filter>imgui</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>.cpp</Filter>
+      <Filter>AllGame</Filter>
     </ClCompile>
     <ClCompile Include="Application\Action\Action.cpp">
-      <Filter>.cpp\Application\Action</Filter>
+      <Filter>AllGame\Application\Action</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\Audio\Audio.cpp">
-      <Filter>.cpp\GameEngine\Audio</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Scene\BaseClassIUDF.cpp">
-      <Filter>.cpp\Application\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Scene\BaseScene.cpp">
-      <Filter>.cpp\Application\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp">
-      <Filter>.cpp\Application\Enemy</Filter>
+      <Filter>AllGame\GameEngine\Audio</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\camera\Camera.cpp">
-      <Filter>.cpp\GameEngine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Collision\Collision.cpp">
-      <Filter>.cpp\Application\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Collision\CollisionPrimitive.cpp">
-      <Filter>.cpp\Application\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\Input\Contoroller\Contoroller.cpp">
-      <Filter>.cpp\GameEngine\Input</Filter>
+      <Filter>AllGame\GameEngine\Camera</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\camera\DebugCamera.cpp">
-      <Filter>.cpp\GameEngine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Scene\DebugScene.cpp">
-      <Filter>.cpp\Application\Scene</Filter>
+      <Filter>AllGame\GameEngine\Camera</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\DebugText\DebugText.cpp">
-      <Filter>.cpp\GameEngine\DebugText</Filter>
+      <Filter>AllGame\GameEngine\DebugText</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\DirectXCommon\DirectXCommon.cpp">
-      <Filter>.cpp\GameEngine\DirectXCommon</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\Enemy.cpp">
-      <Filter>.cpp\Application\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\3d\FbxLoader.cpp">
-      <Filter>.cpp\GameEngine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\3d\FbxObject3d.cpp">
-      <Filter>.cpp\GameEngine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\3d\FbxModel.cpp">
-      <Filter>.cpp\GameEngine\3d</Filter>
+      <Filter>AllGame\GameEngine\DirectXCommon</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\Framework\Framework.cpp">
-      <Filter>.cpp\GameEngine\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Scene\GameScene.cpp">
-      <Filter>.cpp\Application\Scene</Filter>
+      <Filter>AllGame\GameEngine\Framework</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\GenericProcess\GenericProcess.cpp">
-      <Filter>.cpp\GameEngine\GenericProcess</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\Input\Key\Input.cpp">
-      <Filter>.cpp\GameEngine\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\Light\Light.cpp">
-      <Filter>.cpp\GameEngine\Light</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\Light\LightGroup.cpp">
-      <Filter>.cpp\GameEngine\Light</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\3d\Material.cpp">
-      <Filter>.cpp\GameEngine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\3d\Mesh.cpp">
-      <Filter>.cpp\GameEngine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\3d\ModelManager.cpp">
-      <Filter>.cpp\GameEngine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\3d\Object3d.cpp">
-      <Filter>.cpp\GameEngine\3d</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\3d\ObjModel.cpp">
-      <Filter>.cpp\GameEngine\3d</Filter>
+      <Filter>AllGame\GameEngine\GenericProcess</Filter>
     </ClCompile>
     <ClCompile Include="Application\Particle\ObjParticle.cpp">
-      <Filter>.cpp\Application\Particle</Filter>
+      <Filter>AllGame\Application\Particle</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\ParticleManager\ParticleManager.cpp">
-      <Filter>.cpp\GameEngine\ParticleManager</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\Input\Mouse\Mouse.cpp">
-      <Filter>.cpp\GameEngine\Input</Filter>
+      <Filter>AllGame\GameEngine\ParticleManager</Filter>
     </ClCompile>
     <ClCompile Include="Application\Player\Player.cpp">
-      <Filter>.cpp\Application\Player</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\Light\PointLight.cpp">
-      <Filter>.cpp\GameEngine\Light</Filter>
+      <Filter>AllGame\Application\Player</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\PostEffect\PostEffect.cpp">
-      <Filter>.cpp\GameEngine\PostEffect</Filter>
+      <Filter>AllGame\GameEngine\PostEffect</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\camera\RailCamera.cpp">
-      <Filter>.cpp\GameEngine\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Scene\SceneManager.cpp">
-      <Filter>.cpp\Application\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine\Light\SpotLight\SpotLight.cpp">
-      <Filter>.cpp\GameEngine\Light</Filter>
+      <Filter>AllGame\GameEngine\Camera</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\2d\Sprite\Sprite.cpp">
-      <Filter>.cpp\GameEngine\2d\Sprite</Filter>
+      <Filter>AllGame\GameEngine\2d\Sprite</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\2d\Texture\Texture.cpp">
-      <Filter>.cpp\GameEngine\2d\Texture</Filter>
+      <Filter>AllGame\GameEngine\2d\Texture</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\2d\Texture\TextureModel.cpp">
-      <Filter>.cpp\GameEngine\2d\Texture</Filter>
+      <Filter>AllGame\GameEngine\2d\Texture</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\WinApp\WinApp.cpp">
-      <Filter>.cpp\GameEngine\WinApp</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
-      <Filter>.cpp\Application\Enemy</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Scene\TitleScene.cpp">
-      <Filter>.cpp\Application\Scene</Filter>
+      <Filter>AllGame\GameEngine\WinApp</Filter>
     </ClCompile>
     <ClCompile Include="GameEngine\HelperMath\HelperMath.cpp">
-      <Filter>.cpp\GameEngine\HelperMath</Filter>
+      <Filter>AllGame\GameEngine\HelperMath</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Rule\Rule.cpp" />
     <ClCompile Include="GameEngine\2d\SpriteManager\SpriteManager.cpp">
-      <Filter>.cpp\GameEngine\2d\SpriteManager</Filter>
+      <Filter>AllGame\GameEngine\2d\SpriteManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\Light\LightGroup.cpp">
+      <Filter>AllGame\GameEngine\Light\LightGroup</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\Light\Light.cpp">
+      <Filter>AllGame\GameEngine\Light\Light</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\Light\SpotLight\SpotLight.cpp">
+      <Filter>AllGame\GameEngine\Light\SpotLight</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\Light\PointLight.cpp">
+      <Filter>AllGame\GameEngine\Light\PointLight</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\Input\Mouse\Mouse.cpp">
+      <Filter>AllGame\GameEngine\Input\Mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\Input\Key\Input.cpp">
+      <Filter>AllGame\GameEngine\Input\Key</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\Input\Contoroller\Contoroller.cpp">
+      <Filter>AllGame\GameEngine\Input\Contoroller</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\3d\ModelManager.cpp">
+      <Filter>AllGame\GameEngine\3d\ModelManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\3d\Mesh.cpp">
+      <Filter>AllGame\GameEngine\3d\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\3d\Material.cpp">
+      <Filter>AllGame\GameEngine\3d\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\3d\Object3d.cpp">
+      <Filter>AllGame\GameEngine\3d\Object3d</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\3d\FbxModel.cpp">
+      <Filter>AllGame\GameEngine\3d\FbxModel</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\3d\FbxObject3d.cpp">
+      <Filter>AllGame\GameEngine\3d\FbxObject</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\3d\ObjModel.cpp">
+      <Filter>AllGame\GameEngine\3d\ObjModel</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine\3d\FbxLoader.cpp">
+      <Filter>AllGame\GameEngine\3d\FbxLoader</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Boss</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\Enemy.cpp">
+      <Filter>AllGame\Application\Enemy\Normal</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Scene\GameScene.cpp">
+      <Filter>AllGame\Application\Scene\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Scene\TitleScene.cpp">
+      <Filter>AllGame\Application\Scene\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Scene\BaseScene.cpp">
+      <Filter>AllGame\Application\Scene\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Scene\DebugScene.cpp">
+      <Filter>AllGame\Application\Scene\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Scene\SceneManager.cpp">
+      <Filter>AllGame\Application\Scene\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Scene\BaseClassIUDF.cpp">
+      <Filter>AllGame\Application\Scene\BaseClass</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Collision\CollisionPrimitive.cpp">
+      <Filter>AllGame\Application\Collision\Primitive</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Collision\Collision.cpp">
+      <Filter>AllGame\Application\Collision\Normal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,143 +246,142 @@
       <Filter>imgui</Filter>
     </ClInclude>
     <ClInclude Include="Application\Action\Action.h">
-      <Filter>.h\Application\Action</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Audio\Audio.h">
-      <Filter>.h\GameEngine\Audio</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Scene\BaseClassIUDF.h">
-      <Filter>.h\Application\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Scene\BaseScene.h">
-      <Filter>.h\Application\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h">
-      <Filter>.h\Application\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\camera\Camera.h">
-      <Filter>.h\GameEngine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Collision\Collision.h">
-      <Filter>.h\Application\Collsion</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Collision\CollisionPrimitive.h">
-      <Filter>.h\Application\Collsion</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Input\Contoroller\Contoroller.h">
-      <Filter>.h\GameEngine\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\camera\DebugCamera.h">
-      <Filter>.h\GameEngine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Scene\DebugScene.h">
-      <Filter>.h\Application\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\DebugText\DebugText.h">
-      <Filter>.h\GameEngine\DebugText</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Light\DirectionalLight.h">
-      <Filter>.h\GameEngine\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\DirectXCommon\DirectXCommon.h">
-      <Filter>.h\GameEngine\DirectXCommon</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\Enemy.h">
-      <Filter>.h\Application\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\3d\FbxLoader.h">
-      <Filter>.h\GameEngine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\3d\FbxModel.h">
-      <Filter>.h\GameEngine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\3d\FbxObject3d.h">
-      <Filter>.h\GameEngine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Framework\Framework.h">
-      <Filter>.h\GameEngine\Framwork</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Scene\GameScene.h">
-      <Filter>.h\Application\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\GenericProcess\GenericProcess.h">
-      <Filter>.h\GameEngine\GenericProcess</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Input\Key\Input.h">
-      <Filter>.h\GameEngine\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Light\Light.h">
-      <Filter>.h\GameEngine\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Light\LightGroup.h">
-      <Filter>.h\GameEngine\Light</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\3d\Material.h">
-      <Filter>.h\GameEngine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\3d\Mesh.h">
-      <Filter>.h\GameEngine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\3d\ModelManager.h">
-      <Filter>.h\GameEngine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Input\Mouth\Mouse.h">
-      <Filter>.h\GameEngine\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\3d\Object3d.h">
-      <Filter>.h\GameEngine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\3d\ObjModel.h">
-      <Filter>.h\GameEngine\3d</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\ParticleManager\ParticleManager.h">
-      <Filter>.h\GameEngine\ParticleManager</Filter>
+      <Filter>AllGame\Application\Action</Filter>
     </ClInclude>
     <ClInclude Include="Application\Particle\ObjParticle.h">
-      <Filter>.h\Application\Particle</Filter>
+      <Filter>AllGame\Application\Particle</Filter>
     </ClInclude>
     <ClInclude Include="Application\Player\Player.h">
-      <Filter>.h\Application\Player</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Light\PointLight.h">
-      <Filter>.h\GameEngine\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\PostEffect\PostEffect.h">
-      <Filter>.h\GameEngine\PostEffect</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\camera\RailCamera.h">
-      <Filter>.h\GameEngine\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Scene\SceneManager.h">
-      <Filter>.h\Application\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
-      <Filter>.h\Application\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine\Light\SpotLight\SpotLight.h">
-      <Filter>.h\GameEngine\Light</Filter>
+      <Filter>AllGame\Application\Player</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\2d\Sprite\Sprite.h">
-      <Filter>.h\GameEngine\2d\Sprite</Filter>
+      <Filter>AllGame\GameEngine\2d\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\2d\SpriteManager\SpriteManager.h">
+      <Filter>AllGame\GameEngine\2d\SpriteManager</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\2d\Texture\Texture.h">
-      <Filter>.h\GameEngine\2d\Texture</Filter>
+      <Filter>AllGame\GameEngine\2d\Texture</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\2d\Texture\TextureModel.h">
-      <Filter>.h\GameEngine\2d\Texture</Filter>
+      <Filter>AllGame\GameEngine\2d\Texture</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Scene\TitleScene.h">
-      <Filter>.h\Application\Scene</Filter>
+    <ClInclude Include="GameEngine\Audio\Audio.h">
+      <Filter>AllGame\GameEngine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="GameEngine\WinApp\WinApp.h">
-      <Filter>.h\GameEngine\WinApp</Filter>
+    <ClInclude Include="GameEngine\camera\Camera.h">
+      <Filter>AllGame\GameEngine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\camera\DebugCamera.h">
+      <Filter>AllGame\GameEngine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\camera\RailCamera.h">
+      <Filter>AllGame\GameEngine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\DebugText\DebugText.h">
+      <Filter>AllGame\GameEngine\DebugText</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\DirectXCommon\DirectXCommon.h">
+      <Filter>AllGame\GameEngine\DirectXCommon</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Framework\Framework.h">
+      <Filter>AllGame\GameEngine\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\GenericProcess\GenericProcess.h">
+      <Filter>AllGame\GameEngine\GenericProcess</Filter>
     </ClInclude>
     <ClInclude Include="GameEngine\HelperMath\HelperMath.h">
-      <Filter>.h\GameEngine\HelperMath</Filter>
+      <Filter>AllGame\GameEngine\HelperMath</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Rule\Rule.h" />
-    <ClInclude Include="GameEngine\2d\SpriteManager\SpriteManager.h">
-      <Filter>.h\GameEngine\2d\SpriteManager</Filter>
+    <ClInclude Include="GameEngine\ParticleManager\ParticleManager.h">
+      <Filter>AllGame\GameEngine\ParticleManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\PostEffect\PostEffect.h">
+      <Filter>AllGame\GameEngine\PostEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\WinApp\WinApp.h">
+      <Filter>AllGame\GameEngine\WinApp</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Light\LightGroup.h">
+      <Filter>AllGame\GameEngine\Light\LightGroup</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Light\Light.h">
+      <Filter>AllGame\GameEngine\Light\Light</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Light\SpotLight\SpotLight.h">
+      <Filter>AllGame\GameEngine\Light\SpotLight</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Light\PointLight.h">
+      <Filter>AllGame\GameEngine\Light\PointLight</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Light\DirectionalLight.h">
+      <Filter>AllGame\GameEngine\Light\DirectionalLight</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Input\Mouth\Mouse.h">
+      <Filter>AllGame\GameEngine\Input\Mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Input\Key\Input.h">
+      <Filter>AllGame\GameEngine\Input\Key</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\Input\Contoroller\Contoroller.h">
+      <Filter>AllGame\GameEngine\Input\Contoroller</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\3d\ModelManager.h">
+      <Filter>AllGame\GameEngine\3d\ModelManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\3d\Mesh.h">
+      <Filter>AllGame\GameEngine\3d\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\3d\Material.h">
+      <Filter>AllGame\GameEngine\3d\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\3d\Object3d.h">
+      <Filter>AllGame\GameEngine\3d\Object3d</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\3d\ObjModel.h">
+      <Filter>AllGame\GameEngine\3d\ObjModel</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\3d\FbxModel.h">
+      <Filter>AllGame\GameEngine\3d\FbxModel</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\3d\FbxObject3d.h">
+      <Filter>AllGame\GameEngine\3d\FbxObject</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine\3d\FbxLoader.h">
+      <Filter>AllGame\GameEngine\3d\FbxLoader</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h">
+      <Filter>AllGame\Application\Enemy\Boss</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\Enemy.h">
+      <Filter>AllGame\Application\Enemy\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Scene\GameScene.h">
+      <Filter>AllGame\Application\Scene\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Scene\TitleScene.h">
+      <Filter>AllGame\Application\Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Scene\BaseScene.h">
+      <Filter>AllGame\Application\Scene\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Scene\DebugScene.h">
+      <Filter>AllGame\Application\Scene\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Scene\SceneManager.h">
+      <Filter>AllGame\Application\Scene\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Scene\BaseClassIUDF.h">
+      <Filter>AllGame\Application\Scene\BaseClass</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Collision\CollisionPrimitive.h">
+      <Filter>AllGame\Application\Collision\Primitive</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Collision\Collision.h">
+      <Filter>AllGame\Application\Collision\Normal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -416,155 +414,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include=".cpp">
-      <UniqueIdentifier>{00d93547-5b5e-42d1-bb5a-e15dd625784b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="imgui">
       <UniqueIdentifier>{fabfa587-c3fb-4f00-9a7f-258d5fb36f4e}</UniqueIdentifier>
     </Filter>
-    <Filter Include=".h">
-      <UniqueIdentifier>{2ee21779-7278-430e-9a8c-eea314dc9188}</UniqueIdentifier>
-    </Filter>
     <Filter Include="hlsl">
       <UniqueIdentifier>{963fc4a5-224b-405c-bfbf-46ab70adba62}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine">
-      <UniqueIdentifier>{e1c938bd-2fb4-4b73-bb6d-54ae8183aed1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\Application">
-      <UniqueIdentifier>{d555b5d0-2a57-4222-af35-5299252c06c7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\2d">
-      <UniqueIdentifier>{624bfd34-f0a8-452f-87e0-6c8413126307}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\3d">
-      <UniqueIdentifier>{5af5832d-6a89-441b-829e-6fc89a435aa9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\Audio">
-      <UniqueIdentifier>{f22cb4bb-33e5-4c54-aca0-a5171f00ea9a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\Camera">
-      <UniqueIdentifier>{9d60cf87-3042-463c-b5ac-03f9a56a7115}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\DebugText">
-      <UniqueIdentifier>{5dfbc0ce-a6e7-49b2-bf03-6643909fa0da}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\Framework">
-      <UniqueIdentifier>{45675b40-78c4-4ac9-a99d-3cb080b74521}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\GenericProcess">
-      <UniqueIdentifier>{b9a5c9bd-ca4d-4410-a65b-d5b5520b74f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\Input">
-      <UniqueIdentifier>{c450b76b-9e98-46f8-9493-258461a16648}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\Light">
-      <UniqueIdentifier>{8f3345c9-55e8-44a7-b701-032d820c6d8a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\ParticleManager">
-      <UniqueIdentifier>{1e1bc1ba-89eb-4f02-9b3e-9dbcbb6bee1d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\PostEffect">
-      <UniqueIdentifier>{b3675199-97e4-434c-828d-c4f4c6f8832a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\WinApp">
-      <UniqueIdentifier>{adca5936-329f-484d-9500-8ad0861502e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\2d\Sprite">
-      <UniqueIdentifier>{1d88373e-999f-48d2-b3ab-c4baa2ac3db7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\2d\Texture">
-      <UniqueIdentifier>{aa3d647c-5453-45a5-8c50-70ad444676e3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\Application\Action">
-      <UniqueIdentifier>{3b061a4d-2871-46bd-81c5-b0373f6853d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\Application\Collision">
-      <UniqueIdentifier>{a15bec51-068b-4bd3-9a4a-0a37751d4124}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\Application\Enemy">
-      <UniqueIdentifier>{df24eda1-0898-4039-bc0a-bbca638ee6b6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\Application\Particle">
-      <UniqueIdentifier>{beb581c1-9fb6-445e-b5ab-0e3ad7a5577e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\Application\Player">
-      <UniqueIdentifier>{b3c2a819-ee61-45ba-a62f-9cee3a75c23d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\Application\Scene">
-      <UniqueIdentifier>{a1f30d2b-962d-430f-ac5d-505563585df6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".cpp\GameEngine\DirectXCommon">
-      <UniqueIdentifier>{b8752f81-e7e8-4e65-88ba-5c8c373f5b60}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\Application">
-      <UniqueIdentifier>{f233145f-417e-4398-951a-4699b3d34c50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine">
-      <UniqueIdentifier>{9f9bc87a-c941-412e-848c-7d941802f1c5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\Application\Action">
-      <UniqueIdentifier>{782fac21-6f0a-4590-b260-566f021668b3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\Application\Collsion">
-      <UniqueIdentifier>{aace993c-695a-488b-9608-08f38cdd05de}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\Application\Enemy">
-      <UniqueIdentifier>{ea61fa5b-f0d8-4971-960a-26cf21355387}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\Application\Particle">
-      <UniqueIdentifier>{2452ab56-11a2-474f-bcfe-193942f7d2e4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\Application\Player">
-      <UniqueIdentifier>{27fbc668-06da-4417-8d7d-f9b94150d341}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\Application\Scene">
-      <UniqueIdentifier>{a04b2d90-7429-4dce-ae6e-f96db34d3278}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\2d">
-      <UniqueIdentifier>{9642e964-be62-460b-96d6-138c34aa9b57}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\3d">
-      <UniqueIdentifier>{1d4207b3-7277-41de-9c87-dff3eac95b13}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\Audio">
-      <UniqueIdentifier>{d3ecb8f0-8ca8-4dbe-a27b-1841d178b9c4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\Camera">
-      <UniqueIdentifier>{70373033-06a2-4660-8320-091dc3130fc8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\DebugText">
-      <UniqueIdentifier>{5893113b-2343-4802-82c8-c3bddff30998}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\DirectXCommon">
-      <UniqueIdentifier>{4f0b12ca-a130-482a-8151-59ed0cd7741d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\Framwork">
-      <UniqueIdentifier>{3b43e994-b89b-4cab-a504-cda7b2ac734d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\GenericProcess">
-      <UniqueIdentifier>{4e558d13-0d3c-4030-a1ba-1c31988a5213}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\Input">
-      <UniqueIdentifier>{cb1036d8-12e1-4ad4-b546-34e467328069}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\Light">
-      <UniqueIdentifier>{d62faddf-e1f8-40cc-83c0-1e2693623845}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\ParticleManager">
-      <UniqueIdentifier>{ade4689e-84af-4508-a94a-67d591624573}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\PostEffect">
-      <UniqueIdentifier>{e6b9afff-7acd-4799-97f5-1bd34f58b6fd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\WinApp">
-      <UniqueIdentifier>{4dfa301d-ddeb-4582-8c2a-0ce39ce87491}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\2d\Sprite">
-      <UniqueIdentifier>{9a7a88dc-0e5e-4508-8f9f-d9ca758661d1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include=".h\GameEngine\2d\Texture">
-      <UniqueIdentifier>{374b3697-a774-49c8-90eb-b9c542127bd7}</UniqueIdentifier>
     </Filter>
     <Filter Include="hlsl\Basic">
       <UniqueIdentifier>{4ab700d5-045c-4b70-8517-91ccec389729}</UniqueIdentifier>
@@ -596,17 +450,164 @@
     <Filter Include="hlsl\Toon">
       <UniqueIdentifier>{4ead4d18-8985-453f-bf80-c5f9c186d62d}</UniqueIdentifier>
     </Filter>
-    <Filter Include=".h\GameEngine\HelperMath">
-      <UniqueIdentifier>{e3f6af70-8c42-4661-ab96-a9136ad8d866}</UniqueIdentifier>
+    <Filter Include="AllGame">
+      <UniqueIdentifier>{00d93547-5b5e-42d1-bb5a-e15dd625784b}</UniqueIdentifier>
     </Filter>
-    <Filter Include=".cpp\GameEngine\HelperMath">
-      <UniqueIdentifier>{1bd30ae5-a798-448e-a209-f870b29b0a75}</UniqueIdentifier>
+    <Filter Include="AllGame\GameEngine">
+      <UniqueIdentifier>{e1c938bd-2fb4-4b73-bb6d-54ae8183aed1}</UniqueIdentifier>
     </Filter>
-    <Filter Include=".cpp\GameEngine\2d\SpriteManager">
+    <Filter Include="AllGame\GameEngine\2d">
+      <UniqueIdentifier>{624bfd34-f0a8-452f-87e0-6c8413126307}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\2d\Sprite">
+      <UniqueIdentifier>{1d88373e-999f-48d2-b3ab-c4baa2ac3db7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\2d\Texture">
+      <UniqueIdentifier>{aa3d647c-5453-45a5-8c50-70ad444676e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\2d\SpriteManager">
       <UniqueIdentifier>{ff71a368-5c71-4b02-a08e-adb582188651}</UniqueIdentifier>
     </Filter>
-    <Filter Include=".h\GameEngine\2d\SpriteManager">
-      <UniqueIdentifier>{a2091573-d175-42ab-bd75-b72afa362e8b}</UniqueIdentifier>
+    <Filter Include="AllGame\GameEngine\3d">
+      <UniqueIdentifier>{5af5832d-6a89-441b-829e-6fc89a435aa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\3d\ObjModel">
+      <UniqueIdentifier>{c5313059-a84d-4d91-a5a7-6407cf523321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\3d\Object3d">
+      <UniqueIdentifier>{e182ad5d-a2fb-4ff3-966e-c84909db9201}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\3d\ModelManager">
+      <UniqueIdentifier>{0c98c508-03fb-46e1-a729-f6a36af084db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\3d\Mesh">
+      <UniqueIdentifier>{8b7f6631-b8a9-43c2-b6bf-ee5cad4511e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\3d\Material">
+      <UniqueIdentifier>{7352edc4-9f65-426f-ac51-5db1207a94b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\3d\FbxModel">
+      <UniqueIdentifier>{3ad3b139-96b5-45e2-b8f6-ca8deb0cfe18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\3d\FbxObject">
+      <UniqueIdentifier>{8e228e80-0cc1-4ffb-8d49-82a1956ff6c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\3d\FbxLoader">
+      <UniqueIdentifier>{a5e53ded-9f3b-4c81-905f-3b017d8c4c2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Audio">
+      <UniqueIdentifier>{f22cb4bb-33e5-4c54-aca0-a5171f00ea9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Camera">
+      <UniqueIdentifier>{9d60cf87-3042-463c-b5ac-03f9a56a7115}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\DebugText">
+      <UniqueIdentifier>{5dfbc0ce-a6e7-49b2-bf03-6643909fa0da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Framework">
+      <UniqueIdentifier>{45675b40-78c4-4ac9-a99d-3cb080b74521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\GenericProcess">
+      <UniqueIdentifier>{b9a5c9bd-ca4d-4410-a65b-d5b5520b74f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Input">
+      <UniqueIdentifier>{c450b76b-9e98-46f8-9493-258461a16648}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Input\Mouse">
+      <UniqueIdentifier>{8bb05d20-d04f-4240-a667-4a478a4f258a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Input\Key">
+      <UniqueIdentifier>{8e4f80eb-4f16-4e2e-815f-cc050f0ba6d5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Input\Contoroller">
+      <UniqueIdentifier>{4b520e28-40bf-4286-ab64-592ee9cae77e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Light">
+      <UniqueIdentifier>{8f3345c9-55e8-44a7-b701-032d820c6d8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Light\LightGroup">
+      <UniqueIdentifier>{7ac8c094-3d0a-4578-a66e-b92ab1620dd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Light\Light">
+      <UniqueIdentifier>{a448c67e-921d-488d-951c-7cbbdaa4aeb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Light\SpotLight">
+      <UniqueIdentifier>{a08f95df-839f-40b3-934c-ec8a34bc6cd2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Light\PointLight">
+      <UniqueIdentifier>{9e557204-9d32-47bc-912f-5d804af9a500}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\Light\DirectionalLight">
+      <UniqueIdentifier>{653b7ce0-94e7-466a-a1a8-36e720a2d1b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\ParticleManager">
+      <UniqueIdentifier>{1e1bc1ba-89eb-4f02-9b3e-9dbcbb6bee1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\PostEffect">
+      <UniqueIdentifier>{b3675199-97e4-434c-828d-c4f4c6f8832a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\WinApp">
+      <UniqueIdentifier>{adca5936-329f-484d-9500-8ad0861502e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\DirectXCommon">
+      <UniqueIdentifier>{b8752f81-e7e8-4e65-88ba-5c8c373f5b60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\GameEngine\HelperMath">
+      <UniqueIdentifier>{1bd30ae5-a798-448e-a209-f870b29b0a75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application">
+      <UniqueIdentifier>{d555b5d0-2a57-4222-af35-5299252c06c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Action">
+      <UniqueIdentifier>{3b061a4d-2871-46bd-81c5-b0373f6853d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Collision">
+      <UniqueIdentifier>{a15bec51-068b-4bd3-9a4a-0a37751d4124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy">
+      <UniqueIdentifier>{df24eda1-0898-4039-bc0a-bbca638ee6b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Particle">
+      <UniqueIdentifier>{beb581c1-9fb6-445e-b5ab-0e3ad7a5577e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Player">
+      <UniqueIdentifier>{b3c2a819-ee61-45ba-a62f-9cee3a75c23d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Scene">
+      <UniqueIdentifier>{a1f30d2b-962d-430f-ac5d-505563585df6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy\Boss">
+      <UniqueIdentifier>{9b21f00e-8932-4a48-80be-9602561ef0ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy\Normal">
+      <UniqueIdentifier>{b5315a45-02b7-4583-9008-e2ee00fa7473}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy\Throw">
+      <UniqueIdentifier>{b1ca6c7c-0e39-4257-b6f2-5a0ed1a217e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Scene\Game">
+      <UniqueIdentifier>{97a67e61-8004-4985-a175-cf80881725bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Scene\Title">
+      <UniqueIdentifier>{a2a4cb18-a091-4095-ad5a-afc1b48c4889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Scene\Base">
+      <UniqueIdentifier>{97113f52-3bbb-4460-9c13-ffb6b6e51e40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Scene\Debug">
+      <UniqueIdentifier>{24a98c1f-1de9-4bea-bb84-7ce70983cee6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Scene\Manager">
+      <UniqueIdentifier>{038f9191-7481-457a-afd5-13cedbc71889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Scene\BaseClass">
+      <UniqueIdentifier>{6c8c77cf-1269-4b7c-a1fd-4c4abd6c07d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Collision\Primitive">
+      <UniqueIdentifier>{2f986521-a114-46d9-9c05-651da303202b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Collision\Normal">
+      <UniqueIdentifier>{4403e31b-08d3-4b0d-9910-7ec16192ff41}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
