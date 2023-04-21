@@ -65,8 +65,8 @@ void Player::Initalize(Camera* camera)
 //ステータスセット
 void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 {
-	changerot_=eyerot;
 	for (int i = 0; i < MaxRemainingBullet; i++) {
+		//落ちるフラグがtrueなら薬莢を下に落とす
 		if (dropbulletflag_[i] == true) {
 			spritepos_[i].y += 10;
 			time_[i] += 0.5f;
@@ -74,6 +74,7 @@ void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 			Action::GetInstance()->ThrowUp(Gravity, time_[i], 40, spritepos_[i].y);
 			spriterot_[i] += 80;
 		}
+		//落ちたスプライトが画面外に出たらtime_を0にする
 		else if (spritepos_[i].y > WinApp::window_height * 2) {
 			time_[i] = {};
 		}
@@ -83,26 +84,25 @@ void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 		dropbulletflag_[oldremaining_] = true;
 		oldremaining_ = remaining_;
 	}
-
+	//本体のワールド座標取得
 	bodymat_ = body_->GetMatrix();
 	bodyworldpos_ = { -10.0f,0.0f,-20.0f };
 	bodyworldpos_ = XMVector3Transform(bodyworldpos_, bodymat_);
-
-	reticlerot_.y = (reticlepos2d_.x - WinApp::window_width / 2) / 10+changerot_.y;
-
+	//レティクルの位置から角度の算出
+	changerot_ = eyerot;
+	reticlerot_.y = (reticlepos2d_.x - WinApp::window_width / 2) / 10 + changerot_.y;
+	//本体のパーツのステータスセット
 	body_->SetRotation(bodyrot_);
 	body_->SetPosition(bodypos_);
 	body_->SetScale(bodyscl_);
 	body_->SetParent(camera);
-
+	//銃のワールド座標取得とステータスセット
 	gunmat_ = gun_->GetMatrix();
 	gunworldpos_ = XMVector3Transform(gunpos_, gunmat_);
-
 	gun_->SetRotation(gunrot_);
 	gun_->SetScale(gunscl_);
 	gun_->SetParent(camera);
 	XMMATRIX GunNotParentMatrix = gun_->GetNotParentWorld();
-
 	gunnotparentpos_ = XMVector3Transform(gunpos_, GunNotParentMatrix);
 	gun_->SetPosition(gunpos_);
 	//HUDのポジションセット
@@ -130,6 +130,7 @@ void Player::AllUpdate()
 //更新処理
 void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot)
 {
+	//ダメージを食らったとき
 	DamageProcess();
 
 	MouseContoroll();
@@ -144,13 +145,14 @@ void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot)
 
 	velocity_ = XMVector3TransformNormal(velocity_, bodymat_);
 
-	StatusSet(camera,eyerot);
+	StatusSet(camera, eyerot);
 
 	AllUpdate();
 }
 
 void Player::WaitProcess()
 {
+	//ステータスが待機状態の時
 	if (playerstate_ == WAIT) {
 		gunrot_.x = (reticlepos2d_.y - WinApp::window_height / 2) / 50;
 	}
@@ -159,6 +161,7 @@ void Player::WaitProcess()
 //パーティクル描画
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
+	//マズルフラッシュの描画
 	ParticleManager::PreDraw(cmdeList);
 	partsmoke_->Draw();
 	partred_->Draw();
@@ -169,6 +172,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 //スプライト描画
 void Player::SpriteDraw()
 {
+
 	if (mousestopflag_ == false) {
 		for (int i = 0; i < MaxRemainingBullet; i++) {
 			if (remaining_ <= MaxRemainingBullet) {
@@ -217,6 +221,7 @@ void Player::MouseContoroll()
 //ダメージを受けたときの処理
 void Player::DamageProcess()
 {
+	//前の状態よりHPが減っていたら
 	if (oldhp_ > hp_) {
 		shakingstartflag_ = true;
 		shakingscreenvalue_ = 3.5f;
@@ -236,28 +241,36 @@ void Player::GunShotProcess(Phase paterncount)
 			ParticleEfect(paterncount);
 		}
 	}
+	//ステータスがSHOtに切り替わった時
 	if (playerstate_ == SHOT) {
 		//弾が発射された
 		bulletshotflag_ = true;
 		playerstate_ = WAIT;
 	}
+	//それ以外の時
 	else {
 		bulletshotflag_ = false;
 	}
+	//リロード処置
 	RecoilProcess();
 }
 
 void Player::UIMotionProcess()
 {
+	//もし残弾が0になったら
 	if (remaining_ > MaxRemainingBullet) {
+		//反転フラグがtrueの時
 		if (reversflag_ == false) {
+			//Reloadの文字を徐々に大きくする
 			Action::GetInstance()->EaseOut(reloadspritesize_.x, 260);
 			Action::GetInstance()->EaseOut(reloadspritesize_.y, 190);
 			if (reloadspritesize_.x >= 250) {
 				reversflag_ = true;
 			}
 		}
+		//反転フラグがfalseのとき
 		else {
+			//Reloadの文字を徐々に小さくする
 			Action::GetInstance()->EaseOut(reloadspritesize_.x, 200);
 			Action::GetInstance()->EaseOut(reloadspritesize_.y, 130);
 			if (reloadspritesize_.x <= 210) {
@@ -265,6 +278,7 @@ void Player::UIMotionProcess()
 			}
 		}
 	}
+	//残弾が満タンのの時
 	else if (remaining_ == 0) {
 		for (int i = 0; i < MaxRemainingBullet; i++) {
 			spritepos_[i] = { 1220.0f,25.0f + 32.0f * i };
@@ -278,14 +292,21 @@ void Player::UIMotionProcess()
 
 void Player::RecoilProcess()
 {
+	const float addrecovery_ = 0.2f;
+	const int bouncerotation_ = 25;
+	//後ろに後退した値
+	const float recession = 3.1f;
+	//recoverytimeの上限値
+	const int timelimit_ = 1;
+	//リコイルフラグがtrueの時
 	if (recoilgunflag_ == true) {
-		recoverytime_ += 0.2f;
-		gunrot_.x = -25;
-		gunpos_.m128_f32[2] = -3.1f;
-		if (recoverytime_ >= 1) {
-			gunrot_.x = 0;
+		recoverytime_ += addrecovery_;
+		gunrot_.x = -bouncerotation_;
+		gunpos_.m128_f32[2] = -recession;
+		if (recoverytime_ >= timelimit_) {
+			gunrot_.x = {};
 			gunpos_.m128_f32[2] = -3.0f;
-			recoverytime_ = 0.0f;
+			recoverytime_ = {};
 			recoilgunflag_ = false;
 		}
 	}
@@ -294,22 +315,35 @@ void Player::RecoilProcess()
 //リロード処理
 void Player::ReloadProcess()
 {
+	//残弾が空
+	const int emptyremaining_ = 8;
+	//回転の減算する値
+	const float subrotation_ = 9.5f;
+	//タイマーの加算する値
+	const int addtime_ = 1;
+	//タイマーを除算するための値
+	const int divtime_ = 40;
+	//ステータスが待機状態で、残弾が満タン以外の時
 	if (playerstate_ == WAIT && remaining_ != 0) {
+		//右クリックした時
 		if (Mouse::GetInstance()->PushClick(1)) {
+			//ステータスをRELOADに変更
 			playerstate_ = RELOAD;
 			reloadse_->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
 			mousestopflag_ = true;
 		}
 	}
-
+	//ステータスがRELOADの時
 	if (playerstate_ == RELOAD) {
-		gunrot_.x -= 9.5f;
-		remaining_ = 8;
-		reloadtime_ += 1;
-		anser_ = reloadtime_ % 40;
+		gunrot_.x -= subrotation_;
+		remaining_ = emptyremaining_;
+		reloadtime_ += addtime_;
+		anser_ = reloadtime_ % divtime_;
+		//reloaadtime/40の余りが0の時
 		if (anser_ == 0) {
 			remaining_ = {};
 			gunrot_.x = {};
+			//残弾が満タンになった時
 			if (remaining_ == 0) {
 				playerstate_ = WAIT;
 				reloadtime_ = {};
@@ -351,7 +385,7 @@ void Player::ParticleEfect(Phase paterncount)
 			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
 		}
 		//真っすぐ前を向いているとき
-		else if (paterncount == LANDINGPOINT_FRONT || 
+		else if (paterncount == LANDINGPOINT_FRONT ||
 			paterncount == GOALPOINT) {
 			pos.x = gunworldpos_.m128_f32[0] + sinradX * 3.5f;
 			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
