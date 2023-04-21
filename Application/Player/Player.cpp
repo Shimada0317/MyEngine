@@ -63,9 +63,9 @@ void Player::Initalize(Camera* camera)
 };
 
 //ステータスセット
-void Player::StatusSet(Camera* camera)
+void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 {
-
+	changerot_=eyerot;
 	for (int i = 0; i < MaxRemainingBullet; i++) {
 		if (dropbulletflag_[i] == true) {
 			spritepos_[i].y += 10;
@@ -88,7 +88,7 @@ void Player::StatusSet(Camera* camera)
 	bodyworldpos_ = { -10.0f,0.0f,-20.0f };
 	bodyworldpos_ = XMVector3Transform(bodyworldpos_, bodymat_);
 
-	reticlerot_.y = (reticlepos2d_.x - WinApp::window_width / 2) / 10 ;
+	reticlerot_.y = (reticlepos2d_.x - WinApp::window_width / 2) / 10+changerot_.y;
 
 	body_->SetRotation(bodyrot_);
 	body_->SetPosition(bodypos_);
@@ -128,7 +128,7 @@ void Player::AllUpdate()
 
 
 //更新処理
-void Player::Update(Camera* camera, Phase patern)
+void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot)
 {
 	DamageProcess();
 
@@ -144,7 +144,7 @@ void Player::Update(Camera* camera, Phase patern)
 
 	velocity_ = XMVector3TransformNormal(velocity_, bodymat_);
 
-	StatusSet(camera);
+	StatusSet(camera,eyerot);
 
 	AllUpdate();
 }
@@ -348,26 +348,26 @@ void Player::ParticleEfect(Phase paterncount)
 			paterncount == MOVEDPOINT_C_OBLIQUE) {
 			pos.x = gunworldpos_.m128_f32[0] + 2.3f;
 			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gunworldpos_.m128_f32[2] - 3.f * sinradX;
+			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
 		}
 		//真っすぐ前を向いているとき
 		else if (paterncount == LANDINGPOINT_FRONT || 
 			paterncount == GOALPOINT) {
-			pos.x = gunworldpos_.m128_f32[0] - sinradX * 3.5f;
+			pos.x = gunworldpos_.m128_f32[0] + sinradX * 3.5f;
 			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gunworldpos_.m128_f32[2] - 3.0f;
+			pos.z = gunworldpos_.m128_f32[2] - 2.0f;
 		}
 		//左を向いているとき
 		else if (paterncount == MOVEDPOINT_B) {
-			pos.x = gunworldpos_.m128_f32[0] - 3.f*cosradX;
+			pos.x = gunworldpos_.m128_f32[0] - 2.3f;
 			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gunworldpos_.m128_f32[2] + 3.f*cosradX;
+			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
 		}
 		//斜めを向いているとき
 		else if (paterncount == MOVEDPOINT_C_FRONT) {
-			pos.x = gunworldpos_.m128_f32[0] +0.3f;
-			pos.y = gunworldpos_.m128_f32[1] - sinradY * 2.5f;
-			pos.z = gunworldpos_.m128_f32[2] -3.f*sinradX;
+			pos.x = gunworldpos_.m128_f32[0] + 2.3f * sinradX;
+			pos.y = gunworldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gunworldpos_.m128_f32[2] + 2.8f * cosradX;
 		}
 
 		const float rnd_vel = 0.001f;
@@ -400,17 +400,10 @@ void Player::ImGuiDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Plyer");
-	if (ImGui::TreeNode("gunpos")) {
-		ImGui::SliderFloat("gunpos.x", &gunpos_.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunpos.y", &gunpos_.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunpos.z", &gunpos_.m128_f32[2], -100.0f, 100.0f);
-		ImGui::TreePop();
-	}
-
-	if (ImGui::TreeNode("gunWorldpos")) {
-		ImGui::SliderFloat("gunWordpos.x", &gunnotparentpos_.m128_f32[0], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.y", &gunnotparentpos_.m128_f32[1], -100.0f, 100.0f);
-		ImGui::SliderFloat("gunWordpos.z", &gunnotparentpos_.m128_f32[2], -100.0f, 100.0f);
+	if (ImGui::TreeNode("change")) {
+		ImGui::SliderFloat("changerot.x", &changerot_.x, -100.0f, 100.0f);
+		ImGui::SliderFloat("changerot.y", &changerot_.y, -100.0f, 100.0f);
+		ImGui::SliderFloat("changerot.z", &changerot_.z, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
 

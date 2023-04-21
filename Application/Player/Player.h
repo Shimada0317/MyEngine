@@ -43,7 +43,7 @@ public:
 	/// ステータスのSetは全部ここ
 	/// </summary>
 	/// <param name="came"></param>
-	void StatusSet(Camera* camera);
+	void StatusSet(Camera* camera, XMFLOAT3 eyerot);
 	/// <summary>
 	///　オブジェクト等の更新処理
 	/// </summary>
@@ -57,7 +57,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(Camera* camera, Phase patern);
+	void Update(Camera* camera, Phase patern,XMFLOAT3 eyerot);
 	/// <summary>
 	/// 待機時の処理
 	/// </summary>
@@ -238,7 +238,7 @@ private:
 
 	bool shakeheadflag_ = true;
 
-	float changerot_ = 0;
+	XMFLOAT3 changerot_{};
 
 
 	bool bulletshotflag_ = false;

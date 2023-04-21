@@ -80,6 +80,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	railcamera_ = make_unique<RailCamera>();
 	railcamera_->MatrixIdentity(Hero->GetPosition(), Hero->GetRotation());
+	railcamera_->Update(velocity_, eyerot_, GameCamera.get());
 
 
 	OldHp = PlayerHp;
@@ -129,6 +130,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 //ステータスセット
 void GameScene::StatusSet()
 {
+
+
 
 #pragma region 後で必要な変数の追加ごこのコメントを消す
 	//変動するカウンター
@@ -260,7 +263,7 @@ void GameScene::AllUpdata()
 	//スタート地点の更新処理
 	Start->Update(BillColor);
 
-	Hero->Update(GameCamera.get(), (Phase)Patern);
+	Hero->Update(GameCamera.get(), (Phase)Patern,pathrot_);
 }
 
 //ゲームシーンの更新処理
@@ -505,8 +508,9 @@ void GameScene::ImgDraw()
 
 	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
 	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
-	ImGui::SliderFloat("eyerot", &eyerot_.y, -180.0f, 180.0f);
+	ImGui::SliderFloat("eyerot", &pathrot_.y, -180.0f, 180.0f);
 
+	
 
 	ImGui::End();
 	ImGui::PopStyleColor();
@@ -526,6 +530,7 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 	SpriteDraw(dxCommon);
 	//描画後処理
 	ImgDraw();
+	Hero->ImGuiDraw();
 	dxCommon->PostDraw();
 }
 
@@ -1058,6 +1063,7 @@ void GameScene::PlayerMove()
 		//MoveShakingHead();
 		movespeed_ = 0.5f;
 		(this->*MoveFuncTable[Patern])();
+		pathrot_ = eyerot_;
 	}
 	else if (MoveFlag == false) {
 		velocity_ = { 0.f,0.f,0.f };

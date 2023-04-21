@@ -354,7 +354,7 @@ private://ƒƒ“ƒo•Ï”
 
 	XMVECTOR velocity_;
 	XMFLOAT3 eyerot_{ 0.f,0.f,0.f };
-
+	XMFLOAT3 pathrot_{};
 	bool startflag_ = false;
 	bool stanbyflag_ = false;
 	int actioncount_ = 0;
