@@ -83,10 +83,7 @@ public:
 	/// マウスの取得
 	/// </summary>
 	void MouseContoroll();
-	/// <summary>
-	/// ダメージ食らったときの処理
-	/// </summary>
-	void DamageProcess();
+
 	/// <summary>
 	/// 発砲処理
 	/// </summary>
@@ -147,16 +144,10 @@ public:
 #pragma endregion
 private:
 	//Obj
-	unique_ptr<Object3d> track_;
 	unique_ptr<Object3d> gun_;
 	unique_ptr<Object3d> body_;
-	unique_ptr<Object3d> cartridge_;
 	//スプライト
 	unique_ptr<Sprite> spritereticle_;
-	unique_ptr<Sprite> curtainup_;
-	unique_ptr<Sprite> curtaindown_;
-	unique_ptr<Sprite> skip_;
-	unique_ptr<Sprite> window_;
 	unique_ptr<Sprite> bulletHUD[9];
 	unique_ptr<Sprite> reload_;
 	//発砲時のエフェクト
@@ -176,10 +167,6 @@ private:
 	XMVECTOR gunnotparentpos_ = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 gunrot_ = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 gunscl_ = { 0.3f,0.3f,0.3f };
-	//薬莢Objステータス
-	XMVECTOR cartridgepos_ = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 cartridgerot_ = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 cartridgescl_ = { 0.1f,0.1f,0.1f };
 	//プレイヤーObjのステータス
 	XMVECTOR bodypos_ = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 bodyrot_ = { 0.0f,0.0f,0.0f };
@@ -198,8 +185,6 @@ private:
 	XMVECTOR reticleworldpos_;
 	//パーティクルのステータス
 	XMVECTOR particlepos_ = { 0.0f,0.0f,2.0f };
-	//ビューポート
-	XMMATRIX matviewport_;
 	//カメラ
 	XMFLOAT3 eyerot_ = { 0.0f,180.0f,0.0f };
 	XMFLOAT3 targetpos_ = { 0.0f,0.0f,0.0f };
@@ -223,16 +208,9 @@ private:
 	int oldhp_ = hp_;
 	//Reload
 	int reloadtime_ = 0;
-	int anser_ = 0;
 	//移動
 	XMVECTOR velocity_;
-	//弾の速度
-	float movespeed_ = 0;
-
-
 	//cam
-	float shakingvalue_ = 0.0f;
-
 	int actioncount_ = 0;
 	float actiontimer_ = 0.0f;
 
@@ -245,12 +223,9 @@ private:
 	float shotcooltime_ = 0.0f;
 	bool recoilflag_ = false;
 	float recoiltime_ = 0.0f;
-	float shakingscreenvalue_ = 0.0f;
 
 	bool mousestopflag_ = false;
-	float shakelimittime_ = 0;
-	bool shakingstartflag_ = false;
-	XMVECTOR oldpos_;
+
 	bool recoilgunflag_ = false;
 	float recoverytime_ = 0.0f;
 	//持ってきたもの
@@ -271,10 +246,6 @@ private:
 	XMFLOAT2 reloadspritesize_ = { 210,140 };
 
 	bool reversflag_ = false;
-
-	XMVECTOR camvec_{ 0.f,0.f,0.f };
-	XMMATRIX cammat_;
-
 
 	int playerstate_ = WAIT;
 };

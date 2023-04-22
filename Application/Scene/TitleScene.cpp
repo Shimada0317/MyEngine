@@ -421,5 +421,4 @@ void TitleScene::Finalize()
 	start_.reset();
 	bgm_.reset();
 	clickse_.reset();
-	
 }

@@ -24,105 +24,105 @@ GameScene::GameScene(SceneManager* sceneManager_)
 void GameScene::Initialize(DirectXCommon* dxComon)
 {
 	//ポストエフェクトの生成
-	postEffect = make_unique<PostEffect>();
-	postEffect->Initialize();
-	postEffect->Update(PostCol);
+	posteffect_ = make_unique<PostEffect>();
+	posteffect_->Initialize();
+	posteffect_->Update(postcol_);
 
 	//ライトの生成
-	light = Light::Create();
-	lightGroupe = LightGroup::Create();
+	light_ = Light::Create();
+	lightgroupe_ = LightGroup::Create();
 	//ライトセット
-	Object3d::SetLight(light.get());
-	Object3d::SetLightGroup(lightGroupe.get());
+	Object3d::SetLight(light_.get());
+	Object3d::SetLightGroup(lightgroupe_.get());
 	//カメラの生成
-	GameCamera = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
+	camera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 
 
 	//スプライトの生成
-	DamageEfectSp.reset(Sprite::SpriteCreate(Name::kDamageEffect, { 0.0f, 0.0f }, DamageEfectColor));
-	Clear.reset(Sprite::SpriteCreate(kGameClear, { 0.0f,0.0f }));
-	Conteniu.reset(Sprite::SpriteCreate(kGameOver, { 0.0f,0.0f }));
-	Shot.reset(Sprite::SpriteCreate(kShot, { 0.f,WinApp::window_height - 150 }));
-	ReticleForGameOver.reset(Sprite::SpriteCreate(kReticle, ReticlePosition, ReticleColor, SpriteAnchorPoint));
-	Yes.reset(Sprite::SpriteCreate(kYes, YesPosition, YesColor, SpriteAnchorPoint));
-	No.reset(Sprite::SpriteCreate(kNo, NoPosition, NoColor, SpriteAnchorPoint));
-	Hart.reset(Sprite::SpriteCreate(kHart, HartPosition, { 1.f,1.f,1.f,1.f }, SpriteAnchorPoint));
-	CurtainUp.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainUpPos));
-	CurtainDown.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainDownPos));
-	Skip.reset(Sprite::SpriteCreate(Name::kSkip, SkipPos));
+	damageefectsprite_.reset(Sprite::SpriteCreate(Name::kDamageEffect, { 0.0f, 0.0f }, damageefectcolor_));
+	clear_.reset(Sprite::SpriteCreate(kGameClear, { 0.0f,0.0f }));
+	conteniu_.reset(Sprite::SpriteCreate(kGameOver, { 0.0f,0.0f }));
+	shot_.reset(Sprite::SpriteCreate(kShot, { 0.f,WinApp::window_height - 150 }));
+	reticleforgameover_.reset(Sprite::SpriteCreate(kReticle, ReticlePosition, ReticleColor, SpriteAnchorPoint));
+	yes_.reset(Sprite::SpriteCreate(kYes, YesPosition, YesColor, SpriteAnchorPoint));
+	no_.reset(Sprite::SpriteCreate(kNo, NoPosition, NoColor, SpriteAnchorPoint));
+	hart_.reset(Sprite::SpriteCreate(kHart, HartPosition, { 1.f,1.f,1.f,1.f }, SpriteAnchorPoint));
+	curtainup_.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainUpPos));
+	curtaindown_.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainDownPos));
+	skip_.reset(Sprite::SpriteCreate(Name::kSkip, SkipPos));
 	for (int i = 0; i < 5; i++) {
-		LifeCount[i].reset(Sprite::SpriteCreate(i, HartPosition));
+		lifecount_[i].reset(Sprite::SpriteCreate(i, HartPosition));
 	}
 
-	CurtainUp->SetSize(CurtainSize);
-	CurtainDown->SetSize(CurtainSize);
+	curtainup_->SetSize(CurtainSize);
+	curtaindown_->SetSize(CurtainSize);
 
 	//モデルの読み込み
-	Sphere = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
+	sphere_ = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
 	for (int i = 0; i < BUILS; i++) {
-		BuilsHighAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
-		BuilsLowAlpha[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		builshighalpha_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		builslowalpha_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 
 	}
 	for (int i = 0; i < 5; i++) {
-		FieldBuils[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
+		fieldbuils_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 	}
-	World = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
-	Start = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
+	world_ = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
+	start_ = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
 
-	Heri = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
-	Goal = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
-	Hane = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
+	heri_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
+	goal_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
+	hane_ = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
 
-	Hero = make_unique<Player>();
-	Hero->Initalize(GameCamera.get());
-	PlayerHp = Hero->GetHp();
+	player_ = make_unique<Player>();
+	player_->Initalize(camera_.get());
+	playerhp_ = player_->GetHp();
 
 	railcamera_ = make_unique<RailCamera>();
-	railcamera_->MatrixIdentity(Hero->GetPosition(), Hero->GetRotation());
-	railcamera_->Update(velocity_, eyerot_, GameCamera.get());
+	railcamera_->MatrixIdentity(player_->GetPosition(), player_->GetRotation());
+	railcamera_->Update(velocity_, eyerot_, camera_.get());
 
 
-	OldHp = PlayerHp;
+	oldhp_ = playerhp_;
 
-	Bgm = make_unique<Audio>();
-	Bgm->Initialize();
-	Bgm->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
+	bgm_ = make_unique<Audio>();
+	bgm_->Initialize();
+	bgm_->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
 
-	heriFry = make_unique<Audio>();
-	heriFry->Initialize();
-	heriFry->LoadFile("Resources/Sound/SE/heriFry.wav", 0.8f);
+	herifry_ = make_unique<Audio>();
+	herifry_->Initialize();
+	herifry_->LoadFile("Resources/Sound/SE/heriFry.wav", 0.8f);
 
-	FieldBillPos[0] = { -35.0f,0.0f,20.0f };
-	FieldBillPos[1] = { -7.0f,-1,80 };
-	FieldBillPos[2] = { 37.0,0.0f,-10.0f };
-	FieldBillPos[3] = { -900.0,0.0f,0.0f };;
-	FieldBillPos[4] = { -900.0,0.0f,0.0f };;
+	fieldbillpos_[0] = { -35.0f,0.0f,20.0f };
+	fieldbillpos_[1] = { -7.0f,-1,80 };
+	fieldbillpos_[2] = { 37.0,0.0f,-10.0f };
+	fieldbillpos_[3] = { -900.0,0.0f,0.0f };;
+	fieldbillpos_[4] = { -900.0,0.0f,0.0f };;
 
-	FieldBillRot[0] = { 0.0f,270.0f,0.0f };
-	FieldBillRot[1] = { 0.0f,0.0f,0.0f };
-	FieldBillRot[2] = { 0.0f,90.0f,0.0f };
-	FieldBillRot[3] = { 0.0f,0.0f,0.0f };
-	FieldBillRot[4] = { 0.0f,0.0f,0.0f };
+	fieldbillrot_[0] = { 0.0f,270.0f,0.0f };
+	fieldbillrot_[1] = { 0.0f,0.0f,0.0f };
+	fieldbillrot_[2] = { 0.0f,90.0f,0.0f };
+	fieldbillrot_[3] = { 0.0f,0.0f,0.0f };
+	fieldbillrot_[4] = { 0.0f,0.0f,0.0f };
 
 
 	for (int i = 0; i < 3; i++) {
-		SearchLightDir[i] = { 0,-10,0 };
-		SearchLightColor[i] = { 1.f,1.f,1.f };
+		searchlightdir_[i] = { 0,-10,0 };
+		searchlightcolor_[i] = { 1.f,1.f,1.f };
 	}
-	SearchLightPos[0] = { 0, 20, 20 };
-	SearchLightPos[1] = { 20, 10, 45 };
-	SearchLightPos[2] = { 54,10,43 };
+	searchlightpos_[0] = { 0, 20, 20 };
+	searchlightpos_[1] = { 20, 10, 45 };
+	searchlightpos_[2] = { 54,10,43 };
 	for (int i = 0; i < 2; i++) {
 		LightPositionChangeX[i] = false;
 		LightPositionChangeZ[i] = false;
 	}
 
-	lightGroupe->SetSpotLightActive(0, true);
-	lightGroupe->SetSpotLightActive(1, true);
-	lightGroupe->SetSpotLightActive(2, true);
-	lightGroupe->SetSpotLightActive(3, true);
-	lightGroupe->SetSpotLightActive(4, true);
+	lightgroupe_->SetSpotLightActive(0, true);
+	lightgroupe_->SetSpotLightActive(1, true);
+	lightgroupe_->SetSpotLightActive(2, true);
+	lightgroupe_->SetSpotLightActive(3, true);
+	lightgroupe_->SetSpotLightActive(4, true);
 	MotValue = HartSize;
 	LoadEnemyPopData();
 }
@@ -136,105 +136,105 @@ void GameScene::StatusSet()
 #pragma region 後で必要な変数の追加ごこのコメントを消す
 	//変動するカウンター
 	for (int i = 0; i < 5; i++) {
-		LifeCount[i]->SetSize({ 80,80 });
-		LifeCount[i]->SetPosition({ 1160,630 });
+		lifecount_[i]->SetSize({ 80,80 });
+		lifecount_[i]->SetPosition({ 1160,630 });
 	}
 
-	Hart->SetSize(HartSize);
-	Hart->SetPosition({ WinApp::window_width - 173,WinApp::window_height - 50 });
+	hart_->SetSize(HartSize);
+	hart_->SetPosition({ WinApp::window_width - 173,WinApp::window_height - 50 });
 	//Hpバー
-	Hero->SetHp(PlayerHp);
+	player_->SetHp(playerhp_);
 
-	Heri->SetPosition(Heripos);
-	Heri->SetScale(Heriscl);
-	Heri->SetRotation({ 0.0f,180.0f,0.0f });
+	heri_->SetPosition(heripos_);
+	heri_->SetScale(heriscl_);
+	heri_->SetRotation({ 0.0f,180.0f,0.0f });
 
-	Hane->SetRotation({ 0.0f,HeriY,0.0f });
+	hane_->SetRotation({ 0.0f,HeriY,0.0f });
 	if (StartMovieFlag == false) {
-		Hane->SetPosition(Heripos);
-		Hane->SetScale(Heriscl);
+		hane_->SetPosition(heripos_);
+		hane_->SetScale(heriscl_);
 	}
 	else {
-		Hane->SetPosition(GoalPos);
-		Hane->SetScale(GoalScl);
+		hane_->SetPosition(goalpos_);
+		hane_->SetScale(goalscl_);
 	}
 
-	Goal->SetPosition(GoalPos);
-	Goal->SetScale(GoalScl);
-	Goal->SetRotation({ 0.0f,270.0f,0.0f });
+	goal_->SetPosition(goalpos_);
+	goal_->SetScale(goalscl_);
+	goal_->SetRotation({ 0.0f,270.0f,0.0f });
 
-	Heri->Update({ 0.7f,0.7f,0.6f,1.0f });
-	Goal->Update({ 0.7f,0.7f,0.6f,1.0f });
-	Hane->Update({ 0.0f,0.0f,0.0f,1.0f });
+	heri_->Update({ 0.7f,0.7f,0.6f,1.0f });
+	goal_->Update({ 0.7f,0.7f,0.6f,1.0f });
+	hane_->Update({ 0.0f,0.0f,0.0f,1.0f });
 
 #pragma endregion
 
 
 	//天球のステータスセット
-	Sphere->SetRotation(SphereRot);
-	Sphere->SetPosition(SpherePos);
-	Sphere->SetScale(SphereScl);
+	sphere_->SetRotation(sphererot_);
+	sphere_->SetPosition(spherepos_);
+	sphere_->SetScale(spherescl_);
 
 	//地面のステータスセット
-	World->SetPosition(WorldPos);
-	World->SetScale(WorldScl);
+	world_->SetPosition(worldpos_);
+	world_->SetScale(worldscl_);
 
 	//アクタークラスからゲット
-	PlayerHp = Hero->GetHp();
+	playerhp_ = player_->GetHp();
 
 	//スタート地点のステータスセット
-	Start->SetPosition(StartPos);
-	Start->SetScale(StartScl);
-	Start->SetRotation(StartRot);
+	start_->SetPosition(startpos_);
+	start_->SetScale(startscl_);
+	start_->SetRotation(startrot_);
 
 	//左右のビルのステータスセット
 	for (int i = 0; i < BUILS; i++) {
-		BuilsHighAlpha[i]->SetScale(BuilsScl);
-		BuilsLowAlpha[i]->SetScale(BuilsScl);
+		builshighalpha_[i]->SetScale(builsscl_);
+		builslowalpha_[i]->SetScale(builsscl_);
 		if (i % 2 == 0) {
-			BuilsHighAlphaPos = { 100.0f, 0,-300.0f + (100 * i / 2) };
-			BuilsLowAlphaPos = { 200.0f,0,-300.0f + (100 * i / 2) };
-			BuilsRot = { 0.0f,90.0f,0.0f };
+			builshighalphapos_ = { 100.0f, 0,-300.0f + (100 * i / 2) };
+			builslowalphapos_ = { 200.0f,0,-300.0f + (100 * i / 2) };
+			builsrot_ = { 0.0f,90.0f,0.0f };
 		}
 		else if (i % 2 == 1) {
-			BuilsHighAlphaPos = { -100.0f,0,-300.0f + (100 * i / 2) };
-			BuilsLowAlphaPos = { -200.0f, 0,-300.0f + (100 * i / 2) };
-			BuilsRot = { 0.0f,270.0f,0.0f };
+			builshighalphapos_ = { -100.0f,0,-300.0f + (100 * i / 2) };
+			builslowalphapos_ = { -200.0f, 0,-300.0f + (100 * i / 2) };
+			builsrot_ = { 0.0f,270.0f,0.0f };
 		}
-		BuilsHighAlpha[i]->SetRotation(BuilsRot);
-		BuilsHighAlpha[i]->SetPosition(BuilsHighAlphaPos);
-		BuilsLowAlpha[i]->SetRotation(BuilsRot);
-		BuilsLowAlpha[i]->SetPosition(BuilsLowAlphaPos);
+		builshighalpha_[i]->SetRotation(builsrot_);
+		builshighalpha_[i]->SetPosition(builshighalphapos_);
+		builslowalpha_[i]->SetRotation(builsrot_);
+		builslowalpha_[i]->SetPosition(builslowalphapos_);
 	}
 
 	//フィールドの建物のステータスセット
 	for (int i = 0; i < 5; i++) {
-		FieldBuils[i]->SetPosition(FieldBillPos[i]);
-		FieldBuils[i]->SetRotation(FieldBillRot[i]);
-		FieldBuils[i]->SetScale(FieldBuilscl);
+		fieldbuils_[i]->SetPosition(fieldbillpos_[i]);
+		fieldbuils_[i]->SetRotation(fieldbillrot_[i]);
+		fieldbuils_[i]->SetScale(fieldbuilscl_);
 	}
 
-	DamageEfectSp->SetColor(DamageEfectColor);
+	damageefectsprite_->SetColor(damageefectcolor_);
 
 
-	lightGroupe->SetSpotLightDir(0, XMVECTOR({ FieldSpotLightDir.x, FieldSpotLightDir.y, FieldSpotLightDir.z }));
-	lightGroupe->SetSpotLightPos(0, FieldSpotLightPos);
-	lightGroupe->SetSpotLightColor(0, FieldSpotLightColor);
-	lightGroupe->SetSpotLightAtten(0, FieldSpotLightAtten);
-	lightGroupe->SetSpotLightFactorAngle(0, FieldSpotLightFactorAngle);
+	lightgroupe_->SetSpotLightDir(0, XMVECTOR({ fieldspotlightdir_.x, fieldspotlightdir_.y, fieldspotlightdir_.z }));
+	lightgroupe_->SetSpotLightPos(0, fieldspotlightpos_);
+	lightgroupe_->SetSpotLightColor(0, fieldspotlightcolor_);
+	lightgroupe_->SetSpotLightAtten(0, fieldspotlightatten_);
+	lightgroupe_->SetSpotLightFactorAngle(0, fieldspotlightfactorangle_);
 
-	lightGroupe->SetSpotLightDir(1, XMVECTOR({ PlayerSpotLightDir.x, PlayerSpotLightDir.y, PlayerSpotLightDir.z }));
-	lightGroupe->SetSpotLightPos(1, PlayerSpotLightPos);
-	lightGroupe->SetSpotLightColor(1, PlayerSpotLightColor);
-	lightGroupe->SetSpotLightAtten(1, PlayerSpotLightAtten);
-	lightGroupe->SetSpotLightFactorAngle(1, PlayerSpotLightFactorAngle);
+	lightgroupe_->SetSpotLightDir(1, XMVECTOR({ playerspotlightdir_.x, playerspotlightdir_.y, playerspotlightdir_.z }));
+	lightgroupe_->SetSpotLightPos(1, playerspotlightpos_);
+	lightgroupe_->SetSpotLightColor(1, playerspotlightcolor_);
+	lightgroupe_->SetSpotLightAtten(1, playerspotlightatten_);
+	lightgroupe_->SetSpotLightFactorAngle(1, playerspotlightfactorangle_);
 
 	for (int i = 2; i < 5; i++) {
-		lightGroupe->SetSpotLightDir(i, XMVECTOR({ SearchLightDir[i - 2].x, SearchLightDir[i - 2].y, SearchLightDir[i - 2].z }));
-		lightGroupe->SetSpotLightPos(i, SearchLightPos[i - 2]);
-		lightGroupe->SetSpotLightColor(i, SearchLightColor[i - 2]);
-		lightGroupe->SetSpotLightAtten(i, SearchLightAtten);
-		lightGroupe->SetSpotLightFactorAngle(i, SearchLightFactorAngle);
+		lightgroupe_->SetSpotLightDir(i, XMVECTOR({ searchlightdir_[i - 2].x, searchlightdir_[i - 2].y, searchlightdir_[i - 2].z }));
+		lightgroupe_->SetSpotLightPos(i, searchlightpos_[i - 2]);
+		lightgroupe_->SetSpotLightColor(i, searchlightcolor_[i - 2]);
+		lightgroupe_->SetSpotLightAtten(i, searchlightatten_);
+		lightgroupe_->SetSpotLightFactorAngle(i, searchlightfactorangle_);
 	}
 
 };
@@ -242,28 +242,28 @@ void GameScene::StatusSet()
 //オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
-	Action::GetInstance()->DebugMove(SearchLightPos[0]);
+	Action::GetInstance()->DebugMove(searchlightpos_[0]);
 	if (GetCamWorkFlag == true) {
-		velocity_ = XMVector3TransformNormal(velocity_, Hero->GetBodyMatrix());
+		velocity_ = XMVector3TransformNormal(velocity_, player_->GetBodyMatrix());
 	}
-	railcamera_->Update(velocity_, eyerot_, GameCamera.get());
+	railcamera_->Update(velocity_, eyerot_, camera_.get());
 	//左右のビルの更新処理
 	for (int i = 0; i < BUILS; i++) {
-		BuilsHighAlpha[i]->Update(BillColor);
-		BuilsLowAlpha[i]->Update(BillColor);
+		builshighalpha_[i]->Update(BillColor);
+		builslowalpha_[i]->Update(BillColor);
 	}
 	//フィールドのビルの更新処理
 	for (int i = 0; i < 5; i++) {
-		FieldBuils[i]->Update(BillColor);
+		fieldbuils_[i]->Update(BillColor);
 	}
 	//天球の更新処理
-	Sphere->Update({ 1,1,1,1 }, true);
+	sphere_->Update({ 1,1,1,1 }, true);
 	//地面の更新処理
-	World->Update({ 0.7f,0.7f,0.7f,1.0f });
+	world_->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理
-	Start->Update(BillColor);
+	start_->Update(BillColor);
 
-	Hero->Update(GameCamera.get(), (Phase)Patern,pathrot_);
+	player_->Update(camera_.get(), (Phase)patern_,pathrot_);
 }
 
 //ゲームシーンの更新処理
@@ -275,24 +275,24 @@ void GameScene::Update()
 
 	SpotLightMove();
 
-	if (GameStartFlag == false) {
+	if (gamestartflag_ == false) {
 		FadeIn();
 	}
-	if (GameStartFlag == true) {
+	if (gamestartflag_ == true) {
 		DamageProcess();
 	}
 
 	//ゴールに着いたとき
-	if (GoalPos.m128_f32[1] >= 100) {
-		ClearFlag = true;
-		StopUpdateFlag = true;
+	if (goalpos_.m128_f32[1] >= 100) {
+		clearflag_ = true;
+		stopupdateflag_ = true;
 	}
 	//ゴールについていないとき更新を続ける
-	if (StopUpdateFlag == false) {
+	if (stopupdateflag_ == false) {
 		StatusSet();
 		AllUpdata();
 	}
-	else if (StopUpdateFlag == true && ClearFlag == false)
+	else if (stopupdateflag_ == true && clearflag_ == false)
 	{
 		GameOverProcess();
 	}
@@ -326,26 +326,26 @@ void GameScene::Update()
 	}
 
 
-	if (PlayerHp == 4) {
+	if (playerhp_ == 4) {
 		AddTimer = 0.01f;
 	}
-	else if (PlayerHp == 3) {
+	else if (playerhp_ == 3) {
 		AddTimer = 0.05f;
 	}
-	else if (PlayerHp == 2) {
+	else if (playerhp_ == 2) {
 		AddTimer = 0.1f;
 	}
-	else if (PlayerHp == 1) {
+	else if (playerhp_ == 1) {
 		AddTimer = 0.5f;
 	}
 
 
-	XMVECTOR velo = Hero->GetVelocity();
+	XMVECTOR velo = player_->GetVelocity();
 	//SetVelocity(velo);
 
-	Heripos.m128_f32[2] += HeriX;
+	heripos_.m128_f32[2] += HeriX;
 
-	if (Heripos.m128_f32[2] >= 20) {
+	if (heripos_.m128_f32[2] >= 20) {
 		BackObjFlag = false;
 		StartMovieFlag = true;
 	}
@@ -354,54 +354,54 @@ void GameScene::Update()
 	}
 
 	if (GetCamWorkFlag == true) {
-		Robot.remove_if([](std::unique_ptr<Enemy>& robot) {
+		robot_.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
 			});
-		Boss.remove_if([](std::unique_ptr<BossEnemy>& boss) {
+		boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
 			return boss->IsDead();
 			});
 		//目の前の敵を全て倒した時プレイヤーを動かす
-		if (Robot.empty() && Boss.empty()) {
+		if (robot_.empty() && boss_.empty()) {
 			MoveFlag = true;
 		}
 		//プレイヤーが目的地点に着いたとき
 		if (StopFlag == true) {
 			MoveFlag = false;
 			UpdataEnemyPopCommands();
-			Patern += 1;
+			patern_ += 1;
 			StopFlag = false;
 		}
 	}
 
-	if (Patern >= 5) {
+	if (patern_ >= 5) {
 		HeriY += 15.0f;
 	}
 
-	if (Patern >= 6) {
+	if (patern_ >= 6) {
 		if (fring == true) {
-			GoalPos.m128_f32[1] += velo.m128_f32[1];
+			goalpos_.m128_f32[1] += velo.m128_f32[1];
 		}
 	}
 
-	XMFLOAT2 Player2DPos = Hero->GetRetPosition();
-	bool PlayerBulletShot_F = Hero->GetBulletShot();
+	XMFLOAT2 Player2DPos = player_->GetRetPosition();
+	bool PlayerBulletShot_F = player_->GetBulletShot();
 	//敵の更新処理
-	for (std::unique_ptr<Enemy>& Enemy : Robot) {
-		Enemy->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
+	for (std::unique_ptr<Enemy>& Enemy : robot_) {
+		Enemy->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
 	}
 
-	for (std::unique_ptr<BossEnemy>& boss : Boss) {
-		boss->Update(Player2DPos, PlayerHp, PlayerBulletShot_F);
+	for (std::unique_ptr<BossEnemy>& boss : boss_) {
+		boss->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
 	}
 
 	CheckSameTrackPosition();
-	Hero->SetBulletShot(PlayerBulletShot_F);
+	player_->SetBulletShot(PlayerBulletShot_F);
 
-	GameCamera->RecalculationMatrix();
+	camera_->RecalculationMatrix();
 #pragma endregion
 
-	postEffect->Update(PostCol);
-	lightGroupe->Update();
+	posteffect_->Update(postcol_);
+	lightgroupe_->Update();
 }
 
 //オブジェクトの描画処理
@@ -409,37 +409,37 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	Sphere->Draw();
-	World->Draw();
-	Start->Draw();
+	sphere_->Draw();
+	world_->Draw();
+	start_->Draw();
 	for (int i = 0; i < 5; i++) {
-		FieldBuils[i]->Draw();
+		fieldbuils_[i]->Draw();
 	}
 	for (int i = 0; i < BUILS; i++) {
-		BuilsHighAlpha[i]->Draw();
-		BuilsLowAlpha[i]->Draw();
+		builshighalpha_[i]->Draw();
+		builslowalpha_[i]->Draw();
 	}
 
 #pragma region ActorからDrawの処理を持ってくる(後で消す)
-	Goal->Draw();
-	Hane->Draw();
+	goal_->Draw();
+	hane_->Draw();
 	if (BackObjFlag == true) {
-		Heri->Draw();
+		heri_->Draw();
 	}
 	if (GameState != MOVIE) {
-		Hero->ObjDraw();
+		player_->ObjDraw();
 	}
 
-	Hero->ParticleDraw(dxCommon->GetCmdList());
+	player_->ParticleDraw(dxCommon->GetCmdList());
 #pragma endregion
 
 
 	////オブジェクト後処理
 	Object3d::PostDraw();
-	for (std::unique_ptr<Enemy>& robot : Robot) {
+	for (std::unique_ptr<Enemy>& robot : robot_) {
 		robot->Draw(dxCommon);
 	}
-	for (std::unique_ptr<BossEnemy>& boss : Boss) {
+	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Draw(dxCommon);
 	}
 }
@@ -448,48 +448,48 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	Shot->Draw();
+	shot_->Draw();
 
-	if (DamageHitFlag == true) {
-		DamageEfectSp->Draw();
+	if (damagehitflag_ == true) {
+		damageefectsprite_->Draw();
 	}
-	if (ClearFlag == true) {
-		Clear->Draw();
+	if (clearflag_ == true) {
+		clear_->Draw();
 	}
-	if (DethFlag == true) {
-		Conteniu->Draw();
-		No->Draw();
-		Yes->Draw();
-		ReticleForGameOver->Draw();
+	if (dethflag_ == true) {
+		conteniu_->Draw();
+		no_->Draw();
+		yes_->Draw();
+		reticleforgameover_->Draw();
 	}
 
 	if (GetCamWorkFlag == true) {
-		if (PlayerHp == 1) {
-			LifeCount[0]->Draw();
+		if (playerhp_ == 1) {
+			lifecount_[0]->Draw();
 		}
-		else if (PlayerHp == 2) {
-			LifeCount[1]->Draw();
+		else if (playerhp_ == 2) {
+			lifecount_[1]->Draw();
 		}
-		else if (PlayerHp == 3) {
-			LifeCount[2]->Draw();
+		else if (playerhp_ == 3) {
+			lifecount_[2]->Draw();
 		}
-		else if (PlayerHp == 4) {
-			LifeCount[3]->Draw();
+		else if (playerhp_ == 4) {
+			lifecount_[3]->Draw();
 		}
-		else if (PlayerHp == 5) {
-			LifeCount[4]->Draw();
+		else if (playerhp_ == 5) {
+			lifecount_[4]->Draw();
 		}
-		Hart->Draw();
+		hart_->Draw();
 	}
 
 	if (GetCamWorkFlag == false && startflag_ == false) {
-		CurtainUp->Draw();
-		CurtainDown->Draw();
-		Skip->Draw();
+		curtainup_->Draw();
+		curtaindown_->Draw();
+		skip_->Draw();
 
 	}
 	if (GameState != MOVIE) {
-		Hero->SpriteDraw();
+		player_->SpriteDraw();
 	}
 	Sprite::PostDraw();
 }
@@ -502,9 +502,9 @@ void GameScene::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Camera");
-	/*ImGui::SliderFloat("LightPosX", &SearchLightPos[0].x, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightPosY", &SearchLightPos[0].y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightPosZ", &SearchLightPos[0].z, -100.0f, 100.0f);*/
+	/*ImGui::SliderFloat("LightPosX", &searchlightpos_[0].x, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightPosY", &searchlightpos_[0].y, -100.0f, 100.0f);
+	ImGui::SliderFloat("LightPosZ", &searchlightpos_[0].z, -100.0f, 100.0f);*/
 
 	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
 	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
@@ -520,17 +520,17 @@ void GameScene::ImgDraw()
 //ポストエフェクトの描画処理
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 {
-	postEffect->PreDrawScene(dxCommon->GetCmdList());
+	posteffect_->PreDrawScene(dxCommon->GetCmdList());
 	ObjDraw(dxCommon);
 
-	postEffect->PostDrawScene(dxCommon->GetCmdList());
+	posteffect_->PostDrawScene(dxCommon->GetCmdList());
 
 	dxCommon->PreDraw();
-	postEffect->Draw(dxCommon->GetCmdList());
+	posteffect_->Draw(dxCommon->GetCmdList());
 	SpriteDraw(dxCommon);
 	//描画後処理
 	ImgDraw();
-	Hero->ImGuiDraw();
+	player_->ImGuiDraw();
 	dxCommon->PostDraw();
 }
 
@@ -543,32 +543,32 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 //終了処理
 void GameScene::Finalize()
 {
-	Conteniu.reset();
-	Clear.reset();
-	Shot.reset();
+	conteniu_.reset();
+	clear_.reset();
+	shot_.reset();
 
 
-	World.reset();
-	Start.reset();
+	world_.reset();
+	start_.reset();
 	for (int i = 0; i < BUILS; i++) {
-		BuilsHighAlpha[i].reset();
-		BuilsLowAlpha[i].reset();
+		builshighalpha_[i].reset();
+		builslowalpha_[i].reset();
 	}
 	for (int i = 0; i < 5; i++) {
-		FieldBuils[i].reset();
+		fieldbuils_[i].reset();
 	}
 }
 
 void GameScene::FadeIn()
 {
-	PostCol.x += AddPosetEfectColor;
-	PostCol.y += AddPosetEfectColor;
-	PostCol.z += AddPosetEfectColor;
-	if (PostCol.x >= 0.0f) {
-		PostCol.x = 0.0f;
-		PostCol.y = 0.0f;
-		PostCol.z = 0.0f;
-		GameStartFlag = true;
+	postcol_.x += AddPosetEfectColor;
+	postcol_.y += AddPosetEfectColor;
+	postcol_.z += AddPosetEfectColor;
+	if (postcol_.x >= 0.0f) {
+		postcol_.x = 0.0f;
+		postcol_.y = 0.0f;
+		postcol_.z = 0.0f;
+		gamestartflag_ = true;
 	}
 }
 
@@ -618,17 +618,17 @@ void GameScene::SpotLightMove()
 		LightDirEasingTime -= 0.05f;
 	}
 
-	SearchLightDir[0].x = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
-	SearchLightDir[1].z = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
-	SearchLightDir[2].x = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
+	searchlightdir_[0].x = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
+	searchlightdir_[1].z = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
+	searchlightdir_[2].x = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
 
-	SearchLightDir[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
-	SearchLightDir[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
-	SearchLightDir[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
+	searchlightdir_[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
+	searchlightdir_[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
+	searchlightdir_[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
 
 
 
-	if (Patern == 8 && MoveFlag == true) {
+	if (patern_ == 8 && MoveFlag == true) {
 		if (ColorTime >= 0) {
 			ColorTime -= 0.01f;
 		}
@@ -636,8 +636,8 @@ void GameScene::SpotLightMove()
 			ColorTimeRed += 0.01f;
 		}
 
-		FieldSpotLightColor.x = Action::GetInstance()->EasingOut(ColorTimeRed, EndColorRed - StartColorRed) + 0.9f;
-		FieldSpotLightColor.y = Action::GetInstance()->EasingOut(ColorTime, EndColor - StartColor);
+		fieldspotlightcolor_.x = Action::GetInstance()->EasingOut(ColorTimeRed, EndColorRed - StartColorRed) + 0.9f;
+		fieldspotlightcolor_.y = Action::GetInstance()->EasingOut(ColorTime, EndColor - StartColor);
 	}
 
 	if (SpotLightPositionChange == false) {
@@ -658,44 +658,44 @@ void GameScene::SpotLightMove()
 
 void GameScene::DamageProcess()
 {
-	if (PlayerHp > 0) {
+	if (playerhp_ > 0) {
 		//ダメージを食らったたとき
-		if (OldHp > PlayerHp) {
-			PostEffectOnFlag = true;
-			DamageHitFlag = true;
-			DamageEfectColor.w = 1;
-			OldHp = PlayerHp;
+		if (oldhp_ > playerhp_) {
+			posteffectonflag_ = true;
+			damagehitflag_ = true;
+			damageefectcolor_.w = 1;
+			oldhp_ = playerhp_;
 			screenshakestate_ = DAMAGE;
 			shakingscreenvalue_ = 5.f;
 		}
 		//画面を赤くするフラグが立った時
-		if (PostEffectOnFlag == true) {
-			PostCol.x = 0.7f;
-			if (PostCol.x >= 0.7f) {
-				PostEffectOnFlag = false;
+		if (posteffectonflag_ == true) {
+			postcol_.x = 0.7f;
+			if (postcol_.x >= 0.7f) {
+				posteffectonflag_ = false;
 			}
 		}
 		//画面を赤くするフラグが立っていない時
-		if (PostEffectOnFlag == false) {
-			PostCol.x -= 0.05f;
-			if (PostCol.x <= 0) {
-				PostCol.x = 0;
+		if (posteffectonflag_ == false) {
+			postcol_.x -= 0.05f;
+			if (postcol_.x <= 0) {
+				postcol_.x = 0;
 			}
 		}
 	}
 	//体力が0になったら
-	else if (PlayerHp <= 0) {
-		StopUpdateFlag = true;
-		PostCol.x += 0.01f;
-		if (PostCol.x >= 2.0f) {
-			DethFlag = true;
+	else if (playerhp_ <= 0) {
+		stopupdateflag_ = true;
+		postcol_.x += 0.01f;
+		if (postcol_.x >= 2.0f) {
+			dethflag_ = true;
 		}
 	}
 
-	if (DamageHitFlag == true) {
-		DamageEfectColor.w -= 0.02f;
-		if (DamageEfectColor.w <= 0) {
-			DamageHitFlag = false;
+	if (damagehitflag_ == true) {
+		damageefectcolor_.w -= 0.02f;
+		if (damageefectcolor_.w <= 0) {
+			damagehitflag_ = false;
 		}
 	}
 }
@@ -703,9 +703,9 @@ void GameScene::DamageProcess()
 void GameScene::GameOverProcess()
 {
 	Mouse::GetInstance()->MouseMoveSprite(ReticlePosition);
-	ReticleForGameOver->SetPosition(ReticlePosition);
-	if (DethFlag == true) {
-		PostCol.x = 0;
+	reticleforgameover_->SetPosition(ReticlePosition);
+	if (dethflag_ == true) {
+		postcol_.x = 0;
 		CheckcCursorIn(ReticlePosition, YesPosition, 100, 50, YesCursorInFlag);
 		CheckcCursorIn(ReticlePosition, NoPosition, 100, 50, NoCursorInFlag);
 
@@ -730,15 +730,15 @@ void GameScene::GameOverProcess()
 		else {
 			NoColor = { 1.f,1.f,1.f,1.f };
 		}
-		Yes->SetColor(YesColor);
-		No->SetColor(NoColor);
+		yes_->SetColor(YesColor);
+		no_->SetColor(NoColor);
 	}
 }
 
 void GameScene::GameClearProcesss()
 {
 	//ゴールに着いたらクリア画面を表示
-	if (ClearFlag == true) {
+	if (clearflag_ == true) {
 		if (Mouse::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
@@ -752,7 +752,7 @@ void GameScene::LoadEnemyPopData()
 	file.open("Resources/LoadEnemy.csv");
 	assert(file.is_open());
 
-	EnemyPopCommands << file.rdbuf();
+	enemypopcommands_ << file.rdbuf();
 
 	file.close();
 }
@@ -781,7 +781,7 @@ void GameScene::UpdataEnemyPopCommands()
 	bool TRACKSkip = false;
 	bool ARIVESkip = false;
 
-	while (getline(EnemyPopCommands, line))
+	while (getline(enemypopcommands_, line))
 	{
 
 		std::istringstream line_stram(line);
@@ -799,7 +799,7 @@ void GameScene::UpdataEnemyPopCommands()
 			//WAVEの要素
 			count = atoi(word.c_str());
 		}
-		if (Patern == count) {
+		if (patern_ == count) {
 			if (word.find("ROTATION") == 0) {
 
 				getline(line_stram, word, ',');
@@ -883,15 +883,15 @@ void GameScene::UpdataEnemyPopCommands()
 			}
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
-				if (Patern < 8) {
+				if (patern_ < 8) {
 					std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
-					newRobot->Initialize(ROTATION, POSITION, GameCamera.get(), TRACK, step);
-					Robot.push_back(std::move(newRobot));
+					newRobot->Initialize(ROTATION, POSITION, camera_.get(), TRACK, step);
+					robot_.push_back(std::move(newRobot));
 				}
 				else {
 					std::unique_ptr<BossEnemy> boss = std::make_unique<BossEnemy>();
-					boss->Initialize(ROTATION, POSITION, GameCamera.get(), TRACK);
-					Boss.push_back(std::move(boss));
+					boss->Initialize(ROTATION, POSITION, camera_.get(), TRACK);
+					boss_.push_back(std::move(boss));
 					break;
 				}
 				POPSkip = false;
@@ -902,7 +902,7 @@ void GameScene::UpdataEnemyPopCommands()
 
 		}
 
-		if (Patern < count) {
+		if (patern_ < count) {
 			break;
 		}
 
@@ -917,8 +917,8 @@ void GameScene::UpdataEnemyPopCommands()
 
 void GameScene::CheckSameTrackPosition()
 {
-	for (std::unique_ptr<Enemy>& FirstEnemy : Robot) {
-		for (std::unique_ptr<Enemy>& SecondEnemy : Robot) {
+	for (std::unique_ptr<Enemy>& FirstEnemy : robot_) {
+		for (std::unique_ptr<Enemy>& SecondEnemy : robot_) {
 			if (FirstEnemy.get() != SecondEnemy.get()) {
 				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
 				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
@@ -943,10 +943,10 @@ void GameScene::CheckSameTrackPosition()
 
 void GameScene::StartCameraWork()
 {
-	l_reticlepos = Hero->GetPosition();
+	l_reticlepos = player_->GetPosition();
 	if (GetCamWorkFlag == false && startflag_ == false) {
 
-		XMVECTOR l_bodyworldpos = Hero->GetBodyWorldPos();
+		XMVECTOR l_bodyworldpos = player_->GetBodyWorldPos();
 		if (stanbyflag_ == false) {
 			eyerot_.y = 180;
 		}
@@ -987,7 +987,7 @@ void GameScene::StartCameraWork()
 				GameState = MOVE;
 			}
 		}
-		Hero->SetBodyWorldPos(l_bodyworldpos);
+		player_->SetBodyWorldPos(l_bodyworldpos);
 	}
 
 	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanbyflag_ == true && GetCamWorkFlag == false) {
@@ -1046,9 +1046,9 @@ void GameScene::StartCameraWork()
 		}
 	}
 
-	CurtainUp->SetPosition(CurtainUpPos);
-	CurtainDown->SetPosition(CurtainDownPos);
-	Skip->SetPosition(SkipPos);
+	curtainup_->SetPosition(CurtainUpPos);
+	curtaindown_->SetPosition(CurtainDownPos);
+	skip_->SetPosition(SkipPos);
 }
 
 void GameScene::PlayerMove()
@@ -1062,7 +1062,7 @@ void GameScene::PlayerMove()
 		MoveShakingHead();
 		//MoveShakingHead();
 		movespeed_ = 0.5f;
-		(this->*MoveFuncTable[Patern])();
+		(this->*MoveFuncTable[patern_])();
 		pathrot_ = eyerot_;
 	}
 	else if (MoveFlag == false) {

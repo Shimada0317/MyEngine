@@ -171,99 +171,99 @@ public:
 
 private://メンバ変数
 	//Obj
-	unique_ptr <Object3d> Sphere;
-	unique_ptr <Object3d> World;
-	unique_ptr<Object3d> Start;
-	unique_ptr<Object3d> BuilsHighAlpha[BUILS];
-	unique_ptr<Object3d> BuilsLowAlpha[BUILS];
-	unique_ptr<Object3d> FieldBuils[5];
-	unique_ptr<Object3d> Heri;
-	unique_ptr<Object3d> Goal;
-	unique_ptr<Object3d> Hane;
+	unique_ptr <Object3d> sphere_;
+	unique_ptr <Object3d> world_;
+	unique_ptr<Object3d> start_;
+	unique_ptr<Object3d> builshighalpha_[BUILS];
+	unique_ptr<Object3d> builslowalpha_[BUILS];
+	unique_ptr<Object3d> fieldbuils_[5];
+	unique_ptr<Object3d> heri_;
+	unique_ptr<Object3d> goal_;
+	unique_ptr<Object3d> hane_;
 	//スプライト
-	unique_ptr<Sprite> Clear = nullptr;
-	unique_ptr<Sprite> Conteniu = nullptr;
-	unique_ptr<Sprite> DamageEfectSp = nullptr;
-	unique_ptr<Sprite> Shot = nullptr;
-	unique_ptr<Sprite> ReticleForGameOver = nullptr;
-	unique_ptr<Sprite> Yes = nullptr;
-	unique_ptr<Sprite> No = nullptr;
-	unique_ptr<Sprite> LifeCount[5];
-	unique_ptr<Sprite> Hart;
-	unique_ptr<Sprite> CurtainUp;
-	unique_ptr<Sprite> CurtainDown;
-	unique_ptr<Sprite> Skip;
+	unique_ptr<Sprite> clear_;
+	unique_ptr<Sprite> conteniu_;
+	unique_ptr<Sprite> damageefectsprite_;
+	unique_ptr<Sprite> shot_ = nullptr;
+	unique_ptr<Sprite> reticleforgameover_;
+	unique_ptr<Sprite> yes_;
+	unique_ptr<Sprite> no_;
+	unique_ptr<Sprite> lifecount_[5];
+	unique_ptr<Sprite> hart_;
+	unique_ptr<Sprite> curtainup_;
+	unique_ptr<Sprite> curtaindown_;
+	unique_ptr<Sprite> skip_;
 	//プレイヤーと敵
-	list<unique_ptr<Enemy>>Robot;
-	list<unique_ptr<BossEnemy>>Boss;
-	unique_ptr<Player> Hero;
-	stringstream EnemyPopCommands;
+	list<unique_ptr<Enemy>>robot_;
+	list<unique_ptr<BossEnemy>>boss_;
+	unique_ptr<Player> player_;
+	stringstream enemypopcommands_;
 	//その他の機能
-	unique_ptr <Audio> Bgm = nullptr;
-	unique_ptr <Audio> heriFry = nullptr;
-	unique_ptr <PostEffect> postEffect = nullptr;
-	unique_ptr<Light> light = nullptr;
-	unique_ptr<LightGroup> lightGroupe = nullptr;
-	unique_ptr<Camera> GameCamera = nullptr;
+	unique_ptr <Audio> bgm_ = nullptr;
+	unique_ptr <Audio> herifry_ = nullptr;
+	unique_ptr <PostEffect> posteffect_ = nullptr;
+	unique_ptr<Light> light_ = nullptr;
+	unique_ptr<LightGroup> lightgroupe_ = nullptr;
+	unique_ptr<Camera> camera_ = nullptr;
 	unique_ptr<RailCamera> railcamera_ = nullptr;
 	//最初のビルのステータス
-	XMVECTOR StartPos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 StartScl = { 15.0f,15.0f,15.0f };
-	XMFLOAT3 StartRot = { 0.0f,180.0f,0.0f };
+	XMVECTOR startpos_ = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 startscl_ = { 15.0f,15.0f,15.0f };
+	XMFLOAT3 startrot_ = { 0.0f,180.0f,0.0f };
 	//天球のステータス
-	XMVECTOR SpherePos = { 0,0,0 };
-	XMFLOAT3 SphereScl = { 4.0f,4.0f,4.0f };
-	XMFLOAT3 SphereRot = { 0,90,0 };
+	XMVECTOR spherepos_ = { 0,0,0 };
+	XMFLOAT3 spherescl_ = { 4.0f,4.0f,4.0f };
+	XMFLOAT3 sphererot_ = { 0,90,0 };
 	//フィールドのステータス
-	XMFLOAT3 FieldBuilscl = { 6.0f,10.0f,7.0f };
-	XMVECTOR FieldBillPos[5];
-	XMFLOAT3 FieldBillRot[5];
+	XMFLOAT3 fieldbuilscl_ = { 6.0f,10.0f,7.0f };
+	XMVECTOR fieldbillpos_[5];
+	XMFLOAT3 fieldbillrot_[5];
 	//足場のステータス
-	XMVECTOR WorldPos = { 0.0f,-1.1f,0.0f };
-	XMFLOAT3 WorldScl = { 100,100,100 };
+	XMVECTOR worldpos_ = { 0.0f,-1.1f,0.0f };
+	XMFLOAT3 worldscl_ = { 100,100,100 };
 	//ビル群のステータス
-	XMFLOAT3 BuilsScl = { 10.0f,10.0f,10.0f };
-	XMVECTOR BuilsHighAlphaPos = { 0.0f,0.0f,-16.5f };
-	XMVECTOR BuilsLowAlphaPos = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 BuilsRot = { 0.0f,90.0f,0.0f };
+	XMFLOAT3 builsscl_ = { 10.0f,10.0f,10.0f };
+	XMVECTOR builshighalphapos_ = { 0.0f,0.0f,-16.5f };
+	XMVECTOR builslowalphapos_ = { 0.0f,0.0f,-16.5f };
+	XMFLOAT3 builsrot_ = { 0.0f,90.0f,0.0f };
 	//ヘリのステータス(スタートのムービーと終わりのムービー)
 	//スタート
-	XMVECTOR Heripos = { 0.0f,75.0f,-160.0f };
-	XMFLOAT3 Heriscl = { 10.0f,10.0f,10.0f };
+	XMVECTOR heripos_ = { 0.0f,75.0f,-160.0f };
+	XMFLOAT3 heriscl_ = { 10.0f,10.0f,10.0f };
 	//終わり
-	XMVECTOR GoalPos = { 56.f,3.0f,92.0f };
-	XMFLOAT3 GoalScl = { 3.0f,3.0f,3.0f };
+	XMVECTOR goalpos_ = { 56.f,3.0f,92.0f };
+	XMFLOAT3 goalscl_ = { 3.0f,3.0f,3.0f };
 	//その他の変数
-	XMFLOAT4 PostCol = { -1.0f,-1.0f,-1.0f,1.0f };
-	int Patern = 0;
-	int PlayerHp;
-	int OldHp;
-	bool PostEffectOnFlag = false;
-	bool ClearFlag = false;
-	bool StopUpdateFlag = false;
-	bool DethFlag = false;
-	bool GameStartFlag = false;
-	bool DamageHitFlag = false;
-	XMFLOAT4 DamageEfectColor = { 1.f,1.f,1.f,1.f };
+	XMFLOAT4 postcol_ = { -1.0f,-1.0f,-1.0f,1.0f };
+	int patern_ = 0;
+	int playerhp_;
+	int oldhp_;
+	bool posteffectonflag_ = false;
+	bool clearflag_ = false;
+	bool stopupdateflag_ = false;
+	bool dethflag_ = false;
+	bool gamestartflag_ = false;
+	bool damagehitflag_ = false;
+	XMFLOAT4 damageefectcolor_ = { 1.f,1.f,1.f,1.f };
 
 
-	XMFLOAT3 FieldSpotLightDir = { 0,-10,0 };
-	XMFLOAT3 FieldSpotLightPos = { 0,505,50 };
-	XMFLOAT3 FieldSpotLightColor = { 0.9f,0.5f,0.f };
-	XMFLOAT3 FieldSpotLightAtten = { 0.f,0.f,0.f };
-	XMFLOAT2 FieldSpotLightFactorAngle = { 20.0f,30.0f };
+	XMFLOAT3 fieldspotlightdir_ = { 0,-10,0 };
+	XMFLOAT3 fieldspotlightpos_ = { 0,505,50 };
+	XMFLOAT3 fieldspotlightcolor_ = { 0.9f,0.5f,0.f };
+	XMFLOAT3 fieldspotlightatten_ = { 0.f,0.f,0.f };
+	XMFLOAT2 fieldspotlightfactorangle_ = { 20.0f,30.0f };
 
-	XMFLOAT3 PlayerSpotLightDir = { 0,-20,0 };
-	XMFLOAT3 PlayerSpotLightPos = { 0,35,0 };
-	XMFLOAT3 PlayerSpotLightColor = { 1.f,1.f,1.f };
-	XMFLOAT3 PlayerSpotLightAtten = { 0.f,0.f,0.f };
-	XMFLOAT2 PlayerSpotLightFactorAngle = { 20.0f,30.0f };
+	XMFLOAT3 playerspotlightdir_ = { 0,-20,0 };
+	XMFLOAT3 playerspotlightpos_ = { 0,35,0 };
+	XMFLOAT3 playerspotlightcolor_ = { 1.f,1.f,1.f };
+	XMFLOAT3 playerspotlightatten_ = { 0.f,0.f,0.f };
+	XMFLOAT2 playerspotlightfactorangle_ = { 20.0f,30.0f };
 
-	XMFLOAT3 SearchLightDir[3];
-	XMFLOAT3 SearchLightPos[3];
-	XMFLOAT3 SearchLightColor[3];
-	XMFLOAT3 SearchLightAtten = { 0.f,0.f,0.f };
-	XMFLOAT2 SearchLightFactorAngle = { 20.0f,30.0f };
+	XMFLOAT3 searchlightdir_[3];
+	XMFLOAT3 searchlightpos_[3];
+	XMFLOAT3 searchlightcolor_[3];
+	XMFLOAT3 searchlightatten_ = { 0.f,0.f,0.f };
+	XMFLOAT2 searchlightfactorangle_ = { 20.0f,30.0f };
 
 	bool SpotLightPositionChange = false;
 	bool LightPositionChangeX[2];

@@ -13,12 +13,13 @@ const int MaxRemainingBullet = 9;
 const float Gravity = 9.8f;
 const 	XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
 const XMFLOAT4 Color{ 1.f,1.f,1.f,1.f };
-const int ten = 10;
-
+const float addspriteposition = 10;
+const XMFLOAT4 ColorRed{ 1.f,0.f,0.f,0.f };
+const XMFLOAT4 ColorGreen{ 0.f,0.5f,0.f,0.f };
+const XMFLOAT4 ColorSmoke{ 0.1f,0.1f,0.1f,0.f };
 //デストラクタ
 Player::~Player()
 {
-
 	gun_.reset();
 	body_.reset();
 	partgreen_.reset();
@@ -26,7 +27,6 @@ Player::~Player()
 	shotse_.reset();
 	reloadse_.reset();
 }
-
 //初期化処理
 void Player::Initalize(Camera* camera)
 {
@@ -34,11 +34,6 @@ void Player::Initalize(Camera* camera)
 	Object3d::SetCamera(camera);
 	//スプライトの読み込み
 	spritereticle_.reset(Sprite::SpriteCreate(Name::kReticle, reticlepos2d_, reticlecolor_, reticleancorpoint_));
-	curtainup_.reset(Sprite::SpriteCreate(Name::kCurtain, curtainuppos_));
-	curtaindown_.reset(Sprite::SpriteCreate(Name::kCurtain, curtaindownpos_));
-	curtainup_->SetSize(curtainsize_);
-	curtaindown_->SetSize(curtainsize_);
-	skip_.reset(Sprite::SpriteCreate(Name::kSkip, skippos_));
 	reload_.reset(Sprite::SpriteCreate(Name::kReload, reloadspritepos_, reloadspritecolor_, anchorpoint_));
 	for (int i = {}; i < MaxRemainingBullet; i++) {
 		spritepos_[i] = { 1220.0f,25.0f + 32.0f * i };
@@ -61,14 +56,13 @@ void Player::Initalize(Camera* camera)
 	shotse_->Initialize();
 	reloadse_->Initialize();
 };
-
 //ステータスセット
 void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 {
 	for (int i = 0; i < MaxRemainingBullet; i++) {
 		//落ちるフラグがtrueなら薬莢を下に落とす
 		if (dropbulletflag_[i] == true) {
-			spritepos_[i].y += 10;
+			spritepos_[i].y += addspriteposition;
 			time_[i] += 0.5f;
 			spritepos_[i].x += Action::GetInstance()->GetRangRand(-10, 10);
 			Action::GetInstance()->ThrowUp(Gravity, time_[i], 40, spritepos_[i].y);
@@ -79,11 +73,7 @@ void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 			time_[i] = {};
 		}
 	}
-
-	if (oldremaining_ < remaining_) {
-		dropbulletflag_[oldremaining_] = true;
-		oldremaining_ = remaining_;
-	}
+	
 	//本体のワールド座標取得
 	bodymat_ = body_->GetMatrix();
 	bodyworldpos_ = { -10.0f,0.0f,-20.0f };
@@ -107,7 +97,7 @@ void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 	gun_->SetPosition(gunpos_);
 	//HUDのポジションセット
 	for (int i = 0; i < MaxRemainingBullet; i++) {
-		bulletHUD[i]->SetSize({ SpriteSiz });
+		bulletHUD[i]->SetSize(SpriteSiz);
 		bulletHUD[i]->SetPosition(spritepos_[i]);
 		bulletHUD[i]->SetRotation(spriterot_[i]);
 	}
@@ -115,23 +105,18 @@ void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 	reload_->SetSize(reloadspritesize_);
 	reload_->SetColor(reloadspritecolor_);
 }
-
-
+//オブジェクトなどの更新処理
 void Player::AllUpdate()
 {
 	body_->Update();
 	gun_->Update();
-	partred_->Update({ 1.0f,0.0f,0.0f,0.0f });
-	partgreen_->Update({ 0.0f,0.5f,0,0.0f });
-	partsmoke_->Update({ 0.1f,0.1f,0.1f,0.0f });
+	partred_->Update(ColorRed);
+	partgreen_->Update(ColorGreen);
+	partsmoke_->Update(ColorSmoke);
 }
-
-
 //更新処理
 void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot)
 {
-	//ダメージを食らったとき
-	DamageProcess();
 
 	MouseContoroll();
 
@@ -149,7 +134,7 @@ void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot)
 
 	AllUpdate();
 }
-
+//待機状態の処理
 void Player::WaitProcess()
 {
 	//ステータスが待機状態の時
@@ -157,7 +142,6 @@ void Player::WaitProcess()
 		gunrot_.x = (reticlepos2d_.y - WinApp::window_height / 2) / 50;
 	}
 }
-
 //パーティクル描画
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 {
@@ -168,12 +152,10 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 	partgreen_->Draw();
 	ParticleManager::PostDraw();
 }
-
 //スプライト描画
 void Player::SpriteDraw()
 {
-
-	if (mousestopflag_ == false) {
+	if (!mousestopflag_) {
 		for (int i = 0; i < MaxRemainingBullet; i++) {
 			if (remaining_ <= MaxRemainingBullet) {
 				bulletHUD[i]->Draw();
@@ -185,8 +167,6 @@ void Player::SpriteDraw()
 	}
 	spritereticle_->Draw();
 }
-
-
 //オブジェクト描画
 void Player::ObjDraw()
 {
@@ -199,7 +179,6 @@ void Player::SoundEffect()
 {
 	shotse_->LoadFile("Resources/Sound/SE/shot.wav", 0.3f);
 }
-
 //マウス操作
 void Player::MouseContoroll()
 {
@@ -208,24 +187,13 @@ void Player::MouseContoroll()
 	//マウス座標の取得
 	Mouse::GetInstance()->MouseMoveSprite(reticlepos2d_);
 	//銃を撃った時
-	if (recoilgunflag_ == true) {
+	if (recoilgunflag_) {
 		reticlepos2d_.y += 15;
 		Mouse::GetInstance()->RecoilMouse(reticlepos2d_);
 	}
 	else {
 		//取得した座標をレティクルにセット
 		spritereticle_->SetPosition(reticlepos2d_);
-	}
-}
-
-//ダメージを受けたときの処理
-void Player::DamageProcess()
-{
-	//前の状態よりHPが減っていたら
-	if (oldhp_ > hp_) {
-		shakingstartflag_ = true;
-		shakingscreenvalue_ = 3.5f;
-		oldhp_ = hp_;
 	}
 }
 
@@ -251,7 +219,12 @@ void Player::GunShotProcess(Phase paterncount)
 	else {
 		bulletshotflag_ = false;
 	}
-	//リロード処置
+	//残弾が減った時
+	if (oldremaining_ < remaining_) {
+		dropbulletflag_[oldremaining_] = true;
+		oldremaining_ = remaining_;
+	}
+	//リコイル処理
 	RecoilProcess();
 }
 
@@ -260,7 +233,7 @@ void Player::UIMotionProcess()
 	//もし残弾が0になったら
 	if (remaining_ > MaxRemainingBullet) {
 		//反転フラグがtrueの時
-		if (reversflag_ == false) {
+		if (!reversflag_) {
 			//Reloadの文字を徐々に大きくする
 			Action::GetInstance()->EaseOut(reloadspritesize_.x, 260);
 			Action::GetInstance()->EaseOut(reloadspritesize_.y, 190);
@@ -295,17 +268,17 @@ void Player::RecoilProcess()
 	const float addrecovery_ = 0.2f;
 	const int bouncerotation_ = 25;
 	//後ろに後退した値
-	const float recession = 3.1f;
+	const float recession = 3.f;
 	//recoverytimeの上限値
 	const int timelimit_ = 1;
 	//リコイルフラグがtrueの時
-	if (recoilgunflag_ == true) {
+	if (recoilgunflag_) {
 		recoverytime_ += addrecovery_;
 		gunrot_.x = -bouncerotation_;
 		gunpos_.m128_f32[2] = -recession;
 		if (recoverytime_ >= timelimit_) {
 			gunrot_.x = {};
-			gunpos_.m128_f32[2] = -3.0f;
+			gunpos_.m128_f32[2] = -recession;
 			recoverytime_ = {};
 			recoilgunflag_ = false;
 		}
@@ -323,6 +296,7 @@ void Player::ReloadProcess()
 	const int addtime_ = 1;
 	//タイマーを除算するための値
 	const int divtime_ = 40;
+	int anser_ = 0;
 	//ステータスが待機状態で、残弾が満タン以外の時
 	if (playerstate_ == WAIT && remaining_ != 0) {
 		//右クリックした時

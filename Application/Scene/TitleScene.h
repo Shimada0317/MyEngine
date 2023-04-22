@@ -101,7 +101,6 @@ private:
 	unique_ptr <Object3d> sphere_;
 	unique_ptr<Object3d> builshighalpha_[BUILSAMOUNT];
 	unique_ptr<Object3d> builslowalpha_[BUILSAMOUNT];
-	unique_ptr <Object3d> groundobj_;
 	unique_ptr <Object3d >world_;
 	unique_ptr<Object3d> start_;
 	//スプライト
@@ -116,8 +115,6 @@ private:
 	unique_ptr<Sprite> gamestartpreparation_ = nullptr;
 	unique_ptr<Sprite> arrowright_ = nullptr;
 	unique_ptr<Sprite> arrowleft_ = nullptr;
-	unique_ptr<Sprite> arrowrighttrue_ = nullptr;
-	unique_ptr<Sprite> arrowlefttrue_ = nullptr;
 	//その他の機能
 	unique_ptr<Light> light_ = nullptr;
 	unique_ptr<LightGroup> lightgroupe_ = nullptr;
@@ -129,10 +126,6 @@ private:
 	XMVECTOR spherepos_ = { 0,0,0 };
 	XMFLOAT3 spherescl_ = { 4.0f,4.0f,4.0f };
 	XMFLOAT3 sphererot_ = { 0,0,0 };
-	//フィールドのステータス
-	XMVECTOR groundpos_ = { 22.5f,-1,40 };
-	XMFLOAT3 groundscl_ = { 13,20,16 };
-	XMFLOAT3 groundrot_ = { 0,0,0 };
 	//ビル群のステータス
 	XMFLOAT3 builsscl_ = { 10.0f,10.0f,10.0f };
 	XMVECTOR builshighalphapos_ = { 0.0f,0.0f,-16.5f };
@@ -178,18 +171,12 @@ private:
 	float volume_ = 0.8f;
 	//説明ページ
 	int descriptionpage_ = 0;
-
-	float pointlightpos_[3] = { 0.f,0.f,0.f };
-	float pointlightcolor_[3] = { 1.f,1.f,1.f };
-	float pointlightatten_[3] = { 0.3f,0.1f,0.1f };
-
-
+	//ライトのステータス
 	XMFLOAT3 spotlightdir_ = { 0,-1,0 };
 	XMFLOAT3 spotlightpos_ = { 0,1005,0 };
 	XMFLOAT3 spotlightcolor_ = { 1,1,1 };
 	XMFLOAT3 spotlightatten_ = { 0.f,0.f,0.f };
 	XMFLOAT2 spotlightfactorangle_ = { 20.0f,30.0f };
-
 	XMFLOAT3 spotlightdir2_ = { 0,0,0 };
 	XMFLOAT3 spotlightpos2_ = { 10,1005,160 };
 	XMFLOAT3 spotlightcolor2_ = { 0,0,1 };
