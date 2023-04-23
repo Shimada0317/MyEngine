@@ -43,19 +43,19 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	clear_.reset(Sprite::SpriteCreate(kGameClear, { 0.0f,0.0f }));
 	conteniu_.reset(Sprite::SpriteCreate(kGameOver, { 0.0f,0.0f }));
 	shot_.reset(Sprite::SpriteCreate(kShot, { 0.f,WinApp::window_height - 150 }));
-	reticleforgameover_.reset(Sprite::SpriteCreate(kReticle, ReticlePosition, ReticleColor, SpriteAnchorPoint));
-	yes_.reset(Sprite::SpriteCreate(kYes, YesPosition, YesColor, SpriteAnchorPoint));
-	no_.reset(Sprite::SpriteCreate(kNo, NoPosition, NoColor, SpriteAnchorPoint));
-	hart_.reset(Sprite::SpriteCreate(kHart, HartPosition, { 1.f,1.f,1.f,1.f }, SpriteAnchorPoint));
-	curtainup_.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainUpPos));
-	curtaindown_.reset(Sprite::SpriteCreate(Name::kCurtain, CurtainDownPos));
-	skip_.reset(Sprite::SpriteCreate(Name::kSkip, SkipPos));
+	reticleforgameover_.reset(Sprite::SpriteCreate(kReticle, reticleposition_, reticlecolor_, spriteanchorpoint_));
+	yes_.reset(Sprite::SpriteCreate(kYes, yesposition_, yescolor_, spriteanchorpoint_));
+	no_.reset(Sprite::SpriteCreate(kNo, noposition_, nocolor_, spriteanchorpoint_));
+	hart_.reset(Sprite::SpriteCreate(kHart, hartposition_, { 1.f,1.f,1.f,1.f }, spriteanchorpoint_));
+	curtainup_.reset(Sprite::SpriteCreate(Name::kCurtain, curtainuppos_));
+	curtaindown_.reset(Sprite::SpriteCreate(Name::kCurtain, curtaindownpos_));
+	skip_.reset(Sprite::SpriteCreate(Name::kSkip, skippos_));
 	for (int i = 0; i < 5; i++) {
-		lifecount_[i].reset(Sprite::SpriteCreate(i, HartPosition));
+		lifecount_[i].reset(Sprite::SpriteCreate(i, hartposition_));
 	}
 
-	curtainup_->SetSize(CurtainSize);
-	curtaindown_->SetSize(CurtainSize);
+	curtainup_->SetSize(curtainsize_);
+	curtaindown_->SetSize(curtainsize_);
 
 	//モデルの読み込み
 	sphere_ = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
@@ -114,8 +114,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	searchlightpos_[1] = { 20, 10, 45 };
 	searchlightpos_[2] = { 54,10,43 };
 	for (int i = 0; i < 2; i++) {
-		LightPositionChangeX[i] = false;
-		LightPositionChangeZ[i] = false;
+		lightpositionchangex_[i] = false;
+		lightpositionchangez_[i] = false;
 	}
 
 	lightgroupe_->SetSpotLightActive(0, true);
@@ -123,7 +123,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightgroupe_->SetSpotLightActive(2, true);
 	lightgroupe_->SetSpotLightActive(3, true);
 	lightgroupe_->SetSpotLightActive(4, true);
-	MotValue = HartSize;
+	originalsize_ = hartsize_;
 	LoadEnemyPopData();
 }
 
@@ -140,7 +140,7 @@ void GameScene::StatusSet()
 		lifecount_[i]->SetPosition({ 1160,630 });
 	}
 
-	hart_->SetSize(HartSize);
+	hart_->SetSize(hartsize_);
 	hart_->SetPosition({ WinApp::window_width - 173,WinApp::window_height - 50 });
 	//Hpバー
 	player_->SetHp(playerhp_);
@@ -149,8 +149,8 @@ void GameScene::StatusSet()
 	heri_->SetScale(heriscl_);
 	heri_->SetRotation({ 0.0f,180.0f,0.0f });
 
-	hane_->SetRotation({ 0.0f,HeriY,0.0f });
-	if (StartMovieFlag == false) {
+	hane_->SetRotation({ 0.0f,heriy_,0.0f });
+	if (startmovieflag_ == false) {
 		hane_->SetPosition(heripos_);
 		hane_->SetScale(heriscl_);
 	}
@@ -243,7 +243,7 @@ void GameScene::StatusSet()
 void GameScene::AllUpdata()
 {
 	Action::GetInstance()->DebugMove(searchlightpos_[0]);
-	if (GetCamWorkFlag == true) {
+	if (getcamworkflag_ == true) {
 		velocity_ = XMVector3TransformNormal(velocity_, player_->GetBodyMatrix());
 	}
 	railcamera_->Update(velocity_, eyerot_, camera_.get());
@@ -305,55 +305,55 @@ void GameScene::Update()
 
 #pragma region ActorからUpdate内の処理を持ってくる(後でこのコメントは消す)
 
-	EasingTimer += AddTimer;
-	if (ReversFlag == true) {
-		HartSize.x = Action::GetInstance()->EasingOut(EasingTimer, 40) + MotValue.x;
-		HartSize.y = Action::GetInstance()->EasingOut(EasingTimer, 40) + MotValue.y;
-		if (EasingTimer >= 1) {
-			EasingTimer = 0;
-			MotValue = HartSize;
-			ReversFlag = false;
+	easingtimer_ += addtimer_;
+	if (reversflag_ == true) {
+		hartsize_.x = Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.x;
+		hartsize_.y = Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.y;
+		if (easingtimer_ >= 1) {
+			easingtimer_ = 0;
+			originalsize_ = hartsize_;
+			reversflag_ = false;
 		}
 	}
 	else {
-		HartSize.x = -Action::GetInstance()->EasingOut(EasingTimer, 40) + MotValue.x;
-		HartSize.y = -Action::GetInstance()->EasingOut(EasingTimer, 40) + MotValue.y;
-		if (EasingTimer >= 1) {
-			EasingTimer = 0;
-			MotValue = HartSize;
-			ReversFlag = true;
+		hartsize_.x = -Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.x;
+		hartsize_.y = -Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.y;
+		if (easingtimer_ >= 1) {
+			easingtimer_ = 0;
+			originalsize_ = hartsize_;
+			reversflag_ = true;
 		}
 	}
 
 
 	if (playerhp_ == 4) {
-		AddTimer = 0.01f;
+		addtimer_ = 0.01f;
 	}
 	else if (playerhp_ == 3) {
-		AddTimer = 0.05f;
+		addtimer_ = 0.05f;
 	}
 	else if (playerhp_ == 2) {
-		AddTimer = 0.1f;
+		addtimer_ = 0.1f;
 	}
 	else if (playerhp_ == 1) {
-		AddTimer = 0.5f;
+		addtimer_ = 0.5f;
 	}
 
 
 	XMVECTOR velo = player_->GetVelocity();
 	//SetVelocity(velo);
 
-	heripos_.m128_f32[2] += HeriX;
+	heripos_.m128_f32[2] += herix_;
 
 	if (heripos_.m128_f32[2] >= 20) {
-		BackObjFlag = false;
-		StartMovieFlag = true;
+		backobjflag_ = false;
+		startmovieflag_ = true;
 	}
 	else {
-		HeriY += 15.0f;
+		heriy_ += 15.0f;
 	}
 
-	if (GetCamWorkFlag == true) {
+	if (getcamworkflag_ == true) {
 		robot_.remove_if([](std::unique_ptr<Enemy>& robot) {
 			return robot->IsDead();
 			});
@@ -362,23 +362,23 @@ void GameScene::Update()
 			});
 		//目の前の敵を全て倒した時プレイヤーを動かす
 		if (robot_.empty() && boss_.empty()) {
-			MoveFlag = true;
+			moveflag_ = true;
 		}
 		//プレイヤーが目的地点に着いたとき
-		if (StopFlag == true) {
-			MoveFlag = false;
+		if (stopflag_ == true) {
+			moveflag_ = false;
 			UpdataEnemyPopCommands();
 			patern_ += 1;
-			StopFlag = false;
+			stopflag_ = false;
 		}
 	}
 
 	if (patern_ >= 5) {
-		HeriY += 15.0f;
+		heriy_ += 15.0f;
 	}
 
 	if (patern_ >= 6) {
-		if (fring == true) {
+		if (fringflag_ == true) {
 			goalpos_.m128_f32[1] += velo.m128_f32[1];
 		}
 	}
@@ -423,10 +423,10 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 #pragma region ActorからDrawの処理を持ってくる(後で消す)
 	goal_->Draw();
 	hane_->Draw();
-	if (BackObjFlag == true) {
+	if (backobjflag_ == true) {
 		heri_->Draw();
 	}
-	if (GameState != MOVIE) {
+	if (gamestate_ != MOVIE) {
 		player_->ObjDraw();
 	}
 
@@ -463,7 +463,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 		reticleforgameover_->Draw();
 	}
 
-	if (GetCamWorkFlag == true) {
+	if (getcamworkflag_ == true) {
 		if (playerhp_ == 1) {
 			lifecount_[0]->Draw();
 		}
@@ -482,13 +482,13 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 		hart_->Draw();
 	}
 
-	if (GetCamWorkFlag == false && startflag_ == false) {
+	if (getcamworkflag_ == false && startflag_ == false) {
 		curtainup_->Draw();
 		curtaindown_->Draw();
 		skip_->Draw();
 
 	}
-	if (GameState != MOVIE) {
+	if (gamestate_ != MOVIE) {
 		player_->SpriteDraw();
 	}
 	Sprite::PostDraw();
@@ -574,84 +574,84 @@ void GameScene::FadeIn()
 
 void GameScene::SpotLightMove()
 {
-	if (Easing == false) {
-		EasingWaitTimeR += 0.1f;
-		if (EasingWaitTimeR >= 1) {
-			Easing = true;
-			EasingWaitTimeR = 0.f;
+	if (easing_ == false) {
+		easingwaittimer_ += 0.1f;
+		if (easingwaittimer_ >= 1) {
+			easing_ = true;
+			easingwaittimer_ = 0.f;
 		}
 	}
 
-	if (Easing == true) {
-		if (EasingChange == false) {
-			duration = 1;
-			if (duration > time) {
-				time += 0.01f;
+	if (easing_ == true) {
+		if (easingchange_ == false) {
+			duration_ = 1;
+			if (duration_ > time_) {
+				time_ += 0.01f;
 			}
 		}
 		else {
-			duration = -1;
-			if (duration < time) {
-				time -= 0.01f;
+			duration_ = -1;
+			if (duration_ < time_) {
+				time_ -= 0.01f;
 			}
 		}
 	}
-	if (ChangeTimerFlag == false) {
-		LightAddPosChangeTimer += 0.01f;
+	if (changetimerflag_ == false) {
+		lightaddposchangetimer_ += 0.01f;
 	}
 	else {
-		LightAddPosChangeTimer -= 0.01f;
+		lightaddposchangetimer_ -= 0.01f;
 	}
-	if (LightAddPosChangeTimer >= 1) {
-		SearchLightAddPos = HelperMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
-		ChangeTimerFlag = true;
+	if (lightaddposchangetimer_ >= 1) {
+		searchlightaddpos_ = HelperMath::GetInstance()->XMFLOAT3ChangeValue(searchlightaddpos_);
+		changetimerflag_ = true;
 	}
-	else if (LightAddPosChangeTimer <= -1) {
-		SearchLightAddPos = HelperMath::GetInstance()->XMFLOAT3ChangeValue(SearchLightAddPos);
-		ChangeTimerFlag = false;
-	}
-
-	if (LightDirEasingChane == false) {
-		LightDirEasingTime += 0.05f;
-	}
-	else {
-		LightDirEasingTime -= 0.05f;
+	else if (lightaddposchangetimer_ <= -1) {
+		searchlightaddpos_ = HelperMath::GetInstance()->XMFLOAT3ChangeValue(searchlightaddpos_);
+		changetimerflag_ = false;
 	}
 
-	searchlightdir_[0].x = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
-	searchlightdir_[1].z = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
-	searchlightdir_[2].x = Action::GetInstance()->EasingOut(LightDirEasingTime, 5 - 0);
-
-	searchlightdir_[0].z = Action::GetInstance()->EasingOut(time, EndPointZ - StartPointZ);
-	searchlightdir_[1].x = Action::GetInstance()->EasingOut(time, EndPointX - StartPointX);
-	searchlightdir_[2].z = Action::GetInstance()->EasingOut(time, EbdPointZ2 - StartPointZ2);
-
-
-
-	if (patern_ == 8 && MoveFlag == true) {
-		if (ColorTime >= 0) {
-			ColorTime -= 0.01f;
-		}
-		if (ColorTimeRed <= 1) {
-			ColorTimeRed += 0.01f;
-		}
-
-		fieldspotlightcolor_.x = Action::GetInstance()->EasingOut(ColorTimeRed, EndColorRed - StartColorRed) + 0.9f;
-		fieldspotlightcolor_.y = Action::GetInstance()->EasingOut(ColorTime, EndColor - StartColor);
-	}
-
-	if (SpotLightPositionChange == false) {
-		if (time >= 1.f) {
-			SpotLightPositionChange = true;
-			Easing = false;
-			EasingChange = true;
-		}
+	if (lightdireasingchange_ == false) {
+		lightdireasingtime_  += 0.05f;
 	}
 	else {
-		if (time <= -1.f) {
-			SpotLightPositionChange = false;
-			Easing = false;
-			EasingChange = false;
+		lightdireasingtime_  -= 0.05f;
+	}
+
+	searchlightdir_[0].x = Action::GetInstance()->EasingOut(lightdireasingtime_ , 5 - 0);
+	searchlightdir_[1].z = Action::GetInstance()->EasingOut(lightdireasingtime_ , 5 - 0);
+	searchlightdir_[2].x = Action::GetInstance()->EasingOut(lightdireasingtime_ , 5 - 0);
+
+	searchlightdir_[0].z = Action::GetInstance()->EasingOut(time_, endpointz_ - startpointz_);
+	searchlightdir_[1].x = Action::GetInstance()->EasingOut(time_, endpointx_ - startpointx_);
+	searchlightdir_[2].z = Action::GetInstance()->EasingOut(time_, endpointz2_ - startpointz2_);
+
+
+
+	if (patern_ == 8 && moveflag_ == true) {
+		if (colortime_ >= 0) {
+			colortime_ -= 0.01f;
+		}
+		if (colortimered_ <= 1) {
+			colortimered_ += 0.01f;
+		}
+
+		fieldspotlightcolor_.x = Action::GetInstance()->EasingOut(colortimered_, endcolorred_ - startcolorred_) + 0.9f;
+		fieldspotlightcolor_.y = Action::GetInstance()->EasingOut(colortime_, endcolor_ - startcolor_);
+	}
+
+	if (spotlightpositionchange_ == false) {
+		if (time_ >= 1.f) {
+			spotlightpositionchange_ = true;
+			easing_ = false;
+			easingchange_ = true;
+		}
+	}
+	else {
+		if (time_ <= -1.f) {
+			spotlightpositionchange_ = false;
+			easing_ = false;
+			easingchange_ = false;
 		}
 	}
 }
@@ -702,36 +702,36 @@ void GameScene::DamageProcess()
 
 void GameScene::GameOverProcess()
 {
-	Mouse::GetInstance()->MouseMoveSprite(ReticlePosition);
-	reticleforgameover_->SetPosition(ReticlePosition);
+	Mouse::GetInstance()->MouseMoveSprite(reticleposition_);
+	reticleforgameover_->SetPosition(reticleposition_);
 	if (dethflag_ == true) {
 		postcol_.x = 0;
-		CheckcCursorIn(ReticlePosition, YesPosition, 100, 50, YesCursorInFlag);
-		CheckcCursorIn(ReticlePosition, NoPosition, 100, 50, NoCursorInFlag);
+		CheckcCursorIn(reticleposition_, yesposition_, 100, 50, yescursorinflag_);
+		CheckcCursorIn(reticleposition_, noposition_, 100, 50, nocursorinflag_);
 
-		if (YesCursorInFlag == true) {
-			YesColor = { 1.f,0.f,0.f,1.f };
+		if (yescursorinflag_ == true) {
+			yescolor_ = { 1.f,0.f,0.f,1.f };
 			if (Mouse::GetInstance()->PushClick(0)) {
 				BaseScene* scene_ = new GameScene(sceneManager_);
 				sceneManager_->SetNextScene(scene_);
 			}
 		}
 		else {
-			YesColor = { 1.f,1.f,1.f,1.f };
+			yescolor_ = { 1.f,1.f,1.f,1.f };
 		}
 
-		if (NoCursorInFlag == true) {
-			NoColor = { 1.f,0.f,0.f,1.f };
+		if (nocursorinflag_ == true) {
+			nocolor_ = { 1.f,0.f,0.f,1.f };
 			if (Mouse::GetInstance()->PushClick(0)) {
 				BaseScene* scene_ = new TitleScene(sceneManager_);
 				sceneManager_->SetNextScene(scene_);
 			}
 		}
 		else {
-			NoColor = { 1.f,1.f,1.f,1.f };
+			nocolor_ = { 1.f,1.f,1.f,1.f };
 		}
-		yes_->SetColor(YesColor);
-		no_->SetColor(NoColor);
+		yes_->SetColor(yescolor_);
+		no_->SetColor(nocolor_);
 	}
 }
 
@@ -760,10 +760,10 @@ void GameScene::LoadEnemyPopData()
 void GameScene::UpdataEnemyPopCommands()
 {
 	//待機処理
-	if (WaitFlag == true) {
-		WaitT--;
-		if (WaitT <= 0) {
-			WaitFlag = false;
+	if (waitflag_ == true) {
+		waittime_--;
+		if (waittime_ <= 0) {
+			waitflag_ = false;
 		}
 		return;
 	}
@@ -925,15 +925,15 @@ void GameScene::CheckSameTrackPosition()
 				bool secondenemyarive = SecondEnemy->GetArive();
 				bool firstenemyarive = FirstEnemy->GetArive();
 				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
-					otherenemyarive = true;
-					SecondEnemy->WaitTrack(otherenemyarive);
+					otherenemyarive_ = true;
+					SecondEnemy->WaitTrack(otherenemyarive_);
 				}
 				if (secondenemyarive == false) {
 					XMVECTOR firstenemytrack = FirstEnemy->CheckTrackPoint();
 					XMVECTOR secondenemytrack = SecondEnemy->CheckTrackPoint();
 					if (Action::GetInstance()->CompletelyTogetherXMVECTOR(firstenemytrack, secondenemytrack)) {
-						otherenemyarive = false;
-						FirstEnemy->WaitTrack(otherenemyarive);
+						otherenemyarive_ = false;
+						FirstEnemy->WaitTrack(otherenemyarive_);
 					}
 				}
 			}
@@ -944,7 +944,7 @@ void GameScene::CheckSameTrackPosition()
 void GameScene::StartCameraWork()
 {
 	l_reticlepos = player_->GetPosition();
-	if (GetCamWorkFlag == false && startflag_ == false) {
+	if (getcamworkflag_ == false && startflag_ == false) {
 
 		XMVECTOR l_bodyworldpos = player_->GetBodyWorldPos();
 		if (stanbyflag_ == false) {
@@ -984,13 +984,13 @@ void GameScene::StartCameraWork()
 				velocity_ = { 0.0f,0.0f,0.0f };
 				l_reticlepos.m128_f32[1] = 0.0f;
 				movieflag_ = true;
-				GameState = MOVE;
+				gamestate_ = MOVE;
 			}
 		}
 		player_->SetBodyWorldPos(l_bodyworldpos);
 	}
 
-	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanbyflag_ == true && GetCamWorkFlag == false) {
+	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanbyflag_ == true && getcamworkflag_ == false) {
 		movieflag_ = true;
 		actioncount_ = 100;
 		eyerot_.x = 0;
@@ -998,7 +998,7 @@ void GameScene::StartCameraWork()
 		velocity_ = { 0.0f,0.0f,0.0f };
 		l_reticlepos = { 0.0f,-0.7f,13.0f };
 		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
-		GameState = MOVE;
+		gamestate_ = MOVE;
 	}
 
 	if (stanbyflag_ == false) {
@@ -1010,45 +1010,45 @@ void GameScene::StartCameraWork()
 	}
 
 	if (movieflag_ == false) {
-		CurtainUpPos.y += 4;
-		CurtainDownPos.y -= 4;
-		SkipPos.y -= 2;
+		curtainuppos_.y += 4;
+		curtaindownpos_.y -= 4;
+		skippos_.y -= 2;
 
-		if (CurtainUpPos.y >= 0) {
-			CurtainUpPos.y = 0;
+		if (curtainuppos_.y >= 0) {
+			curtainuppos_.y = 0;
 		}
 
-		if (CurtainDownPos.y <= 620) {
-			CurtainDownPos.y = 620;
+		if (curtaindownpos_.y <= 620) {
+			curtaindownpos_.y = 620;
 		}
 
-		if (SkipPos.y <= 620) {
-			SkipPos.y = 620;
+		if (skippos_.y <= 620) {
+			skippos_.y = 620;
 		}
 	}
 	else {
-		CurtainUpPos.y -= 4;
-		CurtainDownPos.y += 4;
-		SkipPos.y += 4;
+		curtainuppos_.y -= 4;
+		curtaindownpos_.y += 4;
+		skippos_.y += 4;
 
-		if (CurtainUpPos.y <= -100) {
-			CurtainUpPos.y = -100;
+		if (curtainuppos_.y <= -100) {
+			curtainuppos_.y = -100;
 		}
 
-		if (CurtainDownPos.y >= 720) {
-			CurtainDownPos.y = 720;
-			GetCamWorkFlag = true;
+		if (curtaindownpos_.y >= 720) {
+			curtaindownpos_.y = 720;
+			getcamworkflag_ = true;
 			startflag_ = true;
 		}
 
-		if (SkipPos.y >= 720) {
-			SkipPos.y = 12000;
+		if (skippos_.y >= 720) {
+			skippos_.y = 12000;
 		}
 	}
 
-	curtainup_->SetPosition(CurtainUpPos);
-	curtaindown_->SetPosition(CurtainDownPos);
-	skip_->SetPosition(SkipPos);
+	curtainup_->SetPosition(curtainuppos_);
+	curtaindown_->SetPosition(curtaindownpos_);
+	skip_->SetPosition(skippos_);
 }
 
 void GameScene::PlayerMove()
@@ -1058,14 +1058,14 @@ void GameScene::PlayerMove()
 	cameravector_ = { 0.f,0.f,0.f,0.f };
 	cameravector_ = XMVector3Transform(cameravector_, l_cameramatrix);
 
-	if (MoveFlag == true) {
+	if (moveflag_ == true) {
 		MoveShakingHead();
 		//MoveShakingHead();
 		movespeed_ = 0.5f;
 		(this->*MoveFuncTable[patern_])();
 		pathrot_ = eyerot_;
 	}
-	else if (MoveFlag == false) {
+	else if (moveflag_ == false) {
 		velocity_ = { 0.f,0.f,0.f };
 	}
 }
@@ -1104,7 +1104,7 @@ void GameScene::MoveShakingHead()
 	const float EyeRotAbsouluteValue = 0.05f;
 	//反転させるための絶対値
 	const float AbsoluteValue = 0.5f;
-	if (GameState == MOVE) {
+	if (gamestate_ == MOVE) {
 		if (shake_ == true) {
 			eyerot_.x += EyeRotAbsouluteValue;
 			if (eyerot_.x >= AbsoluteValue) {
@@ -1140,8 +1140,8 @@ void GameScene::MoveStartBack()
 		Action::GetInstance()->EaseOut(eyerot_.y, 185.0f);
 		velocity_ = { 0.f,0.f,0.f };
 		if (eyerot_.y >= 180) {
-			StopFlag = true;
-			MoveFlag = false;
+			stopflag_ = true;
+			moveflag_ = false;
 
 		}
 	}
@@ -1152,8 +1152,8 @@ void GameScene::MoveStartFront()
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
 	if (eyerot_.y <= 0) {
 		velocity_ = { 0, 0, 0 };
-		MoveFlag = false;
-		StopFlag = true;
+		moveflag_ = false;
+		stopflag_ = true;
 	}
 }
 
@@ -1162,8 +1162,8 @@ void GameScene::MovePointA()
 	velocity_ = { 0, 0, movespeed_ };
 	if (cameravector_.m128_f32[2] >= 40) {
 		velocity_ = { 0.f,0.f,0.f };
-		MoveFlag = false;
-		StopFlag = true;
+		moveflag_ = false;
+		stopflag_ = true;
 	}
 }
 
@@ -1175,8 +1175,8 @@ void GameScene::MovePointALeft()
 		changerotation_ = eyerot_.y;
 		velocity_ = { 0, 0, 0 };
 
-		MoveFlag = false;
-		StopFlag = true;
+		moveflag_ = false;
+		stopflag_ = true;
 	}
 }
 
@@ -1190,8 +1190,8 @@ void GameScene::MovePointB()
 	}
 	if (cameravector_.m128_f32[0] >= 30) {
 
-		MoveFlag = false;
-		StopFlag = true;
+		moveflag_ = false;
+		stopflag_ = true;
 	}
 }
 
@@ -1200,8 +1200,8 @@ void GameScene::MovePointC()
 	velocity_ = { 0, 0, movespeed_ };
 	if (cameravector_.m128_f32[0] >= 45) {
 
-		MoveFlag = false;
-		StopFlag = true;
+		moveflag_ = false;
+		stopflag_ = true;
 		velocity_ = { 0, 0, 0 };
 	}
 }
@@ -1215,8 +1215,8 @@ void GameScene::MovePointCOblique()
 		if (eyerot_.y >= 135) {
 			changerotation_ = 135;
 
-			MoveFlag = false;
-			StopFlag = true;
+			moveflag_ = false;
+			stopflag_ = true;
 			velocity_ = { 0, 0, 0 };
 		}
 	}
@@ -1231,8 +1231,8 @@ void GameScene::MovePointCFront()
 	if (eyerot_.y <= 0) {
 		changerotation_ = 0;
 
-		MoveFlag = false;
-		StopFlag = true;
+		moveflag_ = false;
+		stopflag_ = true;
 		velocity_ = { 0, 0, 0 };
 	}
 }
@@ -1249,8 +1249,8 @@ void GameScene::GoalPointBack()
 			if (eyerot_.y >= 180) {
 				changerotation_ = 0;
 
-				MoveFlag = false;
-				StopFlag = true;
+				moveflag_ = false;
+				stopflag_ = true;
 				velocity_ = { 0, 0, 0 };
 			}
 		}
@@ -1277,7 +1277,7 @@ void GameScene::GoalPoint()
 			}
 		}
 	}
-	GetCamWorkFlag = false;
+	getcamworkflag_ = false;
 	movieflag_ = false;
 	actioncount_ = 0;
 }

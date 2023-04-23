@@ -265,92 +265,92 @@ private://メンバ変数
 	XMFLOAT3 searchlightatten_ = { 0.f,0.f,0.f };
 	XMFLOAT2 searchlightfactorangle_ = { 20.0f,30.0f };
 
-	bool SpotLightPositionChange = false;
-	bool LightPositionChangeX[2];
-	bool LightPositionChangeZ[2];
+	bool spotlightpositionchange_ = false;
+	bool lightpositionchangex_[2];
+	bool lightpositionchangez_[2];
 
-	float duration = 1.f;
-	float time = -1.0f;
-	float value = 0.f;
-	float StartPointZ = 50.f;
-	float EndPointZ = 0.f;
-	float StartPointX = -30;
-	float EndPointX = 30;
-	float EbdPointZ2 = 90.0f;
-	float StartPointZ2 = 50.f;
+	float duration_ = 1.f;
+	float time_ = -1.0f;
+	float value_ = 0.f;
+	float startpointz_ = 50.f;
+	float endpointz_ = 0.f;
+	float startpointx_ = -30;
+	float endpointx_ = 30;
+	float endpointz2_ = 90.0f;
+	float startpointz2_ = 50.f;
 
-	bool Easing = true;
-	float EasingWaitTimeR = 0.f;
-	bool EasingChange = false;
+	bool easing_ = true;
+	float easingwaittimer_ = 0.f;
+	bool easingchange_ = false;
 
-	XMFLOAT3 SearchLightAddPos = { 0.1f,-0.1f,0.05f };
-	float LightAddPosChangeTimer = 0.0f;
-	bool ChangeTimerFlag = false;
+	XMFLOAT3 searchlightaddpos_ = { 0.1f,-0.1f,0.05f };
+	float lightaddposchangetimer_ = 0.0f;
+	bool changetimerflag_ = false;
 
-	float StartColor = -0.5f;
-	float EndColor = 0.0f;
-	float ColorTime = 1.0f;
+	float startcolor_ = -0.5f;
+	float endcolor_ = 0.0f;
+	float colortime_ = 1.0f;
 
-	float StartColorRed = 0.0f;
-	float EndColorRed = 0.8f;
-	float ColorTimeRed = 0.0f;
+	float startcolorred_ = 0.0f;
+	float endcolorred_ = 0.8f;
+	float colortimered_ = 0.0f;
 
-	float LightDirEasingTime = 0.f;
-	bool LightDirEasingChane = false;
+	float lightdireasingtime_ = 0.f;
+	bool lightdireasingchange_ = false;
 
-	XMFLOAT2 ReticlePosition{ 0.f,0.f };
-	XMFLOAT4 ReticleColor{ 1.f,1.f,1.f,1.f };
-	XMFLOAT2 SpriteAnchorPoint{ 0.5f,0.5f };
-	XMFLOAT2 HartPosition{ 10.f,10.f };
+	XMFLOAT2 reticleposition_{ 0.f,0.f };
+	XMFLOAT4 reticlecolor_{ 1.f,1.f,1.f,1.f };
+	XMFLOAT2 spriteanchorpoint_{ 0.5f,0.5f };
+	XMFLOAT2 hartposition_{ 10.f,10.f };
 
-	XMFLOAT2 YesPosition{ WinApp::window_width / 2 - 200,WinApp::window_height / 2 + 100 };
-	XMFLOAT2 NoPosition{ WinApp::window_width / 2 + 200,WinApp::window_height / 2 + 100 };
-	XMFLOAT2 SpriteSize{ 240.f,240.f };
-	XMFLOAT4 YesColor{ 1.f,1.f,1.f,1.f };
-	XMFLOAT4 NoColor{ 1.f,1.f,1.f,1.f };
-	bool YesCursorInFlag = false;
-	bool NoCursorInFlag = false;
+	XMFLOAT2 yesposition_{ WinApp::window_width / 2 - 200,WinApp::window_height / 2 + 100 };
+	XMFLOAT2 noposition_{ WinApp::window_width / 2 + 200,WinApp::window_height / 2 + 100 };
+	XMFLOAT2 spritesize_{ 240.f,240.f };
+	XMFLOAT4 yescolor_{ 1.f,1.f,1.f,1.f };
+	XMFLOAT4 nocolor_{ 1.f,1.f,1.f,1.f };
+	bool yescursorinflag_ = false;
+	bool nocursorinflag_ = false;
 
 
 #pragma region Acrtorから持ってくる変数(いらないものは全部消す)
 
 
-	float HeriY = 0.0f;
-	bool MoveFlag = false;
-	bool BackObjFlag = true;
-	float HeriX = 3.1f;
+	float heriy_ = 0.0f;
+	bool moveflag_ = false;
+	bool backobjflag_ = true;
+	float herix_ = 3.1f;
 
-	bool CountFlag = false;
+	bool countflag_ = false;
 	//待機コマンド
-	bool WaitFlag = false;
-	int WaitT = 0;
+	bool waitflag_ = false;
+	int waittime_ = 0;
 
-	bool fring = false;
+	bool fringflag_ = false;
 
-	XMVECTOR Velo;
+	XMVECTOR velo_;
 
-	bool StartMovieFlag = false;
+	bool startmovieflag_ = false;
 
-	bool StopFlag = false;
+	bool stopflag_ = false;
 
-	bool GetCamWorkFlag = false;
+	bool getcamworkflag_ = false;
 
-	XMFLOAT2 HartSize = { 64,64 };
-	XMFLOAT2 MotValue = { 0.f,0.f };
-	bool ReversFlag = true;
-	float EasingTimer = 0.0f;
-	float AddTimer = 0.01f;
-	bool otherenemyarive = true;
+	XMFLOAT2 hartsize_ = { 64,64 };
+	XMFLOAT2 originalsize_ = { 0.f,0.f };
+	bool reversflag_ = true;
+	float easingtimer_ = 0.0f;
+	float addtimer_ = 0.01f;
+	bool otherenemyarive_ = true;
 
 #pragma endregion
 
 #pragma region プレイヤーから移行
 	//始まりと終わりの演出使う黒いカーテン
-	XMFLOAT2 CurtainUpPos = { 0.0f,0.0f };
-	XMFLOAT2 CurtainSize = { 1280.0f,100.0f };
-	XMFLOAT2 CurtainDownPos = { 0.0f,620.0f };
+	XMFLOAT2 curtainuppos_ = { 0.0f,0.0f };
+	XMFLOAT2 curtainsize_ = { 1280.0f,100.0f };
+	XMFLOAT2 curtaindownpos_ = { 0.0f,620.0f };
 	//Skip文字の表示
-	XMFLOAT2 SkipPos = { 0.0f,620.0f };
+	XMFLOAT2 skippos_ = { 0.0f,620.0f };
 
 	XMVECTOR velocity_;
 	XMFLOAT3 eyerot_{ 0.f,0.f,0.f };
@@ -367,7 +367,7 @@ private://メンバ変数
 	bool FringFlag = false;
 #pragma endregion
 
-	int GameState = MOVIE;
+	int gamestate_ = MOVIE;
 	bool shakingstartflag_ = false;
 	float shakelimittime_ = 0.f;
 	bool shakingscreenflag_ = false;
