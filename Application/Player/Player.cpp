@@ -9,14 +9,12 @@
 
 #include"SpriteManager.h"
 
+//弾数
 const int MaxRemainingBullet = 9;
+//縦のスクリーンの半分のサイズ
 const float screenhalfheight_ = WinApp::window_height / 2;
+//横のスクリーンの半分のサイズ
 const float screenhalfwidth_ = WinApp::window_width / 2;
-
-
-const XMFLOAT4 ColorRed{ 1.f,0.f,0.f,0.f };
-const XMFLOAT4 ColorGreen{ 0.f,0.5f,0.f,0.f };
-const XMFLOAT4 ColorSmoke{ 0.1f,0.1f,0.1f,0.f };
 //デストラクタ
 Player::~Player()
 {
@@ -99,6 +97,12 @@ void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 //オブジェクトなどの更新処理
 void Player::AllUpdate()
 {
+	//赤
+	const XMFLOAT4 ColorRed{ 1.f,0.f,0.f,0.f };
+	//緑
+	const XMFLOAT4 ColorGreen{ 0.f,0.5f,0.f,0.f };
+	//灰色
+	const XMFLOAT4 ColorSmoke{ 0.1f,0.1f,0.1f,0.f };
 	//プレイヤー本体の更新
 	body_->Update();
 	//銃の更新
@@ -218,7 +222,6 @@ void Player::GunShotProcess(Phase paterncount)
 		bullet_shotflag_ = true;
 		player_state_ = WAIT;
 	}
-
 	//残弾が減った時
 	if (old_remaining_ < remaining_) {
 		drop_bulletflag_[old_remaining_] = true;
@@ -302,27 +305,36 @@ void Player::ReloadProcess()
 			//ステータスをRELOADに変更
 			player_state_ = RELOAD;
 			reload_se_->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
+			//マウスを操作出来ない状態に
+
 			mouse_stopflag_ = true;
 		}
 	}
-	//ステータスがRELOADの
+	//ステータスがRELOADではないとき
 	if (player_state_ != RELOAD) { return; }
+	//銃を回転させる
 	gun_rot_.x -= subrotation_;
+	//残弾を一度非表示にする
 	remaining_ = emptyremaining_;
+	//タイムを加算する
 	reload_time_ += addtime_;
+	//動かしているタイムを40で除算
 	anser_ = reload_time_ % divtime_;
-	//reloaadtime/40の余りが0の時
+	//reloaadtime/40の余りが0以外の時
 	if (anser_ != 0) { return; }
+	//残弾マックスに
 	remaining_ = {};
+	//回転していない状態に戻す
 	gun_rot_.x = {};
 	//残弾が満タンになった時
 	if (remaining_ == 0) {
+		//ステータスを待機状態に戻す
 		player_state_ = WAIT;
+		//タイムを初期化
 		reload_time_ = {};
+		//操作を再度可能状態にする
 		mouse_stopflag_ = false;
 	}
-
-
 }
 
 
