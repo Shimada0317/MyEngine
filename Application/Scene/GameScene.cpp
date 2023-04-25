@@ -27,7 +27,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	posteffect_ = make_unique<PostEffect>();
 	posteffect_->Initialize();
 	posteffect_->Update(postcol_);
-
 	//ライトの生成
 	light_ = Light::Create();
 	lightgroupe_ = LightGroup::Create();
@@ -36,8 +35,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLightGroup(lightgroupe_.get());
 	//カメラの生成
 	camera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
-
-
 	//スプライトの生成
 	damageefectsprite_.reset(Sprite::SpriteCreate(Name::kDamageEffect, { 0.0f, 0.0f }, damageefectcolor_));
 	clear_.reset(Sprite::SpriteCreate(kGameClear, { 0.0f,0.0f }));
@@ -53,12 +50,13 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	for (int i = 0; i < 5; i++) {
 		lifecount_[i].reset(Sprite::SpriteCreate(i, hartposition_));
 	}
-
-	curtainup_->SetSize(curtainsize_);
-	curtaindown_->SetSize(curtainsize_);
-
-	//モデルの読み込み
+	//オブジェクトの生成
 	sphere_ = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
+	world_ = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
+	start_ = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
+	heri_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
+	goal_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
+	hane_ = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
 	for (int i = 0; i < BUILS; i++) {
 		builshighalpha_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 		builslowalpha_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
@@ -67,23 +65,15 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	for (int i = 0; i < 5; i++) {
 		fieldbuils_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 	}
-	world_ = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
-	start_ = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
-
-	heri_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
-	goal_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
-	hane_ = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
-
+	
 	player_ = make_unique<Player>();
 	player_->Initalize(camera_.get());
 	playerhp_ = player_->GetHp();
+	oldhp_ = playerhp_;
 
 	railcamera_ = make_unique<RailCamera>();
 	railcamera_->MatrixIdentity(player_->GetPosition(), player_->GetRotation());
 	railcamera_->Update(velocity_, eyerot_, camera_.get());
-
-
-	oldhp_ = playerhp_;
 
 	bgm_ = make_unique<Audio>();
 	bgm_->Initialize();
@@ -124,15 +114,15 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightgroupe_->SetSpotLightActive(3, true);
 	lightgroupe_->SetSpotLightActive(4, true);
 	originalsize_ = hartsize_;
+
+	curtainup_->SetSize(curtainsize_);
+	curtaindown_->SetSize(curtainsize_);
 	LoadEnemyPopData();
 }
 
 //ステータスセット
 void GameScene::StatusSet()
 {
-
-
-
 #pragma region 後で必要な変数の追加ごこのコメントを消す
 	//変動するカウンター
 	for (int i = 0; i < 5; i++) {
@@ -269,10 +259,11 @@ void GameScene::AllUpdata()
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
+	//プレイヤーの移動
 	PlayerMove();
-
+	//開始時のカメラワーク
 	StartCameraWork();
-
+	//スポットライトの動きの処理
 	SpotLightMove();
 
 	if (gamestartflag_ == false) {
@@ -304,40 +295,8 @@ void GameScene::Update()
 	}
 
 #pragma region ActorからUpdate内の処理を持ってくる(後でこのコメントは消す)
-
-	easingtimer_ += addtimer_;
-	if (reversflag_ == true) {
-		hartsize_.x = Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.x;
-		hartsize_.y = Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.y;
-		if (easingtimer_ >= 1) {
-			easingtimer_ = 0;
-			originalsize_ = hartsize_;
-			reversflag_ = false;
-		}
-	}
-	else {
-		hartsize_.x = -Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.x;
-		hartsize_.y = -Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.y;
-		if (easingtimer_ >= 1) {
-			easingtimer_ = 0;
-			originalsize_ = hartsize_;
-			reversflag_ = true;
-		}
-	}
-
-
-	if (playerhp_ == 4) {
-		addtimer_ = 0.01f;
-	}
-	else if (playerhp_ == 3) {
-		addtimer_ = 0.05f;
-	}
-	else if (playerhp_ == 2) {
-		addtimer_ = 0.1f;
-	}
-	else if (playerhp_ == 1) {
-		addtimer_ = 0.5f;
-	}
+	//ハートの鼓動の動き
+	HeartBeat();
 
 
 	XMVECTOR velo = player_->GetVelocity();
@@ -1120,6 +1079,46 @@ void GameScene::MoveShakingHead()
 		}
 	}
 
+}
+
+void GameScene::HeartBeat()
+{
+	//タイマーの加算
+	easingtimer_ += addtimer_;
+	//反転フラグがtrueの時サイズを拡大
+	if (reversflag_ == true) {
+		hartsize_.x = Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.x;
+		hartsize_.y = Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.y;
+		if (easingtimer_ >= 1) {
+			easingtimer_ = 0;
+			originalsize_ = hartsize_;
+			reversflag_ = false;
+		}
+	}
+	//反転フラグがfalseの時サイズを縮小
+	else {
+		hartsize_.x = -Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.x;
+		hartsize_.y = -Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.y;
+		if (easingtimer_ >= 1) {
+			easingtimer_ = 0;
+			originalsize_ = hartsize_;
+			reversflag_ = true;
+		}
+	}
+
+
+	if (playerhp_ == 4) {
+		addtimer_ = 0.01f;
+	}
+	else if (playerhp_ == 3) {
+		addtimer_ = 0.05f;
+	}
+	else if (playerhp_ == 2) {
+		addtimer_ = 0.1f;
+	}
+	else if (playerhp_ == 1) {
+		addtimer_ = 0.5f;
+	}
 }
 
 void GameScene::CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)

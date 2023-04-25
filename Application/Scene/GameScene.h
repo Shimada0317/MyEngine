@@ -130,6 +130,10 @@ public://メンバ関数
 	/// </summary>
 	void MoveShakingHead();
 	/// <summary>
+	/// ハートの鼓動の動き
+	/// </summary>
+	void HeartBeat();
+	/// <summary>
 	/// カーソルに入っているか
 	/// </summary>
 	/// <param name="cursor_Pos"></param>

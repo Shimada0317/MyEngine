@@ -127,6 +127,9 @@ void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot)
 	HUDMotionProcess();
 	//リロードの処理
 	ReloadProcess();
+
+	velocity_ = XMVector3TransformNormal(velocity_, body_mat_);
+
 	//座標や回転、スケールなどのステータスのセット
 	StatusSet(camera, eyerot);
 	//全ての更新処理
