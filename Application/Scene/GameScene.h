@@ -112,10 +112,18 @@ public://メンバ関数
 	/// 敵同士の追尾先が被った時の確認とその場合の処理
 	/// </summary>
 	void CheckSameTrackPosition();
+
+	void KilledAllEnemy();
+
 	/// <summary>
 	/// 始まりのカメラ演出
 	/// </summary>
 	void StartCameraWork();
+	/// <summary>
+	/// 始まりのムービーのスキップ処理
+	/// </summary>
+	void SkipStartMovie();
+
 	/// <summary>
 	/// プレイヤーの移動
 	/// </summary>
@@ -133,6 +141,11 @@ public://メンバ関数
 	/// ハートの鼓動の動き
 	/// </summary>
 	void HeartBeat();
+	/// <summary>
+	/// 映画のようなムービーの処理
+	/// </summary>
+	void MovieProcess();
+
 	/// <summary>
 	/// カーソルに入っているか
 	/// </summary>
@@ -319,7 +332,7 @@ private://メンバ変数
 #pragma region Acrtorから持ってくる変数(いらないものは全部消す)
 
 
-	float heriy_ = 0.0f;
+	float heriy_ = 15.0f;
 	bool moveflag_ = false;
 	bool backobjflag_ = true;
 	float herix_ = 3.1f;
@@ -358,7 +371,7 @@ private://メンバ変数
 
 	XMVECTOR velocity_;
 	XMFLOAT3 eyerot_{ 0.f,0.f,0.f };
-	XMFLOAT3 pathrot_{};
+	XMFLOAT3 passrot_{};
 	bool startflag_ = false;
 	bool stanbyflag_ = false;
 	int actioncount_ = 0;
@@ -366,7 +379,7 @@ private://メンバ変数
 	bool movieflag_ = false;
 	XMVECTOR l_reticlepos;
 	XMVECTOR cameravector_{ 0.f,0.f,0.f };
-	float movespeed_ = 0.f;
+	float movespeed_ = 0.5f;
 	float changerotation_ = 0.f;
 	bool FringFlag = false;
 #pragma endregion

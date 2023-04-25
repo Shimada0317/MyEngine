@@ -65,7 +65,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	for (int i = 0; i < 5; i++) {
 		fieldbuils_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 	}
-	
+
 	player_ = make_unique<Player>();
 	player_->Initalize(camera_.get());
 	playerhp_ = player_->GetHp();
@@ -227,6 +227,9 @@ void GameScene::StatusSet()
 		lightgroupe_->SetSpotLightFactorAngle(i, searchlightfactorangle_);
 	}
 
+	curtainup_->SetPosition(curtainuppos_);
+	curtaindown_->SetPosition(curtaindownpos_);
+	skip_->SetPosition(skippos_);
 };
 
 //オブジェクトなどの更新処理
@@ -252,8 +255,8 @@ void GameScene::AllUpdata()
 	world_->Update({ 0.7f,0.7f,0.7f,1.0f });
 	//スタート地点の更新処理
 	start_->Update(BillColor);
-
-	player_->Update(camera_.get(), (Phase)patern_,pathrot_);
+	//プレイヤーの更新処理
+	player_->Update(camera_.get(), (Phase)patern_, passrot_);
 }
 
 //ゲームシーンの更新処理
@@ -261,6 +264,8 @@ void GameScene::Update()
 {
 	//プレイヤーの移動
 	PlayerMove();
+	//映画のようなムービーの処理
+	MovieProcess();
 	//開始時のカメラワーク
 	StartCameraWork();
 	//スポットライトの動きの処理
@@ -279,8 +284,8 @@ void GameScene::Update()
 		stopupdateflag_ = true;
 	}
 	//ゴールについていないとき更新を続ける
+	StatusSet();
 	if (stopupdateflag_ == false) {
-		StatusSet();
 		AllUpdata();
 	}
 	else if (stopupdateflag_ == true && clearflag_ == false)
@@ -313,16 +318,7 @@ void GameScene::Update()
 	}
 
 	if (getcamworkflag_ == true) {
-		robot_.remove_if([](std::unique_ptr<Enemy>& robot) {
-			return robot->IsDead();
-			});
-		boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
-			return boss->IsDead();
-			});
-		//目の前の敵を全て倒した時プレイヤーを動かす
-		if (robot_.empty() && boss_.empty()) {
-			moveflag_ = true;
-		}
+		KilledAllEnemy();
 		//プレイヤーが目的地点に着いたとき
 		if (stopflag_ == true) {
 			moveflag_ = false;
@@ -332,9 +328,6 @@ void GameScene::Update()
 		}
 	}
 
-	if (patern_ >= 5) {
-		heriy_ += 15.0f;
-	}
 
 	if (patern_ >= 6) {
 		if (fringflag_ == true) {
@@ -467,9 +460,9 @@ void GameScene::ImgDraw()
 
 	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
 	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
-	ImGui::SliderFloat("eyerot", &pathrot_.y, -180.0f, 180.0f);
+	ImGui::SliderFloat("eyerot", &passrot_.y, -180.0f, 180.0f);
 
-	
+
 
 	ImGui::End();
 	ImGui::PopStyleColor();
@@ -571,15 +564,15 @@ void GameScene::SpotLightMove()
 	}
 
 	if (lightdireasingchange_ == false) {
-		lightdireasingtime_  += 0.05f;
+		lightdireasingtime_ += 0.05f;
 	}
 	else {
-		lightdireasingtime_  -= 0.05f;
+		lightdireasingtime_ -= 0.05f;
 	}
 
-	searchlightdir_[0].x = Action::GetInstance()->EasingOut(lightdireasingtime_ , 5 - 0);
-	searchlightdir_[1].z = Action::GetInstance()->EasingOut(lightdireasingtime_ , 5 - 0);
-	searchlightdir_[2].x = Action::GetInstance()->EasingOut(lightdireasingtime_ , 5 - 0);
+	searchlightdir_[0].x = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
+	searchlightdir_[1].z = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
+	searchlightdir_[2].x = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
 
 	searchlightdir_[0].z = Action::GetInstance()->EasingOut(time_, endpointz_ - startpointz_);
 	searchlightdir_[1].x = Action::GetInstance()->EasingOut(time_, endpointx_ - startpointx_);
@@ -900,55 +893,89 @@ void GameScene::CheckSameTrackPosition()
 	}
 }
 
+void GameScene::KilledAllEnemy()
+{
+	robot_.remove_if([](std::unique_ptr<Enemy>& robot) {
+		return robot->IsDead();
+		});
+	boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
+		return boss->IsDead();
+		});
+	//目の前の敵を全て倒した時プレイヤーを動かす
+	if (robot_.empty() && boss_.empty()) {
+		moveflag_ = true;
+	}
+}
+
 void GameScene::StartCameraWork()
 {
 	l_reticlepos = player_->GetPosition();
-	if (getcamworkflag_ == false && startflag_ == false) {
+	XMVECTOR l_bodyworldpos = player_->GetBodyWorldPos();
+	if (getcamworkflag_) { return; }
+	if (startflag_) { return; }
 
-		XMVECTOR l_bodyworldpos = player_->GetBodyWorldPos();
-		if (stanbyflag_ == false) {
-			eyerot_.y = 180;
-		}
-		else if (stanbyflag_ == true && actioncount_ == 0) {
-			Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
-			//後ろを向く
-			if (eyerot_.y <= 0) {
-				eyerot_.y = 0;
-				actiontimer_ += 0.2f;
-				if (actiontimer_ > 5) {
-					actiontimer_ = 5.0f;
-					Action::GetInstance()->EaseOut(eyerot_.x, 95.0f);
-				}
-			}
-			//下を向く
-			if (eyerot_.x >= 90) {
-				actiontimer_ = 0.0f;
-				eyerot_.x = 90;
-				actioncount_ = 1;
+	if (!stanbyflag_) {
+		eyerot_.y = 180;
+	}
+	else if ( actioncount_ == 0) {
+		Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
+		//後ろを向く
+		if (eyerot_.y <= 0) {
+			eyerot_.y = 0;
+			actiontimer_ += 0.2f;
+			if (actiontimer_ > 5) {
+				actiontimer_ = 5.0f;
+				Action::GetInstance()->EaseOut(eyerot_.x, 95.0f);
 			}
 		}
-		if (actioncount_ == 1) {
+		//下を向く
+		if (eyerot_.x >= 90) {
+			actiontimer_ = 0.0f;
+			eyerot_.x = 90;
+			actioncount_ = 1;
+		}
+	}
+	if (actioncount_ == 1) {
 
-			actiontimer_ += 0.15f;
-			velocity_ = { 0.0f,0.67f,0.4f };
-			if (actiontimer_ >= 5) {
-				velocity_ = { 0.0f,-0.6f,0.0f };
-				Action::GetInstance()->EaseOut(eyerot_.x, -5.0f);
-			}
-			if (eyerot_.x <= 0.0f) {
-				eyerot_.x = 0.0f;
-			}
-			//地面に着いたとき
-			if (l_bodyworldpos.m128_f32[1] <= 0.3f) {
-				velocity_ = { 0.0f,0.0f,0.0f };
-				l_reticlepos.m128_f32[1] = 0.0f;
-				movieflag_ = true;
-				gamestate_ = MOVE;
-			}
+		actiontimer_ += 0.15f;
+		velocity_ = { 0.0f,0.67f,0.4f };
+		if (actiontimer_ >= 5) {
+			velocity_ = { 0.0f,-0.6f,0.0f };
+			Action::GetInstance()->EaseOut(eyerot_.x, -5.0f);
 		}
-		player_->SetBodyWorldPos(l_bodyworldpos);
+		if (eyerot_.x <= 0.0f) {
+			eyerot_.x = 0.0f;
+		}
+		//地面に着いたとき
+		if (l_bodyworldpos.m128_f32[1] <= 0.3f) {
+			velocity_ = { 0.0f,0.0f,0.0f };
+			l_reticlepos.m128_f32[1] = 0.0f;
+			movieflag_ = true;
+			gamestate_ = MOVE;
+		}
+	}
+	player_->SetBodyWorldPos(l_bodyworldpos);
+
+
+	
+
+	if (stanbyflag_ == false) {
+		actiontimer_ += 0.01f;
+		if (actiontimer_ >= 1.0f) {
+			actiontimer_ = 0.0f;
+			stanbyflag_ = true;
+		}
 	}
 
+	
+
+	SkipStartMovie();
+
+	
+}
+
+void GameScene::SkipStartMovie()
+{
 	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanbyflag_ == true && getcamworkflag_ == false) {
 		movieflag_ = true;
 		actioncount_ = 100;
@@ -959,55 +986,6 @@ void GameScene::StartCameraWork()
 		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
 		gamestate_ = MOVE;
 	}
-
-	if (stanbyflag_ == false) {
-		actiontimer_ += 0.01f;
-		if (actiontimer_ >= 1.0f) {
-			actiontimer_ = 0.0f;
-			stanbyflag_ = true;
-		}
-	}
-
-	if (movieflag_ == false) {
-		curtainuppos_.y += 4;
-		curtaindownpos_.y -= 4;
-		skippos_.y -= 2;
-
-		if (curtainuppos_.y >= 0) {
-			curtainuppos_.y = 0;
-		}
-
-		if (curtaindownpos_.y <= 620) {
-			curtaindownpos_.y = 620;
-		}
-
-		if (skippos_.y <= 620) {
-			skippos_.y = 620;
-		}
-	}
-	else {
-		curtainuppos_.y -= 4;
-		curtaindownpos_.y += 4;
-		skippos_.y += 4;
-
-		if (curtainuppos_.y <= -100) {
-			curtainuppos_.y = -100;
-		}
-
-		if (curtaindownpos_.y >= 720) {
-			curtaindownpos_.y = 720;
-			getcamworkflag_ = true;
-			startflag_ = true;
-		}
-
-		if (skippos_.y >= 720) {
-			skippos_.y = 12000;
-		}
-	}
-
-	curtainup_->SetPosition(curtainuppos_);
-	curtaindown_->SetPosition(curtaindownpos_);
-	skip_->SetPosition(skippos_);
 }
 
 void GameScene::PlayerMove()
@@ -1016,16 +994,14 @@ void GameScene::PlayerMove()
 	l_cameramatrix = railcamera_->GetWorld();
 	cameravector_ = { 0.f,0.f,0.f,0.f };
 	cameravector_ = XMVector3Transform(cameravector_, l_cameramatrix);
-
+	//敵を全て倒しムーブ状態になったら
 	if (moveflag_ == true) {
+		gamestate_ = MOVE;
+		//歩いているときのような首を動かす
 		MoveShakingHead();
-		//MoveShakingHead();
-		movespeed_ = 0.5f;
 		(this->*MoveFuncTable[patern_])();
-		pathrot_ = eyerot_;
-	}
-	else if (moveflag_ == false) {
-		velocity_ = { 0.f,0.f,0.f };
+		//プレイヤーに渡す角度
+		passrot_ = eyerot_;
 	}
 }
 
@@ -1121,6 +1097,48 @@ void GameScene::HeartBeat()
 	}
 }
 
+void GameScene::MovieProcess()
+{
+	if (gamestate_ == MOVIE) {
+		if (movieflag_ == false) {
+			curtainuppos_.y += 4;
+			curtaindownpos_.y -= 4;
+			skippos_.y -= 2;
+
+			if (curtainuppos_.y >= 0) {
+				curtainuppos_.y = 0;
+			}
+
+			if (curtaindownpos_.y <= 620) {
+				curtaindownpos_.y = 620;
+			}
+
+			if (skippos_.y <= 620) {
+				skippos_.y = 620;
+			}
+		}
+		else {
+			curtainuppos_.y -= 4;
+			curtaindownpos_.y += 4;
+			skippos_.y += 4;
+
+			if (curtainuppos_.y <= -100) {
+				curtainuppos_.y = -100;
+			}
+
+			if (curtaindownpos_.y >= 720) {
+				curtaindownpos_.y = 720;
+				getcamworkflag_ = true;
+				startflag_ = true;
+			}
+
+			if (skippos_.y >= 720) {
+				skippos_.y = 12000;
+			}
+		}
+	}
+}
+
 void GameScene::CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
 {
 	if ((check_Pos.x - radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x)
@@ -1141,7 +1159,6 @@ void GameScene::MoveStartBack()
 		if (eyerot_.y >= 180) {
 			stopflag_ = true;
 			moveflag_ = false;
-
 		}
 	}
 }
@@ -1173,7 +1190,6 @@ void GameScene::MovePointALeft()
 		eyerot_.y = max(eyerot_.y, -90.0f);
 		changerotation_ = eyerot_.y;
 		velocity_ = { 0, 0, 0 };
-
 		moveflag_ = false;
 		stopflag_ = true;
 	}
@@ -1188,9 +1204,9 @@ void GameScene::MovePointB()
 		velocity_ = { 0, 0, movespeed_ };
 	}
 	if (cameravector_.m128_f32[0] >= 30) {
-
 		moveflag_ = false;
 		stopflag_ = true;
+		velocity_ = { 0, 0, 0 };
 	}
 }
 
@@ -1198,7 +1214,6 @@ void GameScene::MovePointC()
 {
 	velocity_ = { 0, 0, movespeed_ };
 	if (cameravector_.m128_f32[0] >= 45) {
-
 		moveflag_ = false;
 		stopflag_ = true;
 		velocity_ = { 0, 0, 0 };
@@ -1213,7 +1228,6 @@ void GameScene::MovePointCOblique()
 		Action::GetInstance()->EaseOut(eyerot_.y, 145.0f);
 		if (eyerot_.y >= 135) {
 			changerotation_ = 135;
-
 			moveflag_ = false;
 			stopflag_ = true;
 			velocity_ = { 0, 0, 0 };
@@ -1229,7 +1243,6 @@ void GameScene::MovePointCFront()
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
 	if (eyerot_.y <= 0) {
 		changerotation_ = 0;
-
 		moveflag_ = false;
 		stopflag_ = true;
 		velocity_ = { 0, 0, 0 };
@@ -1247,7 +1260,6 @@ void GameScene::GoalPointBack()
 			Action::GetInstance()->EaseOut(eyerot_.y, 185.0f);
 			if (eyerot_.y >= 180) {
 				changerotation_ = 0;
-
 				moveflag_ = false;
 				stopflag_ = true;
 				velocity_ = { 0, 0, 0 };
@@ -1258,16 +1270,20 @@ void GameScene::GoalPointBack()
 
 void GameScene::GoalPoint()
 {
+	gamestate_ = MOVIE;
 	stanbyflag_ = false;
+	movieflag_ = false;
 	velocity_ = { 0.f, 0.f, 0.1f };
-	//ShakeHeadFlag = false;
+	//後ろを向く
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
 	if (eyerot_.y <= 0) {
 		changerotation_ = 0;
 		eyerot_.y = 0;
 	}
+	//ヘリに向かう
 	if (cameravector_.m128_f32[2] >= 92) {
 		velocity_ = { 0.f,0.05f,0.1f };
+		//ヘリに乗る
 		if (cameravector_.m128_f32[2] >= 97) {
 			velocity_ = { 0.0f,0.0f,0.0f };
 			FringFlag = true;
@@ -1277,7 +1293,6 @@ void GameScene::GoalPoint()
 		}
 	}
 	getcamworkflag_ = false;
-	movieflag_ = false;
 	actioncount_ = 0;
 }
 
