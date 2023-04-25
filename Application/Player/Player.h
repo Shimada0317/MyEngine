@@ -91,7 +91,7 @@ public:
 	/// <summary>
 	/// UIの動き処理
 	/// </summary>
-	void UIMotionProcess();
+	void HUDMotionProcess();
 	/// <summary>
 	/// リコイルの処理
 	/// </summary>
@@ -104,6 +104,10 @@ public:
 	/// パーティクル発生
 	/// </summary>
 	void ParticleEfect(Phase paterncount);
+	/// <summary>
+	/// 落ちていくHUD
+	/// </summary>
+	void FallingHUD();
 	/// <summary>
 	/// 徐々に大きくする
 	/// </summary>
