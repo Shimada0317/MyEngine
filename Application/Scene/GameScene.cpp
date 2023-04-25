@@ -296,8 +296,10 @@ void GameScene::Update()
 	GameClearProcesss();
 
 	if (screenshakestate_ != NONE) {
-		ScreenShake(shakingscreenvalue_);
+		shakingstartflag_ = true;
+		screenshakestate_ = NONE;
 	}
+	ScreenShake(4.5f,0.1f);
 
 #pragma region ActorからUpdate内の処理を持ってくる(後でこのコメントは消す)
 	//ハートの鼓動の動き
@@ -618,7 +620,7 @@ void GameScene::DamageProcess()
 			damageefectcolor_.w = 1;
 			oldhp_ = playerhp_;
 			screenshakestate_ = DAMAGE;
-			shakingscreenvalue_ = 5.f;
+			shakingscreenvalue_ = 0.f;
 		}
 		//画面を赤くするフラグが立った時
 		if (posteffectonflag_ == true) {
@@ -917,7 +919,7 @@ void GameScene::StartCameraWork()
 	if (!stanbyflag_) {
 		eyerot_.y = 180;
 	}
-	else if ( actioncount_ == 0) {
+	else if (actioncount_ == 0) {
 		Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
 		//後ろを向く
 		if (eyerot_.y <= 0) {
@@ -957,7 +959,7 @@ void GameScene::StartCameraWork()
 	player_->SetBodyWorldPos(l_bodyworldpos);
 
 
-	
+
 
 	if (stanbyflag_ == false) {
 		actiontimer_ += 0.01f;
@@ -967,11 +969,11 @@ void GameScene::StartCameraWork()
 		}
 	}
 
-	
+
 
 	SkipStartMovie();
 
-	
+
 }
 
 void GameScene::SkipStartMovie()
@@ -1005,33 +1007,38 @@ void GameScene::PlayerMove()
 	}
 }
 
-void GameScene::ScreenShake(float shakevalue)
+
+//画面揺れ
+void GameScene::ScreenShake(float shakevalue, float shakingtime)
 {
-	if (shakelimittime_ <= 1) {
-		shakelimittime_ += 0.1f;
-		if (shakingscreenflag_ == true) {
-			shakingscreenvalue_ -= shakevalue;
-			if (shakingscreenvalue_ <= -shakevalue) {
-				shakingscreenflag_ = false;
+	if (shakingstartflag_ == true) {
+		if (shakelimittime_ <= 1) {
+			shakelimittime_ += shakingtime;
+			if (shakingscreenflag_ == true) {
+				shakingscreenvalue_ -= shakevalue;
+				if (shakingscreenvalue_ <= -shakevalue) {
+					shakingscreenflag_ = false;
+				}
 			}
+			else {
+				shakingscreenvalue_ += shakevalue;
+				if (shakingscreenvalue_ >= shakevalue) {
+					shakingscreenflag_ = true;
+				}
+			}
+			eyerot_.x += shakingscreenvalue_;
 		}
 		else {
-			shakingscreenvalue_ += shakevalue;
-			if (shakingscreenvalue_ >= shakevalue) {
-				shakingscreenflag_ = true;
-			}
+			shakingscreenflag_ = true;
+			shakelimittime_ = 0;
+			shakingstartflag_ = false;
+			shakingscreenvalue_ = 0;
+			eyerot_.x = 0;
 		}
-		eyerot_.x += shakingscreenvalue_;
 	}
-	else {
-		shakingscreenflag_ = true;
-		shakelimittime_ = 0;
-		shakingscreenvalue_ = 0;
-		eyerot_.x = 0;
-		screenshakestate_ = NONE;
-	}
-
 }
+
+
 
 void GameScene::MoveShakingHead()
 {
@@ -1099,7 +1106,7 @@ void GameScene::HeartBeat()
 
 void GameScene::MovieProcess()
 {
-	if (gamestate_ == MOVIE) {
+	if (gamestate_ == MOVE) {
 		if (movieflag_ == false) {
 			curtainuppos_.y += 4;
 			curtaindownpos_.y -= 4;

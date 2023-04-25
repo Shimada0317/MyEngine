@@ -132,7 +132,7 @@ public://メンバ関数
 	/// 画面揺れ
 	/// </summary>
 	/// <param name="limitshakevalue">シェイクする値</param>
-	void ScreenShake(float shakevalue);
+	void ScreenShake(float shakevalue, float shakingtime);
 	/// <summary>
 	/// 移動時にカメラ揺れ
 	/// </summary>

@@ -115,6 +115,7 @@ private:
 	unique_ptr<Sprite> gamestartpreparation_ = nullptr;
 	unique_ptr<Sprite> arrowright_ = nullptr;
 	unique_ptr<Sprite> arrowleft_ = nullptr;
+	unique_ptr<Sprite> bullet_hud_[9];
 	//その他の機能
 	unique_ptr<Light> light_ = nullptr;
 	unique_ptr<LightGroup> lightgroupe_ = nullptr;
@@ -151,6 +152,11 @@ private:
 	XMFLOAT2 titlesize_ = { 1280.0f,720.0f };
 	XMFLOAT2 titlepos_ = { 0.0f,0.0f };
 	bool titlespriteflag_ = true;
+	//弾のHUDのステータス
+	XMFLOAT2 bullet_spritepos_[9];
+	float bullet_spriterot_[9];
+	float time_[9];
+	bool drop_bulletflag_[9];
 	//説明の矢印座標
 	XMFLOAT2 arrowrightpos_ = { 1240.0f,300 };
 	XMFLOAT2 arrowleftpos_ = { 35.0f,300 };
@@ -186,5 +192,7 @@ private:
 	float easingtimer_ = 0.f;
 	bool easingchangeflag_=false;
 	XMFLOAT2 clicksize_ = { 550.f,60.f };
+
+	int remaining_ = 0;
 };
 

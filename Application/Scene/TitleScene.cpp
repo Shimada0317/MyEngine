@@ -11,8 +11,11 @@ const float SubColor = 0.01f;
 const float CameraMoveValueXandY = 0.4f;
 const float CameraMoveValueZ = 0.1f;
 const float CameraEyeMoveValue = 0.01f;
+const int MaxRemainingBullet = 9;
+
 const XMFLOAT4 RegularColor = { 1.f,1.f,1.f,1.f };
 const XMFLOAT2 DescriptionScreenPosition = { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f };
+const XMFLOAT2 SpriteSize = { 64.f,64.f };
 
 //コンストラクタ
 TitleScene::TitleScene(SceneManager* sceneManager_)
@@ -48,7 +51,14 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	gamestartpreparation_.reset(Sprite::SpriteCreate(Name::kStartScreen, DescriptionScreenPosition, spritecol_, anchorpoint_));
 	arrowright_.reset(Sprite::SpriteCreate(kArrowRight, arrowrightpos_, arrowrightcolor_, anchorpoint_));
 	arrowleft_.reset(Sprite::SpriteCreate(kArrowLeft, arrowleftpos_, arrowleftcolor_, anchorpoint_));
-
+	for (int i = {}; i < MaxRemainingBullet; i++) {
+		bullet_spritepos_[i] = { 1220.0f,25.0f + 32.0f * i };
+		bullet_spriterot_[i] = {};
+		time_[i] = {};
+		bullet_hud_[i].reset(Sprite::SpriteCreate(Name::kBullet, bullet_spritepos_[i], RegularColor, anchorpoint_));
+		bullet_hud_[i]->SetSize(SpriteSize);
+		drop_bulletflag_[i] = false;
+	}
 
 	//オブジェクトの生成
 	sphere_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kSkydome));
@@ -77,6 +87,11 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 //ステータスセット
 void TitleScene::StatusSet()
 {
+	//HUDのポジションセット
+	for (int i = 0; i < MaxRemainingBullet; i++) {
+		bullet_hud_[i]->SetPosition(bullet_spritepos_[i]);
+		bullet_hud_[i]->SetRotation(bullet_spriterot_[i]);
+	}
 	//カメラの動き
 	titlecamera_->MoveEyeVector(cameraeyemove_);
 	titlecamera_->MoveVector(cameramove_);
@@ -372,6 +387,11 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 		}
 		if (descriptionpage_ == DescriptionPage) {
 			descriptionoperation_->Draw();
+			for (int i = 0; i < MaxRemainingBullet; i++) {
+				if (remaining_ <= MaxRemainingBullet) {
+					bullet_hud_[i]->Draw();
+				}
+			}
 		}
 		else if (descriptionpage_ == EnemyOverViewPage) {
 			enemyoverview_->Draw();
