@@ -219,6 +219,7 @@
     <ClCompile Include="Application\Collision\Collision.cpp">
       <Filter>AllGame\Application\Collision\Normal</Filter>
     </ClCompile>
+    <ClCompile Include="BulletUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -383,6 +384,7 @@
     <ClInclude Include="Application\Collision\Collision.h">
       <Filter>AllGame\Application\Collision\Normal</Filter>
     </ClInclude>
+    <ClInclude Include="BulletUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

@@ -2,6 +2,7 @@
 #include<memory>
 #include"BaseScene.h"
 #include"GameScene.h"
+#include"BulletUI.h"
 
 const int BUILSAMOUNT = 16;
 
@@ -69,8 +70,6 @@ public://メンバ関数
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon)override;
 
-	void FallingHUD();
-
 	void HUDMotionProcess();
 
 	void ReloadProcess();
@@ -108,8 +107,7 @@ private:
 	unique_ptr<Sprite> gamestartpreparation_ = nullptr;
 	unique_ptr<Sprite> arrowright_ = nullptr;
 	unique_ptr<Sprite> arrowleft_ = nullptr;
-	unique_ptr<Sprite> bullet_hud_[9];
-	unique_ptr<Sprite> reload_;
+	unique_ptr<BulletUI> bullet_ui_;
 	//その他の機能
 	unique_ptr<Light> light_ = nullptr;
 	unique_ptr<LightGroup> lightgroupe_ = nullptr;
@@ -146,16 +144,9 @@ private:
 	XMFLOAT2 titlesize_ = { 1280.0f,720.0f };
 	XMFLOAT2 titlepos_ = { 0.0f,0.0f };
 	bool titlespriteflag_ = true;
-	//弾のHUDのステータス
-	XMFLOAT2 bullet_spritepos_[9];
-	float bullet_spriterot_[9];
-	float time_[9];
-	bool drop_bulletflag_[9];
-	//Reloadのステータス
-	XMFLOAT4 reload_spritecolor_ = { 1.0f,1.0f,1.0f,0.9f };
-	XMFLOAT2 reload_spritepos_ = { 900,410 };
-	XMFLOAT2 reload_spritesize_ = { 210,140 };
-	XMFLOAT2 reload_oldspritesize_ = reload_spritesize_;
+	//UIのステータス
+	XMFLOAT2 ui_bulletpos_{ 1120.0f,45.0f };
+	XMFLOAT2 ui_reloadpos_ = { 900,410 };
 	//説明の矢印座標
 	XMFLOAT2 arrowrightpos_ = { 1240.0f,300 };
 	XMFLOAT2 arrowleftpos_ = { 35.0f,300 };

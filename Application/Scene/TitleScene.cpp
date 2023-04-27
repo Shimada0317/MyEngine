@@ -51,15 +51,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	gamestartpreparation_.reset(Sprite::SpriteCreate(Name::kStartScreen, DescriptionScreenPosition, spritecol_, anchorpoint_));
 	arrowright_.reset(Sprite::SpriteCreate(kArrowRight, arrowrightpos_, arrowrightcolor_, anchorpoint_));
 	arrowleft_.reset(Sprite::SpriteCreate(kArrowLeft, arrowleftpos_, arrowleftcolor_, anchorpoint_));
-	reload_.reset(Sprite::SpriteCreate(Name::kReload, reload_spritepos_, reload_spritecolor_, anchorpoint_));
-	for (int i = {}; i < MaxRemainingBullet; i++) {
-		bullet_spritepos_[i] = { 1120.0f,45.0f + 32.0f * i };
-		bullet_spriterot_[i] = {};
-		time_[i] = {};
-		bullet_hud_[i].reset(Sprite::SpriteCreate(Name::kBullet, bullet_spritepos_[i], RegularColor, anchorpoint_));
-		bullet_hud_[i]->SetSize(SpriteSize);
-		drop_bulletflag_[i] = false;
-	}
+	
+	bullet_ui_ = make_unique<BulletUI>();
+	bullet_ui_->Create(remaining_,ui_bulletpos_,ui_reloadpos_);
 
 	//オブジェクトの生成
 	sphere_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kSkydome));
@@ -88,11 +82,8 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 //ステータスセット
 void TitleScene::StatusSet()
 {
-	//HUDのポジションセット
-	for (int i = 0; i < MaxRemainingBullet; i++) {
-		bullet_hud_[i]->SetPosition(bullet_spritepos_[i]);
-		bullet_hud_[i]->SetRotation(bullet_spriterot_[i]);
-	}
+	bullet_ui_->Set();
+
 	//カメラの動き
 	titlecamera_->MoveEyeVector(cameraeyemove_);
 	titlecamera_->MoveVector(cameramove_);
@@ -162,9 +153,6 @@ void TitleScene::StatusSet()
 	clickbefore_->SetSize(clicksize_);
 	signalafter_->SetSize(clicksize_);
 	signalbefore_->SetSize(clicksize_);
-	//リロードの文字
-	reload_->SetSize(reload_spritesize_);
-	reload_->SetColor(reload_spritecolor_);
 }
 
 //全ての更新処理をまとめる
@@ -190,10 +178,10 @@ void TitleScene::AllUpdate()
 //更新処理
 void TitleScene::Update()
 {
-	//UIをイージングで拡大縮小させる処理
-	UiEasingProcess();
 	//マウスの座標にスプライトを合わせる
 	Mouse::GetInstance()->MouseMoveSprite(reticlepos_);
+	//UIをイージングで拡大縮小させる処理
+	UiEasingProcess();
 	//カメラのムーブ関数
 	CameraDirection();
 	//操作説明のページ
@@ -261,8 +249,7 @@ void TitleScene::UiEasingProcess()
 	arrowsize_.y = Action::GetInstance()->EasingOut(easingtimer_, 5) + 32;
 	clicksize_.x = Action::GetInstance()->EasingOut(easingtimer_, 5) + 550;
 	clicksize_.y = Action::GetInstance()->EasingOut(easingtimer_, 5) + 60;
-	reload_spritesize_.x = Action::GetInstance()->EasingOut(easingtimer_, 20) + reload_oldspritesize_.x;
-	reload_spritesize_.y = Action::GetInstance()->EasingOut(easingtimer_, 20) + reload_oldspritesize_.y;
+	bullet_ui_->ReloadMotion();
 }
 
 void TitleScene::ArrowProces()
@@ -356,14 +343,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	}
 	if (titlestate_ == DESCRIPTIONPAGE) {
 		descriptionoperation_->Draw();
-		for (int i = 0; i < MaxRemainingBullet; i++) {
-			if (remaining_ <= MaxRemainingBullet) {
-				bullet_hud_[i]->Draw();
-			}
-		}
-		if (remaining_ >= MaxRemainingBullet) {
-			reload_->Draw();
-		}
+		bullet_ui_->Draw();
 	}
 	else if (titlestate_ == ENEMYOVERVIEWPAGE) {
 		enemyoverview_->Draw();
@@ -384,51 +364,6 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	posteffct_->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 }
-
-void TitleScene::FallingHUD()
-{
-	//落下時に回転に加算する値
-	const float addrotationvalue_ = 80.f;
-	//左右に飛ばす値
-	const float absolutevalue_ = 10.f;
-	//時間に加算する値
-	const float addfalltime_ = 0.5f;
-	//重力
-	const float Gravity = 9.8f;
-	//上方向に飛ばす値
-	const int upper_ = 40;
-	//弾数9発ぶんのfor文
-	for (int i = 0; i < MaxRemainingBullet; i++) {
-		//落ちるフラグがtrueなら薬莢を下に落とす
-		if (drop_bulletflag_[i]) {
-			time_[i] += addfalltime_;
-			bullet_spritepos_[i].x += Action::GetInstance()->GetRangRand(-absolutevalue_, absolutevalue_);
-			Action::GetInstance()->ThrowUp(Gravity, time_[i], upper_, bullet_spritepos_[i].y);
-			bullet_spriterot_[i] += addrotationvalue_;
-		}
-		//落ちたスプライトが画面外に出たらtime_を0にする
-		else if (bullet_spritepos_[i].y > WinApp::window_height * 2) {
-			time_[i] = {};
-		}
-	}
-}
-
-
-void TitleScene::HUDMotionProcess()
-{
-	FallingHUD();
-	//残弾が満タンの時
-	if (remaining_ == 0) {
-		for (int i = 0; i < MaxRemainingBullet; i++) {
-			bullet_spritepos_[i] = { 1120.0f,45.0f + 32.0f * i };
-			bullet_spriterot_[i] = {};
-			time_[i] = {};
-			drop_bulletflag_[i] = false;
-			old_remaining_ = remaining_;
-		}
-	}
-}
-
 
 void TitleScene::ReloadProcess()
 {
@@ -457,6 +392,7 @@ void TitleScene::ReloadProcess()
 		if (anser_ != 0) { return; }
 		//残弾マックスに
 		remaining_ = {};
+		bullet_ui_->Reload(remaining_);
 		//残弾が満タンになった時
 		if (remaining_ == 0) {
 			//タイムを初期化
@@ -471,12 +407,10 @@ void TitleScene::ShotProcess()
 	if (remaining_ < MaxRemainingBullet) {
 		if (Mouse::GetInstance()->PushClick(0)) {
 			remaining_ += 1;
+			bullet_ui_->Shot(remaining_);
 		}
 	}
-	if (old_remaining_ < remaining_) {
-		drop_bulletflag_[old_remaining_] = true;
-		old_remaining_ = remaining_;
-	}
+	
 }
 
 void TitleScene::DescriptioPageProcess()
@@ -487,7 +421,7 @@ void TitleScene::DescriptioPageProcess()
 
 	ShotProcess();
 
-	HUDMotionProcess();
+	bullet_ui_->FallingUI();
 }
 
 void TitleScene::GameStartPrepartionPage()
