@@ -3,6 +3,7 @@
 #include"Sprite.h"
 #include<vector>
 #include"Audio.h"
+#include"BulletUI.h"
 #include"HelperMath.h"
 #include"ParticleManager.h"
 #include"RailCamera.h"
@@ -83,7 +84,6 @@ public:
 	/// マウスの取得
 	/// </summary>
 	void MouseContoroll();
-
 	/// <summary>
 	/// 発砲処理
 	/// </summary>
@@ -91,7 +91,7 @@ public:
 	/// <summary>
 	/// UIの動き処理
 	/// </summary>
-	void HUDMotionProcess();
+	void UIMotionProcess();
 	/// <summary>
 	/// リコイルの処理
 	/// </summary>
@@ -104,10 +104,6 @@ public:
 	/// パーティクル発生
 	/// </summary>
 	void ParticleEfect(Phase paterncount);
-	/// <summary>
-	/// 落ちていくHUD
-	/// </summary>
-	void FallingHUD();
 	/// <summary>
 	/// 徐々に大きくする
 	/// </summary>
@@ -160,8 +156,7 @@ private:
 	unique_ptr<Object3d> body_;
 	//スプライト
 	unique_ptr<Sprite> sprite_reticle_;
-	unique_ptr<Sprite> bullet_hud_[9];
-	unique_ptr<Sprite> reload_;
+	unique_ptr<BulletUI>bullet_ui_;
 	//発砲時のエフェクト
 	unique_ptr <ParticleManager> part_green_ = nullptr;
 	unique_ptr <ParticleManager> part_red_ = nullptr;
@@ -217,11 +212,9 @@ private:
 	XMFLOAT4 reload_spritecolor_ = { 1.0f,1.0f,1.0f,0.9f };
 	XMFLOAT2 reload_spritepos_ = { WinApp::window_width / 2,210 };
 	XMFLOAT2 reload_spritesize_ = { 210,140 };
-	//弾のHUDのステータス
-	XMFLOAT2 bullet_spritepos_[9];
-	float bullet_spriterot_[9];
-	float time_[9];
-	bool drop_bulletflag_[9];
+	//UIのステータス
+	XMFLOAT2 ui_bulletpos{ 1220.0f,25.0f  };
+	XMFLOAT2 ui_reloadpos_{ WinApp::window_width / 2,210 };
 	//Skip文字の表示
 	XMFLOAT2 skippos_ = curtain_downpos_;
 	//2D座標入の取得用変数

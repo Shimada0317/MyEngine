@@ -70,8 +70,6 @@ public://ƒƒ“ƒoŠÖ”
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon)override;
 
-	void HUDMotionProcess();
-
 	void ReloadProcess();
 
 	void ShotProcess();

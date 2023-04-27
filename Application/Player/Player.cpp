@@ -37,15 +37,10 @@ void Player::Initalize(Camera* camera)
 	Object3d::SetCamera(camera);
 	//スプライトの読み込み
 	sprite_reticle_.reset(Sprite::SpriteCreate(Name::kReticle, reticle_pos2d_, Color, anchorpoint_));
-	reload_.reset(Sprite::SpriteCreate(Name::kReload, reload_spritepos_, reload_spritecolor_, anchorpoint_));
-	for (int i = {}; i < MaxRemainingBullet; i++) {
-		bullet_spritepos_[i] = { 1220.0f,25.0f + 32.0f * i };
-		bullet_spriterot_[i] = {};
-		time_[i] = {};
-		bullet_hud_[i].reset(Sprite::SpriteCreate(Name::kBullet, bullet_spritepos_[i], Color, anchorpoint_));
-		bullet_hud_[i]->SetSize(SpriteSiz);
-		drop_bulletflag_[i] = false;
-	}
+
+	bullet_ui_ = make_unique<BulletUI>();
+	bullet_ui_->Create(remaining_, ui_bulletpos, ui_reloadpos_);
+
 	//オブジェクトの読み込み
 	gun_ = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
 	body_ = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
@@ -85,14 +80,8 @@ void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 	XMMATRIX GunNotParentMatrix = gun_->GetNotParentWorld();
 	gun_notparentpos_ = XMVector3Transform(gun_pos_, GunNotParentMatrix);
 	gun_->SetPosition(gun_pos_);
-	//HUDのポジションセット
-	for (int i = 0; i < MaxRemainingBullet; i++) {
-		bullet_hud_[i]->SetPosition(bullet_spritepos_[i]);
-		bullet_hud_[i]->SetRotation(bullet_spriterot_[i]);
-	}
-	//リロードの文字
-	reload_->SetSize(reload_spritesize_);
-	reload_->SetColor(reload_spritecolor_);
+	//UIのポジションセット
+	bullet_ui_->Set();
 }
 //オブジェクトなどの更新処理
 void Player::AllUpdate()
@@ -124,7 +113,7 @@ void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot)
 	//発砲の処理
 	GunShotProcess(patern);
 	//UI
-	HUDMotionProcess();
+	UIMotionProcess();
 	//リロードの処理
 	ReloadProcess();
 
@@ -163,14 +152,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 void Player::SpriteDraw()
 {
 	if (!mouse_stopflag_) {
-		for (int i = 0; i < MaxRemainingBullet; i++) {
-			if (remaining_ <= MaxRemainingBullet) {
-				bullet_hud_[i]->Draw();
-			}
-		}
-		if (remaining_ >= MaxRemainingBullet) {
-			reload_->Draw();
-		}
+		bullet_ui_->Draw();
 	}
 	sprite_reticle_->Draw();
 }
@@ -215,6 +197,7 @@ void Player::GunShotProcess(Phase paterncount)
 		if (Mouse::GetInstance()->PushClick(0)) {
 			player_state_ = SHOT;
 			remaining_ += addvalue;
+			bullet_ui_->Shot(remaining_);
 			recoil_gunflag_ = true;
 			ParticleEfect(paterncount);
 		}
@@ -225,43 +208,17 @@ void Player::GunShotProcess(Phase paterncount)
 		bullet_shotflag_ = true;
 		player_state_ = WAIT;
 	}
-	//残弾が減った時
-	if (old_remaining_ < remaining_) {
-		drop_bulletflag_[old_remaining_] = true;
-		old_remaining_ = remaining_;
-	}
+	
 	//リコイル処理
 	RecoilProcess();
 }
 
-void Player::HUDMotionProcess()
+void Player::UIMotionProcess()
 {
-	//もし残弾が0になったら
-	if (remaining_ > MaxRemainingBullet) {
-		//反転フラグがtrueの時
-		if (!revers_flag_) {
-			//HUDを徐々に大きくする
-			SlowlyLargeHUD();
-		}
-		//反転フラグがfalseのとき
-		else {
-			//HUDを徐々に小さく
-			SlowlySmallHUD();
-		}
-	}
-	//残弾が満タンの時
-	else if (remaining_ == 0) {
-		for (int i = 0; i < MaxRemainingBullet; i++) {
-			bullet_spritepos_[i] = { 1220.0f,25.0f + 32.0f * i };
-			bullet_spriterot_[i] = {};
-			time_[i] = {};
-			drop_bulletflag_[i] = false;
-			old_remaining_ = remaining_;
-		}
-	}
-
+	
+	bullet_ui_->ReloadMotion();
 	//落ちていく薬莢の処理
-	FallingHUD();
+	bullet_ui_->FallingUI();
 }
 
 void Player::RecoilProcess()
@@ -320,6 +277,7 @@ void Player::ReloadProcess()
 	gun_rot_.x -= subrotation_;
 	//残弾を一度非表示にする
 	remaining_ = emptyremaining_;
+	bullet_ui_->SetRemainig(remaining_);
 	//タイムを加算する
 	reload_time_ += addtime_;
 	//動かしているタイムを40で除算
@@ -328,8 +286,7 @@ void Player::ReloadProcess()
 	if (anser_ != 0) { return; }
 	//残弾マックスに
 	remaining_ = {};
-	//回転していない状態に戻す
-	gun_rot_.x = {};
+	bullet_ui_->Reload(remaining_);
 	//残弾が満タンになった時
 	if (remaining_ == 0) {
 		//ステータスを待機状態に戻す
@@ -414,33 +371,7 @@ void Player::ParticleEfect(Phase paterncount)
 	SoundEffect();
 
 }
-void Player::FallingHUD()
-{
-	//落下時に回転に加算する値
-	const float addrotationvalue_ = 80.f;
-	//左右に飛ばす値
-	const float absolutevalue_ = 10.f;
-	//時間に加算する値
-	const float addfalltime_ = 0.5f;
-	//重力
-	const float Gravity = 9.8f;
-	//上方向に飛ばす値
-	const int upper_ = 40;
-	//弾数9発ぶんのfor文
-	for (int i = 0; i < MaxRemainingBullet; i++) {
-		//落ちるフラグがtrueなら薬莢を下に落とす
-		if (drop_bulletflag_[i]) {
-			time_[i] += addfalltime_;
-			bullet_spritepos_[i].x += Action::GetInstance()->GetRangRand(-absolutevalue_, absolutevalue_);
-			Action::GetInstance()->ThrowUp(Gravity, time_[i], upper_, bullet_spritepos_[i].y);
-			bullet_spriterot_[i] += addrotationvalue_;
-		}
-		//落ちたスプライトが画面外に出たらtime_を0にする
-		else if (bullet_spritepos_[i].y > WinApp::window_height * 2) {
-			time_[i] = {};
-		}
-	}
-}
+
 void Player::SlowlyLargeHUD()
 {
 	//Reloadの文字を徐々に大きくする

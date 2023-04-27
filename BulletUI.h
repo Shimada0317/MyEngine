@@ -14,6 +14,8 @@ public:
 
 	void Shot(int remaining);
 
+	void SetRemainig(int remaining) { this->remaining_ = remaining; };
+
 	void Reload(int  remaining);
 
 	void FallingUI();

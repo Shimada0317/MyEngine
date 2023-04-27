@@ -373,8 +373,6 @@ void TitleScene::ReloadProcess()
 
 	if (hudstate_ != RELOAD) { return; }
 	if (remaining_ != 0) {
-		//残弾が空
-		const int emptyremaining_ = 8;
 		//回転の減算する値
 		const float subrotation_ = 9.5f;
 		//タイマーの加算する値
@@ -383,7 +381,8 @@ void TitleScene::ReloadProcess()
 		const int divtime_ = 40;
 		int anser_ = 0;
 		//残弾を一度非表示にする
-		remaining_ = MaxRemainingBullet;
+		remaining_ = 8;
+		bullet_ui_->SetRemainig(remaining_);
 		//タイムを加算する
 		reloadtime_ += addtime_;
 		//動かしているタイムを40で除算
