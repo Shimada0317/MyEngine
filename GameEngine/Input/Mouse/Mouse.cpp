@@ -38,10 +38,6 @@ void Mouse::Update()
 
 
 	}
-
-	//memcpy(cliPre, cli, sizeof(cli));
-
-//	result = Onclick->Acquire();
 }
 
 bool Mouse::PushClick(BYTE click)

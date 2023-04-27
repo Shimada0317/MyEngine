@@ -3,6 +3,34 @@
 
 using namespace DirectX;
 
+Collision* Collision::GetInstance()
+{
+	static Collision instance;
+
+	return &instance;
+}
+
+void Collision::ToggleFlagInClick(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
+{
+	if ((check_Pos.x - radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) &&
+		(check_Pos.y - radY <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
+		CheckFlag = true;
+	}
+	else {
+		CheckFlag = false;
+	}
+}
+
+bool Collision::ChangeAtClick(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
+{
+	if ((check_Pos.x - radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) &&
+		(check_Pos.y - radY <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
+		return true;
+	}
+
+	return false;
+}
+
 bool Collision::CheckSphere2Plane(const Sphere& sphere, const Plane& plane, DirectX::XMVECTOR* inter)
 {
 	//座標系の原点から球の中心座標への距離

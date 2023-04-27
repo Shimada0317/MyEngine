@@ -20,6 +20,12 @@ private: // エイリアス
 	using XMVECTOR = DirectX::XMVECTOR;
 
 public:
+	static Collision* GetInstance();
+
+	void ToggleFlagInClick(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag);
+
+	bool ChangeAtClick(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY);
+public:
 
 	///<summary>
 	///球と平面の当たり判定
@@ -76,6 +82,7 @@ public:
 	static bool HeadHit(XMVECTOR headPos, XMFLOAT3 headScl, XMVECTOR PlayerPos, XMFLOAT3 playerScl);
 
 	static bool ArmHit(XMVECTOR armPos, XMFLOAT3 armScl, XMVECTOR PlayerPos, XMFLOAT3 PlayerScl);
+
 
 private:
 

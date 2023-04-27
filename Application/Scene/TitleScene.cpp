@@ -3,6 +3,7 @@
 #include <sstream>
 #include <iomanip>
 #include"Action.h"
+#include"Collision.h"
 #include"Mouse.h"
 #include"HelperMath.h"
 #include"SceneManager.h"
@@ -15,7 +16,7 @@ const int MaxRemainingBullet = 9;
 
 const XMFLOAT4 RegularColor = { 1.f,1.f,1.f,1.f };
 const XMFLOAT2 DescriptionScreenPosition = { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f };
-const XMFLOAT2 SpriteSize = { 64.f,64.f };
+const XMFLOAT2 SpriteSize = { 72.f,72.f };
 
 //コンストラクタ
 TitleScene::TitleScene(SceneManager* sceneManager_)
@@ -27,18 +28,17 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 //初期化処理
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
-	titlecamera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height); 
+	//カメラの生成
+	titlecamera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(titlecamera_.get());
+	//ライトの生成
 	light_ = make_unique<Light>();
 	light_ = Light::Create();
-
 	lightgroupe_ = make_unique<LightGroup>();
 	lightgroupe_ = LightGroup::Create();
-
+	//ライトのセット
 	Object3d::SetLightGroup(lightgroupe_.get());
 	Object3d::SetLight(light_.get());
-
-	
 	//スプライトの生成
 	title_.reset(Sprite::SpriteCreate(Name::kTitle, { 1.0f,1.0f }));
 	cursor_.reset(Sprite::SpriteCreate(Name::kReticle, reticlepos_, spritecol_, anchorpoint_));
@@ -51,8 +51,9 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	gamestartpreparation_.reset(Sprite::SpriteCreate(Name::kStartScreen, DescriptionScreenPosition, spritecol_, anchorpoint_));
 	arrowright_.reset(Sprite::SpriteCreate(kArrowRight, arrowrightpos_, arrowrightcolor_, anchorpoint_));
 	arrowleft_.reset(Sprite::SpriteCreate(kArrowLeft, arrowleftpos_, arrowleftcolor_, anchorpoint_));
+	reload_.reset(Sprite::SpriteCreate(Name::kReload, reload_spritepos_, reload_spritecolor_, anchorpoint_));
 	for (int i = {}; i < MaxRemainingBullet; i++) {
-		bullet_spritepos_[i] = { 1220.0f,25.0f + 32.0f * i };
+		bullet_spritepos_[i] = { 1120.0f,45.0f + 32.0f * i };
 		bullet_spriterot_[i] = {};
 		time_[i] = {};
 		bullet_hud_[i].reset(Sprite::SpriteCreate(Name::kBullet, bullet_spritepos_[i], RegularColor, anchorpoint_));
@@ -152,7 +153,6 @@ void TitleScene::StatusSet()
 	lightgroupe_->SetSpotLightAtten(2, spotlightatten_);
 	lightgroupe_->SetSpotLightFactorAngle(2, spotlightfactorangle_);
 
-
 	arrowleft_->SetSize(arrowsize_);
 	arrowright_->SetSize(arrowsize_);
 	arrowleft_->SetColor(arrowleftcolor_);
@@ -162,7 +162,9 @@ void TitleScene::StatusSet()
 	clickbefore_->SetSize(clicksize_);
 	signalafter_->SetSize(clicksize_);
 	signalbefore_->SetSize(clicksize_);
-
+	//リロードの文字
+	reload_->SetSize(reload_spritesize_);
+	reload_->SetColor(reload_spritecolor_);
 }
 
 //全ての更新処理をまとめる
@@ -176,7 +178,7 @@ void TitleScene::AllUpdate()
 	//ポストエフェクトの更新処理
 	posteffct_->Update(postefectcolor_);
 	//天球の更新処理
-	sphere_->Update({ 1,1,1,1 },true);
+	sphere_->Update({ 1,1,1,1 }, true);
 	//地面の更新処理
 	world_->Update();
 	//カメラの移動先のビルの更新処理
@@ -188,28 +190,32 @@ void TitleScene::AllUpdate()
 //更新処理
 void TitleScene::Update()
 {
-
+	//UIをイージングで拡大縮小させる処理
 	UiEasingProcess();
-	
+	//マウスの座標にスプライトを合わせる
 	Mouse::GetInstance()->MouseMoveSprite(reticlepos_);
 	//カメラのムーブ関数
 	CameraDirection();
+	//操作説明のページ
+	DescriptioPageProcess();
+	//ゲーム開始のページ
+	GameStartPrepartionPage();
 	//カーソルがスプライトの範囲内であるか
-	CheckCursorIn(reticlepos_, clickpos_, 250.f, 50.f, signalcurorinflag_);
+	Collision::GetInstance()->ToggleFlagInClick(reticlepos_, clickpos_, 250.f, 50.f, signalcurorinflag_);
 	//最初のクリック
-	if (signalcurorinflag_ == true ) {
+	if (signalcurorinflag_) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			titlespriteflag_ = false;
 			cameraeyemoveflag_ = true;
 		}
 	}
 
-	DescriptionPageProces();
-
+	ArrowProces();
+	//フェードアウト後にシーンチェンジ
 	FadeOutAndSceneChange();
-
+	//座標、回転、スケールのステータスをセット
 	StatusSet();
-
+	//全ての更新処理
 	AllUpdate();
 	//カメラの再計算
 	titlecamera_->RecalculationMatrix();
@@ -218,8 +224,9 @@ void TitleScene::Update()
 //カメラの移動
 void TitleScene::CameraDirection()
 {
+	if (titlestate_ != TITLESCREEN) { return; }
 	cameramove_ = { 0.0f,0.0f,0.0f };
-	if (cameraeyemoveflag_ == true && camerachangeflag_ == false) {
+	if (cameraeyemoveflag_ && !camerachangeflag_) {
 		if (cameraeyemove_.m128_f32[0] >= -1.1) {
 			cameraeyemove_.m128_f32[0] -= CameraEyeMoveValue;
 			cameramove_.m128_f32[0] += CameraMoveValueXandY;
@@ -228,25 +235,24 @@ void TitleScene::CameraDirection()
 		}
 		else {
 			camerachangeflag_ = true;
+			cameraeyemove_ = { 0.0f,0.0f,0.0f };
+			titlestate_ = DESCRIPTIONPAGE;
 		}
 	}
-
-	if (camerachangeflag_ == true) {
-		cameraeyemove_ = { 0.0f,0.0f,0.0f };
-	}
 }
-
+//UIの拡大縮小
 void TitleScene::UiEasingProcess()
 {
-
-	if (easingchangeflag_ == false) {
+	if (!easingchangeflag_) {
 		easingtimer_ += 0.05f;
+		//タイマーが一定の値になったら反転させる
 		if (easingtimer_ >= 1) {
 			easingchangeflag_ = true;
 		}
 	}
 	else {
 		easingtimer_ -= 0.05f;
+		//タイマーが一定の値になったら反転させる
 		if (easingtimer_ <= -1) {
 			easingchangeflag_ = false;
 		}
@@ -255,44 +261,22 @@ void TitleScene::UiEasingProcess()
 	arrowsize_.y = Action::GetInstance()->EasingOut(easingtimer_, 5) + 32;
 	clicksize_.x = Action::GetInstance()->EasingOut(easingtimer_, 5) + 550;
 	clicksize_.y = Action::GetInstance()->EasingOut(easingtimer_, 5) + 60;
+	reload_spritesize_.x = Action::GetInstance()->EasingOut(easingtimer_, 20) + reload_oldspritesize_.x;
+	reload_spritesize_.y = Action::GetInstance()->EasingOut(easingtimer_, 20) + reload_oldspritesize_.y;
 }
 
-//カーソルが範囲内に入っているか
-void TitleScene::CheckCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
-{
-	if ((check_Pos.x - radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) &&
-		(check_Pos.y - radY <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
-		CheckFlag = true;
-	}
-	else {
-		CheckFlag = false;
-	}
-}
-
-//矢印のスプライトの範囲
-bool TitleScene::NextorBack(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY)
-{
-	if ((check_Pos.x - radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x) &&
-		(check_Pos.y - radY <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
-		return true;
-	}
-
-	return false;
-}
-
-
-void TitleScene::DescriptionPageProces()
+void TitleScene::ArrowProces()
 {
 	//カメラが移動した後の画面
-	if (descriptionpage_ < GameStartPrepartionPage &&
-		camerachangeflag_ == true) {
-		if (NextorBack(reticlepos_, arrowrightpos_, 16, 16)) {
+	if (titlestate_ < GAMESTARTPREPARTIONPAGE &&
+		camerachangeflag_) {
+		if (Collision::GetInstance()->ChangeAtClick(reticlepos_, arrowrightpos_, 16, 16)) {
 			arrowrightcolor_ = { 1.f,0.f,0.f,1.f };
 			righttrueinflag_ = true;
 			//矢印を押された時
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				clickse_->LoadFile("Resources/Sound/SE/click.wav", volume_);
-				descriptionpage_ += 1;
+				titlestate_ += 1;
 			}
 		}
 		else {
@@ -300,15 +284,17 @@ void TitleScene::DescriptionPageProces()
 			righttrueinflag_ = false;
 		}
 	}
-
 	//ページが0以上であれば
-	if (descriptionpage_ > DescriptionPage) {
-		if (NextorBack(reticlepos_, arrowleftpos_, 16, 16)) {
+	if (titlestate_ > DESCRIPTIONPAGE) {
+		if (Collision::GetInstance()->ChangeAtClick(reticlepos_, arrowleftpos_, 16, 16)) {
 			arrowleftcolor_ = { 1.f,0.f,0.f,1.f };
 			lefttrueinflag_ = true;
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				clickse_->LoadFile("Resources/Sound/SE/click.wav", volume_);
-				descriptionpage_ -= 1;
+				titlestate_ -= 1;
+				if (titlestate_ <= DESCRIPTIONPAGE) {
+					titlestate_ = DESCRIPTIONPAGE;
+				}
 			}
 		}
 		else {
@@ -317,25 +303,13 @@ void TitleScene::DescriptionPageProces()
 		}
 	}
 
-	//救援ヘリを呼ぶとき
-	if (camerachangeflag_ == true &&
-		signalcurorinflag_ == true &&
-		descriptionpage_ == GameStartPrepartionPage) {
-		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
-			if (clickflag_ == true) {
-				clickse_->LoadFile("Resources/Sound/SE/MorseCode.wav", volume_);
-				clickflag_ = false;
-			}
-			fadeoutflag_ = true;
-		}
-	}
 }
 
 //フェードアウト後にゲームシーンへチェンジ
 void TitleScene::FadeOutAndSceneChange()
 {
 	//救援ヘリを読んだ後
-	if (fadeoutflag_ == true) {
+	if (fadeoutflag_) {
 		postefectcolor_.x -= SubColor;
 		postefectcolor_.y -= SubColor;
 		postefectcolor_.z -= SubColor;
@@ -352,7 +326,6 @@ void TitleScene::FadeOutAndSceneChange()
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
 	posteffct_->PreDrawScene(dxCommon->GetCmdList());
-
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	world_->Draw();
 	sphere_->Draw();
@@ -362,59 +335,176 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	}
 	start_->Draw();
 	Object3d::PostDraw();
-
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	if (titlespriteflag_ == true) {
+	if (titlespriteflag_) {
 		title_->Draw();
 	}
-	if (cameraeyemoveflag_ == false) {
-		if (signalcurorinflag_ == false) {
+	if (!cameraeyemoveflag_) {
+		if (!signalcurorinflag_) {
 			clickbefore_->Draw();
 		}
-		else if (signalcurorinflag_ == true) {
+		else if (signalcurorinflag_) {
 			clickafter_->Draw();
 		}
 	}
-	else if (camerachangeflag_ == true) {
-		if (descriptionpage_ < GameStartPrepartionPage) {
-			arrowright_->Draw();
-		}
-		if (descriptionpage_ > DescriptionPage) {
 
-			arrowleft_->Draw();
-
-
-		}
-		if (descriptionpage_ == DescriptionPage) {
-			descriptionoperation_->Draw();
-			for (int i = 0; i < MaxRemainingBullet; i++) {
-				if (remaining_ <= MaxRemainingBullet) {
-					bullet_hud_[i]->Draw();
-				}
+	if (titlestate_ < GAMESTARTPREPARTIONPAGE) {
+		arrowright_->Draw();
+	}
+	if (titlestate_ > DESCRIPTIONPAGE) {
+		arrowleft_->Draw();
+	}
+	if (titlestate_ == DESCRIPTIONPAGE) {
+		descriptionoperation_->Draw();
+		for (int i = 0; i < MaxRemainingBullet; i++) {
+			if (remaining_ <= MaxRemainingBullet) {
+				bullet_hud_[i]->Draw();
 			}
 		}
-		else if (descriptionpage_ == EnemyOverViewPage) {
-			enemyoverview_->Draw();
+		if (remaining_ >= MaxRemainingBullet) {
+			reload_->Draw();
 		}
-		else if (descriptionpage_ == GameStartPrepartionPage) {
-			gamestartpreparation_->Draw();
+	}
+	else if (titlestate_ == ENEMYOVERVIEWPAGE) {
+		enemyoverview_->Draw();
+	}
+	else if (titlestate_ == GAMESTARTPREPARTIONPAGE) {
+		gamestartpreparation_->Draw();
+		if (!signalcurorinflag_) {
+			signalbefore_->Draw();
 		}
-		if (descriptionpage_ == GameStartPrepartionPage) {
-			if (signalcurorinflag_ == false) {
-				signalbefore_->Draw();
-			}
-			else if (signalcurorinflag_ == true) {
-				signalafter_->Draw();
-			}
+		else if (signalcurorinflag_) {
+			signalafter_->Draw();
 		}
 	}
 	cursor_->Draw();
 	Sprite::PostDraw();
 	posteffct_->PostDrawScene(dxCommon->GetCmdList());
-
 	dxCommon->PreDraw();
 	posteffct_->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
+}
+
+void TitleScene::FallingHUD()
+{
+	//落下時に回転に加算する値
+	const float addrotationvalue_ = 80.f;
+	//左右に飛ばす値
+	const float absolutevalue_ = 10.f;
+	//時間に加算する値
+	const float addfalltime_ = 0.5f;
+	//重力
+	const float Gravity = 9.8f;
+	//上方向に飛ばす値
+	const int upper_ = 40;
+	//弾数9発ぶんのfor文
+	for (int i = 0; i < MaxRemainingBullet; i++) {
+		//落ちるフラグがtrueなら薬莢を下に落とす
+		if (drop_bulletflag_[i]) {
+			time_[i] += addfalltime_;
+			bullet_spritepos_[i].x += Action::GetInstance()->GetRangRand(-absolutevalue_, absolutevalue_);
+			Action::GetInstance()->ThrowUp(Gravity, time_[i], upper_, bullet_spritepos_[i].y);
+			bullet_spriterot_[i] += addrotationvalue_;
+		}
+		//落ちたスプライトが画面外に出たらtime_を0にする
+		else if (bullet_spritepos_[i].y > WinApp::window_height * 2) {
+			time_[i] = {};
+		}
+	}
+}
+
+
+void TitleScene::HUDMotionProcess()
+{
+	FallingHUD();
+	//残弾が満タンの時
+	if (remaining_ == 0) {
+		for (int i = 0; i < MaxRemainingBullet; i++) {
+			bullet_spritepos_[i] = { 1120.0f,45.0f + 32.0f * i };
+			bullet_spriterot_[i] = {};
+			time_[i] = {};
+			drop_bulletflag_[i] = false;
+			old_remaining_ = remaining_;
+		}
+	}
+}
+
+
+void TitleScene::ReloadProcess()
+{
+	if (Mouse::GetInstance()->PushClick(1)) {
+		hudstate_ = RELOAD;
+	}
+
+	if (hudstate_ != RELOAD) { return; }
+	if (remaining_ != 0) {
+		//残弾が空
+		const int emptyremaining_ = 8;
+		//回転の減算する値
+		const float subrotation_ = 9.5f;
+		//タイマーの加算する値
+		const int addtime_ = 1;
+		//タイマーを除算するための値
+		const int divtime_ = 40;
+		int anser_ = 0;
+		//残弾を一度非表示にする
+		remaining_ = MaxRemainingBullet;
+		//タイムを加算する
+		reloadtime_ += addtime_;
+		//動かしているタイムを40で除算
+		anser_ = reloadtime_ % divtime_;
+		//reloaadtime/40の余りが0以外の時
+		if (anser_ != 0) { return; }
+		//残弾マックスに
+		remaining_ = {};
+		//残弾が満タンになった時
+		if (remaining_ == 0) {
+			//タイムを初期化
+			reloadtime_ = {};
+			hudstate_ = WAIT;
+		}
+	}
+}
+
+void TitleScene::ShotProcess()
+{
+	if (remaining_ < MaxRemainingBullet) {
+		if (Mouse::GetInstance()->PushClick(0)) {
+			remaining_ += 1;
+		}
+	}
+	if (old_remaining_ < remaining_) {
+		drop_bulletflag_[old_remaining_] = true;
+		old_remaining_ = remaining_;
+	}
+}
+
+void TitleScene::DescriptioPageProcess()
+{
+	if (titlestate_ != DESCRIPTIONPAGE) { return; }
+
+	ReloadProcess();
+
+	ShotProcess();
+
+	HUDMotionProcess();
+}
+
+void TitleScene::GameStartPrepartionPage()
+{
+	if (titlestate_ != GAMESTARTPREPARTIONPAGE) { return; }
+	//救援ヘリを呼ぶとき
+	if (camerachangeflag_ &&
+		signalcurorinflag_ &&
+		titlestate_ == GAMESTARTPREPARTIONPAGE) {
+		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
+			if (clickflag_) {
+				clickse_->LoadFile("Resources/Sound/SE/MorseCode.wav", volume_);
+				clickflag_ = false;
+			}
+			fadeoutflag_ = true;
+		}
+	}
 }
 
 //終了処理

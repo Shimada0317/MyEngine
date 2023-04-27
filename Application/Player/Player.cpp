@@ -259,6 +259,7 @@ void Player::HUDMotionProcess()
 			old_remaining_ = remaining_;
 		}
 	}
+
 	//—‚¿‚Ä‚¢‚­–òä°‚Ìˆ—
 	FallingHUD();
 }

@@ -8,93 +8,86 @@ const int BUILSAMOUNT = 16;
 class TitleScene :public BaseScene
 {
 private:
-	enum OperationPage {
-		DescriptionPage = 0,
-		EnemyOverViewPage,
-		GameStartPrepartionPage,
+	enum TITLESTATE {
+		TITLESCREEN=0,
+		DESCRIPTIONPAGE,
+		ENEMYOVERVIEWPAGE,
+		GAMESTARTPREPARTIONPAGE,
+	};
+
+	enum UISTATE {
+		WAIT=0,
+		RELOAD,
 	};
 
 private:
 	static const int debugTextNumber = 0;
-
+private:
+	static void(TitleScene::* PageFuncTable[])();
 public://メンバ関数
 	/// <summary>
 	/// コンストラクタ
 	/// </summary>
 	/// <param name="sceneManager_"></param>
 	TitleScene(SceneManager* sceneManager_);
-
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
 	/// <param name="dxComon"></param>
 	void Initialize(DirectXCommon* dxComon) override;
-
 	/// <summary>
 	/// ステータスセット
 	/// </summary>
 	void StatusSet();
-
 	/// <summary>
 	/// Obj等のUpdateはこの中で
 	/// </summary>
 	void AllUpdate();
-
 	/// <summary>
 	/// 更新処理
 	/// </summary>
 	void Update() override;
-
 	/// <summary>
 	/// カメラの移動
 	/// </summary>
 	void CameraDirection();
-
 	/// <summary>
 	/// UIをイージングで拡大縮小させる処理
 	/// </summary>
 	void UiEasingProcess();
-
-	/// <summary>
-	/// カーソルが範囲内に入っているか
-	/// </summary>
-	/// <param name="cursorPos">カーソルの座標</param>
-	/// <param name="checkPos">押せるスプライトの座標</param>
-	/// <param name="radX">スプライトの横の範囲</param>
-	/// <param name="radY">スプライトの縦の範囲</param>
-	/// <param name="CheckFlag">範囲内に入っている場合フラグをtrueにする</param>
-	void CheckCursorIn(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY,bool& CheckFlag);
-
-	/// <summary>
-	/// 矢印のスプライトの範囲
-	/// </summary>
-	/// <param name="cursorPos">カーソルの座標</param>
-	/// <param name="checkPos">押せるスプライトの座標</param>
-	/// <param name="radX">スプライトの横の範囲</param>
-	/// <param name="radY">スプライトの縦の範囲</param>
-	/// <returns></returns>
-	bool NextorBack(const XMFLOAT2& cursorPos, const XMFLOAT2& checkPos, float radX, float radY);
-
 	/// <summary>
 	/// 説明画面で行われる処理
 	/// </summary>
-	void DescriptionPageProces();
-
+	void ArrowProces();
 	/// <summary>
 	///　フェードアウト後にゲームシーンへチェンジ
 	/// </summary>
 	void FadeOutAndSceneChange();
-
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon)override;
 
+	void FallingHUD();
+
+	void HUDMotionProcess();
+
+	void ReloadProcess();
+
+	void ShotProcess();
+
+	void DescriptioPageProcess();
+
+	void GameStartPrepartionPage();
+
 	/// <summary>
 	/// 終了処理
 	/// </summary>
 	void Finalize() override;
+public://関数テーブル
+
+
 
 private:
 	//Obj
@@ -116,6 +109,7 @@ private:
 	unique_ptr<Sprite> arrowright_ = nullptr;
 	unique_ptr<Sprite> arrowleft_ = nullptr;
 	unique_ptr<Sprite> bullet_hud_[9];
+	unique_ptr<Sprite> reload_;
 	//その他の機能
 	unique_ptr<Light> light_ = nullptr;
 	unique_ptr<LightGroup> lightgroupe_ = nullptr;
@@ -157,6 +151,11 @@ private:
 	float bullet_spriterot_[9];
 	float time_[9];
 	bool drop_bulletflag_[9];
+	//Reloadのステータス
+	XMFLOAT4 reload_spritecolor_ = { 1.0f,1.0f,1.0f,0.9f };
+	XMFLOAT2 reload_spritepos_ = { 900,410 };
+	XMFLOAT2 reload_spritesize_ = { 210,140 };
+	XMFLOAT2 reload_oldspritesize_ = reload_spritesize_;
 	//説明の矢印座標
 	XMFLOAT2 arrowrightpos_ = { 1240.0f,300 };
 	XMFLOAT2 arrowleftpos_ = { 35.0f,300 };
@@ -175,8 +174,6 @@ private:
 	bool clickflag_ = true;
 	//音量
 	float volume_ = 0.8f;
-	//説明ページ
-	int descriptionpage_ = 0;
 	//ライトのステータス
 	XMFLOAT3 spotlightdir_ = { 0,-1,0 };
 	XMFLOAT3 spotlightpos_ = { 0,1005,0 };
@@ -194,5 +191,11 @@ private:
 	XMFLOAT2 clicksize_ = { 550.f,60.f };
 
 	int remaining_ = 0;
+	int old_remaining_ = 0;
+	bool revers_flag_ = false;
+	int reloadtime_ = 0;
+
+	int hudstate_ = WAIT;
+	int titlestate_ = TITLESCREEN;
 };
 
