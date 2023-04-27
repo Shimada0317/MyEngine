@@ -381,7 +381,7 @@ void TitleScene::ReloadProcess()
 		const int divtime_ = 40;
 		int anser_ = 0;
 		//残弾を一度非表示にする
-		remaining_ = 8;
+		remaining_ = MaxRemainingBullet;
 		bullet_ui_->SetRemainig(remaining_);
 		//タイムを加算する
 		reloadtime_ += addtime_;
