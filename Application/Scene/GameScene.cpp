@@ -952,7 +952,6 @@ void GameScene::StartCameraWork()
 		if (l_bodyworldpos.m128_f32[1] <= 0.3f) {
 			velocity_ = { 0.0f,0.0f,0.0f };
 			l_reticlepos.m128_f32[1] = 0.0f;
-			movieflag_ = true;
 			gamestate_ = MOVE;
 		}
 	}
@@ -979,7 +978,6 @@ void GameScene::StartCameraWork()
 void GameScene::SkipStartMovie()
 {
 	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanbyflag_ == true && getcamworkflag_ == false) {
-		movieflag_ = true;
 		actioncount_ = 100;
 		eyerot_.x = 0;
 		eyerot_.y = 0;
@@ -992,18 +990,19 @@ void GameScene::SkipStartMovie()
 
 void GameScene::PlayerMove()
 {
-	XMMATRIX l_cameramatrix;
-	l_cameramatrix = railcamera_->GetWorld();
-	cameravector_ = { 0.f,0.f,0.f,0.f };
-	cameravector_ = XMVector3Transform(cameravector_, l_cameramatrix);
-	//ìGÇëSÇƒì|ÇµÉÄÅ[ÉuèÛë‘Ç…Ç»Ç¡ÇΩÇÁ
-	if (moveflag_ == true) {
-		gamestate_ = MOVE;
-		//ï‡Ç¢ÇƒÇ¢ÇÈÇ∆Ç´ÇÃÇÊÇ§Ç»éÒÇìÆÇ©Ç∑
-		MoveShakingHead();
-		(this->*MoveFuncTable[patern_])();
-		//ÉvÉåÉCÉÑÅ[Ç…ìnÇ∑äpìx
-		passrot_ = eyerot_;
+	if (gamestate_ == MOVE) {
+		XMMATRIX l_cameramatrix;
+		l_cameramatrix = railcamera_->GetWorld();
+		cameravector_ = { 0.f,0.f,0.f,0.f };
+		cameravector_ = XMVector3Transform(cameravector_, l_cameramatrix);
+		//ìGÇëSÇƒì|ÇµÉÄÅ[ÉuèÛë‘Ç…Ç»Ç¡ÇΩÇÁ
+		if (moveflag_ == true) {
+			//ï‡Ç¢ÇƒÇ¢ÇÈÇ∆Ç´ÇÃÇÊÇ§Ç»éÒÇìÆÇ©Ç∑
+			MoveShakingHead();
+			(this->*MoveFuncTable[patern_])();
+			//ÉvÉåÉCÉÑÅ[Ç…ìnÇ∑äpìx
+			passrot_ = eyerot_;
+		}
 	}
 }
 
@@ -1106,8 +1105,7 @@ void GameScene::HeartBeat()
 
 void GameScene::MovieProcess()
 {
-	if (gamestate_ == MOVE) {
-		if (movieflag_ == false) {
+	if (gamestate_ == MOVIE) {
 			curtainuppos_.y += 4;
 			curtaindownpos_.y -= 4;
 			skippos_.y -= 2;
@@ -1123,8 +1121,8 @@ void GameScene::MovieProcess()
 			if (skippos_.y <= 620) {
 				skippos_.y = 620;
 			}
-		}
-		else {
+	}
+	else {
 			curtainuppos_.y -= 4;
 			curtaindownpos_.y += 4;
 			skippos_.y += 4;
@@ -1143,6 +1141,12 @@ void GameScene::MovieProcess()
 				skippos_.y = 12000;
 			}
 		}
+}
+
+void GameScene::MoveProcess()
+{
+	if (gamestate_ == MOVE) {
+
 	}
 }
 
@@ -1197,7 +1201,6 @@ void GameScene::MovePointALeft()
 		eyerot_.y = max(eyerot_.y, -90.0f);
 		changerotation_ = eyerot_.y;
 		velocity_ = { 0, 0, 0 };
-		moveflag_ = false;
 		stopflag_ = true;
 	}
 }
@@ -1211,7 +1214,6 @@ void GameScene::MovePointB()
 		velocity_ = { 0, 0, movespeed_ };
 	}
 	if (cameravector_.m128_f32[0] >= 30) {
-		moveflag_ = false;
 		stopflag_ = true;
 		velocity_ = { 0, 0, 0 };
 	}
@@ -1221,7 +1223,6 @@ void GameScene::MovePointC()
 {
 	velocity_ = { 0, 0, movespeed_ };
 	if (cameravector_.m128_f32[0] >= 45) {
-		moveflag_ = false;
 		stopflag_ = true;
 		velocity_ = { 0, 0, 0 };
 	}
@@ -1235,7 +1236,6 @@ void GameScene::MovePointCOblique()
 		Action::GetInstance()->EaseOut(eyerot_.y, 145.0f);
 		if (eyerot_.y >= 135) {
 			changerotation_ = 135;
-			moveflag_ = false;
 			stopflag_ = true;
 			velocity_ = { 0, 0, 0 };
 		}
@@ -1250,7 +1250,6 @@ void GameScene::MovePointCFront()
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
 	if (eyerot_.y <= 0) {
 		changerotation_ = 0;
-		moveflag_ = false;
 		stopflag_ = true;
 		velocity_ = { 0, 0, 0 };
 	}
@@ -1267,7 +1266,6 @@ void GameScene::GoalPointBack()
 			Action::GetInstance()->EaseOut(eyerot_.y, 185.0f);
 			if (eyerot_.y >= 180) {
 				changerotation_ = 0;
-				moveflag_ = false;
 				stopflag_ = true;
 				velocity_ = { 0, 0, 0 };
 			}
@@ -1279,7 +1277,6 @@ void GameScene::GoalPoint()
 {
 	gamestate_ = MOVIE;
 	stanbyflag_ = false;
-	movieflag_ = false;
 	velocity_ = { 0.f, 0.f, 0.1f };
 	//å„ÇÎÇå¸Ç≠
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);

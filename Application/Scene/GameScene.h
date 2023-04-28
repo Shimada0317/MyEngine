@@ -146,6 +146,8 @@ public://メンバ関数
 	/// </summary>
 	void MovieProcess();
 
+	void MoveProcess();
+
 	/// <summary>
 	/// カーソルに入っているか
 	/// </summary>
@@ -376,7 +378,6 @@ private://メンバ変数
 	bool stanbyflag_ = false;
 	int actioncount_ = 0;
 	float actiontimer_ = 0.f;
-	bool movieflag_ = false;
 	XMVECTOR l_reticlepos;
 	XMVECTOR cameravector_{ 0.f,0.f,0.f };
 	float movespeed_ = 0.5f;

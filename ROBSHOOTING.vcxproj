@@ -59,7 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\SpriteManager;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)GameEngine\Light\SpotLight;$(ProjectDir)GameEngine\HelperMath;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Actor;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene;$(ProjectDir)External\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\SpriteManager;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)GameEngine\Light\SpotLight;$(ProjectDir)GameEngine\HelperMath;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Actor;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene;$(ProjectDir)External\imgui;$(ProjectDir)Application\UI\BulletUI</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26495;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -79,7 +79,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\SpriteManager;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)GameEngine\Light\SpotLight;$(ProjectDir)GameEngine\HelperMath;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Actor;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene;$(ProjectDir)External\imgui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\SpriteManager;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)GameEngine\Light\SpotLight;$(ProjectDir)GameEngine\HelperMath;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Actor;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene;$(ProjectDir)External\imgui;$(ProjectDir)Application\UI\BulletUI</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <TreatWarningAsError>true</TreatWarningAsError>
@@ -104,7 +104,7 @@
     <ClCompile Include="Application\Scene\GameScene.cpp" />
     <ClCompile Include="Application\Scene\SceneManager.cpp" />
     <ClCompile Include="Application\Scene\TitleScene.cpp" />
-    <ClCompile Include="BulletUI.cpp" />
+    <ClCompile Include="Application\UI\BulletUI\BulletUI.cpp" />
     <ClCompile Include="External\imgui\imgui.cpp" />
     <ClCompile Include="External\imgui\imgui_demo.cpp" />
     <ClCompile Include="External\imgui\imgui_draw.cpp" />
@@ -283,7 +283,7 @@
     <ClInclude Include="Application\Scene\GameScene.h" />
     <ClInclude Include="Application\Scene\SceneManager.h" />
     <ClInclude Include="Application\Scene\TitleScene.h" />
-    <ClInclude Include="BulletUI.h" />
+    <ClInclude Include="Application\UI\BulletUI\BulletUI.h" />
     <ClInclude Include="External\imgui\imconfig.h" />
     <ClInclude Include="External\imgui\imgui.h" />
     <ClInclude Include="External\imgui\imgui_impl_dx12.h" />

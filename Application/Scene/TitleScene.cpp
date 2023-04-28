@@ -335,7 +335,7 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 		}
 	}
 
-	if (titlestate_ < GAMESTARTPREPARTIONPAGE) {
+	if (titlestate_ < GAMESTARTPREPARTIONPAGE&&titlestate_>TITLESCREEN) {
 		arrowright_->Draw();
 	}
 	if (titlestate_ > DESCRIPTIONPAGE) {
