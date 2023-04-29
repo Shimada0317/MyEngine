@@ -51,20 +51,16 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 		lifecount_[i].reset(Sprite::SpriteCreate(i, hartposition_));
 	}
 	//オブジェクトの生成
-	sphere_ = Object3d::Create(ModelManager::GetInstance()->GetModel(6));
-	world_ = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
-	start_ = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
 	heri_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
 	goal_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
 	hane_ = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
-	
+	//背景のオブジェクトの生成
+	common_background_ = make_unique<CommonBackground>();
+	common_background_->Initialize();
 	
 	for (int i = 0; i < 5; i++) {
 		fieldbuils_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 	}
-
-	common_background_ = make_unique<CommonBackground>();
-	common_background_->Initialize();
 
 	player_ = make_unique<Player>();
 	player_->Initalize(camera_.get());
@@ -94,7 +90,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	fieldbillrot_[2] = { 0.0f,90.0f,0.0f };
 	fieldbillrot_[3] = { 0.0f,0.0f,0.0f };
 	fieldbillrot_[4] = { 0.0f,0.0f,0.0f };
-
 
 	for (int i = 0; i < 3; i++) {
 		searchlightdir_[i] = { 0,-10,0 };
@@ -134,6 +129,7 @@ void GameScene::StatusSet()
 	hart_->SetPosition({ WinApp::window_width - 173,WinApp::window_height - 50 });
 	//Hpバー
 	player_->SetHp(playerhp_);
+	playerhp_ = player_->GetHp();
 
 	heri_->SetPosition(heripos_);
 	heri_->SetScale(heriscl_);
@@ -160,24 +156,6 @@ void GameScene::StatusSet()
 #pragma endregion
 
 
-	//天球のステータスセット
-	sphere_->SetRotation(sphererot_);
-	sphere_->SetPosition(spherepos_);
-	sphere_->SetScale(spherescl_);
-
-	//地面のステータスセット
-	world_->SetPosition(worldpos_);
-	world_->SetScale(worldscl_);
-
-	//アクタークラスからゲット
-	playerhp_ = player_->GetHp();
-
-	//スタート地点のステータスセット
-	start_->SetPosition(startpos_);
-	start_->SetScale(startscl_);
-	start_->SetRotation(startrot_);
-
-	
 
 	//フィールドの建物のステータスセット
 	for (int i = 0; i < 5; i++) {
@@ -217,25 +195,16 @@ void GameScene::StatusSet()
 //オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
-	Action::GetInstance()->DebugMove(searchlightpos_[0]);
 	if (getcamworkflag_ == true) {
 		velocity_ = XMVector3TransformNormal(velocity_, player_->GetBodyMatrix());
 	}
-	railcamera_->Update(velocity_, eyerot_, camera_.get());
-	
 	//フィールドのビルの更新処理
 	for (int i = 0; i < 5; i++) {
 		fieldbuils_[i]->Update(BillColor);
 	}
-	//天球の更新処理
-	sphere_->Update({ 1,1,1,1 }, true);
-	//地面の更新処理
-	world_->Update({ 0.7f,0.7f,0.7f,1.0f });
-	//スタート地点の更新処理
-	start_->Update(BillColor);
 	//プレイヤーの更新処理
 	player_->Update(camera_.get(), (Phase)patern_, passrot_);
-
+	railcamera_->Update(velocity_, eyerot_, camera_.get());
 	common_background_->Update();
 }
 
@@ -250,6 +219,8 @@ void GameScene::Update()
 	StartCameraWork();
 	//スポットライトの動きの処理
 	SpotLightMove();
+	//ハートの鼓動の動き
+	HeartBeat();
 
 	if (gamestartflag_ == false) {
 		FadeIn();
@@ -282,8 +253,7 @@ void GameScene::Update()
 	ScreenShake(4.5f,0.1f);
 
 #pragma region ActorからUpdate内の処理を持ってくる(後でこのコメントは消す)
-	//ハートの鼓動の動き
-	HeartBeat();
+
 
 
 	XMVECTOR velo = player_->GetVelocity();
@@ -431,15 +401,10 @@ void GameScene::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Camera");
-	/*ImGui::SliderFloat("LightPosX", &searchlightpos_[0].x, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightPosY", &searchlightpos_[0].y, -100.0f, 100.0f);
-	ImGui::SliderFloat("LightPosZ", &searchlightpos_[0].z, -100.0f, 100.0f);*/
-
+	
 	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
 	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
 	ImGui::SliderFloat("eyerot", &passrot_.y, -180.0f, 180.0f);
-
-
 
 	ImGui::End();
 	ImGui::PopStyleColor();
@@ -475,10 +440,6 @@ void GameScene::Finalize()
 	conteniu_.reset();
 	clear_.reset();
 	shot_.reset();
-
-	world_.reset();
-	start_.reset();
-	
 	for (int i = 0; i < 5; i++) {
 		fieldbuils_[i].reset();
 	}

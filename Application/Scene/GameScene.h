@@ -189,9 +189,6 @@ public:
 
 private://ƒƒ“ƒo•Ï”
 	//Obj
-	unique_ptr <Object3d> sphere_;
-	unique_ptr <Object3d> world_;
-	unique_ptr<Object3d> start_;
 	unique_ptr<Object3d> fieldbuils_[5];
 	unique_ptr<Object3d> heri_;
 	unique_ptr<Object3d> goal_;
