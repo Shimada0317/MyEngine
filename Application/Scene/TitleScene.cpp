@@ -56,13 +56,8 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	bullet_ui_->Create(remaining_,ui_bulletpos_,ui_reloadpos_);
 
 	//オブジェクトの生成
-	sphere_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kSkydome));
-	for (int i = 0; i < BUILSAMOUNT; i++) {
-		builshighalpha_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(kBuils));
-		builslowalpha_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(kBuils));
-	}
-	start_ = Object3d::Create(ModelManager::GetInstance()->GetModel(8));
-	world_ = Object3d::Create(ModelManager::GetInstance()->GetModel(9));
+	common_background_ = make_unique<CommonBackground>();
+	common_background_->Initialize();
 	//SEの初期か
 	clickse_ = make_unique<Audio>();
 	clickse_->Initialize();
@@ -87,36 +82,7 @@ void TitleScene::StatusSet()
 	//カメラの動き
 	titlecamera_->MoveEyeVector(cameraeyemove_);
 	titlecamera_->MoveVector(cameramove_);
-	//天球のステータスのセット
-	sphere_->SetRotation(sphererot_);
-	sphere_->SetPosition(spherepos_);
-	sphere_->SetScale(spherescl_);
-	//地面のステータスのセット
-	world_->SetPosition(worldpos_);
-	world_->SetScale(worldscl_);
-	//左右のビルのステータスのセット
-	for (int i = 0; i < BUILSAMOUNT; i++) {
-		builshighalpha_[i]->SetScale(builsscl_);
-		builslowalpha_[i]->SetScale(builsscl_);
-		if (i % 2 == 0) {
-			builshighalphapos_ = { 100.0f, 0,-300.0f + (100 * i / 2) };
-			builslowalphapos_ = { 200.0f,0,-300.0f + (100 * i / 2) };
-			builsrot_ = { 0.0f,90.0f,0.0f };
-		}
-		else if (i % 2 == 1) {
-			builshighalphapos_ = { -100.0f,0,-300.0f + (100 * i / 2) };
-			builslowalphapos_ = { -200.0f, 0,-300.0f + (100 * i / 2) };
-			builsrot_ = { 0.0f,270.0f,0.0f };
-		}
-		builshighalpha_[i]->SetRotation(builsrot_);
-		builshighalpha_[i]->SetPosition(builshighalphapos_);
-		builslowalpha_[i]->SetRotation(builsrot_);
-		builslowalpha_[i]->SetPosition(builslowalphapos_);
-	}
-	//カメラの移動先のビルのステータスセット
-	start_->SetPosition(startpos_);
-	start_->SetScale(startscl_);
-	start_->SetRotation({ 0.0f,180.0f,0.0f });
+	
 	//タイトルスプライトのステータスセット
 	title_->SetSize({ titlesize_ });
 	title_->SetPosition({ titlepos_ });
@@ -158,21 +124,13 @@ void TitleScene::StatusSet()
 //全ての更新処理をまとめる
 void TitleScene::AllUpdate()
 {
-	//左右のビルの更新処理
-	for (int i = 0; i < BUILSAMOUNT; i++) {
-		builshighalpha_[i]->Update({ 0.8f,0.6f,0.3f,1.0f });
-		builslowalpha_[i]->Update({ 0.2f,0.2f,0.2f,0.9f });
-	}
+
 	//ポストエフェクトの更新処理
 	posteffct_->Update(postefectcolor_);
-	//天球の更新処理
-	sphere_->Update({ 1,1,1,1 }, true);
-	//地面の更新処理
-	world_->Update();
-	//カメラの移動先のビルの更新処理
-	start_->Update({ 0.4f,0.4f,0.4f,1.f });
 	//ライトグループ更新
 	lightgroupe_->Update();
+	//背景オブジェクトの更新
+	common_background_->Update();
 }
 
 //更新処理
@@ -314,13 +272,14 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 {
 	posteffct_->PreDrawScene(dxCommon->GetCmdList());
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	world_->Draw();
+	common_background_->Draw();
+	/*world_->Draw();
 	sphere_->Draw();
 	for (int i = 0; i < BUILSAMOUNT; i++) {
 		builshighalpha_[i]->Draw();
 		builslowalpha_[i]->Draw();
 	}
-	start_->Draw();
+	start_->Draw();*/
 	Object3d::PostDraw();
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	if (titlespriteflag_) {
@@ -455,13 +414,7 @@ void TitleScene::Finalize()
 	cursor_.reset();
 	lightgroupe_.reset();
 	light_.reset();
-	for (int i = 0; i < BUILSAMOUNT; i++) {
-		builshighalpha_[i].reset();
-		builslowalpha_[i].reset();
-	}
-	sphere_.reset();
-	world_.reset();
-	start_.reset();
 	bgm_.reset();
 	clickse_.reset();
+	common_background_.reset();
 }

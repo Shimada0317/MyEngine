@@ -222,6 +222,7 @@
     <ClCompile Include="Application\UI\BulletUI\BulletUI.cpp">
       <Filter>AllGame\Application\UI\BulletUI</Filter>
     </ClCompile>
+    <ClCompile Include="Application\CommonBackground\CommonBackground.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -389,6 +390,7 @@
     <ClInclude Include="Application\UI\BulletUI\BulletUI.h">
       <Filter>AllGame\Application\UI\BulletUI</Filter>
     </ClInclude>
+    <ClInclude Include="Application\CommonBackground\CommonBackground.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

@@ -3,8 +3,8 @@
 #include"BaseScene.h"
 #include"GameScene.h"
 #include"BulletUI.h"
+#include"CommonBackground.h"
 
-const int BUILSAMOUNT = 16;
 
 class TitleScene :public BaseScene
 {
@@ -88,11 +88,7 @@ public://関数テーブル
 
 private:
 	//Obj
-	unique_ptr <Object3d> sphere_;
-	unique_ptr<Object3d> builshighalpha_[BUILSAMOUNT];
-	unique_ptr<Object3d> builslowalpha_[BUILSAMOUNT];
-	unique_ptr <Object3d >world_;
-	unique_ptr<Object3d> start_;
+	unique_ptr<CommonBackground> common_background_;
 	//スプライト
 	unique_ptr<Sprite> title_ = nullptr;
 	unique_ptr<Sprite> cursor_ = nullptr;

@@ -8,8 +8,7 @@
 #include"Player.h"
 #include"TitleScene.h"
 #include"RailCamera.h"
-
-const int BUILS = 16;
+#include"CommonBackground.h"
 
 
 class GameScene :public BaseScene
@@ -193,12 +192,11 @@ private://メンバ変数
 	unique_ptr <Object3d> sphere_;
 	unique_ptr <Object3d> world_;
 	unique_ptr<Object3d> start_;
-	unique_ptr<Object3d> builshighalpha_[BUILS];
-	unique_ptr<Object3d> builslowalpha_[BUILS];
 	unique_ptr<Object3d> fieldbuils_[5];
 	unique_ptr<Object3d> heri_;
 	unique_ptr<Object3d> goal_;
 	unique_ptr<Object3d> hane_;
+	unique_ptr<CommonBackground> common_background_;
 	//スプライト
 	unique_ptr<Sprite> clear_;
 	unique_ptr<Sprite> conteniu_;

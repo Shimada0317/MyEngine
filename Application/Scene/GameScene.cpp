@@ -57,14 +57,14 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	heri_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
 	goal_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
 	hane_ = Object3d::Create(ModelManager::GetInstance()->GetModel(12));
-	for (int i = 0; i < BUILS; i++) {
-		builshighalpha_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
-		builslowalpha_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
-
-	}
+	
+	
 	for (int i = 0; i < 5; i++) {
 		fieldbuils_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
 	}
+
+	common_background_ = make_unique<CommonBackground>();
+	common_background_->Initialize();
 
 	player_ = make_unique<Player>();
 	player_->Initalize(camera_.get());
@@ -177,25 +177,7 @@ void GameScene::StatusSet()
 	start_->SetScale(startscl_);
 	start_->SetRotation(startrot_);
 
-	//左右のビルのステータスセット
-	for (int i = 0; i < BUILS; i++) {
-		builshighalpha_[i]->SetScale(builsscl_);
-		builslowalpha_[i]->SetScale(builsscl_);
-		if (i % 2 == 0) {
-			builshighalphapos_ = { 100.0f, 0,-300.0f + (100 * i / 2) };
-			builslowalphapos_ = { 200.0f,0,-300.0f + (100 * i / 2) };
-			builsrot_ = { 0.0f,90.0f,0.0f };
-		}
-		else if (i % 2 == 1) {
-			builshighalphapos_ = { -100.0f,0,-300.0f + (100 * i / 2) };
-			builslowalphapos_ = { -200.0f, 0,-300.0f + (100 * i / 2) };
-			builsrot_ = { 0.0f,270.0f,0.0f };
-		}
-		builshighalpha_[i]->SetRotation(builsrot_);
-		builshighalpha_[i]->SetPosition(builshighalphapos_);
-		builslowalpha_[i]->SetRotation(builsrot_);
-		builslowalpha_[i]->SetPosition(builslowalphapos_);
-	}
+	
 
 	//フィールドの建物のステータスセット
 	for (int i = 0; i < 5; i++) {
@@ -240,11 +222,7 @@ void GameScene::AllUpdata()
 		velocity_ = XMVector3TransformNormal(velocity_, player_->GetBodyMatrix());
 	}
 	railcamera_->Update(velocity_, eyerot_, camera_.get());
-	//左右のビルの更新処理
-	for (int i = 0; i < BUILS; i++) {
-		builshighalpha_[i]->Update(BillColor);
-		builslowalpha_[i]->Update(BillColor);
-	}
+	
 	//フィールドのビルの更新処理
 	for (int i = 0; i < 5; i++) {
 		fieldbuils_[i]->Update(BillColor);
@@ -257,6 +235,8 @@ void GameScene::AllUpdata()
 	start_->Update(BillColor);
 	//プレイヤーの更新処理
 	player_->Update(camera_.get(), (Phase)patern_, passrot_);
+
+	common_background_->Update();
 }
 
 //ゲームシーンの更新処理
@@ -363,15 +343,10 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	sphere_->Draw();
-	world_->Draw();
-	start_->Draw();
+	//start_->Draw();
+	common_background_->Draw();
 	for (int i = 0; i < 5; i++) {
 		fieldbuils_[i]->Draw();
-	}
-	for (int i = 0; i < BUILS; i++) {
-		builshighalpha_[i]->Draw();
-		builslowalpha_[i]->Draw();
 	}
 
 #pragma region ActorからDrawの処理を持ってくる(後で消す)
@@ -501,13 +476,9 @@ void GameScene::Finalize()
 	clear_.reset();
 	shot_.reset();
 
-
 	world_.reset();
 	start_.reset();
-	for (int i = 0; i < BUILS; i++) {
-		builshighalpha_[i].reset();
-		builslowalpha_[i].reset();
-	}
+	
 	for (int i = 0; i < 5; i++) {
 		fieldbuils_[i].reset();
 	}
