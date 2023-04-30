@@ -222,7 +222,9 @@
     <ClCompile Include="Application\UI\BulletUI\BulletUI.cpp">
       <Filter>AllGame\Application\UI\BulletUI</Filter>
     </ClCompile>
-    <ClCompile Include="Application\CommonBackground\CommonBackground.cpp" />
+    <ClCompile Include="Application\CommonBackground\CommonBackground.cpp">
+      <Filter>AllGame\Application\Background\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -390,7 +392,9 @@
     <ClInclude Include="Application\UI\BulletUI\BulletUI.h">
       <Filter>AllGame\Application\UI\BulletUI</Filter>
     </ClInclude>
-    <ClInclude Include="Application\CommonBackground\CommonBackground.h" />
+    <ClInclude Include="Application\CommonBackground\CommonBackground.h">
+      <Filter>AllGame\Application\Background\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -622,6 +626,15 @@
     </Filter>
     <Filter Include="AllGame\Application\UI\BulletUI">
       <UniqueIdentifier>{dcfb3e77-1e0c-430e-9aa7-b767e916b87d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Background">
+      <UniqueIdentifier>{0604a60b-b2e2-4e69-920c-cfbfe97fcb25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Background\Common">
+      <UniqueIdentifier>{918f1f4c-4e6a-49c3-8a5e-fd8e32ef2fee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Background\Game">
+      <UniqueIdentifier>{b47f965d-262a-4399-af46-c007ed4293b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

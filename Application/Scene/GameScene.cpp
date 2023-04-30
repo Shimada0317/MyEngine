@@ -2,13 +2,12 @@
 #include<cassert>
 #include <iomanip>
 #include"Action.h"
+#include"Collision.h"
 #include"Mouse.h"
 #include"HelperMath.h"
 
 #include"SceneManager.h"
 
-const float AddPosetEfectColor = 0.05f;
-const XMFLOAT4 BillColor = { 0.8f,0.6f,0.3f,1.0f };
 
 using namespace DirectX;
 
@@ -195,6 +194,8 @@ void GameScene::StatusSet()
 //オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
+	const XMFLOAT4 BillColor = { 0.8f,0.6f,0.3f,1.0f };
+
 	if (getcamworkflag_ == true) {
 		velocity_ = XMVector3TransformNormal(velocity_, player_->GetBodyMatrix());
 	}
@@ -447,6 +448,7 @@ void GameScene::Finalize()
 
 void GameScene::FadeIn()
 {
+	const float AddPosetEfectColor = 0.05f;
 	postcol_.x += AddPosetEfectColor;
 	postcol_.y += AddPosetEfectColor;
 	postcol_.z += AddPosetEfectColor;
@@ -590,13 +592,16 @@ void GameScene::GameOverProcess()
 {
 	Mouse::GetInstance()->MouseMoveSprite(reticleposition_);
 	reticleforgameover_->SetPosition(reticleposition_);
+	const float radx_ = 100;
+	const float rady_ = 50;
+	const XMFLOAT4 color_red_{ 1.f,0.f,0.f,1.f };
 	if (dethflag_ == true) {
 		postcol_.x = 0;
-		CheckcCursorIn(reticleposition_, yesposition_, 100, 50, yescursorinflag_);
-		CheckcCursorIn(reticleposition_, noposition_, 100, 50, nocursorinflag_);
+		Collision::GetInstance()->ToggleFlagInClick(reticleposition_, yesposition_, radx_, rady_, yescursorinflag_);
+		Collision::GetInstance()->ToggleFlagInClick(reticleposition_, noposition_, radx_, rady_, nocursorinflag_);
 
 		if (yescursorinflag_ == true) {
-			yescolor_ = { 1.f,0.f,0.f,1.f };
+			yescolor_ = color_red_;
 			if (Mouse::GetInstance()->PushClick(0)) {
 				BaseScene* scene_ = new GameScene(sceneManager_);
 				sceneManager_->SetNextScene(scene_);
@@ -607,7 +612,7 @@ void GameScene::GameOverProcess()
 		}
 
 		if (nocursorinflag_ == true) {
-			nocolor_ = { 1.f,0.f,0.f,1.f };
+			nocolor_ = color_red_;
 			if (Mouse::GetInstance()->PushClick(0)) {
 				BaseScene* scene_ = new TitleScene(sceneManager_);
 				sceneManager_->SetNextScene(scene_);
