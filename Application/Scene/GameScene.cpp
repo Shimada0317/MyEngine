@@ -57,10 +57,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	common_background_ = make_unique<CommonBackground>();
 	common_background_->Initialize();
 	
-	for (int i = 0; i < 5; i++) {
-		fieldbuils_[i] = Object3d::Create(ModelManager::GetInstance()->GetModel(7));
-	}
-
 	player_ = make_unique<Player>();
 	player_->Initalize(camera_.get());
 	playerhp_ = player_->GetHp();
@@ -78,17 +74,9 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	herifry_->Initialize();
 	herifry_->LoadFile("Resources/Sound/SE/heriFry.wav", 0.8f);
 
-	fieldbillpos_[0] = { -35.0f,0.0f,20.0f };
-	fieldbillpos_[1] = { -7.0f,-1,80 };
-	fieldbillpos_[2] = { 37.0,0.0f,-10.0f };
-	fieldbillpos_[3] = { -900.0,0.0f,0.0f };;
-	fieldbillpos_[4] = { -900.0,0.0f,0.0f };;
-
-	fieldbillrot_[0] = { 0.0f,270.0f,0.0f };
-	fieldbillrot_[1] = { 0.0f,0.0f,0.0f };
-	fieldbillrot_[2] = { 0.0f,90.0f,0.0f };
-	fieldbillrot_[3] = { 0.0f,0.0f,0.0f };
-	fieldbillrot_[4] = { 0.0f,0.0f,0.0f };
+	game_background_ = make_unique<GameBackground>();
+	game_background_->LoadBackgrounndPopData();
+	
 
 	for (int i = 0; i < 3; i++) {
 		searchlightdir_[i] = { 0,-10,0 };
@@ -157,11 +145,7 @@ void GameScene::StatusSet()
 
 
 	//フィールドの建物のステータスセット
-	for (int i = 0; i < 5; i++) {
-		fieldbuils_[i]->SetPosition(fieldbillpos_[i]);
-		fieldbuils_[i]->SetRotation(fieldbillrot_[i]);
-		fieldbuils_[i]->SetScale(fieldbuilscl_);
-	}
+	
 
 	damageefectsprite_->SetColor(damageefectcolor_);
 
@@ -200,9 +184,10 @@ void GameScene::AllUpdata()
 		velocity_ = XMVector3TransformNormal(velocity_, player_->GetBodyMatrix());
 	}
 	//フィールドのビルの更新処理
-	for (int i = 0; i < 5; i++) {
-		fieldbuils_[i]->Update(BillColor);
-	}
+	
+	game_background_->UpdateBackgroudPopCommands();
+	game_background_->Update();
+
 	//プレイヤーの更新処理
 	player_->Update(camera_.get(), (Phase)patern_, passrot_);
 	railcamera_->Update(velocity_, eyerot_, camera_.get());
@@ -316,9 +301,9 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	//start_->Draw();
 	common_background_->Draw();
-	for (int i = 0; i < 5; i++) {
-		fieldbuils_[i]->Draw();
-	}
+	
+
+	game_background_->Draw();
 
 #pragma region ActorからDrawの処理を持ってくる(後で消す)
 	goal_->Draw();
@@ -441,9 +426,7 @@ void GameScene::Finalize()
 	conteniu_.reset();
 	clear_.reset();
 	shot_.reset();
-	for (int i = 0; i < 5; i++) {
-		fieldbuils_[i].reset();
-	}
+	
 }
 
 void GameScene::FadeIn()
@@ -802,7 +785,6 @@ void GameScene::UpdataEnemyPopCommands()
 
 			break;
 		}
-
 	}
 }
 

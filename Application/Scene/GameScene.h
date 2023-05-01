@@ -5,6 +5,7 @@
 #include"BaseScene.h"
 #include"BossEnemy/BossEnemy.h"
 #include"Enemy.h"
+#include"GameBackground.h"
 #include"Player.h"
 #include"TitleScene.h"
 #include"RailCamera.h"
@@ -189,11 +190,11 @@ public:
 
 private://メンバ変数
 	//Obj
-	unique_ptr<Object3d> fieldbuils_[5];
 	unique_ptr<Object3d> heri_;
 	unique_ptr<Object3d> goal_;
 	unique_ptr<Object3d> hane_;
 	unique_ptr<CommonBackground> common_background_;
+	unique_ptr<GameBackground>game_background_;
 	//スプライト
 	unique_ptr<Sprite> clear_;
 	unique_ptr<Sprite> conteniu_;
@@ -228,10 +229,7 @@ private://メンバ変数
 	XMVECTOR spherepos_ = { 0,0,0 };
 	XMFLOAT3 spherescl_ = { 4.0f,4.0f,4.0f };
 	XMFLOAT3 sphererot_ = { 0,90,0 };
-	//フィールドのステータス
-	XMFLOAT3 fieldbuilscl_ = { 6.0f,10.0f,7.0f };
-	XMVECTOR fieldbillpos_[5];
-	XMFLOAT3 fieldbillrot_[5];
+
 	//足場のステータス
 	XMVECTOR worldpos_ = { 0.0f,-1.1f,0.0f };
 	XMFLOAT3 worldscl_ = { 100,100,100 };
