@@ -8,15 +8,7 @@
 #include"HelperMath.h"
 #include"SceneManager.h"
 
-const float SubColor = 0.01f;
-const float CameraMoveValueXandY = 0.4f;
-const float CameraMoveValueZ = 0.1f;
-const float CameraEyeMoveValue = 0.01f;
 const int MaxRemainingBullet = 9;
-
-const XMFLOAT4 RegularColor = { 1.f,1.f,1.f,1.f };
-const XMFLOAT2 DescriptionScreenPosition = { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f };
-const XMFLOAT2 SpriteSize = { 72.f,72.f };
 
 //コンストラクタ
 TitleScene::TitleScene(SceneManager* sceneManager_)
@@ -28,6 +20,9 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 //初期化処理
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
+	const XMFLOAT4 RegularColor = { 1.f,1.f,1.f,1.f };
+	const XMFLOAT2 DescriptionScreenPosition = { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f };
+
 	//カメラの生成
 	titlecamera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(titlecamera_.get());
@@ -124,7 +119,6 @@ void TitleScene::StatusSet()
 //全ての更新処理をまとめる
 void TitleScene::AllUpdate()
 {
-
 	//ポストエフェクトの更新処理
 	posteffct_->Update(postefectcolor_);
 	//ライトグループ更新
@@ -170,6 +164,12 @@ void TitleScene::Update()
 //カメラの移動
 void TitleScene::CameraDirection()
 {
+	const float CameraMoveValueXandY = 0.4f;
+
+	const float CameraMoveValueZ = 0.1f;
+
+	const float CameraEyeMoveValue = 0.01f;
+
 	if (titlestate_ != TITLESCREEN) { return; }
 	cameramove_ = { 0.0f,0.0f,0.0f };
 	if (cameraeyemoveflag_ && !camerachangeflag_) {
@@ -189,39 +189,47 @@ void TitleScene::CameraDirection()
 //UIの拡大縮小
 void TitleScene::UiEasingProcess()
 {
+	const int timerlimit_ = 1;
+	const int addsize_ = 5;
+	const float variable_arrowsize_ = 32;
+	const float absolutevalue_ = 0.05f;
+	const XMFLOAT2 variable_clicksize_{ 550,60 };
+
 	if (!easingchangeflag_) {
-		easingtimer_ += 0.05f;
+		easingtimer_ += absolutevalue_;
 		//タイマーが一定の値になったら反転させる
-		if (easingtimer_ >= 1) {
+		if (easingtimer_ >= timerlimit_) {
 			easingchangeflag_ = true;
 		}
 	}
 	else {
-		easingtimer_ -= 0.05f;
+		easingtimer_ -= absolutevalue_;
 		//タイマーが一定の値になったら反転させる
-		if (easingtimer_ <= -1) {
+		if (easingtimer_ <= -timerlimit_) {
 			easingchangeflag_ = false;
 		}
 	}
-	arrowsize_.x = Action::GetInstance()->EasingOut(easingtimer_, 5) + 32;
-	arrowsize_.y = Action::GetInstance()->EasingOut(easingtimer_, 5) + 32;
-	clicksize_.x = Action::GetInstance()->EasingOut(easingtimer_, 5) + 550;
-	clicksize_.y = Action::GetInstance()->EasingOut(easingtimer_, 5) + 60;
+	arrowsize_.x = Action::GetInstance()->EasingOut(easingtimer_, addsize_) + variable_arrowsize_;
+	arrowsize_.y = Action::GetInstance()->EasingOut(easingtimer_, addsize_) + variable_arrowsize_;
+	clicksize_.x = Action::GetInstance()->EasingOut(easingtimer_, addsize_) + variable_clicksize_.x;
+	clicksize_.y = Action::GetInstance()->EasingOut(easingtimer_, addsize_) + variable_clicksize_.y;
 	bullet_ui_->ReloadMotion();
 }
 
 void TitleScene::ArrowProces()
 {
+	const XMFLOAT2 rad{ 16.f,16.f };
+	const int absolutevalue_ = 1;
 	//カメラが移動した後の画面
 	if (titlestate_ < GAMESTARTPREPARTIONPAGE &&
 		camerachangeflag_) {
-		if (Collision::GetInstance()->ChangeAtClick(reticlepos_, arrowrightpos_, 16, 16)) {
+		if (Collision::GetInstance()->ChangeAtClick(reticlepos_, arrowrightpos_, rad.x, rad.y)) {
 			arrowrightcolor_ = { 1.f,0.f,0.f,1.f };
 			righttrueinflag_ = true;
 			//矢印を押された時
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				clickse_->LoadFile("Resources/Sound/SE/click.wav", volume_);
-				titlestate_ += 1;
+				titlestate_ += absolutevalue_;
 			}
 		}
 		else {
@@ -236,7 +244,7 @@ void TitleScene::ArrowProces()
 			lefttrueinflag_ = true;
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				clickse_->LoadFile("Resources/Sound/SE/click.wav", volume_);
-				titlestate_ -= 1;
+				titlestate_ -= absolutevalue_;
 				if (titlestate_ <= DESCRIPTIONPAGE) {
 					titlestate_ = DESCRIPTIONPAGE;
 				}
@@ -253,6 +261,7 @@ void TitleScene::ArrowProces()
 //フェードアウト後にゲームシーンへチェンジ
 void TitleScene::FadeOutAndSceneChange()
 {
+	const float SubColor = 0.01f;
 	//救援ヘリを読んだ後
 	if (fadeoutflag_) {
 		postefectcolor_.x -= SubColor;
@@ -273,13 +282,6 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	posteffct_->PreDrawScene(dxCommon->GetCmdList());
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	common_background_->Draw();
-	/*world_->Draw();
-	sphere_->Draw();
-	for (int i = 0; i < BUILSAMOUNT; i++) {
-		builshighalpha_[i]->Draw();
-		builslowalpha_[i]->Draw();
-	}
-	start_->Draw();*/
 	Object3d::PostDraw();
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	if (titlespriteflag_) {
@@ -339,6 +341,7 @@ void TitleScene::ReloadProcess()
 		//タイマーを除算するための値
 		const int divtime_ = 40;
 		int anser_ = 0;
+		const int full = 0;
 		//残弾を一度非表示にする
 		remaining_ = MaxRemainingBullet;
 		bullet_ui_->SetRemainig(remaining_);
@@ -352,7 +355,7 @@ void TitleScene::ReloadProcess()
 		remaining_ = {};
 		bullet_ui_->Reload(remaining_);
 		//残弾が満タンになった時
-		if (remaining_ == 0) {
+		if (remaining_ == full) {
 			//タイムを初期化
 			reloadtime_ = {};
 			hudstate_ = WAIT;
@@ -362,9 +365,10 @@ void TitleScene::ReloadProcess()
 
 void TitleScene::ShotProcess()
 {
+	const int subbullet_ = 1;
 	if (remaining_ < MaxRemainingBullet) {
 		if (Mouse::GetInstance()->PushClick(0)) {
-			remaining_ += 1;
+			remaining_ += subbullet_;
 			bullet_ui_->Shot(remaining_);
 		}
 	}

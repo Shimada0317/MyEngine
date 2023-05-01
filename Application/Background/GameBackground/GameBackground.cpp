@@ -5,9 +5,7 @@
 
 GameBackground::~GameBackground()
 {
-	for (unique_ptr<Object3d>& new_backgrpund : backgrouhnd_) {
-		new_backgrpund.reset();
-	}
+
 }
 
 void GameBackground::LoadBackgrounndPopData()
@@ -15,9 +13,7 @@ void GameBackground::LoadBackgrounndPopData()
 	ifstream file;
 	file.open("Resources/background.csv");
 	assert(file.is_open());
-
 	backgrouhnd_popcommands_ << file.rdbuf();
-
 	file.close();
 }
 
@@ -99,7 +95,6 @@ void GameBackground::UpdateBackgroudPopCommands()
 
 		if (word.find("END") == 0) {
 			getline(line_stram, word, ',');
-
 			break;
 		}
 	}

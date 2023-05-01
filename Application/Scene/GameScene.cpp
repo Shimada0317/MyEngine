@@ -77,7 +77,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	game_background_ = make_unique<GameBackground>();
 	game_background_->LoadBackgrounndPopData();
 	
-
 	for (int i = 0; i < 3; i++) {
 		searchlightdir_[i] = { 0,-10,0 };
 		searchlightcolor_[i] = { 1.f,1.f,1.f };
@@ -868,16 +867,14 @@ void GameScene::StartCameraWork()
 			eyerot_.x = 0.0f;
 		}
 		//’n–Ê‚É’…‚¢‚½‚Æ‚«
-		if (l_bodyworldpos.m128_f32[1] <= 0.3f) {
+		if (l_bodyworldpos.m128_f32[1] <= 0.9f) {
+			l_bodyworldpos.m128_f32[1] = 0.9f;
 			velocity_ = { 0.0f,0.0f,0.0f };
-			l_reticlepos.m128_f32[1] = 0.0f;
+			l_reticlepos = { 0.0f,-0.7f,13.0f };
+			railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
 			gamestate_ = MOVE;
 		}
 	}
-	player_->SetBodyWorldPos(l_bodyworldpos);
-
-
-
 
 	if (stanbyflag_ == false) {
 		actiontimer_ += 0.01f;
@@ -887,14 +884,13 @@ void GameScene::StartCameraWork()
 		}
 	}
 
+	SkipStartMovie(l_bodyworldpos);
 
-
-	SkipStartMovie();
-
+	player_->SetBodyWorldPos(l_bodyworldpos);
 
 }
 
-void GameScene::SkipStartMovie()
+void GameScene::SkipStartMovie(XMVECTOR& bodypos)
 {
 	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0)) && stanbyflag_ == true && getcamworkflag_ == false) {
 		actioncount_ = 100;
@@ -903,6 +899,7 @@ void GameScene::SkipStartMovie()
 		velocity_ = { 0.0f,0.0f,0.0f };
 		l_reticlepos = { 0.0f,-0.7f,13.0f };
 		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
+		bodypos.m128_f32[1] = 0.9f;
 		gamestate_ = MOVE;
 	}
 }

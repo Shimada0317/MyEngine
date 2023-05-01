@@ -122,7 +122,7 @@ public://メンバ関数
 	/// <summary>
 	/// 始まりのムービーのスキップ処理
 	/// </summary>
-	void SkipStartMovie();
+	void SkipStartMovie(XMVECTOR& bodypos);
 
 	/// <summary>
 	/// プレイヤーの移動
