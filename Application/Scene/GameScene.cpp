@@ -42,13 +42,11 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	reticleforgameover_.reset(Sprite::SpriteCreate(kReticle, reticleposition_, reticlecolor_, spriteanchorpoint_));
 	yes_.reset(Sprite::SpriteCreate(kYes, yesposition_, yescolor_, spriteanchorpoint_));
 	no_.reset(Sprite::SpriteCreate(kNo, noposition_, nocolor_, spriteanchorpoint_));
-	hart_.reset(Sprite::SpriteCreate(kHart, hartposition_, { 1.f,1.f,1.f,1.f }, spriteanchorpoint_));
+
 	curtainup_.reset(Sprite::SpriteCreate(Name::kCurtain, curtainuppos_));
 	curtaindown_.reset(Sprite::SpriteCreate(Name::kCurtain, curtaindownpos_));
 	skip_.reset(Sprite::SpriteCreate(Name::kSkip, skippos_));
-	for (int i = 0; i < 5; i++) {
-		lifecount_[i].reset(Sprite::SpriteCreate(i, hartposition_));
-	}
+
 	//オブジェクトの生成
 	heri_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
 	goal_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
@@ -56,7 +54,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//背景のオブジェクトの生成
 	common_background_ = make_unique<CommonBackground>();
 	common_background_->Initialize();
-	
+
 	player_ = make_unique<Player>();
 	player_->Initalize(camera_.get());
 	playerhp_ = player_->GetHp();
@@ -76,7 +74,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 
 	game_background_ = make_unique<GameBackground>();
 	game_background_->LoadBackgrounndPopData();
-	
+
 	for (int i = 0; i < 3; i++) {
 		searchlightdir_[i] = { 0,-10,0 };
 		searchlightcolor_[i] = { 1.f,1.f,1.f };
@@ -94,7 +92,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightgroupe_->SetSpotLightActive(2, true);
 	lightgroupe_->SetSpotLightActive(3, true);
 	lightgroupe_->SetSpotLightActive(4, true);
-	originalsize_ = hartsize_;
+
 
 	curtainup_->SetSize(curtainsize_);
 	curtaindown_->SetSize(curtainsize_);
@@ -105,14 +103,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 void GameScene::StatusSet()
 {
 #pragma region 後で必要な変数の追加ごこのコメントを消す
-	//変動するカウンター
-	for (int i = 0; i < 5; i++) {
-		lifecount_[i]->SetSize({ 80,80 });
-		lifecount_[i]->SetPosition({ 1160,630 });
-	}
 
-	hart_->SetSize(hartsize_);
-	hart_->SetPosition({ WinApp::window_width - 173,WinApp::window_height - 50 });
 	//Hpバー
 	player_->SetHp(playerhp_);
 	playerhp_ = player_->GetHp();
@@ -140,11 +131,6 @@ void GameScene::StatusSet()
 	hane_->Update({ 0.0f,0.0f,0.0f,1.0f });
 
 #pragma endregion
-
-
-
-	//フィールドの建物のステータスセット
-	
 
 	damageefectsprite_->SetColor(damageefectcolor_);
 
@@ -183,7 +169,7 @@ void GameScene::AllUpdata()
 		velocity_ = XMVector3TransformNormal(velocity_, player_->GetBodyMatrix());
 	}
 	//フィールドのビルの更新処理
-	
+
 	game_background_->UpdateBackgroudPopCommands();
 	game_background_->Update();
 
@@ -204,9 +190,6 @@ void GameScene::Update()
 	StartCameraWork();
 	//スポットライトの動きの処理
 	SpotLightMove();
-	//ハートの鼓動の動き
-	HeartBeat();
-
 	if (gamestartflag_ == false) {
 		FadeIn();
 	}
@@ -235,7 +218,7 @@ void GameScene::Update()
 		shakingstartflag_ = true;
 		screenshakestate_ = NONE;
 	}
-	ScreenShake(4.5f,0.1f);
+	ScreenShake(4.5f, 0.1f);
 
 #pragma region ActorからUpdate内の処理を持ってくる(後でこのコメントは消す)
 
@@ -298,13 +281,9 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
 	////オブジェクト前処理
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	//start_->Draw();
 	common_background_->Draw();
-	
-
 	game_background_->Draw();
 
-#pragma region ActorからDrawの処理を持ってくる(後で消す)
 	goal_->Draw();
 	hane_->Draw();
 	if (backobjflag_ == true) {
@@ -315,7 +294,6 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	}
 
 	player_->ParticleDraw(dxCommon->GetCmdList());
-#pragma endregion
 
 
 	////オブジェクト後処理
@@ -348,7 +326,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 	}
 
 	if (getcamworkflag_ == true) {
-		if (playerhp_ == 1) {
+		/*if (playerhp_ == 1) {
 			lifecount_[0]->Draw();
 		}
 		else if (playerhp_ == 2) {
@@ -363,10 +341,10 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 		else if (playerhp_ == 5) {
 			lifecount_[4]->Draw();
 		}
-		hart_->Draw();
+		hart_->Draw();*/
 	}
 
-	if (getcamworkflag_ == false && startflag_ == false) {
+	if (gamestate_ == MOVIE) {
 		curtainup_->Draw();
 		curtaindown_->Draw();
 		skip_->Draw();
@@ -386,10 +364,11 @@ void GameScene::ImgDraw()
 	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.1f, 0.0f, 0.1f, 0.0f));
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Camera");
-	
+
 	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
 	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
 	ImGui::SliderFloat("eyerot", &passrot_.y, -180.0f, 180.0f);
+	ImGui::SliderFloat("eyerotY", &eyerot_.y, -180.0f, 180.0f);
 
 	ImGui::End();
 	ImGui::PopStyleColor();
@@ -425,7 +404,7 @@ void GameScene::Finalize()
 	conteniu_.reset();
 	clear_.reset();
 	shot_.reset();
-	
+
 }
 
 void GameScene::FadeIn()
@@ -771,8 +750,6 @@ void GameScene::UpdataEnemyPopCommands()
 				TRACKSkip = false;
 				ARIVESkip = false;
 			}
-
-
 		}
 
 		if (patern_ < count) {
@@ -906,7 +883,7 @@ void GameScene::SkipStartMovie(XMVECTOR& bodypos)
 
 void GameScene::PlayerMove()
 {
-	if (gamestate_ == MOVE) {
+	if (gamestate_ == MOVE || gamestate_ == MOVIE) {
 		XMMATRIX l_cameramatrix;
 		l_cameramatrix = railcamera_->GetWorld();
 		cameravector_ = { 0.f,0.f,0.f,0.f };
@@ -953,8 +930,6 @@ void GameScene::ScreenShake(float shakevalue, float shakingtime)
 	}
 }
 
-
-
 void GameScene::MoveShakingHead()
 {
 	//加算と減算する為の絶対値
@@ -979,90 +954,45 @@ void GameScene::MoveShakingHead()
 
 }
 
-void GameScene::HeartBeat()
-{
-	//タイマーの加算
-	easingtimer_ += addtimer_;
-	//反転フラグがtrueの時サイズを拡大
-	if (reversflag_ == true) {
-		hartsize_.x = Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.x;
-		hartsize_.y = Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.y;
-		if (easingtimer_ >= 1) {
-			easingtimer_ = 0;
-			originalsize_ = hartsize_;
-			reversflag_ = false;
-		}
-	}
-	//反転フラグがfalseの時サイズを縮小
-	else {
-		hartsize_.x = -Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.x;
-		hartsize_.y = -Action::GetInstance()->EasingOut(easingtimer_, 40) + originalsize_.y;
-		if (easingtimer_ >= 1) {
-			easingtimer_ = 0;
-			originalsize_ = hartsize_;
-			reversflag_ = true;
-		}
-	}
 
-
-	if (playerhp_ == 4) {
-		addtimer_ = 0.01f;
-	}
-	else if (playerhp_ == 3) {
-		addtimer_ = 0.05f;
-	}
-	else if (playerhp_ == 2) {
-		addtimer_ = 0.1f;
-	}
-	else if (playerhp_ == 1) {
-		addtimer_ = 0.5f;
-	}
-}
 
 void GameScene::MovieProcess()
 {
 	if (gamestate_ == MOVIE) {
-			curtainuppos_.y += 4;
-			curtaindownpos_.y -= 4;
-			skippos_.y -= 2;
+		curtainuppos_.y += 4;
+		curtaindownpos_.y -= 4;
+		skippos_.y -= 2;
 
-			if (curtainuppos_.y >= 0) {
-				curtainuppos_.y = 0;
-			}
+		if (curtainuppos_.y >= 0) {
+			curtainuppos_.y = 0;
+		}
 
-			if (curtaindownpos_.y <= 620) {
-				curtaindownpos_.y = 620;
-			}
+		if (curtaindownpos_.y <= 620) {
+			curtaindownpos_.y = 620;
+		}
 
-			if (skippos_.y <= 620) {
-				skippos_.y = 620;
-			}
+		if (skippos_.y <= 620) {
+			skippos_.y = 620;
+		}
 	}
 	else {
-			curtainuppos_.y -= 4;
-			curtaindownpos_.y += 4;
-			skippos_.y += 4;
+		curtainuppos_.y -= 4;
+		curtaindownpos_.y += 4;
+		skippos_.y += 4;
 
-			if (curtainuppos_.y <= -100) {
-				curtainuppos_.y = -100;
-			}
-
-			if (curtaindownpos_.y >= 720) {
-				curtaindownpos_.y = 720;
-				getcamworkflag_ = true;
-				startflag_ = true;
-			}
-
-			if (skippos_.y >= 720) {
-				skippos_.y = 12000;
-			}
+		if (curtainuppos_.y <= -100) {
+			curtainuppos_.y = -100;
 		}
-}
 
-void GameScene::MoveProcess()
-{
-	if (gamestate_ == MOVE) {
+		if (curtaindownpos_.y >= 720) {
+			curtaindownpos_.y = 720;
+			getcamworkflag_ = true;
+			startflag_ = true;
+		}
 
+		if (skippos_.y >= 720) {
+			skippos_.y = 12000;
+		}
 	}
 }
 
@@ -1191,8 +1121,8 @@ void GameScene::GoalPointBack()
 
 void GameScene::GoalPoint()
 {
-	gamestate_ = MOVIE;
-	stanbyflag_ = false;
+	//gamestate_ = MOVIE;
+	//stanbyflag_ = false;
 	velocity_ = { 0.f, 0.f, 0.1f };
 	//後ろを向く
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);

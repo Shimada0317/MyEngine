@@ -23,6 +23,7 @@ Player::~Player()
 	part_green_.reset();
 	part_red_.reset();
 	part_smoke_.reset();
+	player_ui_.reset();
 	shot_se_.reset();
 	reload_se_.reset();
 }
@@ -40,6 +41,10 @@ void Player::Initalize(Camera* camera)
 
 	bullet_ui_ = make_unique<BulletUI>();
 	bullet_ui_->Create(remaining_, ui_bulletpos, ui_reloadpos_);
+
+	player_ui_ = make_unique<PlayerUI>();
+	player_ui_->Create();
+
 
 	//オブジェクトの読み込み
 	gun_ = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
@@ -117,6 +122,8 @@ void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot)
 	//リロードの処理
 	ReloadProcess();
 
+	player_ui_->HartBeat(hp_);
+
 	velocity_ = XMVector3TransformNormal(velocity_, body_mat_);
 
 	//座標や回転、スケールなどのステータスのセット
@@ -155,6 +162,7 @@ void Player::SpriteDraw()
 		bullet_ui_->Draw();
 	}
 	sprite_reticle_->Draw();
+	player_ui_->Draw(hp_);
 }
 //オブジェクト描画
 void Player::ObjDraw()

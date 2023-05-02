@@ -6,6 +6,7 @@
 #include"BulletUI.h"
 #include"HelperMath.h"
 #include"ParticleManager.h"
+#include"PlayerUI.h"
 #include"RailCamera.h"
 #include<memory>
 #include<list>
@@ -157,6 +158,7 @@ private:
 	//スプライト
 	unique_ptr<Sprite> sprite_reticle_;
 	unique_ptr<BulletUI>bullet_ui_;
+	unique_ptr<PlayerUI> player_ui_;
 	//発砲時のエフェクト
 	unique_ptr <ParticleManager> part_green_ = nullptr;
 	unique_ptr <ParticleManager> part_red_ = nullptr;

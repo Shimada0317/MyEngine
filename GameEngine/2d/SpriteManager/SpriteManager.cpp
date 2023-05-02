@@ -42,7 +42,4 @@ void SpriteManager::SpriteName()
 	Sprite::LoadTexture(kYes, L"Resources/Yes.png");
 	Sprite::LoadTexture(kNo, L"Resources/No.png");
 #pragma endregion
-
-
-
 }

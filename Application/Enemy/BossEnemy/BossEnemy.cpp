@@ -144,6 +144,10 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 		}
 	}
 
+	if (Input::GetInstance()->PushKey(DIK_O)) {
+		Hp = 0;
+	}
+
 	Damage();
 
 	Death();

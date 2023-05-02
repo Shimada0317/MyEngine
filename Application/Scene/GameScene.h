@@ -137,17 +137,11 @@ public://メンバ関数
 	/// 移動時にカメラ揺れ
 	/// </summary>
 	void MoveShakingHead();
-	/// <summary>
-	/// ハートの鼓動の動き
-	/// </summary>
-	void HeartBeat();
+
 	/// <summary>
 	/// 映画のようなムービーの処理
 	/// </summary>
 	void MovieProcess();
-
-	void MoveProcess();
-
 	/// <summary>
 	/// カーソルに入っているか
 	/// </summary>
@@ -203,8 +197,6 @@ private://メンバ変数
 	unique_ptr<Sprite> reticleforgameover_;
 	unique_ptr<Sprite> yes_;
 	unique_ptr<Sprite> no_;
-	unique_ptr<Sprite> lifecount_[5];
-	unique_ptr<Sprite> hart_;
 	unique_ptr<Sprite> curtainup_;
 	unique_ptr<Sprite> curtaindown_;
 	unique_ptr<Sprite> skip_;
@@ -313,7 +305,6 @@ private://メンバ変数
 	XMFLOAT2 reticleposition_{ 0.f,0.f };
 	XMFLOAT4 reticlecolor_{ 1.f,1.f,1.f,1.f };
 	XMFLOAT2 spriteanchorpoint_{ 0.5f,0.5f };
-	XMFLOAT2 hartposition_{ 10.f,10.f };
 
 	XMFLOAT2 yesposition_{ WinApp::window_width / 2 - 200,WinApp::window_height / 2 + 100 };
 	XMFLOAT2 noposition_{ WinApp::window_width / 2 + 200,WinApp::window_height / 2 + 100 };
@@ -347,8 +338,6 @@ private://メンバ変数
 
 	bool getcamworkflag_ = false;
 
-	XMFLOAT2 hartsize_ = { 64,64 };
-	XMFLOAT2 originalsize_ = { 0.f,0.f };
 	bool reversflag_ = true;
 	float easingtimer_ = 0.0f;
 	float addtimer_ = 0.01f;

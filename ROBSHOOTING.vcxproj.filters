@@ -228,6 +228,9 @@
     <ClCompile Include="Application\Background\GameBackground\GameBackground.cpp">
       <Filter>AllGame\Application\Background\Game</Filter>
     </ClCompile>
+    <ClCompile Include="Application\UI\PlayerUI\PlayerUI.cpp">
+      <Filter>AllGame\Application\Scene\UI\PlayerUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -400,6 +403,9 @@
     </ClInclude>
     <ClInclude Include="Application\Background\GameBackground\GameBackground.h">
       <Filter>AllGame\Application\Background\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\UI\PlayerUI\PlayerUI.h">
+      <Filter>AllGame\Application\Scene\UI\PlayerUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -641,6 +647,9 @@
     </Filter>
     <Filter Include="AllGame\Application\Scene\UI\BulletUI">
       <UniqueIdentifier>{dcfb3e77-1e0c-430e-9aa7-b767e916b87d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Scene\UI\PlayerUI">
+      <UniqueIdentifier>{4ee2af51-b0bb-4e27-b1c9-7c1bc1fae66e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
