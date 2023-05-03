@@ -37,15 +37,14 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//スプライトの生成
 	damageefectsprite_.reset(Sprite::SpriteCreate(Name::kDamageEffect, { 0.0f, 0.0f }, damageefectcolor_));
 	clear_.reset(Sprite::SpriteCreate(kGameClear, { 0.0f,0.0f }));
-	conteniu_.reset(Sprite::SpriteCreate(kGameOver, { 0.0f,0.0f }));
 	shot_.reset(Sprite::SpriteCreate(kShot, { 0.f,WinApp::window_height - 150 }));
 	reticleforgameover_.reset(Sprite::SpriteCreate(kReticle, reticleposition_, reticlecolor_, spriteanchorpoint_));
-	yes_.reset(Sprite::SpriteCreate(kYes, yesposition_, yescolor_, spriteanchorpoint_));
-	no_.reset(Sprite::SpriteCreate(kNo, noposition_, nocolor_, spriteanchorpoint_));
+	continue_screen_ = make_unique<Continue>();
+	continue_screen_->Create(yesposition_, noposition_);
+	movie_ = make_unique<Movie>();
+	movie_->Create();
 
-	curtainup_.reset(Sprite::SpriteCreate(Name::kCurtain, curtainuppos_));
-	curtaindown_.reset(Sprite::SpriteCreate(Name::kCurtain, curtaindownpos_));
-	skip_.reset(Sprite::SpriteCreate(Name::kSkip, skippos_));
+	
 
 	//オブジェクトの生成
 	heri_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
@@ -93,9 +92,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightgroupe_->SetSpotLightActive(3, true);
 	lightgroupe_->SetSpotLightActive(4, true);
 
-
-	curtainup_->SetSize(curtainsize_);
-	curtaindown_->SetSize(curtainsize_);
 	LoadEnemyPopData();
 }
 
@@ -134,6 +130,7 @@ void GameScene::StatusSet()
 
 	damageefectsprite_->SetColor(damageefectcolor_);
 
+	movie_->StatusSet();
 
 	lightgroupe_->SetSpotLightDir(0, XMVECTOR({ fieldspotlightdir_.x, fieldspotlightdir_.y, fieldspotlightdir_.z }));
 	lightgroupe_->SetSpotLightPos(0, fieldspotlightpos_);
@@ -155,9 +152,6 @@ void GameScene::StatusSet()
 		lightgroupe_->SetSpotLightFactorAngle(i, searchlightfactorangle_);
 	}
 
-	curtainup_->SetPosition(curtainuppos_);
-	curtaindown_->SetPosition(curtaindownpos_);
-	skip_->SetPosition(skippos_);
 };
 
 //オブジェクトなどの更新処理
@@ -319,38 +313,15 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 		clear_->Draw();
 	}
 	if (dethflag_ == true) {
-		conteniu_->Draw();
-		no_->Draw();
-		yes_->Draw();
+		continue_screen_->Draw();
 		reticleforgameover_->Draw();
 	}
 
-	if (getcamworkflag_ == true) {
-		/*if (playerhp_ == 1) {
-			lifecount_[0]->Draw();
-		}
-		else if (playerhp_ == 2) {
-			lifecount_[1]->Draw();
-		}
-		else if (playerhp_ == 3) {
-			lifecount_[2]->Draw();
-		}
-		else if (playerhp_ == 4) {
-			lifecount_[3]->Draw();
-		}
-		else if (playerhp_ == 5) {
-			lifecount_[4]->Draw();
-		}
-		hart_->Draw();*/
-	}
 
-	if (gamestate_ == MOVIE) {
-		curtainup_->Draw();
-		curtaindown_->Draw();
-		skip_->Draw();
+	movie_->Draw();
 
-	}
-	if (gamestate_ != MOVIE) {
+	
+	if (gamestate_ == FIGHT||gamestate_==MOVE) {
 		player_->SpriteDraw();
 	}
 	Sprite::PostDraw();
@@ -401,7 +372,7 @@ void GameScene::Draw(DirectXCommon* dxCommon)
 //終了処理
 void GameScene::Finalize()
 {
-	conteniu_.reset();
+	continue_screen_.reset();
 	clear_.reset();
 	shot_.reset();
 
@@ -535,6 +506,7 @@ void GameScene::DamageProcess()
 	//体力が0になったら
 	else if (playerhp_ <= 0) {
 		stopupdateflag_ = true;
+		gamestate_ = DEATH;
 		postcol_.x += 0.01f;
 		if (postcol_.x >= 2.0f) {
 			dethflag_ = true;
@@ -582,8 +554,7 @@ void GameScene::GameOverProcess()
 		else {
 			nocolor_ = { 1.f,1.f,1.f,1.f };
 		}
-		yes_->SetColor(yescolor_);
-		no_->SetColor(nocolor_);
+		continue_screen_->ChangeColor(yescolor_, nocolor_);
 	}
 }
 
@@ -959,51 +930,13 @@ void GameScene::MoveShakingHead()
 void GameScene::MovieProcess()
 {
 	if (gamestate_ == MOVIE) {
-		curtainuppos_.y += 4;
-		curtaindownpos_.y -= 4;
-		skippos_.y -= 2;
-
-		if (curtainuppos_.y >= 0) {
-			curtainuppos_.y = 0;
-		}
-
-		if (curtaindownpos_.y <= 620) {
-			curtaindownpos_.y = 620;
-		}
-
-		if (skippos_.y <= 620) {
-			skippos_.y = 620;
-		}
+		movie_->Disply();
 	}
 	else {
-		curtainuppos_.y -= 4;
-		curtaindownpos_.y += 4;
-		skippos_.y += 4;
+		movie_->Invisible();
+		getcamworkflag_ = true;
+		startflag_ = true;
 
-		if (curtainuppos_.y <= -100) {
-			curtainuppos_.y = -100;
-		}
-
-		if (curtaindownpos_.y >= 720) {
-			curtaindownpos_.y = 720;
-			getcamworkflag_ = true;
-			startflag_ = true;
-		}
-
-		if (skippos_.y >= 720) {
-			skippos_.y = 12000;
-		}
-	}
-}
-
-void GameScene::CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag)
-{
-	if ((check_Pos.x - radX <= cursor_Pos.x && check_Pos.x + radX >= cursor_Pos.x)
-		&& (check_Pos.y - radY <= cursor_Pos.y && check_Pos.y + radY >= cursor_Pos.y)) {
-		CheckFlag = true;
-	}
-	else {
-		CheckFlag = false;
 	}
 }
 

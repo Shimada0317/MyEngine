@@ -4,8 +4,10 @@
 #include<memory>
 #include"BaseScene.h"
 #include"BossEnemy/BossEnemy.h"
+#include"Continue.h"
 #include"Enemy.h"
 #include"GameBackground.h"
+#include"Movie.h"
 #include"Player.h"
 #include"TitleScene.h"
 #include"RailCamera.h"
@@ -19,6 +21,7 @@ private:
 		MOVIE = 0,
 		FIGHT,
 		MOVE,
+		DEATH,
 	};
 
 	enum ShakeScreenPatern {
@@ -123,7 +126,6 @@ public://メンバ関数
 	/// 始まりのムービーのスキップ処理
 	/// </summary>
 	void SkipStartMovie(XMVECTOR& bodypos);
-
 	/// <summary>
 	/// プレイヤーの移動
 	/// </summary>
@@ -137,20 +139,10 @@ public://メンバ関数
 	/// 移動時にカメラ揺れ
 	/// </summary>
 	void MoveShakingHead();
-
 	/// <summary>
 	/// 映画のようなムービーの処理
 	/// </summary>
 	void MovieProcess();
-	/// <summary>
-	/// カーソルに入っているか
-	/// </summary>
-	/// <param name="cursor_Pos"></param>
-	/// <param name="check_Pos"></param>
-	/// <param name="radX"></param>
-	/// <param name="radY"></param>
-	/// <param name="CheckFlag"></param>
-	void CheckcCursorIn(const XMFLOAT2& cursor_Pos, const XMFLOAT2& check_Pos, float radX, float radY, bool& CheckFlag);
 public:
 #pragma region 関数テーブル
 
@@ -191,15 +183,12 @@ private://メンバ変数
 	unique_ptr<GameBackground>game_background_;
 	//スプライト
 	unique_ptr<Sprite> clear_;
-	unique_ptr<Sprite> conteniu_;
 	unique_ptr<Sprite> damageefectsprite_;
 	unique_ptr<Sprite> shot_ = nullptr;
 	unique_ptr<Sprite> reticleforgameover_;
-	unique_ptr<Sprite> yes_;
-	unique_ptr<Sprite> no_;
-	unique_ptr<Sprite> curtainup_;
-	unique_ptr<Sprite> curtaindown_;
-	unique_ptr<Sprite> skip_;
+	
+	unique_ptr<Continue> continue_screen_;
+	unique_ptr<Movie> movie_;
 	//プレイヤーと敵
 	list<unique_ptr<Enemy>>robot_;
 	list<unique_ptr<BossEnemy>>boss_;
@@ -346,12 +335,7 @@ private://メンバ変数
 #pragma endregion
 
 #pragma region プレイヤーから移行
-	//始まりと終わりの演出使う黒いカーテン
-	XMFLOAT2 curtainuppos_ = { 0.0f,0.0f };
-	XMFLOAT2 curtainsize_ = { 1280.0f,100.0f };
-	XMFLOAT2 curtaindownpos_ = { 0.0f,620.0f };
-	//Skip文字の表示
-	XMFLOAT2 skippos_ = { 0.0f,620.0f };
+
 
 	XMVECTOR velocity_;
 	XMFLOAT3 eyerot_{ 0.f,0.f,0.f };
