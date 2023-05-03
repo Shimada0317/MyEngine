@@ -18,14 +18,16 @@ class GameScene :public BaseScene
 {
 private:
 	enum GamePhase {
-		MOVIE = 0,
+		NONE = 0,
+		START,
 		FIGHT,
 		MOVE,
-		DEATH,
+		CONTINUE,
+		CLEAR,
 	};
 
 	enum ShakeScreenPatern {
-		NONE=0,
+		NORMAL=0,
 		DAMAGE,
 		SHOT,
 	};
@@ -351,13 +353,13 @@ private://ÉÅÉìÉoïœêî
 	bool FringFlag = false;
 #pragma endregion
 
-	int gamestate_ = MOVIE;
+	int gamestate_ = NONE;
 	bool shakingstartflag_ = false;
 	float shakelimittime_ = 0.f;
 	bool shakingscreenflag_ = false;
 	float shakingscreenvalue_= 0.f;
 	bool shake_ = true;
 
-	int screenshakestate_ = NONE;
+	int screenshakestate_ = NORMAL;
 };
 

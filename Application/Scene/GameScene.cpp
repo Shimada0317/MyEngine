@@ -184,10 +184,11 @@ void GameScene::Update()
 	StartCameraWork();
 	//スポットライトの動きの処理
 	SpotLightMove();
-	if (gamestartflag_ == false) {
+
+	if (!gamestartflag_) {
 		FadeIn();
 	}
-	if (gamestartflag_ == true) {
+	if (gamestartflag_) {
 		DamageProcess();
 	}
 
@@ -208,9 +209,9 @@ void GameScene::Update()
 
 	GameClearProcesss();
 
-	if (screenshakestate_ != NONE) {
+	if (screenshakestate_ != NORMAL) {
 		shakingstartflag_ = true;
-		screenshakestate_ = NONE;
+		screenshakestate_ = NORMAL;
 	}
 	ScreenShake(4.5f, 0.1f);
 
@@ -231,7 +232,7 @@ void GameScene::Update()
 		heriy_ += 15.0f;
 	}
 
-	if (getcamworkflag_ == true) {
+	if (getcamworkflag_ ) {
 		KilledAllEnemy();
 		//プレイヤーが目的地点に着いたとき
 		if (stopflag_ == true) {
@@ -244,7 +245,7 @@ void GameScene::Update()
 
 
 	if (patern_ >= 6) {
-		if (fringflag_ == true) {
+		if (fringflag_) {
 			goalpos_.m128_f32[1] += velo.m128_f32[1];
 		}
 	}
@@ -280,10 +281,10 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 
 	goal_->Draw();
 	hane_->Draw();
-	if (backobjflag_ == true) {
+	if (backobjflag_) {
 		heri_->Draw();
 	}
-	if (gamestate_ != MOVIE) {
+	if (gamestate_ != START) {
 		player_->ObjDraw();
 	}
 
@@ -306,21 +307,17 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	shot_->Draw();
 
-	if (damagehitflag_ == true) {
+	if (damagehitflag_) {
 		damageefectsprite_->Draw();
 	}
-	if (clearflag_ == true) {
+	if (clearflag_) {
 		clear_->Draw();
 	}
-	if (dethflag_ == true) {
+	if (dethflag_) {
 		continue_screen_->Draw();
 		reticleforgameover_->Draw();
 	}
-
-
 	movie_->Draw();
-
-	
 	if (gamestate_ == FIGHT||gamestate_==MOVE) {
 		player_->SpriteDraw();
 	}
@@ -506,7 +503,7 @@ void GameScene::DamageProcess()
 	//体力が0になったら
 	else if (playerhp_ <= 0) {
 		stopupdateflag_ = true;
-		gamestate_ = DEATH;
+		gamestate_ = CONTINUE;
 		postcol_.x += 0.01f;
 		if (postcol_.x >= 2.0f) {
 			dethflag_ = true;
@@ -854,7 +851,7 @@ void GameScene::SkipStartMovie(XMVECTOR& bodypos)
 
 void GameScene::PlayerMove()
 {
-	if (gamestate_ == MOVE || gamestate_ == MOVIE) {
+	if (gamestate_ == MOVE || gamestate_ == START) {
 		XMMATRIX l_cameramatrix;
 		l_cameramatrix = railcamera_->GetWorld();
 		cameravector_ = { 0.f,0.f,0.f,0.f };
@@ -929,7 +926,7 @@ void GameScene::MoveShakingHead()
 
 void GameScene::MovieProcess()
 {
-	if (gamestate_ == MOVIE) {
+	if (gamestate_ == START) {
 		movie_->Disply();
 	}
 	else {
