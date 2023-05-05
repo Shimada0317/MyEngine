@@ -26,13 +26,8 @@ private:
 		CLEAR,
 	};
 
-	enum ShakeScreenPatern {
-		NORMAL=0,
-		DAMAGE,
-		SHOT,
-	};
-
 private:
+	//移動用の関数ポインタ	
 	static void (GameScene::* MoveFuncTable[])();
 public://メンバ関数
 	/// <summary>
@@ -57,6 +52,56 @@ public://メンバ関数
 	/// 更新処理
 	/// </summary>
 	void Update() override;
+	/// <summary>
+	/// 始まりのカメラ演出
+	/// </summary>
+	void StartProcess();
+	/// <summary>
+	/// 移動時の処理
+	/// </summary>
+	void MoveProcess();
+	/// <summary>
+	/// 戦闘時の処理
+	/// </summary>
+	void FightProcess();
+	/// <summary>
+	/// ゲームオーバー時の処理
+	/// </summary>
+	void GameOverProcess();
+	/// <summary>
+	/// ゲームクリア時の処理
+	/// </summary>
+	void GameClearProcesss();
+	/// <summary>
+	/// 徐々に明るくする
+	/// </summary>
+	void FadeIn();
+	/// <summary>
+	/// スポットライトの動き
+	/// </summary>
+	void SpotLightMove();
+	/// <summary>
+	/// 攻撃を食らったときの処理
+	/// </summary>
+	void DamageProcess();
+	/// <summary>
+	/// csv読み込み
+	/// </summary>
+	void LoadEnemyPopData();
+	/// <summary>
+	/// 敵の生成
+	/// </summary>
+	void UpdataEnemyPopCommands();
+	/// <summary>
+	/// 敵同士の追尾先が被った時の確認とその場合の処理
+	/// </summary>
+	void CheckSameTrackPosition();
+
+	void KilledAllEnemy();
+	/// <summary>
+	/// 始まりのムービーのスキップ処理
+	/// </summary>
+	void SkipStartMovie(XMVECTOR& bodypos);
 	/// <summary>
 	/// オブジェクトの描画
 	/// </summary>
@@ -85,66 +130,6 @@ public://メンバ関数
 	/// 終了処理
 	/// </summary>
 	void Finalize() override;
-	/// <summary>
-	/// 徐々に明るくする
-	/// </summary>
-	void FadeIn();
-	/// <summary>
-	/// スポットライトの動き
-	/// </summary>
-	void SpotLightMove();
-	/// <summary>
-	/// 攻撃を食らったときの処理
-	/// </summary>
-	void DamageProcess();
-	/// <summary>
-	/// ゲームオーバー時の処理
-	/// </summary>
-	void GameOverProcess();
-	/// <summary>
-	/// ゲームクリア時の処理
-	/// </summary>
-	void GameClearProcesss();
-	/// <summary>
-	/// csv読み込み
-	/// </summary>
-	void LoadEnemyPopData();
-	/// <summary>
-	/// 敵の生成
-	/// </summary>
-	void UpdataEnemyPopCommands();
-	/// <summary>
-	/// 敵同士の追尾先が被った時の確認とその場合の処理
-	/// </summary>
-	void CheckSameTrackPosition();
-
-	void KilledAllEnemy();
-
-	/// <summary>
-	/// 始まりのカメラ演出
-	/// </summary>
-	void StartCameraWork();
-	/// <summary>
-	/// 始まりのムービーのスキップ処理
-	/// </summary>
-	void SkipStartMovie(XMVECTOR& bodypos);
-	/// <summary>
-	/// プレイヤーの移動
-	/// </summary>
-	void PlayerMove();
-	/// <summary>
-	/// 画面揺れ
-	/// </summary>
-	/// <param name="limitshakevalue">シェイクする値</param>
-	void ScreenShake(float shakevalue, float shakingtime);
-	/// <summary>
-	/// 移動時にカメラ揺れ
-	/// </summary>
-	void MoveShakingHead();
-	/// <summary>
-	/// 映画のようなムービーの処理
-	/// </summary>
-	void MovieProcess();
 public:
 #pragma region 関数テーブル
 
@@ -188,7 +173,6 @@ private://メンバ変数
 	unique_ptr<Sprite> damageefectsprite_;
 	unique_ptr<Sprite> shot_ = nullptr;
 	unique_ptr<Sprite> reticleforgameover_;
-	
 	unique_ptr<Continue> continue_screen_;
 	unique_ptr<Movie> movie_;
 	//プレイヤーと敵
@@ -204,18 +188,6 @@ private://メンバ変数
 	unique_ptr<LightGroup> lightgroupe_ = nullptr;
 	unique_ptr<Camera> camera_ = nullptr;
 	unique_ptr<RailCamera> railcamera_ = nullptr;
-	//最初のビルのステータス
-	XMVECTOR startpos_ = { 0.0f,0.0f,-16.5f };
-	XMFLOAT3 startscl_ = { 15.0f,15.0f,15.0f };
-	XMFLOAT3 startrot_ = { 0.0f,180.0f,0.0f };
-	//天球のステータス
-	XMVECTOR spherepos_ = { 0,0,0 };
-	XMFLOAT3 spherescl_ = { 4.0f,4.0f,4.0f };
-	XMFLOAT3 sphererot_ = { 0,90,0 };
-
-	//足場のステータス
-	XMVECTOR worldpos_ = { 0.0f,-1.1f,0.0f };
-	XMFLOAT3 worldscl_ = { 100,100,100 };
 	//ビル群のステータス
 	XMFLOAT3 builsscl_ = { 10.0f,10.0f,10.0f };
 	XMVECTOR builshighalphapos_ = { 0.0f,0.0f,-16.5f };
@@ -234,10 +206,6 @@ private://メンバ変数
 	int playerhp_;
 	int oldhp_;
 	bool posteffectonflag_ = false;
-	bool clearflag_ = false;
-	bool stopupdateflag_ = false;
-	bool dethflag_ = false;
-	bool gamestartflag_ = false;
 	bool damagehitflag_ = false;
 	XMFLOAT4 damageefectcolor_ = { 1.f,1.f,1.f,1.f };
 
@@ -261,26 +229,19 @@ private://メンバ変数
 	XMFLOAT2 searchlightfactorangle_ = { 20.0f,30.0f };
 
 	bool spotlightpositionchange_ = false;
-	bool lightpositionchangex_[2];
-	bool lightpositionchangez_[2];
 
-	float duration_ = 1.f;
+
 	float time_ = -1.0f;
 	float value_ = 0.f;
-	float startpointz_ = 50.f;
-	float endpointz_ = 0.f;
-	float startpointx_ = -30;
-	float endpointx_ = 30;
-	float endpointz2_ = 90.0f;
-	float startpointz2_ = 50.f;
+
+	
 
 	bool easing_ = true;
 	float easingwaittimer_ = 0.f;
 	bool easingchange_ = false;
 
-	XMFLOAT3 searchlightaddpos_ = { 0.1f,-0.1f,0.05f };
-	float lightaddposchangetimer_ = 0.0f;
-	bool changetimerflag_ = false;
+
+
 
 	float startcolor_ = -0.5f;
 	float endcolor_ = 0.0f;
@@ -306,44 +267,23 @@ private://メンバ変数
 	bool nocursorinflag_ = false;
 
 
-#pragma region Acrtorから持ってくる変数(いらないものは全部消す)
-
 
 	float heriy_ = 15.0f;
-	bool moveflag_ = false;
 	bool backobjflag_ = true;
-	float herix_ = 3.1f;
 
-	bool countflag_ = false;
-	//待機コマンド
-	bool waitflag_ = false;
-	int waittime_ = 0;
-
-	bool fringflag_ = false;
-
-	XMVECTOR velo_;
+	
 
 	bool startmovieflag_ = false;
 
 	bool stopflag_ = false;
 
-	bool getcamworkflag_ = false;
-
-	bool reversflag_ = true;
-	float easingtimer_ = 0.0f;
-	float addtimer_ = 0.01f;
 	bool otherenemyarive_ = true;
 
-#pragma endregion
-
-#pragma region プレイヤーから移行
 
 
 	XMVECTOR velocity_;
-	XMFLOAT3 eyerot_{ 0.f,0.f,0.f };
+	XMFLOAT3 eyerot_{ 0.f,180.f,0.f };
 	XMFLOAT3 passrot_{};
-	bool startflag_ = false;
-	bool stanbyflag_ = false;
 	int actioncount_ = 0;
 	float actiontimer_ = 0.f;
 	XMVECTOR l_reticlepos;
@@ -351,15 +291,11 @@ private://メンバ変数
 	float movespeed_ = 0.5f;
 	float changerotation_ = 0.f;
 	bool FringFlag = false;
-#pragma endregion
+
+	bool shakingstartflag_ = false;
+	float shake_addvalue_ = 0.f;
 
 	int gamestate_ = NONE;
-	bool shakingstartflag_ = false;
-	float shakelimittime_ = 0.f;
-	bool shakingscreenflag_ = false;
-	float shakingscreenvalue_= 0.f;
-	bool shake_ = true;
 
-	int screenshakestate_ = NORMAL;
 };
 

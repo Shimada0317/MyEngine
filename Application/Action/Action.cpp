@@ -17,7 +17,7 @@ Action* Action::GetInstance()
 	return &instance;
 }
 
-void Action::PlayerMove3d(XMVECTOR &position)
+void Action::PlayerMove3d(XMVECTOR& position)
 {
 	XMVECTOR move = { 0.5f,0.5f,0.5f };
 
@@ -35,7 +35,7 @@ void Action::PlayerMove3d(XMVECTOR &position)
 	}
 }
 
-void Action::PlayerJump(XMFLOAT3& position,bool& JumpFlag)
+void Action::PlayerJump(XMFLOAT3& position, bool& JumpFlag)
 {
 
 	if (JumpFlag == false) {
@@ -49,7 +49,7 @@ void Action::PlayerJump(XMFLOAT3& position,bool& JumpFlag)
 
 }
 
-void Action::PlayerMove2d(XMFLOAT2 &position, float Speed)
+void Action::PlayerMove2d(XMFLOAT2& position, float Speed)
 {
 	if (Input::GetInstance()->TriggerKey(DIK_UP)) {
 		position.y += Speed;
@@ -83,7 +83,15 @@ void Action::EaseOut(float& MoveValue, float PurposeValue)
 	MoveValue += easevalue;
 }
 
-float Action::EasingOut(float time,float addvalue)
+void Action::EasingAddTimer(float& timer_, float addtime_)
+{
+	timer_ += addtime_;
+	if (timer_ == 1) {
+		timer_ = 0;
+	}
+}
+
+float Action::EasingOut(float time, float addvalue)
 {
 	return addvalue * sinf((time * DirectX::XM_PI) / 2);
 }
@@ -107,6 +115,56 @@ void Action::Flash(float& color, float transparent)
 void Action::ThrowUp(float gravity, float time, float upper, float& position)
 {
 	position += gravity * time - upper;
+}
+
+void Action::ScreenShake(float& shakevalue, float shakingtime, XMFLOAT3& eyerot_, bool& shakingstartflag_)
+{
+	if (shakingstartflag_ == true) {
+		if (shakelimittime_ <= 1) {
+			shakelimittime_ += shakingtime;
+			if (shakingscreenflag_ == true) {
+				shakingscreenvalue_ -= shakevalue;
+				if (shakingscreenvalue_ <= -shakevalue) {
+					shakingscreenflag_ = false;
+				}
+			}
+			else {
+				shakingscreenvalue_ += shakevalue;
+				if (shakingscreenvalue_ >= shakevalue) {
+					shakingscreenflag_ = true;
+				}
+			}
+			eyerot_.x += shakingscreenvalue_;
+		}
+		else {
+			shakingscreenflag_ = true;
+			shakelimittime_ = 0;
+			shakingstartflag_ = false;
+			shakevalue = 0.f;
+			shakingscreenvalue_ = 0;
+			eyerot_.x = 0;
+		}
+	}
+}
+
+void Action::MoveShakingHead(XMFLOAT3& eyerot_)
+{
+	//‰ÁŽZ‚ÆŒ¸ŽZ‚·‚éˆ×‚Ìâ‘Î’l
+	const float EyeRotAbsouluteValue = 0.05f;
+	//”½“]‚³‚¹‚é‚½‚ß‚Ìâ‘Î’l
+	const float AbsoluteValue = 0.5f;
+	if (shake_ == true) {
+		eyerot_.x += EyeRotAbsouluteValue;
+		if (eyerot_.x >= AbsoluteValue) {
+			shake_ = false;
+		}
+	}
+	else {
+		eyerot_.x -= EyeRotAbsouluteValue;
+		if (eyerot_.x <= -AbsoluteValue) {
+			shake_ = true;
+		}
+	}
 }
 
 

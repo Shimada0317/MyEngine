@@ -47,17 +47,20 @@ public:
 	/// <param name="Speed"></param>
 	void PlayerMove2d(XMFLOAT2& position, float Speed);
 	/// <summary>
-	/// ロボットの更新処理
+	///  乱数生成
 	/// </summary>
 	/// <param name="minValue">最小の範囲値</param>
 	/// <param name="maxValue">最大の範囲値</param>
 	float GetRangRand(float minValue, float maxValue);
+
 	/// <summary>
 	/// イーズアウト
 	/// </summary>
 	/// /// <param name="MoveValue">移動する値</param>
 	/// <param name="PurposeValue">目的地の値</param>
 	void EaseOut(float& MoveValue, float PurposeValue);
+
+	void EasingAddTimer(float& timer_,float addtime_);
 
 	float EasingOut(float time, float addvalue);
 
@@ -79,6 +82,10 @@ public:
 	/// <param name="position">現在地</param>
 	void ThrowUp(float gravity, float time, float upper, float& position);
 
+	void ScreenShake(float& shakevalue, float shakingtime,XMFLOAT3& eyerot_,bool& shakingstartflag_);
+
+	void MoveShakingHead(XMFLOAT3& eyerot_);
+
 	/// <summary>
 	/// ベクター同士の比較
 	/// </summary>
@@ -90,5 +97,10 @@ public:
 	void DebugMove(XMFLOAT3& Value);
 
 private:
+	float shakelimittime_ = 0.f;
+	float shakingscreenvalue_ = 0.f;
+	bool shakingscreenflag_ = false;
+
+	bool shake_ = true;
 };
 
