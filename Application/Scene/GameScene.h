@@ -241,14 +241,10 @@ private://ƒƒ“ƒo•Ï”
 	bool easingchange_ = false;
 
 
-
-
-	float startcolor_ = -0.5f;
-	float endcolor_ = 0.0f;
+	
 	float colortime_ = 1.0f;
 
-	float startcolorred_ = 0.0f;
-	float endcolorred_ = 0.8f;
+	
 	float colortimered_ = 0.0f;
 
 	float lightdireasingtime_ = 0.f;

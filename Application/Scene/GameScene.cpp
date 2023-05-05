@@ -366,11 +366,16 @@ void GameScene::SpotLightMove()
 {
 	const float duration_ = 1;
 	const float startpointz_ = 50.f;
-	const float endpointz_ = 0.f;
 	const float startpointx_ = -30;
+	const float startpointz2_ = 50.f;
+	const float endpointz_ = 0.f;
 	const float endpointx_ = 30;
 	const float endpointz2_ = 90.0f;
-	const float startpointz2_ = 50.f;
+	const float startcolor_ = -0.5f;
+	const float startcolorred_ = 0.0f;
+	const float endcolor_ = 0.0f;
+	const float endcolorred_ = 0.8f;
+
 	if (easing_ == false) {
 		easingwaittimer_ += 0.1f;
 		if (easingwaittimer_ >= 1) {
@@ -408,7 +413,7 @@ void GameScene::SpotLightMove()
 
 
 
-	if (patern_ == 8) {
+	if (patern_ == GOALPOINT) {
 		if (colortime_ >= 0) {
 			colortime_ -= 0.01f;
 		}
