@@ -229,31 +229,19 @@ private://ÉÅÉìÉoïœêî
 	XMFLOAT2 searchlightfactorangle_ = { 20.0f,30.0f };
 
 	bool spotlightpositionchange_ = false;
-
-
 	float time_ = -1.0f;
 	float value_ = 0.f;
-
-	
-
 	bool easing_ = true;
 	float easingwaittimer_ = 0.f;
 	bool easingchange_ = false;
-
-
-	
 	float colortime_ = 1.0f;
-
-	
 	float colortimered_ = 0.0f;
-
 	float lightdireasingtime_ = 0.f;
 	bool lightdireasingchange_ = false;
 
 	XMFLOAT2 reticleposition_{ 0.f,0.f };
 	XMFLOAT4 reticlecolor_{ 1.f,1.f,1.f,1.f };
 	XMFLOAT2 spriteanchorpoint_{ 0.5f,0.5f };
-
 	XMFLOAT2 yesposition_{ WinApp::window_width / 2 - 200,WinApp::window_height / 2 + 100 };
 	XMFLOAT2 noposition_{ WinApp::window_width / 2 + 200,WinApp::window_height / 2 + 100 };
 	XMFLOAT2 spritesize_{ 240.f,240.f };
@@ -261,22 +249,11 @@ private://ÉÅÉìÉoïœêî
 	XMFLOAT4 nocolor_{ 1.f,1.f,1.f,1.f };
 	bool yescursorinflag_ = false;
 	bool nocursorinflag_ = false;
-
-
-
 	float heriy_ = 15.0f;
 	bool backobjflag_ = true;
-
-	
-
 	bool startmovieflag_ = false;
-
 	bool stopflag_ = false;
-
 	bool otherenemyarive_ = true;
-
-
-
 	XMVECTOR velocity_;
 	XMFLOAT3 eyerot_{ 0.f,180.f,0.f };
 	XMFLOAT3 passrot_{};

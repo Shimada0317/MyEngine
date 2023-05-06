@@ -10,6 +10,14 @@
 class ThrowEnemy
 {
 private:
+	enum State {
+		APPEARANCE =0,
+		WAIT,
+		ATTACK,
+		DEATH,
+	};
+
+private:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
@@ -39,6 +47,14 @@ public:
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
 	void Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
+	/// <summary>
+	/// 登場処理
+	/// </summary>
+	void AppearanceProcess();
+	/// <summary>
+	/// 
+	/// </summary>
+	void AttackProcess();
 
 	/// <summary>
 	/// 2D→3D座標
@@ -51,11 +67,6 @@ public:
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
-
-	/// <summary>
-	/// ビュー変換
-	/// </summary>
-	void ChangeViewPort(XMMATRIX& matviewport);
 
 	void ThrowAttack();
 
@@ -72,6 +83,8 @@ public:
 	std::unique_ptr<Object3d>Shadow;
 	std::unique_ptr<Object3d>Center;
 	std::unique_ptr<Object3d>ThrowBox;
+	std::unique_ptr<Object3d>enemy_;
+	std::unique_ptr<Object3d>propeller_;
 
 	//スプライト
 	std::unique_ptr<Sprite> RockOn;
@@ -81,21 +94,17 @@ public:
 	//パーツごとのステータス
 	//敵の中心部分
 	XMVECTOR CenterWorldPos = { 0.f,0.f,0.f };
-	XMVECTOR AllPos = { 0.f,0.f,0.f };
+	XMVECTOR center_pos_ = { 0.f,0.f,0.f };
 	XMFLOAT3 CenterRot = { 0.f,0.f,0.f };
 	XMMATRIX CenterMat;
-	//頭
-	XMVECTOR HeadPos = { 0.f,0.f,0.f };
-	XMFLOAT3 HeadRot = { 0.f,0.f,0.f };
-	XMFLOAT3 HeadScl = { 0.f,0.f,0.f };
-	//体
-	XMVECTOR BodyPos = { 0.f,0.f,0.f };
-	XMFLOAT3 BodyRot = { 0.f,0.f,0.f };
-	XMFLOAT3 BodyScl = { 1.f,1.f,1.f };
-	//腕
-	XMVECTOR ArmsPos = { 0.f,0.f,0.f };
-	XMFLOAT3 ArmsRot = { 0.f,0.f,0.f };
-	XMFLOAT3 ArmsScl = { 0.f,0.f,0.f };
+	//
+	XMVECTOR body_pos_ = { 0.f,0.f,0.f };
+	XMFLOAT3 body_rot_ = { 0.f,0.f,0.f };
+	XMFLOAT3 body_scl_ = { 1.f,1.f,1.f };
+	//
+	XMVECTOR propeller_pos_{ 0.f,0.f,0.f };
+	XMFLOAT3 propeller_rot_{ 0.f,0.f,0.f };
+	XMFLOAT3 propeller_scl_{ 1.f,1.f,1.f };
 	//影のステータス
 	XMVECTOR ShadowPos = { 0.f,0.f,0.f };
 	XMFLOAT4 ShadowCol = { 0.f,0.f,0.f,0.1f };
@@ -115,10 +124,11 @@ public:
 	XMFLOAT2 RockOnHeadPos = { 0.0f,0.0f };
 	XMFLOAT2 RockOnBoxPoss = { 0.f,0.f };
 
+	float bullet_speed_ = 0.f;
+
 	int Hp = 160;
 	int OldHp = 0;
 	float Length = 0.f;
-	float MoveSpeed = 0.1f;
 	//敵とプレイヤーの距離
 	float OriginDistance;
 	float OriginHeadDistance;
@@ -132,5 +142,8 @@ public:
 	bool DefomationFlag = false;
 	float DefomationCount = 0.0f;
 
+	float floating_pos_ = 0.f;
+
+	int state_ = APPEARANCE;
 };
 

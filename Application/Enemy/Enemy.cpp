@@ -292,12 +292,6 @@ void Enemy::TrackPlayerMode()
 	}
 }
 
-void Enemy::Motion()
-{
-	
-
-}
-
 //UŒ‚ƒ‚[ƒh‚Ì
 void Enemy::AttackMode(int& playerhp)
 {
