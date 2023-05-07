@@ -207,32 +207,36 @@ void GameScene::StartProcess()
 	if (gamestate_ != GamePhase::START) { return; }
 	l_reticlepos = player_->GetPosition();
 	XMVECTOR l_bodyworldpos = player_->GetBodyWorldPos();
-	if (actioncount_ == 0 && heripos_.m128_f32[2] >= 20) {
+	if (movie_sequence_ == MovieSequence::ACTION && heripos_.m128_f32[2] >= 20) {
 		backobjflag_ = false;
 		startmovieflag_ = true;
-		actioncount_ = 1;
+		movie_sequence_ = MovieSequence::TURNAROUND;
 	}
-	if (actioncount_ == 1) {
+
+	if (movie_sequence_ == MovieSequence::TURNAROUND) {
 		Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
 		//後ろを向く
 		if (eyerot_.y <= 0) {
-			movie_sequence_ = MovieSequence::FACELOWER;
 			eyerot_.y = 0;
-			actiontimer_ += 0.2f;
-			if (actiontimer_ > 5) {
-				actiontimer_ = 5.0f;
-				Action::GetInstance()->EaseOut(eyerot_.x, 95.0f);
-			}
-		}
-		//下を向く
-		if (eyerot_.x >= 90) {
-			movie_sequence_ = MovieSequence::JUMP;
-			actiontimer_ = 0.0f;
-			eyerot_.x = 90;
-			actioncount_ = 2;
+			movie_sequence_ = MovieSequence::FACELOWER;
 		}
 	}
-	else if (actioncount_ == 2) {
+
+	if (movie_sequence_ == MovieSequence::FACELOWER) {
+		actiontimer_ += 0.2f;
+		if (actiontimer_ > 5) {
+			actiontimer_ = 5.0f;
+			Action::GetInstance()->EaseOut(eyerot_.x, 95.0f);
+			//下を向く
+			if (eyerot_.x >= 90) {
+				actiontimer_ = 0.0f;
+				eyerot_.x = 90;
+				movie_sequence_ = MovieSequence::JUMP;
+			}
+		}
+	}
+
+	if (movie_sequence_ ==MovieSequence::JUMP) {
 		actiontimer_ += 0.15f;
 		velocity_ = { 0.0f,0.67f,0.4f };
 		if (actiontimer_ >= 5) {
@@ -241,16 +245,22 @@ void GameScene::StartProcess()
 		}
 		if (eyerot_.x <= 0.0f) {
 			eyerot_.x = 0.0f;
+			
 		}
 		//地面に着いたとき
 		if (l_bodyworldpos.m128_f32[1] <= 0.9f) {
 			l_bodyworldpos.m128_f32[1] = 0.9f;
 			velocity_ = { 0.0f,0.0f,0.0f };
-			l_reticlepos = { 0.0f,-0.7f,13.0f };
-			railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
-			movie_sequence_ = MovieSequence::FINISH;
+			movie_sequence_ = MovieSequence::LANDING;
 		}
 	}
+
+	if (movie_sequence_ == MovieSequence::LANDING) {
+		l_reticlepos = { 0.0f,-0.7f,13.0f };
+		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
+		movie_sequence_ = MovieSequence::FINISH;
+	}
+
 	SkipStartMovie(l_bodyworldpos);
 	player_->SetBodyWorldPos(l_bodyworldpos);
 	if (movie_sequence_ != MovieSequence::FINISH) { return; }
@@ -265,7 +275,9 @@ void GameScene::MoveProcess()
 	cameravector_ = { 0.f,0.f,0.f,0.f };
 	cameravector_ = XMVector3Transform(cameravector_, l_cameramatrix);
 	//歩いているときのような首を動かす
-	Action::GetInstance()->MoveShakingHead(eyerot_);
+	if (movie_sequence_ == FINISH) {
+		Action::GetInstance()->MoveShakingHead(eyerot_);
+	}
 	(this->*MoveFuncTable[patern_])();
 	//プレイヤーに渡す角度
 	passrot_ = eyerot_;
@@ -688,7 +700,6 @@ void GameScene::KilledAllEnemy()
 void GameScene::SkipStartMovie(XMVECTOR& bodypos)
 {
 	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0))) {
-		actioncount_ = 100;
 		eyerot_.x = 0;
 		eyerot_.y = 0;
 		velocity_ = { 0.0f,0.0f,0.0f };
@@ -800,8 +811,6 @@ void GameScene::MovePointCFront()
 
 void GameScene::GoalPointBack()
 {
-	movie_->Disply();
-	actioncount_ = 0;
 	velocity_ = { 0.f,0.f,movespeed_ };
 	if (cameravector_.m128_f32[2] >= 80) {
 		velocity_ = { 0.f,0.f,0.1f };
@@ -820,6 +829,8 @@ void GameScene::GoalPointBack()
 
 void GameScene::GoalPoint()
 {
+	movie_sequence_ = MovieSequence::ACTION;
+	movie_->Disply();
 	velocity_ = { 0.f, 0.f, 0.1f };
 	//後ろを向く
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
@@ -844,8 +855,6 @@ void GameScene::GoalPoint()
 			}
 		}
 	}
-
-	actioncount_ = 0;
 }
 
 void(GameScene::* GameScene::MoveFuncTable[])() {
@@ -874,7 +883,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	if (backobjflag_) {
 		heri_->Draw();
 	}
-	if (gamestate_==GamePhase::MOVE||gamestate_==GamePhase::FIGHT) {
+	if (movie_sequence_==MovieSequence::FINISH) {
 		player_->ObjDraw();
 	}
 
@@ -908,7 +917,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 		reticleforgameover_->Draw();
 	}
 	movie_->Draw();
-	if (gamestate_ == FIGHT || gamestate_ == MOVE) {
+	if ((gamestate_ == FIGHT || gamestate_ == MOVE)&&movie_sequence_==MovieSequence::FINISH) {
 		player_->SpriteDraw();
 	}
 	Sprite::PostDraw();
@@ -962,5 +971,4 @@ void GameScene::Finalize()
 	continue_screen_.reset();
 	clear_.reset();
 	shot_.reset();
-
 }
