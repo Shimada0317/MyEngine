@@ -65,10 +65,6 @@ public:
 	/// </summary>
 	void TrackPlayerMode();
 
-	/// <summary>
-	/// 待機モーション
-	/// </summary>
-	void Motion();
 
 	/// <summary>
 	/// 攻撃モード

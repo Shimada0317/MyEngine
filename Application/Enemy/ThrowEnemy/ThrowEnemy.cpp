@@ -33,7 +33,7 @@ void ThrowEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Came
 
 	RockOn.reset(Sprite::SpriteCreate(Name::kEnemyMarker, RockOnPos, RockOnCol, RockOnAnchorPoint));
 
-	floating_pos_ - Action::GetInstance()->GetRangRand(2.f, 4.f);
+	floating_pos_ = Action::GetInstance()->GetRangRand(2.f, 4.f);
 
 	LandingPoint = trackpos;
 	OldHp = Hp;

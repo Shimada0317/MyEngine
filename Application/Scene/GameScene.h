@@ -26,6 +26,15 @@ private:
 		CLEAR,
 	};
 
+	enum MovieSequence {
+		ACTION=0,
+		TURNAROUND,
+		FACELOWER,
+		JUMP,
+		LANDING,
+		FINISH,
+	};
+
 private:
 	//移動用の関数ポインタ	
 	static void (GameScene::* MoveFuncTable[])();
@@ -268,7 +277,8 @@ private://メンバ変数
 	bool shakingstartflag_ = false;
 	float shake_addvalue_ = 0.f;
 
-	int gamestate_ = NONE;
+	int gamestate_ = GamePhase::NONE;
+	int movie_sequence_ = MovieSequence::ACTION;
 
 };
 

@@ -44,23 +44,20 @@ void Movie::Disply()
 	}
 }
 
-void Movie::Invisible()
+void Movie::Invisible(int& gamestate_, int state_)
 {
 	curtainuppos_.y -= 4;
 	curtaindownpos_.y += 4;
 	skippos_.y += 4;
 
-	if (curtainuppos_.y <= -100) {
-		curtainuppos_.y = -100;
-	}
+	if (curtainuppos_.y >= -100) { return; }
+	if (curtaindownpos_.y <= 720) { return; }
+	if (skippos_.y <= 720) { return; }
+	curtainuppos_.y = -100;
+	curtaindownpos_.y = 720;
+	skippos_.y = 12000;
+	gamestate_ = state_;
 
-	if (curtaindownpos_.y >= 720) {
-		curtaindownpos_.y = 720;
-	}
-
-	if (skippos_.y >= 720) {
-		skippos_.y = 12000;
-	}
 }
 
 void Movie::Draw()

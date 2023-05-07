@@ -182,7 +182,6 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulle
 		else if (Length <= LengthLimit&&WaitFlag==false) {
 			BodyPartPos.m128_f32[2] -= 1.f;
 			AtttackTimer += 0.1f;
-			Motion();
 			MovementFlag = false;
 			AttackMode(playerhp);
 		}

@@ -20,9 +20,7 @@ Player::~Player()
 {
 	gun_.reset();
 	body_.reset();
-	part_green_.reset();
-	part_red_.reset();
-	part_smoke_.reset();
+
 	player_ui_.reset();
 	shot_se_.reset();
 	reload_se_.reset();
@@ -109,27 +107,23 @@ void Player::AllUpdate()
 	part_smoke_->Update(ColorSmoke);
 }
 //更新処理
-void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot)
+void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot, int gamestate_, int state_)
 {
 	//マウス操作
 	MouseContoroll();
 	//待機状態の処理
 	WaitProcess();
+	//座標や回転、スケールなどのステータスのセット
+	StatusSet(camera, eyerot);
+	//全ての更新処理
+	AllUpdate();
+	if (gamestate_ == state_) { return; }
 	//発砲の処理
 	GunShotProcess(patern);
 	//UI
 	UIMotionProcess();
 	//リロードの処理
 	ReloadProcess();
-
-	player_ui_->HartBeat(hp_);
-
-	velocity_ = XMVector3TransformNormal(velocity_, body_mat_);
-
-	//座標や回転、スケールなどのステータスのセット
-	StatusSet(camera, eyerot);
-	//全ての更新処理
-	AllUpdate();
 }
 //待機状態の処理
 void Player::WaitProcess()
@@ -203,10 +197,11 @@ void Player::GunShotProcess(Phase paterncount)
 	//弾の発射前
 	if (player_state_ == WAIT && remaining_ < MaxRemainingBullet) {
 		if (Mouse::GetInstance()->PushClick(0)) {
-			player_state_ = SHOT;
 			remaining_ += addvalue;
 			bullet_ui_->Shot(remaining_);
 			recoil_gunflag_ = true;
+			player_state_ = SHOT;
+			//マズルフラッシュ
 			ParticleEfect(paterncount);
 		}
 	}
@@ -216,14 +211,15 @@ void Player::GunShotProcess(Phase paterncount)
 		bullet_shotflag_ = true;
 		player_state_ = WAIT;
 	}
-	
 	//リコイル処理
 	RecoilProcess();
 }
 
 void Player::UIMotionProcess()
 {
-	
+	//UIの鼓動
+	player_ui_->HartBeat(hp_);
+	//リロード
 	bullet_ui_->ReloadMotion();
 	//落ちていく薬莢の処理
 	bullet_ui_->FallingUI();
@@ -311,73 +307,71 @@ void Player::ReloadProcess()
 void Player::ParticleEfect(Phase paterncount)
 {
 
-	for (int i = 0; i < 10; i++) {
-		XMFLOAT3 pos{};
-		float radX = reticle_rot_.y * XM_PI / 180.f;
-		float radY = gun_rot_.x * XM_PI / 180.f;
-		float sinradX = sinf(radX);
-		float cosradX = cosf(radX);
+		for (int i = 0; i < 10; i++) {
+			float radX = reticle_rot_.y * XM_PI / 180.f;
+			float radY = gun_rot_.x * XM_PI / 180.f;
+			float sinradX = sinf(radX);
+			float cosradX = cosf(radX);
 
-		float sinradY = sinf(radY);
-		float cosradY = cosf(radY);
-		//後ろを向いているとき
-		if (paterncount == LANDINGPOINT_BACK ||
-			paterncount == MOVEDPOINT_A ||
-			paterncount == MOVEDPOINT_A_LEFT ||
-			paterncount == GOALPOINT_BACK) {
-			pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
-			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gun_worldpos_.m128_f32[2] + 3.0f;
-		}
-		//右を向いているとき
-		else if (paterncount == MOVEDPOINT_C ||
-			paterncount == MOVEDPOINT_C_OBLIQUE) {
-			pos.x = gun_worldpos_.m128_f32[0] + 2.3f;
-			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
-		}
-		//真っすぐ前を向いているとき
-		else if (paterncount == LANDINGPOINT_FRONT ||
-			paterncount == GOALPOINT) {
-			pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
-			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gun_worldpos_.m128_f32[2] - 3.0f;
-		}
-		//左を向いているとき
-		else if (paterncount == MOVEDPOINT_B) {
-			pos.x = gun_worldpos_.m128_f32[0] - 2.3f;
-			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
-		}
-		//斜めを向いているとき
-		else if (paterncount == MOVEDPOINT_C_FRONT) {
-			pos.x = gun_worldpos_.m128_f32[0] + 2.3f * sinradX;
-			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-			pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
-		}
+			float sinradY = sinf(radY);
+			float cosradY = cosf(radY);
+			//後ろを向いているとき
+			if (paterncount == LANDINGPOINT_BACK ||
+				paterncount == MOVEDPOINT_A ||
+				paterncount == MOVEDPOINT_A_LEFT ||
+				paterncount == GOALPOINT_BACK) {
+				pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
+				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+				pos.z = gun_worldpos_.m128_f32[2] + 3.0f;
+			}
+			//右を向いているとき
+			else if (paterncount == MOVEDPOINT_C ||
+				paterncount == MOVEDPOINT_C_OBLIQUE) {
+				pos.x = gun_worldpos_.m128_f32[0] + 2.3f;
+				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
+			}
+			//真っすぐ前を向いているとき
+			else if (paterncount == LANDINGPOINT_FRONT ||
+				paterncount == GOALPOINT) {
+				pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
+				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+				pos.z = gun_worldpos_.m128_f32[2] - 3.0f;
+			}
+			//左を向いているとき
+			else if (paterncount == MOVEDPOINT_B) {
+				pos.x = gun_worldpos_.m128_f32[0] - 2.3f;
+				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
+			}
+			//斜めを向いているとき
+			else if (paterncount == MOVEDPOINT_C_FRONT) {
+				pos.x = gun_worldpos_.m128_f32[0] + 2.3f * sinradX;
+				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
+			}
 
-		const float rnd_vel = 0.001f;
-		XMFLOAT3 vel{};
-		vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-		vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			const float rnd_vel = 0.001f;
+			XMFLOAT3 vel{};
+			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
 
-		const float smokernd_vel = 0.05f;
-		XMFLOAT3 smokevel{};
-		smokevel.x = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
-		smokevel.y = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
-		smokevel.z = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
-		XMFLOAT3 acc{};
-		acc.y = 0.0;
+			const float smokernd_vel = 0.05f;
+			XMFLOAT3 smokevel{};
+			smokevel.x = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
+			smokevel.y = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
+			smokevel.z = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
+			XMFLOAT3 acc{};
+			acc.y = 0.0;
 
-		XMFLOAT3 Smokeacc{};
-		Smokeacc.y += 0.005f;
-		part_red_->Add(20, pos, vel, acc, 0.7f, 0.2f, 1.0f);
-		part_green_->Add(20, pos, vel, acc, 0.5f, 0.2f, 1.0f);
-		part_smoke_->Add(50, pos, smokevel, acc, 0.5f, 0.0f, 1.0f);
-	}
-	SoundEffect();
-
+			XMFLOAT3 Smokeacc{};
+			Smokeacc.y += 0.005f;
+			part_red_->Add(20, pos, vel, acc, 0.7f, 0.f, 1.f);
+			part_green_->Add(20, pos, vel, acc, 0.5f, 0.f, 1.f);
+			part_smoke_->Add(50, pos, smokevel, acc, 0.5f, 0.f, 1.f);
+		}
+		SoundEffect();
 }
 
 void Player::SlowlyLargeHUD()

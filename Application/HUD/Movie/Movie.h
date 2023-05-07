@@ -22,7 +22,7 @@ public:
 	/// <summary>
 	/// ”ñ•\Ž¦
 	/// </summary>
-	void Invisible();
+	void Invisible(int& gamestate_,int state_);
 	/// <summary>
 	/// •`‰æ
 	/// </summary>

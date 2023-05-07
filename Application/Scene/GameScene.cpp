@@ -163,7 +163,7 @@ void GameScene::AllUpdata()
 	game_background_->Update();
 
 	//プレイヤーの更新処理
-	player_->Update(camera_.get(), (Phase)patern_, passrot_);
+	player_->Update(camera_.get(), (Phase)patern_, passrot_,gamestate_,START);
 	railcamera_->Update(velocity_, eyerot_, camera_.get());
 	common_background_->Update();
 }
@@ -216,6 +216,7 @@ void GameScene::StartProcess()
 		Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
 		//後ろを向く
 		if (eyerot_.y <= 0) {
+			movie_sequence_ = MovieSequence::FACELOWER;
 			eyerot_.y = 0;
 			actiontimer_ += 0.2f;
 			if (actiontimer_ > 5) {
@@ -225,6 +226,7 @@ void GameScene::StartProcess()
 		}
 		//下を向く
 		if (eyerot_.x >= 90) {
+			movie_sequence_ = MovieSequence::JUMP;
 			actiontimer_ = 0.0f;
 			eyerot_.x = 90;
 			actioncount_ = 2;
@@ -246,12 +248,13 @@ void GameScene::StartProcess()
 			velocity_ = { 0.0f,0.0f,0.0f };
 			l_reticlepos = { 0.0f,-0.7f,13.0f };
 			railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
-			gamestate_ = MOVE;
-			movie_->Invisible();
+			movie_sequence_ = MovieSequence::FINISH;
 		}
 	}
 	SkipStartMovie(l_bodyworldpos);
 	player_->SetBodyWorldPos(l_bodyworldpos);
+	if (movie_sequence_ != MovieSequence::FINISH) { return; }
+	movie_->Invisible(gamestate_, MOVE);
 }
 //移動時の処理
 void GameScene::MoveProcess()
@@ -692,8 +695,7 @@ void GameScene::SkipStartMovie(XMVECTOR& bodypos)
 		l_reticlepos = { 0.0f,-0.7f,13.0f };
 		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
 		bodypos.m128_f32[1] = 0.9f;
-		gamestate_ = MOVE;
-		movie_->Invisible();
+		movie_sequence_ = MovieSequence::FINISH;
 	}
 }
 
@@ -872,7 +874,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	if (backobjflag_) {
 		heri_->Draw();
 	}
-	if (gamestate_ != START) {
+	if (gamestate_==GamePhase::MOVE||gamestate_==GamePhase::FIGHT) {
 		player_->ObjDraw();
 	}
 

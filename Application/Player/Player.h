@@ -59,7 +59,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(Camera* camera, Phase patern,XMFLOAT3 eyerot);
+	void Update(Camera* camera, Phase patern,XMFLOAT3 eyerot,int gamestate_,int state_);
 	/// <summary>
 	/// 待機時の処理
 	/// </summary>
@@ -135,8 +135,6 @@ public:
 	const bool& GetBulletShot() { return bullet_shotflag_; }
 
 	const XMVECTOR& GetBodyWorldPos() { return body_worldpos_; }
-
-	const XMVECTOR& GetVelocity() { return velocity_; }
 
 	const XMMATRIX& GetBodyMatrix() { return body_mat_; }
 #pragma endregion
@@ -226,8 +224,6 @@ private:
 	int old_hp_ = hp_;
 	//Reload
 	int reload_time_ = 0;
-	//移動
-	XMVECTOR velocity_;
 	//残弾数
 	int remaining_ = 0;
 	int old_remaining_ = 0;
@@ -246,5 +242,6 @@ private:
 	bool revers_flag_ = false;
 	//プレイヤーの状態
 	int player_state_ = WAIT;
+	XMFLOAT3 pos{};
 };
 
