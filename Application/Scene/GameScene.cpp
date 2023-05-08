@@ -7,10 +7,7 @@
 #include"HelperMath.h"
 
 #include"SceneManager.h"
-
-
 using namespace DirectX;
-
 
 //コンストラクタ
 GameScene::GameScene(SceneManager* sceneManager_)
@@ -18,7 +15,6 @@ GameScene::GameScene(SceneManager* sceneManager_)
 {
 
 }
-
 //初期化処理
 void GameScene::Initialize(DirectXCommon* dxComon)
 {
@@ -29,6 +25,19 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//ライトの生成
 	light_ = Light::Create();
 	lightgroupe_ = LightGroup::Create();
+	for (int i = 0; i < 3; i++) {
+		searchlightdir_[i] = { 0,-10,0 };
+		searchlightcolor_[i] = { 1.f,1.f,1.f };
+	}
+	searchlightpos_[0] = { 0, 20, 20 };
+	searchlightpos_[1] = { 20, 10, 45 };
+	searchlightpos_[2] = { 54,10,43 };
+	//使うライトをアクティブ
+	lightgroupe_->SetSpotLightActive(0, true);
+	lightgroupe_->SetSpotLightActive(1, true);
+	lightgroupe_->SetSpotLightActive(2, true);
+	lightgroupe_->SetSpotLightActive(3, true);
+	lightgroupe_->SetSpotLightActive(4, true);
 	//ライトセット
 	Object3d::SetLight(light_.get());
 	Object3d::SetLightGroup(lightgroupe_.get());
@@ -46,8 +55,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	movie_ = make_unique<Movie>();
 	movie_->Create();
 	movie_->Disply();
-
-
 	//オブジェクトの生成
 	heri_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
 	goal_ = Object3d::Create(ModelManager::GetInstance()->GetModel(11));
@@ -55,55 +62,46 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//背景のオブジェクトの生成
 	common_background_ = make_unique<CommonBackground>();
 	common_background_->Initialize();
-
+	//プレイヤーの生成
 	player_ = make_unique<Player>();
 	player_->Initalize(camera_.get());
 	playerhp_ = player_->GetHp();
 	oldhp_ = playerhp_;
-
+	//レールカメラの生成
 	railcamera_ = make_unique<RailCamera>();
 	railcamera_->MatrixIdentity(player_->GetPosition(), player_->GetRotation());
 	railcamera_->Update(velocity_, eyerot_, camera_.get());
-
-	bgm_ = make_unique<Audio>();
-	bgm_->Initialize();
-	bgm_->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
-
+	//オーディオの生成
 	herifry_ = make_unique<Audio>();
+	bgm_ = make_unique<Audio>();
 	herifry_->Initialize();
+	bgm_->Initialize();
 	herifry_->LoadFile("Resources/Sound/SE/heriFry.wav", 0.8f);
-
+	bgm_->LoopWave("Resources/Sound/BGM/Blinded.wav", 0.3f);
+	//ゲームの背景オブジェクト
 	game_background_ = make_unique<GameBackground>();
 	game_background_->LoadBackgrounndPopData();
-
-	for (int i = 0; i < 3; i++) {
-		searchlightdir_[i] = { 0,-10,0 };
-		searchlightcolor_[i] = { 1.f,1.f,1.f };
-	}
-	searchlightpos_[0] = { 0, 20, 20 };
-	searchlightpos_[1] = { 20, 10, 45 };
-	searchlightpos_[2] = { 54,10,43 };
-
-	lightgroupe_->SetSpotLightActive(0, true);
-	lightgroupe_->SetSpotLightActive(1, true);
-	lightgroupe_->SetSpotLightActive(2, true);
-	lightgroupe_->SetSpotLightActive(3, true);
-	lightgroupe_->SetSpotLightActive(4, true);
-
+	//csvの読み込み
 	LoadEnemyPopData();
 }
-
 //ステータスセット
 void GameScene::StatusSet()
 {
+	//ダメージエフェクトの色
+	damageefectsprite_->SetColor(damageefectcolor_);
+	//映画風演出ステータス
+	movie_->StatusSet();
 	//Hpバー
 	player_->SetHp(playerhp_);
 	playerhp_ = player_->GetHp();
-
+	//ヘリコプターのステータス
 	heri_->SetPosition(heripos_);
 	heri_->SetScale(heriscl_);
 	heri_->SetRotation({ 0.0f,180.0f,0.0f });
-
+	goal_->SetPosition(goalpos_);
+	goal_->SetScale(goalscl_);
+	goal_->SetRotation({ 0.0f,270.0f,0.0f });
+	//ヘリのプロペラの
 	hane_->SetRotation({ 0.0f,heriy_,0.0f });
 	if (startmovieflag_ == false) {
 		hane_->SetPosition(heripos_);
@@ -113,32 +111,19 @@ void GameScene::StatusSet()
 		hane_->SetPosition(goalpos_);
 		hane_->SetScale(goalscl_);
 	}
-
-	goal_->SetPosition(goalpos_);
-	goal_->SetScale(goalscl_);
-	goal_->SetRotation({ 0.0f,270.0f,0.0f });
-
-	heri_->Update({ 0.7f,0.7f,0.6f,1.0f });
-	goal_->Update({ 0.7f,0.7f,0.6f,1.0f });
-	hane_->Update({ 0.0f,0.0f,0.0f,1.0f });
-
-
-	damageefectsprite_->SetColor(damageefectcolor_);
-
-	movie_->StatusSet();
-
+	//フィールド全体を照らすステータス
 	lightgroupe_->SetSpotLightDir(0, XMVECTOR({ fieldspotlightdir_.x, fieldspotlightdir_.y, fieldspotlightdir_.z }));
 	lightgroupe_->SetSpotLightPos(0, fieldspotlightpos_);
 	lightgroupe_->SetSpotLightColor(0, fieldspotlightcolor_);
 	lightgroupe_->SetSpotLightAtten(0, fieldspotlightatten_);
 	lightgroupe_->SetSpotLightFactorAngle(0, fieldspotlightfactorangle_);
-
+	//スタート地点のステータス
 	lightgroupe_->SetSpotLightDir(1, XMVECTOR({ playerspotlightdir_.x, playerspotlightdir_.y, playerspotlightdir_.z }));
 	lightgroupe_->SetSpotLightPos(1, playerspotlightpos_);
 	lightgroupe_->SetSpotLightColor(1, playerspotlightcolor_);
 	lightgroupe_->SetSpotLightAtten(1, playerspotlightatten_);
 	lightgroupe_->SetSpotLightFactorAngle(1, playerspotlightfactorangle_);
-
+	//フィールド内を動くライトのステータス
 	for (int i = 2; i < 5; i++) {
 		lightgroupe_->SetSpotLightDir(i, XMVECTOR({ searchlightdir_[i - 2].x, searchlightdir_[i - 2].y, searchlightdir_[i - 2].z }));
 		lightgroupe_->SetSpotLightPos(i, searchlightpos_[i - 2]);
@@ -146,32 +131,29 @@ void GameScene::StatusSet()
 		lightgroupe_->SetSpotLightAtten(i, searchlightatten_);
 		lightgroupe_->SetSpotLightFactorAngle(i, searchlightfactorangle_);
 	}
-
 };
-
 //オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
 	const XMFLOAT4 BillColor = { 0.8f,0.6f,0.3f,1.0f };
-
 	if (gamestate_ == MOVE) {
 		velocity_ = XMVector3TransformNormal(velocity_, player_->GetBodyMatrix());
 	}
-	//フィールドのビルの更新処理
-
+	//オブジェクトの更新処理
+	heri_->Update({ 0.7f,0.7f,0.6f,1.0f });
+	goal_->Update({ 0.7f,0.7f,0.6f,1.0f });
+	hane_->Update({ 0.0f,0.0f,0.0f,1.0f });
+	common_background_->Update();
 	game_background_->UpdateBackgroudPopCommands();
 	game_background_->Update();
-
 	//プレイヤーの更新処理
 	player_->Update(camera_.get(), (Phase)patern_, passrot_,gamestate_,START);
+	//レールカメラの更新
 	railcamera_->Update(velocity_, eyerot_, camera_.get());
-	common_background_->Update();
 }
-
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
-
 	const float add_position_ = 3.1f;
 	const float add_rotation_ = 15.f;
 	heripos_.m128_f32[2] += add_position_;
@@ -207,27 +189,26 @@ void GameScene::StartProcess()
 	if (gamestate_ != GamePhase::START) { return; }
 	l_reticlepos = player_->GetPosition();
 	XMVECTOR l_bodyworldpos = player_->GetBodyWorldPos();
+	//ゲームシーンに遷移後
 	if (movie_sequence_ == MovieSequence::ACTION && heripos_.m128_f32[2] >= 20) {
 		backobjflag_ = false;
 		startmovieflag_ = true;
 		movie_sequence_ = MovieSequence::TURNAROUND;
 	}
-
+	//後ろを向く
 	if (movie_sequence_ == MovieSequence::TURNAROUND) {
 		Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
-		//後ろを向く
 		if (eyerot_.y <= 0) {
 			eyerot_.y = 0;
 			movie_sequence_ = MovieSequence::FACELOWER;
 		}
 	}
-
+	//下を向く
 	if (movie_sequence_ == MovieSequence::FACELOWER) {
 		actiontimer_ += 0.2f;
 		if (actiontimer_ > 5) {
 			actiontimer_ = 5.0f;
 			Action::GetInstance()->EaseOut(eyerot_.x, 95.0f);
-			//下を向く
 			if (eyerot_.x >= 90) {
 				actiontimer_ = 0.0f;
 				eyerot_.x = 90;
@@ -235,7 +216,7 @@ void GameScene::StartProcess()
 			}
 		}
 	}
-
+	//跳ぶ
 	if (movie_sequence_ ==MovieSequence::JUMP) {
 		actiontimer_ += 0.15f;
 		velocity_ = { 0.0f,0.67f,0.4f };
@@ -247,23 +228,23 @@ void GameScene::StartProcess()
 			eyerot_.x = 0.0f;
 			
 		}
-		//地面に着いたとき
 		if (l_bodyworldpos.m128_f32[1] <= 0.9f) {
 			l_bodyworldpos.m128_f32[1] = 0.9f;
 			velocity_ = { 0.0f,0.0f,0.0f };
 			movie_sequence_ = MovieSequence::LANDING;
 		}
 	}
-
+	//地面に着いたとき
 	if (movie_sequence_ == MovieSequence::LANDING) {
 		l_reticlepos = { 0.0f,-0.7f,13.0f };
 		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
 		movie_sequence_ = MovieSequence::FINISH;
 	}
-
+	//演出スキップ
 	SkipStartMovie(l_bodyworldpos);
 	player_->SetBodyWorldPos(l_bodyworldpos);
 	if (movie_sequence_ != MovieSequence::FINISH) { return; }
+	//映画風演出の不可視
 	movie_->Invisible(gamestate_, MOVE);
 }
 //移動時の処理
@@ -290,6 +271,7 @@ void GameScene::MoveProcess()
 void GameScene::FightProcess()
 {
 	if (gamestate_ != FIGHT) { return; }
+	//ダメージを食らったときの処理
 	DamageProcess();
 	XMFLOAT2 Player2DPos = player_->GetRetPosition();
 	bool PlayerBulletShot_F = player_->GetBulletShot();
@@ -301,14 +283,14 @@ void GameScene::FightProcess()
 	for (std::unique_ptr<Enemy>& Enemy : robot_) {
 		Enemy->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
 	}
-
+	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
 	}
-
+	//追尾先が被った時の敵の処理
 	CheckSameTrackPosition();
 	player_->SetBulletShot(PlayerBulletShot_F);
-
+	//全ての敵を倒す
 	KilledAllEnemy();
 }
 //ゲームオーバー時の処理
@@ -324,7 +306,7 @@ void GameScene::GameOverProcess()
 		postcol_.x = 0;
 		Collision::GetInstance()->ToggleFlagInClick(reticleposition_, yesposition_, radx_, rady_, yescursorinflag_);
 		Collision::GetInstance()->ToggleFlagInClick(reticleposition_, noposition_, radx_, rady_, nocursorinflag_);
-
+		//Yesの文字にカーソルを合わせたとき
 		if (yescursorinflag_ == true) {
 			yescolor_ = color_red_;
 			if (Mouse::GetInstance()->PushClick(0)) {
@@ -335,7 +317,7 @@ void GameScene::GameOverProcess()
 		else {
 			yescolor_ = { 1.f,1.f,1.f,1.f };
 		}
-
+		//Noの文字にカーソルを合わせたとき
 		if (nocursorinflag_ == true) {
 			nocolor_ = color_red_;
 			if (Mouse::GetInstance()->PushClick(0)) {
@@ -359,7 +341,7 @@ void GameScene::GameClearProcesss()
 		sceneManager_->SetNextScene(scene_);
 	}
 }
-
+//遷移ようのフェード
 void GameScene::FadeIn()
 {
 	if (gamestate_ != GamePhase::NONE) { return; }
@@ -376,7 +358,7 @@ void GameScene::FadeIn()
 	}
 
 }
-
+//ライトの動き
 void GameScene::SpotLightMove()
 {
 	const float duration_ = 1;
@@ -455,7 +437,7 @@ void GameScene::SpotLightMove()
 		}
 	}
 }
-
+//ダメージを食らったときの処理
 void GameScene::DamageProcess()
 {
 	if (playerhp_ > 0) {
@@ -545,6 +527,7 @@ void GameScene::UpdataEnemyPopCommands()
 			count = atoi(word.c_str());
 		}
 		if (patern_ == count) {
+			//角度の取得
 			if (word.find("ROTATION") == 0) {
 
 				getline(line_stram, word, ',');
@@ -709,7 +692,7 @@ void GameScene::SkipStartMovie(XMVECTOR& bodypos)
 		movie_sequence_ = MovieSequence::FINISH;
 	}
 }
-
+//1回目の戦闘地点
 void GameScene::MoveStartBack()
 {
 	velocity_ = { 0, 0, movespeed_ };
@@ -722,7 +705,7 @@ void GameScene::MoveStartBack()
 		}
 	}
 }
-
+//2回目の戦闘地点
 void GameScene::MoveStartFront()
 {
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
@@ -732,7 +715,7 @@ void GameScene::MoveStartFront()
 		stopflag_ = true;
 	}
 }
-
+//3回目の戦闘地点
 void GameScene::MovePointA()
 {
 	velocity_ = { 0, 0, movespeed_ };
@@ -742,7 +725,7 @@ void GameScene::MovePointA()
 		stopflag_ = true;
 	}
 }
-
+//4回目の戦闘地点
 void GameScene::MovePointALeft()
 {
 	Action::GetInstance()->EaseOut(eyerot_.y, -95.0f);
@@ -754,7 +737,7 @@ void GameScene::MovePointALeft()
 		stopflag_ = true;
 	}
 }
-
+//5回目の戦闘地点
 void GameScene::MovePointB()
 {
 	Action::GetInstance()->EaseOut(eyerot_.y, 95.0f);
@@ -769,7 +752,7 @@ void GameScene::MovePointB()
 		velocity_ = { 0, 0, 0 };
 	}
 }
-
+//6回目の戦闘地点
 void GameScene::MovePointC()
 {
 	velocity_ = { 0, 0, movespeed_ };
@@ -779,7 +762,7 @@ void GameScene::MovePointC()
 		velocity_ = { 0, 0, 0 };
 	}
 }
-
+//7回目の戦闘地点
 void GameScene::MovePointCOblique()
 {
 	velocity_ = { 0, 0, movespeed_ };
@@ -794,7 +777,7 @@ void GameScene::MovePointCOblique()
 		}
 	}
 }
-
+//8回目の戦闘地点
 void GameScene::MovePointCFront()
 {
 	if (cameravector_.m128_f32[0] <= 55) {
@@ -808,7 +791,7 @@ void GameScene::MovePointCFront()
 		velocity_ = { 0, 0, 0 };
 	}
 }
-
+//ボスの戦闘地点
 void GameScene::GoalPointBack()
 {
 	velocity_ = { 0.f,0.f,movespeed_ };
@@ -826,7 +809,7 @@ void GameScene::GoalPointBack()
 		}
 	}
 }
-
+//ゴール
 void GameScene::GoalPoint()
 {
 	movie_sequence_ = MovieSequence::ACTION;
@@ -856,7 +839,7 @@ void GameScene::GoalPoint()
 		}
 	}
 }
-
+//移動用の関数ポインタ
 void(GameScene::* GameScene::MoveFuncTable[])() {
 	&GameScene::MoveStartBack,
 		& GameScene::MoveStartFront,
@@ -869,7 +852,6 @@ void(GameScene::* GameScene::MoveFuncTable[])() {
 		& GameScene::GoalPointBack,
 		& GameScene::GoalPoint
 };
-
 //オブジェクトの描画処理
 void GameScene::ObjDraw(DirectXCommon* dxCommon)
 {
@@ -877,7 +859,6 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	common_background_->Draw();
 	game_background_->Draw();
-
 	goal_->Draw();
 	hane_->Draw();
 	if (backobjflag_) {
@@ -886,10 +867,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	if (movie_sequence_==MovieSequence::FINISH) {
 		player_->ObjDraw();
 	}
-
 	player_->ParticleDraw(dxCommon->GetCmdList());
-
-
 	////オブジェクト後処理
 	Object3d::PostDraw();
 	for (std::unique_ptr<Enemy>& robot : robot_) {
@@ -899,13 +877,11 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 		boss->Draw(dxCommon);
 	}
 }
-
 //スプライトの描画処理
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	shot_->Draw();
-
 	if (damagehitflag_) {
 		damageefectsprite_->Draw();
 	}
@@ -922,7 +898,6 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 	}
 	Sprite::PostDraw();
 }
-
 //ImgUiの描画処理
 void GameScene::ImgDraw()
 {
@@ -941,13 +916,11 @@ void GameScene::ImgDraw()
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
 }
-
 //ポストエフェクトの描画処理
 void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 {
 	posteffect_->PreDrawScene(dxCommon->GetCmdList());
 	ObjDraw(dxCommon);
-
 	posteffect_->PostDrawScene(dxCommon->GetCmdList());
 
 	dxCommon->PreDraw();
@@ -958,17 +931,16 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 	player_->ImGuiDraw();
 	dxCommon->PostDraw();
 }
-
 //描画処理
 void GameScene::Draw(DirectXCommon* dxCommon)
 {
 	PostEffectDraw(dxCommon);
 }
-
 //終了処理
 void GameScene::Finalize()
 {
 	continue_screen_.reset();
 	clear_.reset();
 	shot_.reset();
+	player_.reset();
 }
