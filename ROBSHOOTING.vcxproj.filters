@@ -189,9 +189,6 @@
     <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\Enemy.cpp">
-      <Filter>AllGame\Application\Enemy\Normal</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClCompile>
@@ -236,6 +233,9 @@
     </ClCompile>
     <ClCompile Include="Application\HUD\Movie\Movie.cpp">
       <Filter>AllGame\Application\HUD\Movie</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -371,9 +371,6 @@
     <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h">
       <Filter>AllGame\Application\Enemy\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\Enemy.h">
-      <Filter>AllGame\Application\Enemy\Normal</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClInclude>
@@ -418,6 +415,9 @@
     </ClInclude>
     <ClInclude Include="Application\HUD\Movie\Movie.h">
       <Filter>AllGame\Application\HUD\Movie</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h">
+      <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
