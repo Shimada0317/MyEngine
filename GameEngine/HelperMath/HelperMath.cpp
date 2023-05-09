@@ -10,6 +10,17 @@ HelperMath* HelperMath::GetInstance()
     return &instance;
 }
 
+XMVECTOR HelperMath::XMvectorAddFloat(const XMVECTOR& FirstValue, float AddValue)
+{
+    XMVECTOR valueresult = { 0.f,0.f,0.f };
+
+    valueresult.m128_f32[0] = FirstValue.m128_f32[0] + AddValue;
+    valueresult.m128_f32[1] = FirstValue.m128_f32[1] + AddValue;
+    valueresult.m128_f32[2] = FirstValue.m128_f32[2] + AddValue;
+
+    return valueresult;
+}
+
 XMVECTOR HelperMath::XMvectorAddXMvector(const XMVECTOR& FirstValue, const XMVECTOR& AddValue)
 {
     XMVECTOR valueresult={0.f,0.f,0.f};
@@ -28,6 +39,17 @@ XMVECTOR HelperMath::XMvectorSubXMVector(const XMVECTOR& FirstValue, const XMVEC
     valueresult.m128_f32[0] = FirstValue.m128_f32[0] - SubValue.m128_f32[0];
     valueresult.m128_f32[1] = FirstValue.m128_f32[1] - SubValue.m128_f32[1];
     valueresult.m128_f32[2] = FirstValue.m128_f32[2] - SubValue.m128_f32[2];
+
+    return valueresult;
+}
+
+XMFLOAT3 HelperMath::XMFLOAT3AddFloat(const XMFLOAT3& FirstValue, float AddValue)
+{
+    XMFLOAT3 valueresult = { 0.f,0.f,0.f };
+
+    valueresult.x = FirstValue.x + AddValue;
+    valueresult.y = FirstValue.y + AddValue;
+    valueresult.z = FirstValue.z + AddValue;
 
     return valueresult;
 }

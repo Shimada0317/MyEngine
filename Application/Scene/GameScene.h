@@ -6,6 +6,7 @@
 #include"BossEnemy/BossEnemy.h"
 #include"Continue.h"
 #include"NormalEnemy.h"
+#include"ThrowEnemy.h"
 #include"GameBackground.h"
 #include"Movie.h"
 #include"Player.h"
@@ -187,6 +188,7 @@ private://メンバ変数
 	//プレイヤーと敵
 	list<unique_ptr<NormalEnemy>>robot_;
 	list<unique_ptr<BossEnemy>>boss_;
+	list<unique_ptr<ThrowEnemy>>throw_;
 	unique_ptr<Player> player_;
 	stringstream enemypopcommands_;
 	//その他の機能

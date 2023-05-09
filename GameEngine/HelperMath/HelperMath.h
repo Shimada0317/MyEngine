@@ -23,6 +23,7 @@ public:
 	/// <returns></returns>
 	static HelperMath* GetInstance();
 
+	XMVECTOR XMvectorAddFloat(const XMVECTOR& FirstValue, float AddValue);
 	/// <summary>
 	/// XMVECTOR“¯Žm‚Ì‰ÁŽZ
 	/// </summary>
@@ -31,6 +32,13 @@ public:
 	/// XMVECTOR“¯Žm‚ÌŒ¸ŽZ
 	/// </summary>
 	XMVECTOR XMvectorSubXMVector(const XMVECTOR& FirstValue, const XMVECTOR& SubValue);
+	/// <summary>
+	/// XMFLOAT3‚Æfloat‚Ì‰ÁŽZ
+	/// </summary>
+	/// <param name="FirstValue"></param>
+	/// <param name="AddValue"></param>
+	/// <returns></returns>
+	XMFLOAT3 XMFLOAT3AddFloat(const XMFLOAT3& FirstValue, float AddValue);
 	/// <summary>
 	/// XMFLOAT3“¯Žm‚Ì‰ÁŽZ
 	/// </summary>

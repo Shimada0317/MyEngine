@@ -19,7 +19,8 @@ enum ModelName {
 	kHeli,
 	kHane,
 	kSphere,
-	kThrowEnemy
+	kThrowEnemy,
+	kEnemyPropeller,
 };
 
 class ModelManager final

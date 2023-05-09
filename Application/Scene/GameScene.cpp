@@ -283,6 +283,10 @@ void GameScene::FightProcess()
 	for (std::unique_ptr<NormalEnemy>& NormalEnemy : robot_) {
 		NormalEnemy->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
 	}
+	for (std::unique_ptr<ThrowEnemy>& ThrowEnemy : throw_) {
+		ThrowEnemy->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
+	}
+
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
@@ -612,9 +616,9 @@ void GameScene::UpdataEnemyPopCommands()
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				if (patern_ < 8) {
-					std::unique_ptr<NormalEnemy> newRobot = std::make_unique<NormalEnemy>();
-					newRobot->Initialize(ROTATION, POSITION, camera_.get(), TRACK, step);
-					robot_.push_back(std::move(newRobot));
+					std::unique_ptr<ThrowEnemy> newRobot = std::make_unique<ThrowEnemy>();
+					newRobot->Initialize(ROTATION, POSITION, camera_.get(), TRACK);
+					throw_.push_back(std::move(newRobot));
 				}
 				else {
 					std::unique_ptr<BossEnemy> boss = std::make_unique<BossEnemy>();
@@ -668,6 +672,9 @@ void GameScene::CheckSameTrackPosition()
 //表示されている全ての敵を倒した時
 void GameScene::KilledAllEnemy()
 {
+	throw_.remove_if([](std::unique_ptr<ThrowEnemy>& throwrobot) {
+		return throwrobot->IsDead();
+		});
 	robot_.remove_if([](std::unique_ptr<NormalEnemy>& robot) {
 		return robot->IsDead();
 		});
@@ -675,7 +682,7 @@ void GameScene::KilledAllEnemy()
 		return boss->IsDead();
 		});
 	//目の前の敵を全て倒した時プレイヤーを動かす
-	if (robot_.empty() && boss_.empty()) {
+	if (robot_.empty() && boss_.empty()&&throw_.empty()) {
 		gamestate_ = MOVE;
 	}
 }
@@ -872,6 +879,9 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	Object3d::PostDraw();
 	for (std::unique_ptr<NormalEnemy>& robot : robot_) {
 		robot->Draw(dxCommon);
+	}
+	for (std::unique_ptr<ThrowEnemy>& throwrobot : throw_) {
+		throwrobot->Draw(dxCommon);
 	}
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Draw(dxCommon);

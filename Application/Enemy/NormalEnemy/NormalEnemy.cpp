@@ -274,21 +274,7 @@ void NormalEnemy::TrackPlayerMode()
 
 	AllPos.m128_f32[0] -= v3x;
 	AllPos.m128_f32[2] -= v3z;
-	//サイドステップ
-	if (MovementFlag == true) {
-		AllPos.m128_f32[0] += SideStepSpeed;
-		MovementChangeTime += 0.01f;
-		if (MovementChangeTime <= 2 && ReversalFlag == false) {
-			SideStepSpeed = -SideStepSpeed;
-			MovementChangeTime = 0;
-			ReversalFlag = true;
-		}
-		else if (MovementChangeTime >= 2 && ReversalFlag == true) {
-			SideStepSpeed = +SideStepSpeed;
-			MovementChangeTime = 0;
-			ReversalFlag = false;
-		}
-	}
+	
 }
 
 //攻撃モードの時
