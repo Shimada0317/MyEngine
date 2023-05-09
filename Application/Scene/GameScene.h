@@ -5,7 +5,7 @@
 #include"BaseScene.h"
 #include"BossEnemy/BossEnemy.h"
 #include"Continue.h"
-#include"Enemy.h"
+#include"NormalEnemy.h"
 #include"GameBackground.h"
 #include"Movie.h"
 #include"Player.h"
@@ -185,7 +185,7 @@ private://メンバ変数
 	unique_ptr<Continue> continue_screen_;
 	unique_ptr<Movie> movie_;
 	//プレイヤーと敵
-	list<unique_ptr<Enemy>>robot_;
+	list<unique_ptr<NormalEnemy>>robot_;
 	list<unique_ptr<BossEnemy>>boss_;
 	unique_ptr<Player> player_;
 	stringstream enemypopcommands_;

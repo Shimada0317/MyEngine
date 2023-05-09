@@ -9,7 +9,7 @@
 #include<memory>
 #include<list>
 
-class Enemy
+class NormalEnemy
 {
 private:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -19,7 +19,7 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 public:
 	//デストラクタ
-	~Enemy();
+	~NormalEnemy();
 
 	/// <summary>
 	/// 初期化処理

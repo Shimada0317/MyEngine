@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseScene.h"
 #include <DirectXMath.h>
-#include"Enemy.h"
+#include"NormalEnemy.h"
 #include"DebugCamera.h"
 #include"Object3d.h"
 #include"ObjModel.h"

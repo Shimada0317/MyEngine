@@ -1,4 +1,4 @@
-#include "Enemy.h"
+#include "NormalEnemy.h"
 #include"Action.h"
 #include"HelperMath.h"
 #include"SpriteManager.h"
@@ -22,7 +22,7 @@ const XMFLOAT4 operator+(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& 
 }
 
 //デストラクタ
-Enemy::~Enemy()
+NormalEnemy::~NormalEnemy()
 {
 	Shadow.reset();
 	Center.reset();
@@ -34,7 +34,7 @@ Enemy::~Enemy()
 }
 
 //初期化処理
-void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement)
+void NormalEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement)
 {
 	HeadPartRot =BodyPartRot = ArmsPartRot = allrot;
 
@@ -77,7 +77,7 @@ void Enemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* c
 }
 
 //ステータスセット
-void Enemy::StatusSet()
+void NormalEnemy::StatusSet()
 {
 	
 	Center->SetScale({ 1.0f,1.0f,1.0f });
@@ -115,7 +115,7 @@ void Enemy::StatusSet()
 }
 
 //Obj等の更新処理をまとめる
-void Enemy::AllUpdate()
+void NormalEnemy::AllUpdate()
 {
 	Shadow->Update(ShadowCol);
 	Center->Update();
@@ -133,7 +133,7 @@ void Enemy::AllUpdate()
 }
 
 //更新処理
-void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
 {
 	//変形
 	Defomation();
@@ -199,7 +199,7 @@ void Enemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulle
 }
 
 //描画処理
-void Enemy::Draw(DirectXCommon* dxCommon)
+void NormalEnemy::Draw(DirectXCommon* dxCommon)
 {
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
 	PartGreen->Draw();
@@ -220,7 +220,7 @@ void Enemy::Draw(DirectXCommon* dxCommon)
 	Object3d::PostDraw();
 }
 
-void Enemy::Defomation()
+void NormalEnemy::Defomation()
 {
 	//変形前なら
 	if (DefomationFlag == false) {
@@ -248,7 +248,7 @@ void Enemy::Defomation()
 }
 
 //プレイヤーへの追尾モードの時
-void Enemy::TrackPlayerMode()
+void NormalEnemy::TrackPlayerMode()
 {
 	float vx = 0;
 	float vy = 0;
@@ -292,7 +292,7 @@ void Enemy::TrackPlayerMode()
 }
 
 //攻撃モードの時
-void Enemy::AttackMode(int& playerhp)
+void NormalEnemy::AttackMode(int& playerhp)
 {
 	if (AtttackTimer >= TimerLimit) {
 		AttackFaseFlag = true;
@@ -317,7 +317,7 @@ void Enemy::AttackMode(int& playerhp)
 }
 
 //攻撃する時
-void Enemy::Attack(int& playerhp, float& attacktimer)
+void NormalEnemy::Attack(int& playerhp, float& attacktimer)
 {
 	//巨大化していく値
 	XMFLOAT3 gigantic = { 0.0002f ,0.0002f ,0.0002f };
@@ -372,7 +372,7 @@ void Enemy::Attack(int& playerhp, float& attacktimer)
 	}
 }
 
-void Enemy::Damage()
+void NormalEnemy::Damage()
 {
 	//ダメージを受けたとき
 	if (OldHp > Hp && Hp >= 0) {
@@ -389,7 +389,7 @@ void Enemy::Damage()
 	}
 }
 
-void Enemy::Death()
+void NormalEnemy::Death()
 {
 	//生きているときにHPが0になったら
 	if (Hp <= 0) {
@@ -413,7 +413,7 @@ void Enemy::Death()
 }
 
 //3D座標から2D座標を取得する
-XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& set3Dposition)
+XMFLOAT2 NormalEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 {
 	Center->SetRotation(CenterRot);
 	CenterMat = Center->GetMatrix();
@@ -443,7 +443,7 @@ XMFLOAT2 Enemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 }
 
 
-void Enemy::ParticleEfect()
+void NormalEnemy::ParticleEfect()
 {
 	for (int i = 0; i < 50; i++) {
 		XMFLOAT3 pos;
@@ -468,7 +468,7 @@ void Enemy::ParticleEfect()
 
 }
 
-void Enemy::WaitTrack(bool otherenemyarive)
+void NormalEnemy::WaitTrack(bool otherenemyarive)
 {
 	if (otherenemyarive == true) {
 		LengthLimit = 2.5f;

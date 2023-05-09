@@ -280,8 +280,8 @@ void GameScene::FightProcess()
 		shakingstartflag_ = true;
 	}
 	//敵の更新処理
-	for (std::unique_ptr<Enemy>& Enemy : robot_) {
-		Enemy->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
+	for (std::unique_ptr<NormalEnemy>& NormalEnemy : robot_) {
+		NormalEnemy->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
 	}
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
@@ -612,7 +612,7 @@ void GameScene::UpdataEnemyPopCommands()
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
 				if (patern_ < 8) {
-					std::unique_ptr<Enemy> newRobot = std::make_unique<Enemy>();
+					std::unique_ptr<NormalEnemy> newRobot = std::make_unique<NormalEnemy>();
 					newRobot->Initialize(ROTATION, POSITION, camera_.get(), TRACK, step);
 					robot_.push_back(std::move(newRobot));
 				}
@@ -642,8 +642,8 @@ void GameScene::UpdataEnemyPopCommands()
 //敵同士の追尾先が被っているとき
 void GameScene::CheckSameTrackPosition()
 {
-	for (std::unique_ptr<Enemy>& FirstEnemy : robot_) {
-		for (std::unique_ptr<Enemy>& SecondEnemy : robot_) {
+	for (std::unique_ptr<NormalEnemy>& FirstEnemy : robot_) {
+		for (std::unique_ptr<NormalEnemy>& SecondEnemy : robot_) {
 			if (FirstEnemy.get() != SecondEnemy.get()) {
 				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
 				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
@@ -668,7 +668,7 @@ void GameScene::CheckSameTrackPosition()
 //表示されている全ての敵を倒した時
 void GameScene::KilledAllEnemy()
 {
-	robot_.remove_if([](std::unique_ptr<Enemy>& robot) {
+	robot_.remove_if([](std::unique_ptr<NormalEnemy>& robot) {
 		return robot->IsDead();
 		});
 	boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
@@ -870,7 +870,7 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	player_->ParticleDraw(dxCommon->GetCmdList());
 	////オブジェクト後処理
 	Object3d::PostDraw();
-	for (std::unique_ptr<Enemy>& robot : robot_) {
+	for (std::unique_ptr<NormalEnemy>& robot : robot_) {
 		robot->Draw(dxCommon);
 	}
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
