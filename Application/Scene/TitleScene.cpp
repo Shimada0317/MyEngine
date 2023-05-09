@@ -16,7 +16,6 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 {
 
 }
-
 //初期化処理
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
@@ -44,12 +43,10 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	descriptionoperation_.reset(Sprite::SpriteCreate(Name::kOperationDescription, DescriptionScreenPosition, spritecol_, anchorpoint_));
 	enemyoverview_.reset(Sprite::SpriteCreate(Name::kEnemyDescription, DescriptionScreenPosition, spritecol_, anchorpoint_));
 	gamestartpreparation_.reset(Sprite::SpriteCreate(Name::kStartScreen, DescriptionScreenPosition, spritecol_, anchorpoint_));
-	arrowright_.reset(Sprite::SpriteCreate(kArrowRight, arrowrightpos_, arrowrightcolor_, anchorpoint_));
-	arrowleft_.reset(Sprite::SpriteCreate(kArrowLeft, arrowleftpos_, arrowleftcolor_, anchorpoint_));
-	
+	arrowright_.reset(Sprite::SpriteCreate(Name::kArrowRight, arrowrightpos_, arrowrightcolor_, anchorpoint_));
+	arrowleft_.reset(Sprite::SpriteCreate(Name::kArrowLeft, arrowleftpos_, arrowleftcolor_, anchorpoint_));
 	bullet_ui_ = make_unique<BulletUI>();
 	bullet_ui_->Create(remaining_,ui_bulletpos_,ui_reloadpos_);
-
 	//オブジェクトの生成
 	common_background_ = make_unique<CommonBackground>();
 	common_background_->Initialize();
@@ -68,54 +65,48 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	lightgroupe_->SetSpotLightActive(1, true);
 	lightgroupe_->SetSpotLightActive(2, true);
 }
-
 //ステータスセット
 void TitleScene::StatusSet()
 {
+	//弾のUI
 	bullet_ui_->Set();
-
 	//カメラの動き
 	titlecamera_->MoveEyeVector(cameraeyemove_);
 	titlecamera_->MoveVector(cameramove_);
-	
 	//タイトルスプライトのステータスセット
 	title_->SetSize({ titlesize_ });
 	title_->SetPosition({ titlepos_ });
 	//マウスカーソルの座標セット
 	cursor_->SetPosition({ reticlepos_ });
-
 	//1つ目のスポットライトを設定
 	lightgroupe_->SetSpotLightDir(0, XMVECTOR({ spotlightdir_.x, spotlightdir_.y, spotlightdir_.z }));
 	lightgroupe_->SetSpotLightPos(0, spotlightpos_);
 	lightgroupe_->SetSpotLightColor(0, spotlightcolor_);
 	lightgroupe_->SetSpotLightAtten(0, spotlightatten_);
 	lightgroupe_->SetSpotLightFactorAngle(0, spotlightfactorangle_);
-
 	//2つ目のスポットライトを設定
 	lightgroupe_->SetSpotLightDir(1, XMVECTOR({ spotlightdir2_.x, spotlightdir2_.y, spotlightdir2_.z }));
 	lightgroupe_->SetSpotLightPos(1, spotlightpos2_);
 	lightgroupe_->SetSpotLightColor(1, spotlightcolor2_);
 	lightgroupe_->SetSpotLightAtten(1, spotlightatten2_);
 	lightgroupe_->SetSpotLightFactorAngle(1, spotlightfactorangle2_);
-
 	//1つ目のスポットライトを設定
 	lightgroupe_->SetSpotLightDir(2, XMVECTOR({ spotlightdir_.x, spotlightdir_.y, spotlightdir_.z }));
 	lightgroupe_->SetSpotLightPos(2, spotlightpos_);
 	lightgroupe_->SetSpotLightColor(2, spotlightcolor_);
 	lightgroupe_->SetSpotLightAtten(2, spotlightatten_);
 	lightgroupe_->SetSpotLightFactorAngle(2, spotlightfactorangle_);
-
+	//矢印のステータス
 	arrowleft_->SetSize(arrowsize_);
 	arrowright_->SetSize(arrowsize_);
 	arrowleft_->SetColor(arrowleftcolor_);
 	arrowright_->SetColor(arrowrightcolor_);
-
+	//クリックのステータス
 	clickafter_->SetSize(clicksize_);
 	clickbefore_->SetSize(clicksize_);
 	signalafter_->SetSize(clicksize_);
 	signalbefore_->SetSize(clicksize_);
 }
-
 //全ての更新処理をまとめる
 void TitleScene::AllUpdate()
 {
@@ -126,7 +117,6 @@ void TitleScene::AllUpdate()
 	//背景オブジェクトの更新
 	common_background_->Update();
 }
-
 //更新処理
 void TitleScene::Update()
 {
@@ -149,7 +139,7 @@ void TitleScene::Update()
 			cameraeyemoveflag_ = true;
 		}
 	}
-
+	// 説明画面で行われる処理
 	ArrowProces();
 	//フェードアウト後にシーンチェンジ
 	FadeOutAndSceneChange();
@@ -160,16 +150,12 @@ void TitleScene::Update()
 	//カメラの再計算
 	titlecamera_->RecalculationMatrix();
 }
-
 //カメラの移動
 void TitleScene::CameraDirection()
 {
 	const float CameraMoveValueXandY = 0.4f;
-
 	const float CameraMoveValueZ = 0.1f;
-
 	const float CameraEyeMoveValue = 0.01f;
-
 	if (titlestate_ != TITLESCREEN) { return; }
 	cameramove_ = { 0.0f,0.0f,0.0f };
 	if (cameraeyemoveflag_ && !camerachangeflag_) {
@@ -194,7 +180,6 @@ void TitleScene::UiEasingProcess()
 	const float variable_arrowsize_ = 32;
 	const float absolutevalue_ = 0.05f;
 	const XMFLOAT2 variable_clicksize_{ 550,60 };
-
 	if (!easingchangeflag_) {
 		easingtimer_ += absolutevalue_;
 		//タイマーが一定の値になったら反転させる
@@ -215,7 +200,7 @@ void TitleScene::UiEasingProcess()
 	clicksize_.y = Action::GetInstance()->EasingOut(easingtimer_, addsize_) + variable_clicksize_.y;
 	bullet_ui_->ReloadMotion();
 }
-
+// 説明画面で行われる処理
 void TitleScene::ArrowProces()
 {
 	const XMFLOAT2 rad{ 16.f,16.f };
@@ -257,7 +242,6 @@ void TitleScene::ArrowProces()
 	}
 
 }
-
 //フェードアウト後にゲームシーンへチェンジ
 void TitleScene::FadeOutAndSceneChange()
 {
@@ -275,14 +259,15 @@ void TitleScene::FadeOutAndSceneChange()
 		}
 	}
 }
-
 //描画処理
 void TitleScene::Draw(DirectXCommon* dxCommon)
 {
 	posteffct_->PreDrawScene(dxCommon->GetCmdList());
+	//オブジェクトの描画
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	common_background_->Draw();
 	Object3d::PostDraw();
+	//スプライトの描画
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	if (titlespriteflag_) {
 		title_->Draw();
@@ -295,7 +280,6 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 			clickafter_->Draw();
 		}
 	}
-
 	if (titlestate_ < GAMESTARTPREPARTIONPAGE&&titlestate_>TITLESCREEN) {
 		arrowright_->Draw();
 	}
@@ -325,13 +309,12 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 	posteffct_->Draw(dxCommon->GetCmdList());
 	dxCommon->PostDraw();
 }
-
+// リロード処理
 void TitleScene::ReloadProcess()
 {
 	if (Mouse::GetInstance()->PushClick(1)) {
 		hudstate_ = RELOAD;
 	}
-
 	if (hudstate_ != RELOAD) { return; }
 	if (remaining_ != 0) {
 		//回転の減算する値
@@ -362,7 +345,7 @@ void TitleScene::ReloadProcess()
 		}
 	}
 }
-
+// 発砲の処理
 void TitleScene::ShotProcess()
 {
 	const int subbullet_ = 1;
@@ -374,7 +357,7 @@ void TitleScene::ShotProcess()
 	}
 	
 }
-
+// 説明のページの処理
 void TitleScene::DescriptioPageProcess()
 {
 	if (titlestate_ != DESCRIPTIONPAGE) { return; }
@@ -385,7 +368,7 @@ void TitleScene::DescriptioPageProcess()
 
 	bullet_ui_->FallingUI();
 }
-
+// ゲーム開始のページの処理
 void TitleScene::GameStartPrepartionPage()
 {
 	if (titlestate_ != GAMESTARTPREPARTIONPAGE) { return; }

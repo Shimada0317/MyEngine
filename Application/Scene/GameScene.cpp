@@ -103,7 +103,7 @@ void GameScene::StatusSet()
 	goal_->SetRotation({ 0.0f,270.0f,0.0f });
 	//ヘリのプロペラの
 	hane_->SetRotation({ 0.0f,heriy_,0.0f });
-	if (startmovieflag_ == false) {
+	if (movie_sequence_ == MovieSequence::ACTION) {
 		hane_->SetPosition(heripos_);
 		hane_->SetScale(heriscl_);
 	}
@@ -147,7 +147,7 @@ void GameScene::AllUpdata()
 	game_background_->UpdateBackgroudPopCommands();
 	game_background_->Update();
 	//プレイヤーの更新処理
-	player_->Update(camera_.get(), (Phase)patern_, passrot_,gamestate_,START);
+	player_->Update(camera_.get(), (Phase)patern_, passrot_, gamestate_, START);
 	//レールカメラの更新
 	railcamera_->Update(velocity_, eyerot_, camera_.get());
 }
@@ -191,8 +191,6 @@ void GameScene::StartProcess()
 	XMVECTOR l_bodyworldpos = player_->GetBodyWorldPos();
 	//ゲームシーンに遷移後
 	if (movie_sequence_ == MovieSequence::ACTION && heripos_.m128_f32[2] >= 20) {
-		backobjflag_ = false;
-		startmovieflag_ = true;
 		movie_sequence_ = MovieSequence::TURNAROUND;
 	}
 	//後ろを向く
@@ -217,7 +215,7 @@ void GameScene::StartProcess()
 		}
 	}
 	//跳ぶ
-	if (movie_sequence_ ==MovieSequence::JUMP) {
+	if (movie_sequence_ == MovieSequence::JUMP) {
 		actiontimer_ += 0.15f;
 		velocity_ = { 0.0f,0.67f,0.4f };
 		if (actiontimer_ >= 5) {
@@ -226,7 +224,7 @@ void GameScene::StartProcess()
 		}
 		if (eyerot_.x <= 0.0f) {
 			eyerot_.x = 0.0f;
-			
+
 		}
 		if (l_bodyworldpos.m128_f32[1] <= 0.9f) {
 			l_bodyworldpos.m128_f32[1] = 0.9f;
@@ -250,6 +248,7 @@ void GameScene::StartProcess()
 //移動時の処理
 void GameScene::MoveProcess()
 {
+	//ゲームの状態が移動中の時
 	if (gamestate_ != MOVE) { return; }
 	XMMATRIX l_cameramatrix;
 	l_cameramatrix = railcamera_->GetWorld();
@@ -300,40 +299,40 @@ void GameScene::FightProcess()
 //ゲームオーバー時の処理
 void GameScene::GameOverProcess()
 {
+	//状態がコンティニューの時
 	if (gamestate_ != CONTINUE) { return; }
 	Mouse::GetInstance()->MouseMoveSprite(reticleposition_);
 	reticleforgameover_->SetPosition(reticleposition_);
 	const float radx_ = 100;
 	const float rady_ = 50;
 	const XMFLOAT4 color_red_{ 1.f,0.f,0.f,1.f };
-	if (gamestate_ == CONTINUE) {
-		postcol_.x = 0;
-		Collision::GetInstance()->ToggleFlagInClick(reticleposition_, yesposition_, radx_, rady_, yescursorinflag_);
-		Collision::GetInstance()->ToggleFlagInClick(reticleposition_, noposition_, radx_, rady_, nocursorinflag_);
-		//Yesの文字にカーソルを合わせたとき
-		if (yescursorinflag_ == true) {
-			yescolor_ = color_red_;
-			if (Mouse::GetInstance()->PushClick(0)) {
-				BaseScene* scene_ = new GameScene(sceneManager_);
-				sceneManager_->SetNextScene(scene_);
-			}
+	postcol_.x = 0;
+	Collision::GetInstance()->ToggleFlagInClick(reticleposition_, yesposition_, radx_, rady_, yescursorinflag_);
+	Collision::GetInstance()->ToggleFlagInClick(reticleposition_, noposition_, radx_, rady_, nocursorinflag_);
+	//Yesの文字にカーソルを合わせたとき
+	if (yescursorinflag_ == true) {
+		yescolor_ = color_red_;
+		if (Mouse::GetInstance()->PushClick(0)) {
+			BaseScene* scene_ = new GameScene(sceneManager_);
+			sceneManager_->SetNextScene(scene_);
 		}
-		else {
-			yescolor_ = { 1.f,1.f,1.f,1.f };
-		}
-		//Noの文字にカーソルを合わせたとき
-		if (nocursorinflag_ == true) {
-			nocolor_ = color_red_;
-			if (Mouse::GetInstance()->PushClick(0)) {
-				BaseScene* scene_ = new TitleScene(sceneManager_);
-				sceneManager_->SetNextScene(scene_);
-			}
-		}
-		else {
-			nocolor_ = { 1.f,1.f,1.f,1.f };
-		}
-		continue_screen_->ChangeColor(yescolor_, nocolor_);
 	}
+	else {
+		yescolor_ = { 1.f,1.f,1.f,1.f };
+	}
+	//Noの文字にカーソルを合わせたとき
+	if (nocursorinflag_ == true) {
+		nocolor_ = color_red_;
+		if (Mouse::GetInstance()->PushClick(0)) {
+			BaseScene* scene_ = new TitleScene(sceneManager_);
+			sceneManager_->SetNextScene(scene_);
+		}
+	}
+	else {
+		nocolor_ = { 1.f,1.f,1.f,1.f };
+	}
+	continue_screen_->ChangeColor(yescolor_, nocolor_);
+
 }
 //ゲームクリア時の処理
 void GameScene::GameClearProcesss()
@@ -348,12 +347,13 @@ void GameScene::GameClearProcesss()
 //遷移ようのフェード
 void GameScene::FadeIn()
 {
+	//ゲームが始まる前
 	if (gamestate_ != GamePhase::NONE) { return; }
 	const float AddPosetEfectColor = 0.05f;
 	postcol_.x += AddPosetEfectColor;
 	postcol_.y += AddPosetEfectColor;
 	postcol_.z += AddPosetEfectColor;
-	
+
 	if (postcol_.x >= 0.0f) {
 		postcol_.x = 0.0f;
 		postcol_.y = 0.0f;
@@ -396,24 +396,21 @@ void GameScene::SpotLightMove()
 			}
 		}
 	}
-
+	//移動方向を反転する
 	if (lightdireasingchange_ == false) {
 		lightdireasingtime_ += 0.05f;
 	}
 	else {
 		lightdireasingtime_ -= 0.05f;
 	}
-
+	//ライトの動き
 	searchlightdir_[0].x = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
 	searchlightdir_[1].z = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
 	searchlightdir_[2].x = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
-
 	searchlightdir_[0].z = Action::GetInstance()->EasingOut(time_, endpointz_ - startpointz_);
 	searchlightdir_[1].x = Action::GetInstance()->EasingOut(time_, endpointx_ - startpointx_);
 	searchlightdir_[2].z = Action::GetInstance()->EasingOut(time_, endpointz2_ - startpointz2_);
-
-
-
+	//ボス戦時に全体を赤くする
 	if (patern_ == GOALPOINT) {
 		if (colortime_ >= 0) {
 			colortime_ -= 0.01f;
@@ -421,7 +418,6 @@ void GameScene::SpotLightMove()
 		if (colortimered_ <= 1) {
 			colortimered_ += 0.01f;
 		}
-
 		fieldspotlightcolor_.x = Action::GetInstance()->EasingOut(colortimered_, endcolorred_ - startcolorred_) + 0.9f;
 		fieldspotlightcolor_.y = Action::GetInstance()->EasingOut(colortime_, endcolor_ - startcolor_);
 	}
@@ -682,7 +678,7 @@ void GameScene::KilledAllEnemy()
 		return boss->IsDead();
 		});
 	//目の前の敵を全て倒した時プレイヤーを動かす
-	if (robot_.empty() && boss_.empty()&&throw_.empty()) {
+	if (robot_.empty() && boss_.empty() && throw_.empty()) {
 		gamestate_ = MOVE;
 	}
 }
@@ -868,10 +864,10 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	game_background_->Draw();
 	goal_->Draw();
 	hane_->Draw();
-	if (backobjflag_) {
+	if (movie_sequence_ == MovieSequence::ACTION) {
 		heri_->Draw();
 	}
-	if (movie_sequence_==MovieSequence::FINISH) {
+	if (movie_sequence_ == MovieSequence::FINISH) {
 		player_->ObjDraw();
 	}
 	player_->ParticleDraw(dxCommon->GetCmdList());
@@ -903,7 +899,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 		reticleforgameover_->Draw();
 	}
 	movie_->Draw();
-	if ((gamestate_ == FIGHT || gamestate_ == MOVE)&&movie_sequence_==MovieSequence::FINISH) {
+	if ((gamestate_ == FIGHT || gamestate_ == MOVE) && movie_sequence_ == MovieSequence::FINISH) {
 		player_->SpriteDraw();
 	}
 	Sprite::PostDraw();

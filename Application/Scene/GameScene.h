@@ -219,20 +219,19 @@ private://メンバ変数
 	bool posteffectonflag_ = false;
 	bool damagehitflag_ = false;
 	XMFLOAT4 damageefectcolor_ = { 1.f,1.f,1.f,1.f };
-
-
+	//フィールドライト用の変数
 	XMFLOAT3 fieldspotlightdir_ = { 0,-10,0 };
 	XMFLOAT3 fieldspotlightpos_ = { 0,505,50 };
 	XMFLOAT3 fieldspotlightcolor_ = { 0.9f,0.5f,0.f };
 	XMFLOAT3 fieldspotlightatten_ = { 0.f,0.f,0.f };
 	XMFLOAT2 fieldspotlightfactorangle_ = { 20.0f,30.0f };
-
+	//プレイヤー用のライトの変数
 	XMFLOAT3 playerspotlightdir_ = { 0,-20,0 };
 	XMFLOAT3 playerspotlightpos_ = { 0,35,0 };
 	XMFLOAT3 playerspotlightcolor_ = { 1.f,1.f,1.f };
 	XMFLOAT3 playerspotlightatten_ = { 0.f,0.f,0.f };
 	XMFLOAT2 playerspotlightfactorangle_ = { 20.0f,30.0f };
-
+	//ステージ内を動いているライトの変数
 	XMFLOAT3 searchlightdir_[3];
 	XMFLOAT3 searchlightpos_[3];
 	XMFLOAT3 searchlightcolor_[3];
@@ -261,8 +260,6 @@ private://メンバ変数
 	bool yescursorinflag_ = false;
 	bool nocursorinflag_ = false;
 	float heriy_ = 15.0f;
-	bool backobjflag_ = true;
-	bool startmovieflag_ = false;
 	bool stopflag_ = false;
 	bool otherenemyarive_ = true;
 	XMVECTOR velocity_;
@@ -278,7 +275,7 @@ private://メンバ変数
 
 	bool shakingstartflag_ = false;
 	float shake_addvalue_ = 0.f;
-
+	//ステータス
 	int gamestate_ = GamePhase::NONE;
 	int movie_sequence_ = MovieSequence::ACTION;
 

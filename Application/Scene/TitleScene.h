@@ -69,23 +69,26 @@ public://メンバ関数
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon)override;
-
+	/// <summary>
+	/// リロード処理
+	/// </summary>
 	void ReloadProcess();
-
+	/// <summary>
+	/// 発砲の処理
+	/// </summary>
 	void ShotProcess();
-
+	/// <summary>
+	/// 説明のページの処理
+	/// </summary>
 	void DescriptioPageProcess();
-
+	/// <summary>
+	/// ゲーム開始のページの処理
+	/// </summary>
 	void GameStartPrepartionPage();
-
 	/// <summary>
 	/// 終了処理
 	/// </summary>
 	void Finalize() override;
-public://関数テーブル
-
-
-
 private:
 	//Obj
 	unique_ptr<CommonBackground> common_background_;
@@ -134,6 +137,7 @@ private:
 	XMFLOAT2 anchorpoint_ = { 0.5f,0.5f };
 	XMFLOAT2 reticlepos_ = { 640.0f,360.0f };
 	XMFLOAT2 clickpos_ = { WinApp::window_width/2,600 };
+	XMFLOAT2 clicksize_ = { 550.f,60.f };
 	//タイトルスプライトのステータス
 	XMFLOAT2 titlesize_ = { 1280.0f,720.0f };
 	XMFLOAT2 titlepos_ = { 0.0f,0.0f };
@@ -170,16 +174,15 @@ private:
 	XMFLOAT3 spotlightcolor2_ = { 0,0,1 };
 	XMFLOAT3 spotlightatten2_ = { 0.f,0.f,0.f };
 	XMFLOAT2 spotlightfactorangle2_ = { 20.0f,30.0f };
-
+	//イージング変数
 	float easingtimer_ = 0.f;
 	bool easingchangeflag_=false;
-	XMFLOAT2 clicksize_ = { 550.f,60.f };
-
+	//残用の変数
 	int remaining_ = 0;
 	int old_remaining_ = 0;
 	bool revers_flag_ = false;
 	int reloadtime_ = 0;
-
+	//ステータス
 	int hudstate_ = WAIT;
 	int titlestate_ = TITLESCREEN;
 };
