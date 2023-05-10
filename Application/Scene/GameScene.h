@@ -36,6 +36,12 @@ private:
 		FINISH,
 	};
 
+	enum ENEMYPATERN {
+		NORMAL=0,
+		THROW,
+		BOSS,
+	};
+
 private:
 	//移動用の関数ポインタ	
 	static void (GameScene::* MoveFuncTable[])();

@@ -2,6 +2,7 @@
 #include"Camera.h"
 #include"DirectXCommon.h"
 #include"Object3d.h"
+#include"ObjParticle.h"
 #include"ParticleManager.h"
 #include"Sprite.h"
 #include<DirectXMath.h>
@@ -56,7 +57,7 @@ public:
 	/// <summary>
 	/// 
 	/// </summary>
-	void AttackProcess(const XMFLOAT2& player2Dpos, bool& playerbulletshot);
+	void AttackProcess(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
 
 	void DamageProcess(const XMFLOAT2& player2Dpos,bool& playerbulletshot);
 
@@ -76,7 +77,12 @@ public:
 
 	void BulletCollision(const XMFLOAT2& player2Dpos, bool& playerbulletshot);
 
-	void ThrowAttack();
+	void ThrowAttack(int& playerhp);
+
+	/// <summary>
+	/// パーティクル発生
+	/// </summary>
+	void ParticleEfect();
 
 	/// <summary>
 	/// 倒されているか
@@ -85,32 +91,34 @@ public:
 	bool IsDead() const { return DeadFlag; }
 public:
 	//オブジェクト
-	std::unique_ptr<Object3d>Center;
-	std::unique_ptr<Object3d>bullet_;
-	std::unique_ptr<Object3d>enemy_;
-	std::unique_ptr<Object3d>propeller_;
-
+	unique_ptr<Object3d>Center;
+	unique_ptr<Object3d>bullet_;
+	unique_ptr<Object3d>enemy_;
+	unique_ptr<Object3d>propeller_;
+	list<unique_ptr<ObjParticle>>obj_particle_;
 	//スプライト
-	std::unique_ptr<Sprite> RockOn;
-	std::unique_ptr<Sprite> rockon_bullet_;
+	unique_ptr<Sprite> RockOn;
+	unique_ptr<Sprite> rockon_bullet_;
 	//カメラ
 	Camera* HaveCamera = nullptr;
-
+	//ダメージを食らったときのエフェクト
+	ParticleManager* PartGreen = nullptr;
+	ParticleManager* PartRed = nullptr;
 	//パーツごとのステータス
 	//敵の中心部分
 	XMVECTOR CenterWorldPos = { 0.f,0.f,0.f };
 	XMVECTOR center_pos_ = { 0.f,0.f,0.f };
 	XMFLOAT3 CenterRot = { 0.f,0.f,0.f };
 	XMMATRIX CenterMat;
-	//
+	//本体のステータス
 	XMVECTOR body_pos_ = {};
 	XMFLOAT3 body_rot_ = {};
 	XMFLOAT3 body_scl_ = { 1.f,1.f,1.f };
-	//
+	//羽のステータス
 	XMVECTOR propeller_pos_{ 0.f,0.f,0.f };
 	XMFLOAT3 propeller_rot_{ 0.f,0.f,0.f };
 	XMFLOAT3 propeller_scl_{ 1.f,1.f,1.f };
-	//
+	//弾のステータス
 	XMVECTOR old_pos_{};
 	XMVECTOR bullet_pos_{};
 	XMFLOAT3 bullet_rot_{};
@@ -129,7 +137,7 @@ public:
 	float bullet_speed_ = 0.05f;
 
 	int Hp = 50;
-	int OldHp = 0;
+	int OldHp = Hp;
 	float Length = 0.f;
 	//敵とプレイヤーの距離
 	float OriginDistance;
@@ -143,6 +151,8 @@ public:
 	bool DeadFlag = false;
 
 	float floating_pos_ = 0.f;
+
+	float fall_time_ = 0.f;
 
 	int state_ = APPEARANCE;
 };

@@ -285,7 +285,6 @@ void GameScene::FightProcess()
 	for (std::unique_ptr<ThrowEnemy>& ThrowEnemy : throw_) {
 		ThrowEnemy->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
 	}
-
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
@@ -500,6 +499,8 @@ void GameScene::UpdataEnemyPopCommands()
 	XMVECTOR POSITION = { 0.0f,0.0f,0.0f };
 	XMVECTOR TRACK = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 ROTATION = { 0.0f,0.0f,0.0f };
+	int TYPE = 0;
+
 	bool ari = false;
 	bool step = false;
 	int count = 0;
@@ -609,14 +610,28 @@ void GameScene::UpdataEnemyPopCommands()
 
 				ARIVESkip = true;
 			}
+			//敵のパターン
+			else if (word.find("TYPE") == 0) {
+				getline(line_stram, word, ',');
+				int type = (int)std::atof(word.c_str());
+				TYPE = type;
+			}
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
-				if (patern_ < 8) {
+				if (TYPE == ENEMYPATERN::NORMAL) {
+					std::unique_ptr<NormalEnemy> newRobot = std::make_unique<NormalEnemy>();
+					newRobot->Initialize(ROTATION, POSITION, camera_.get(), TRACK);
+					robot_.push_back(std::move(newRobot));
+				}
+
+				else if (TYPE == ENEMYPATERN::THROW) {
 					std::unique_ptr<ThrowEnemy> newRobot = std::make_unique<ThrowEnemy>();
 					newRobot->Initialize(ROTATION, POSITION, camera_.get(), TRACK);
 					throw_.push_back(std::move(newRobot));
 				}
-				else {
+
+
+				else if (TYPE == ENEMYPATERN::BOSS) {
 					std::unique_ptr<BossEnemy> boss = std::make_unique<BossEnemy>();
 					boss->Initialize(ROTATION, POSITION, camera_.get(), TRACK);
 					boss_.push_back(std::move(boss));
@@ -631,10 +646,8 @@ void GameScene::UpdataEnemyPopCommands()
 		if (patern_ < count) {
 			break;
 		}
-
 		if (word.find("END") == 0) {
 			getline(line_stram, word, ',');
-
 			break;
 		}
 	}
