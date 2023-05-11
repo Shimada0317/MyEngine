@@ -149,6 +149,7 @@ public:
 
 	//Hp‚ª0ˆÈã‚©
 	bool DeadFlag = false;
+	bool particle_flag_ = true;
 
 	float floating_pos_ = 0.f;
 

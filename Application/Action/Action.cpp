@@ -207,6 +207,22 @@ void Action::DebugMove(XMFLOAT3& Value)
 	}
 }
 
+void Action::LoopTimer(float& timer, float addvalue, float duration_)
+{
+	if (easing_invert_ == false) {
+		timer += addvalue;
+		if (timer > duration_) {
+			easing_invert_ = true;
+		}
+	}
+	else {
+		timer -= addvalue;
+		if (timer < -duration_) {
+			easing_invert_ = false;
+		}
+	}
+}
+
 
 
 

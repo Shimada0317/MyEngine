@@ -361,7 +361,7 @@ void GameScene::FadeIn()
 	}
 
 }
-//ライトの動き
+//ライトの動き[ライトクラス内で動きの地点だけで管理する]
 void GameScene::SpotLightMove()
 {
 	const float duration_ = 1;
@@ -384,24 +384,31 @@ void GameScene::SpotLightMove()
 		}
 	}
 	else if (easing_ == true) {
-		if (easingchange_ == false) {
-			if (duration_ > time_) {
-				time_ += 0.01f;
-			}
-		}
-		else {
-			if (-duration_ < time_) {
-				time_ -= 0.01f;
-			}
+		Action::GetInstance()->LoopTimer(time_, 0.01f, duration_);
+		if (time_ < -duration_ || time_ > duration_) {
+			easing_ = false;
 		}
 	}
+
+	//if (spotlightpositionchange_ == false) {
+	//	if (time_ >= 1.f) {
+	//		spotlightpositionchange_ = true;
+	//		easing_ = false;
+	//		easingchange_ = true;
+	//	}
+	//}
+	//else {
+	//	if (time_ <= -1.f) {
+	//		spotlightpositionchange_ = false;
+	//		easing_ = false;
+	//		easingchange_ = false;
+	//	}
+	//}
+
 	//移動方向を反転する
-	if (lightdireasingchange_ == false) {
-		lightdireasingtime_ += 0.05f;
-	}
-	else {
-		lightdireasingtime_ -= 0.05f;
-	}
+	lightdireasingtime_ += 0.05f;
+	
+
 	//ライトの動き
 	searchlightdir_[0].x = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
 	searchlightdir_[1].z = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
@@ -421,20 +428,7 @@ void GameScene::SpotLightMove()
 		fieldspotlightcolor_.y = Action::GetInstance()->EasingOut(colortime_, endcolor_ - startcolor_);
 	}
 
-	if (spotlightpositionchange_ == false) {
-		if (time_ >= 1.f) {
-			spotlightpositionchange_ = true;
-			easing_ = false;
-			easingchange_ = true;
-		}
-	}
-	else {
-		if (time_ <= -1.f) {
-			spotlightpositionchange_ = false;
-			easing_ = false;
-			easingchange_ = false;
-		}
-	}
+	
 }
 //ダメージを食らったときの処理
 void GameScene::DamageProcess()
@@ -926,7 +920,7 @@ void GameScene::ImgDraw()
 	ImGui::SetWindowSize(ImVec2(400, 500), ImGuiCond_::ImGuiCond_FirstUseEver);
 	ImGui::Begin("Camera");
 
-	ImGui::SliderInt("Actioncount", &actioncount_, -100, 100);
+	ImGui::SliderFloat("time", &time_, -100.f, 100.f);
 	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
 	ImGui::SliderFloat("eyerot", &passrot_.y, -180.0f, 180.0f);
 	ImGui::SliderFloat("eyerotY", &eyerot_.y, -180.0f, 180.0f);

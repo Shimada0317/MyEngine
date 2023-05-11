@@ -1,14 +1,12 @@
-#include "Player.h"
 #include<cassert>
 #include "imgui.h"
 #include"imconfig.h"
 #include"Action.h"
 #include"ModelManager.h"
 #include"Mouse.h"
-#include"WinApp.h"
-
+#include"Player.h"
 #include"SpriteManager.h"
-
+#include"WinApp.h"
 //弾数
 const int MaxRemainingBullet = 9;
 //縦のスクリーンの半分のサイズ
@@ -20,7 +18,6 @@ Player::~Player()
 {
 	gun_.reset();
 	body_.reset();
-
 	player_ui_.reset();
 	shot_se_.reset();
 	reload_se_.reset();
@@ -42,8 +39,6 @@ void Player::Initalize(Camera* camera)
 
 	player_ui_ = make_unique<PlayerUI>();
 	player_ui_->Create();
-
-
 	//オブジェクトの読み込み
 	gun_ = Object3d::Create(ModelManager::GetInstance()->GetModel(10));
 	body_ = Object3d::Create(ModelManager::GetInstance()->GetModel(10));

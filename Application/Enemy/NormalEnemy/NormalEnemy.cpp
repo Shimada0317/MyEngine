@@ -188,11 +188,9 @@ void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playe
 	else {
 		AttackFaseFlag = false;
 	}
-
 	if (Input::GetInstance()->PushKey(DIK_O)) {
 		Hp = 0;
 	}
-
 	StatusSet();
 	AllUpdate();
 }
@@ -245,7 +243,6 @@ void NormalEnemy::Defomation()
 		DefomationFlag = true;
 	}
 }
-
 //プレイヤーへの追尾モードの時
 void NormalEnemy::TrackPlayerMode()
 {
@@ -275,7 +272,6 @@ void NormalEnemy::TrackPlayerMode()
 	AllPos.m128_f32[2] -= v3z;
 	
 }
-
 //攻撃モードの時
 void NormalEnemy::AttackMode(int& playerhp)
 {
@@ -389,14 +385,11 @@ void NormalEnemy::Death()
 			ParticleEfect();
 		}
 		RobotAriveFlag = false;
-
-
 		if (Obj_Particle.empty()) {
 			DeadFlag = true;
 		}
 	}
 }
-
 //3D座標から2D座標を取得する
 XMFLOAT2 NormalEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 {
@@ -466,5 +459,4 @@ void NormalEnemy::WaitTrack(bool otherenemyarive)
 		WaitFlag = false;
 		AtttackTimer = 0;
 	}
-
 }

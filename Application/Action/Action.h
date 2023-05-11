@@ -81,9 +81,18 @@ public:
 	/// <param name="upper">ìäÇ∞è„Ç∞ÇÈíl</param>
 	/// <param name="position">åªç›ín</param>
 	void ThrowUp(float gravity, float time, float upper, float& position);
-
+	/// <summary>
+	/// âÊñ ÇÃóhÇÍ
+	/// </summary>
+	/// <param name="shakevalue"></param>
+	/// <param name="shakingtime"></param>
+	/// <param name="eyerot_"></param>
+	/// <param name="shakingstartflag_"></param>
 	void ScreenShake(float& shakevalue, float shakingtime,XMFLOAT3& eyerot_,bool& shakingstartflag_);
-
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="eyerot_"></param>
 	void MoveShakingHead(XMFLOAT3& eyerot_);
 
 	/// <summary>
@@ -96,11 +105,15 @@ public:
 
 	void DebugMove(XMFLOAT3& Value);
 
+	void LoopTimer(float& timer,float addvalue,float duration_);
+
 private:
 	float shakelimittime_ = 0.f;
 	float shakingscreenvalue_ = 0.f;
 	bool shakingscreenflag_ = false;
 
 	bool shake_ = true;
+
+	bool easing_invert_ = false;
 };
 

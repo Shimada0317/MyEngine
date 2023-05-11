@@ -253,7 +253,6 @@ private://ƒƒ“ƒo•Ï”
 	float colortime_ = 1.0f;
 	float colortimered_ = 0.0f;
 	float lightdireasingtime_ = 0.f;
-	bool lightdireasingchange_ = false;
 
 	XMFLOAT2 reticleposition_{ 0.f,0.f };
 	XMFLOAT4 reticlecolor_{ 1.f,1.f,1.f,1.f };

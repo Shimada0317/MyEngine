@@ -185,11 +185,14 @@ void ThrowEnemy::DeathProcess()
 	float gravity_ = 1.8f;
 	fall_time_ += 0.001f;
 	float fallspeed = gravity_ * fall_time_;
-	center_pos_.m128_f32[1] -= fallspeed;
-	ParticleEfect();
-	if (center_pos_.m128_f32[1] <= 0) {
-		DeadFlag = true;
+	if (center_pos_.m128_f32[1] >= 0) {
+		center_pos_.m128_f32[1] -= fallspeed;
+		if (center_pos_.m128_f32[1] <= 0) {
+			DeadFlag = true;
+		}
 	}
+	if (particle_flag_ != true) { return; }
+	ParticleEfect();
 }
 //3D‚©‚ç2D‚É•ÏŠ·
 XMFLOAT2 ThrowEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
@@ -299,9 +302,8 @@ void ThrowEnemy::ThrowAttack(int& playerhp)
 
 void ThrowEnemy::ParticleEfect()
 {
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 10; i++) {
 		XMFLOAT3 pos;
-
 		pos.x = CenterWorldPos.m128_f32[0];
 		pos.y = CenterWorldPos.m128_f32[1];
 		pos.z = CenterWorldPos.m128_f32[2];
@@ -318,4 +320,5 @@ void ThrowEnemy::ParticleEfect()
 		PartRed->Add(200, pos, vel, acc, 4.0f, 0.0f, 150.0f);
 		PartGreen->Add(200, pos, vel, acc, 3.7f, 0.0f, 150.0f);
 	}
+	particle_flag_ = false;
 }
