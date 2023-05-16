@@ -28,6 +28,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	for (int i = 0; i < 3; i++) {
 		searchlightdir_[i] = { 0,-10,0 };
 		searchlightcolor_[i] = { 1.f,1.f,1.f };
+		dir_timer_X[i] =-1.f;
+		dir_timer_Z[i] = 0.f;
 	}
 	searchlightpos_[0] = { 0, 20, 20 };
 	searchlightpos_[1] = { 20, 10, 45 };
@@ -135,7 +137,6 @@ void GameScene::StatusSet()
 //オブジェクトなどの更新処理
 void GameScene::AllUpdata()
 {
-	const XMFLOAT4 BillColor = { 0.8f,0.6f,0.3f,1.0f };
 	if (gamestate_ == MOVE) {
 		velocity_ = XMVector3TransformNormal(velocity_, player_->GetBodyMatrix());
 	}
@@ -154,10 +155,10 @@ void GameScene::AllUpdata()
 //ゲームシーンの更新処理
 void GameScene::Update()
 {
-	const float add_position_ = 3.1f;
-	const float add_rotation_ = 15.f;
-	heripos_.m128_f32[2] += add_position_;
-	heriy_ += add_rotation_;
+	const float kAddPosition_ = 3.1f;
+	const float kAddRotation_ = 15.f;
+	heripos_.m128_f32[2] += kAddPosition_;
+	heriy_ += kAddRotation_;
 	//カメラの演出前のフェード
 	FadeIn();
 	//開始時のカメラワーク
@@ -188,7 +189,7 @@ void GameScene::StartProcess()
 {
 	if (gamestate_ != GamePhase::START) { return; }
 	l_reticlepos = player_->GetPosition();
-	XMVECTOR l_bodyworldpos = player_->GetBodyWorldPos();
+	XMVECTOR kBodyWorldPos = player_->GetBodyWorldPos();
 	//ゲームシーンに遷移後
 	if (movie_sequence_ == MovieSequence::ACTION && heripos_.m128_f32[2] >= 20) {
 		movie_sequence_ = MovieSequence::TURNAROUND;
@@ -226,8 +227,8 @@ void GameScene::StartProcess()
 			eyerot_.x = 0.0f;
 
 		}
-		if (l_bodyworldpos.m128_f32[1] <= 0.9f) {
-			l_bodyworldpos.m128_f32[1] = 0.9f;
+		if (kBodyWorldPos.m128_f32[1] <= 0.9f) {
+			kBodyWorldPos.m128_f32[1] = 0.9f;
 			velocity_ = { 0.0f,0.0f,0.0f };
 			movie_sequence_ = MovieSequence::LANDING;
 		}
@@ -239,8 +240,8 @@ void GameScene::StartProcess()
 		movie_sequence_ = MovieSequence::FINISH;
 	}
 	//演出スキップ
-	SkipStartMovie(l_bodyworldpos);
-	player_->SetBodyWorldPos(l_bodyworldpos);
+	SkipStartMovie(kBodyWorldPos);
+	player_->SetBodyWorldPos(kBodyWorldPos);
 	if (movie_sequence_ != MovieSequence::FINISH) { return; }
 	//映画風演出の不可視
 	movie_->Invisible(gamestate_, MOVE);
@@ -250,10 +251,10 @@ void GameScene::MoveProcess()
 {
 	//ゲームの状態が移動中の時
 	if (gamestate_ != MOVE) { return; }
-	XMMATRIX l_cameramatrix;
-	l_cameramatrix = railcamera_->GetWorld();
+	XMMATRIX kCameraMatrix;
+	kCameraMatrix = railcamera_->GetWorld();
 	cameravector_ = { 0.f,0.f,0.f,0.f };
-	cameravector_ = XMVector3Transform(cameravector_, l_cameramatrix);
+	cameravector_ = XMVector3Transform(cameravector_, kCameraMatrix);
 	//歩いているときのような首を動かす
 	if (movie_sequence_ == FINISH) {
 		Action::GetInstance()->MoveShakingHead(eyerot_);
@@ -272,26 +273,26 @@ void GameScene::FightProcess()
 	if (gamestate_ != FIGHT) { return; }
 	//ダメージを食らったときの処理
 	DamageProcess();
-	XMFLOAT2 Player2DPos = player_->GetRetPosition();
-	bool PlayerBulletShot_F = player_->GetBulletShot();
-	if (PlayerBulletShot_F == true) {
+	XMFLOAT2 kPlayer2DPos = player_->GetRetPosition();
+	bool kPlayerBulletShot = player_->GetBulletShot();
+	if (kPlayerBulletShot == true) {
 		shake_addvalue_ = 1.f;
 		shakingstartflag_ = true;
 	}
 	//敵の更新処理
 	for (std::unique_ptr<NormalEnemy>& NormalEnemy : robot_) {
-		NormalEnemy->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
+		NormalEnemy->Update(kPlayer2DPos, playerhp_, kPlayerBulletShot);
 	}
 	for (std::unique_ptr<ThrowEnemy>& ThrowEnemy : throw_) {
-		ThrowEnemy->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
+		ThrowEnemy->Update(kPlayer2DPos, playerhp_, kPlayerBulletShot);
 	}
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
-		boss->Update(Player2DPos, playerhp_, PlayerBulletShot_F);
+		boss->Update(kPlayer2DPos, playerhp_, kPlayerBulletShot);
 	}
 	//追尾先が被った時の敵の処理
 	CheckSameTrackPosition();
-	player_->SetBulletShot(PlayerBulletShot_F);
+	player_->SetBulletShot(kPlayerBulletShot);
 	//全ての敵を倒す
 	KilledAllEnemy();
 }
@@ -302,15 +303,15 @@ void GameScene::GameOverProcess()
 	if (gamestate_ != CONTINUE) { return; }
 	Mouse::GetInstance()->MouseMoveSprite(reticleposition_);
 	reticleforgameover_->SetPosition(reticleposition_);
-	const float radx_ = 100;
-	const float rady_ = 50;
-	const XMFLOAT4 color_red_{ 1.f,0.f,0.f,1.f };
+	const float kRadX = 100;
+	const float kRadY = 50;
+	const XMFLOAT4 kColorRed{ 1.f,0.f,0.f,1.f };
 	postcol_.x = 0;
-	Collision::GetInstance()->ToggleFlagInClick(reticleposition_, yesposition_, radx_, rady_, yescursorinflag_);
-	Collision::GetInstance()->ToggleFlagInClick(reticleposition_, noposition_, radx_, rady_, nocursorinflag_);
+	Collision::GetInstance()->ToggleFlagInClick(reticleposition_, yesposition_, kRadX, kRadY, yescursorinflag_);
+	Collision::GetInstance()->ToggleFlagInClick(reticleposition_, noposition_, kRadX, kRadY, nocursorinflag_);
 	//Yesの文字にカーソルを合わせたとき
 	if (yescursorinflag_ == true) {
-		yescolor_ = color_red_;
+		yescolor_ = kColorRed;
 		if (Mouse::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new GameScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
@@ -321,7 +322,7 @@ void GameScene::GameOverProcess()
 	}
 	//Noの文字にカーソルを合わせたとき
 	if (nocursorinflag_ == true) {
-		nocolor_ = color_red_;
+		nocolor_ = kColorRed;
 		if (Mouse::GetInstance()->PushClick(0)) {
 			BaseScene* scene_ = new TitleScene(sceneManager_);
 			sceneManager_->SetNextScene(scene_);
@@ -348,10 +349,10 @@ void GameScene::FadeIn()
 {
 	//ゲームが始まる前
 	if (gamestate_ != GamePhase::NONE) { return; }
-	const float AddPosetEfectColor = 0.05f;
-	postcol_.x += AddPosetEfectColor;
-	postcol_.y += AddPosetEfectColor;
-	postcol_.z += AddPosetEfectColor;
+	const float kAddPosetEfectColor = 0.05f;
+	postcol_.x += kAddPosetEfectColor;
+	postcol_.y += kAddPosetEfectColor;
+	postcol_.z += kAddPosetEfectColor;
 
 	if (postcol_.x >= 0.0f) {
 		postcol_.x = 0.0f;
@@ -364,17 +365,17 @@ void GameScene::FadeIn()
 //ライトの動き[ライトクラス内で動きの地点だけで管理する]
 void GameScene::SpotLightMove()
 {
-	const float duration_ = 1;
-	const float startpointz_ = 50.f;
-	const float startpointx_ = -30;
-	const float startpointz2_ = 50.f;
-	const float endpointz_ = 0.f;
-	const float endpointx_ = 30;
-	const float endpointz2_ = 90.0f;
-	const float startcolor_ = -0.5f;
-	const float startcolorred_ = 0.0f;
-	const float endcolor_ = 0.0f;
-	const float endcolorred_ = 0.8f;
+	const float kDuration = 1;
+	const float kStartPointZ = 50.f;
+	const float kStartPointX = -30;
+	const float kStartPointZ2 = 50.f;
+	const float kEndPointZ = 0.f;
+	const float kEndPointX = 30;
+	const float kEndPointZ2 = 90.0f;
+	const float kStartColor = -0.5f;
+	const float kStartColorRed = 0.0f;
+	const float kEndColor = 0.0f;
+	const float kEndColorRed = 0.8f;
 
 	if (easing_ == false) {
 		easingwaittimer_ += 0.1f;
@@ -384,38 +385,21 @@ void GameScene::SpotLightMove()
 		}
 	}
 	else if (easing_ == true) {
-		Action::GetInstance()->LoopTimer(time_, 0.01f, duration_);
-		if (time_ < -duration_ || time_ > duration_) {
+		Action::GetInstance()->LoopTimer(time_, 0.01f, kDuration);
+		if (time_ < -kDuration || time_ > kDuration) {
 			easing_ = false;
 		}
 	}
-
-	//if (spotlightpositionchange_ == false) {
-	//	if (time_ >= 1.f) {
-	//		spotlightpositionchange_ = true;
-	//		easing_ = false;
-	//		easingchange_ = true;
-	//	}
-	//}
-	//else {
-	//	if (time_ <= -1.f) {
-	//		spotlightpositionchange_ = false;
-	//		easing_ = false;
-	//		easingchange_ = false;
-	//	}
-	//}
-
 	//移動方向を反転する
 	lightdireasingtime_ += 0.05f;
-	
-
 	//ライトの動き
 	searchlightdir_[0].x = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
+	searchlightdir_[0].z = Action::GetInstance()->EasingOut(time_, kEndPointZ - kStartPointZ);
 	searchlightdir_[1].z = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
+	searchlightdir_[1].x = Action::GetInstance()->EasingOut(time_, kEndPointX - kStartPointX);
 	searchlightdir_[2].x = Action::GetInstance()->EasingOut(lightdireasingtime_, 5 - 0);
-	searchlightdir_[0].z = Action::GetInstance()->EasingOut(time_, endpointz_ - startpointz_);
-	searchlightdir_[1].x = Action::GetInstance()->EasingOut(time_, endpointx_ - startpointx_);
-	searchlightdir_[2].z = Action::GetInstance()->EasingOut(time_, endpointz2_ - startpointz2_);
+	searchlightdir_[2].z = Action::GetInstance()->EasingOut(time_, kEndPointZ2 - kStartPointZ2);
+	
 	//ボス戦時に全体を赤くする
 	if (patern_ == GOALPOINT) {
 		if (colortime_ >= 0) {
@@ -424,8 +408,8 @@ void GameScene::SpotLightMove()
 		if (colortimered_ <= 1) {
 			colortimered_ += 0.01f;
 		}
-		fieldspotlightcolor_.x = Action::GetInstance()->EasingOut(colortimered_, endcolorred_ - startcolorred_) + 0.9f;
-		fieldspotlightcolor_.y = Action::GetInstance()->EasingOut(colortime_, endcolor_ - startcolor_);
+		fieldspotlightcolor_.x = Action::GetInstance()->EasingOut(colortimered_, kEndColorRed - kStartColorRed) + 0.9f;
+		fieldspotlightcolor_.y = Action::GetInstance()->EasingOut(colortime_, kEndColor - kStartColor);
 	}
 
 	

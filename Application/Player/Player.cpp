@@ -25,14 +25,12 @@ Player::~Player()
 //初期化処理
 void Player::Initalize(Camera* camera)
 {
-	//HUDのサイズ
-	const XMFLOAT2 SpriteSiz = { 64.0f,64.0f };
 	//色
-	const XMFLOAT4 Color{ 1.f,1.f,1.f,1.f };
+	const XMFLOAT4 kColor{ 1.f,1.f,1.f,1.f };
 	//オブジェクトにカメラをセット
 	Object3d::SetCamera(camera);
 	//スプライトの読み込み
-	sprite_reticle_.reset(Sprite::SpriteCreate(Name::kReticle, reticle_pos2d_, Color, anchorpoint_));
+	sprite_reticle_.reset(Sprite::SpriteCreate(Name::kReticle, reticle_pos2d_, kColor, anchorpoint_));
 
 	bullet_ui_ = make_unique<BulletUI>();
 	bullet_ui_->Create(remaining_, ui_bulletpos, ui_reloadpos_);
@@ -85,21 +83,21 @@ void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 void Player::AllUpdate()
 {
 	//赤
-	const XMFLOAT4 ColorRed{ 1.f,0.f,0.f,0.f };
+	const XMFLOAT4 kColorRed{ 1.f,0.f,0.f,0.f };
 	//緑
-	const XMFLOAT4 ColorGreen{ 0.f,0.5f,0.f,0.f };
+	const XMFLOAT4 kColorGreen{ 0.f,0.5f,0.f,0.f };
 	//灰色
-	const XMFLOAT4 ColorSmoke{ 0.1f,0.1f,0.1f,0.f };
+	const XMFLOAT4 kColorSmoke{ 0.1f,0.1f,0.1f,0.f };
 	//プレイヤー本体の更新
 	body_->Update();
 	//銃の更新
 	gun_->Update();
 	//赤いパーティクルの更新処理
-	part_red_->Update(ColorRed);
+	part_red_->Update(kColorRed);
 	//緑のパーティクルの更新処理
-	part_green_->Update(ColorGreen);
+	part_green_->Update(kColorGreen);
 	//煙の更新処理
-	part_smoke_->Update(ColorSmoke);
+	part_smoke_->Update(kColorSmoke);
 }
 //更新処理
 void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot, int gamestate_, int state_)
@@ -124,13 +122,13 @@ void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot, int gamestate
 void Player::WaitProcess()
 {
 	//ステータスが待機状態の時
-	if (player_state_ == WAIT) {
+	if (player_state_ == State::kWait) {
 		//除算する値
-		const int dividevaluY = 10;
-		const int dividevaluX = 50;
+		const int kDivideValuY = 10;
+		const int kDivideValuX = 50;
 		//マウス座標から角度の取得
-		gun_rot_.y = (reticle_pos2d_.x - screenhalfwidth_) / dividevaluY;
-		gun_rot_.x = (reticle_pos2d_.y - screenhalfheight_) / dividevaluX;
+		gun_rot_.y = (reticle_pos2d_.x - screenhalfwidth_) / kDivideValuY;
+		gun_rot_.x = (reticle_pos2d_.y - screenhalfheight_) / kDivideValuX;
 		bullet_shotflag_ = false;
 	}
 }
@@ -170,12 +168,12 @@ void Player::SoundEffect()
 void Player::MouseContoroll()
 {
 	//加算する値
-	const int addvalue = 15;
+	const int kAddValue = 15;
 	//マウス座標の取得
 	Mouse::GetInstance()->MouseMoveSprite(reticle_pos2d_);
 	//銃を撃った時
 	if (recoil_gunflag_) {
-		reticle_pos2d_.y += addvalue;
+		reticle_pos2d_.y += kAddValue;
 		Mouse::GetInstance()->RecoilMouse(reticle_pos2d_);
 	}
 	else {
@@ -188,23 +186,23 @@ void Player::MouseContoroll()
 void Player::GunShotProcess(Phase paterncount)
 {
 	//加算する値
-	const int addvalue = 1;
+	const int kAddValue = 1;
 	//弾の発射前
-	if (player_state_ == WAIT && remaining_ < MaxRemainingBullet) {
+	if (player_state_ == State::kWait && remaining_ < MaxRemainingBullet) {
 		if (Mouse::GetInstance()->PushClick(0)) {
-			remaining_ += addvalue;
+			remaining_ += kAddValue;
 			bullet_ui_->Shot(remaining_);
 			recoil_gunflag_ = true;
-			player_state_ = SHOT;
+			player_state_ = State::kShot;
 			//マズルフラッシュ
 			ParticleEfect(paterncount);
 		}
 	}
 	//ステータスがSHOTに切り替わった時
-	if (player_state_ == SHOT) {
+	if (player_state_ == State::kShot) {
 		//弾が発射された
 		bullet_shotflag_ = true;
-		player_state_ = WAIT;
+		player_state_ = State::kWait;
 	}
 	//リコイル処理
 	RecoilProcess();
@@ -223,19 +221,19 @@ void Player::UIMotionProcess()
 void Player::RecoilProcess()
 {
 	//タイムを加算する値
-	const float addrecovery_ = 0.2f;
+	const float kAddRecovery = 0.2f;
 	//反動の角度
-	const int bouncerotation_ = 25;
+	const int kBounceRotation = 25;
 	//recoverytimeの上限値
-	const int timelimit_ = 1;
+	const int kTimeLimit = 1;
 	//リコイルフラグがtrueの時
 	if (recoil_gunflag_) {
 		//タイムを加算
-		recovery_time_ += addrecovery_;
+		recovery_time_ += kAddRecovery;
 		//銃の反動で上に向ける
-		gun_rot_.x = -bouncerotation_;
+		gun_rot_.x = -kBounceRotation;
 		//タイムが上限値まで来たら
-		if (recovery_time_ >= timelimit_) {
+		if (recovery_time_ >= kTimeLimit) {
 			//反動を元に戻す
 			gun_rot_.x = {};
 			//タイムを初期化
@@ -250,20 +248,20 @@ void Player::RecoilProcess()
 void Player::ReloadProcess()
 {
 	//残弾が空
-	const int emptyremaining_ = 8;
+	const int kEmptyRemaining = 8;
 	//回転の減算する値
-	const float subrotation_ = 9.5f;
+	const float kSubRotation = 9.5f;
 	//タイマーの加算する値
-	const int addtime_ = 1;
+	const int kAddTime = 1;
 	//タイマーを除算するための値
-	const int divtime_ = 40;
-	int anser_ = 0;
+	const int kDivTime = 40;
+	int kAnser = 0;
 	//ステータスが待機状態で、残弾が満タン以外の時
-	if (player_state_ == WAIT && remaining_ != 0) {
+	if (player_state_ == State::kWait && remaining_ != 0) {
 		//右クリックした時
 		if (Mouse::GetInstance()->PushClick(1)) {
 			//ステータスをRELOADに変更
-			player_state_ = RELOAD;
+			player_state_ = State::kReload;
 			reload_se_->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
 			//マウスを操作出来ない状態に
 
@@ -271,25 +269,25 @@ void Player::ReloadProcess()
 		}
 	}
 	//ステータスがRELOADではないとき
-	if (player_state_ != RELOAD) { return; }
+	if (player_state_ != State::kReload) { return; }
 	//銃を回転させる
-	gun_rot_.x -= subrotation_;
+	gun_rot_.x -= kSubRotation;
 	//残弾を一度非表示にする
-	remaining_ = emptyremaining_;
+	remaining_ = kEmptyRemaining;
 	bullet_ui_->SetRemainig(remaining_);
 	//タイムを加算する
-	reload_time_ += addtime_;
+	reload_time_ += kAddTime;
 	//動かしているタイムを40で除算
-	anser_ = reload_time_ % divtime_;
+	kAnser = reload_time_ % kDivTime;
 	//reloaadtime/40の余りが0以外の時
-	if (anser_ != 0) { return; }
+	if (kAnser != 0) { return; }
 	//残弾マックスに
 	remaining_ = {};
 	bullet_ui_->Reload(remaining_);
 	//残弾が満タンになった時
 	if (remaining_ == 0) {
 		//ステータスを待機状態に戻す
-		player_state_ = WAIT;
+		player_state_ = State::kWait;
 		//タイムを初期化
 		reload_time_ = {};
 		//操作を再度可能状態にする
@@ -301,20 +299,18 @@ void Player::ReloadProcess()
 //マズルエフェクト
 void Player::ParticleEfect(Phase paterncount)
 {
-
 		for (int i = 0; i < 10; i++) {
 			float radX = reticle_rot_.y * XM_PI / 180.f;
 			float radY = gun_rot_.x * XM_PI / 180.f;
 			float sinradX = sinf(radX);
 			float cosradX = cosf(radX);
-
 			float sinradY = sinf(radY);
 			float cosradY = cosf(radY);
 			//後ろを向いているとき
-			if (paterncount == LANDINGPOINT_BACK ||
-				paterncount == MOVEDPOINT_A ||
-				paterncount == MOVEDPOINT_A_LEFT ||
-				paterncount == GOALPOINT_BACK) {
+			if (paterncount == Phase::kLandingPointBack ||
+				paterncount == Phase::kMovedPointA ||
+				paterncount == Phase::kMovedPointALeft ||
+				paterncount == Phase::kGoalPointBack) {
 				pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
 				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
 				pos.z = gun_worldpos_.m128_f32[2] + 3.0f;
@@ -400,7 +396,6 @@ void Player::ImGuiDraw()
 		ImGui::SliderFloat("changerot.z", &change_rot_.z, -100.0f, 100.0f);
 		ImGui::TreePop();
 	}
-
 	ImGui::End();
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();

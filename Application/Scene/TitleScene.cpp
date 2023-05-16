@@ -19,8 +19,8 @@ TitleScene::TitleScene(SceneManager* sceneManager_)
 //初期化処理
 void TitleScene::Initialize(DirectXCommon* dxComon)
 {
-	const XMFLOAT4 RegularColor = { 1.f,1.f,1.f,1.f };
-	const XMFLOAT2 DescriptionScreenPosition = { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f };
+	const XMFLOAT4 kRegularColor = { 1.f,1.f,1.f,1.f };
+	const XMFLOAT2 kDescriptionScreenPosition = { WinApp::window_width / 2.0f,WinApp::window_height / 2.0f - 72.0f };
 
 	//カメラの生成
 	titlecamera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
@@ -36,13 +36,13 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	//スプライトの生成
 	title_.reset(Sprite::SpriteCreate(Name::kTitle, { 1.0f,1.0f }));
 	cursor_.reset(Sprite::SpriteCreate(Name::kReticle, reticlepos_, spritecol_, anchorpoint_));
-	clickbefore_.reset(Sprite::SpriteCreate(Name::kClickStartBefore, clickpos_, RegularColor, anchorpoint_));
-	clickafter_.reset(Sprite::SpriteCreate(Name::kClickStartAfter, clickpos_, RegularColor, anchorpoint_));
-	signalbefore_.reset(Sprite::SpriteCreate(Name::kSignalBefore, clickpos_, RegularColor, anchorpoint_));
-	signalafter_.reset(Sprite::SpriteCreate(Name::kSignalAfter, clickpos_, RegularColor, anchorpoint_));
-	descriptionoperation_.reset(Sprite::SpriteCreate(Name::kOperationDescription, DescriptionScreenPosition, spritecol_, anchorpoint_));
-	enemyoverview_.reset(Sprite::SpriteCreate(Name::kEnemyDescription, DescriptionScreenPosition, spritecol_, anchorpoint_));
-	gamestartpreparation_.reset(Sprite::SpriteCreate(Name::kStartScreen, DescriptionScreenPosition, spritecol_, anchorpoint_));
+	clickbefore_.reset(Sprite::SpriteCreate(Name::kClickStartBefore, clickpos_, kRegularColor, anchorpoint_));
+	clickafter_.reset(Sprite::SpriteCreate(Name::kClickStartAfter, clickpos_, kRegularColor, anchorpoint_));
+	signalbefore_.reset(Sprite::SpriteCreate(Name::kSignalBefore, clickpos_, kRegularColor, anchorpoint_));
+	signalafter_.reset(Sprite::SpriteCreate(Name::kSignalAfter, clickpos_, kRegularColor, anchorpoint_));
+	descriptionoperation_.reset(Sprite::SpriteCreate(Name::kOperationDescription, kDescriptionScreenPosition, spritecol_, anchorpoint_));
+	enemyoverview_.reset(Sprite::SpriteCreate(Name::kEnemyDescription, kDescriptionScreenPosition, spritecol_, anchorpoint_));
+	gamestartpreparation_.reset(Sprite::SpriteCreate(Name::kStartScreen, kDescriptionScreenPosition, spritecol_, anchorpoint_));
 	arrowright_.reset(Sprite::SpriteCreate(Name::kArrowRight, arrowrightpos_, arrowrightcolor_, anchorpoint_));
 	arrowleft_.reset(Sprite::SpriteCreate(Name::kArrowLeft, arrowleftpos_, arrowleftcolor_, anchorpoint_));
 	bullet_ui_ = make_unique<BulletUI>();
@@ -153,68 +153,68 @@ void TitleScene::Update()
 //カメラの移動
 void TitleScene::CameraDirection()
 {
-	const float CameraMoveValueXandY = 0.4f;
-	const float CameraMoveValueZ = 0.1f;
-	const float CameraEyeMoveValue = 0.01f;
-	if (titlestate_ != TITLESCREEN) { return; }
+	const float kCameraMoveValueXandY = 0.4f;
+	const float kCameraMoveValueZ = 0.1f;
+	const float kCameraEyeMoveValue = 0.01f;
+	if (titlestate_ != TITLESTATE::kTitleScreen) { return; }
 	cameramove_ = { 0.0f,0.0f,0.0f };
 	if (cameraeyemoveflag_ && !camerachangeflag_) {
 		if (cameraeyemove_.m128_f32[0] >= -1.1) {
-			cameraeyemove_.m128_f32[0] -= CameraEyeMoveValue;
-			cameramove_.m128_f32[0] += CameraMoveValueXandY;
-			cameramove_.m128_f32[1] -= CameraMoveValueXandY;
-			cameramove_.m128_f32[2] -= CameraMoveValueZ;
+			cameraeyemove_.m128_f32[0] -= kCameraEyeMoveValue;
+			cameramove_.m128_f32[0] += kCameraMoveValueXandY;
+			cameramove_.m128_f32[1] -= kCameraMoveValueXandY;
+			cameramove_.m128_f32[2] -= kCameraMoveValueZ;
 		}
 		else {
 			camerachangeflag_ = true;
 			cameraeyemove_ = { 0.0f,0.0f,0.0f };
-			titlestate_ = DESCRIPTIONPAGE;
+			titlestate_ = TITLESTATE::kDescriptionPage;
 		}
 	}
 }
 //UIの拡大縮小
 void TitleScene::UiEasingProcess()
 {
-	const int timerlimit_ = 1;
-	const int addsize_ = 5;
-	const float variable_arrowsize_ = 32;
-	const float absolutevalue_ = 0.05f;
-	const XMFLOAT2 variable_clicksize_{ 550,60 };
+	const int kTimerLimit = 1;
+	const int kAddSize = 5;
+	const float kVariableArrowSize = 32;
+	const float kAbsoluteValue = 0.05f;
+	const XMFLOAT2 kVariableClickSize{ 550,60 };
 	if (!easingchangeflag_) {
-		easingtimer_ += absolutevalue_;
+		easingtimer_ += kAbsoluteValue;
 		//タイマーが一定の値になったら反転させる
-		if (easingtimer_ >= timerlimit_) {
+		if (easingtimer_ >= kTimerLimit) {
 			easingchangeflag_ = true;
 		}
 	}
 	else {
-		easingtimer_ -= absolutevalue_;
+		easingtimer_ -= kAbsoluteValue;
 		//タイマーが一定の値になったら反転させる
-		if (easingtimer_ <= -timerlimit_) {
+		if (easingtimer_ <= -kTimerLimit) {
 			easingchangeflag_ = false;
 		}
 	}
-	arrowsize_.x = Action::GetInstance()->EasingOut(easingtimer_, addsize_) + variable_arrowsize_;
-	arrowsize_.y = Action::GetInstance()->EasingOut(easingtimer_, addsize_) + variable_arrowsize_;
-	clicksize_.x = Action::GetInstance()->EasingOut(easingtimer_, addsize_) + variable_clicksize_.x;
-	clicksize_.y = Action::GetInstance()->EasingOut(easingtimer_, addsize_) + variable_clicksize_.y;
+	arrowsize_.x = Action::GetInstance()->EasingOut(easingtimer_, kAddSize) + kVariableArrowSize;
+	arrowsize_.y = Action::GetInstance()->EasingOut(easingtimer_, kAddSize) + kVariableArrowSize;
+	clicksize_.x = Action::GetInstance()->EasingOut(easingtimer_, kAddSize) + kVariableClickSize.x;
+	clicksize_.y = Action::GetInstance()->EasingOut(easingtimer_, kAddSize) + kVariableClickSize.y;
 	bullet_ui_->ReloadMotion();
 }
 // 説明画面で行われる処理
 void TitleScene::ArrowProces()
 {
-	const XMFLOAT2 rad{ 16.f,16.f };
-	const int absolutevalue_ = 1;
+	const XMFLOAT2 kRad{ 16.f,16.f };
+	const int kAbsoluteValue = 1;
 	//カメラが移動した後の画面
-	if (titlestate_ < GAMESTARTPREPARTIONPAGE &&
+	if (titlestate_ < TITLESTATE::kGameStartPreoartionPage &&
 		camerachangeflag_) {
-		if (Collision::GetInstance()->ChangeAtClick(reticlepos_, arrowrightpos_, rad.x, rad.y)) {
+		if (Collision::GetInstance()->ChangeAtClick(reticlepos_, arrowrightpos_, kRad.x, kRad.y)) {
 			arrowrightcolor_ = { 1.f,0.f,0.f,1.f };
 			righttrueinflag_ = true;
 			//矢印を押された時
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				clickse_->LoadFile("Resources/Sound/SE/click.wav", volume_);
-				titlestate_ += absolutevalue_;
+				titlestate_ += kAbsoluteValue;
 			}
 		}
 		else {
@@ -223,15 +223,15 @@ void TitleScene::ArrowProces()
 		}
 	}
 	//ページが0以上であれば
-	if (titlestate_ > DESCRIPTIONPAGE) {
+	if (titlestate_ > TITLESTATE::kDescriptionPage) {
 		if (Collision::GetInstance()->ChangeAtClick(reticlepos_, arrowleftpos_, 16, 16)) {
 			arrowleftcolor_ = { 1.f,0.f,0.f,1.f };
 			lefttrueinflag_ = true;
 			if ((Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1))) {
 				clickse_->LoadFile("Resources/Sound/SE/click.wav", volume_);
-				titlestate_ -= absolutevalue_;
-				if (titlestate_ <= DESCRIPTIONPAGE) {
-					titlestate_ = DESCRIPTIONPAGE;
+				titlestate_ -= kAbsoluteValue;
+				if (titlestate_ <= TITLESTATE::kDescriptionPage) {
+					titlestate_ = TITLESTATE::kDescriptionPage;
 				}
 			}
 		}
@@ -245,13 +245,13 @@ void TitleScene::ArrowProces()
 //フェードアウト後にゲームシーンへチェンジ
 void TitleScene::FadeOutAndSceneChange()
 {
-	const float SubColor = 0.01f;
+	const float kSubColor = 0.01f;
 	//救援ヘリを読んだ後
 	if (fadeoutflag_) {
-		postefectcolor_.x -= SubColor;
-		postefectcolor_.y -= SubColor;
-		postefectcolor_.z -= SubColor;
-		postefectcolor_.w -= SubColor;
+		postefectcolor_.x -= kSubColor;
+		postefectcolor_.y -= kSubColor;
+		postefectcolor_.z -= kSubColor;
+		postefectcolor_.w -= kSubColor;
 		if (postefectcolor_.w <= 0) {
 			//シーン切り替え
 			BaseScene* scene_ = new GameScene(sceneManager_);
@@ -280,20 +280,20 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 			clickafter_->Draw();
 		}
 	}
-	if (titlestate_ < GAMESTARTPREPARTIONPAGE&&titlestate_>TITLESCREEN) {
+	if (titlestate_ < TITLESTATE::kGameStartPreoartionPage&&titlestate_>TITLESTATE::kTitleScreen) {
 		arrowright_->Draw();
 	}
-	if (titlestate_ > DESCRIPTIONPAGE) {
+	if (titlestate_ > TITLESTATE::kDescriptionPage) {
 		arrowleft_->Draw();
 	}
-	if (titlestate_ == DESCRIPTIONPAGE) {
+	if (titlestate_ == TITLESTATE::kDescriptionPage) {
 		descriptionoperation_->Draw();
 		bullet_ui_->Draw();
 	}
-	else if (titlestate_ == ENEMYOVERVIEWPAGE) {
+	else if (titlestate_ == TITLESTATE::kEnemyOverviewPage) {
 		enemyoverview_->Draw();
 	}
-	else if (titlestate_ == GAMESTARTPREPARTIONPAGE) {
+	else if (titlestate_ == TITLESTATE::kGameStartPreoartionPage) {
 		gamestartpreparation_->Draw();
 		if (!signalcurorinflag_) {
 			signalbefore_->Draw();
@@ -313,45 +313,45 @@ void TitleScene::Draw(DirectXCommon* dxCommon)
 void TitleScene::ReloadProcess()
 {
 	if (Mouse::GetInstance()->PushClick(1)) {
-		hudstate_ = RELOAD;
+		hudstate_ = UISTATE::kReload;
 	}
-	if (hudstate_ != RELOAD) { return; }
+	if (hudstate_ != UISTATE::kReload) { return; }
 	if (remaining_ != 0) {
 		//回転の減算する値
-		const float subrotation_ = 9.5f;
+		const float kSubRotation = 9.5f;
 		//タイマーの加算する値
-		const int addtime_ = 1;
+		const int kAddTime = 1;
 		//タイマーを除算するための値
-		const int divtime_ = 40;
-		int anser_ = 0;
-		const int full = 0;
+		const int kDivTime = 40;
+		int kAnser = 0;
+		const int kFull = 0;
 		//残弾を一度非表示にする
 		remaining_ = MaxRemainingBullet;
 		bullet_ui_->SetRemainig(remaining_);
 		//タイムを加算する
-		reloadtime_ += addtime_;
+		reloadtime_ += kAddTime;
 		//動かしているタイムを40で除算
-		anser_ = reloadtime_ % divtime_;
+		kAnser = reloadtime_ % kDivTime;
 		//reloaadtime/40の余りが0以外の時
-		if (anser_ != 0) { return; }
+		if (kAnser != 0) { return; }
 		//残弾マックスに
 		remaining_ = {};
 		bullet_ui_->Reload(remaining_);
 		//残弾が満タンになった時
-		if (remaining_ == full) {
+		if (remaining_ == kFull) {
 			//タイムを初期化
 			reloadtime_ = {};
-			hudstate_ = WAIT;
+			hudstate_ = UISTATE::kWait;
 		}
 	}
 }
 // 発砲の処理
 void TitleScene::ShotProcess()
 {
-	const int subbullet_ = 1;
+	const int kSubBullet = 1;
 	if (remaining_ < MaxRemainingBullet) {
 		if (Mouse::GetInstance()->PushClick(0)) {
-			remaining_ += subbullet_;
+			remaining_ += kSubBullet;
 			bullet_ui_->Shot(remaining_);
 		}
 	}
@@ -360,7 +360,7 @@ void TitleScene::ShotProcess()
 // 説明のページの処理
 void TitleScene::DescriptioPageProcess()
 {
-	if (titlestate_ != DESCRIPTIONPAGE) { return; }
+	if (titlestate_ != TITLESTATE::kDescriptionPage) { return; }
 
 	ReloadProcess();
 
@@ -371,11 +371,11 @@ void TitleScene::DescriptioPageProcess()
 // ゲーム開始のページの処理
 void TitleScene::GameStartPrepartionPage()
 {
-	if (titlestate_ != GAMESTARTPREPARTIONPAGE) { return; }
+	if (titlestate_ != TITLESTATE::kGameStartPreoartionPage) { return; }
 	//救援ヘリを呼ぶとき
 	if (camerachangeflag_ &&
 		signalcurorinflag_ &&
-		titlestate_ == GAMESTARTPREPARTIONPAGE) {
+		titlestate_ == TITLESTATE::kGameStartPreoartionPage) {
 		if (Mouse::GetInstance()->PushClick(0) || Mouse::GetInstance()->PushClick(1)) {
 			if (clickflag_) {
 				clickse_->LoadFile("Resources/Sound/SE/MorseCode.wav", volume_);

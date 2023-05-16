@@ -1,6 +1,4 @@
 #pragma once
-
-
 #include<DirectXMath.h>
 
 class SpotLight
@@ -42,6 +40,7 @@ public://メンバ関数
 	inline const XMFLOAT2& GetLightFactorAngleCos() { return lightFactorAngleCos; }
 	inline void SetActive(bool active) { this->active = active; }
 	inline bool IsActive() { return active; }
+
 private://メンバ変数
 	//ライト方向(単位ベクトル)
 	XMVECTOR lightdir = { 1,0,0,0 };

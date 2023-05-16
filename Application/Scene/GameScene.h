@@ -284,5 +284,7 @@ private://ƒƒ“ƒo•Ï”
 	int gamestate_ = GamePhase::NONE;
 	int movie_sequence_ = MovieSequence::ACTION;
 
+	float dir_timer_X[3];
+	float dir_timer_Z[3];
 };
 

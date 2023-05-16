@@ -10,15 +10,15 @@ class TitleScene :public BaseScene
 {
 private:
 	enum TITLESTATE {
-		TITLESCREEN=0,
-		DESCRIPTIONPAGE,
-		ENEMYOVERVIEWPAGE,
-		GAMESTARTPREPARTIONPAGE,
+		kTitleScreen=0,
+		kDescriptionPage,
+		kEnemyOverviewPage,
+		kGameStartPreoartionPage,
 	};
 
 	enum UISTATE {
-		WAIT=0,
-		RELOAD,
+		kWait=0,
+		kReload,
 	};
 
 private:
@@ -183,7 +183,7 @@ private:
 	bool revers_flag_ = false;
 	int reloadtime_ = 0;
 	//ステータス
-	int hudstate_ = WAIT;
-	int titlestate_ = TITLESCREEN;
+	int hudstate_ = kWait;
+	int titlestate_ = kTitleScreen;
 };
 

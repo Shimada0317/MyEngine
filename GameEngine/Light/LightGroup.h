@@ -123,6 +123,8 @@ public: // メンバ関数
 	void SetSpotLightColor(int index, const XMFLOAT3& lightcolor);
 	void SetSpotLightAtten(int index, const XMFLOAT3& lightAtten);
 	void SetSpotLightFactorAngle(int index, const XMFLOAT2& lightFactorAngle);
+
+	void SporLightLoopMove(int index,const XMFLOAT3& startpoint_,const XMFLOAT3& endpoint_);
 private: // メンバ変数
 	// 定数バッファ
 	ComPtr<ID3D12Resource> constBuff;
@@ -138,5 +140,11 @@ private: // メンバ変数
 	SpotLight spotLights[SpotLightNum];
 	// ダーティフラグ
 	bool dirty = false;
+
+	bool easing_ = false;
+	float easingwait_timer_ = 0.f;
+	float timer_ = -1.0f;
+	float lightdireasingtime_ = 0.f;
+
 };
 

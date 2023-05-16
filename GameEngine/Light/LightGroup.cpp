@@ -1,4 +1,5 @@
 #include "LightGroup.h"
+#include"Action.h"
 #include<assert.h>
 
 using namespace DirectX;
@@ -124,7 +125,7 @@ void LightGroup::DefaultLightSetting()
 	dirLights[1].SetLightDir({ +0.5f,+0.1f,+0.2f,0 });
 
 	dirLights[2].SetActive(true);
-	dirLights[2].SetLightColor({1.0f,1.0f,1.0f});
+	dirLights[2].SetLightColor({ 1.0f,1.0f,1.0f });
 	dirLights[2].SetLightDir({ -0.5f,+0.1f,-0.2f,0 });
 }
 
@@ -231,3 +232,4 @@ void LightGroup::SetSpotLightAtten(int index, const XMFLOAT3& lightAtten)
 	spotLights[index].SetLightAtten(lightAtten);
 	dirty = true;
 }
+
