@@ -7,6 +7,7 @@
 #include"Continue.h"
 #include"NormalEnemy.h"
 #include"ThrowEnemy.h"
+#include"EnemyPop.h"
 #include"GameBackground.h"
 #include"Movie.h"
 #include"Player.h"
@@ -192,6 +193,7 @@ private://メンバ変数
 	unique_ptr<Continue> continue_screen_;
 	unique_ptr<Movie> movie_;
 	//プレイヤーと敵
+	unique_ptr<EnemyPop> enemypop_;
 	list<unique_ptr<NormalEnemy>>robot_;
 	list<unique_ptr<BossEnemy>>boss_;
 	list<unique_ptr<ThrowEnemy>>throw_;

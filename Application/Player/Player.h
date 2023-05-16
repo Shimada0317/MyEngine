@@ -12,16 +12,16 @@
 #include<list>
 
 enum  Phase {
-	LANDINGPOINT_BACK = 0,
-	LANDINGPOINT_FRONT,
-	MOVEDPOINT_A,
-	MOVEDPOINT_A_LEFT,
-	MOVEDPOINT_B,
-	MOVEDPOINT_C,
-	MOVEDPOINT_C_OBLIQUE,
-	MOVEDPOINT_C_FRONT,
-	GOALPOINT_BACK,
-	GOALPOINT,
+	kLandingPointBack = 0,
+	kLandingPointFront,
+	kMovedPointA,
+	kMovedPointALeft,
+	kMovedPointB,
+	kMovedPointC,
+	kMovedPointCOblique,
+	kMovedPointCFront,
+	kGoalPointBack,
+	kGoalPoint,
 
 };
 
@@ -29,10 +29,10 @@ class Player
 {
 private:
 	enum State {
-		WAIT = 0,
-		RELOAD,
-		SHOT,
-		MOVE,
+		kWait = 0,
+		kReload,
+		kShot,
+		kMove,
 	};
 public:
 	~Player();
@@ -241,7 +241,7 @@ private:
 	//UIの大きさが一定まで行ったときにフラグを立てる
 	bool revers_flag_ = false;
 	//プレイヤーの状態
-	int player_state_ = WAIT;
+	int player_state_ = State::kWait;
 	XMFLOAT3 pos{};
 };
 

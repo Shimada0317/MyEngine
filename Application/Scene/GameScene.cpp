@@ -45,6 +45,9 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLightGroup(lightgroupe_.get());
 	//カメラの生成
 	camera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
+
+	enemypop_ = make_unique<EnemyPop>();
+	enemypop_->LoadCsv();
 	//スプライトの生成
 	damageefectsprite_.reset(Sprite::SpriteCreate(Name::kDamageEffect, { 0.0f, 0.0f }, damageefectcolor_));
 	clear_.reset(Sprite::SpriteCreate(kGameClear, { 0.0f,0.0f }));
@@ -83,8 +86,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//ゲームの背景オブジェクト
 	game_background_ = make_unique<GameBackground>();
 	game_background_->LoadBackgrounndPopData();
-	//csvの読み込み
-	LoadEnemyPopData();
 }
 //ステータスセット
 void GameScene::StatusSet()
@@ -263,7 +264,7 @@ void GameScene::MoveProcess()
 	//プレイヤーに渡す角度
 	passrot_ = eyerot_;
 	if (!stopflag_) { return; }
-	UpdataEnemyPopCommands();
+	enemypop_->PopEnemy(robot_, throw_, boss_, patern_, camera_.get());
 	patern_ += 1;
 	stopflag_ = false;
 }
@@ -401,7 +402,7 @@ void GameScene::SpotLightMove()
 	searchlightdir_[2].z = Action::GetInstance()->EasingOut(time_, kEndPointZ2 - kStartPointZ2);
 	
 	//ボス戦時に全体を赤くする
-	if (patern_ == GOALPOINT) {
+	if (patern_ == Phase::kGoalPoint) {
 		if (colortime_ >= 0) {
 			colortime_ -= 0.01f;
 		}
@@ -457,179 +458,7 @@ void GameScene::DamageProcess()
 		}
 	}
 }
-//敵のステータスのcsv読み込み
-void GameScene::LoadEnemyPopData()
-{
-	ifstream file;
-	file.open("Resources/LoadEnemy.csv");
-	assert(file.is_open());
 
-	enemypopcommands_ << file.rdbuf();
-
-	file.close();
-}
-//敵の出現処理
-void GameScene::UpdataEnemyPopCommands()
-{
-
-	std::string line;
-
-	XMVECTOR POSITION = { 0.0f,0.0f,0.0f };
-	XMVECTOR TRACK = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 ROTATION = { 0.0f,0.0f,0.0f };
-	int TYPE = 0;
-
-	bool ari = false;
-	bool step = false;
-	int count = 0;
-
-	bool POPSkip = false;
-	bool TRACKSkip = false;
-	bool ARIVESkip = false;
-
-	while (getline(enemypopcommands_, line))
-	{
-
-		std::istringstream line_stram(line);
-
-		std::string word;
-
-		getline(line_stram, word, ',');
-
-		if (word.find("//") == 0) {
-			continue;
-		}
-
-		if (word.find("WAVE") == 0) {
-			getline(line_stram, word, ',');
-			//WAVEの要素
-			count = atoi(word.c_str());
-		}
-		if (patern_ == count) {
-			//角度の取得
-			if (word.find("ROTATION") == 0) {
-
-				getline(line_stram, word, ',');
-				float x = (float)std::atof(word.c_str());
-
-				getline(line_stram, word, ',');
-				float y = (float)std::atof(word.c_str());
-
-				getline(line_stram, word, ',');
-				float z = (float)std::atof(word.c_str());
-
-				ROTATION.x = x;
-				ROTATION.y = y;
-				ROTATION.z = z;
-
-				POPSkip = true;
-			}
-			//座標取得
-			else if (word.find("POSITION") == 0) {
-
-				getline(line_stram, word, ',');
-				float x = (float)std::atof(word.c_str());
-
-				getline(line_stram, word, ',');
-				float y = (float)std::atof(word.c_str());
-
-				getline(line_stram, word, ',');
-				float z = (float)std::atof(word.c_str());
-
-				POSITION.m128_f32[0] = x;
-				POSITION.m128_f32[1] = y;
-				POSITION.m128_f32[2] = z;
-
-				POPSkip = true;
-			}
-			//追尾先の座標取得
-			else if (word.find("TRACK") == 0) {
-
-				getline(line_stram, word, ',');
-				float x = (float)std::atof(word.c_str());
-
-				getline(line_stram, word, ',');
-				float y = (float)std::atof(word.c_str());
-
-				getline(line_stram, word, ',');
-				float z = (float)std::atof(word.c_str());
-
-				TRACK.m128_f32[0] = x;
-				TRACK.m128_f32[1] = y;
-				TRACK.m128_f32[2] = z;
-
-				TRACKSkip = true;
-			}
-
-			else if (word.find("STEP") == 0) {
-				getline(line_stram, word, ',');
-				int STEP = atoi(word.c_str());
-				if (STEP == 1) {
-					step = true;
-				}
-				else {
-					step = false;
-				}
-
-			}
-
-			//
-			else if (word.find("ARIVE") == 0) {
-				getline(line_stram, word, ',');
-
-				//待ち時間
-				int Arive = atoi(word.c_str());
-				if (Arive == 1) {
-					ari = true;
-				}
-				else {
-					ari = false;
-				}
-
-				ARIVESkip = true;
-			}
-			//敵のパターン
-			else if (word.find("TYPE") == 0) {
-				getline(line_stram, word, ',');
-				int type = (int)std::atof(word.c_str());
-				TYPE = type;
-			}
-
-			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
-				if (TYPE == ENEMYPATERN::NORMAL) {
-					std::unique_ptr<NormalEnemy> newRobot = std::make_unique<NormalEnemy>();
-					newRobot->Initialize(ROTATION, POSITION, camera_.get(), TRACK);
-					robot_.push_back(std::move(newRobot));
-				}
-
-				else if (TYPE == ENEMYPATERN::THROW) {
-					std::unique_ptr<ThrowEnemy> newRobot = std::make_unique<ThrowEnemy>();
-					newRobot->Initialize(ROTATION, POSITION, camera_.get(), TRACK);
-					throw_.push_back(std::move(newRobot));
-				}
-
-
-				else if (TYPE == ENEMYPATERN::BOSS) {
-					std::unique_ptr<BossEnemy> boss = std::make_unique<BossEnemy>();
-					boss->Initialize(ROTATION, POSITION, camera_.get(), TRACK);
-					boss_.push_back(std::move(boss));
-					break;
-				}
-				POPSkip = false;
-				TRACKSkip = false;
-				ARIVESkip = false;
-			}
-		}
-
-		if (patern_ < count) {
-			break;
-		}
-		if (word.find("END") == 0) {
-			getline(line_stram, word, ',');
-			break;
-		}
-	}
-}
 //敵同士の追尾先が被っているとき
 void GameScene::CheckSameTrackPosition()
 {

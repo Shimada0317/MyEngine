@@ -31,9 +31,9 @@ void Player::Initalize(Camera* camera)
 	Object3d::SetCamera(camera);
 	//スプライトの読み込み
 	sprite_reticle_.reset(Sprite::SpriteCreate(Name::kReticle, reticle_pos2d_, kColor, anchorpoint_));
-
 	bullet_ui_ = make_unique<BulletUI>();
 	bullet_ui_->Create(remaining_, ui_bulletpos, ui_reloadpos_);
+
 
 	player_ui_ = make_unique<PlayerUI>();
 	player_ui_->Create();
@@ -316,27 +316,27 @@ void Player::ParticleEfect(Phase paterncount)
 				pos.z = gun_worldpos_.m128_f32[2] + 3.0f;
 			}
 			//右を向いているとき
-			else if (paterncount == MOVEDPOINT_C ||
-				paterncount == MOVEDPOINT_C_OBLIQUE) {
+			else if (paterncount == Phase::kMovedPointC ||
+				paterncount == Phase::kMovedPointCOblique) {
 				pos.x = gun_worldpos_.m128_f32[0] + 2.3f;
 				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
 				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
 			}
 			//真っすぐ前を向いているとき
-			else if (paterncount == LANDINGPOINT_FRONT ||
-				paterncount == GOALPOINT) {
+			else if (paterncount == Phase::kLandingPointFront ||
+				paterncount == Phase::kGoalPoint) {
 				pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
 				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
 				pos.z = gun_worldpos_.m128_f32[2] - 3.0f;
 			}
 			//左を向いているとき
-			else if (paterncount == MOVEDPOINT_B) {
+			else if (paterncount == Phase::kMovedPointB) {
 				pos.x = gun_worldpos_.m128_f32[0] - 2.3f;
 				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
 				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
 			}
 			//斜めを向いているとき
-			else if (paterncount == MOVEDPOINT_C_FRONT) {
+			else if (paterncount == Phase::kMovedPointCFront) {
 				pos.x = gun_worldpos_.m128_f32[0] + 2.3f * sinradX;
 				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
 				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;

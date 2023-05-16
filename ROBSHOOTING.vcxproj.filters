@@ -237,6 +237,7 @@
     <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Enemy\EnemyPop\EnemyPop.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -419,6 +420,7 @@
     <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h">
       <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Enemy\EnemyPop\EnemyPop.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
