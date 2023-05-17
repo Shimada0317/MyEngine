@@ -4,6 +4,7 @@
 #include"NormalEnemy.h"
 #include"ThrowEnemy.h"
 #include"BossEnemy.h"
+#include"DirectXCommon.h"
 #include<sstream>
 
 class EnemyPop
@@ -15,9 +16,41 @@ private:
 		kBoss,
 	};
 public:
+	/// <summary>
+	/// csv“Ç‚İ‚İ
+	/// </summary>
 	void LoadCsv();
-	void PopEnemy(list<unique_ptr<NormalEnemy>>&normalrobot, list<unique_ptr<ThrowEnemy>>& throwrobot, list<unique_ptr<BossEnemy>>& bossrobot,int phase,Camera* camera);
+	void PopEnemy(int phase,Camera* camera);
+	/// <summary>
+	/// “G‚ÌXV
+	/// </summary>
+	/// <param name="player2Dpos"></param>
+	/// <param name="playerhp"></param>
+	/// <param name="playerbulletshot"></param>
+	void Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
+	/// <summary>
+	/// “G“¯m‚Ì’Ç”öæ‚ª”í‚Á‚½‚ÌŠm”F‚Æ‚»‚Ìê‡‚Ìˆ—
+	/// </summary>
+	void CheckSameTrackPosition();
+	/// <summary>
+	/// “G‚Ì€–Sˆ—
+	/// </summary>
+	void EnemyDead();
+	/// <summary>
+	/// ‘S‚Ä‚Ì“G‚ğ“|‚µ‚½
+	/// </summary>
+	/// <returns></returns>
+	bool KilledAllEnemy();
+	/// <summary>
+	/// •`‰æˆ—
+	/// </summary>
+	/// <param name="dxcommon"></param>
+	void Draw(DirectXCommon* dxcommon);
 private:
 	stringstream enemypopcommands_;
+	list<unique_ptr<NormalEnemy>>robot_;
+	list<unique_ptr<BossEnemy>>boss_;
+	list<unique_ptr<ThrowEnemy>>throw_;
+	bool otherenemyarive_ = true;
 };
 

@@ -1,4 +1,5 @@
 #include "EnemyPop.h"
+#include"Action.h"
 #include<fstream>
 
 void EnemyPop::LoadCsv()
@@ -12,7 +13,7 @@ void EnemyPop::LoadCsv()
 	file.close();
 }
 
-void EnemyPop::PopEnemy(list<unique_ptr<NormalEnemy>>& normalrobot, list<unique_ptr<ThrowEnemy>>& throwrobot, list<unique_ptr<BossEnemy>>& bossrobot,int phase, Camera* camera)
+void EnemyPop::PopEnemy(int phase, Camera* camera)
 {
 	std::string line;
 
@@ -114,7 +115,6 @@ void EnemyPop::PopEnemy(list<unique_ptr<NormalEnemy>>& normalrobot, list<unique_
 				}
 			}
 
-			//
 			else if (word.find("ARIVE") == 0) {
 				getline(line_stram, word, ',');
 
@@ -140,20 +140,19 @@ void EnemyPop::PopEnemy(list<unique_ptr<NormalEnemy>>& normalrobot, list<unique_
 				if (TYPE == ENEMYPATERN::kNormal) {
 					std::unique_ptr<NormalEnemy> newRobot = std::make_unique<NormalEnemy>();
 					newRobot->Initialize(ROTATION, POSITION, camera, TRACK);
-					normalrobot.push_back(std::move(newRobot));
+					robot_.push_back(std::move(newRobot));
 				}
 
 				else if (TYPE == ENEMYPATERN::kThrow) {
 					std::unique_ptr<ThrowEnemy> newRobot = std::make_unique<ThrowEnemy>();
 					newRobot->Initialize(ROTATION, POSITION, camera, TRACK);
-					throwrobot.push_back(std::move(newRobot));
+					throw_.push_back(std::move(newRobot));
 				}
-
 
 				else if (TYPE == ENEMYPATERN::kBoss) {
 					std::unique_ptr<BossEnemy> boss = std::make_unique<BossEnemy>();
 					boss->Initialize(ROTATION, POSITION, camera, TRACK);
-					bossrobot.push_back(std::move(boss));
+					boss_.push_back(std::move(boss));
 					break;
 				}
 				POPSkip = false;
@@ -169,6 +168,81 @@ void EnemyPop::PopEnemy(list<unique_ptr<NormalEnemy>>& normalrobot, list<unique_
 			getline(line_stram, word, ',');
 			break;
 		}
+	}
+}
+
+void EnemyPop::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+{
+	//敵の更新処理
+	for (std::unique_ptr<NormalEnemy>& NormalEnemy : robot_) {
+		NormalEnemy->Update(player2Dpos, playerhp, playerbulletshot);
+	}
+	for (std::unique_ptr<ThrowEnemy>& ThrowEnemy : throw_) {
+		ThrowEnemy->Update(player2Dpos, playerhp, playerbulletshot);
+	}
+	//ボスの更新処理
+	for (std::unique_ptr<BossEnemy>& boss : boss_) {
+		boss->Update(player2Dpos, playerhp, playerbulletshot);
+	}
+}
+
+void EnemyPop::CheckSameTrackPosition()
+{
+	for (std::unique_ptr<NormalEnemy>& FirstEnemy : robot_) {
+		for (std::unique_ptr<NormalEnemy>& SecondEnemy : robot_) {
+			if (FirstEnemy.get() != SecondEnemy.get()) {
+				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
+				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
+				bool secondenemyarive = SecondEnemy->GetArive();
+				bool firstenemyarive = FirstEnemy->GetArive();
+				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
+					otherenemyarive_ = true;
+					SecondEnemy->WaitTrack(otherenemyarive_);
+				}
+				if (secondenemyarive == false) {
+					XMVECTOR firstenemytrack = FirstEnemy->CheckTrackPoint();
+					XMVECTOR secondenemytrack = SecondEnemy->CheckTrackPoint();
+					if (Action::GetInstance()->CompletelyTogetherXMVECTOR(firstenemytrack, secondenemytrack)) {
+						otherenemyarive_ = false;
+						FirstEnemy->WaitTrack(otherenemyarive_);
+					}
+				}
+			}
+		}
+	}
+}
+
+void EnemyPop::EnemyDead()
+{
+	throw_.remove_if([](std::unique_ptr<ThrowEnemy>& throwrobot) {
+		return throwrobot->IsDead();
+		});
+	robot_.remove_if([](std::unique_ptr<NormalEnemy>& robot) {
+		return robot->IsDead();
+		});
+	boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
+		return boss->IsDead();
+		});
+}
+
+bool EnemyPop::KilledAllEnemy()
+{
+	if (robot_.empty() && throw_.empty() && boss_.empty()) {
+		return true;
+	}
+	return false;
+}
+
+void EnemyPop::Draw(DirectXCommon* dxcommon)
+{
+	for (std::unique_ptr<NormalEnemy>& robot : robot_) {
+		robot->Draw(dxcommon);
+	}
+	for (std::unique_ptr<ThrowEnemy>& throwrobot : throw_) {
+		throwrobot->Draw(dxcommon);
+	}
+	for (std::unique_ptr<BossEnemy>& boss : boss_) {
+		boss->Draw(dxcommon);
 	}
 }
 

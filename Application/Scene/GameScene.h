@@ -3,10 +3,7 @@
 #include<sstream>
 #include<memory>
 #include"BaseScene.h"
-#include"BossEnemy/BossEnemy.h"
 #include"Continue.h"
-#include"NormalEnemy.h"
-#include"ThrowEnemy.h"
 #include"EnemyPop.h"
 #include"GameBackground.h"
 #include"Movie.h"
@@ -102,18 +99,8 @@ public://メンバ関数
 	/// </summary>
 	void DamageProcess();
 	/// <summary>
-	/// csv読み込み
+	/// 
 	/// </summary>
-	void LoadEnemyPopData();
-	/// <summary>
-	/// 敵の生成
-	/// </summary>
-	void UpdataEnemyPopCommands();
-	/// <summary>
-	/// 敵同士の追尾先が被った時の確認とその場合の処理
-	/// </summary>
-	void CheckSameTrackPosition();
-
 	void KilledAllEnemy();
 	/// <summary>
 	/// 始まりのムービーのスキップ処理
@@ -194,11 +181,7 @@ private://メンバ変数
 	unique_ptr<Movie> movie_;
 	//プレイヤーと敵
 	unique_ptr<EnemyPop> enemypop_;
-	list<unique_ptr<NormalEnemy>>robot_;
-	list<unique_ptr<BossEnemy>>boss_;
-	list<unique_ptr<ThrowEnemy>>throw_;
 	unique_ptr<Player> player_;
-	stringstream enemypopcommands_;
 	//その他の機能
 	unique_ptr <Audio> bgm_ = nullptr;
 	unique_ptr <Audio> herifry_ = nullptr;
@@ -268,7 +251,6 @@ private://メンバ変数
 	bool nocursorinflag_ = false;
 	float heriy_ = 15.0f;
 	bool stopflag_ = false;
-	bool otherenemyarive_ = true;
 	XMVECTOR velocity_;
 	XMFLOAT3 eyerot_{ 0.f,180.f,0.f };
 	XMFLOAT3 passrot_{};

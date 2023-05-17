@@ -45,7 +45,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLightGroup(lightgroupe_.get());
 	//カメラの生成
 	camera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
-
+	//
 	enemypop_ = make_unique<EnemyPop>();
 	enemypop_->LoadCsv();
 	//スプライトの生成
@@ -264,7 +264,7 @@ void GameScene::MoveProcess()
 	//プレイヤーに渡す角度
 	passrot_ = eyerot_;
 	if (!stopflag_) { return; }
-	enemypop_->PopEnemy(robot_, throw_, boss_, patern_, camera_.get());
+	enemypop_->PopEnemy( patern_, camera_.get());
 	patern_ += 1;
 	stopflag_ = false;
 }
@@ -281,18 +281,10 @@ void GameScene::FightProcess()
 		shakingstartflag_ = true;
 	}
 	//敵の更新処理
-	for (std::unique_ptr<NormalEnemy>& NormalEnemy : robot_) {
-		NormalEnemy->Update(kPlayer2DPos, playerhp_, kPlayerBulletShot);
-	}
-	for (std::unique_ptr<ThrowEnemy>& ThrowEnemy : throw_) {
-		ThrowEnemy->Update(kPlayer2DPos, playerhp_, kPlayerBulletShot);
-	}
-	//ボスの更新処理
-	for (std::unique_ptr<BossEnemy>& boss : boss_) {
-		boss->Update(kPlayer2DPos, playerhp_, kPlayerBulletShot);
-	}
+	enemypop_->Update(kPlayer2DPos, playerhp_, kPlayerBulletShot);
+	
 	//追尾先が被った時の敵の処理
-	CheckSameTrackPosition();
+	enemypop_->CheckSameTrackPosition();
 	player_->SetBulletShot(kPlayerBulletShot);
 	//全ての敵を倒す
 	KilledAllEnemy();
@@ -458,47 +450,12 @@ void GameScene::DamageProcess()
 		}
 	}
 }
-
-//敵同士の追尾先が被っているとき
-void GameScene::CheckSameTrackPosition()
-{
-	for (std::unique_ptr<NormalEnemy>& FirstEnemy : robot_) {
-		for (std::unique_ptr<NormalEnemy>& SecondEnemy : robot_) {
-			if (FirstEnemy.get() != SecondEnemy.get()) {
-				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
-				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
-				bool secondenemyarive = SecondEnemy->GetArive();
-				bool firstenemyarive = FirstEnemy->GetArive();
-				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
-					otherenemyarive_ = true;
-					SecondEnemy->WaitTrack(otherenemyarive_);
-				}
-				if (secondenemyarive == false) {
-					XMVECTOR firstenemytrack = FirstEnemy->CheckTrackPoint();
-					XMVECTOR secondenemytrack = SecondEnemy->CheckTrackPoint();
-					if (Action::GetInstance()->CompletelyTogetherXMVECTOR(firstenemytrack, secondenemytrack)) {
-						otherenemyarive_ = false;
-						FirstEnemy->WaitTrack(otherenemyarive_);
-					}
-				}
-			}
-		}
-	}
-}
 //表示されている全ての敵を倒した時
 void GameScene::KilledAllEnemy()
 {
-	throw_.remove_if([](std::unique_ptr<ThrowEnemy>& throwrobot) {
-		return throwrobot->IsDead();
-		});
-	robot_.remove_if([](std::unique_ptr<NormalEnemy>& robot) {
-		return robot->IsDead();
-		});
-	boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
-		return boss->IsDead();
-		});
+	enemypop_->EnemyDead();
 	//目の前の敵を全て倒した時プレイヤーを動かす
-	if (robot_.empty() && boss_.empty() && throw_.empty()) {
+	if (enemypop_->KilledAllEnemy()) {
 		gamestate_ = MOVE;
 	}
 }
@@ -693,15 +650,8 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	player_->ParticleDraw(dxCommon->GetCmdList());
 	////オブジェクト後処理
 	Object3d::PostDraw();
-	for (std::unique_ptr<NormalEnemy>& robot : robot_) {
-		robot->Draw(dxCommon);
-	}
-	for (std::unique_ptr<ThrowEnemy>& throwrobot : throw_) {
-		throwrobot->Draw(dxCommon);
-	}
-	for (std::unique_ptr<BossEnemy>& boss : boss_) {
-		boss->Draw(dxCommon);
-	}
+	//描画
+	enemypop_->Draw(dxCommon);
 }
 //スプライトの描画処理
 void GameScene::SpriteDraw(DirectXCommon* dxCommon)

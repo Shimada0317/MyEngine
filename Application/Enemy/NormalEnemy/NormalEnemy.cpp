@@ -131,7 +131,6 @@ void NormalEnemy::AllUpdate()
 		patrticle->Update();
 	}
 }
-
 //çXêVèàóù
 void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
 {
@@ -141,7 +140,6 @@ void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playe
 	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 		});
-
 	//ìñÇΩÇËîªíË
 	if (playerbulletshot == true && Hp > 0) {
 		if (player2Dpos.x - Distance*1.3 < RockOnPos.x && player2Dpos.x + Distance * 1.3 > RockOnPos.x &&
@@ -149,12 +147,10 @@ void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playe
 			Hp -= BodyDamage;
 			playerbulletshot = false;
 		}
-
 		if (player2Dpos.x - HeadDistance * 1.3 < RockOnHeadPos.x && player2Dpos.x + HeadDistance * 1.3 > RockOnHeadPos.x &&
 			player2Dpos.y - HeadDistance * 1.3 <RockOnHeadPos.y && player2Dpos.y + HeadDistance * 1.3 >RockOnHeadPos.y) {
 			Hp -= HeadDamage;
 			playerbulletshot = false;
-			
 		}
 	}
 
