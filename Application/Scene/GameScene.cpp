@@ -45,6 +45,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	Object3d::SetLightGroup(lightgroupe_.get());
 	//カメラの生成
 	camera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
+
+	moviestaging_ = make_unique<MovieStaging>();
 	//
 	enemypop_ = make_unique<EnemyPop>();
 	enemypop_->LoadCsv();
@@ -106,7 +108,7 @@ void GameScene::StatusSet()
 	goal_->SetRotation({ 0.0f,270.0f,0.0f });
 	//ヘリのプロペラの
 	hane_->SetRotation({ 0.0f,heriy_,0.0f });
-	if (movie_sequence_ == MovieSequence::ACTION) {
+	if (movie_sequence_ == MovieSequence::kAction) {
 		hane_->SetPosition(heripos_);
 		hane_->SetScale(heriscl_);
 	}
@@ -189,61 +191,13 @@ void GameScene::Update()
 void GameScene::StartProcess()
 {
 	if (gamestate_ != GamePhase::START) { return; }
-	l_reticlepos = player_->GetPosition();
-	XMVECTOR kBodyWorldPos = player_->GetBodyWorldPos();
-	//ゲームシーンに遷移後
-	if (movie_sequence_ == MovieSequence::ACTION && heripos_.m128_f32[2] >= 20) {
-		movie_sequence_ = MovieSequence::TURNAROUND;
-	}
-	//後ろを向く
-	if (movie_sequence_ == MovieSequence::TURNAROUND) {
-		Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
-		if (eyerot_.y <= 0) {
-			eyerot_.y = 0;
-			movie_sequence_ = MovieSequence::FACELOWER;
-		}
-	}
-	//下を向く
-	if (movie_sequence_ == MovieSequence::FACELOWER) {
-		actiontimer_ += 0.2f;
-		if (actiontimer_ > 5) {
-			actiontimer_ = 5.0f;
-			Action::GetInstance()->EaseOut(eyerot_.x, 95.0f);
-			if (eyerot_.x >= 90) {
-				actiontimer_ = 0.0f;
-				eyerot_.x = 90;
-				movie_sequence_ = MovieSequence::JUMP;
-			}
-		}
-	}
-	//跳ぶ
-	if (movie_sequence_ == MovieSequence::JUMP) {
-		actiontimer_ += 0.15f;
-		velocity_ = { 0.0f,0.67f,0.4f };
-		if (actiontimer_ >= 5) {
-			velocity_ = { 0.0f,-0.6f,0.0f };
-			Action::GetInstance()->EaseOut(eyerot_.x, -5.0f);
-		}
-		if (eyerot_.x <= 0.0f) {
-			eyerot_.x = 0.0f;
-
-		}
-		if (kBodyWorldPos.m128_f32[1] <= 0.9f) {
-			kBodyWorldPos.m128_f32[1] = 0.9f;
-			velocity_ = { 0.0f,0.0f,0.0f };
-			movie_sequence_ = MovieSequence::LANDING;
-		}
-	}
-	//地面に着いたとき
-	if (movie_sequence_ == MovieSequence::LANDING) {
-		l_reticlepos = { 0.0f,-0.7f,13.0f };
-		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
-		movie_sequence_ = MovieSequence::FINISH;
-	}
-	//演出スキップ
-	SkipStartMovie(kBodyWorldPos);
-	player_->SetBodyWorldPos(kBodyWorldPos);
-	if (movie_sequence_ != MovieSequence::FINISH) { return; }
+	if (heripos_.m128_f32[2] < 20.f) { return; }
+	//始まりのカメラ演出
+	moviestaging_->StartMovie(player_.get(), eyerot_, velocity_, railcamera_.get());
+	//カメラ演出の状態をGetする
+	movie_sequence_ = moviestaging_->GetMovieSequence();
+	//演出が終わっていないなら
+	if (movie_sequence_ != MovieSequence::kFinish) { return; }
 	//映画風演出の不可視
 	movie_->Invisible(gamestate_, MOVE);
 }
@@ -257,9 +211,7 @@ void GameScene::MoveProcess()
 	cameravector_ = { 0.f,0.f,0.f,0.f };
 	cameravector_ = XMVector3Transform(cameravector_, kCameraMatrix);
 	//歩いているときのような首を動かす
-	if (movie_sequence_ == FINISH) {
-		Action::GetInstance()->MoveShakingHead(eyerot_);
-	}
+	moviestaging_->MoveShakingHead(eyerot_);
 	(this->*MoveFuncTable[patern_])();
 	//プレイヤーに渡す角度
 	passrot_ = eyerot_;
@@ -282,12 +234,15 @@ void GameScene::FightProcess()
 	}
 	//敵の更新処理
 	enemypop_->Update(kPlayer2DPos, playerhp_, kPlayerBulletShot);
-	
 	//追尾先が被った時の敵の処理
 	enemypop_->CheckSameTrackPosition();
 	player_->SetBulletShot(kPlayerBulletShot);
 	//全ての敵を倒す
-	KilledAllEnemy();
+	enemypop_->EnemyDead();
+	//目の前の敵を全て倒した時プレイヤーを動かす
+	if (enemypop_->KilledAllEnemy()) {
+		gamestate_ = MOVE;
+	}
 }
 //ゲームオーバー時の処理
 void GameScene::GameOverProcess()
@@ -450,28 +405,6 @@ void GameScene::DamageProcess()
 		}
 	}
 }
-//表示されている全ての敵を倒した時
-void GameScene::KilledAllEnemy()
-{
-	enemypop_->EnemyDead();
-	//目の前の敵を全て倒した時プレイヤーを動かす
-	if (enemypop_->KilledAllEnemy()) {
-		gamestate_ = MOVE;
-	}
-}
-//始まりの演出スキップ処理
-void GameScene::SkipStartMovie(XMVECTOR& bodypos)
-{
-	if ((Mouse::GetInstance()->PushClick(1) || Mouse::GetInstance()->PushClick(0))) {
-		eyerot_.x = 0;
-		eyerot_.y = 0;
-		velocity_ = { 0.0f,0.0f,0.0f };
-		l_reticlepos = { 0.0f,-0.7f,13.0f };
-		railcamera_->MatrixIdentity(l_reticlepos, eyerot_);
-		bodypos.m128_f32[1] = 0.9f;
-		movie_sequence_ = MovieSequence::FINISH;
-	}
-}
 //1回目の戦闘地点
 void GameScene::MoveStartBack()
 {
@@ -592,7 +525,7 @@ void GameScene::GoalPointBack()
 //ゴール
 void GameScene::GoalPoint()
 {
-	movie_sequence_ = MovieSequence::ACTION;
+	movie_sequence_ = MovieSequence::kAction;
 	movie_->Disply();
 	velocity_ = { 0.f, 0.f, 0.1f };
 	//後ろを向く
@@ -641,10 +574,10 @@ void GameScene::ObjDraw(DirectXCommon* dxCommon)
 	game_background_->Draw();
 	goal_->Draw();
 	hane_->Draw();
-	if (movie_sequence_ == MovieSequence::ACTION) {
+	if (movie_sequence_ == MovieSequence::kAction) {
 		heri_->Draw();
 	}
-	if (movie_sequence_ == MovieSequence::FINISH) {
+	if (movie_sequence_ == MovieSequence::kFinish) {
 		player_->ObjDraw();
 	}
 	player_->ParticleDraw(dxCommon->GetCmdList());
@@ -669,7 +602,7 @@ void GameScene::SpriteDraw(DirectXCommon* dxCommon)
 		reticleforgameover_->Draw();
 	}
 	movie_->Draw();
-	if ((gamestate_ == FIGHT || gamestate_ == MOVE) && movie_sequence_ == MovieSequence::FINISH) {
+	if ((gamestate_ == FIGHT || gamestate_ == MOVE) && movie_sequence_ == MovieSequence::kFinish) {
 		player_->SpriteDraw();
 	}
 	Sprite::PostDraw();
@@ -684,7 +617,6 @@ void GameScene::ImgDraw()
 	ImGui::Begin("Camera");
 
 	ImGui::SliderFloat("time", &time_, -100.f, 100.f);
-	ImGui::SliderFloat("Actiontimer", &actiontimer_, -100.0f, 100.0f);
 	ImGui::SliderFloat("eyerot", &passrot_.y, -180.0f, 180.0f);
 	ImGui::SliderFloat("eyerotY", &eyerot_.y, -180.0f, 180.0f);
 

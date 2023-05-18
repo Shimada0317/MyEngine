@@ -237,7 +237,10 @@
     <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\EnemyPop\EnemyPop.cpp" />
+    <ClCompile Include="Application\Enemy\EnemyPop\EnemyPop.cpp">
+      <Filter>AllGame\Application\Enemy\EnemyPop</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\MovieStaging\MovieStaging.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -420,7 +423,10 @@
     <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h">
       <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\EnemyPop\EnemyPop.h" />
+    <ClInclude Include="Application\Enemy\EnemyPop\EnemyPop.h">
+      <Filter>AllGame\Application\Enemy\EnemyPop</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\MovieStaging\MovieStaging.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -673,6 +679,12 @@
     </Filter>
     <Filter Include="AllGame\Application\HUD\Movie">
       <UniqueIdentifier>{f914dba9-23a3-4e86-953e-c656b41a0f97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy\EnemyPop">
+      <UniqueIdentifier>{688f00f2-752f-47c6-a8b0-8c9ddf5e84bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\MovieStaging">
+      <UniqueIdentifier>{c1e598e9-3e2d-40b7-8c5a-2a68f0de6a52}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

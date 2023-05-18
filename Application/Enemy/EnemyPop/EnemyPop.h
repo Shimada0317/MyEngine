@@ -20,6 +20,11 @@ public:
 	/// csv“Ç‚İ‚İ
 	/// </summary>
 	void LoadCsv();
+	/// <summary>
+	/// “G‚Ì¶¬
+	/// </summary>
+	/// <param name="phase"></param>
+	/// <param name="camera"></param>
 	void PopEnemy(int phase,Camera* camera);
 	/// <summary>
 	/// “G‚ÌXV

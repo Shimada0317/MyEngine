@@ -226,10 +226,7 @@ XMFLOAT2 ThrowEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 //描画処理
 void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 {
-	ParticleManager::PreDraw(dxCommon->GetCmdList());
-	PartGreen->Draw();
-	PartRed->Draw();
-	ParticleManager::PostDraw();
+	
 
 	//オブジェクト
 	Object3d::PreDraw(dxCommon->GetCmdList());
@@ -242,6 +239,11 @@ void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 		bullet_->Draw();
 	}
 	Object3d::PostDraw();
+
+	ParticleManager::PreDraw(dxCommon->GetCmdList());
+	PartGreen->Draw();
+	PartRed->Draw();
+	ParticleManager::PostDraw();
 	//スプライト
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	RockOn->Draw();
@@ -305,20 +307,20 @@ void ThrowEnemy::ParticleEfect()
 	for (int i = 0; i < 10; i++) {
 		XMFLOAT3 pos;
 		pos.x = CenterWorldPos.m128_f32[0];
-		pos.y = CenterWorldPos.m128_f32[1];
+		pos.y = CenterWorldPos.m128_f32[1]-1.f;
 		pos.z = CenterWorldPos.m128_f32[2];
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};
 		vel.x = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
-		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.12f);
-		vel.z = Action::GetInstance()->GetRangRand(-0.03f, 0.09f);
+		vel.y = Action::GetInstance()->GetRangRand(-0.11f, 0.12f);
+		vel.z = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
 
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		PartRed->Add(200, pos, vel, acc, 4.0f, 0.0f, 150.0f);
-		PartGreen->Add(200, pos, vel, acc, 3.7f, 0.0f, 150.0f);
+		PartRed->Add(30, pos, vel, acc, 1.0f, 0.0f, 0.0f);
+		PartGreen->Add(30, pos, vel, acc, 0.7f, 0.0f, 0.0f);
 	}
-	particle_flag_ = false;
+	//particle_flag_ = false;
 }

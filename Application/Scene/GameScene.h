@@ -6,6 +6,8 @@
 #include"Continue.h"
 #include"EnemyPop.h"
 #include"GameBackground.h"
+#include"ModelManager.h"
+#include"MovieStaging.h"
 #include"Movie.h"
 #include"Player.h"
 #include"TitleScene.h"
@@ -23,15 +25,6 @@ private:
 		MOVE,
 		CONTINUE,
 		CLEAR,
-	};
-
-	enum MovieSequence {
-		ACTION=0,
-		TURNAROUND,
-		FACELOWER,
-		JUMP,
-		LANDING,
-		FINISH,
 	};
 
 	enum ENEMYPATERN {
@@ -98,14 +91,6 @@ public://メンバ関数
 	/// 攻撃を食らったときの処理
 	/// </summary>
 	void DamageProcess();
-	/// <summary>
-	/// 
-	/// </summary>
-	void KilledAllEnemy();
-	/// <summary>
-	/// 始まりのムービーのスキップ処理
-	/// </summary>
-	void SkipStartMovie(XMVECTOR& bodypos);
 	/// <summary>
 	/// オブジェクトの描画
 	/// </summary>
@@ -190,6 +175,7 @@ private://メンバ変数
 	unique_ptr<LightGroup> lightgroupe_ = nullptr;
 	unique_ptr<Camera> camera_ = nullptr;
 	unique_ptr<RailCamera> railcamera_ = nullptr;
+	unique_ptr<MovieStaging> moviestaging_ = nullptr;
 	//ビル群のステータス
 	XMFLOAT3 builsscl_ = { 10.0f,10.0f,10.0f };
 	XMVECTOR builshighalphapos_ = { 0.0f,0.0f,-16.5f };
@@ -254,9 +240,6 @@ private://メンバ変数
 	XMVECTOR velocity_;
 	XMFLOAT3 eyerot_{ 0.f,180.f,0.f };
 	XMFLOAT3 passrot_{};
-	int actioncount_ = 0;
-	float actiontimer_ = 0.f;
-	XMVECTOR l_reticlepos;
 	XMVECTOR cameravector_{ 0.f,0.f,0.f };
 	float movespeed_ = 0.5f;
 	float changerotation_ = 0.f;
@@ -266,7 +249,7 @@ private://メンバ変数
 	float shake_addvalue_ = 0.f;
 	//ステータス
 	int gamestate_ = GamePhase::NONE;
-	int movie_sequence_ = MovieSequence::ACTION;
+	int movie_sequence_ = MovieSequence::kAction;
 
 	float dir_timer_X[3];
 	float dir_timer_Z[3];
