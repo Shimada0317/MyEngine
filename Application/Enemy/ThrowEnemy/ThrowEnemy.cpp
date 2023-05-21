@@ -226,8 +226,6 @@ XMFLOAT2 ThrowEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 //描画処理
 void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 {
-	
-
 	//オブジェクト
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	for (std::unique_ptr<ObjParticle>& particle : obj_particle_) {

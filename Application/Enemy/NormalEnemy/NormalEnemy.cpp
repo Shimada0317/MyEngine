@@ -158,10 +158,6 @@ void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playe
 
 	Death();
 
-	if (Hp < 50) {
-		AttackTimeMin = 15;
-		AttackTimeMax = 20;
-	}
 
 	if (RandomFlag == false) {
 		TimerLimit = Action::GetInstance()->GetRangRand(AttackTimeMin, AttackTimeMax);
@@ -371,18 +367,21 @@ void NormalEnemy::Death()
 	//ê∂Ç´ÇƒÇ¢ÇÈÇ∆Ç´Ç…HPÇ™0Ç…Ç»Ç¡ÇΩÇÁ
 	if (Hp <= 0) {
 		OldTrackPoint = TrackPoint;
-		NotLifeFlag = true;
 		Hp = 0;
-		ShadowCol.w -= Subtraction;
-		ArmsPartColor.w -= Subtraction;
-		BodyPartColor.w -= Subtraction;
-		HeadPartColor.w -= Subtraction;
+		if (HeadPartColor.w > 0) {
+			ShadowCol.w -= Subtraction;
+			ArmsPartColor.w -= Subtraction;
+			BodyPartColor.w -= Subtraction;
+			HeadPartColor.w -= Subtraction;
+		}
+		
 		if (ParticleEfectFlag == true) {
 			ParticleEfect();
 		}
 		RobotAriveFlag = false;
-		if (Obj_Particle.empty()) {
+		if (Obj_Particle.empty()&&ShadowCol.w<0) {
 			DeadFlag = true;
+			ObjParticleFlag = true;
 		}
 	}
 }

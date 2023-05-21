@@ -130,8 +130,6 @@ public://Getter Setter
 
 	bool GetArive() { return RobotAriveFlag; }
 
-	bool GetCountZero() { return NotLifeFlag; }
-
 private:
 	//Obj
 	//“ª
@@ -273,8 +271,6 @@ private:
 	bool ParticleEfectFlag = true;
 	//“¯‚¶’Ç]æ‚É•Ê‚Ì“G‚ª‚¢‚é‚©‚¢‚È‚¢‚©
 	bool WaitFlag = false;
-
-	bool NotLifeFlag = false;
 
 	bool ObjParticleFlag = false;
 };
