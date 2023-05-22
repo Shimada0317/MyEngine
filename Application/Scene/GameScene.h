@@ -189,7 +189,7 @@ private://ƒƒ“ƒo•Ï”
 	XMVECTOR goalpos_ = { 56.f,3.0f,92.0f };
 	XMFLOAT3 goalscl_ = { 3.0f,3.0f,3.0f };
 	//‚»‚Ì‘¼‚Ì•Ï”
-	XMFLOAT4 postcol_ = { -1.0f,-1.0f,-1.0f,1.0f };
+	XMFLOAT4 postefectcolor_ = { -1.0f,-1.0f,-1.0f,0.0f };
 	int patern_ = 0;
 	int playerhp_;
 	int oldhp_;

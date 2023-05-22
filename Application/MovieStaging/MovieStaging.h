@@ -23,6 +23,5 @@ public:
 private:
 	float actiontimer_ = 0.f;
 	int moviesequence_ = MovieSequence::kTurnAround;
-
 };
 

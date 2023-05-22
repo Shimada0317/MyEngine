@@ -240,7 +240,9 @@
     <ClCompile Include="Application\Enemy\EnemyPop\EnemyPop.cpp">
       <Filter>AllGame\Application\Enemy\EnemyPop</Filter>
     </ClCompile>
-    <ClCompile Include="Application\MovieStaging\MovieStaging.cpp" />
+    <ClCompile Include="Application\MovieStaging\MovieStaging.cpp">
+      <Filter>AllGame\Application\MovieStaging</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -426,7 +428,9 @@
     <ClInclude Include="Application\Enemy\EnemyPop\EnemyPop.h">
       <Filter>AllGame\Application\Enemy\EnemyPop</Filter>
     </ClInclude>
-    <ClInclude Include="Application\MovieStaging\MovieStaging.h" />
+    <ClInclude Include="Application\MovieStaging\MovieStaging.h">
+      <Filter>AllGame\Application\MovieStaging</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

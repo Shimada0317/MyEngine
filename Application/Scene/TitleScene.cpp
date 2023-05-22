@@ -26,13 +26,10 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	titlecamera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(titlecamera_.get());
 	//ライトの生成
-	light_ = make_unique<Light>();
-	light_ = Light::Create();
 	lightgroupe_ = make_unique<LightGroup>();
 	lightgroupe_ = LightGroup::Create();
 	//ライトのセット
 	Object3d::SetLightGroup(lightgroupe_.get());
-	Object3d::SetLight(light_.get());
 	//スプライトの生成
 	title_.reset(Sprite::SpriteCreate(Name::kTitle, { 1.0f,1.0f }));
 	cursor_.reset(Sprite::SpriteCreate(Name::kReticle, reticlepos_, spritecol_, anchorpoint_));
@@ -248,10 +245,7 @@ void TitleScene::FadeOutAndSceneChange()
 	const float kSubColor = 0.01f;
 	//救援ヘリを読んだ後
 	if (fadeoutflag_) {
-		postefectcolor_.x -= kSubColor;
-		postefectcolor_.y -= kSubColor;
-		postefectcolor_.z -= kSubColor;
-		postefectcolor_.w -= kSubColor;
+		Action::GetInstance()->ColorDown(postefectcolor_, kSubColor);
 		if (postefectcolor_.w <= 0) {
 			//シーン切り替え
 			BaseScene* scene_ = new GameScene(sceneManager_);
@@ -400,7 +394,6 @@ void TitleScene::Finalize()
 	signalbefore_.reset();
 	cursor_.reset();
 	lightgroupe_.reset();
-	light_.reset();
 	bgm_.reset();
 	clickse_.reset();
 	common_background_.reset();

@@ -223,6 +223,23 @@ void Action::LoopTimer(float& timer, float addvalue, float duration_)
 	}
 }
 
+void Action::ColorDown(XMFLOAT4& color, float downval)
+{
+	color.x -= downval;
+	color.y -= downval;
+	color.z -= downval;
+	color.w -= downval;
+}
+
+void Action::ColorUp(XMFLOAT4& color, float upval)
+{
+	color.x += upval;
+	color.y += upval;
+	color.z += upval;
+	color.w += upval;
+}
+
+
 
 
 

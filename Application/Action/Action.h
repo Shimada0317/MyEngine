@@ -107,6 +107,10 @@ public:
 
 	void LoopTimer(float& timer,float addvalue,float duration_);
 
+	void ColorDown(XMFLOAT4& color,float downval);
+
+	void ColorUp(XMFLOAT4& color,float upval);
+
 private:
 	float shakelimittime_ = 0.f;
 	float shakingscreenvalue_ = 0.f;

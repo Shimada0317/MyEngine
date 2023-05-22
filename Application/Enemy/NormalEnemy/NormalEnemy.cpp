@@ -158,7 +158,6 @@ void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playe
 
 	Death();
 
-
 	if (RandomFlag == false) {
 		TimerLimit = Action::GetInstance()->GetRangRand(AttackTimeMin, AttackTimeMax);
 		RandomFlag = true;

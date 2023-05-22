@@ -3,11 +3,12 @@
 #include"ObjParticle.h"
 #include"DirectXCommon.h"
 #include"Sprite.h"
-#include"Camera.h"
 #include"ParticleManager.h"
 #include<DirectXMath.h>
 #include<memory>
 #include<list>
+
+class Camera;
 
 class NormalEnemy
 {
@@ -20,7 +21,6 @@ private:
 public:
 	//デストラクタ
 	~NormalEnemy();
-
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -29,43 +29,34 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Step">移動時に横移動するか</param>
 	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& allPos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement= false);
-
 	/// <summary>
 	/// ステータスをセット
 	/// </summary>
 	void StatusSet();
-
 	/// <summary>
 	/// Obj等のUpdateはこの中で
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
 	void AllUpdate();
-
 	/// <summary>
 	/// ロボットの更新処理
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
 	void Update(const XMFLOAT2& player2Dpos, int& playerhp,bool& playerbulletshot);
-
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
-
-
 	/// <summary>
 	/// 変形
 	/// </summary>
 	void Defomation();
-
 	/// <summary>
 	/// プレイヤー追尾モード
 	/// </summary>
 	void TrackPlayerMode();
-
-
 	/// <summary>
 	/// 攻撃モード
 	/// </summary>
@@ -101,7 +92,6 @@ public://Getter Setter
 	/// </summary>
 	/// <param name="TrackPoint">追尾先</param>
 	void SetTrackPoint(const XMVECTOR& trackpoint) { this->OldTrackPoint = trackpoint; }
-
 	/// <summary>
 	/// 追尾先のゲッター
 	/// </summary>
@@ -109,19 +99,16 @@ public://Getter Setter
 	const XMVECTOR& GetTrackPos() { return OldTrackPoint; }
 
 	const XMVECTOR& CheckTrackPoint() { return TrackPoint; }
-
 	/// <summary>
 	/// 中心のワールド座標のゲッター
 	/// </summary>
 	/// <returns></returns>
 	const XMVECTOR& GetPosition() { return CenterWorldPos; }
-
 	/// <summary>
 	/// 2D座標のゲッター
 	/// </summary>
 	/// <returns></returns>
 	const XMFLOAT2& Get2DPosition() { return RockOnPos; }
-
 	/// <summary>
 	/// 倒されているか
 	/// </summary>

@@ -21,9 +21,8 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//ポストエフェクトの生成
 	posteffect_ = make_unique<PostEffect>();
 	posteffect_->Initialize();
-	posteffect_->Update(postcol_);
+	posteffect_->Update(postefectcolor_);
 	//ライトの生成
-	light_ = Light::Create();
 	lightgroupe_ = LightGroup::Create();
 	for (int i = 0; i < 3; i++) {
 		searchlightdir_[i] = { 0,-10,0 };
@@ -41,7 +40,6 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightgroupe_->SetSpotLightActive(3, true);
 	lightgroupe_->SetSpotLightActive(4, true);
 	//ライトセット
-	Object3d::SetLight(light_.get());
 	Object3d::SetLightGroup(lightgroupe_.get());
 	//カメラの生成
 	camera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
@@ -182,9 +180,8 @@ void GameScene::Update()
 		AllUpdata();
 		Action::GetInstance()->ScreenShake(shake_addvalue_, 0.1f, eyerot_, shakingstartflag_);
 	}
-
 	camera_->RecalculationMatrix();
-	posteffect_->Update(postcol_);
+	posteffect_->Update(postefectcolor_);
 	lightgroupe_->Update();
 }
 //始まりの演出の処理
@@ -254,7 +251,7 @@ void GameScene::GameOverProcess()
 	const float kRadX = 100;
 	const float kRadY = 50;
 	const XMFLOAT4 kColorRed{ 1.f,0.f,0.f,1.f };
-	postcol_.x = 0;
+	postefectcolor_.x = 0;
 	Collision::GetInstance()->ToggleFlagInClick(reticleposition_, yesposition_, kRadX, kRadY, yescursorinflag_);
 	Collision::GetInstance()->ToggleFlagInClick(reticleposition_, noposition_, kRadX, kRadY, nocursorinflag_);
 	//Yesの文字にカーソルを合わせたとき
@@ -298,14 +295,12 @@ void GameScene::FadeIn()
 	//ゲームが始まる前
 	if (gamestate_ != GamePhase::NONE) { return; }
 	const float kAddPosetEfectColor = 0.05f;
-	postcol_.x += kAddPosetEfectColor;
-	postcol_.y += kAddPosetEfectColor;
-	postcol_.z += kAddPosetEfectColor;
-
-	if (postcol_.x >= 0.0f) {
-		postcol_.x = 0.0f;
-		postcol_.y = 0.0f;
-		postcol_.z = 0.0f;
+	Action::GetInstance()->ColorUp(postefectcolor_, kAddPosetEfectColor);
+	if (postefectcolor_.x >= 0.0f) {
+		postefectcolor_.x = 0.0f;
+		postefectcolor_.y = 0.0f;
+		postefectcolor_.z = 0.0f;
+		postefectcolor_.w = 1.f;
 		gamestate_ = START;
 	}
 
@@ -377,23 +372,23 @@ void GameScene::DamageProcess()
 		}
 		//画面を赤くするフラグが立った時
 		if (posteffectonflag_ == true) {
-			postcol_.x = 0.7f;
-			if (postcol_.x >= 0.7f) {
+			postefectcolor_.x = 0.7f;
+			if (postefectcolor_.x >= 0.7f) {
 				posteffectonflag_ = false;
 			}
 		}
 		//画面を赤くするフラグが立っていない時
 		if (posteffectonflag_ == false) {
-			postcol_.x -= 0.05f;
-			if (postcol_.x <= 0) {
-				postcol_.x = 0;
+			postefectcolor_.x -= 0.05f;
+			if (postefectcolor_.x <= 0) {
+				postefectcolor_.x = 0;
 			}
 		}
 	}
 	//体力が0になったら
 	else if (playerhp_ <= 0) {
-		postcol_.x += 0.01f;
-		if (postcol_.x >= 2.0f) {
+		postefectcolor_.x += 0.01f;
+		if (postefectcolor_.x >= 2.0f) {
 			gamestate_ = CONTINUE;
 		}
 	}
