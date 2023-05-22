@@ -59,7 +59,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\SpriteManager;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)GameEngine\Light\SpotLight;$(ProjectDir)GameEngine\HelperMath;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Actor;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene;$(ProjectDir)External\imgui;$(ProjectDir)Application\UI\BulletUI;$(ProjectDir)Application\Background\CommonBackground;$(ProjectDir)Application\Background\GameBackground;$(ProjectDir)Application\UI\PlayerUI;$(ProjectDir)Application\HUD\Continue;$(ProjectDir)Application\HUD\Movie;$(ProjectDir)Application\Enemy\NormalEnemy;$(ProjectDir)Application\Enemy\BossEnemy;$(ProjectDir)Application\Enemy\ThrowEnemy;$(ProjectDir)Application\Enemy\EnemyPop;$(ProjectDir)Application\MovieStaging</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(ProjectDir)GameEngine;$(ProjectDir)GameEngine\3d;$(ProjectDir)GameEngine\2d\SpriteManager;$(ProjectDir)GameEngine\2d\Sprite;$(ProjectDir)GameEngine\2d\Texture;$(ProjectDir)GameEngine\Audio;$(ProjectDir)GameEngine\Camera;$(ProjectDir)GameEngine\DebugText;$(ProjectDir)GameEngine\DirectXCommon;$(ProjectDir)GameEngine\Framework;$(ProjectDir)GameEngine\Input;$(ProjectDir)GameEngine\Input\Mouse;$(ProjectDir)GameEngine\Input\Contoroller;$(ProjectDir)GameEngine\Input\Key;$(ProjectDir)GameEngine\Light;$(ProjectDir)GameEngine\ParticleManager;$(ProjectDir)GameEngine\PostEffect;$(ProjectDir)GameEngine\WinApp;$(ProjectDir)GameEngine\Light\SpotLight;$(ProjectDir)GameEngine\HelperMath;$(ProjectDir)Application;$(ProjectDir)Application\Action;$(ProjectDir)Application\Actor;$(ProjectDir)Application\Bullet;$(ProjectDir)Application\Collision;$(ProjectDir)Application\Enemy;$(ProjectDir)Application\Particle;$(ProjectDir)Application\Player;$(ProjectDir)Application\Scene;$(ProjectDir)External\imgui;$(ProjectDir)Application\UI\BulletUI;$(ProjectDir)Application\Background\CommonBackground;$(ProjectDir)Application\Background\GameBackground;$(ProjectDir)Application\UI\PlayerUI;$(ProjectDir)Application\HUD\Continue;$(ProjectDir)Application\HUD\Movie;$(ProjectDir)Application\Enemy\NormalEnemy;$(ProjectDir)Application\Enemy\BossEnemy;$(ProjectDir)Application\Enemy\ThrowEnemy;$(ProjectDir)Application\Enemy\EnemyPop;$(ProjectDir)Application\MovieStaging;$(ProjectDir)Application\LightControl</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <TreatWarningAsError>true</TreatWarningAsError>
       <DisableSpecificWarnings>26812;26495;%(DisableSpecificWarnings)</DisableSpecificWarnings>
@@ -103,6 +103,7 @@
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp" />
     <ClCompile Include="Application\HUD\Continue\Continue.cpp" />
     <ClCompile Include="Application\HUD\Movie\Movie.cpp" />
+    <ClCompile Include="Application\LightControl\LightControl.cpp" />
     <ClCompile Include="Application\MovieStaging\MovieStaging.cpp" />
     <ClCompile Include="Application\Particle\ObjParticle.cpp" />
     <ClCompile Include="Application\Scene\BaseClassIUDF.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h" />
     <ClInclude Include="Application\HUD\Continue\Continue.h" />
     <ClInclude Include="Application\HUD\Movie\Movie.h" />
+    <ClInclude Include="Application\LightControl\LightControl.h" />
     <ClInclude Include="Application\MovieStaging\MovieStaging.h" />
     <ClInclude Include="Application\Particle\ObjParticle.h" />
     <ClInclude Include="Application\Scene\BaseClassIUDF.h" />

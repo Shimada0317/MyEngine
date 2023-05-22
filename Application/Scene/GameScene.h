@@ -13,6 +13,7 @@
 #include"TitleScene.h"
 #include"RailCamera.h"
 #include"CommonBackground.h"
+#include"LightControl.h"
 
 
 class GameScene :public BaseScene
@@ -173,6 +174,7 @@ private://メンバ変数
 	unique_ptr <PostEffect> posteffect_ = nullptr;
 	unique_ptr<Light> light_ = nullptr;
 	unique_ptr<LightGroup> lightgroupe_ = nullptr;
+	unique_ptr<LightControl> lightcontrol_ = nullptr;
 	unique_ptr<Camera> camera_ = nullptr;
 	unique_ptr<RailCamera> railcamera_ = nullptr;
 	unique_ptr<MovieStaging> moviestaging_ = nullptr;
@@ -196,34 +198,6 @@ private://メンバ変数
 	bool posteffectonflag_ = false;
 	bool damagehitflag_ = false;
 	XMFLOAT4 damageefectcolor_ = { 1.f,1.f,1.f,1.f };
-	//フィールドライト用の変数
-	XMFLOAT3 fieldspotlightdir_ = { 0,-10,0 };
-	XMFLOAT3 fieldspotlightpos_ = { 0,505,50 };
-	XMFLOAT3 fieldspotlightcolor_ = { 0.9f,0.5f,0.f };
-	XMFLOAT3 fieldspotlightatten_ = { 0.f,0.f,0.f };
-	XMFLOAT2 fieldspotlightfactorangle_ = { 20.0f,30.0f };
-	//プレイヤー用のライトの変数
-	XMFLOAT3 playerspotlightdir_ = { 0,-20,0 };
-	XMFLOAT3 playerspotlightpos_ = { 0,35,0 };
-	XMFLOAT3 playerspotlightcolor_ = { 1.f,1.f,1.f };
-	XMFLOAT3 playerspotlightatten_ = { 0.f,0.f,0.f };
-	XMFLOAT2 playerspotlightfactorangle_ = { 20.0f,30.0f };
-	//ステージ内を動いているライトの変数
-	XMFLOAT3 searchlightdir_[3];
-	XMFLOAT3 searchlightpos_[3];
-	XMFLOAT3 searchlightcolor_[3];
-	XMFLOAT3 searchlightatten_ = { 0.f,0.f,0.f };
-	XMFLOAT2 searchlightfactorangle_ = { 20.0f,30.0f };
-
-	bool spotlightpositionchange_ = false;
-	float time_ = -1.0f;
-	float value_ = 0.f;
-	bool easing_ = true;
-	float easingwaittimer_ = 0.f;
-	bool easingchange_ = false;
-	float colortime_ = 1.0f;
-	float colortimered_ = 0.0f;
-	float lightdireasingtime_ = 0.f;
 
 	XMFLOAT2 reticleposition_{ 0.f,0.f };
 	XMFLOAT4 reticlecolor_{ 1.f,1.f,1.f,1.f };
@@ -250,8 +224,5 @@ private://メンバ変数
 	//ステータス
 	int gamestate_ = GamePhase::NONE;
 	int movie_sequence_ = MovieSequence::kAction;
-
-	float dir_timer_X[3];
-	float dir_timer_Z[3];
 };
 

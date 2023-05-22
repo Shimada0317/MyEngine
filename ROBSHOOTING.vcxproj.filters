@@ -243,6 +243,9 @@
     <ClCompile Include="Application\MovieStaging\MovieStaging.cpp">
       <Filter>AllGame\Application\MovieStaging</Filter>
     </ClCompile>
+    <ClCompile Include="Application\LightControl\LightControl.cpp">
+      <Filter>AllGame\Application\LightControl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -430,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="Application\MovieStaging\MovieStaging.h">
       <Filter>AllGame\Application\MovieStaging</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\LightControl\LightControl.h">
+      <Filter>AllGame\Application\LightControl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -689,6 +695,9 @@
     </Filter>
     <Filter Include="AllGame\Application\MovieStaging">
       <UniqueIdentifier>{c1e598e9-3e2d-40b7-8c5a-2a68f0de6a52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\LightControl">
+      <UniqueIdentifier>{94f7290a-4056-4169-b2b3-94079bad45d2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
