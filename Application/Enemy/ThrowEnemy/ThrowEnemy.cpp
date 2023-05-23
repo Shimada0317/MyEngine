@@ -19,39 +19,39 @@ ThrowEnemy::~ThrowEnemy()
 //初期化処理
 void ThrowEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpos)
 {
-	HaveCamera = camera;
+	bringupcamera_ = camera;
 	//オブジェクトの生成
 	enemy_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kThrowEnemy));
 	propeller_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kEnemyPropeller));
-	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
+	center_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
 	bullet_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kSphere));
 	//スプライトの生成
-	RockOn.reset(Sprite::SpriteCreate(Name::kEnemyMarker, RockOnPos, RockOnCol, RockOnAnchorPoint));
-	rockon_bullet_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockon_bulletpos_, RockOnCol, RockOnAnchorPoint));
+	rockon_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockon_pos_, rockon_color_, anchorpoint_));
+	rockon_bullet_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockon_bulletpos_, rockon_color_, anchorpoint_));
 	
-	PartGreen = ParticleManager::Create(HaveCamera);
-	PartRed = ParticleManager::Create(HaveCamera);
+	partgreen_ = ParticleManager::Create(bringupcamera_);
+	partred_ = ParticleManager::Create(bringupcamera_);
 	floating_pos_ = Action::GetInstance()->GetRangRand(6.f, 7.f);
 	body_rot_ = allrot;
 	body_rot_.x -= 10;
 	center_pos_ = allpos;
-	CenterMat = Center->GetMatrix();
-	CenterWorldPos = XMVector3TransformNormal(center_pos_, CenterMat);
-	LandingPoint = trackpos;
-	OldHp = Hp;
-	Center->SetPosition(CenterWorldPos);
+	center_mat_ = center_->GetMatrix();
+	center_worldpos_ = XMVector3TransformNormal(center_pos_, center_mat_);
+	landing_point_ = trackpos;
+	oldhp_ = hp_;
+	center_->SetPosition(center_worldpos_);
 }
 //ステータスのセット
 void ThrowEnemy::StatusSet()
 {
 
-	Center->SetScale({ 1.f,1.f,1.f });
-	XMMatrixIsIdentity(CenterMat);
-	CenterMat = Center->GetMatrix();
-	CenterWorldPos = XMVector3TransformNormal(center_pos_, CenterMat);
-	Center->SetPosition(CenterWorldPos);
+	center_->SetScale({ 1.f,1.f,1.f });
+	XMMatrixIsIdentity(center_mat_);
+	center_mat_ = center_->GetMatrix();
+	center_worldpos_ = XMVector3TransformNormal(center_pos_, center_mat_);
+	center_->SetPosition(center_worldpos_);
 
-	body_pos_ = propeller_pos_ = CenterWorldPos;
+	body_pos_ = propeller_pos_ = center_worldpos_;
 
 	enemy_->SetPosition(body_pos_);
 	enemy_->SetRotation(body_rot_);
@@ -66,8 +66,8 @@ void ThrowEnemy::StatusSet()
 	propeller_->SetRotation(propeller_rot_);
 	propeller_->SetScale(propeller_scl_);
 
-	RockOnPos = WorldtoScreen(body_pos_);
-	RockOn->SetPosition(RockOnPos);
+	rockon_pos_ = WorldtoScreen(body_pos_);
+	rockon_->SetPosition(rockon_pos_);
 	rockon_bulletpos_ = WorldtoScreen(bullet_pos_);
 	rockon_bullet_->SetPosition(rockon_bulletpos_);
 }
@@ -76,11 +76,11 @@ void ThrowEnemy::AllUpdate()
 {
 	enemy_->Update();
 	propeller_->Update();
-	Center->Update();
+	center_->Update();
 	bullet_->Update();
 
-	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
-	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
+	partred_->Update({ 1.0f,0.0f,0.0f,0.0f });
+	partgreen_->Update({ 0.0f,0.5f,0,0.0f });
 	for (unique_ptr<ObjParticle>& patrticle : obj_particle_) {
 		patrticle->Update();
 	}
@@ -102,9 +102,9 @@ void ThrowEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& player
 	//死亡処理
 	DeathProcess();
 	if (Input::GetInstance()->PushKey(DIK_O)) {
-		Hp = 0;
+		hp_ = 0;
 	}
-	if (Hp <= 0) {
+	if (hp_ <= 0) {
 		state_ = State::DEATH;
 	}
 	//ステータスのセット
@@ -119,7 +119,7 @@ void ThrowEnemy::AppearanceProcess()
 	//落下してくる
 	center_pos_.m128_f32[1] -= FallSpeed;
 	if (center_pos_.m128_f32[1] <= floating_pos_) {
-		bullet_pos_ = CenterWorldPos;
+		bullet_pos_ = center_worldpos_;
 		bullet_pos_.m128_f32[1] =bullet_pos_.m128_f32[1] - 1.f;
 		old_pos_ = bullet_pos_;
 		state_ = State::WAIT;
@@ -151,32 +151,32 @@ void ThrowEnemy::DamageProcess(const XMFLOAT2& player2Dpos, bool& playerbulletsh
 	float vy = 0;
 	float vz = 0;
 
-	vx = (bullet_pos_.m128_f32[0] - LandingPoint.m128_f32[0]);
-	vy = (bullet_pos_.m128_f32[1] - LandingPoint.m128_f32[1] - 2);
-	vz = (bullet_pos_.m128_f32[2] - LandingPoint.m128_f32[2]);
+	vx = (bullet_pos_.m128_f32[0] - landing_point_.m128_f32[0]);
+	vy = (bullet_pos_.m128_f32[1] - landing_point_.m128_f32[1] - 2);
+	vz = (bullet_pos_.m128_f32[2] - landing_point_.m128_f32[2]);
 
 	float v2x = powf(vx, 2.f);
 	float v2y = powf(vy, 2.f);
 	float v2z = powf(vz, 2.f);
 
-	Length = sqrtf(v2x + v2y + v2z);
-	Distance = Length;
+	length_ = sqrtf(v2x + v2y + v2z);
+	distance_ = length_;
 
 	//当たり判定
-	if (playerbulletshot == true && Hp > 0) {
-		if (player2Dpos.x - Distance * 2.f < RockOnPos.x && player2Dpos.x + Distance * 2.f > RockOnPos.x &&
-			player2Dpos.y - Distance * 2.f < RockOnPos.y && player2Dpos.y + Distance * 2.f > RockOnPos.y) {
-			Hp -= BodyDamage;
+	if (playerbulletshot == true && hp_ > 0) {
+		if (player2Dpos.x - distance_ * 2.f < rockon_pos_.x && player2Dpos.x + distance_ * 2.f > rockon_pos_.x &&
+			player2Dpos.y - distance_ * 2.f < rockon_pos_.y && player2Dpos.y + distance_ * 2.f > rockon_pos_.y) {
+			hp_ -= BodyDamage;
 			playerbulletshot = false;
 		}
 	}
-	if (Hp >= OldHp) { return; }
+	if (hp_ >= oldhp_) { return; }
 	for (int i = 0; i < 5; i++) {
 		std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 		newparticle->Initialize(1, body_pos_, { 0.3f,0.3f,0.3f }, { body_rot_ });
 		obj_particle_.push_back(std::move(newparticle));
 	}
-	OldHp = Hp;
+	oldhp_ = hp_;
 }
 //死亡処理
 void ThrowEnemy::DeathProcess()
@@ -188,7 +188,7 @@ void ThrowEnemy::DeathProcess()
 	if (center_pos_.m128_f32[1] >= 0) {
 		center_pos_.m128_f32[1] -= fallspeed;
 		if (center_pos_.m128_f32[1] <= 0) {
-			DeadFlag = true;
+			dead_flag_ = true;
 		}
 	}
 	if (particle_flag_ != true) { return; }
@@ -197,21 +197,21 @@ void ThrowEnemy::DeathProcess()
 //3Dから2Dに変換
 XMFLOAT2 ThrowEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 {
-	Center->SetRotation(CenterRot);
-	CenterMat = Center->GetMatrix();
+	center_->SetRotation(center_rot_);
+	center_mat_ = center_->GetMatrix();
 	const float kDistancePlayerTo3DReticle = 50.0f;
-	offset = { 0.0,0.0,1.0f };
-	offset = XMVector3TransformNormal(offset, CenterMat);
-	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
+	offset_ = { 0.0,0.0,1.0f };
+	offset_ = XMVector3TransformNormal(offset_, center_mat_);
+	offset_ = XMVector3Normalize(offset_) * kDistancePlayerTo3DReticle;
 
 	XMVECTOR PositionRet = set3Dposition;
 
-	HelperMath::GetInstance()->ChangeViewPort(MatViewPort, offset);
+	HelperMath::GetInstance()->ChangeViewPort(matviewport_, offset_);
 
-	XMMATRIX MatVP = MatViewPort;
+	XMMATRIX MatVP = matviewport_;
 
-	XMMATRIX View = HaveCamera->GetViewMatrix();
-	XMMATRIX Pro = HaveCamera->GetProjectionMatrix();
+	XMMATRIX View = bringupcamera_->GetViewMatrix();
+	XMMATRIX Pro = bringupcamera_->GetProjectionMatrix();
 
 	XMMATRIX MatViewProjectionViewport = View * Pro * MatVP;
 
@@ -239,12 +239,12 @@ void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 	Object3d::PostDraw();
 
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
-	PartGreen->Draw();
-	PartRed->Draw();
+	partgreen_->Draw();
+	partred_->Draw();
 	ParticleManager::PostDraw();
 	//スプライト
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	RockOn->Draw();
+	rockon_->Draw();
 	rockon_bullet_->Draw();
 	Sprite::PostDraw();
 }
@@ -267,9 +267,9 @@ void ThrowEnemy::ThrowAttack(int& playerhp)
 	float vz = 0;
 	float bullet_length = 0;
 
-	vx = (bullet_pos_.m128_f32[0] - LandingPoint.m128_f32[0]);
-	vy = (bullet_pos_.m128_f32[1] - LandingPoint.m128_f32[1]-2);
-	vz = (bullet_pos_.m128_f32[2] - LandingPoint.m128_f32[2]);
+	vx = (bullet_pos_.m128_f32[0] - landing_point_.m128_f32[0]);
+	vy = (bullet_pos_.m128_f32[1] - landing_point_.m128_f32[1]-2);
+	vz = (bullet_pos_.m128_f32[2] - landing_point_.m128_f32[2]);
 
 	float v2x = powf(vx, 2.f);
 	float v2y = powf(vy, 2.f);
@@ -304,9 +304,9 @@ void ThrowEnemy::ParticleEfect()
 {
 	for (int i = 0; i < 10; i++) {
 		XMFLOAT3 pos;
-		pos.x = CenterWorldPos.m128_f32[0];
-		pos.y = CenterWorldPos.m128_f32[1]-1.f;
-		pos.z = CenterWorldPos.m128_f32[2];
+		pos.x = center_worldpos_.m128_f32[0];
+		pos.y = center_worldpos_.m128_f32[1]-1.f;
+		pos.z = center_worldpos_.m128_f32[2];
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};
@@ -317,8 +317,8 @@ void ThrowEnemy::ParticleEfect()
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		PartRed->Add(30, pos, vel, acc, 1.0f, 0.0f, 0.0f);
-		PartGreen->Add(30, pos, vel, acc, 0.7f, 0.0f, 0.0f);
+		partred_->Add(30, pos, vel, acc, 1.0f, 0.0f, 0.0f);
+		partgreen_->Add(30, pos, vel, acc, 0.7f, 0.0f, 0.0f);
 	}
 	//particle_flag_ = false;
 }

@@ -28,7 +28,7 @@ public:
 	/// <param name="allPos">座標</param>
 	/// <param name="came">カメラ</param>
 	/// <param name="Step">移動時に横移動するか</param>
-	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& allPos, Camera* camera, const XMVECTOR& trackpoint, const bool& movement= false);
+	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& allPos, Camera* camera, const XMVECTOR& trackpoint);
 	/// <summary>
 	/// ステータスをセット
 	/// </summary>
@@ -91,174 +91,144 @@ public://Getter Setter
 	/// 追尾先のセッター
 	/// </summary>
 	/// <param name="TrackPoint">追尾先</param>
-	void SetTrackPoint(const XMVECTOR& trackpoint) { this->OldTrackPoint = trackpoint; }
+	void SetTrackPoint(const XMVECTOR& trackpoint) { this->oldtrack_point_ = trackpoint; }
 	/// <summary>
 	/// 追尾先のゲッター
 	/// </summary>
 	/// <returns></returns>
-	const XMVECTOR& GetTrackPos() { return OldTrackPoint; }
+	const XMVECTOR& GetTrackPos() { return oldtrack_point_; }
 
-	const XMVECTOR& CheckTrackPoint() { return TrackPoint; }
+	const XMVECTOR& CheckTrackPoint() { return track_point_; }
 	/// <summary>
 	/// 中心のワールド座標のゲッター
 	/// </summary>
 	/// <returns></returns>
-	const XMVECTOR& GetPosition() { return CenterWorldPos; }
+	const XMVECTOR& GetPosition() { return center_worldpos_; }
 	/// <summary>
 	/// 2D座標のゲッター
 	/// </summary>
 	/// <returns></returns>
-	const XMFLOAT2& Get2DPosition() { return RockOnPos; }
+	const XMFLOAT2& Get2DPosition() { return rockon_pos_; }
 	/// <summary>
 	/// 倒されているか
 	/// </summary>
 	/// <returns></returns>
-	bool IsDead() const { return DeadFlag; }
+	bool IsDead() const { return dead_flag_; }
 
-	bool GetArive() { return RobotAriveFlag; }
+	bool GetArive() { return robotarive_flag_; }
 
 private:
 	//Obj
 	//頭
-	std::unique_ptr<Object3d> HeadPart;
+	std::unique_ptr<Object3d> headpart_;
 	//両腕
-	std::unique_ptr<Object3d> ArmsPart;
+	std::unique_ptr<Object3d> armspart_;
 	//体
-	std::unique_ptr<Object3d> BodyPart;
+	std::unique_ptr<Object3d> bodypart_;
 	//影
-	std::unique_ptr<Object3d> Shadow;
+	std::unique_ptr<Object3d> shadow_;
 	//中心
-	std::unique_ptr<Object3d> Center;
+	std::unique_ptr<Object3d> center_;
 
 	//Objパーティクル
-	std::list<std::unique_ptr<ObjParticle>>Obj_Particle;
+	std::list<std::unique_ptr<ObjParticle>>obj_particle_;
 
 	//スプライト
 	//体
-	std::unique_ptr<Sprite> RockOn;
+	std::unique_ptr<Sprite> rockon_;
 	//頭
-	std::unique_ptr<Sprite> RockOnHead;
+	std::unique_ptr<Sprite> rockonhead_;
 
 	//ダメージを食らったときのエフェクト
-	ParticleManager* PartGreen = nullptr;
-	ParticleManager* PartRed = nullptr;
+	ParticleManager* partgreen_ = nullptr;
+	ParticleManager* partred_ = nullptr;
 
 	//その他
 	//サウンドエフェクト
-	Audio* ClushSe;
+	Audio* clushse_;
 	//カメラ
-	Camera* BringUpCamera;
+	Camera* bringupcamera_;
 
 	//敵の中心部分のステータス
-	XMVECTOR CenterWorldPos = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 CenterRot = { 0.0f,0.0f,0.0f };
-	XMMATRIX CenterMat;
+	XMVECTOR center_worldpos_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 center_rot_ = { 0.0f,0.0f,0.0f };
+	XMMATRIX center_mat_;
 
 	//敵が持っているステータス
-	int Hp = 50;
-	int OldHp = 0;
-	bool RobotAriveFlag = false;
-	XMVECTOR TrackPoint = { 0,0,0 };
-	XMVECTOR OldTrackPoint = { 0,0,0 };
-	XMVECTOR FakeTrackPoint = { 0,0,0 };
-
+	int hp_ = 50;
+	int oldhp_ = 0;
+	bool robotarive_flag_ = false;
+	XMVECTOR track_point_ = { 0,0,0 };
+	XMVECTOR oldtrack_point_ = { 0,0,0 };
+	XMVECTOR faketrack_point_ = { 0,0,0 };
 	//パーツごとのスケール
-	XMFLOAT3 HeadPartScl = { 0.3f,0.3f,0.3f };
-	XMFLOAT3 BodyPartScl = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 ArmsPartScl = { 0.2f,0.2f,0.2f };
-
+	XMFLOAT3 headpart_scl_ = { 0.3f,0.3f,0.3f };
+	XMFLOAT3 bodypart_scl_ = { 1.0f,1.0f,1.0f };
+	XMFLOAT3 armspart_scl_ = { 0.2f,0.2f,0.2f };
 	//パーツごとのポジション
-	XMVECTOR HeadPartPos = { 0.0f,0.0f,0.0f };
-	XMVECTOR BodyPartPos = { 0.0f,0.0f,0.0f };
-	XMVECTOR ArmsPartPos = { 0.0f,0.0f,0.0f };
-
+	XMVECTOR headpart_pos_ = { 0.0f,0.0f,0.0f };
+	XMVECTOR bodypart_pos_ = { 0.0f,0.0f,0.0f };
+	XMVECTOR armspart_pos_ = { 0.0f,0.0f,0.0f };
 	//パーツごとの色
-	XMFLOAT4 ArmsPartColor = { 1.0f,1.0f,1.0f,1.0f };
-	XMFLOAT4 HeadPartColor = { 1.0f,1.0f,1.0f,1.0f };
-	XMFLOAT4 BodyPartColor = { 1.0f,1.0f,1.0f,1.0f };
-
+	XMFLOAT4 armspart_color_ = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT4 headpart_color_ = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT4 bodypart_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	//パーツごとの回転
-	XMFLOAT3 ArmsPartRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 HeadPartRot = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 BodyPartRot = { 0.0f,0.0f,0.0f };
-
+	XMFLOAT3 armspart_rot_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 headpart_rot_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 bodypart_rot_ = { 0.0f,0.0f,0.0f };
 	//パーツごとに渡すステータス
-	XMVECTOR AllPos = { 0.0f,0.0f,-10.0f };
-	XMFLOAT3 AllRot;
-
+	XMVECTOR all_pos_ = { 0.0f,0.0f,-10.0f };
+	XMFLOAT3 all_rot_;
 	//影のステータス
-	XMVECTOR ShadowPos = { 0,0,0 };
-	XMFLOAT4 ShadowCol = { 0.0f,0.0f,0.0f,0.1f };
-
+	XMVECTOR shadow_pos_ = { 0,0,0 };
+	XMFLOAT4 shadow_color_ = { 0.0f,0.0f,0.0f,0.1f };
 	//敵が持つ2D系のステータス
-	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
-	XMFLOAT2 RockOnAnchorPoint = { 0.5f,0.5f };
-	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
-	XMFLOAT2 RockOnHeadPos = { 0.0f,0.0f };
-
+	XMFLOAT2 rockon_pos_ = { 0.0f,0.0f };
+	XMFLOAT2 anchorpoint_ = { 0.5f,0.5f };
+	XMFLOAT4 rockon_color_ = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT2 rockonhead_pos_ = { 0.0f,0.0f };
 	//2D座標を持たせる計算で使う変数
-	XMVECTOR offset;
-	XMMATRIX MatViewPort;
-
+	XMVECTOR offset_;
+	XMMATRIX matviewport_;
 	//攻撃モードで使用される変数
-	bool AttackFaseFlag = false;
-
+	bool attackfase_flag_ = false;
 	//攻撃の準備時間
-	bool AttackShakeDownFlag = false;
-	float AttackCharge = 0.0f;
-
+	bool attackshakedown_flag_ = false;
+	float attack_charge_ = 0.0f;
 	//移動速度
-	float MoveSpeed = 0.09f;
-
+	float movespeed_ = 0.09f;
 	//プレイヤーと敵の距離
-	float Length = 3.0f;
-	float LengthLimit =	1.5f;
-
-	//待機時のモーション変数
-	float MotionTime = 0.0f;
-	bool MotionChangeFlag = true;
-
-	//サイドステップ
-	float MovementChangeTime = 0.0f;
-	bool ReversalFlag = false;
-	float SideStepSpeed = 0.001f;
-	bool MovementFlag = false;
-
+	float length_ = 3.0f;
+	float limit_length_ =1.5f;
 	//Hpが0以上か
-	bool DeadFlag = false;
-
+	bool dead_flag_ = false;
 	//敵とプレイヤーの距離
-	float OriginDistance;
-	float OriginHeadDistance;
-
-	float Distance = 60.0f;
-	float HeadDistance = 30.0f;
-
+	float origin_distance_;
+	float originhead_distance_;
+	float distance_ = 60.0f;
+	float head_distance_ = 30.0f;
 	//敵のモーション用
-	float PursePositiveRot = 180;
-	float PurseNegativeeRot = 0;
-
+	float purse_positiverot_ = 180;
+	float purse_negativerot_ = 0;
 	//変形用のフラグ
-	bool DefomationFlag = false;
-	float DefomationCount = 0.0f;
-
+	bool defomation_flag_ = false;
+	float defomation_count_ = 0.0f;
 	//振動
-	float Vibration=0.0f;
-	bool VibrationChangeFlag = false;
+	float vibration_=0.0f;
+	bool vibrationchange_flag_ = false;
 
-	XMVECTOR AttackBeforePos = { 0.0f,0.0f,0.0f };
-	float LimitDistance = 0.0f;
+	XMVECTOR attack_beforepos_ = { 0.0f,0.0f,0.0f };
+	float limit_distance_ = 0.0f;
 
-	float AtttackTimer = 0.f;
-	float TimerLimit = 0.f;
-	bool RandomFlag = false;
-	float AttackTimeMin = 20;
-	float AttackTimeMax = 40;
-
-	bool ParticleEfectFlag = true;
+	float atttack_timer_ = 0.f;
+	float timer_limit_ = 0.f;
+	bool random_flag_ = false;
+	float attacktime_min_ = 20;
+	float attacktime_max_ = 40;
+	bool particleefect_flag_ = true;
 	//同じ追従先に別の敵がいるかいないか
-	bool WaitFlag = false;
-
-	bool ObjParticleFlag = false;
+	bool wait_flag_ = false;
+	bool objparticle_flag_ = false;
 };
 

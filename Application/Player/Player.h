@@ -59,7 +59,7 @@ public:
 	/// <param name="came">カメラ</param>
 	/// <param name="Ene2dPos">敵の2D座標</param>
 	/// <param name="pat">現在のフェイズ</param>
-	void Update(Camera* camera, Phase patern,XMFLOAT3 eyerot,int gamestate_,int state_);
+	void Update(Camera* camera, Phase patern,XMFLOAT3 eyerot,int gamestate,int state);
 	/// <summary>
 	/// 待機時の処理
 	/// </summary>
@@ -146,7 +146,7 @@ public:
 	void SetRetPosition(const XMFLOAT2& position) { this->reticle_pos2d_ = position; }
 	void SetRetSiz(const XMFLOAT2& scale) { this->reticle_size_ = scale; }
 	void SetHp(int HP) { this->hp_ = HP; }
-	void SetBulletShot(const bool& BulletShot_F) { this->bullet_shotflag_ = BulletShot_F; }
+	void SetBulletShot(const bool& bulletshotflag) { this->bullet_shotflag_ = bulletshotflag; }
 	void SetBodyWorldPos(const XMVECTOR& worldbodypos) { this->body_worldpos_ = worldbodypos; }
 #pragma endregion
 private:

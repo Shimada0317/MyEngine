@@ -88,28 +88,28 @@ public:
 	/// 倒されているか
 	/// </summary>
 	/// <returns></returns>
-	bool IsDead() const { return DeadFlag; }
+	bool IsDead() const { return dead_flag_; }
 public:
 	//オブジェクト
-	unique_ptr<Object3d>Center;
+	unique_ptr<Object3d>center_;
 	unique_ptr<Object3d>bullet_;
 	unique_ptr<Object3d>enemy_;
 	unique_ptr<Object3d>propeller_;
 	list<unique_ptr<ObjParticle>>obj_particle_;
 	//スプライト
-	unique_ptr<Sprite> RockOn;
+	unique_ptr<Sprite> rockon_;
 	unique_ptr<Sprite> rockon_bullet_;
 	//カメラ
-	Camera* HaveCamera = nullptr;
+	Camera* bringupcamera_;
 	//ダメージを食らったときのエフェクト
-	ParticleManager* PartGreen = nullptr;
-	ParticleManager* PartRed = nullptr;
+	ParticleManager* partgreen_ = nullptr;
+	ParticleManager* partred_ = nullptr;
 	//パーツごとのステータス
 	//敵の中心部分
-	XMVECTOR CenterWorldPos = { 0.f,0.f,0.f };
+	XMVECTOR center_worldpos_ = { 0.f,0.f,0.f };
 	XMVECTOR center_pos_ = { 0.f,0.f,0.f };
-	XMFLOAT3 CenterRot = { 0.f,0.f,0.f };
-	XMMATRIX CenterMat;
+	XMFLOAT3 center_rot_ = { 0.f,0.f,0.f };
+	XMMATRIX center_mat_;
 	//本体のステータス
 	XMVECTOR body_pos_ = {};
 	XMFLOAT3 body_rot_ = {};
@@ -124,37 +124,32 @@ public:
 	XMFLOAT3 bullet_rot_{};
 	XMFLOAT3 bullet_scl_{};
 	//着弾地点
-	XMVECTOR LandingPoint = {};
+	XMVECTOR landing_point_ = {};
 	//2D座標を持たせる計算で使う変数
-	XMVECTOR offset;
-	XMMATRIX MatViewPort;
+	XMVECTOR offset_;
+	XMMATRIX matviewport_;
 	//敵が持つ2D系のステータス
-	XMFLOAT2 RockOnPos = { 0.0f,0.0f };
-	XMFLOAT2 RockOnAnchorPoint = { 0.5f,0.5f };
-	XMFLOAT4 RockOnCol = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT2 rockon_pos_ = { 0.0f,0.0f };
+	XMFLOAT2 anchorpoint_ = { 0.5f,0.5f };
+	XMFLOAT4 rockon_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT2 rockon_bulletpos_ = { 0.0f,0.0f };
-
+	//弾速
 	float bullet_speed_ = 0.05f;
-
-	int Hp = 50;
-	int OldHp = Hp;
-	float Length = 0.f;
+	int hp_ = 50;
+	int oldhp_ = hp_;
+	float length_ = 0.f;
 	//敵とプレイヤーの距離
-	float OriginDistance;
-	float OriginHeadDistance;
-	float OriginBoxDistance;
-	float Distance = 60.0f;
+	float origin_distance_;
+	float originhead_distance_;
+	float originbox_distance_;
+	float distance_ = 60.0f;
 	float bullet_distance_ = 0.f;
 	bool bullet_active_ = true;
-
 	//Hpが0以上か
-	bool DeadFlag = false;
+	bool dead_flag_ = false;
 	bool particle_flag_ = true;
-
 	float floating_pos_ = 0.f;
-
 	float fall_time_ = 0.f;
-
 	int state_ = APPEARANCE;
 };
 

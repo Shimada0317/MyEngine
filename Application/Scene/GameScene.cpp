@@ -27,9 +27,9 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	lightcontrol_->Initialize();
 	//カメラの生成
 	camera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
-
+	//カメラ演出
 	moviestaging_ = make_unique<MovieStaging>();
-	//
+	//敵の生成
 	enemypop_ = make_unique<EnemyPop>();
 	enemypop_->LoadCsv();
 	//スプライトの生成
@@ -267,7 +267,6 @@ void GameScene::FadeIn()
 		postefectcolor_.w = 1.f;
 		gamestate_ = START;
 	}
-
 }
 //ライトの動き[ライトクラス内で動きの地点だけで管理する]
 void GameScene::SpotLightMove()

@@ -100,7 +100,7 @@ void Player::AllUpdate()
 	part_smoke_->Update(kColorSmoke);
 }
 //更新処理
-void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot, int gamestate_, int state_)
+void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot, int gamestate, int state)
 {
 	//マウス操作
 	MouseContoroll();
@@ -110,7 +110,7 @@ void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot, int gamestate
 	StatusSet(camera, eyerot);
 	//全ての更新処理
 	AllUpdate();
-	if (gamestate_ == state_) { return; }
+	if (gamestate == state) { return; }
 	//発砲の処理
 	GunShotProcess(patern);
 	//UI
