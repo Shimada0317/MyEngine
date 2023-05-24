@@ -91,11 +91,11 @@ public:
 	bool IsDead() const { return dead_flag_; }
 public:
 	//オブジェクト
-	unique_ptr<Object3d>center_;
-	unique_ptr<Object3d>bullet_;
-	unique_ptr<Object3d>enemy_;
-	unique_ptr<Object3d>propeller_;
-	list<unique_ptr<ObjParticle>>obj_particle_;
+	unique_ptr<Object3d> center_;
+	unique_ptr<Object3d> bullet_;
+	unique_ptr<Object3d> enemy_;
+	unique_ptr<Object3d> propeller_;
+	list<unique_ptr<ObjParticle>> obj_particle_;
 	//スプライト
 	unique_ptr<Sprite> rockon_;
 	unique_ptr<Sprite> rockon_bullet_;

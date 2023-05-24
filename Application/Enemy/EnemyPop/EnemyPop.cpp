@@ -29,6 +29,7 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 	bool POPSkip = false;
 	bool TRACKSkip = false;
 	bool ARIVESkip = false;
+	bool TYPESkip = false;
 
 	while (getline(enemypopcommands_, line))
 	{
@@ -134,9 +135,10 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 				getline(line_stram, word, ',');
 				int type = (int)std::atof(word.c_str());
 				TYPE = type;
+				TYPESkip = true;
 			}
 
-			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true) {
+			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true&& TYPESkip == true) {
 				if (TYPE == ENEMYPATERN::kNormal) {
 					std::unique_ptr<NormalEnemy> newRobot = std::make_unique<NormalEnemy>();
 					newRobot->Initialize(ROTATION, POSITION, camera, TRACK);

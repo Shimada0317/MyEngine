@@ -217,10 +217,8 @@ private:
 	//U“®
 	float vibration_=0.0f;
 	bool vibrationchange_flag_ = false;
-
 	XMVECTOR attack_beforepos_ = { 0.0f,0.0f,0.0f };
 	float limit_distance_ = 0.0f;
-
 	float atttack_timer_ = 0.f;
 	float timer_limit_ = 0.f;
 	bool random_flag_ = false;

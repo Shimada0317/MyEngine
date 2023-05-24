@@ -77,7 +77,7 @@ void ThrowEnemy::AllUpdate()
 	enemy_->Update();
 	propeller_->Update();
 	center_->Update();
-	bullet_->Update();
+	bullet_->Update({1.f,0.f,0.f,1.f});
 
 	partred_->Update({ 1.0f,0.0f,0.0f,0.0f });
 	partgreen_->Update({ 0.0f,0.5f,0,0.0f });
@@ -244,8 +244,8 @@ void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 	ParticleManager::PostDraw();
 	//スプライト
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	rockon_->Draw();
-	rockon_bullet_->Draw();
+	//rockon_->Draw();
+	//rockon_bullet_->Draw();
 	Sprite::PostDraw();
 }
 //弾の当たり判定

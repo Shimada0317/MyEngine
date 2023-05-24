@@ -425,9 +425,6 @@
     <ClInclude Include="Application\HUD\Movie\Movie.h">
       <Filter>AllGame\Application\HUD\Movie</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h">
-      <Filter>AllGame\Application\Enemy\Normal</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Enemy\EnemyPop\EnemyPop.h">
       <Filter>AllGame\Application\Enemy\EnemyPop</Filter>
     </ClInclude>
@@ -436,6 +433,9 @@
     </ClInclude>
     <ClInclude Include="Application\LightControl\LightControl.h">
       <Filter>AllGame\Application\LightControl</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h">
+      <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

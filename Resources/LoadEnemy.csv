@@ -238,10 +238,10 @@ END,,,
 ,,,
 ヘリに乗る直前,,,
 WAVE,8,,
+ROTATION,0,180,0
 POSITION,55,60,45
 TRACK,55,0,82
 STEP,0,,
 ARIVE,1,,
 TYPE,2,,
-,,,
 END,,,

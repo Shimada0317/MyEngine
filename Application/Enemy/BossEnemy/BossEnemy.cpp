@@ -13,169 +13,168 @@ const XMFLOAT4 AddColor = { 0.1f,0.1f,0.1f,0.0f };
 
 BossEnemy::~BossEnemy()
 {
-	Shadow.reset();
-	Center.reset();
-	HeadPart.reset();
-	BodyPart.reset();
-	ArmsPart.reset();
-
+	shadow_.reset();
+	center_.reset();
+	headpart_.reset();
+	bodypart_.reset();
+	armspart_.reset();
 }
 
 void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint)
 {
-	AllPos = allpos;
+	all_pos_ = allpos;
 
-	GetCamera = camera;
+	bringupcamera_ = camera;
 
-	HeadPartRot = BodyPartRot = ArmsPartRot = allrot;
-	PursePositiveRot += HeadPartRot.y;
-	PurseNegativeeRot += HeadPartRot.y;
+	headpart_rot_ = bodypart_rot_ = armspart_rot_ = allrot;
+	purse_positiverot_ += headpart_rot_.y;
+	purse_negativerot_ += headpart_rot_.y;
 
-	OriginDistance = Distance;
-	OriginHeadDistance = HeadDistance;
+	origin_distance_ = distance_;
+	originhead_distance_ = head_distance_;
 
-	Shadow = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
-	Center = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
-	HeadPart = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
-	BodyPart = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
-	ArmsPart = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
+	shadow_ = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
+	center_ = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
+	headpart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
+	bodypart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
+	armspart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
 
-	PartGreen = ParticleManager::Create(camera);
-	PartRed = ParticleManager::Create(camera);
+	partgreen_ = ParticleManager::Create(camera);
+	partred_ = ParticleManager::Create(camera);
 
-	CenterMat = Center->GetMatrix();
-	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
+	center_mat_ = center_->GetMatrix();
+	center_worldpos_ = XMVector3TransformNormal(all_pos_, center_mat_);
 
-	RockOn.reset(Sprite::SpriteCreate(Name::kEnemyMarker, RockOnPos, RockOnCol, RockOnAnchorPoint));
-	RockOnHead.reset(Sprite::SpriteCreate(Name::kEnemyMarker, RockOnHeadPos, RockOnCol, RockOnAnchorPoint));
+	rockon_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockon_pos_, rockon_color_, anchorpoint_));
+	rockonhead_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockonhead_pos_, rockon_color_, anchorpoint_));
 
-	TrackPoint = OldTrackPoint = trackpoint;
+	track_point_ = oldtrack_point_ = trackpoint;
 
-	Hp = 800;
-	OldHp = Hp;
-	RandomFlag = true;
-	TimerLimit = 8;
-	RobotAriveFlag = true;
-	Center->SetPosition(CenterWorldPos);
+	hp_ = 800;
+	oldhp_ = hp_;
+	random_flag_ = true;
+	timer_limit_ = 8;
+	robotarive_flag_ = true;
+	center_->SetPosition(center_worldpos_);
 
 }
 
 void BossEnemy::StatusSet()
 {
 	////変形前なら
-	if (DefomationFlag == false) {
-		AllPos.m128_f32[1] -= FallSpeed;
+	if (defomation_flag_ == false) {
+		all_pos_.m128_f32[1] -= FallSpeed;
 		//地面に着いたとき
-		if (AllPos.m128_f32[1] <= 2) {
-			AllPos.m128_f32[1] = 2;
-			DefomationFlag = true;
+		if (all_pos_.m128_f32[1] <= 2) {
+			all_pos_.m128_f32[1] = 2;
+			defomation_flag_ = true;
 		}
 	}
 
-	Center->SetScale({ 1.0f,1.0f,1.0f });
-	XMMatrixIsIdentity(CenterMat);
-	CenterMat = Center->GetMatrix();
-	CenterWorldPos = XMVector3TransformNormal(AllPos, CenterMat);
-	Center->SetPosition(CenterWorldPos);
+	center_->SetScale({ 1.0f,1.0f,1.0f });
+	XMMatrixIsIdentity(center_mat_);
+	center_mat_ = center_->GetMatrix();
+	center_worldpos_ = XMVector3TransformNormal(all_pos_, center_mat_);
+	center_->SetPosition(center_worldpos_);
 
-	ShadowPos = CenterWorldPos;
-	ShadowPos.m128_f32[1] = -0.8f;
-	Shadow->SetPosition(ShadowPos);
-	Shadow->SetRotation({ 0.0f,0.0f,0.0f });
-	Shadow->SetScale({ 5.0f,1.0f,5.0f });
+	shadow_pos_ = center_worldpos_;
+	shadow_pos_.m128_f32[1] = -0.8f;
+	shadow_->SetPosition(shadow_pos_);
+	shadow_->SetRotation({ 0.0f,0.0f,0.0f });
+	shadow_->SetScale({ 5.0f,1.0f,5.0f });
 
-	HeadPartPos = ArmsPartPos = BodyPartPos = CenterWorldPos;
-	HeadPartPos.m128_f32[1] = CenterWorldPos.m128_f32[1] + 4.0f;
-	ArmsPartPos.m128_f32[1] = CenterWorldPos.m128_f32[1] + 0.2f;
+	headpart_pos_ = armspart_pos_ = bodypart_pos_ = center_worldpos_;
+	headpart_pos_.m128_f32[1] = center_worldpos_.m128_f32[1] + 4.0f;
+	armspart_pos_.m128_f32[1] = center_worldpos_.m128_f32[1] + 0.2f;
 
-	HeadPart->SetPosition(HeadPartPos);
-	HeadPart->SetRotation(HeadPartRot);
-	HeadPart->SetScale(HeadPartScl);
+	headpart_->SetPosition(headpart_pos_);
+	headpart_->SetRotation(headpart_rot_);
+	headpart_->SetScale(headpart_scl_);
 
-	BodyPart->SetPosition(BodyPartPos);
-	BodyPart->SetRotation(BodyPartRot);
-	BodyPart->SetScale(BodyPartScl);
+	bodypart_->SetPosition(bodypart_pos_);
+	bodypart_->SetRotation(bodypart_rot_);
+	bodypart_->SetScale(bodypart_scl_);
 
-	ArmsPart->SetPosition(ArmsPartPos);
-	ArmsPart->SetRotation(ArmsPartRot);
-	ArmsPart->SetScale(ArmsPartScl);
+	armspart_->SetPosition(armspart_pos_);
+	armspart_->SetRotation(armspart_rot_);
+	armspart_->SetScale(armspart_scl_);
 
-	RockOnPos = WorldtoScreen(BodyPartPos);
-	RockOnHeadPos = WorldtoScreen(HeadPartPos);
-	RockOn->SetPosition(RockOnPos);
-	RockOnHead->SetPosition(RockOnHeadPos);
+	rockon_pos_ = WorldtoScreen(bodypart_pos_);
+	rockonhead_pos_ = WorldtoScreen(headpart_pos_);
+	rockon_->SetPosition(rockon_pos_);
+	rockonhead_->SetPosition(rockonhead_pos_);
 }
 
 void BossEnemy::AllUpdate()
 {
-	Shadow->Update(ShadowCol);
-	Center->Update();
+	shadow_->Update(shadow_color_);
+	center_->Update();
 
-	HeadPart->Update(HeadPartColor);
-	BodyPart->Update(BodyPartColor);
-	ArmsPart->Update(ArmsPartColor);
+	headpart_->Update(headpart_color_);
+	bodypart_->Update(bodypart_color_);
+	armspart_->Update(armspart_color_);
 
-	PartRed->Update({ 1.0f,0.0f,0.0f,0.0f });
-	PartGreen->Update({ 0.0f,0.5f,0,0.0f });
+	partred_->Update({ 1.0f,0.0f,0.0f,0.0f });
+	partgreen_->Update({ 0.0f,0.5f,0,0.0f });
 
-	for (std::unique_ptr<ObjParticle>& patrticle : Obj_Particle) {
+	for (std::unique_ptr<ObjParticle>& patrticle : obj_particle_) {
 		patrticle->Update(50);
 	}
 }
 
 void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
 {
-	Obj_Particle.remove_if([](std::unique_ptr<ObjParticle>& particle) {
+	obj_particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 		});
 
 	//当たり判定
-	if (playerbulletshot == true && Hp > 0) {
-		if (player2Dpos.x - Distance * 4 < RockOnPos.x && player2Dpos.x + Distance * 4 > RockOnPos.x &&
-			player2Dpos.y - Distance * 4 < RockOnPos.y && player2Dpos.y + Distance * 4 > RockOnPos.y) {
-			Hp -= BodyDamage;
+	if (playerbulletshot == true && hp_ > 0) {
+		if (player2Dpos.x - distance_ * 4 < rockon_pos_.x && player2Dpos.x + distance_ * 4 > rockon_pos_.x &&
+			player2Dpos.y - distance_ * 4 < rockon_pos_.y && player2Dpos.y + distance_ * 4 > rockon_pos_.y) {
+			hp_ -= BodyDamage;
 			playerbulletshot = false;
 		}
 
-		if (player2Dpos.x - HeadDistance * 4 < RockOnHeadPos.x && player2Dpos.x + HeadDistance * 4 > RockOnHeadPos.x &&
-			player2Dpos.y - HeadDistance * 4 < RockOnHeadPos.y && player2Dpos.y + HeadDistance * 4 > RockOnHeadPos.y) {
-			Hp -= HeadDamage;
+		if (player2Dpos.x - head_distance_ * 4 < rockonhead_pos_.x && player2Dpos.x + head_distance_ * 4 > rockonhead_pos_.x &&
+			player2Dpos.y - head_distance_ * 4 < rockonhead_pos_.y && player2Dpos.y + head_distance_ * 4 > rockonhead_pos_.y) {
+			hp_ -= HeadDamage;
 			playerbulletshot = false;
 		}
 	}
 
 	if (Input::GetInstance()->PushKey(DIK_O)) {
-		Hp = 0;
+		hp_ = 0;
 	}
 
 	Damage();
 
 	Death();
 
-	if (Hp < 50) {
-		AttackTimeMin = 15;
-		AttackTimeMax = 20;
+	if (hp_ < 50) {
+		attacktime_min_ = 15;
+		attacktime_max_ = 20;
 	}
 
-	if (RandomFlag == false) {
-		TimerLimit = Action::GetInstance()->GetRangRand(AttackTimeMin, AttackTimeMax);
-		RandomFlag = true;
+	if (random_flag_ == false) {
+		timer_limit_ = Action::GetInstance()->GetRangRand(attacktime_min_, attacktime_max_);
+		random_flag_ = true;
 	}
 
 	//生きているとき
-	if (RobotAriveFlag == true && Hp > 0) {
-		if (Length > LengthLimit && DefomationFlag == true) {
+	if (robotarive_flag_ == true && hp_ > 0) {
+		if (length_ > limit_length_ && defomation_flag_ == true) {
 			TrackPlayerMode();
 		}
 		//プレイヤーの前まで来たとき
-		else if (Length <= LengthLimit && WaitFlag == false) {
-			BodyPartPos.m128_f32[2] -= 1.f;
-			AtttackTimer += 0.1f;
+		else if (length_ <= limit_length_ && wait_flag_ == false) {
+			bodypart_pos_.m128_f32[2] -= 1.f;
+			atttack_timer_ += 0.1f;
 			AttackMode(playerhp);
 		}
 	}
 	else {
-		AttackFaseFlag = false;
+		attackfase_flag_ = false;
 	}
 
 	StatusSet();
@@ -185,26 +184,26 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 void BossEnemy::Draw(DirectXCommon* dxCommon)
 {
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	//RockOnHead->Draw();
-	//RockOn->Draw();
+	//rockonhead_->Draw();
+	//rockon_->Draw();
 	Sprite::PostDraw();
 
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
-	PartGreen->Draw();
-	PartRed->Draw();
+	partgreen_->Draw();
+	partred_->Draw();
 	ParticleManager::PostDraw();
 
 	Object3d::PreDraw(dxCommon->GetCmdList());
-	for (std::unique_ptr<ObjParticle>& particle : Obj_Particle) {
+	for (std::unique_ptr<ObjParticle>& particle : obj_particle_) {
 		particle->Draw();
 	}
-	if (Hp > 0) {
-		HeadPart->Draw();
-		BodyPart->Draw();
-		ArmsPart->Draw();
-		Shadow->Draw();
+	if (hp_ > 0) {
+		headpart_->Draw();
+		bodypart_->Draw();
+		armspart_->Draw();
+		shadow_->Draw();
 	}
-	//Center->Draw();
+	//center_->Draw();
 	Object3d::PostDraw();
 }
 
@@ -214,46 +213,46 @@ void BossEnemy::TrackPlayerMode()
 	float vy = 0;
 	float vz = 0;
 
-	vx = (AllPos.m128_f32[0] - TrackPoint.m128_f32[0]);
-	vy = (AllPos.m128_f32[1] - TrackPoint.m128_f32[1]);
-	vz = (AllPos.m128_f32[2] - TrackPoint.m128_f32[2]);
+	vx = (all_pos_.m128_f32[0] - track_point_.m128_f32[0]);
+	vy = (all_pos_.m128_f32[1] - track_point_.m128_f32[1]);
+	vz = (all_pos_.m128_f32[2] - track_point_.m128_f32[2]);
 
 	float v2x = powf(vx, 2.f);
 	float v2y = powf(vy, 2.f);
 	float v2z = powf(vz, 2.f);
-	Length = sqrtf(v2x + v2y + v2z);
+	length_ = sqrtf(v2x + v2y + v2z);
 
-	float v3x = (vx / Length) * MoveSpeed;
-	float v3y = (vy / Length) * MoveSpeed;
-	float v3z = (vz / Length) * MoveSpeed;
-	Distance = OriginDistance;
-	HeadDistance = OriginHeadDistance;
+	float v3x = (vx / length_) * movespeed_;
+	float v3y = (vy / length_) * movespeed_;
+	float v3z = (vz / length_) * movespeed_;
+	distance_ = origin_distance_;
+	head_distance_ = originhead_distance_;
 
-	Distance -= Length * 2.f;
-	HeadDistance -= Length;
+	distance_ -= length_ * 2.f;
+	head_distance_ -= length_;
 
-	AllPos.m128_f32[0] -= v3x;
-	AllPos.m128_f32[2] -= v3z;
+	all_pos_.m128_f32[0] -= v3x;
+	all_pos_.m128_f32[2] -= v3z;
 }
 
 void BossEnemy::AttackMode(int& playerhp)
 {
-	if (AtttackTimer >= TimerLimit) {
-		AttackFaseFlag = true;
-		RandomFlag = false;
+	if (atttack_timer_ >= timer_limit_) {
+		attackfase_flag_ = true;
+		random_flag_ = false;
 	}
 	//攻撃フェイズに移行した時
-	if (AttackFaseFlag == true) {
-		Action::GetInstance()->EaseOut(HeadPartRot.y, PursePositiveRot + 1);
-		if (HeadPartRot.y >= PursePositiveRot) {
-			HeadPartRot.y = PursePositiveRot;
+	if (attackfase_flag_ == true) {
+		Action::GetInstance()->EaseOut(headpart_rot_.y, purse_positiverot_ + 1);
+		if (headpart_rot_.y >= purse_positiverot_) {
+			headpart_rot_.y = purse_positiverot_;
 		}
-		Attack(playerhp, AtttackTimer);
+		Attack(playerhp, atttack_timer_);
 	}
 	else {
-		Action::GetInstance()->EaseOut(HeadPartRot.y, PurseNegativeeRot - 1);
-		if (HeadPartRot.y <= PurseNegativeeRot) {
-			HeadPartRot.y = PurseNegativeeRot;
+		Action::GetInstance()->EaseOut(headpart_rot_.y, purse_negativerot_ - 1);
+		if (headpart_rot_.y <= purse_negativerot_) {
+			headpart_rot_.y = purse_negativerot_;
 		}
 	}
 }
@@ -263,50 +262,50 @@ void BossEnemy::Attack(int& playerhp, float& attacktimer)
 	//巨大化していく値
 	XMFLOAT3 gigantic = { 0.0002f ,0.0002f ,0.0002f };
 	float discoloration = 0.01f;
-	if (AttackShakeDownFlag == false) {
-		ArmsPartRot.x += 1.5f;
-		ArmsPartScl = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(ArmsPartScl, gigantic);
-		BodyPartScl = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(BodyPartScl, gigantic);
-		HeadPartScl = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(HeadPartScl, gigantic);
-		ArmsPartColor.y -= discoloration;
-		ArmsPartColor.z -= discoloration;
+	if (attackshakedown_flag_ == false) {
+		armspart_rot_.x += 1.5f;
+		armspart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(armspart_scl_, gigantic);
+		bodypart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(bodypart_scl_, gigantic);
+		headpart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(headpart_scl_, gigantic);
+		armspart_color_.y -= discoloration;
+		armspart_color_.z -= discoloration;
 		//腕が最大点に達した時
-		if (ArmsPartRot.x >= 40.0f) {
-			ArmsPartRot.x = 40;
-			if (VibrationChangeFlag == true) {
-				Vibration -= 4.2f;
-				if (Vibration <= -4.2f) {
-					VibrationChangeFlag = false;
+		if (armspart_rot_.x >= 40.0f) {
+			armspart_rot_.x = 40;
+			if (vibrationchange_flag_ == true) {
+				vibration_ -= 4.2f;
+				if (vibration_ <= -4.2f) {
+					vibrationchange_flag_ = false;
 				}
 			}
 			else {
-				Vibration += 4.2f;
-				if (Vibration >= 4.2f) {
-					VibrationChangeFlag = true;
+				vibration_ += 4.2f;
+				if (vibration_ >= 4.2f) {
+					vibrationchange_flag_ = true;
 				}
 			}
 			//体の震え
-			HeadPartRot.y += Vibration;
-			BodyPartRot.y += Vibration;
-			ArmsPartRot.y += Vibration;
-			AttackCharge += 0.1f;
-			if (AttackCharge >= 10) {
-				AttackCharge = 0;
-				AttackShakeDownFlag = true;
+			headpart_rot_.y += vibration_;
+			bodypart_rot_.y += vibration_;
+			armspart_rot_.y += vibration_;
+			attack_charge_ += 0.1f;
+			if (attack_charge_ >= 10) {
+				attack_charge_ = 0;
+				attackshakedown_flag_ = true;
 			}
 		}
 	}
 	else {
-		ArmsPartRot.x -= 10.0f;
-		if (ArmsPartRot.x <= 0.0f) {
-			ArmsPartRot.x = 0.0f;
-			ArmsPartColor = { 1.0f,1.0f,1.0f ,1.0f };
-			ArmsPartScl = { 0.2f,0.2f,0.2f };
-			AttackShakeDownFlag = false;
-			AttackFaseFlag = false;
+		armspart_rot_.x -= 10.0f;
+		if (armspart_rot_.x <= 0.0f) {
+			armspart_rot_.x = 0.0f;
+			armspart_color_ = { 1.0f,1.0f,1.0f ,1.0f };
+			armspart_scl_ = { 0.2f,0.2f,0.2f };
+			attackshakedown_flag_ = false;
+			attackfase_flag_ = false;
 			attacktimer = 0;
 			playerhp -= 5;
-			Hp = 0;
+			hp_ = 0;
 			SelfDestructingEfect();
 		}
 	}
@@ -315,16 +314,16 @@ void BossEnemy::Attack(int& playerhp, float& attacktimer)
 void BossEnemy::Damage()
 {
 	//ダメージを受けたとき
-	if (OldHp > Hp && Hp >= 0) {
-		OldHp = Hp;
-		HeadPartColor.y -= 0.2f;
-		HeadPartColor.z -= 0.2f;
-		BodyPartColor.y -= 0.2f;
-		BodyPartColor.z -= 0.2f;
+	if (oldhp_ > hp_ && hp_ >= 0) {
+		oldhp_ = hp_;
+		headpart_color_.y -= 0.2f;
+		headpart_color_.z -= 0.2f;
+		bodypart_color_.y -= 0.2f;
+		bodypart_color_.z -= 0.2f;
 		for (int i = 0; i < 5; i++) {
 			std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
-			newparticle->Initialize(1, BodyPartPos, { 1.3f,1.3f,1.3f }, { BodyPartRot });
-			Obj_Particle.push_back(std::move(newparticle));
+			newparticle->Initialize(1, bodypart_pos_, { 1.3f,1.3f,1.3f }, { bodypart_rot_ });
+			obj_particle_.push_back(std::move(newparticle));
 		}
 	}
 }
@@ -332,41 +331,41 @@ void BossEnemy::Damage()
 void BossEnemy::Death()
 {
 	//生きているときにHPが0になったら
-	if (Hp <= 0) {
-		OldTrackPoint = TrackPoint;
-		NotLifeFlag = true;
-		Hp = 0;
-		ShadowCol.w -= Subtraction;
-		ArmsPartColor.w -= Subtraction;
-		BodyPartColor.w -= Subtraction;
-		HeadPartColor.w -= Subtraction;
-		if (ParticleEfectFlag == true) {
+	if (hp_ <= 0) {
+		oldtrack_point_ = track_point_;
+		notlife_flag_ = true;
+		hp_ = 0;
+		shadow_color_.w -= Subtraction;
+		armspart_color_.w -= Subtraction;
+		bodypart_color_.w -= Subtraction;
+		headpart_color_.w -= Subtraction;
+		if (objparticle_flag_ == true) {
 			//ParticleEfect();
 		}
-		RobotAriveFlag = false;
-		if (Obj_Particle.empty()) {
-			DeadFlag = true;
+		robotarive_flag_ = false;
+		if (obj_particle_.empty()) {
+			dead_flag_ = true;
 		}
 	}
 }
 
 XMFLOAT2 BossEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 {
-	Center->SetRotation(CenterRot);
-	CenterMat = Center->GetMatrix();
+	center_->SetRotation(center_rot_);
+	center_mat_ = center_->GetMatrix();
 	const float kDistancePlayerTo3DReticle = 50.0f;
-	offset = { 0.0,0.0,1.0f };
-	offset = XMVector3TransformNormal(offset, CenterMat);
-	offset = XMVector3Normalize(offset) * kDistancePlayerTo3DReticle;
+	offset_ = { 0.0,0.0,1.0f };
+	offset_ = XMVector3TransformNormal(offset_, center_mat_);
+	offset_ = XMVector3Normalize(offset_) * kDistancePlayerTo3DReticle;
 
 	XMVECTOR PositionRet = set3Dposition;
 
-	HelperMath::GetInstance()->ChangeViewPort(MatViewPort, offset);
+	HelperMath::GetInstance()->ChangeViewPort(matviewport_, offset_);
 
-	XMMATRIX MatVP = MatViewPort;
+	XMMATRIX MatVP = matviewport_;
 
-	XMMATRIX View = GetCamera->GetViewMatrix();
-	XMMATRIX Pro = GetCamera->GetProjectionMatrix();
+	XMMATRIX View = bringupcamera_->GetViewMatrix();
+	XMMATRIX Pro = bringupcamera_->GetProjectionMatrix();
 
 	XMMATRIX MatViewProjectionViewport = View * Pro * MatVP;
 
@@ -385,9 +384,9 @@ void BossEnemy::ParticleEfect()
 	for (int i = 0; i < 50; i++) {
 		XMFLOAT3 pos;
 
-		pos.x = CenterWorldPos.m128_f32[0];
-		pos.y = CenterWorldPos.m128_f32[1];
-		pos.z = CenterWorldPos.m128_f32[2];
+		pos.x = center_worldpos_.m128_f32[0];
+		pos.y = center_worldpos_.m128_f32[1];
+		pos.z = center_worldpos_.m128_f32[2];
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};
@@ -398,10 +397,10 @@ void BossEnemy::ParticleEfect()
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		PartRed->Add(400, pos, vel, acc, 120.0f, 0.0f, 150.0f);
-		PartGreen->Add(400, pos, vel, acc, 110.1f, 0.0f, 150.0f);
+		partred_->Add(400, pos, vel, acc, 120.0f, 0.0f, 150.0f);
+		partgreen_->Add(400, pos, vel, acc, 110.1f, 0.0f, 150.0f);
 	}
-	ParticleEfectFlag = false;
+	objparticle_flag_ = false;
 }
 
 void BossEnemy::SelfDestructingEfect()
@@ -409,9 +408,9 @@ void BossEnemy::SelfDestructingEfect()
 	for (int i = 0; i < 50; i++) {
 		XMFLOAT3 pos;
 
-		pos.x = CenterWorldPos.m128_f32[0];
-		pos.y = CenterWorldPos.m128_f32[1];
-		pos.z = CenterWorldPos.m128_f32[2];
+		pos.x = center_worldpos_.m128_f32[0];
+		pos.y = center_worldpos_.m128_f32[1];
+		pos.z = center_worldpos_.m128_f32[2];
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};
@@ -422,10 +421,10 @@ void BossEnemy::SelfDestructingEfect()
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		PartRed->Add(400, pos, vel, acc, 120.0f, 0.0f, 150.0f);
-		PartGreen->Add(400, pos, vel, acc, 110.1f, 0.0f, 150.0f);
+		partred_->Add(400, pos, vel, acc, 120.0f, 0.0f, 150.0f);
+		partgreen_->Add(400, pos, vel, acc, 110.1f, 0.0f, 150.0f);
 	}
-	ParticleEfectFlag = false;
+	objparticle_flag_ = false;
 }
 
 
