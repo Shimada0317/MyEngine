@@ -222,8 +222,6 @@ private:
 	float atttack_timer_ = 0.f;
 	float timer_limit_ = 0.f;
 	bool random_flag_ = false;
-	float attacktime_min_ = 20;
-	float attacktime_max_ = 40;
 	bool particleefect_flag_ = true;
 	//“¯‚¶’Ç]æ‚É•Ê‚Ì“G‚ª‚¢‚é‚©‚¢‚È‚¢‚©
 	bool wait_flag_ = false;

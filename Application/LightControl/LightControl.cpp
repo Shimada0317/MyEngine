@@ -19,6 +19,7 @@ void LightControl::Initialize()
 	lightgroupe_->SetSpotLightActive(2, true);
 	lightgroupe_->SetSpotLightActive(3, true);
 	lightgroupe_->SetSpotLightActive(4, true);
+	lightgroupe_->SetSpotLightActive(5, true);
 
 	//ライトセット
 	Object3d::SetLightGroup(lightgroupe_.get());
@@ -32,17 +33,23 @@ void LightControl::Set()
 	lightgroupe_->SetSpotLightColor(0, fieldspotlightcolor_);
 	lightgroupe_->SetSpotLightAtten(0, fieldspotlightatten_);
 	lightgroupe_->SetSpotLightFactorAngle(0, fieldspotlightfactorangle_);
+	//フィールド全体を照らすステータス
+	lightgroupe_->SetSpotLightDir(1, XMVECTOR({ fieldspotlightdir_.x, fieldspotlightdir_.y, fieldspotlightdir_.z }));
+	lightgroupe_->SetSpotLightPos(1, fieldspotlightpos_);
+	lightgroupe_->SetSpotLightColor(1, fieldspotlightcolor_);
+	lightgroupe_->SetSpotLightAtten(1, fieldspotlightatten_);
+	lightgroupe_->SetSpotLightFactorAngle(1, fieldspotlightfactorangle_);
 	//スタート地点のステータス
-	lightgroupe_->SetSpotLightDir(1, XMVECTOR({ playerspotlightdir_.x, playerspotlightdir_.y, playerspotlightdir_.z }));
-	lightgroupe_->SetSpotLightPos(1, playerspotlightpos_);
-	lightgroupe_->SetSpotLightColor(1, playerspotlightcolor_);
-	lightgroupe_->SetSpotLightAtten(1, playerspotlightatten_);
-	lightgroupe_->SetSpotLightFactorAngle(1, playerspotlightfactorangle_);
+	lightgroupe_->SetSpotLightDir(2, XMVECTOR({ playerspotlightdir_.x, playerspotlightdir_.y, playerspotlightdir_.z }));
+	lightgroupe_->SetSpotLightPos(2, playerspotlightpos_);
+	lightgroupe_->SetSpotLightColor(2, playerspotlightcolor_);
+	lightgroupe_->SetSpotLightAtten(2, playerspotlightatten_);
+	lightgroupe_->SetSpotLightFactorAngle(2, playerspotlightfactorangle_);
 	//フィールド内を動くライトのステータス
-	for (int i = 2; i < 5; i++) {
-		lightgroupe_->SetSpotLightDir(i, XMVECTOR({ searchlightdir_[i - 2].x, searchlightdir_[i - 2].y, searchlightdir_[i - 2].z }));
-		lightgroupe_->SetSpotLightPos(i, searchlightpos_[i - 2]);
-		lightgroupe_->SetSpotLightColor(i, searchlightcolor_[i - 2]);
+	for (int i = 3; i < 6; i++) {
+		lightgroupe_->SetSpotLightDir(i, XMVECTOR({ searchlightdir_[i - 3].x, searchlightdir_[i - 3].y, searchlightdir_[i - 3].z }));
+		lightgroupe_->SetSpotLightPos(i, searchlightpos_[i - 3]);
+		lightgroupe_->SetSpotLightColor(i, searchlightcolor_[i - 3]);
 		lightgroupe_->SetSpotLightAtten(i, searchlightatten_);
 		lightgroupe_->SetSpotLightFactorAngle(i, searchlightfactorangle_);
 	}
@@ -50,8 +57,6 @@ void LightControl::Set()
 
 void LightControl::Update()
 {
-	WrappingLight();
-
 	Set();
 
 	lightgroupe_->Update();

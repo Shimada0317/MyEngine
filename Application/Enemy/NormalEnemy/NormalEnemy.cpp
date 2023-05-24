@@ -9,6 +9,8 @@ const int BodyDamage = 50;
 const float Subtraction = 0.1f;
 const float FallSpeed = 0.25f;
 const float AddDefomationValue = 0.04f;
+const float attacktime_min_ = 20;
+const float attacktime_max_ = 40;
 const XMFLOAT4 AddColor = { 0.1f,0.1f,0.1f,0.0f };
 
 const XMFLOAT4 operator+(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& rhs)
@@ -289,7 +291,8 @@ void NormalEnemy::Attack(int& playerhp, float& attacktimer)
 {
 	//‹‘å‰»‚µ‚Ä‚¢‚­’l
 	XMFLOAT3 gigantic = { 0.0002f ,0.0002f ,0.0002f };
-	float discoloration = 0.01f;
+	const float discoloration = 0.01f;
+	const float MaxPoint = 40.f;
 	if (attackshakedown_flag_ == false) {
 		armspart_rot_.x += 1.5f;
 		armspart_scl_=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(armspart_scl_, gigantic);
@@ -298,8 +301,8 @@ void NormalEnemy::Attack(int& playerhp, float& attacktimer)
 		armspart_color_.y -= discoloration;
 		armspart_color_.z -= discoloration;
 		//˜r‚ªÅ‘å“_‚É’B‚µ‚½Žž
-		if (armspart_rot_.x >= 40.0f) {
-			armspart_rot_.x = 40;
+		if (armspart_rot_.x >= MaxPoint) {
+			armspart_rot_.x = MaxPoint;
 			limit_length_ = 0.1f;
 			if (vibrationchange_flag_ == true) {
 				vibration_ -= 4.2f;

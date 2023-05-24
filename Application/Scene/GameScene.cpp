@@ -25,6 +25,7 @@ void GameScene::Initialize(DirectXCommon* dxComon)
 	//ライトの生成
 	lightcontrol_ = make_unique<LightControl>();
 	lightcontrol_->Initialize();
+	lightcontrol_->SetNotSpotLightActive(0);
 	//カメラの生成
 	camera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 	//カメラ演出
@@ -141,6 +142,7 @@ void GameScene::Update()
 	if (gamestate_ == NONE || gamestate_ == START || gamestate_ == FIGHT || gamestate_ == MOVE) {
 		//スポットライトの動きの処理
 		SpotLightMove();
+		lightcontrol_->WrappingLight();
 		lightcontrol_->Update();
 		AllUpdata();
 		Action::GetInstance()->ScreenShake(shake_addvalue_, 0.1f, eyerot_, shakingstartflag_);
@@ -241,7 +243,6 @@ void GameScene::GameOverProcess()
 		nocolor_ = { 1.f,1.f,1.f,1.f };
 	}
 	continue_screen_->ChangeColor(yescolor_, nocolor_);
-
 }
 //ゲームクリア時の処理
 void GameScene::GameClearProcesss()

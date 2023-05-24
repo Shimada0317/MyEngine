@@ -73,8 +73,8 @@ void Player::StatusSet(Camera* camera, XMFLOAT3 eyerot)
 	gun_->SetRotation(gun_rot_);
 	gun_->SetScale(gun_scl_);
 	gun_->SetParent(camera);
-	XMMATRIX GetGunNotParentMatrix = gun_->GetNotParentWorld();
-	gun_notparentpos_ = XMVector3Transform(gun_pos_, GetGunNotParentMatrix);
+	XMMATRIX kGetGunNotParentMatrix = gun_->GetNotParentWorld();
+	gun_notparentpos_ = XMVector3Transform(gun_pos_, kGetGunNotParentMatrix);
 	gun_->SetPosition(gun_pos_);
 	//UIのポジションセット
 	bullet_ui_->Set();

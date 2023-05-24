@@ -104,7 +104,7 @@ void GameBackground::Update()
 {
 	const XMFLOAT4 BillColor = { 0.8f,0.6f,0.3f,1.0f };
 	for (unique_ptr<Object3d>& new_backgrpund : backgrouhnd_) {
-		new_backgrpund->Update(BillColor,true);
+		new_backgrpund->Update(BillColor);
 	}
 }
 

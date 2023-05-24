@@ -25,11 +25,14 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	//カメラの生成
 	titlecamera_ = make_unique<Camera>(WinApp::window_width, WinApp::window_height);
 	Object3d::SetCamera(titlecamera_.get());
-	//ライトの生成
-	lightgroupe_ = make_unique<LightGroup>();
-	lightgroupe_ = LightGroup::Create();
-	//ライトのセット
-	Object3d::SetLightGroup(lightgroupe_.get());
+	//
+	lightcontrol_ = make_unique<LightControl>();
+	lightcontrol_->Initialize();
+	for (int i = 3; i < 6; i++) {
+		lightcontrol_->SetNotSpotLightActive(i);
+	}
+	lightcontrol_->SetFieldLightPos(spotlightpos_);
+
 	//スプライトの生成
 	title_.reset(Sprite::SpriteCreate(Name::kTitle, { 1.0f,1.0f }));
 	cursor_.reset(Sprite::SpriteCreate(Name::kReticle, reticlepos_, spritecol_, anchorpoint_));
@@ -57,10 +60,6 @@ void TitleScene::Initialize(DirectXCommon* dxComon)
 	posteffct_ = make_unique<PostEffect>();
 	posteffct_->Initialize();
 	cameraeyemove_ = { 0.0f,0.0f,0.0f };
-	//スポットライトをアクティブ状態
-	lightgroupe_->SetSpotLightActive(0, true);
-	lightgroupe_->SetSpotLightActive(1, true);
-	lightgroupe_->SetSpotLightActive(2, true);
 }
 //ステータスセット
 void TitleScene::StatusSet()
@@ -75,24 +74,7 @@ void TitleScene::StatusSet()
 	title_->SetPosition({ titlepos_ });
 	//マウスカーソルの座標セット
 	cursor_->SetPosition({ reticlepos_ });
-	//1つ目のスポットライトを設定
-	lightgroupe_->SetSpotLightDir(0, XMVECTOR({ spotlightdir_.x, spotlightdir_.y, spotlightdir_.z }));
-	lightgroupe_->SetSpotLightPos(0, spotlightpos_);
-	lightgroupe_->SetSpotLightColor(0, spotlightcolor_);
-	lightgroupe_->SetSpotLightAtten(0, spotlightatten_);
-	lightgroupe_->SetSpotLightFactorAngle(0, spotlightfactorangle_);
-	//2つ目のスポットライトを設定
-	lightgroupe_->SetSpotLightDir(1, XMVECTOR({ spotlightdir2_.x, spotlightdir2_.y, spotlightdir2_.z }));
-	lightgroupe_->SetSpotLightPos(1, spotlightpos2_);
-	lightgroupe_->SetSpotLightColor(1, spotlightcolor2_);
-	lightgroupe_->SetSpotLightAtten(1, spotlightatten2_);
-	lightgroupe_->SetSpotLightFactorAngle(1, spotlightfactorangle2_);
-	//1つ目のスポットライトを設定
-	lightgroupe_->SetSpotLightDir(2, XMVECTOR({ spotlightdir_.x, spotlightdir_.y, spotlightdir_.z }));
-	lightgroupe_->SetSpotLightPos(2, spotlightpos_);
-	lightgroupe_->SetSpotLightColor(2, spotlightcolor_);
-	lightgroupe_->SetSpotLightAtten(2, spotlightatten_);
-	lightgroupe_->SetSpotLightFactorAngle(2, spotlightfactorangle_);
+	
 	//矢印のステータス
 	arrowleft_->SetSize(arrowsize_);
 	arrowright_->SetSize(arrowsize_);
@@ -110,7 +92,7 @@ void TitleScene::AllUpdate()
 	//ポストエフェクトの更新処理
 	posteffct_->Update(postefectcolor_);
 	//ライトグループ更新
-	lightgroupe_->Update();
+	lightcontrol_->Update();
 	//背景オブジェクトの更新
 	common_background_->Update();
 }
@@ -393,7 +375,7 @@ void TitleScene::Finalize()
 	signalafter_.reset();
 	signalbefore_.reset();
 	cursor_.reset();
-	lightgroupe_.reset();
+	lightcontrol_.reset();
 	bgm_.reset();
 	clickse_.reset();
 	common_background_.reset();

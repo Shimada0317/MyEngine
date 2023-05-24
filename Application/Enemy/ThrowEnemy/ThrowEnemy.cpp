@@ -147,19 +147,19 @@ void ThrowEnemy::AttackProcess(const XMFLOAT2& player2Dpos, int& playerhp, bool&
 //ダメージを食らったときの処理
 void ThrowEnemy::DamageProcess(const XMFLOAT2& player2Dpos, bool& playerbulletshot)
 {
-	float vx = 0;
-	float vy = 0;
-	float vz = 0;
+	float Vx = 0;
+	float Vy = 0;
+	float Vz = 0;
 
-	vx = (bullet_pos_.m128_f32[0] - landing_point_.m128_f32[0]);
-	vy = (bullet_pos_.m128_f32[1] - landing_point_.m128_f32[1] - 2);
-	vz = (bullet_pos_.m128_f32[2] - landing_point_.m128_f32[2]);
+	Vx = (bullet_pos_.m128_f32[0] - landing_point_.m128_f32[0]);
+	Vy = (bullet_pos_.m128_f32[1] - landing_point_.m128_f32[1] - 2);
+	Vz = (bullet_pos_.m128_f32[2] - landing_point_.m128_f32[2]);
 
-	float v2x = powf(vx, 2.f);
-	float v2y = powf(vy, 2.f);
-	float v2z = powf(vz, 2.f);
+	float V2x = powf(Vx, 2.f);
+	float V2y = powf(Vy, 2.f);
+	float V2z = powf(Vz, 2.f);
 
-	length_ = sqrtf(v2x + v2y + v2z);
+	length_ = sqrtf(V2x + V2y + V2z);
 	distance_ = length_;
 
 	//当たり判定
@@ -182,9 +182,9 @@ void ThrowEnemy::DamageProcess(const XMFLOAT2& player2Dpos, bool& playerbulletsh
 void ThrowEnemy::DeathProcess()
 {
 	if (state_ != State::DEATH) { return; }
-	float gravity_ = 1.8f;
+	const float kGravity = 1.8f;
 	fall_time_ += 0.001f;
-	float fallspeed = gravity_ * fall_time_;
+	float fallspeed = kGravity * fall_time_;
 	if (center_pos_.m128_f32[1] >= 0) {
 		center_pos_.m128_f32[1] -= fallspeed;
 		if (center_pos_.m128_f32[1] <= 0) {
@@ -217,11 +217,11 @@ XMFLOAT2 ThrowEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 
 	PositionRet = XMVector3TransformCoord(PositionRet, MatViewProjectionViewport);
 
-	XMFLOAT2 get2dposition;
-	get2dposition.x = PositionRet.m128_f32[0];
-	get2dposition.y = PositionRet.m128_f32[1];
+	XMFLOAT2 Get2dPosition;
+	Get2dPosition.x = PositionRet.m128_f32[0];
+	Get2dPosition.y = PositionRet.m128_f32[1];
 
-	return get2dposition;
+	return Get2dPosition;
 }
 //描画処理
 void ThrowEnemy::Draw(DirectXCommon* dxCommon)
@@ -265,7 +265,7 @@ void ThrowEnemy::ThrowAttack(int& playerhp)
 	float vx = 0;
 	float vy = 0;
 	float vz = 0;
-	float bullet_length = 0;
+	float BulletLength = 0;
 
 	vx = (bullet_pos_.m128_f32[0] - landing_point_.m128_f32[0]);
 	vy = (bullet_pos_.m128_f32[1] - landing_point_.m128_f32[1]-2);
@@ -275,18 +275,18 @@ void ThrowEnemy::ThrowAttack(int& playerhp)
 	float v2y = powf(vy, 2.f);
 	float v2z = powf(vz, 2.f);
 
-	bullet_length = sqrtf(v2x + v2y + v2z);
+	BulletLength = sqrtf(v2x + v2y + v2z);
 
 	XMVECTOR v3;
-	v3.m128_f32[0] = (vx / bullet_length) * bullet_speed_;
-	v3.m128_f32[1] = (vy / bullet_length) * bullet_speed_;
-	v3.m128_f32[2] = (vz / bullet_length) * bullet_speed_;
+	v3.m128_f32[0] = (vx / BulletLength) * bullet_speed_;
+	v3.m128_f32[1] = (vy / BulletLength) * bullet_speed_;
+	v3.m128_f32[2] = (vz / BulletLength) * bullet_speed_;
 
 	
-	bullet_distance_ = bullet_length;
+	bullet_distance_ = BulletLength;
 
 	bullet_pos_ -= v3;
-	if (bullet_length <=0.1f) {
+	if (BulletLength <=0.1f) {
 		playerhp -= 1;
 		bullet_pos_ = old_pos_;
 		bullet_scl_={};
@@ -303,22 +303,20 @@ void ThrowEnemy::ThrowAttack(int& playerhp)
 void ThrowEnemy::ParticleEfect()
 {
 	for (int i = 0; i < 10; i++) {
-		XMFLOAT3 pos;
-		pos.x = center_worldpos_.m128_f32[0];
-		pos.y = center_worldpos_.m128_f32[1]-1.f;
-		pos.z = center_worldpos_.m128_f32[2];
+		XMFLOAT3 Pos;
+		Pos.x = center_worldpos_.m128_f32[0];
+		Pos.y = center_worldpos_.m128_f32[1]-1.f;
+		Pos.z = center_worldpos_.m128_f32[2];
 
-		const float rnd_vel = 0.04f;
-		XMFLOAT3 vel{};
-		vel.x = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
-		vel.y = Action::GetInstance()->GetRangRand(-0.11f, 0.12f);
-		vel.z = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
+		XMFLOAT3 Vel{};
+		Vel.x = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
+		Vel.y = Action::GetInstance()->GetRangRand(-0.11f, 0.12f);
+		Vel.z = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
 
-		XMFLOAT3 acc{};
-		acc.y = 0.0;
+		XMFLOAT3 Acc{};
+		Acc.y = 0.0;
 
-		partred_->Add(30, pos, vel, acc, 1.0f, 0.0f, 0.0f);
-		partgreen_->Add(30, pos, vel, acc, 0.7f, 0.0f, 0.0f);
+		partred_->Add(30, Pos, Vel, Acc, 1.0f, 0.0f, 0.0f);
+		partgreen_->Add(30, Pos, Vel, Acc, 0.7f, 0.0f, 0.0f);
 	}
-	//particle_flag_ = false;
 }

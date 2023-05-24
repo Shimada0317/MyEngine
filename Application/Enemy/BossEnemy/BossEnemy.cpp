@@ -260,15 +260,15 @@ void BossEnemy::AttackMode(int& playerhp)
 void BossEnemy::Attack(int& playerhp, float& attacktimer)
 {
 	//‹‘å‰»‚µ‚Ä‚¢‚­’l
-	XMFLOAT3 gigantic = { 0.0002f ,0.0002f ,0.0002f };
-	float discoloration = 0.01f;
+	XMFLOAT3 kGigantic = { 0.0002f ,0.0002f ,0.0002f };
+	float kDiscoloration = 0.01f;
 	if (attackshakedown_flag_ == false) {
 		armspart_rot_.x += 1.5f;
-		armspart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(armspart_scl_, gigantic);
-		bodypart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(bodypart_scl_, gigantic);
-		headpart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(headpart_scl_, gigantic);
-		armspart_color_.y -= discoloration;
-		armspart_color_.z -= discoloration;
+		armspart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(armspart_scl_, kGigantic);
+		bodypart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(bodypart_scl_, kGigantic);
+		headpart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(headpart_scl_, kGigantic);
+		armspart_color_.y -= kDiscoloration;
+		armspart_color_.z -= kDiscoloration;
 		//˜r‚ªÅ‘å“_‚É’B‚µ‚½
 		if (armspart_rot_.x >= 40.0f) {
 			armspart_rot_.x = 40;

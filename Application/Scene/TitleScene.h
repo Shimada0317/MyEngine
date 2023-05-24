@@ -3,6 +3,7 @@
 #include"BaseScene.h"
 #include"GameScene.h"
 #include"BulletUI.h"
+#include"LightControl.h"
 #include"CommonBackground.h"
 
 
@@ -106,8 +107,7 @@ private:
 	unique_ptr<Sprite> arrowleft_ = nullptr;
 	unique_ptr<BulletUI> bullet_ui_;
 	//その他の機能
-	unique_ptr<Light> light_ = nullptr;
-	unique_ptr<LightGroup> lightgroupe_ = nullptr;
+	unique_ptr<LightControl> lightcontrol_ = nullptr;
 	unique_ptr<PostEffect> posteffct_ = nullptr;
 	unique_ptr<Audio> clickse_ = nullptr;
 	unique_ptr<Audio> bgm_ = nullptr;
@@ -164,16 +164,8 @@ private:
 	//音量
 	float volume_ = 0.8f;
 	//ライトのステータス
-	XMFLOAT3 spotlightdir_ = { 0,-1,0 };
 	XMFLOAT3 spotlightpos_ = { 0,1005,0 };
 	XMFLOAT3 spotlightcolor_ = { 1,1,1 };
-	XMFLOAT3 spotlightatten_ = { 0.f,0.f,0.f };
-	XMFLOAT2 spotlightfactorangle_ = { 20.0f,30.0f };
-	XMFLOAT3 spotlightdir2_ = { 0,0,0 };
-	XMFLOAT3 spotlightpos2_ = { 10,1005,160 };
-	XMFLOAT3 spotlightcolor2_ = { 0,0,1 };
-	XMFLOAT3 spotlightatten2_ = { 0.f,0.f,0.f };
-	XMFLOAT2 spotlightfactorangle2_ = { 20.0f,30.0f };
 	//イージング変数
 	float easingtimer_ = 0.f;
 	bool easingchangeflag_=false;

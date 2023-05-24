@@ -20,6 +20,11 @@ public:
 
 	void FieldLightColorChange();
 
+	void SetFieldLightColor(const XMFLOAT3& color){this->fieldspotlightcolor_=color;}
+
+	void SetNotSpotLightActive(int number) { lightgroupe_->SetSpotLightActive(number, false); }
+
+	void SetFieldLightPos(const XMFLOAT3& fieldspotlightpos) { this->fieldspotlightpos_ = fieldspotlightpos; }
 private:
 	unique_ptr<LightGroup>lightgroupe_;
 
