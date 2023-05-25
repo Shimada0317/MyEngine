@@ -17,7 +17,6 @@ BossEnemy::~BossEnemy()
 	center_.reset();
 	headpart_.reset();
 	bodypart_.reset();
-	armspart_.reset();
 }
 
 void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint)
@@ -26,7 +25,7 @@ void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camer
 
 	bringupcamera_ = camera;
 
-	headpart_rot_ = bodypart_rot_ = armspart_rot_ = allrot;
+	headpart_rot_ = bodypart_rot_ = corepart_rot_ = allrot;
 	purse_positiverot_ += headpart_rot_.y;
 	purse_negativerot_ += headpart_rot_.y;
 
@@ -36,8 +35,8 @@ void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camer
 	shadow_ = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
 	center_ = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
 	headpart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
-	bodypart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(4));
-	armspart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(5));
+	bodypart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBossBody));
+	corepart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBossCore));
 
 	partgreen_ = ParticleManager::Create(camera);
 	partred_ = ParticleManager::Create(camera);
@@ -83,9 +82,8 @@ void BossEnemy::StatusSet()
 	shadow_->SetRotation({ 0.0f,0.0f,0.0f });
 	shadow_->SetScale({ 5.0f,1.0f,5.0f });
 
-	headpart_pos_ = armspart_pos_ = bodypart_pos_ = center_worldpos_;
+	headpart_pos_ = bodypart_pos_=corepart_pos_ = center_worldpos_;
 	headpart_pos_.m128_f32[1] = center_worldpos_.m128_f32[1] + 4.0f;
-	armspart_pos_.m128_f32[1] = center_worldpos_.m128_f32[1] + 0.2f;
 
 	headpart_->SetPosition(headpart_pos_);
 	headpart_->SetRotation(headpart_rot_);
@@ -95,9 +93,9 @@ void BossEnemy::StatusSet()
 	bodypart_->SetRotation(bodypart_rot_);
 	bodypart_->SetScale(bodypart_scl_);
 
-	armspart_->SetPosition(armspart_pos_);
-	armspart_->SetRotation(armspart_rot_);
-	armspart_->SetScale(armspart_scl_);
+	corepart_->SetPosition(corepart_pos_);
+	corepart_->SetRotation(corepart_rot_);
+	corepart_->SetScale(corepart_scl_);
 
 	rockon_pos_ = WorldtoScreen(bodypart_pos_);
 	rockonhead_pos_ = WorldtoScreen(headpart_pos_);
@@ -112,7 +110,7 @@ void BossEnemy::AllUpdate()
 
 	headpart_->Update(headpart_color_);
 	bodypart_->Update(bodypart_color_);
-	armspart_->Update(armspart_color_);
+	corepart_->Update(corepart_color_);
 
 	partred_->Update({ 1.0f,0.0f,0.0f,0.0f });
 	partgreen_->Update({ 0.0f,0.5f,0,0.0f });
@@ -166,16 +164,8 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 		if (length_ > limit_length_ && defomation_flag_ == true) {
 			TrackPlayerMode();
 		}
-		//プレイヤーの前まで来たとき
-		else if (length_ <= limit_length_ && wait_flag_ == false) {
-			bodypart_pos_.m128_f32[2] -= 1.f;
-			atttack_timer_ += 0.1f;
-			AttackMode(playerhp);
-		}
 	}
-	else {
-		attackfase_flag_ = false;
-	}
+	
 
 	StatusSet();
 	AllUpdate();
@@ -200,7 +190,7 @@ void BossEnemy::Draw(DirectXCommon* dxCommon)
 	if (hp_ > 0) {
 		headpart_->Draw();
 		bodypart_->Draw();
-		armspart_->Draw();
+		corepart_->Draw();
 		shadow_->Draw();
 	}
 	//center_->Draw();
@@ -237,78 +227,12 @@ void BossEnemy::TrackPlayerMode()
 
 void BossEnemy::AttackMode(int& playerhp)
 {
-	if (atttack_timer_ >= timer_limit_) {
-		attackfase_flag_ = true;
-		random_flag_ = false;
-	}
-	//攻撃フェイズに移行した時
-	if (attackfase_flag_ == true) {
-		Action::GetInstance()->EaseOut(headpart_rot_.y, purse_positiverot_ + 1);
-		if (headpart_rot_.y >= purse_positiverot_) {
-			headpart_rot_.y = purse_positiverot_;
-		}
-		Attack(playerhp, atttack_timer_);
-	}
-	else {
-		Action::GetInstance()->EaseOut(headpart_rot_.y, purse_negativerot_ - 1);
-		if (headpart_rot_.y <= purse_negativerot_) {
-			headpart_rot_.y = purse_negativerot_;
-		}
-	}
+	
 }
 
 void BossEnemy::Attack(int& playerhp, float& attacktimer)
 {
-	//巨大化していく値
-	XMFLOAT3 kGigantic = { 0.0002f ,0.0002f ,0.0002f };
-	float kDiscoloration = 0.01f;
-	if (attackshakedown_flag_ == false) {
-		armspart_rot_.x += 1.5f;
-		armspart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(armspart_scl_, kGigantic);
-		bodypart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(bodypart_scl_, kGigantic);
-		headpart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(headpart_scl_, kGigantic);
-		armspart_color_.y -= kDiscoloration;
-		armspart_color_.z -= kDiscoloration;
-		//腕が最大点に達した時
-		if (armspart_rot_.x >= 40.0f) {
-			armspart_rot_.x = 40;
-			if (vibrationchange_flag_ == true) {
-				vibration_ -= 4.2f;
-				if (vibration_ <= -4.2f) {
-					vibrationchange_flag_ = false;
-				}
-			}
-			else {
-				vibration_ += 4.2f;
-				if (vibration_ >= 4.2f) {
-					vibrationchange_flag_ = true;
-				}
-			}
-			//体の震え
-			headpart_rot_.y += vibration_;
-			bodypart_rot_.y += vibration_;
-			armspart_rot_.y += vibration_;
-			attack_charge_ += 0.1f;
-			if (attack_charge_ >= 10) {
-				attack_charge_ = 0;
-				attackshakedown_flag_ = true;
-			}
-		}
-	}
-	else {
-		armspart_rot_.x -= 10.0f;
-		if (armspart_rot_.x <= 0.0f) {
-			armspart_rot_.x = 0.0f;
-			armspart_color_ = { 1.0f,1.0f,1.0f ,1.0f };
-			armspart_scl_ = { 0.2f,0.2f,0.2f };
-			attackshakedown_flag_ = false;
-			attackfase_flag_ = false;
-			attacktimer = 0;
-			playerhp -= 5;
-			hp_ = 0;
-			SelfDestructingEfect();
-		}
-	}
+
 }
 
 void BossEnemy::Damage()
@@ -336,9 +260,9 @@ void BossEnemy::Death()
 		notlife_flag_ = true;
 		hp_ = 0;
 		shadow_color_.w -= Subtraction;
-		armspart_color_.w -= Subtraction;
 		bodypart_color_.w -= Subtraction;
 		headpart_color_.w -= Subtraction;
+		corepart_color_.w -= Subtraction;
 		if (objparticle_flag_ == true) {
 			//ParticleEfect();
 		}

@@ -32,6 +32,8 @@ void ModelManager::Initialize()
     CallModel("Sphere",true);
     CallModel("ThrowEnemy");
     CallModel("ThrowEnemyPropeller");
+    CallModel("bossbody");
+    CallModel("core");
 }
 
 void ModelManager::CallModel(const std::string& ObjModelname, bool Smoothing)

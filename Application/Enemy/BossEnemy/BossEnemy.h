@@ -80,10 +80,10 @@ private:
 	//Obj
 //頭
 	std::unique_ptr<Object3d> headpart_;
-	//両腕
-	std::unique_ptr<Object3d> armspart_;
 	//体
 	std::unique_ptr<Object3d> bodypart_;
+	//足
+	std::unique_ptr<Object3d> corepart_;
 	//影
 	std::unique_ptr<Object3d> shadow_;
 	//中心
@@ -117,21 +117,20 @@ private:
 	XMVECTOR faketrack_point_ = { 0,0,0 };
 	//パーツごとのスケール
 	XMFLOAT3 headpart_scl_ = { 1.2f,1.2f,1.2f };
-	XMFLOAT3 bodypart_scl_ = { 4.0f,4.0f,4.0f };
-	XMFLOAT3 armspart_scl_ = { 0.8f,0.8f,0.8f };
+	XMFLOAT3 bodypart_scl_ = { 2.3f,2.3f,2.3f };
+	XMFLOAT3 corepart_scl_ = { 2.f,2.f,2.f };
 	//パーツごとのポジション
 	XMVECTOR headpart_pos_ = { 0.0f,-1000.0f,0.0f };
 	XMVECTOR bodypart_pos_ = { 0.0f,-1000.0f,0.0f };
-	XMVECTOR armspart_pos_ = { 0.0f,-1000.0f,0.0f };
+	XMVECTOR corepart_pos_ = { 0.f,-1000.f,0.f };
 	//パーツごとの色
-	XMFLOAT4 armspart_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT4 headpart_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT4 bodypart_color_ = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT4 corepart_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	//パーツごとの回転
-	XMFLOAT3 armspart_rot_ = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 headpart_rot_ = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 bodypart_rot_ = { 0.0f,0.0f,0.0f };
-
+	XMFLOAT3 corepart_rot_ = { 0.0f,0.0f,0.0f };
 	//パーツごとに渡すステータス
 	XMVECTOR all_pos_ = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 all_rot_;

@@ -21,6 +21,8 @@ enum ModelName {
 	kSphere,
 	kThrowEnemy,
 	kEnemyPropeller,
+	kBossBody,
+	kBossCore,
 };
 
 class ModelManager final
