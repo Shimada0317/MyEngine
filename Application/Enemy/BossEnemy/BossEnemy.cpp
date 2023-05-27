@@ -1,11 +1,13 @@
 #include "BossEnemy.h"
 #include"Action.h"
+#include"Camera.h"
 #include"HelperMath.h"
 #include"SpriteManager.h"
 
 using namespace DirectX;
 const int HeadDamage = 80;
 const int BodyDamage = 50;
+const int Coredamage = 25;
 const float Subtraction = 0.1f;
 const float FallSpeed = 0.25f;
 const float AddDefomationValue = 0.04f;
@@ -21,38 +23,36 @@ BossEnemy::~BossEnemy()
 
 void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint)
 {
+	//中心座標
 	all_pos_ = allpos;
-
+	//カメラ
 	bringupcamera_ = camera;
-
+	//角度を共通化
 	headpart_rot_ = bodypart_rot_ = corepart_rot_ = allrot;
-	purse_positiverot_ += headpart_rot_.y;
-	purse_negativerot_ += headpart_rot_.y;
 
 	origin_distance_ = distance_;
 	originhead_distance_ = head_distance_;
+	origincore_distance_ = core_distance_;
 
-	shadow_ = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
-	center_ = Object3d::Create(ModelManager::GetInstance()->GetModel(2));
-	headpart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(3));
+	shadow_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
+	center_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
+	headpart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kHead));
 	bodypart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBossBody));
 	corepart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBossCore));
 
 	partgreen_ = ParticleManager::Create(camera);
 	partred_ = ParticleManager::Create(camera);
-
+	//中心のワールド座標
 	center_mat_ = center_->GetMatrix();
 	center_worldpos_ = XMVector3TransformNormal(all_pos_, center_mat_);
-
+	//敵の2D座標
 	rockon_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockon_pos_, rockon_color_, anchorpoint_));
 	rockonhead_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockonhead_pos_, rockon_color_, anchorpoint_));
-
-	track_point_ = oldtrack_point_ = trackpoint;
+	rockoncore_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockonhead_pos_, rockon_color_, anchorpoint_));
+	track_point_ = trackpoint;
 
 	hp_ = 800;
 	oldhp_ = hp_;
-	random_flag_ = true;
-	timer_limit_ = 8;
 	robotarive_flag_ = true;
 	center_->SetPosition(center_worldpos_);
 
@@ -60,16 +60,6 @@ void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camer
 
 void BossEnemy::StatusSet()
 {
-	////変形前なら
-	if (defomation_flag_ == false) {
-		all_pos_.m128_f32[1] -= FallSpeed;
-		//地面に着いたとき
-		if (all_pos_.m128_f32[1] <= 2) {
-			all_pos_.m128_f32[1] = 2;
-			defomation_flag_ = true;
-		}
-	}
-
 	center_->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(center_mat_);
 	center_mat_ = center_->GetMatrix();
@@ -80,9 +70,11 @@ void BossEnemy::StatusSet()
 	shadow_pos_.m128_f32[1] = -0.8f;
 	shadow_->SetPosition(shadow_pos_);
 	shadow_->SetRotation({ 0.0f,0.0f,0.0f });
-	shadow_->SetScale({ 5.0f,1.0f,5.0f });
+	shadow_->SetScale({ 2.0f,1.0f,2.0f });
 
-	headpart_pos_ = bodypart_pos_=corepart_pos_ = center_worldpos_;
+	headpart_pos_ = bodypart_pos_ = corepart_pos_ = center_worldpos_;
+	bodypart_pos_.m128_f32[1] = center_worldpos_.m128_f32[1] - 1.f;
+	corepart_pos_.m128_f32[1] = center_worldpos_.m128_f32[1] - 3.f;
 	headpart_pos_.m128_f32[1] = center_worldpos_.m128_f32[1] + 4.0f;
 
 	headpart_->SetPosition(headpart_pos_);
@@ -99,8 +91,10 @@ void BossEnemy::StatusSet()
 
 	rockon_pos_ = WorldtoScreen(bodypart_pos_);
 	rockonhead_pos_ = WorldtoScreen(headpart_pos_);
+	rockoncore_pos_ = WorldtoScreen(corepart_pos_);
 	rockon_->SetPosition(rockon_pos_);
 	rockonhead_->SetPosition(rockonhead_pos_);
+	rockoncore_->SetPosition(rockoncore_pos_);
 }
 
 void BossEnemy::AllUpdate()
@@ -122,21 +116,23 @@ void BossEnemy::AllUpdate()
 
 void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
 {
+	Appearance();
+
+	Move(player2Dpos,playerhp,playerbulletshot);
+
+	Stun(player2Dpos, playerhp, playerbulletshot);
+
 	obj_particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 		});
 
 	//当たり判定
 	if (playerbulletshot == true && hp_ > 0) {
-		if (player2Dpos.x - distance_ * 4 < rockon_pos_.x && player2Dpos.x + distance_ * 4 > rockon_pos_.x &&
-			player2Dpos.y - distance_ * 4 < rockon_pos_.y && player2Dpos.y + distance_ * 4 > rockon_pos_.y) {
-			hp_ -= BodyDamage;
-			playerbulletshot = false;
-		}
-
-		if (player2Dpos.x - head_distance_ * 4 < rockonhead_pos_.x && player2Dpos.x + head_distance_ * 4 > rockonhead_pos_.x &&
-			player2Dpos.y - head_distance_ * 4 < rockonhead_pos_.y && player2Dpos.y + head_distance_ * 4 > rockonhead_pos_.y) {
-			hp_ -= HeadDamage;
+		if (player2Dpos.x - core_distance_ * 4 < rockoncore_pos_.x && player2Dpos.x + core_distance_ * 4 > rockoncore_pos_.x &&
+			player2Dpos.y - core_distance_ * 4 < rockoncore_pos_.y && player2Dpos.y + core_distance_ * 4 > rockoncore_pos_.y) {
+			hp_ -= Coredamage;
+			addrot_ -= 5.f;
+			corepart_color_.y = 0;
 			playerbulletshot = false;
 		}
 	}
@@ -149,24 +145,6 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 
 	Death();
 
-	if (hp_ < 50) {
-		attacktime_min_ = 15;
-		attacktime_max_ = 20;
-	}
-
-	if (random_flag_ == false) {
-		timer_limit_ = Action::GetInstance()->GetRangRand(attacktime_min_, attacktime_max_);
-		random_flag_ = true;
-	}
-
-	//生きているとき
-	if (robotarive_flag_ == true && hp_ > 0) {
-		if (length_ > limit_length_ && defomation_flag_ == true) {
-			TrackPlayerMode();
-		}
-	}
-	
-
 	StatusSet();
 	AllUpdate();
 }
@@ -176,6 +154,7 @@ void BossEnemy::Draw(DirectXCommon* dxCommon)
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	//rockonhead_->Draw();
 	//rockon_->Draw();
+	rockoncore_->Draw();
 	Sprite::PostDraw();
 
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
@@ -195,6 +174,57 @@ void BossEnemy::Draw(DirectXCommon* dxCommon)
 	}
 	//center_->Draw();
 	Object3d::PostDraw();
+}
+
+void BossEnemy::Appearance()
+{
+	if (state_ == kAppearance) {
+		all_pos_.m128_f32[1] -= FallSpeed;
+		if (all_pos_.m128_f32[1] <= 3.f) {
+			all_pos_.m128_f32[1] = 3.f;
+			state_ = kMove;
+		}
+	}
+}
+
+void BossEnemy::Move(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+{
+	if (state_ != kMove) { return; }
+	//addrot_ = 20.f;
+	corepart_rot_.y += addrot_;
+	bodypart_rot_.y += addrot_;
+	headpart_rot_.y += addrot_;
+	if (length_ > limit_length_) {
+		TrackPlayerMode();
+	}
+	if (addrot_ <= 0) {
+		state_ = kStun;
+	}
+}
+
+void BossEnemy::Stun(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+{
+	if (state_ != kStun) { return; }
+	movespeed_ = 0.f;
+	addrot_ = 0.f;
+	if (playerbulletshot == true && hp_ > 0) {
+		if (player2Dpos.x - head_distance_ * 4 < rockonhead_pos_.x && player2Dpos.x + head_distance_ * 4 > rockonhead_pos_.x &&
+			player2Dpos.y - head_distance_ * 4 < rockonhead_pos_.y && player2Dpos.y + head_distance_ * 4 > rockonhead_pos_.y) {
+			hp_ -= HeadDamage;
+			playerbulletshot = false;
+		}
+
+		if (player2Dpos.x - distance_ * 4 < rockon_pos_.x && player2Dpos.x + distance_ * 4 > rockon_pos_.x &&
+			player2Dpos.y - distance_ * 4 < rockon_pos_.y && player2Dpos.y + distance_ * 4 > rockon_pos_.y) {
+			hp_ -= BodyDamage;
+			playerbulletshot = false;
+		}
+	}
+	time_ += 0.1f;
+	if (time_ >= 10) {
+		state_ = kMove;
+		addrot_ = 20;
+	}
 }
 
 void BossEnemy::TrackPlayerMode()
@@ -217,23 +247,16 @@ void BossEnemy::TrackPlayerMode()
 	float v3z = (vz / length_) * movespeed_;
 	distance_ = origin_distance_;
 	head_distance_ = originhead_distance_;
+	core_distance_ = origincore_distance_;
 
 	distance_ -= length_ * 2.f;
 	head_distance_ -= length_;
+	core_distance_ -= length_;
 
 	all_pos_.m128_f32[0] -= v3x;
 	all_pos_.m128_f32[2] -= v3z;
 }
 
-void BossEnemy::AttackMode(int& playerhp)
-{
-	
-}
-
-void BossEnemy::Attack(int& playerhp, float& attacktimer)
-{
-
-}
 
 void BossEnemy::Damage()
 {
@@ -242,8 +265,8 @@ void BossEnemy::Damage()
 		oldhp_ = hp_;
 		headpart_color_.y -= 0.2f;
 		headpart_color_.z -= 0.2f;
-		bodypart_color_.y -= 0.2f;
-		bodypart_color_.z -= 0.2f;
+		//bodypart_color_.y -= 0.2f;
+		//bodypart_color_.z -= 0.2f;
 		for (int i = 0; i < 5; i++) {
 			std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 			newparticle->Initialize(1, bodypart_pos_, { 1.3f,1.3f,1.3f }, { bodypart_rot_ });
@@ -256,8 +279,6 @@ void BossEnemy::Death()
 {
 	//生きているときにHPが0になったら
 	if (hp_ <= 0) {
-		oldtrack_point_ = track_point_;
-		notlife_flag_ = true;
 		hp_ = 0;
 		shadow_color_.w -= Subtraction;
 		bodypart_color_.w -= Subtraction;

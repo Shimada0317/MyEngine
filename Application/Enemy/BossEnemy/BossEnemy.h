@@ -2,14 +2,22 @@
 #include"ObjParticle.h"
 #include"DirectXCommon.h"
 #include"Sprite.h"
-#include"Camera.h"
+
 #include"ParticleManager.h"
 #include<DirectXMath.h>
 #include<memory>
 #include<list>
 
+class Camera;
+
 class BossEnemy
 {
+private: 
+	enum State {
+		kAppearance,
+		kMove,
+		kStun,
+	}state_;
 private:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
@@ -30,22 +38,16 @@ public:
 
 	void Draw(DirectXCommon* dxCommon);
 
+	void Appearance();
+
+	void Move(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
+
+	void Stun(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
+
 	/// <summary>
 /// プレイヤー追尾モード
 /// </summary>
 	void TrackPlayerMode();
-
-	/// <summary>
-	/// 攻撃モード
-	/// </summary>
-	/// <param name="playerHp">プレイヤーのHp</param>
-	void AttackMode(int& playerhp);
-
-	/// <summary>
-	/// 攻撃
-	/// </summary>
-	/// <param name="playerhp">プレイヤーのHp</param>
-	void Attack(int& playerhp, float& attacktimer);
 
 	void Damage();
 
@@ -96,6 +98,8 @@ private:
 	std::unique_ptr<Sprite> rockon_;
 	//頭
 	std::unique_ptr<Sprite> rockonhead_;
+	//コア
+	std::unique_ptr<Sprite> rockoncore_;
 
 	//ダメージを食らったときのエフェクト
 	ParticleManager* partgreen_ = nullptr;
@@ -113,16 +117,14 @@ private:
 	int oldhp_ = 0;
 	bool robotarive_flag_ = false;
 	XMVECTOR track_point_ = { 0,0,0 };
-	XMVECTOR oldtrack_point_ = { 0,0,0 };
-	XMVECTOR faketrack_point_ = { 0,0,0 };
 	//パーツごとのスケール
-	XMFLOAT3 headpart_scl_ = { 1.2f,1.2f,1.2f };
-	XMFLOAT3 bodypart_scl_ = { 2.3f,2.3f,2.3f };
-	XMFLOAT3 corepart_scl_ = { 2.f,2.f,2.f };
+	XMFLOAT3 headpart_scl_ = { 1.f,1.f,1.f };
+	XMFLOAT3 bodypart_scl_ = { 1.4f,1.4f,1.4f };
+	XMFLOAT3 corepart_scl_ = { 0.8f,0.8f,0.8f };
 	//パーツごとのポジション
 	XMVECTOR headpart_pos_ = { 0.0f,-1000.0f,0.0f };
 	XMVECTOR bodypart_pos_ = { 0.0f,-1000.0f,0.0f };
-	XMVECTOR corepart_pos_ = { 0.f,-1000.f,0.f };
+	XMVECTOR corepart_pos_ = { 0.f,1000.f,0.f };
 	//パーツごとの色
 	XMFLOAT4 headpart_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT4 bodypart_color_ = { 1.0f,1.0f,1.0f,1.0f };
@@ -136,22 +138,20 @@ private:
 	XMFLOAT3 all_rot_;
 
 	//影のステータス
-	XMVECTOR shadow_pos_ = { 0,0,0 };
+	XMVECTOR shadow_pos_ = {};
 	XMFLOAT4 shadow_color_ = { 0.0f,0.0f,0.0f,0.1f };
 
 	//敵が持つ2D系のステータス
-	XMFLOAT2 rockon_pos_ = { 0.0f,0.0f };
+	XMFLOAT2 rockon_pos_ = {};
 	XMFLOAT2 anchorpoint_ = { 0.5f,0.5f };
 	XMFLOAT4 rockon_color_ = { 1.0f,1.0f,1.0f,1.0f };
-	XMFLOAT2 rockonhead_pos_ = { 0.0f,0.0f };
+	XMFLOAT2 rockonhead_pos_ = {};
+	XMFLOAT2 rockoncore_pos_ = {};
 
 	//2D座標を持たせる計算で使う変数
 	XMVECTOR offset_;
 	XMMATRIX matviewport_;
-	//攻撃モードで使用される変数
-	bool attackfase_flag_ = false;
-	//攻撃の準備時間
-	bool attackshakedown_flag_ = false;
+
 	float attack_charge_ = 0.0f;
 	//移動速度
 	float movespeed_ = 0.03f;
@@ -163,29 +163,18 @@ private:
 	//敵とプレイヤーの距離
 	float origin_distance_;
 	float originhead_distance_;
-	float distance_ = 60.0f;
-	float head_distance_ = 30.0f;
-	//敵のモーション用
-	float purse_positiverot_ = 180;
-	float purse_negativerot_ = 0;
-	//変形用のフラグ
-	bool defomation_flag_ = false;
-	float defomation_count_ = 0.0f;
-	//振動
-	float vibration_ = 0.0f;
-	bool vibrationchange_flag_ = false;
-	XMVECTOR attack_beforepos_ = { 0.0f,0.0f,0.0f };
-	float limit_distance_ = 0.0f;
+	float origincore_distance_;
+	float distance_ = 60.f;
+	float head_distance_ = 30.f;
+	float core_distance_=20.f;
+
+	float limit_distance_ = 0.f;
 	float atttack_timer_ = 0.f;
-	float timer_limit_ = 0.f;
-	bool random_flag_ = false;
-	float attacktime_min_ = 20;
-	float attacktime_max_ = 40;
 	bool particleefect_flag_ = true;
 	//同じ追従先に別の敵がいるかいないか
-	bool wait_flag_ = false;
-	bool notlife_flag_ = false;
 	bool objparticle_flag_ = false;
 
+	float addrot_ = 20.f;
+	float time_ = 0.f;
 };
 
