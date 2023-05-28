@@ -147,7 +147,6 @@ public:
 	bool bullet_active_ = true;
 	//Hp‚ª0ˆÈã‚©
 	bool dead_flag_ = false;
-	bool particle_flag_ = true;
 	float floating_pos_ = 0.f;
 	float fall_time_ = 0.f;
 	int state_ = APPEARANCE;

@@ -40,26 +40,24 @@ void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camer
 	bodypart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBossBody));
 	corepart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBossCore));
 
-	partgreen_ = ParticleManager::Create(camera);
-	partred_ = ParticleManager::Create(camera);
-	//中心のワールド座標
-	center_mat_ = center_->GetMatrix();
-	center_worldpos_ = XMVector3TransformNormal(all_pos_, center_mat_);
+	partgreen_ = ParticleManager::Create(bringupcamera_);
+	partred_ = ParticleManager::Create(bringupcamera_);
+
 	//敵の2D座標
 	rockon_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockon_pos_, rockon_color_, anchorpoint_));
 	rockonhead_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockonhead_pos_, rockon_color_, anchorpoint_));
 	rockoncore_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockonhead_pos_, rockon_color_, anchorpoint_));
 	track_point_ = trackpoint;
-
-	hp_ = 800;
-	oldhp_ = hp_;
-	robotarive_flag_ = true;
-	center_->SetPosition(center_worldpos_);
-
 }
 
 void BossEnemy::StatusSet()
 {
+	if (center_worldpos_.m128_f32[1] >= 10) {
+		headpart_scl_ = { 1.f,1.f,1.f };
+		bodypart_scl_ = { 1.4f,1.4f,1.4f };
+		corepart_scl_ = { 0.8f,0.8f,0.8f };
+
+	}
 	center_->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(center_mat_);
 	center_mat_ = center_->GetMatrix();
@@ -118,7 +116,7 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 {
 	Appearance();
 
-	Move(player2Dpos,playerhp,playerbulletshot);
+	Move(player2Dpos, playerhp, playerbulletshot);
 
 	Stun(player2Dpos, playerhp, playerbulletshot);
 
@@ -140,7 +138,11 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 	if (Input::GetInstance()->PushKey(DIK_O)) {
 		hp_ = 0;
 	}
+	if (hp_ == 0) {
+		state_ = State::kDead;
+	}
 
+	ParticleEfect();
 	Damage();
 
 	Death();
@@ -151,16 +153,17 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 
 void BossEnemy::Draw(DirectXCommon* dxCommon)
 {
-	Sprite::PreDraw(dxCommon->GetCmdList());
-	//rockonhead_->Draw();
-	//rockon_->Draw();
-	rockoncore_->Draw();
-	Sprite::PostDraw();
 
 	ParticleManager::PreDraw(dxCommon->GetCmdList());
 	partgreen_->Draw();
 	partred_->Draw();
 	ParticleManager::PostDraw();
+
+	Sprite::PreDraw(dxCommon->GetCmdList());
+	//rockonhead_->Draw();
+	//rockon_->Draw();
+	rockoncore_->Draw();
+	Sprite::PostDraw();
 
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	for (std::unique_ptr<ObjParticle>& particle : obj_particle_) {
@@ -277,21 +280,19 @@ void BossEnemy::Damage()
 
 void BossEnemy::Death()
 {
+	if (state_ != State::kDead) { return; }
 	//生きているときにHPが0になったら
-	if (hp_ <= 0) {
-		hp_ = 0;
-		shadow_color_.w -= Subtraction;
-		bodypart_color_.w -= Subtraction;
-		headpart_color_.w -= Subtraction;
-		corepart_color_.w -= Subtraction;
-		if (objparticle_flag_ == true) {
-			//ParticleEfect();
-		}
-		robotarive_flag_ = false;
-		if (obj_particle_.empty()) {
-			dead_flag_ = true;
-		}
+
+	shadow_color_.w -= Subtraction;
+	bodypart_color_.w -= Subtraction;
+	headpart_color_.w -= Subtraction;
+	corepart_color_.w -= Subtraction;
+	robotarive_flag_ = false;
+	if (obj_particle_.empty()) {
+		dead_flag_ = true;
 	}
+	ParticleEfect();
+
 }
 
 XMFLOAT2 BossEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
@@ -326,12 +327,13 @@ XMFLOAT2 BossEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 
 void BossEnemy::ParticleEfect()
 {
+
 	for (int i = 0; i < 50; i++) {
 		XMFLOAT3 pos;
 
-		pos.x = center_worldpos_.m128_f32[0];
-		pos.y = center_worldpos_.m128_f32[1];
-		pos.z = center_worldpos_.m128_f32[2];
+		pos.x = bodypart_pos_.m128_f32[0];
+		pos.y = bodypart_pos_.m128_f32[1];
+		pos.z = bodypart_pos_.m128_f32[2];
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};
@@ -342,34 +344,8 @@ void BossEnemy::ParticleEfect()
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		partred_->Add(400, pos, vel, acc, 120.0f, 0.0f, 150.0f);
-		partgreen_->Add(400, pos, vel, acc, 110.1f, 0.0f, 150.0f);
+		partred_->Add(30, pos, vel, acc, 400.0f, 0.0f, 150.0f);
+		partgreen_->Add(30, pos, vel, acc, 300.7f, 0.0f, 150.0f);
 	}
-	objparticle_flag_ = false;
 }
-
-void BossEnemy::SelfDestructingEfect()
-{
-	for (int i = 0; i < 50; i++) {
-		XMFLOAT3 pos;
-
-		pos.x = center_worldpos_.m128_f32[0];
-		pos.y = center_worldpos_.m128_f32[1];
-		pos.z = center_worldpos_.m128_f32[2];
-
-		const float rnd_vel = 0.04f;
-		XMFLOAT3 vel{};
-		vel.x = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
-		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.12f);
-		vel.z = Action::GetInstance()->GetRangRand(-0.03f, 0.09f);
-
-		XMFLOAT3 acc{};
-		acc.y = 0.0;
-
-		partred_->Add(400, pos, vel, acc, 120.0f, 0.0f, 150.0f);
-		partgreen_->Add(400, pos, vel, acc, 110.1f, 0.0f, 150.0f);
-	}
-	objparticle_flag_ = false;
-}
-
 

@@ -17,6 +17,7 @@ private:
 		kAppearance,
 		kMove,
 		kStun,
+		kDead,
 	}state_;
 private:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -64,12 +65,6 @@ public:
 	/// </summary>
 	void ParticleEfect();
 
-	/// <summary>
-	/// パーティクル発生
-	/// </summary>
-	void SelfDestructingEfect();
-
-	void WaitTrack(bool otherenemyarive);
 public:
 
 	/// <summary>
@@ -104,23 +99,21 @@ private:
 	//ダメージを食らったときのエフェクト
 	ParticleManager* partgreen_ = nullptr;
 	ParticleManager* partred_ = nullptr;
-
 	//カメラ
 	Camera* bringupcamera_;
 	//敵の中心部分のステータス
 	XMVECTOR center_worldpos_ = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 center_rot_ = { 0.0f,0.0f,0.0f };
 	XMMATRIX center_mat_;
-
 	//敵が持っているステータス
-	int hp_ = 50;
-	int oldhp_ = 0;
-	bool robotarive_flag_ = false;
+	int hp_ = 600;
+	int oldhp_ = hp_;
+	bool robotarive_flag_ = true;
 	XMVECTOR track_point_ = { 0,0,0 };
 	//パーツごとのスケール
-	XMFLOAT3 headpart_scl_ = { 1.f,1.f,1.f };
-	XMFLOAT3 bodypart_scl_ = { 1.4f,1.4f,1.4f };
-	XMFLOAT3 corepart_scl_ = { 0.8f,0.8f,0.8f };
+	XMFLOAT3 headpart_scl_ = { 0.f,0.f,0.f };
+	XMFLOAT3 bodypart_scl_ = { 0.f,0.f,0.f };
+	XMFLOAT3 corepart_scl_ = { 0.f,0.f,0.f };
 	//パーツごとのポジション
 	XMVECTOR headpart_pos_ = { 0.0f,-1000.0f,0.0f };
 	XMVECTOR bodypart_pos_ = { 0.0f,-1000.0f,0.0f };
@@ -154,7 +147,7 @@ private:
 
 	float attack_charge_ = 0.0f;
 	//移動速度
-	float movespeed_ = 0.03f;
+	float movespeed_ = 0.07f;
 	//プレイヤーと敵の距離
 	float length_ = 13.0f;
 	float limit_length_ = 7.0f;
@@ -170,7 +163,6 @@ private:
 
 	float limit_distance_ = 0.f;
 	float atttack_timer_ = 0.f;
-	bool particleefect_flag_ = true;
 	//同じ追従先に別の敵がいるかいないか
 	bool objparticle_flag_ = false;
 

@@ -419,9 +419,9 @@ void NormalEnemy::ParticleEfect()
 	for (int i = 0; i < 50; i++) {
 		XMFLOAT3 pos;
 
-		pos.x = center_worldpos_.m128_f32[0];
-		pos.y = center_worldpos_.m128_f32[1];
-		pos.z = center_worldpos_.m128_f32[2];
+		pos.x = bodypart_pos_.m128_f32[0];
+		pos.y = bodypart_pos_.m128_f32[1];
+		pos.z = bodypart_pos_.m128_f32[2];
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 vel{};

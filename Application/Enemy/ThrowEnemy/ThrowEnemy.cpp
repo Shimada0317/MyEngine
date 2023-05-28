@@ -191,7 +191,6 @@ void ThrowEnemy::DeathProcess()
 			dead_flag_ = true;
 		}
 	}
-	if (particle_flag_ != true) { return; }
 	ParticleEfect();
 }
 //3D‚©‚ç2D‚É•ÏŠ·
