@@ -168,5 +168,6 @@ private:
 
 	float addrot_ = 20.f;
 	float time_ = 0.f;
+	bool particleefect_flag_ = true;
 };
 

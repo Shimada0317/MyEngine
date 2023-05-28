@@ -142,7 +142,6 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 		state_ = State::kDead;
 	}
 
-	ParticleEfect();
 	Damage();
 
 	Death();
@@ -287,11 +286,13 @@ void BossEnemy::Death()
 	bodypart_color_.w -= Subtraction;
 	headpart_color_.w -= Subtraction;
 	corepart_color_.w -= Subtraction;
+	if (particleefect_flag_ == true) {
+		ParticleEfect();
+	}
 	robotarive_flag_ = false;
 	if (obj_particle_.empty()) {
 		dead_flag_ = true;
 	}
-	ParticleEfect();
 
 }
 
@@ -328,7 +329,7 @@ XMFLOAT2 BossEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 void BossEnemy::ParticleEfect()
 {
 
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 5; i++) {
 		XMFLOAT3 pos;
 
 		pos.x = bodypart_pos_.m128_f32[0];
@@ -344,8 +345,10 @@ void BossEnemy::ParticleEfect()
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		partred_->Add(30, pos, vel, acc, 400.0f, 0.0f, 150.0f);
-		partgreen_->Add(30, pos, vel, acc, 300.7f, 0.0f, 150.0f);
+		partred_->Add(200, pos, vel, acc, 100.f, 0.f, 150.f);
+		partgreen_->Add(200, pos, vel, acc, 90.f, 0.f, 150.f);
 	}
+	particleefect_flag_ = false;
+
 }
 
