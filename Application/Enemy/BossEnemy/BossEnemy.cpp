@@ -135,9 +135,9 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 		}
 	}
 
-	if (Input::GetInstance()->PushKey(DIK_O)) {
+	/*if (Input::GetInstance()->PushKey(DIK_O)) {
 		hp_ = 0;
-	}
+	}*/
 	if (hp_ == 0) {
 		state_ = State::kDead;
 	}
@@ -161,7 +161,7 @@ void BossEnemy::Draw(DirectXCommon* dxCommon)
 	Sprite::PreDraw(dxCommon->GetCmdList());
 	//rockonhead_->Draw();
 	//rockon_->Draw();
-	rockoncore_->Draw();
+	//rockoncore_->Draw();
 	Sprite::PostDraw();
 
 	Object3d::PreDraw(dxCommon->GetCmdList());
@@ -226,6 +226,7 @@ void BossEnemy::Stun(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbul
 	if (time_ >= 10) {
 		state_ = kMove;
 		addrot_ = 20;
+		movespeed_ = 0.07f;
 	}
 }
 

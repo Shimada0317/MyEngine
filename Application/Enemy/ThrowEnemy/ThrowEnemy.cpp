@@ -74,10 +74,10 @@ void ThrowEnemy::StatusSet()
 //‘S‚Ä‚ÌXVˆ—‚ð‚Ü‚Æ‚ß‚é
 void ThrowEnemy::AllUpdate()
 {
-	enemy_->Update();
-	propeller_->Update();
+	enemy_->Update(color_);
+	propeller_->Update(color_);
 	center_->Update();
-	bullet_->Update({1.f,0.f,0.f,1.f});
+	bullet_->Update(bullet_color_);
 
 	partred_->Update({ 1.0f,0.0f,0.0f,0.0f });
 	partgreen_->Update({ 0.0f,0.5f,0,0.0f });
@@ -101,9 +101,9 @@ void ThrowEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& player
 	DamageProcess(player2Dpos,playerbulletshot);
 	//Ž€–Sˆ—
 	DeathProcess();
-	if (Input::GetInstance()->PushKey(DIK_O)) {
+	/*if (Input::GetInstance()->PushKey(DIK_O)) {
 		hp_ = 0;
-	}
+	}*/
 	if (hp_ <= 0) {
 		state_ = State::DEATH;
 	}
@@ -185,12 +185,16 @@ void ThrowEnemy::DeathProcess()
 	const float kGravity = 1.8f;
 	fall_time_ += 0.001f;
 	float fallspeed = kGravity * fall_time_;
+	color_.w -= fall_time_;
+	bullet_color_.w -= fall_time_;
+
 	if (center_pos_.m128_f32[1] >= 0) {
 		center_pos_.m128_f32[1] -= fallspeed;
 		if (center_pos_.m128_f32[1] <= 0) {
 			dead_flag_ = true;
 		}
 	}
+	if (color_.w <= 0) { return; }
 	ParticleEfect();
 }
 //3D‚©‚ç2D‚É•ÏŠ·
@@ -252,8 +256,8 @@ void ThrowEnemy::BulletCollision(const XMFLOAT2& player2Dpos, bool& playerbullet
 {
 	//“–‚½‚è”»’è
 	if (playerbulletshot == false) { return; }
-	if (player2Dpos.x - bullet_distance_ * 4.f < rockon_bulletpos_.x && player2Dpos.x + bullet_distance_ * 4.f > rockon_bulletpos_.x &&
-		player2Dpos.y - bullet_distance_ * 4.f < rockon_bulletpos_.y && player2Dpos.y + bullet_distance_ * 4.f > rockon_bulletpos_.y) {
+	if (player2Dpos.x - bullet_distance_ * bullet_magnification_ < rockon_bulletpos_.x && player2Dpos.x + bullet_distance_ * bullet_magnification_ > rockon_bulletpos_.x &&
+		player2Dpos.y - bullet_distance_ * bullet_magnification_ < rockon_bulletpos_.y && player2Dpos.y + bullet_distance_ * bullet_magnification_ > rockon_bulletpos_.y) {
 		bullet_active_ = false;
 		playerbulletshot = false;
 	}
@@ -276,7 +280,7 @@ void ThrowEnemy::ThrowAttack(int& playerhp)
 
 	BulletLength = sqrtf(v2x + v2y + v2z);
 
-	XMVECTOR v3;
+	XMVECTOR v3{};
 	v3.m128_f32[0] = (vx / BulletLength) * bullet_speed_;
 	v3.m128_f32[1] = (vy / BulletLength) * bullet_speed_;
 	v3.m128_f32[2] = (vz / BulletLength) * bullet_speed_;
@@ -284,12 +288,15 @@ void ThrowEnemy::ThrowAttack(int& playerhp)
 	
 	bullet_distance_ = BulletLength;
 
+
 	bullet_pos_ -= v3;
+	bullet_magnification_ += 0.015f;
 	if (BulletLength <=0.1f) {
 		playerhp -= 1;
 		bullet_pos_ = old_pos_;
 		bullet_scl_={};
 		state_ = State::WAIT;
+		bullet_magnification_ = 0.f;
 	}
 
 	if (bullet_active_ == false) {

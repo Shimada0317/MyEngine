@@ -179,9 +179,9 @@ void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playe
 	else {
 		attackfase_flag_ = false;
 	}
-	if (Input::GetInstance()->PushKey(DIK_O)) {
+	/*if (Input::GetInstance()->PushKey(DIK_O)) {
 		hp_ = 0;
-	}
+	}*/
 	StatusSet();
 	AllUpdate();
 }

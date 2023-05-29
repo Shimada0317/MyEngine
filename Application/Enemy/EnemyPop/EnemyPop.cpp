@@ -23,7 +23,6 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 	int TYPE = 0;
 
 	bool ari = false;
-	bool step = false;
 	int count = 0;
 
 	bool POPSkip = false;
@@ -105,17 +104,6 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 				TRACKSkip = true;
 			}
 
-			else if (word.find("STEP") == 0) {
-				getline(line_stram, word, ',');
-				int STEP = atoi(word.c_str());
-				if (STEP == 1) {
-					step = true;
-				}
-				else {
-					step = false;
-				}
-			}
-
 			else if (word.find("ARIVE") == 0) {
 				getline(line_stram, word, ',');
 
@@ -160,6 +148,7 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 				POPSkip = false;
 				TRACKSkip = false;
 				ARIVESkip = false;
+				TYPESkip = false;
 			}
 		}
 

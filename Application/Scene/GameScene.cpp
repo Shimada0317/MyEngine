@@ -174,7 +174,9 @@ void GameScene::MoveProcess()
 	cameravector_ = { 0.f,0.f,0.f,0.f };
 	cameravector_ = XMVector3Transform(cameravector_, kCameraMatrix);
 	//•à‚¢‚Ä‚¢‚é‚Æ‚«‚Ì‚æ‚¤‚Èñ‚ğ“®‚©‚·
-	moviestaging_->MoveShakingHead(eyerot_);
+	if ( movie_sequence_!= kAction) {
+		moviestaging_->MoveShakingHead(eyerot_);
+	}
 	(this->*MoveFuncTable[patern_])();
 	//ƒvƒŒƒCƒ„[‚É“n‚·Šp“x
 	passrot_ = eyerot_;
@@ -457,7 +459,8 @@ void GameScene::GoalPoint()
 			velocity_ = { 0.0f,0.0f,0.0f };
 			FringFlag = true;
 			if (FringFlag == true) {
-				velocity_ = { 0.0f,0.6683f,0.0f };
+				velocity_ = { 0.0f,0.6f,0.0f };
+				goalpos_.m128_f32[1] += velocity_.m128_f32[1]/3.345f;
 				//ƒS[ƒ‹‚É’…‚¢‚½‚Æ‚«
 				if (goalpos_.m128_f32[1] >= 100) {
 					gamestate_ = CLEAR;
@@ -549,8 +552,8 @@ void GameScene::PostEffectDraw(DirectXCommon* dxCommon)
 	posteffect_->Draw(dxCommon->GetCmdList());
 	SpriteDraw(dxCommon);
 	//•`‰æŒãˆ—
-	ImgDraw();
-	player_->ImGuiDraw();
+	//ImgDraw();
+	//player_->ImGuiDraw();
 	dxCommon->PostDraw();
 }
 //•`‰æˆ—
@@ -565,4 +568,6 @@ void GameScene::Finalize()
 	clear_.reset();
 	shot_.reset();
 	player_.reset();
+	bgm_.reset();
+	herifry_.reset();
 }

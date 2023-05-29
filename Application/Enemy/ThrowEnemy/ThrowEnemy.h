@@ -123,6 +123,9 @@ public:
 	XMVECTOR bullet_pos_{};
 	XMFLOAT3 bullet_rot_{};
 	XMFLOAT3 bullet_scl_{};
+	//色
+	XMFLOAT4 color_ = { 1.f,1.f,1.f,1.f };
+	XMFLOAT4 bullet_color_ = { 1.f,0.f,0.f,1.f };
 	//着弾地点
 	XMVECTOR landing_point_ = {};
 	//2D座標を持たせる計算で使う変数
@@ -144,6 +147,7 @@ public:
 	float originbox_distance_;
 	float distance_ = 60.0f;
 	float bullet_distance_ = 0.f;
+	float bullet_magnification_=0.f;
 	bool bullet_active_ = true;
 	//Hpが0以上か
 	bool dead_flag_ = false;
