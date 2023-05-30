@@ -174,17 +174,33 @@ void GameScene::MoveProcess()
 	cameravector_ = { 0.f,0.f,0.f,0.f };
 	cameravector_ = XMVector3Transform(cameravector_, kCameraMatrix);
 	//歩いているときのような首を動かす
-	if ( movie_sequence_!= kAction) {
+	if (movie_sequence_ != kAction) {
 		moviestaging_->MoveShakingHead(eyerot_);
 	}
 	(this->*MoveFuncTable[patern_])();
 	//プレイヤーに渡す角度
 	passrot_ = eyerot_;
 	if (!stopflag_) { return; }
-	enemypop_->PopEnemy( patern_, camera_.get());
+	enemypop_->PopEnemy(patern_, camera_.get());
 	patern_ += 1;
 	stopflag_ = false;
 }
+bool GameScene::DestinationArrivalCheck(float manyvalue, float fewvalue)
+{
+	if (manyvalue >= fewvalue) {
+		return true;
+	}
+	return false;
+}
+
+void GameScene::WarPointArrival(float manyvalue, float fewvalue)
+{
+	if (!DestinationArrivalCheck(manyvalue, fewvalue)) { return; }
+	gamestate_ = FIGHT;
+	stopflag_ = true;
+	velocity_ = { 0, 0, 0 };
+}
+
 //戦闘時の処理
 void GameScene::FightProcess()
 {
@@ -326,118 +342,83 @@ void GameScene::DamageProcess()
 void GameScene::MoveStartBack()
 {
 	velocity_ = { 0, 0, movespeed_ };
-	if (cameravector_.m128_f32[2] >= 20) {
-		Action::GetInstance()->EaseOut(eyerot_.y, 185.0f);
-		velocity_ = { 0.f,0.f,0.f };
-		if (eyerot_.y >= 180) {
-			gamestate_ = FIGHT;
-			stopflag_ = true;
-		}
-	}
+	if (!DestinationArrivalCheck(cameravector_.m128_f32[2], 20.f)) { return; }
+	velocity_ = { 0.f,0.f,0.f };
+	Action::GetInstance()->EaseOut(eyerot_.y, 185.0f);
+	WarPointArrival(eyerot_.y, 180.f);
 }
 //2回目の戦闘地点
 void GameScene::MoveStartFront()
 {
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
-	if (eyerot_.y <= 0) {
-		velocity_ = { 0, 0, 0 };
-		gamestate_ = FIGHT;
-		stopflag_ = true;
-	}
+	WarPointArrival(0.f, eyerot_.y);
 }
 //3回目の戦闘地点
 void GameScene::MovePointA()
 {
 	velocity_ = { 0, 0, movespeed_ };
-	if (cameravector_.m128_f32[2] >= 40) {
-		velocity_ = { 0.f,0.f,0.f };
-		gamestate_ = FIGHT;
-		stopflag_ = true;
-	}
+	WarPointArrival(cameravector_.m128_f32[2], 40.f);
 }
 //4回目の戦闘地点
 void GameScene::MovePointALeft()
 {
 	Action::GetInstance()->EaseOut(eyerot_.y, -95.0f);
-	if (eyerot_.y <= -90) {
-		eyerot_.y = max(eyerot_.y, -90.0f);
-		gamestate_ = FIGHT;
-		changerotation_ = eyerot_.y;
-		velocity_ = { 0, 0, 0 };
-		stopflag_ = true;
-	}
+	WarPointArrival(-90.f, eyerot_.y);
 }
 //5回目の戦闘地点
 void GameScene::MovePointB()
 {
 	Action::GetInstance()->EaseOut(eyerot_.y, 95.0f);
-	if (eyerot_.y >= 90) {
-		changerotation_ = 90;
-		eyerot_.y = 90;
-		velocity_ = { 0, 0, movespeed_ };
-	}
-	if (cameravector_.m128_f32[0] >= 30) {
-		gamestate_ = FIGHT;
-		stopflag_ = true;
-		velocity_ = { 0, 0, 0 };
-	}
+	if (!DestinationArrivalCheck(eyerot_.y, 90.f)) { return; }
+	eyerot_.y = 90;
+	velocity_ = { 0, 0, movespeed_ };
+
+	if (!DestinationArrivalCheck(cameravector_.m128_f32[0], 30.f)) { return; }
+	gamestate_ = FIGHT;
+	stopflag_ = true;
+	velocity_ = { 0, 0, 0 };
+
 }
 //6回目の戦闘地点
 void GameScene::MovePointC()
 {
 	velocity_ = { 0, 0, movespeed_ };
-	if (cameravector_.m128_f32[0] >= 45) {
-		gamestate_ = FIGHT;
-		stopflag_ = true;
-		velocity_ = { 0, 0, 0 };
-	}
+	if (!DestinationArrivalCheck(cameravector_.m128_f32[0], 45.f)) { return; }
+	gamestate_ = FIGHT;
+	stopflag_ = true;
+	velocity_ = { 0, 0, 0 };
 }
 //7回目の戦闘地点
 void GameScene::MovePointCOblique()
 {
 	velocity_ = { 0, 0, movespeed_ };
-	if (cameravector_.m128_f32[0] >= 50) {
-		velocity_ = { 0, 0, 0 };
-		Action::GetInstance()->EaseOut(eyerot_.y, 145.0f);
-		if (eyerot_.y >= 135) {
-			gamestate_ = FIGHT;
-			changerotation_ = 135;
-			stopflag_ = true;
-			velocity_ = { 0, 0, 0 };
-		}
-	}
+	if (!DestinationArrivalCheck(cameravector_.m128_f32[0], 50.f)) { return; }
+	velocity_ = { 0, 0, 0 };
+	Action::GetInstance()->EaseOut(eyerot_.y, 145.0f);
+	WarPointArrival(eyerot_.y, 135.f);
 }
 //8回目の戦闘地点
 void GameScene::MovePointCFront()
 {
-	if (cameravector_.m128_f32[0] <= 55) {
+	if (DestinationArrivalCheck(55.f, cameravector_.m128_f32[0])) {
 		velocity_ = { 0, 0, movespeed_ };
 	}
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
-	if (eyerot_.y <= 0) {
-		gamestate_ = FIGHT;
-		changerotation_ = 0;
-		stopflag_ = true;
-		velocity_ = { 0, 0, 0 };
-	}
+	WarPointArrival(0.f, eyerot_.y);
 }
 //ボスの戦闘地点
 void GameScene::GoalPointBack()
 {
 	velocity_ = { 0.f,0.f,movespeed_ };
-	if (cameravector_.m128_f32[2] >= 80) {
-		velocity_ = { 0.f,0.f,0.1f };
-		if (cameravector_.m128_f32[2] >= 82) {
-			velocity_ = { 0.0f,0.0f,0.0f };
-			Action::GetInstance()->EaseOut(eyerot_.y, 185.0f);
-			if (eyerot_.y >= 180) {
-				gamestate_ = FIGHT;
-				changerotation_ = 0;
-				stopflag_ = true;
-				velocity_ = { 0, 0, 0 };
-			}
-		}
-	}
+	if (!DestinationArrivalCheck(cameravector_.m128_f32[2], 80.f)) { return; }
+	velocity_ = { 0.f,0.f,0.1f };
+	if (!DestinationArrivalCheck(cameravector_.m128_f32[2], 82.f)) { return; }
+	velocity_ = { 0.0f,0.0f,0.0f };
+	Action::GetInstance()->EaseOut(eyerot_.y, 185.0f);
+	if (!DestinationArrivalCheck(eyerot_.y, 180.f)) { return; }
+	gamestate_ = FIGHT;
+	stopflag_ = true;
+	velocity_ = { 0, 0, 0 };
 }
 //ゴール
 void GameScene::GoalPoint()
@@ -447,26 +428,23 @@ void GameScene::GoalPoint()
 	velocity_ = { 0.f, 0.f, 0.1f };
 	//後ろを向く
 	Action::GetInstance()->EaseOut(eyerot_.y, -5.0f);
+
 	if (eyerot_.y <= 0) {
-		changerotation_ = 0;
 		eyerot_.y = 0;
 	}
 	//ヘリに向かう
-	if (cameravector_.m128_f32[2] >= 92) {
+	if (DestinationArrivalCheck(cameravector_.m128_f32[2], 92.f)) {
 		velocity_ = { 0.f,0.05f,0.1f };
 		//ヘリに乗る
-		if (cameravector_.m128_f32[2] >= 97) {
-			velocity_ = { 0.0f,0.0f,0.0f };
-			FringFlag = true;
-			if (FringFlag == true) {
-				velocity_ = { 0.0f,0.6f,0.0f };
-				goalpos_.m128_f32[1] += velocity_.m128_f32[1]/3.345f;
-				//ゴールに着いたとき
-				if (goalpos_.m128_f32[1] >= 100) {
-					gamestate_ = CLEAR;
+		if (DestinationArrivalCheck(cameravector_.m128_f32[2], 97.f)) {
+			velocity_ = { 0.0f,0.6f,0.0f };
+			goalpos_.m128_f32[1] += velocity_.m128_f32[1] / 3.345f;
+			//ゴールに着いたとき
+			if (goalpos_.m128_f32[1] >= 100) {
+				gamestate_ = CLEAR;
 
-				}
 			}
+
 		}
 	}
 }

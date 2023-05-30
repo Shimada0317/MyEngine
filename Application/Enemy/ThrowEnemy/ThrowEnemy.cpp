@@ -101,9 +101,9 @@ void ThrowEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& player
 	DamageProcess(player2Dpos,playerbulletshot);
 	//Ž€–Sˆ—
 	DeathProcess();
-	/*if (Input::GetInstance()->PushKey(DIK_O)) {
+	if (Input::GetInstance()->PushKey(DIK_O)) {
 		hp_ = 0;
-	}*/
+	}
 	if (hp_ <= 0) {
 		state_ = State::DEATH;
 	}

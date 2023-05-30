@@ -68,6 +68,10 @@ public://ƒƒ“ƒoŠÖ”
 	/// ˆÚ“®‚Ìˆ—
 	/// </summary>
 	void MoveProcess();
+
+	void WarPointArrival(float manyvalue, float fewvalue);
+
+	bool DestinationArrivalCheck(float manyvalue, float fewvalue);
 	/// <summary>
 	/// í“¬‚Ìˆ—
 	/// </summary>
