@@ -29,20 +29,18 @@ void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camer
 	bringupcamera_ = camera;
 	//角度を共通化
 	headpart_rot_ = bodypart_rot_ = corepart_rot_ = allrot;
-
 	origin_distance_ = distance_;
 	originhead_distance_ = head_distance_;
 	origincore_distance_ = core_distance_;
-
+	//オブジェクトの生成
 	shadow_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
 	center_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
 	headpart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kHead));
 	bodypart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBossBody));
 	corepart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBossCore));
-
+	//パーティクル生成
 	partgreen_ = ParticleManager::Create(bringupcamera_);
 	partred_ = ParticleManager::Create(bringupcamera_);
-
 	//敵の2D座標
 	rockon_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockon_pos_, rockon_color_, anchorpoint_));
 	rockonhead_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockonhead_pos_, rockon_color_, anchorpoint_));
@@ -130,23 +128,18 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 			player2Dpos.y - core_distance_ * 4 < rockoncore_pos_.y && player2Dpos.y + core_distance_ * 4 > rockoncore_pos_.y) {
 			hp_ -= Coredamage;
 			addrot_ -= 5.f;
-			corepart_color_.y = 0;
 			playerbulletshot = false;
 		}
-	}
-
-	/*if (Input::GetInstance()->PushKey(DIK_O)) {
-		hp_ = 0;
-	}*/
-	if (hp_ == 0) {
-		state_ = State::kDead;
 	}
 
 	Damage();
 
 	Death();
 
+	Attack(playerhp);
+
 	StatusSet();
+
 	AllUpdate();
 }
 
@@ -158,49 +151,49 @@ void BossEnemy::Draw(DirectXCommon* dxCommon)
 	partred_->Draw();
 	ParticleManager::PostDraw();
 
-	Sprite::PreDraw(dxCommon->GetCmdList());
-	//rockonhead_->Draw();
-	//rockon_->Draw();
-	//rockoncore_->Draw();
-	Sprite::PostDraw();
-
 	Object3d::PreDraw(dxCommon->GetCmdList());
 	for (std::unique_ptr<ObjParticle>& particle : obj_particle_) {
 		particle->Draw();
 	}
-	if (hp_ > 0) {
-		headpart_->Draw();
-		bodypart_->Draw();
-		corepart_->Draw();
-		shadow_->Draw();
-	}
-	//center_->Draw();
+
+	headpart_->Draw();
+	bodypart_->Draw();
+	corepart_->Draw();
+	shadow_->Draw();
+
 	Object3d::PostDraw();
 }
 
 void BossEnemy::Appearance()
 {
-	if (state_ == kAppearance) {
-		all_pos_.m128_f32[1] -= FallSpeed;
-		if (all_pos_.m128_f32[1] <= 3.f) {
-			all_pos_.m128_f32[1] = 3.f;
-			state_ = kMove;
-		}
+	if (state_ != kAppearance) { return; }
+	all_pos_.m128_f32[1] -= FallSpeed;
+	if (all_pos_.m128_f32[1] <= 3.f) {
+		all_pos_.m128_f32[1] = 3.f;
+		state_ = kMove;
 	}
 }
 
 void BossEnemy::Move(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
 {
 	if (state_ != kMove) { return; }
-	//addrot_ = 20.f;
+	float endcolor_ = 0.f;
+	float startcolor_ = 1.f;
+	Action::GetInstance()->LoopTimer(color_time_, 0.1f, 50);
+	corepart_color_.y = Action::GetInstance()->EasingOut(color_time_, endcolor_ - startcolor_);
+	corepart_color_.z = Action::GetInstance()->EasingOut(color_time_, endcolor_ - startcolor_);
 	corepart_rot_.y += addrot_;
 	bodypart_rot_.y += addrot_;
 	headpart_rot_.y += addrot_;
 	if (length_ > limit_length_) {
 		TrackPlayerMode();
 	}
+	else {
+		state_ = kAttack;
+	}
 	if (addrot_ <= 0) {
 		state_ = kStun;
+		all_pos_.m128_f32[2] -= movespeed_ * 2;
 	}
 }
 
@@ -209,6 +202,7 @@ void BossEnemy::Stun(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbul
 	if (state_ != kStun) { return; }
 	movespeed_ = 0.f;
 	addrot_ = 0.f;
+	all_pos_.m128_f32[2] -= 0.01f;
 	if (playerbulletshot == true && hp_ > 0) {
 		if (player2Dpos.x - head_distance_ * 4 < rockonhead_pos_.x && player2Dpos.x + head_distance_ * 4 > rockonhead_pos_.x &&
 			player2Dpos.y - head_distance_ * 4 < rockonhead_pos_.y && player2Dpos.y + head_distance_ * 4 > rockonhead_pos_.y) {
@@ -226,7 +220,8 @@ void BossEnemy::Stun(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbul
 	if (time_ >= 10) {
 		state_ = kMove;
 		addrot_ = 20;
-		movespeed_ = 0.07f;
+		movespeed_ = 0.02f;
+		time_ = 0.f;
 	}
 }
 
@@ -260,7 +255,6 @@ void BossEnemy::TrackPlayerMode()
 	all_pos_.m128_f32[2] -= v3z;
 }
 
-
 void BossEnemy::Damage()
 {
 	//ダメージを受けたとき
@@ -268,34 +262,52 @@ void BossEnemy::Damage()
 		oldhp_ = hp_;
 		headpart_color_.y -= 0.2f;
 		headpart_color_.z -= 0.2f;
-		//bodypart_color_.y -= 0.2f;
-		//bodypart_color_.z -= 0.2f;
 		for (int i = 0; i < 5; i++) {
 			std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 			newparticle->Initialize(1, bodypart_pos_, { 1.3f,1.3f,1.3f }, { bodypart_rot_ });
 			obj_particle_.push_back(std::move(newparticle));
 		}
 	}
+
+	if (hp_ > 0) { return; }
+	state_ = State::kDead;
+
 }
 
 void BossEnemy::Death()
 {
 	if (state_ != State::kDead) { return; }
 	//生きているときにHPが0になったら
-
 	shadow_color_.w -= Subtraction;
 	bodypart_color_.w -= Subtraction;
 	headpart_color_.w -= Subtraction;
 	corepart_color_.w -= Subtraction;
-	if (particleefect_flag_ == true) {
-		ParticleEfect();
-	}
+
 	robotarive_flag_ = false;
 	if (obj_particle_.empty()) {
 		dead_flag_ = true;
 	}
 
+	if (bodypart_color_.w <= 0.5f) { return; }
+	ParticleEfect();
 }
+
+void BossEnemy::Attack(int& playerhp)
+{
+	if (state_ != kAttack) { return; }
+	addrot_ = 100.f;
+	bodypart_rot_.y += addrot_;
+	AttackSpeed += 0.01f;
+	float Rand = Action::GetInstance()->GetRangRand(-0.05f, 0.05f);
+	all_pos_.m128_f32[0] += Rand;
+	all_pos_.m128_f32[2] += AttackSpeed;
+	if (AttackSpeed > 0.15f) {
+		AttackSpeed = 0.f;
+		playerhp -= 5;
+	}
+
+}
+
 
 XMFLOAT2 BossEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
 {

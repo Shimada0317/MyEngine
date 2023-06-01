@@ -372,21 +372,13 @@ void GameScene::MovePointB()
 	if (!DestinationArrivalCheck(eyerot_.y, 90.f)) { return; }
 	eyerot_.y = 90;
 	velocity_ = { 0, 0, movespeed_ };
-
-	if (!DestinationArrivalCheck(cameravector_.m128_f32[0], 30.f)) { return; }
-	gamestate_ = FIGHT;
-	stopflag_ = true;
-	velocity_ = { 0, 0, 0 };
-
+	WarPointArrival(cameravector_.m128_f32[0], 30.f);
 }
 //6回目の戦闘地点
 void GameScene::MovePointC()
 {
 	velocity_ = { 0, 0, movespeed_ };
-	if (!DestinationArrivalCheck(cameravector_.m128_f32[0], 45.f)) { return; }
-	gamestate_ = FIGHT;
-	stopflag_ = true;
-	velocity_ = { 0, 0, 0 };
+	WarPointArrival(cameravector_.m128_f32[0], 45.f);
 }
 //7回目の戦闘地点
 void GameScene::MovePointCOblique()
@@ -442,7 +434,6 @@ void GameScene::GoalPoint()
 			//ゴールに着いたとき
 			if (goalpos_.m128_f32[1] >= 100) {
 				gamestate_ = CLEAR;
-
 			}
 
 		}

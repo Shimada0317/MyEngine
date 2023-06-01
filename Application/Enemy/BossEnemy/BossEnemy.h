@@ -18,6 +18,7 @@ private:
 		kMove,
 		kStun,
 		kDead,
+		kAttack,
 	}state_;
 private:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -53,6 +54,9 @@ public:
 	void Damage();
 
 	void Death();
+
+
+	void Attack(int& playerhp);
 
 	/// <summary>
 	/// 2D→3D座標
@@ -106,7 +110,7 @@ private:
 	XMFLOAT3 center_rot_ = { 0.0f,0.0f,0.0f };
 	XMMATRIX center_mat_;
 	//敵が持っているステータス
-	int hp_ = 600;
+	int hp_ = 1000;
 	int oldhp_ = hp_;
 	bool robotarive_flag_ = true;
 	XMVECTOR track_point_ = { 0,0,0 };
@@ -128,6 +132,7 @@ private:
 	XMFLOAT3 corepart_rot_ = { 0.0f,0.0f,0.0f };
 	//パーツごとに渡すステータス
 	XMVECTOR all_pos_ = { 0.0f,0.0f,-10.0f };
+	XMVECTOR old_pos_{};
 	XMFLOAT3 all_rot_;
 
 	//影のステータス
@@ -147,7 +152,7 @@ private:
 
 	float attack_charge_ = 0.0f;
 	//移動速度
-	float movespeed_ = 0.07f;
+	float movespeed_ = 0.02f;
 	//プレイヤーと敵の距離
 	float length_ = 13.0f;
 	float limit_length_ = 7.0f;
@@ -169,5 +174,8 @@ private:
 	float addrot_ = 20.f;
 	float time_ = 0.f;
 	bool particleefect_flag_ = true;
+	float AttackSpeed = 0.f;
+	float color_time_ = 1.f;
+
 };
 
