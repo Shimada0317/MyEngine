@@ -295,14 +295,18 @@ void BossEnemy::Death()
 void BossEnemy::Attack(int& playerhp)
 {
 	if (state_ != kAttack) { return; }
+	attack_timer_ += 0.1f;
 	addrot_ = 100.f;
+	corepart_rot_.y += addrot_;
 	bodypart_rot_.y += addrot_;
-	AttackSpeed += 0.01f;
+	headpart_rot_.y += addrot_;
+	attack_speed_ += 0.1f;
 	float Rand = Action::GetInstance()->GetRangRand(-0.05f, 0.05f);
 	all_pos_.m128_f32[0] += Rand;
-	all_pos_.m128_f32[2] += AttackSpeed;
-	if (AttackSpeed > 0.15f) {
-		AttackSpeed = 0.f;
+	if (attack_timer_ < 4) { return; }
+	all_pos_.m128_f32[2] += attack_speed_;
+	if (attack_speed_ > 0.5f) {
+		attack_speed_ = 0.f;
 		playerhp -= 5;
 	}
 

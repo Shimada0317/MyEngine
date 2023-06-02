@@ -174,8 +174,9 @@ private:
 	float addrot_ = 20.f;
 	float time_ = 0.f;
 	bool particleefect_flag_ = true;
-	float AttackSpeed = 0.f;
+	float attack_speed_ = 0.f;
 	float color_time_ = 1.f;
+	float attack_timer_ = 0.f;
 
 };
 
