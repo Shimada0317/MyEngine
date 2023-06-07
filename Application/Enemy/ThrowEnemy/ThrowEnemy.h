@@ -137,7 +137,7 @@ public:
 	XMFLOAT4 rockon_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT2 rockon_bulletpos_ = { 0.0f,0.0f };
 	//’e‘¬
-	float bullet_speed_ = 0.05f;
+	float bullet_speed_ = 0.08f;
 	int hp_ = 50;
 	int oldhp_ = hp_;
 	float length_ = 0.f;

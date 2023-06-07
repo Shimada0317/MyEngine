@@ -128,7 +128,7 @@ void ThrowEnemy::WaitProcess()
 {
 	if (state_ != State::WAIT) { return; }
 	bullet_active_ = true;
-	bullet_scl_=HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, 0.001f);
+	bullet_scl_=HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, 0.005f);
 	if (bullet_scl_.z <= 0.3f) { return; }
 	state_ = State::ATTACK;
 }

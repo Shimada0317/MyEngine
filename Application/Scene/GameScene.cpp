@@ -435,7 +435,6 @@ void GameScene::GoalPoint()
 			if (goalpos_.m128_f32[1] >= 100) {
 				gamestate_ = CLEAR;
 			}
-
 		}
 	}
 }
