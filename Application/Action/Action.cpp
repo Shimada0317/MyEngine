@@ -239,6 +239,15 @@ void Action::ColorUp(XMFLOAT4& color, float upval)
 	color.w += upval;
 }
 
+XMFLOAT3 Action::RandMax(const XMFLOAT3& value, float randvel)
+{
+	XMFLOAT3 Value = value;
+
+	Value = (float)rand() / RAND_MAX * randvel - randvel / 2.0f;
+
+	return Value;
+}
+
 
 
 

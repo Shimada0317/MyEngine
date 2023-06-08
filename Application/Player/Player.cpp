@@ -344,15 +344,13 @@ void Player::ParticleEfect(Phase paterncount)
 
 			const float rnd_vel = 0.001f;
 			XMFLOAT3 vel{};
-			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
-			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel = Action::GetInstance()->RandMax(vel,rnd_vel);
+
 
 			const float smokernd_vel = 0.05f;
 			XMFLOAT3 smokevel{};
-			smokevel.x = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
-			smokevel.y = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
-			smokevel.z = (float)rand() / RAND_MAX * smokernd_vel - smokernd_vel / 2.0f;
+			smokevel = Action::GetInstance()->RandMax(smokevel, smokernd_vel);
+			
 			XMFLOAT3 acc{};
 			acc.y = 0.0;
 

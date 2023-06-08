@@ -111,6 +111,7 @@ public:
 
 	void ColorUp(XMFLOAT4& color,float upval);
 
+	XMFLOAT3 RandMax(const XMFLOAT3& value,float randvel);
 private:
 	float shakelimittime_ = 0.f;
 	float shakingscreenvalue_ = 0.f;
