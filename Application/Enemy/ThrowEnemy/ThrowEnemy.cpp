@@ -312,12 +312,12 @@ void ThrowEnemy::ParticleEfect()
 		Pos.z = center_worldpos_.m128_f32[2];
 
 		XMFLOAT3 Vel{};
-		Vel.x = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
-		Vel.y = Action::GetInstance()->GetRangRand(-0.11f, 0.12f);
-		Vel.z = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
+		XMFLOAT3 MinValue{ -0.09f,-0.11f,-0.09f };
+		XMFLOAT3 MaxValue{ 0.09f,0.12f,0.09f };
+
+		Vel = Action::GetInstance()->RandMinAndMax(MinValue, MaxValue);
 
 		XMFLOAT3 Acc{};
-		Acc.y = 0.0;
 
 		partred_->Add(30, Pos, Vel, Acc, 1.0f, 0.0f, 0.0f);
 		partgreen_->Add(30, Pos, Vel, Acc, 0.7f, 0.0f, 0.0f);

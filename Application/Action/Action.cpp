@@ -243,7 +243,20 @@ XMFLOAT3 Action::RandMax(const XMFLOAT3& value, float randvel)
 {
 	XMFLOAT3 Value = value;
 
-	Value = (float)rand() / RAND_MAX * randvel - randvel / 2.0f;
+	Value.x = (float)rand() / RAND_MAX * randvel - randvel / 2.0f;
+	Value.y = (float)rand() / RAND_MAX * randvel - randvel / 2.0f;
+	Value.z = (float)rand() / RAND_MAX * randvel - randvel / 2.0f;
+
+	return Value;
+}
+
+XMFLOAT3 Action::RandMinAndMax(const XMFLOAT3& minvalue, const XMFLOAT3& maxvalue)
+{
+	XMFLOAT3 Value;
+
+	Value.x = GetRangRand(minvalue.x, maxvalue.x);
+	Value.y = GetRangRand(minvalue.y, maxvalue.y);
+	Value.z = GetRangRand(minvalue.z, maxvalue.z);
 
 	return Value;
 }

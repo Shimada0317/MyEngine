@@ -354,16 +354,15 @@ void BossEnemy::ParticleEfect()
 		pos.z = bodypart_pos_.m128_f32[2];
 
 		const float rnd_vel = 0.04f;
-		XMFLOAT3 vel{};
-		vel.x = Action::GetInstance()->GetRangRand(-0.09f, 0.09f);
-		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.12f);
-		vel.z = Action::GetInstance()->GetRangRand(-0.03f, 0.09f);
+		XMFLOAT3 Vel{};
+		XMFLOAT3 MinValue{ -0.09f,-0.01f,-0.03f };
+		XMFLOAT3 MaxValue{ 0.09f,0.12f,0.09f };
+		Vel = Action::GetInstance()->RandMinAndMax(MinValue, MaxValue);
 
-		XMFLOAT3 acc{};
-		acc.y = 0.0;
+		XMFLOAT3 Acc{};
 
-		partred_->Add(200, pos, vel, acc, 100.f, 0.f, 150.f);
-		partgreen_->Add(200, pos, vel, acc, 90.f, 0.f, 150.f);
+		partred_->Add(200, pos, Vel, Acc, 100.f, 0.f, 150.f);
+		partgreen_->Add(200, pos, Vel, Acc, 90.f, 0.f, 150.f);
 	}
 	particleefect_flag_ = false;
 
