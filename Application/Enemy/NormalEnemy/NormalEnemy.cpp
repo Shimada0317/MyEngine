@@ -416,22 +416,19 @@ void NormalEnemy::ParticleEfect()
 {
 	for (int i = 0; i < 50; i++) {
 		XMFLOAT3 pos;
-
-		pos.x = bodypart_pos_.m128_f32[0];
-		pos.y = bodypart_pos_.m128_f32[1];
-		pos.z = bodypart_pos_.m128_f32[2];
-
+		pos = HelperMath::GetInstance()->ConvertToXMVECTOR(bodypart_pos_);
+		
 		const float rnd_vel = 0.04f;
-		XMFLOAT3 vel{};
-		vel.x = Action::GetInstance()->GetRangRand(-0.09f,0.09f);
-		vel.y = Action::GetInstance()->GetRangRand(-0.01f, 0.12f);
-		vel.z = Action::GetInstance()->GetRangRand(-0.03f, 0.09f);
+		XMFLOAT3 Vel{};
+		XMFLOAT3 MinValue{ -0.09f,-0.01f,-0.03f };
+		XMFLOAT3 MaxValue{ 0.09f,0.12f,0.09f };
+		Vel = Action::GetInstance()->RandMinAndMax(MinValue, MaxValue);
 
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		partred_->Add(200, pos, vel, acc, 4.0f, 0.0f, 150.0f);
-		partgreen_->Add(200, pos, vel, acc, 3.7f, 0.0f, 150.0f);
+		partred_->Add(200, pos, Vel, acc, 4.0f, 0.0f, 150.0f);
+		partgreen_->Add(200, pos, Vel, acc, 3.7f, 0.0f, 150.0f);
 	}
 	particleefect_flag_ = false;
 

@@ -262,29 +262,23 @@ void ThrowEnemy::BulletCollision(const XMFLOAT2& player2Dpos, bool& playerbullet
 //’e”­ŽË
 void ThrowEnemy::ThrowAttack(int& playerhp)
 {
-	float vx = 0;
-	float vy = 0;
-	float vz = 0;
+	XMFLOAT3 Value;
 	float BulletLength = 0;
 
-	vx = (bullet_pos_.m128_f32[0] - landing_point_.m128_f32[0]);
-	vy = (bullet_pos_.m128_f32[1] - landing_point_.m128_f32[1]-2);
-	vz = (bullet_pos_.m128_f32[2] - landing_point_.m128_f32[2]);
+	Value.x = (bullet_pos_.m128_f32[0] - landing_point_.m128_f32[0]);
+	Value.y = (bullet_pos_.m128_f32[1] - landing_point_.m128_f32[1]-2);
+	Value.z = (bullet_pos_.m128_f32[2] - landing_point_.m128_f32[2]);
 
-	float v2x = powf(vx, 2.f);
-	float v2y = powf(vy, 2.f);
-	float v2z = powf(vz, 2.f);
-
-	BulletLength = sqrtf(v2x + v2y + v2z);
+	XMFLOAT3 SquareValue{};
+	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(Value, 2);
+	BulletLength = HelperMath::GetInstance()->LengthCalculation(SquareValue);
 
 	XMVECTOR v3{};
-	v3.m128_f32[0] = (vx / BulletLength) * bullet_speed_;
-	v3.m128_f32[1] = (vy / BulletLength) * bullet_speed_;
-	v3.m128_f32[2] = (vz / BulletLength) * bullet_speed_;
-
+	v3.m128_f32[0] = (Value.x / BulletLength) * bullet_speed_;
+	v3.m128_f32[1] = (Value.y / BulletLength) * bullet_speed_;
+	v3.m128_f32[2] = (Value.z / BulletLength) * bullet_speed_;
 	
 	bullet_distance_ = BulletLength;
-
 
 	bullet_pos_ -= v3;
 	bullet_magnification_ += 0.015f;

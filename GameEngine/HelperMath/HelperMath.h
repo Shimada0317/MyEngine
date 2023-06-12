@@ -58,6 +58,12 @@ public:
 	/// <returns></returns>
 	XMFLOAT3 ConvertToXMFLOAT3(float SourceValue);
 
+	XMFLOAT3 ConvertToXMVECTOR(XMVECTOR value);
+
+	XMFLOAT3 SquareToXMFLOAT3(XMFLOAT3 value, float squarevalue);
+
+	float LengthCalculation(XMFLOAT3 value);
+
 	void ChangeViewPort(XMMATRIX& matviewport, const XMVECTOR& offset);
 };
 

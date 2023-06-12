@@ -98,6 +98,36 @@ XMFLOAT3 HelperMath::ConvertToXMFLOAT3(float SourceValue)
     return ConvertValue;
 }
 
+XMFLOAT3 HelperMath::ConvertToXMVECTOR(XMVECTOR value)
+{
+    XMFLOAT3 Value;
+    Value.x = value.m128_f32[0];
+    Value.y = value.m128_f32[1];
+    Value.z = value.m128_f32[2];
+
+    return Value;
+}
+
+XMFLOAT3 HelperMath::SquareToXMFLOAT3(XMFLOAT3 value, float squarevalue)
+{
+    XMFLOAT3 Value;
+
+    Value.x = powf(value.x, squarevalue);
+    Value.y = powf(value.y, squarevalue);
+    Value.z = powf(value.z, squarevalue);
+
+    return Value;
+}
+
+float HelperMath::LengthCalculation(XMFLOAT3 value)
+{
+    float Length;
+
+    Length = sqrtf(value.x + value.y + value.z);
+
+    return Length;
+}
+
 void HelperMath::ChangeViewPort(XMMATRIX& matviewport, const XMVECTOR& offset)
 {
     matviewport.r[0].m128_f32[0] = WinApp::window_width / 2;

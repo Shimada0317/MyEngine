@@ -346,7 +346,6 @@ void Player::ParticleEfect(Phase paterncount)
 			XMFLOAT3 vel{};
 			vel = Action::GetInstance()->RandMax(vel,rnd_vel);
 
-
 			const float smokernd_vel = 0.05f;
 			XMFLOAT3 smokevel{};
 			smokevel = Action::GetInstance()->RandMax(smokevel, smokernd_vel);
