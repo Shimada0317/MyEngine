@@ -159,7 +159,7 @@ XMFLOAT3 HelperMath::TrackCalculation(const XMVECTOR& position, const XMVECTOR& 
     Value.y = position.m128_f32[1] - trackpoint.m128_f32[1];
     Value.z = position.m128_f32[2] - trackpoint.m128_f32[2];
 
-    return XMFLOAT3();
+    return Value;
 }
 
 XMVECTOR HelperMath::TrackingVelocityCalculation(const XMFLOAT3& value, float length, float speed)
@@ -171,13 +171,8 @@ XMVECTOR HelperMath::TrackingVelocityCalculation(const XMFLOAT3& value, float le
     return Value;
 }
 
-XMVECTOR HelperMath::TrackEnemytoPlayer(const XMVECTOR trackspeed)
+void HelperMath::TrackEnemytoPlayer(XMVECTOR& position,const XMVECTOR trackspeed)
 {
-    XMVECTOR Value;
-
-    Value.m128_f32[0] -= trackspeed.m128_f32[0];
-    Value.m128_f32[1] = 0;
-    Value.m128_f32[2] -= trackspeed.m128_f32[2];
-
-    return Value;
+    position.m128_f32[0] -= trackspeed.m128_f32[0];
+    position.m128_f32[2] -= trackspeed.m128_f32[2];
 }

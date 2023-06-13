@@ -83,7 +83,7 @@ public:
 
 	static bool ArmHit(XMVECTOR armPos, XMFLOAT3 armScl, XMVECTOR PlayerPos, XMFLOAT3 PlayerScl);
 
-
+	static bool CheckHit2D(const XMFLOAT2& playerpos, const XMFLOAT2& enemypos,float distance ,float mulvalue);
 private:
 
 };

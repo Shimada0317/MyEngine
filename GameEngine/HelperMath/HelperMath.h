@@ -70,6 +70,6 @@ public:
 
 	XMVECTOR TrackingVelocityCalculation(const XMFLOAT3& value, float length, float speed);
 
-	XMVECTOR TrackEnemytoPlayer(const XMVECTOR trackspeed);
+	void TrackEnemytoPlayer(XMVECTOR& position, const XMVECTOR trackspeed);
 };
 

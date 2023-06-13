@@ -1,5 +1,6 @@
 #include "NormalEnemy.h"
 #include"Action.h"
+#include"Collision.h"
 #include"HelperMath.h"
 #include"SpriteManager.h"
 
@@ -143,13 +144,11 @@ void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playe
 		});
 	//当たり判定
 	if (playerbulletshot == true && hp_ > 0) {
-		if (player2Dpos.x - distance_*1.3 < rockon_pos_.x && player2Dpos.x + distance_ * 1.3 > rockon_pos_.x &&
-			player2Dpos.y - distance_ * 1.3 <rockon_pos_.y && player2Dpos.y + distance_ * 1.3 >rockon_pos_.y) {
+		if (Collision::GetInstance()->CheckHit2D(player2Dpos, rockon_pos_, distance_, 1.3f)) {
 			hp_ -= BodyDamage;
 			playerbulletshot = false;
 		}
-		if (player2Dpos.x - head_distance_ * 1.3 < rockonhead_pos_.x && player2Dpos.x + head_distance_ * 1.3 > rockonhead_pos_.x &&
-			player2Dpos.y - head_distance_ * 1.3 <rockonhead_pos_.y && player2Dpos.y + head_distance_ * 1.3 >rockonhead_pos_.y) {
+		if (Collision::GetInstance()->CheckHit2D(player2Dpos, rockonhead_pos_, head_distance_, 1.3f)) {
 			hp_ -= HeadDamage;
 			playerbulletshot = false;
 		}
@@ -245,15 +244,14 @@ void NormalEnemy::TrackPlayerMode()
 	//追尾速度の計算
 	XMVECTOR TrackSpeed{};
 	TrackSpeed = HelperMath::GetInstance()->TrackingVelocityCalculation(Value, length_, movespeed_);
-
+	//距離をもとの値に戻す
 	distance_ = origin_distance_;
 	head_distance_ = originhead_distance_;
-
+	//距離の計算
 	distance_ -= length_ * 2.0f;
 	head_distance_ -= length_;
-
-	all_pos_ = HelperMath::GetInstance()->TrackEnemytoPlayer(TrackSpeed);
-	
+	//追尾移動
+	HelperMath::GetInstance()->TrackEnemytoPlayer(all_pos_,TrackSpeed);
 }
 //攻撃モードの時
 void NormalEnemy::AttackMode(int& playerhp)

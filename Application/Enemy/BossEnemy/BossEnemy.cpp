@@ -1,8 +1,10 @@
 #include "BossEnemy.h"
 #include"Action.h"
 #include"Camera.h"
+#include"Collision.h"
 #include"HelperMath.h"
 #include"SpriteManager.h"
+
 
 using namespace DirectX;
 const int HeadDamage = 80;
@@ -124,8 +126,7 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 
 	//“–‚½‚è”»’è
 	if (playerbulletshot == true && hp_ > 0) {
-		if (player2Dpos.x - core_distance_ * 4 < rockoncore_pos_.x && player2Dpos.x + core_distance_ * 4 > rockoncore_pos_.x &&
-			player2Dpos.y - core_distance_ * 4 < rockoncore_pos_.y && player2Dpos.y + core_distance_ * 4 > rockoncore_pos_.y) {
+		if (Collision::GetInstance()->CheckHit2D(player2Dpos, rockoncore_pos_, core_distance_, 4)) {
 			hp_ -= Coredamage;
 			addrot_ -= 5.f;
 			playerbulletshot = false;
@@ -204,14 +205,12 @@ void BossEnemy::Stun(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbul
 	addrot_ = 0.f;
 	all_pos_.m128_f32[2] -= 0.01f;
 	if (playerbulletshot == true && hp_ > 0) {
-		if (player2Dpos.x - head_distance_ * 4 < rockonhead_pos_.x && player2Dpos.x + head_distance_ * 4 > rockonhead_pos_.x &&
-			player2Dpos.y - head_distance_ * 4 < rockonhead_pos_.y && player2Dpos.y + head_distance_ * 4 > rockonhead_pos_.y) {
+		if (Collision::GetInstance()->CheckHit2D(player2Dpos,rockonhead_pos_,head_distance_,4)) {
 			hp_ -= HeadDamage;
 			playerbulletshot = false;
 		}
 
-		if (player2Dpos.x - distance_ * 4 < rockon_pos_.x && player2Dpos.x + distance_ * 4 > rockon_pos_.x &&
-			player2Dpos.y - distance_ * 4 < rockon_pos_.y && player2Dpos.y + distance_ * 4 > rockon_pos_.y) {
+		if (Collision::GetInstance()->CheckHit2D(player2Dpos, rockonhead_pos_, distance_, 4)) {
 			hp_ -= BodyDamage;
 			playerbulletshot = false;
 		}
@@ -246,7 +245,7 @@ void BossEnemy::TrackPlayerMode()
 	head_distance_ -= length_;
 	core_distance_ -= length_;
 
-	all_pos_ = HelperMath::GetInstance()->TrackEnemytoPlayer(TrackSpeed);
+	HelperMath::GetInstance()->TrackEnemytoPlayer(all_pos_,TrackSpeed);
 }
 
 void BossEnemy::Damage()

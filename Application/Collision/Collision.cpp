@@ -277,14 +277,9 @@ bool Collision::BodyHit(XMVECTOR bodyPos, XMFLOAT3 bodyScl, XMVECTOR PlayerPos, 
 	float mpz = PlayerPos.m128_f32[2] - playerScl.z / 2;
 	float ppz = PlayerPos.m128_f32[2] + playerScl.z / 2;
 
-	/*if ((mbx <= ppx && mpx >= pbx || mby <= ppy && mby >= ppy) && mbz <= ppz) {
-		return true;
-	}*/
-
 	if ((mbx <= ppx && mpx <= pbx) && (mby <= ppy && mpy <= pby) && (mbz <= ppz && mpz <= pbz)) {
 		return true;
 	}
-
 
 	return false;
 }
@@ -334,3 +329,14 @@ bool Collision::ArmHit(XMVECTOR armPos, XMFLOAT3 armScl, XMVECTOR PlayerPos, XMF
 
 	return false;
 }
+
+bool Collision::CheckHit2D(const XMFLOAT2& playerpos, const XMFLOAT2& enemypos, float distance, float mulvalue)
+{
+	if (playerpos.x - distance * mulvalue<enemypos.x && playerpos.x + distance * mulvalue>enemypos.x &&
+		playerpos.y - distance * mulvalue<enemypos.y && playerpos.y + distance * mulvalue>enemypos.y) {
+		return true;
+	}
+	return false;
+}
+
+
