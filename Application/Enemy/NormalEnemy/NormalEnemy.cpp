@@ -10,8 +10,8 @@ const int BodyDamage = 50;
 const float Subtraction = 0.1f;
 const float FallSpeed = 0.25f;
 const float AddDefomationValue = 0.04f;
-const float attacktime_min_ = 20;
-const float attacktime_max_ = 40;
+const float attacktime_min_ = 10;
+const float attacktime_max_ = 20;
 const XMFLOAT4 AddColor = { 0.1f,0.1f,0.1f,0.0f };
 
 const XMFLOAT4 operator+(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& rhs)
@@ -72,7 +72,6 @@ void NormalEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Cam
 
 	hp_ = 160;
 	oldhp_ = hp_;
-	random_flag_ = true;
 	timer_limit_ = 8;
 	robotarive_flag_ = true;
 	center_->SetPosition(center_worldpos_);
@@ -158,10 +157,7 @@ void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playe
 
 	Death();
 
-	if (random_flag_ == false) {
-		timer_limit_ = Action::GetInstance()->GetRangRand(attacktime_min_, attacktime_max_);
-		random_flag_ = true;
-	}
+	
 
 	//生きているとき
 	if (robotarive_flag_ == true && hp_ > 0) {
@@ -256,9 +252,13 @@ void NormalEnemy::TrackPlayerMode()
 //攻撃モードの時
 void NormalEnemy::AttackMode(int& playerhp)
 {
+	if (random_flag_ == false) {
+		timer_limit_ = Action::GetInstance()->GetRangRand(attacktime_min_, attacktime_max_);
+		random_flag_ = true;
+	}
+
 	if (atttack_timer_ >= timer_limit_) {
 		attackfase_flag_ = true;
-		random_flag_ = false;
 	}
 	
 	//攻撃フェイズに移行した時
