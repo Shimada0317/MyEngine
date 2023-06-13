@@ -227,22 +227,17 @@ void BossEnemy::Stun(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbul
 
 void BossEnemy::TrackPlayerMode()
 {
-	float vx = 0;
-	float vy = 0;
-	float vz = 0;
-
-	vx = (all_pos_.m128_f32[0] - track_point_.m128_f32[0]);
-	vy = (all_pos_.m128_f32[1] - track_point_.m128_f32[1]);
-	vz = (all_pos_.m128_f32[2] - track_point_.m128_f32[2]);
-
-	float v2x = powf(vx, 2.f);
-	float v2y = powf(vy, 2.f);
-	float v2z = powf(vz, 2.f);
-	length_ = sqrtf(v2x + v2y + v2z);
-
-	float v3x = (vx / length_) * movespeed_;
-	float v3y = (vy / length_) * movespeed_;
-	float v3z = (vz / length_) * movespeed_;
+	//’Ç”ö‚ÌŒvŽZ
+	XMFLOAT3 Value;
+	Value = HelperMath::GetInstance()->TrackCalculation(all_pos_, track_point_);
+	//’l‚ð2æ
+	XMFLOAT3 SquareValue{};
+	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(Value,2);
+	//‹——£‚ÌŒvŽZ
+	length_ = HelperMath::GetInstance()->LengthCalculation(SquareValue);
+	//’Ç”ö‘¬“x‚ÌŒvŽZ
+	XMVECTOR TrackSpeed{};
+	TrackSpeed = HelperMath::GetInstance()->TrackingVelocityCalculation(Value, length_, movespeed_);
 	distance_ = origin_distance_;
 	head_distance_ = originhead_distance_;
 	core_distance_ = origincore_distance_;
@@ -251,8 +246,7 @@ void BossEnemy::TrackPlayerMode()
 	head_distance_ -= length_;
 	core_distance_ -= length_;
 
-	all_pos_.m128_f32[0] -= v3x;
-	all_pos_.m128_f32[2] -= v3z;
+	all_pos_ = HelperMath::GetInstance()->TrackEnemytoPlayer(TrackSpeed);
 }
 
 void BossEnemy::Damage()

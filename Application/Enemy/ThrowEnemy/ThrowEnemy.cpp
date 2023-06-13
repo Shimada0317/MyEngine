@@ -273,14 +273,13 @@ void ThrowEnemy::ThrowAttack(int& playerhp)
 	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(Value, 2);
 	BulletLength = HelperMath::GetInstance()->LengthCalculation(SquareValue);
 
-	XMVECTOR v3{};
-	v3.m128_f32[0] = (Value.x / BulletLength) * bullet_speed_;
-	v3.m128_f32[1] = (Value.y / BulletLength) * bullet_speed_;
-	v3.m128_f32[2] = (Value.z / BulletLength) * bullet_speed_;
+	//’Ç”ö‘¬“x‚ÌŒvŽZ
+	XMVECTOR TrackSpeed{};
+	TrackSpeed = HelperMath::GetInstance()->TrackingVelocityCalculation(Value, BulletLength, bullet_speed_);
 	
 	bullet_distance_ = BulletLength;
 
-	bullet_pos_ -= v3;
+	bullet_pos_ -= TrackSpeed;
 	bullet_magnification_ += 0.015f;
 	if (BulletLength <=0.1f) {
 		playerhp -= 1;

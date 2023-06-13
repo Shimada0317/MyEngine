@@ -234,30 +234,25 @@ void NormalEnemy::Defomation()
 //プレイヤーへの追尾モードの時
 void NormalEnemy::TrackPlayerMode()
 {
-	float vx = 0;
-	float vy = 0;
-	float vz = 0;
+	//追尾の計算
+	XMFLOAT3 Value;
+	Value = HelperMath::GetInstance()->TrackCalculation(all_pos_, track_point_);
+	//値を2乗
+	XMFLOAT3 SquareValue{};
+	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(Value,2);
+	//距離の計算
+	length_ = HelperMath::GetInstance()->LengthCalculation(SquareValue);
+	//追尾速度の計算
+	XMVECTOR TrackSpeed{};
+	TrackSpeed = HelperMath::GetInstance()->TrackingVelocityCalculation(Value, length_, movespeed_);
 
-	vx = (all_pos_.m128_f32[0] - track_point_.m128_f32[0]);
-	vy = (all_pos_.m128_f32[1] - track_point_.m128_f32[1]);
-	vz = (all_pos_.m128_f32[2] - track_point_.m128_f32[2]);
-
-	float v2x = powf(vx, 2.f);
-	float v2y = powf(vy, 2.f);
-	float v2z = powf(vz, 2.f);
-	length_ = sqrtf(v2x + v2y + v2z);
-
-	float v3x = (vx / length_) * movespeed_;
-	float v3y = (vy / length_) * movespeed_;
-	float v3z = (vz / length_) * movespeed_;
 	distance_ = origin_distance_;
 	head_distance_ = originhead_distance_;
 
 	distance_ -= length_ * 2.0f;
 	head_distance_ -= length_;
 
-	all_pos_.m128_f32[0] -= v3x;
-	all_pos_.m128_f32[2] -= v3z;
+	all_pos_ = HelperMath::GetInstance()->TrackEnemytoPlayer(TrackSpeed);
 	
 }
 //攻撃モードの時

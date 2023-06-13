@@ -65,5 +65,11 @@ public:
 	float LengthCalculation(XMFLOAT3 value);
 
 	void ChangeViewPort(XMMATRIX& matviewport, const XMVECTOR& offset);
+
+	XMFLOAT3 TrackCalculation(const XMVECTOR& position, const XMVECTOR& trackpoint);
+
+	XMVECTOR TrackingVelocityCalculation(const XMFLOAT3& value, float length, float speed);
+
+	XMVECTOR TrackEnemytoPlayer(const XMVECTOR trackspeed);
 };
 

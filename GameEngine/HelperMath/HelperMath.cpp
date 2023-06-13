@@ -150,3 +150,34 @@ void HelperMath::ChangeViewPort(XMMATRIX& matviewport, const XMVECTOR& offset)
     matviewport.r[3].m128_f32[2] = 0;
     matviewport.r[3].m128_f32[3] = 1;
 }
+
+XMFLOAT3 HelperMath::TrackCalculation(const XMVECTOR& position, const XMVECTOR& trackpoint)
+{
+    XMFLOAT3 Value;
+
+    Value.x = position.m128_f32[0] - trackpoint.m128_f32[0];
+    Value.y = position.m128_f32[1] - trackpoint.m128_f32[1];
+    Value.z = position.m128_f32[2] - trackpoint.m128_f32[2];
+
+    return XMFLOAT3();
+}
+
+XMVECTOR HelperMath::TrackingVelocityCalculation(const XMFLOAT3& value, float length, float speed)
+{
+    XMVECTOR Value{};
+    Value.m128_f32[0] = (value.x / length) * speed;
+    Value.m128_f32[1] = (value.y / length) * speed;
+    Value.m128_f32[2] = (value.z / length) * speed;
+    return Value;
+}
+
+XMVECTOR HelperMath::TrackEnemytoPlayer(const XMVECTOR trackspeed)
+{
+    XMVECTOR Value;
+
+    Value.m128_f32[0] -= trackspeed.m128_f32[0];
+    Value.m128_f32[1] = 0;
+    Value.m128_f32[2] -= trackspeed.m128_f32[2];
+
+    return Value;
+}
