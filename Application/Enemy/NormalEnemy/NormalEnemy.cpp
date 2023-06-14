@@ -2,6 +2,7 @@
 #include"Action.h"
 #include"Collision.h"
 #include"HelperMath.h"
+#include"Player.h"
 #include"SpriteManager.h"
 
 using namespace DirectX;
@@ -133,23 +134,26 @@ void NormalEnemy::AllUpdate()
 	}
 }
 //更新処理
-void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+void NormalEnemy::Update(Player* player)
 {
 	//変形
 	Defomation();
-	
+	player_ = player;
+	player_hp_ = player->GetHp();
+	player_shot_ = player->GetBulletShot();
+	player_pos_ = player->GetRetPosition();
 	obj_particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 		});
 	//当たり判定
-	if (playerbulletshot == true && hp_ > 0) {
-		if (Collision::GetInstance()->CheckHit2D(player2Dpos, rockon_pos_, distance_, 1.3f)) {
+	if (player_shot_ == true && hp_ > 0) {
+		if (Collision::GetInstance()->CheckHit2D(player_pos_, rockon_pos_, distance_, 1.3f)) {
 			hp_ -= BodyDamage;
-			playerbulletshot = false;
+			player_shot_ = false;
 		}
-		if (Collision::GetInstance()->CheckHit2D(player2Dpos, rockonhead_pos_, head_distance_, 1.3f)) {
+		if (Collision::GetInstance()->CheckHit2D(player_pos_, rockonhead_pos_, head_distance_, 1.3f)) {
 			hp_ -= HeadDamage;
-			playerbulletshot = false;
+			player_shot_ = false;
 		}
 	}
 
@@ -168,7 +172,7 @@ void NormalEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playe
 		else if (length_ <= limit_length_&&wait_flag_==false) {
 			bodypart_pos_.m128_f32[2] -= 1.f;
 			atttack_timer_ += 0.1f;
-			AttackMode(playerhp);
+			AttackMode();
 		}
 	}
 	else {
@@ -250,7 +254,7 @@ void NormalEnemy::TrackPlayerMode()
 	HelperMath::GetInstance()->TrackEnemytoPlayer(all_pos_,TrackSpeed);
 }
 //攻撃モードの時
-void NormalEnemy::AttackMode(int& playerhp)
+void NormalEnemy::AttackMode()
 {
 	if (random_flag_ == false) {
 		timer_limit_ = Action::GetInstance()->GetRangRand(attacktime_min_, attacktime_max_);
@@ -267,7 +271,7 @@ void NormalEnemy::AttackMode(int& playerhp)
 		if (headpart_rot_.y >= purse_positiverot_) {
 			headpart_rot_.y = purse_positiverot_;
 		}
-		Attack(playerhp, atttack_timer_);
+		Attack( atttack_timer_);
 	}
 	else {
 		Action::GetInstance()->EaseOut(headpart_rot_.y, purse_negativerot_ - 1);
@@ -278,7 +282,7 @@ void NormalEnemy::AttackMode(int& playerhp)
 }
 
 //攻撃する時
-void NormalEnemy::Attack(int& playerhp, float& attacktimer)
+void NormalEnemy::Attack( float& attacktimer)
 {
 	//巨大化していく値
 	XMFLOAT3 gigantic = { 0.0002f ,0.0002f ,0.0002f };
@@ -327,7 +331,8 @@ void NormalEnemy::Attack(int& playerhp, float& attacktimer)
 			attackshakedown_flag_ = false;
 			attackfase_flag_ = false;
 			attacktimer = 0;
-			playerhp -= 1;
+			player_hp_ -= 1;
+			player_->SetHp(player_hp_);
 			hp_ = 0;
 
 		}

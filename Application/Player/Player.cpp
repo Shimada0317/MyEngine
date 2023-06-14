@@ -33,8 +33,7 @@ void Player::Initalize(Camera* camera)
 	sprite_reticle_.reset(Sprite::SpriteCreate(Name::kReticle, reticle_pos2d_, kColor, anchorpoint_));
 	bullet_ui_ = make_unique<BulletUI>();
 	bullet_ui_->Create(remaining_, ui_bulletpos, ui_reloadpos_);
-
-
+	//プレイヤーのUI
 	player_ui_ = make_unique<PlayerUI>();
 	player_ui_->Create();
 	//オブジェクトの読み込み
@@ -294,8 +293,6 @@ void Player::ReloadProcess()
 		mouse_stopflag_ = false;
 	}
 }
-
-
 //マズルエフェクト
 void Player::ParticleEfect(Phase paterncount)
 {
@@ -341,7 +338,6 @@ void Player::ParticleEfect(Phase paterncount)
 				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
 				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
 			}
-
 			const float rnd_vel = 0.001f;
 			XMFLOAT3 vel{};
 			vel = Action::GetInstance()->RandMax(vel,rnd_vel);

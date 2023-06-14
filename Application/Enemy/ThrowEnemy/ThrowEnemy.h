@@ -8,6 +8,8 @@
 #include<DirectXMath.h>
 #include<list>
 
+class Player;
+
 class ThrowEnemy
 {
 private:
@@ -24,8 +26,11 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
-public:
 
+private:
+	//動きようの関数ポインタ
+	static void (ThrowEnemy::* StateFuncTable[])();
+public:
 	//デストラクタ
 	~ThrowEnemy();
 
@@ -47,19 +52,10 @@ public:
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
-	void Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
-	/// <summary>
-	/// 登場処理
-	/// </summary>
-	void AppearanceProcess();
+	void Update(Player* player);
+	
 
-	void WaitProcess();
-	/// <summary>
-	/// 
-	/// </summary>
-	void AttackProcess(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
-
-	void DamageProcess(const XMFLOAT2& player2Dpos,bool& playerbulletshot);
+	void DamageProcess();
 
 	void DeathProcess();
 
@@ -75,9 +71,9 @@ public:
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
 
-	void BulletCollision(const XMFLOAT2& player2Dpos, bool& playerbulletshot);
+	void BulletCollision();
 
-	void ThrowAttack(int& playerhp);
+	void ThrowAttack();
 
 	/// <summary>
 	/// パーティクル発生
@@ -89,12 +85,31 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	bool IsDead() const { return dead_flag_; }
+
+	void SetPlayer(Player* player) { player_ = player; }
+
+public:
+	/// <summary>
+	/// 登場処理
+	/// </summary>
+	void AppearanceProcess();
+	/// <summary>
+	/// 待機処理
+	/// </summary>
+	void WaitProcess();
+	/// <summary>
+	/// 
+	/// </summary>
+	void AttackProcess();
+
+
 public:
 	//オブジェクト
 	unique_ptr<Object3d> center_;
 	unique_ptr<Object3d> bullet_;
 	unique_ptr<Object3d> enemy_;
 	unique_ptr<Object3d> propeller_;
+	Player* player_;
 	list<unique_ptr<ObjParticle>> obj_particle_;
 	//スプライト
 	unique_ptr<Sprite> rockon_;
@@ -154,5 +169,9 @@ public:
 	float floating_pos_ = 0.f;
 	float fall_time_ = 0.f;
 	int state_ = APPEARANCE;
+	//持ってきたプレイヤーの情報
+	XMFLOAT2 player_pos_{};
+	bool player_shot_ = false;
+	int player_hp_ = 0;
 };
 

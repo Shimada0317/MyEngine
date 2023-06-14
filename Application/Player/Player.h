@@ -33,6 +33,7 @@ private:
 		kReload,
 		kShot,
 		kMove,
+		kDead,
 	};
 public:
 	~Player();
@@ -53,12 +54,11 @@ public:
 	/// <summary>
 	/// 更新処理
 	/// </summary>
-	/// <param name="bull">プレイヤーの弾</param>
-	/// <param name="Remaining">残弾数</param>
-	/// <param name="enePos">敵の座標</param>
-	/// <param name="came">カメラ</param>
-	/// <param name="Ene2dPos">敵の2D座標</param>
-	/// <param name="pat">現在のフェイズ</param>
+	/// <param name="camera">カメラ</param>
+	/// <param name="patern">ゲームのフェイズ</param>
+	/// <param name="eyerot">カメラの角度</param>
+	/// <param name="gamestate">ゲームの状態</param>
+	/// <param name="state">ゲーム開始の値</param>
 	void Update(Camera* camera, Phase patern,XMFLOAT3 eyerot,int gamestate,int state);
 	/// <summary>
 	/// 待機時の処理

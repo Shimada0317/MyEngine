@@ -1,5 +1,6 @@
 #include "EnemyPop.h"
 #include"Action.h"
+#include"Player.h"
 #include<fstream>
 
 void EnemyPop::LoadCsv()
@@ -162,18 +163,19 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 	}
 }
 
-void EnemyPop::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+void EnemyPop::Update(Player* player)
 {
 	//敵の更新処理
 	for (std::unique_ptr<NormalEnemy>& NormalEnemy : robot_) {
-		NormalEnemy->Update(player2Dpos, playerhp, playerbulletshot);
+		NormalEnemy->Update(player);
 	}
 	for (std::unique_ptr<ThrowEnemy>& ThrowEnemy : throw_) {
-		ThrowEnemy->Update(player2Dpos, playerhp, playerbulletshot);
+		ThrowEnemy->Update(player);
+
 	}
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
-		boss->Update(player2Dpos, playerhp, playerbulletshot);
+		boss->Update(player);
 	}
 }
 

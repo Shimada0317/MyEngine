@@ -9,6 +9,7 @@
 #include<list>
 
 class Camera;
+class Player;
 
 class NormalEnemy
 {
@@ -43,7 +44,7 @@ public:
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
-	void Update(const XMFLOAT2& player2Dpos, int& playerhp,bool& playerbulletshot);
+	void Update(Player* player);
 	/// <summary>
 	/// 描画処理
 	/// </summary>
@@ -61,13 +62,13 @@ public:
 	/// 攻撃モード
 	/// </summary>
 	/// <param name="playerHp">プレイヤーのHp</param>
-	void AttackMode(int& playerhp);
+	void AttackMode();
 
 	/// <summary>
 	/// 攻撃
 	/// </summary>
 	/// <param name="playerhp">プレイヤーのHp</param>
-	void Attack(int& playerhp,float& attacktimer);
+	void Attack(float& attacktimer);
 
 	void Damage();
 
@@ -226,5 +227,10 @@ private:
 	//同じ追従先に別の敵がいるかいないか
 	bool wait_flag_ = false;
 	bool objparticle_flag_ = false;
+	//持ってきたプレイヤーの情報
+	Player* player_;
+	XMFLOAT2 player_pos_{};
+	bool player_shot_ = false;
+	int player_hp_ = 0;
 };
 

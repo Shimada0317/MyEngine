@@ -4,6 +4,7 @@
 #include"HelperMath.h"
 #include"ModelManager.h"
 #include"SpriteManager.h"
+#include"Player.h"
 
 using namespace DirectX;
 
@@ -17,6 +18,14 @@ ThrowEnemy::~ThrowEnemy()
 	enemy_.reset();
 	propeller_.reset();
 }
+void (ThrowEnemy::* ThrowEnemy::StateFuncTable[])() {
+	&ThrowEnemy::AppearanceProcess,
+		&ThrowEnemy::WaitProcess,
+		&ThrowEnemy::AttackProcess,
+		&ThrowEnemy::DeathProcess,
+};
+
+
 //‰Šú‰»ˆ—
 void ThrowEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpos)
 {
@@ -87,21 +96,19 @@ void ThrowEnemy::AllUpdate()
 	}
 }
 //XVˆ—
-void ThrowEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+void ThrowEnemy::Update(Player* player)
 {
+	player_ = player;
+	player_pos_ = player->GetRetPosition();
+	player_shot_ = player->GetBulletShot();
 	obj_particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 		});
-	//“oêˆ—
-	AppearanceProcess();
-	//‘Ò‹@ˆ—
-	WaitProcess();
-	//UŒ‚ˆ—
-	AttackProcess(player2Dpos, playerhp, playerbulletshot);
+
+	(this->*StateFuncTable[state_])();
+
 	//ƒ_ƒ[ƒW‚ğH‚ç‚Á‚½‚Æ‚«‚Ìˆ—
-	DamageProcess(player2Dpos, playerbulletshot);
-	//€–Sˆ—
-	DeathProcess();
+	DamageProcess();
 	if (hp_ <= 0) {
 		state_ = State::DEATH;
 	}
@@ -113,7 +120,6 @@ void ThrowEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& player
 //“oêˆ—
 void ThrowEnemy::AppearanceProcess()
 {
-	if (state_ != State::APPEARANCE) { return; }
 	//—‰º‚µ‚Ä‚­‚é
 	center_pos_.m128_f32[1] -= FallSpeed;
 	if (center_pos_.m128_f32[1] <= floating_pos_) {
@@ -122,28 +128,25 @@ void ThrowEnemy::AppearanceProcess()
 		old_pos_ = bullet_pos_;
 		state_ = State::WAIT;
 	}
-
 }
 //‘Ò‹@ˆ—
 void ThrowEnemy::WaitProcess()
 {
-	if (state_ != State::WAIT) { return; }
 	bullet_active_ = true;
 	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, 0.005f);
 	if (bullet_scl_.z <= 0.3f) { return; }
 	state_ = State::ATTACK;
 }
 //UŒ‚ˆ—
-void ThrowEnemy::AttackProcess(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+void ThrowEnemy::AttackProcess()
 {
-	if (state_ != State::ATTACK) { return; }
 	//’e”­Ë
-	ThrowAttack(playerhp);
+	ThrowAttack();
 	//’e‚Ì“–‚½‚è”»’è
-	BulletCollision(player2Dpos, playerbulletshot);
+	BulletCollision();
 }
 //ƒ_ƒ[ƒW‚ğH‚ç‚Á‚½‚Æ‚«‚Ìˆ—
-void ThrowEnemy::DamageProcess(const XMFLOAT2& player2Dpos, bool& playerbulletshot)
+void ThrowEnemy::DamageProcess()
 {
 	float Vx = 0;
 	float Vy = 0;
@@ -161,10 +164,10 @@ void ThrowEnemy::DamageProcess(const XMFLOAT2& player2Dpos, bool& playerbulletsh
 	distance_ = length_;
 
 	//“–‚½‚è”»’è
-	if (playerbulletshot == true && hp_ > 0) {
-		if (!Collision::GetInstance()->CheckHit2D(player2Dpos, rockon_pos_, distance_, 2.f)) { return; }
+	if (player_shot_== true && hp_ > 0) {
+		if (!Collision::GetInstance()->CheckHit2D(player_pos_, rockon_pos_, distance_, 2.f)) { return; }
 		hp_ -= BodyDamage;
-		playerbulletshot = false;
+		player_shot_ = false;
 	}
 	if (hp_ >= oldhp_) { return; }
 	for (int i = 0; i < 5; i++) {
@@ -177,7 +180,6 @@ void ThrowEnemy::DamageProcess(const XMFLOAT2& player2Dpos, bool& playerbulletsh
 //€–Sˆ—
 void ThrowEnemy::DeathProcess()
 {
-	if (state_ != State::DEATH) { return; }
 	const float kGravity = 1.8f;
 	fall_time_ += 0.001f;
 	float fallspeed = kGravity * fall_time_;
@@ -248,17 +250,18 @@ void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 	Sprite::PostDraw();
 }
 //’e‚Ì“–‚½‚è”»’è
-void ThrowEnemy::BulletCollision(const XMFLOAT2& player2Dpos, bool& playerbulletshot)
+void ThrowEnemy::BulletCollision()
 {
+	
 	//’e‚ª”­Ë‚³‚ê‚Ä‚¢‚é
-	if (playerbulletshot == false) { return; }
+	if (player_shot_ == false) { return; }
 	//“–‚½‚è”»’è
-	if (!Collision::GetInstance()->CheckHit2D(player2Dpos, rockon_bulletpos_, bullet_distance_, bullet_magnification_)) { return; }
+	if (!Collision::GetInstance()->CheckHit2D(player_pos_, rockon_bulletpos_, bullet_distance_, bullet_magnification_)) { return; }
 	bullet_active_ = false;
-	playerbulletshot = false;
+	player_shot_ = false;
 }
 //’e”­Ë
-void ThrowEnemy::ThrowAttack(int& playerhp)
+void ThrowEnemy::ThrowAttack()
 {
 	//’Ç”ö‚ÌŒvZ
 	XMFLOAT3 Value;
@@ -279,7 +282,9 @@ void ThrowEnemy::ThrowAttack(int& playerhp)
 	bullet_pos_ -= TrackSpeed;
 	bullet_magnification_ += 0.015f;
 	if (BulletLength <= 0.1f) {
-		playerhp -= 1;
+		player_hp_ = player_->GetHp();
+		player_hp_ -= 1;
+		player_->SetHp(player_hp_);
 		bullet_pos_ = old_pos_;
 		bullet_scl_ = {};
 		state_ = State::WAIT;
@@ -313,3 +318,4 @@ void ThrowEnemy::ParticleEfect()
 		partgreen_->Add(30, Pos, Vel, Acc, 0.7f, 0.0f, 0.0f);
 	}
 }
+

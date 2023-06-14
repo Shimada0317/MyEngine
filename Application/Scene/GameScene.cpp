@@ -9,11 +9,12 @@
 #include"SceneManager.h"
 using namespace DirectX;
 
+XMFLOAT4 kBlack = { 0.f,0.f,0.f,1.f };
+
 //コンストラクタ
 GameScene::GameScene(SceneManager* sceneManager_)
 	:BaseScene(sceneManager_)
 {
-
 }
 //初期化処理
 void GameScene::Initialize(DirectXCommon* dxComon)
@@ -80,7 +81,6 @@ void GameScene::StatusSet()
 	//映画風演出ステータス
 	movie_->StatusSet();
 	//Hpバー
-	player_->SetHp(playerhp_);
 	playerhp_ = player_->GetHp();
 	//ヘリコプターのステータス
 	heri_->SetPosition(heripos_);
@@ -139,14 +139,8 @@ void GameScene::Update()
 	GameClearProcesss();
 	//ゴールについていないとき更新を続ける
 	StatusSet();
-	if (gamestate_ == NONE || gamestate_ == START || gamestate_ == FIGHT || gamestate_ == MOVE) {
-		//スポットライトの動きの処理
-		SpotLightMove();
-		lightcontrol_->WrappingLight();
-		lightcontrol_->Update();
-		AllUpdata();
-		Action::GetInstance()->ScreenShake(shake_addvalue_, 0.1f, eyerot_, shakingstartflag_);
-	}
+	//ゲームが動いているときの処理
+	MovingGameProcesss();
 	camera_->RecalculationMatrix();
 	posteffect_->Update(postefectcolor_);
 }
@@ -214,7 +208,7 @@ void GameScene::FightProcess()
 		shakingstartflag_ = true;
 	}
 	//敵の更新処理
-	enemypop_->Update(kPlayer2DPos, playerhp_, kPlayerBulletShot);
+	enemypop_->Update(player_.get());
 	//追尾先が被った時の敵の処理
 	enemypop_->CheckSameTrackPosition();
 	player_->SetBulletShot(kPlayerBulletShot);
@@ -272,6 +266,18 @@ void GameScene::GameClearProcesss()
 		sceneManager_->SetNextScene(scene_);
 	}
 }
+//ゲームが動いている時の処理
+void GameScene::MovingGameProcesss()
+{
+	if (gamestate_ == CONTINUE || gamestate_ == CLEAR) { return; }
+	//スポットライトの動きの処理
+	SpotLightMove();
+	lightcontrol_->WrappingLight();
+	lightcontrol_->Update();
+	AllUpdata();
+	Action::GetInstance()->ScreenShake(shake_addvalue_, 0.1f, eyerot_, shakingstartflag_);
+
+}
 //遷移ようのフェード
 void GameScene::FadeIn()
 {
@@ -280,10 +286,7 @@ void GameScene::FadeIn()
 	const float kAddPosetEfectColor = 0.05f;
 	Action::GetInstance()->ColorUp(postefectcolor_, kAddPosetEfectColor);
 	if (postefectcolor_.x >= 0.0f) {
-		postefectcolor_.x = 0.0f;
-		postefectcolor_.y = 0.0f;
-		postefectcolor_.z = 0.0f;
-		postefectcolor_.w = 1.f;
+		postefectcolor_ = kBlack;
 		gamestate_ = START;
 	}
 }
@@ -307,12 +310,12 @@ void GameScene::DamageProcess()
 			oldhp_ = playerhp_;
 			shake_addvalue_ = 4.5f;
 			shakingstartflag_ = true;
-		}
-		//画面を赤くするフラグが立った時
-		if (posteffectonflag_ == true) {
-			postefectcolor_.x = 0.7f;
-			if (postefectcolor_.x >= 0.7f) {
-				posteffectonflag_ = false;
+			//画面を赤くするフラグが立った時
+			if (posteffectonflag_ == true) {
+				postefectcolor_.x = 0.7f;
+				if (postefectcolor_.x >= 0.7f) {
+					posteffectonflag_ = false;
+				}
 			}
 		}
 		//画面を赤くするフラグが立っていない時

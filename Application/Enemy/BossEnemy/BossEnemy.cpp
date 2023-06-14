@@ -3,6 +3,7 @@
 #include"Camera.h"
 #include"Collision.h"
 #include"HelperMath.h"
+#include"Player.h"
 #include"SpriteManager.h"
 
 
@@ -112,24 +113,28 @@ void BossEnemy::AllUpdate()
 	}
 }
 
-void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+void BossEnemy::Update(Player* player)
 {
+	player = player;
+	player_pos_ = player->GetRetPosition();
+	player_shot_ = player->GetBulletShot();
+
 	Appearance();
 
-	Move(player2Dpos, playerhp, playerbulletshot);
+	Move();
 
-	Stun(player2Dpos, playerhp, playerbulletshot);
+	Stun();
 
 	obj_particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 		});
 
 	//“–‚½‚è”»’è
-	if (playerbulletshot == true && hp_ > 0) {
-		if (Collision::GetInstance()->CheckHit2D(player2Dpos, rockoncore_pos_, core_distance_, 4)) {
+	if (player_shot_ == true && hp_ > 0) {
+		if (Collision::GetInstance()->CheckHit2D(player_pos_, rockoncore_pos_, core_distance_, 4)) {
 			hp_ -= Coredamage;
 			addrot_ -= 5.f;
-			playerbulletshot = false;
+			player_shot_ = false;
 		}
 	}
 
@@ -137,7 +142,7 @@ void BossEnemy::Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerb
 
 	Death();
 
-	Attack(playerhp);
+	Attack();
 
 	StatusSet();
 
@@ -175,7 +180,7 @@ void BossEnemy::Appearance()
 	}
 }
 
-void BossEnemy::Move(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+void BossEnemy::Move()
 {
 	if (state_ != kMove) { return; }
 	float endcolor_ = 0.f;
@@ -198,21 +203,21 @@ void BossEnemy::Move(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbul
 	}
 }
 
-void BossEnemy::Stun(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot)
+void BossEnemy::Stun()
 {
 	if (state_ != kStun) { return; }
 	movespeed_ = 0.f;
 	addrot_ = 0.f;
 	all_pos_.m128_f32[2] -= 0.01f;
-	if (playerbulletshot == true && hp_ > 0) {
-		if (Collision::GetInstance()->CheckHit2D(player2Dpos,rockonhead_pos_,head_distance_,4)) {
+	if (player_shot_ == true && hp_ > 0) {
+		if (Collision::GetInstance()->CheckHit2D(player_pos_,rockonhead_pos_,head_distance_,4)) {
 			hp_ -= HeadDamage;
-			playerbulletshot = false;
+			player_shot_ = false;
 		}
 
-		if (Collision::GetInstance()->CheckHit2D(player2Dpos, rockonhead_pos_, distance_, 4)) {
+		if (Collision::GetInstance()->CheckHit2D(player_pos_, rockonhead_pos_, distance_, 4)) {
 			hp_ -= BodyDamage;
-			playerbulletshot = false;
+			player_shot_ = false;
 		}
 	}
 	time_ += 0.1f;
@@ -285,7 +290,7 @@ void BossEnemy::Death()
 	ParticleEfect();
 }
 
-void BossEnemy::Attack(int& playerhp)
+void BossEnemy::Attack()
 {
 	if (state_ != kAttack) { return; }
 	attack_timer_ += 0.1f;
@@ -300,7 +305,8 @@ void BossEnemy::Attack(int& playerhp)
 	all_pos_.m128_f32[2] += attack_speed_;
 	if (attack_speed_ > 0.5f) {
 		attack_speed_ = 0.f;
-		playerhp -= 5;
+		player_hp_ -= 5;
+		player->SetHp(player_hp_);
 	}
 
 }

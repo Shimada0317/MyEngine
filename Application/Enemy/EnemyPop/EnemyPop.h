@@ -7,6 +7,8 @@
 #include"DirectXCommon.h"
 #include<sstream>
 
+class Player;
+
 class EnemyPop
 {
 private:
@@ -32,7 +34,7 @@ public:
 	/// <param name="player2Dpos"></param>
 	/// <param name="playerhp"></param>
 	/// <param name="playerbulletshot"></param>
-	void Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
+	void Update(Player* player);
 	/// <summary>
 	/// “G“¯m‚Ì’Ç”öæ‚ª”í‚Á‚½‚ÌŠm”F‚Æ‚»‚Ìê‡‚Ìˆ—
 	/// </summary>

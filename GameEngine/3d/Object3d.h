@@ -153,9 +153,15 @@ public: // メンバ関数
 	/// </summary>
 	/// <param name="position">座標</param>
 	void SetPosition(const XMVECTOR& position) { this->position = position; }
-
+	/// <summary>
+	/// 角度の設定
+	/// </summary>
+	/// <param name="rotation"></param>
 	void SetRotation(const XMFLOAT3& rotation) { this->rotation = rotation; }
-
+	/// <summary>
+	/// 行列の設定
+	/// </summary>
+	/// <param name="mat"></param>
 	void SetMatrix(const XMMATRIX& mat) { this->matWorld = mat; }
 
 	const XMMATRIX& GetMatrix() { return matWorld; }
@@ -185,6 +191,7 @@ public: // メンバ関数
 
 	void SetParent(Camera* cameraP) { this->cameraParent = cameraP; }
 
+	void AllStatus(const XMFLOAT4& pos);
 private: // メンバ変数
 	ComPtr<ID3D12Resource> constBuffB0; // 定数バッファ
 	// 色

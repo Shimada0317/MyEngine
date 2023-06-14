@@ -85,6 +85,10 @@ public://ƒƒ“ƒoŠÖ”
 	/// </summary>
 	void GameClearProcesss();
 	/// <summary>
+	/// ƒQ[ƒ€‚ª“®‚¢‚Ä‚¢‚é‚Ìˆ—
+	/// </summary>
+	void MovingGameProcesss();
+	/// <summary>
 	/// ™X‚É–¾‚é‚­‚·‚é
 	/// </summary>
 	void FadeIn();

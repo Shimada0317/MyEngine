@@ -9,6 +9,7 @@
 #include<list>
 
 class Camera;
+class Player;
 
 class BossEnemy
 {
@@ -36,15 +37,15 @@ public:
 
 	void AllUpdate();
 
-	void Update(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
+	void Update(Player* player);
 
 	void Draw(DirectXCommon* dxCommon);
 
 	void Appearance();
 
-	void Move(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
+	void Move();
 
-	void Stun(const XMFLOAT2& player2Dpos, int& playerhp, bool& playerbulletshot);
+	void Stun();
 
 	/// <summary>
 /// プレイヤー追尾モード
@@ -56,7 +57,7 @@ public:
 	void Death();
 
 
-	void Attack(int& playerhp);
+	void Attack();
 
 	/// <summary>
 	/// 2D→3D座標
@@ -177,6 +178,10 @@ private:
 	float attack_speed_ = 0.f;
 	float color_time_ = 1.f;
 	float attack_timer_ = 0.f;
-
+	//持ってきたプレイヤーの情報
+	Player* player;
+	XMFLOAT2 player_pos_{};
+	bool player_shot_ = false;
+	int player_hp_ = 0;
 };
 
