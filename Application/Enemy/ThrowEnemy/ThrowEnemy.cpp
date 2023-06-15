@@ -54,7 +54,6 @@ void ThrowEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Came
 //ステータスのセット
 void ThrowEnemy::StatusSet()
 {
-
 	center_->SetScale({ 1.f,1.f,1.f });
 	XMMatrixIsIdentity(center_mat_);
 	center_mat_ = center_->GetMatrix();
@@ -104,9 +103,8 @@ void ThrowEnemy::Update(Player* player)
 	obj_particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 		});
-
+	//関数ポインタで状態遷移
 	(this->*StateFuncTable[state_])();
-
 	//ダメージを食らったときの処理
 	DamageProcess();
 	if (hp_ <= 0) {

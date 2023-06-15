@@ -32,9 +32,9 @@ private:
 		kWait = 0,
 		kReload,
 		kShot,
-		kMove,
-		kDead,
-	};
+	} player_state_;
+private:
+	static void (Player::* StateFunctable[])();
 public:
 	~Player();
 	/// <summary>
@@ -88,7 +88,7 @@ public:
 	/// <summary>
 	/// 発砲処理
 	/// </summary>
-	void GunShotProcess(Phase paterncount);
+	void GunShotProcess();
 	/// <summary>
 	/// UIの動き処理
 	/// </summary>
@@ -104,7 +104,7 @@ public:
 	/// <summary>
 	/// パーティクル発生
 	/// </summary>
-	void ParticleEfect(Phase paterncount);
+	void ParticleEfect(int paterncount);
 	/// <summary>
 	/// 徐々に大きくする
 	/// </summary>
@@ -235,13 +235,10 @@ private:
 	//リコイルの処理に使われるもの
 	float recoil_time_ = 0.0f;
 	float recovery_time_ = 0.0f;
-	bool recoil_flag_ = false;
 	bool recoil_gunflag_ = false;
-	bool mouse_stopflag_ = false;
 	//UIの大きさが一定まで行ったときにフラグを立てる
 	bool revers_flag_ = false;
-	//プレイヤーの状態
-	int player_state_ = State::kWait;
 	XMFLOAT3 pos{};
+	int game_phase_{};
 };
 

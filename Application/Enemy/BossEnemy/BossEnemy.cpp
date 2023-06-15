@@ -24,6 +24,15 @@ BossEnemy::~BossEnemy()
 	bodypart_.reset();
 }
 
+void (BossEnemy::* BossEnemy::StateFuncTable[])() {
+	&BossEnemy::AppearanceProcess,
+	&BossEnemy::MoveProcess,
+	&BossEnemy::StunProcess,
+	&BossEnemy::DeathProcess,
+	&BossEnemy::AttackProcess,
+
+};
+
 void BossEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint)
 {
 	//中心座標
@@ -119,11 +128,7 @@ void BossEnemy::Update(Player* player)
 	player_pos_ = player->GetRetPosition();
 	player_shot_ = player->GetBulletShot();
 
-	Appearance();
-
-	Move();
-
-	Stun();
+	(this->*StateFuncTable[state_])();
 
 	obj_particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
@@ -137,12 +142,6 @@ void BossEnemy::Update(Player* player)
 			player_shot_ = false;
 		}
 	}
-
-	Damage();
-
-	Death();
-
-	Attack();
 
 	StatusSet();
 
@@ -170,9 +169,8 @@ void BossEnemy::Draw(DirectXCommon* dxCommon)
 	Object3d::PostDraw();
 }
 
-void BossEnemy::Appearance()
+void BossEnemy::AppearanceProcess()
 {
-	if (state_ != kAppearance) { return; }
 	all_pos_.m128_f32[1] -= FallSpeed;
 	if (all_pos_.m128_f32[1] <= 3.f) {
 		all_pos_.m128_f32[1] = 3.f;
@@ -180,9 +178,8 @@ void BossEnemy::Appearance()
 	}
 }
 
-void BossEnemy::Move()
+void BossEnemy::MoveProcess()
 {
-	if (state_ != kMove) { return; }
 	float endcolor_ = 0.f;
 	float startcolor_ = 1.f;
 	Action::GetInstance()->LoopTimer(color_time_, 0.1f, 50);
@@ -203,9 +200,8 @@ void BossEnemy::Move()
 	}
 }
 
-void BossEnemy::Stun()
+void BossEnemy::StunProcess()
 {
-	if (state_ != kStun) { return; }
 	movespeed_ = 0.f;
 	addrot_ = 0.f;
 	all_pos_.m128_f32[2] -= 0.01f;
@@ -253,7 +249,7 @@ void BossEnemy::TrackPlayerMode()
 	HelperMath::GetInstance()->TrackEnemytoPlayer(all_pos_,TrackSpeed);
 }
 
-void BossEnemy::Damage()
+void BossEnemy::DamageProcess()
 {
 	//ダメージを受けたとき
 	if (oldhp_ > hp_ && hp_ >= 0) {
@@ -272,9 +268,8 @@ void BossEnemy::Damage()
 
 }
 
-void BossEnemy::Death()
+void BossEnemy::DeathProcess()
 {
-	if (state_ != State::kDead) { return; }
 	//生きているときにHPが0になったら
 	shadow_color_.w -= Subtraction;
 	bodypart_color_.w -= Subtraction;
@@ -290,9 +285,8 @@ void BossEnemy::Death()
 	ParticleEfect();
 }
 
-void BossEnemy::Attack()
+void BossEnemy::AttackProcess()
 {
-	if (state_ != kAttack) { return; }
 	attack_timer_ += 0.1f;
 	addrot_ = 100.f;
 	corepart_rot_.y += addrot_;
@@ -308,7 +302,6 @@ void BossEnemy::Attack()
 		player_hp_ -= 5;
 		player->SetHp(player_hp_);
 	}
-
 }
 
 

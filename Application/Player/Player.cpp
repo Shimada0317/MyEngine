@@ -22,6 +22,13 @@ Player::~Player()
 	shot_se_.reset();
 	reload_se_.reset();
 }
+
+void (Player::* Player::StateFunctable[])() {
+	&Player::WaitProcess,
+	&Player::ReloadProcess,
+	&Player::GunShotProcess,
+};
+
 //初期化処理
 void Player::Initalize(Camera* camera)
 {
@@ -101,27 +108,25 @@ void Player::AllUpdate()
 //更新処理
 void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot, int gamestate, int state)
 {
+	game_phase_ = patern;
 	//マウス操作
 	MouseContoroll();
-	//待機状態の処理
-	WaitProcess();
+	
 	//座標や回転、スケールなどのステータスのセット
 	StatusSet(camera, eyerot);
 	//全ての更新処理
 	AllUpdate();
 	if (gamestate == state) { return; }
-	//発砲の処理
-	GunShotProcess(patern);
+	//プレイヤーの状態遷移
+	(this->*StateFunctable[player_state_])();
 	//UI
 	UIMotionProcess();
-	//リロードの処理
-	ReloadProcess();
+	//リコイル処理
+	RecoilProcess();
 }
 //待機状態の処理
 void Player::WaitProcess()
 {
-	//ステータスが待機状態の時
-	if (player_state_ == State::kWait) {
 		//除算する値
 		const int kDivideValuY = 10;
 		const int kDivideValuX = 50;
@@ -129,7 +134,24 @@ void Player::WaitProcess()
 		gun_rot_.y = (reticle_pos2d_.x - screenhalfwidth_) / kDivideValuY;
 		gun_rot_.x = (reticle_pos2d_.y - screenhalfheight_) / kDivideValuX;
 		bullet_shotflag_ = false;
-	}
+
+		//弾の発射前
+		if (remaining_ < MaxRemainingBullet&&
+			Mouse::GetInstance()->PushClick(0)) {
+			//加算する値
+				const int kAddValue = 1;
+				remaining_ += kAddValue;
+				bullet_ui_->Shot(remaining_);
+				recoil_gunflag_ = true;
+				player_state_ = State::kShot;
+				//マズルフラッシュ
+				ParticleEfect(game_phase_);
+		}
+
+		if (remaining_!=0&&
+			Mouse::GetInstance()->PushClick(1)) {
+			player_state_ = State::kReload;
+		}
 }
 //パーティクル描画
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
@@ -144,7 +166,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 //スプライト描画
 void Player::SpriteDraw()
 {
-	if (!mouse_stopflag_) {
+	if (player_state_!=kReload) {
 		bullet_ui_->Draw();
 	}
 	sprite_reticle_->Draw();
@@ -182,29 +204,11 @@ void Player::MouseContoroll()
 }
 
 //弾の発射処理
-void Player::GunShotProcess(Phase paterncount)
+void Player::GunShotProcess()
 {
-	//加算する値
-	const int kAddValue = 1;
-	//弾の発射前
-	if (player_state_ == State::kWait && remaining_ < MaxRemainingBullet) {
-		if (Mouse::GetInstance()->PushClick(0)) {
-			remaining_ += kAddValue;
-			bullet_ui_->Shot(remaining_);
-			recoil_gunflag_ = true;
-			player_state_ = State::kShot;
-			//マズルフラッシュ
-			ParticleEfect(paterncount);
-		}
-	}
-	//ステータスがSHOTに切り替わった時
-	if (player_state_ == State::kShot) {
-		//弾が発射された
-		bullet_shotflag_ = true;
-		player_state_ = State::kWait;
-	}
-	//リコイル処理
-	RecoilProcess();
+	//弾が発射された
+	bullet_shotflag_ = true;
+	player_state_ = State::kWait;
 }
 
 void Player::UIMotionProcess()
@@ -262,9 +266,6 @@ void Player::ReloadProcess()
 			//ステータスをRELOADに変更
 			player_state_ = State::kReload;
 			reload_se_->LoadFile("Resources/Sound/SE/reload.wav", 0.3f);
-			//マウスを操作出来ない状態に
-
-			mouse_stopflag_ = true;
 		}
 	}
 	//ステータスがRELOADではないとき
@@ -289,12 +290,10 @@ void Player::ReloadProcess()
 		player_state_ = State::kWait;
 		//タイムを初期化
 		reload_time_ = {};
-		//操作を再度可能状態にする
-		mouse_stopflag_ = false;
 	}
 }
 //マズルエフェクト
-void Player::ParticleEfect(Phase paterncount)
+void Player::ParticleEfect(int paterncount)
 {
 		for (int i = 0; i < 10; i++) {
 			float radX = reticle_rot_.y * XM_PI / 180.f;

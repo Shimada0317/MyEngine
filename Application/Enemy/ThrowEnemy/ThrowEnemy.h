@@ -28,7 +28,7 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 
 private:
-	//動きようの関数ポインタ
+	//状態遷移の関数ポインタ
 	static void (ThrowEnemy::* StateFuncTable[])();
 public:
 	//デストラクタ

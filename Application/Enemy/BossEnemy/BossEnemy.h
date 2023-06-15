@@ -27,6 +27,9 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
+private:
+	//状態遷移の関数ポインタ
+	static void (BossEnemy::* StateFuncTable[])();
 public:
 	//デストラクタ
 	~BossEnemy();
@@ -41,23 +44,23 @@ public:
 
 	void Draw(DirectXCommon* dxCommon);
 
-	void Appearance();
+	void AppearanceProcess();
 
-	void Move();
+	void MoveProcess();
 
-	void Stun();
+	void StunProcess();
 
 	/// <summary>
 /// プレイヤー追尾モード
 /// </summary>
 	void TrackPlayerMode();
 
-	void Damage();
+	void DamageProcess();
 
-	void Death();
+	void DeathProcess();
 
 
-	void Attack();
+	void AttackProcess();
 
 	/// <summary>
 	/// 2D→3D座標
