@@ -37,6 +37,15 @@ NormalEnemy::~NormalEnemy()
 	delete clushse_;
 }
 
+void(NormalEnemy::* NormalEnemy::StateFuncTable[])() {
+	&NormalEnemy::Defomation,
+		&NormalEnemy::TrackPlayerMode,
+		&NormalEnemy::WaitMode,
+		&NormalEnemy::AttackMode,
+		&NormalEnemy::Death,
+
+};
+
 //初期化処理
 void NormalEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint)
 {
@@ -154,20 +163,9 @@ void NormalEnemy::Update(Player* player)
 			playershot = false;
 		}
 	}
-
-
-	//変形
-	Defomation();
-
+	//関数ポインタで状態遷移
+	(this->*StateFuncTable[state_])();
 	Damage();
-
-	Death();
-	//生きているとき
-	TrackPlayerMode();
-	//プレイヤーの前まで来たとき
-	WaitMode();
-
-	AttackMode();
 
 	StatusSet();
 	AllUpdate();
@@ -198,9 +196,7 @@ void NormalEnemy::Draw(DirectXCommon* dxCommon)
 
 void NormalEnemy::Defomation()
 {
-	if (state_ != State::kDefomation) { return; }
 	//変形前なら
-
 	all_pos_.m128_f32[1] -= FallSpeed;
 	//地面に着いたとき
 	if (all_pos_.m128_f32[1] <= 0) {
@@ -218,7 +214,6 @@ void NormalEnemy::Defomation()
 //プレイヤーへの追尾モードの時
 void NormalEnemy::TrackPlayerMode()
 {
-	if (state_ != State::kMove) { return; }
 	//追尾の計算
 	XMFLOAT3 Value;
 	Value = HelperMath::GetInstance()->TrackCalculation(all_pos_, track_point_);
@@ -247,7 +242,6 @@ void NormalEnemy::TrackPlayerMode()
 //攻撃モードの時
 void NormalEnemy::WaitMode()
 {
-	if (state_ != State::kWait) { return; }
 	atttack_timer_ += 0.1f;
 	if (atttack_timer_ >= timer_limit_) {
 		Action::GetInstance()->EaseOut(headpart_rot_.y, purse_positiverot_ + 1);
@@ -281,8 +275,6 @@ void NormalEnemy::Damage()
 
 void NormalEnemy::Death()
 {
-	//生きているときにHPが0になったら
-	if (state_ != State::kDeath) { return; }
 	oldtrack_point_ = track_point_;
 	if (headpart_color_.w > 0) {
 		Transparentize();
@@ -376,23 +368,25 @@ void NormalEnemy::ShakeBody()
 
 void NormalEnemy::AttackCharge()
 {
-	const float discoloration = 0.01f;
-	const float MaxPoint = 40.f;
-
-	armspart_rot_.x += 1.5f;
-	Enlargement();
-	armspart_color_.y -= discoloration;
-	armspart_color_.z -= discoloration;
-	//腕が最大点に達した時
-	if (armspart_rot_.x < MaxPoint) { return; }
-	armspart_rot_.x = MaxPoint;
+	AttackBefore();
 	limit_length_ = 0.1f;
 	//振動させる
 	ShakeBody();
 	attack_charge_ += 0.1f;
-	if (attack_charge_ < 9) { return; }
-	attack_charge_ = 10;
-	Attack();
+	if (attack_charge_ > 9) {
+		Attack();
+	}
+}
+
+void NormalEnemy::AttackBefore()
+{
+	const float discoloration = 0.05f;
+	const float MaxPoint = 40.f;
+	if (armspart_rot_.x > MaxPoint) { return; }
+	armspart_rot_.x += 1.5f;
+	Enlargement();
+	armspart_color_.y -= discoloration;
+	armspart_color_.z -= discoloration;
 }
 
 void NormalEnemy::Attack()

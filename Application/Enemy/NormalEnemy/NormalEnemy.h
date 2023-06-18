@@ -20,7 +20,8 @@ private:
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 private:
-
+	//状態遷移の関数ポインタ
+	static void (NormalEnemy::* StateFuncTable[])();
 private:
 	enum State {
 		kDefomation,
@@ -109,6 +110,8 @@ public:
 	/// 攻撃チャージ
 	/// </summary>
 	void AttackCharge();
+	
+	void AttackBefore();
 	/// <summary>
 	/// 攻撃
 	/// </summary>
