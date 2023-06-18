@@ -19,6 +19,16 @@ private:
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
+private:
+
+private:
+	enum State {
+		kDefomation,
+		kMove,
+		kWait,
+		kAttack,
+		kDeath,
+	}state_;
 public:
 	//デストラクタ
 	~NormalEnemy();
@@ -59,33 +69,58 @@ public:
 	/// </summary>
 	void TrackPlayerMode();
 	/// <summary>
-	/// 攻撃モード
+	/// 到着後の待機
 	/// </summary>
-	/// <param name="playerHp">プレイヤーのHp</param>
+	void WaitMode();
+	/// <summary>
+	/// 待機後の攻撃
+	/// </summary>
 	void AttackMode();
-
 	/// <summary>
-	/// 攻撃
+	/// ダメージを食らった
 	/// </summary>
-	/// <param name="playerhp">プレイヤーのHp</param>
-	void Attack(float& attacktimer);
-
 	void Damage();
-
-	void Death();
-
 	/// <summary>
-	/// 2D→3D座標
+	/// 死んだ
 	/// </summary>
-	/// <param name="Set3dPosition">表示したい3D座標の場所</param>
-	XMFLOAT2 WorldtoScreen(const XMVECTOR& set3Dposition);
-
+	void Death();
+	/// <summary>
+	/// 展開時の大きさ
+	/// </summary>
+	void DeploymentScale();
 	/// <summary>
 	/// パーティクル発生
 	/// </summary>
 	void ParticleEfect();
-
+	/// <summary>
+	/// 追従する時、先に他の敵がいるか
+	/// </summary>
+	/// <param name="otherenemyarive">自信以外が先にいるか</param>
 	void WaitTrack(bool otherenemyarive);
+	/// <summary>
+	/// パーツを大きくする
+	/// </summary>
+	void Enlargement();
+	/// <summary>
+	/// 揺らす処理
+	/// </summary>
+	void ShakeBody();
+	/// <summary>
+	/// 攻撃チャージ
+	/// </summary>
+	void AttackCharge();
+	/// <summary>
+	/// 攻撃
+	/// </summary>
+	void Attack();
+	/// <summary>
+	/// 透明にする
+	/// </summary>
+	void Transparentize();
+	/// <summary>
+	/// 攻撃を受けたときに色を変える
+	/// </summary>
+	void HitColor();
 
 public://Getter Setter
 	/// <summary>
@@ -130,31 +165,25 @@ private:
 	std::unique_ptr<Object3d> shadow_;
 	//中心
 	std::unique_ptr<Object3d> center_;
-
 	//Objパーティクル
 	std::list<std::unique_ptr<ObjParticle>>obj_particle_;
-
 	//スプライト
 	//体
 	std::unique_ptr<Sprite> rockon_;
 	//頭
 	std::unique_ptr<Sprite> rockonhead_;
-
 	//ダメージを食らったときのエフェクト
 	ParticleManager* partgreen_ = nullptr;
 	ParticleManager* partred_ = nullptr;
-
 	//その他
 	//サウンドエフェクト
 	Audio* clushse_;
 	//カメラ
 	Camera* bringupcamera_;
-
 	//敵の中心部分のステータス
 	XMVECTOR center_worldpos_ = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 center_rot_ = { 0.0f,0.0f,0.0f };
 	XMMATRIX center_mat_;
-
 	//敵が持っているステータス
 	int hp_ = 50;
 	int oldhp_ = 0;
@@ -189,11 +218,6 @@ private:
 	XMFLOAT2 anchorpoint_ = { 0.5f,0.5f };
 	XMFLOAT4 rockon_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT2 rockonhead_pos_ = { 0.0f,0.0f };
-	//2D座標を持たせる計算で使う変数
-	XMVECTOR offset_;
-	XMMATRIX matviewport_;
-	//攻撃モードで使用される変数
-	bool attackfase_flag_ = false;
 	//攻撃の準備時間
 	bool attackshakedown_flag_ = false;
 	float attack_charge_ = 0.0f;
@@ -202,7 +226,7 @@ private:
 	//プレイヤーと敵の距離
 	float length_ = 3.0f;
 	float limit_length_ =1.5f;
-	//Hpが0以上か
+	//死んでいるか
 	bool dead_flag_ = false;
 	//敵とプレイヤーの距離
 	float origin_distance_;
@@ -211,26 +235,20 @@ private:
 	float head_distance_ = 30.0f;
 	//敵のモーション用
 	float purse_positiverot_ = 180;
-	float purse_negativerot_ = 0;
 	//変形用のフラグ
-	bool defomation_flag_ = false;
 	float defomation_count_ = 0.0f;
 	//振動
 	float vibration_=0.0f;
 	bool vibrationchange_flag_ = false;
 	XMVECTOR attack_beforepos_ = { 0.0f,0.0f,0.0f };
-	float limit_distance_ = 0.0f;
 	float atttack_timer_ = 0.f;
 	float timer_limit_ = 0.f;
-	bool random_flag_ = false;
 	bool particleefect_flag_ = true;
 	//同じ追従先に別の敵がいるかいないか
 	bool wait_flag_ = false;
-	bool objparticle_flag_ = false;
 	//持ってきたプレイヤーの情報
 	Player* player_;
 	XMFLOAT2 player_pos_{};
-	bool player_shot_ = false;
 	int player_hp_ = 0;
 };
 

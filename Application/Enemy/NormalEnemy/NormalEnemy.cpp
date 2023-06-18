@@ -40,13 +40,13 @@ NormalEnemy::~NormalEnemy()
 //初期化処理
 void NormalEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint)
 {
-	headpart_rot_ =bodypart_rot_ = armspart_rot_ = allrot;
+	state_ = State::kDefomation;
+	headpart_rot_ = bodypart_rot_ = armspart_rot_ = allrot;
 
 	all_pos_ = allpos;
 	bringupcamera_ = camera;
 
 	purse_positiverot_ += headpart_rot_.y;
-	purse_negativerot_ += headpart_rot_.y;
 
 	origin_distance_ = distance_;
 	originhead_distance_ = head_distance_;
@@ -81,7 +81,7 @@ void NormalEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Cam
 //ステータスセット
 void NormalEnemy::StatusSet()
 {
-	
+
 	center_->SetScale({ 1.0f,1.0f,1.0f });
 	XMMatrixIsIdentity(center_mat_);
 	center_mat_ = center_->GetMatrix();
@@ -110,8 +110,8 @@ void NormalEnemy::StatusSet()
 	armspart_->SetRotation(armspart_rot_);
 	armspart_->SetScale(armspart_scl_);
 
-	rockon_pos_ = WorldtoScreen(bodypart_pos_);
-	rockonhead_pos_ = WorldtoScreen(headpart_pos_);
+	rockon_pos_ = Action::GetInstance()->WorldToScreen(center_mat_, bodypart_pos_, bringupcamera_);
+	rockonhead_pos_ = Action::GetInstance()->WorldToScreen(center_mat_, headpart_pos_, bringupcamera_);
 	rockon_->SetPosition(rockon_pos_);
 	rockonhead_->SetPosition(rockonhead_pos_);
 }
@@ -136,51 +136,43 @@ void NormalEnemy::AllUpdate()
 //更新処理
 void NormalEnemy::Update(Player* player)
 {
-	//変形
-	Defomation();
 	player_ = player;
 	player_hp_ = player->GetHp();
-	player_shot_ = player->GetBulletShot();
+	bool playershot = player->GetBulletShot();
 	player_pos_ = player->GetRetPosition();
 	obj_particle_.remove_if([](std::unique_ptr<ObjParticle>& particle) {
 		return particle->IsDelete();
 		});
 	//当たり判定
-	if (player_shot_ == true && hp_ > 0) {
+	if (playershot == true && hp_ > 0) {
 		if (Collision::GetInstance()->CheckHit2D(player_pos_, rockon_pos_, distance_, 1.3f)) {
 			hp_ -= BodyDamage;
-			player_shot_ = false;
+			playershot = false;
 		}
 		if (Collision::GetInstance()->CheckHit2D(player_pos_, rockonhead_pos_, head_distance_, 1.3f)) {
 			hp_ -= HeadDamage;
-			player_shot_ = false;
+			playershot = false;
 		}
 	}
+
+
+	//変形
+	Defomation();
 
 	Damage();
 
 	Death();
-
-	
-
 	//生きているとき
-	if (robotarive_flag_ == true && hp_ > 0) {
-		if (length_ > limit_length_ && defomation_flag_ == true) {
-			TrackPlayerMode();
-		}
-		//プレイヤーの前まで来たとき
-		else if (length_ <= limit_length_&&wait_flag_==false) {
-			bodypart_pos_.m128_f32[2] -= 1.f;
-			atttack_timer_ += 0.1f;
-			AttackMode();
-		}
-	}
-	else {
-		attackfase_flag_ = false;
-	}
+	TrackPlayerMode();
+	//プレイヤーの前まで来たとき
+	WaitMode();
+
+	AttackMode();
 
 	StatusSet();
 	AllUpdate();
+	if (hp_ > 0) { return; }
+	state_ = State::kDeath;
 }
 
 //描画処理
@@ -195,50 +187,44 @@ void NormalEnemy::Draw(DirectXCommon* dxCommon)
 	for (std::unique_ptr<ObjParticle>& particle : obj_particle_) {
 		particle->Draw();
 	}
-	if (hp_ > 0) {
-		headpart_->Draw();
-		bodypart_->Draw();
-		armspart_->Draw();
-		shadow_->Draw();
-	}
+
+	headpart_->Draw();
+	bodypart_->Draw();
+	armspart_->Draw();
+	shadow_->Draw();
 	//center_->Draw();
 	Object3d::PostDraw();
 }
 
 void NormalEnemy::Defomation()
 {
+	if (state_ != State::kDefomation) { return; }
 	//変形前なら
-	if (defomation_flag_ == false) {
-		all_pos_.m128_f32[1] -= FallSpeed;
-		//地面に着いたとき
-		if (all_pos_.m128_f32[1] <= 0) {
-			all_pos_.m128_f32[1] = 0;
-			defomation_count_ += AddDefomationValue;
-			if (headpart_scl_.z <= 0.3f && armspart_scl_.z <= 0.2f) {
-				Action::GetInstance()->EaseOut(headpart_scl_.x, 1.0f);
-				Action::GetInstance()->EaseOut(headpart_scl_.y, 1.0f);
-				Action::GetInstance()->EaseOut(headpart_scl_.z, 1.0f);
 
-				Action::GetInstance()->EaseOut(armspart_scl_.x, 0.8f);
-				Action::GetInstance()->EaseOut(armspart_scl_.y, 0.8f);
-				Action::GetInstance()->EaseOut(armspart_scl_.z, 0.8f);
-			}
+	all_pos_.m128_f32[1] -= FallSpeed;
+	//地面に着いたとき
+	if (all_pos_.m128_f32[1] <= 0) {
+		all_pos_.m128_f32[1] = 0;
+		defomation_count_ += AddDefomationValue;
+		if (headpart_scl_.z <= 0.3f && armspart_scl_.z <= 0.2f) {
+			DeploymentScale();
 		}
 	}
-	if (defomation_count_ >= 1) {
-		defomation_count_ = 1;
-		defomation_flag_ = true;
-	}
+
+	if (defomation_count_ <= 1) { return; }
+
+	state_ = State::kMove;
 }
 //プレイヤーへの追尾モードの時
 void NormalEnemy::TrackPlayerMode()
 {
+	if (state_ != State::kMove) { return; }
 	//追尾の計算
 	XMFLOAT3 Value;
 	Value = HelperMath::GetInstance()->TrackCalculation(all_pos_, track_point_);
 	//値を2乗
 	XMFLOAT3 SquareValue{};
-	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(Value,2);
+	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(Value, 2);
 	//距離の計算
 	length_ = HelperMath::GetInstance()->LengthCalculation(SquareValue);
 	//追尾速度の計算
@@ -251,92 +237,32 @@ void NormalEnemy::TrackPlayerMode()
 	distance_ -= length_ * 2.0f;
 	head_distance_ -= length_;
 	//追尾移動
-	HelperMath::GetInstance()->TrackEnemytoPlayer(all_pos_,TrackSpeed);
+	HelperMath::GetInstance()->TrackEnemytoPlayer(all_pos_, TrackSpeed);
+	if (length_ <= limit_length_ && wait_flag_ == false) {
+		bodypart_pos_.m128_f32[2] -= 1.f;
+		state_ = State::kWait;
+		timer_limit_ = Action::GetInstance()->GetRangRand(attacktime_min_, attacktime_max_);
+	}
 }
 //攻撃モードの時
-void NormalEnemy::AttackMode()
+void NormalEnemy::WaitMode()
 {
-	if (random_flag_ == false) {
-		timer_limit_ = Action::GetInstance()->GetRangRand(attacktime_min_, attacktime_max_);
-		random_flag_ = true;
-	}
-
+	if (state_ != State::kWait) { return; }
+	atttack_timer_ += 0.1f;
 	if (atttack_timer_ >= timer_limit_) {
-		attackfase_flag_ = true;
-	}
-	
-	//攻撃フェイズに移行した時
-	if (attackfase_flag_ == true) {
 		Action::GetInstance()->EaseOut(headpart_rot_.y, purse_positiverot_ + 1);
 		if (headpart_rot_.y >= purse_positiverot_) {
 			headpart_rot_.y = purse_positiverot_;
-		}
-		Attack( atttack_timer_);
-	}
-	else {
-		Action::GetInstance()->EaseOut(headpart_rot_.y, purse_negativerot_ - 1);
-		if (headpart_rot_.y <= purse_negativerot_) {
-			headpart_rot_.y = purse_negativerot_;
+			state_ = State::kAttack;
 		}
 	}
 }
 
 //攻撃する時
-void NormalEnemy::Attack( float& attacktimer)
+void NormalEnemy::AttackMode()
 {
-	//巨大化していく値
-	XMFLOAT3 gigantic = { 0.0002f ,0.0002f ,0.0002f };
-	const float discoloration = 0.01f;
-	const float MaxPoint = 40.f;
-	if (attackshakedown_flag_ == false) {
-		armspart_rot_.x += 1.5f;
-		armspart_scl_=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(armspart_scl_, gigantic);
-		bodypart_scl_=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(bodypart_scl_, gigantic);
-		headpart_scl_=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(headpart_scl_, gigantic);
-		armspart_color_.y -= discoloration;
-		armspart_color_.z -= discoloration;
-		//腕が最大点に達した時
-		if (armspart_rot_.x >= MaxPoint) {
-			armspart_rot_.x = MaxPoint;
-			limit_length_ = 0.1f;
-			if (vibrationchange_flag_ == true) {
-				vibration_ -= 4.2f;
-				if (vibration_ <= -4.2f) {
-					vibrationchange_flag_ = false;
-				}
-			}
-			else {
-				vibration_ += 4.2f;
-				if (vibration_ >= 4.2f) {
-					vibrationchange_flag_ = true;
-				}
-			}
-			//体の震え
-			headpart_rot_.y += vibration_;
-			bodypart_rot_.y += vibration_;
-			armspart_rot_.y += vibration_;
-			attack_charge_ += 0.1f;
-			if (attack_charge_ >= 10) {
-				attack_charge_ = 0;
-				attackshakedown_flag_ = true;
-			}
-		}
-	}
-	else {
-		armspart_rot_.x -= 10.0f;
-		if (armspart_rot_.x <= 0.0f) {
-			armspart_rot_.x = 0.0f;
-			armspart_color_ = { 1.0f,1.0f,1.0f ,1.0f };
-			armspart_scl_ = { 0.2f,0.2f,0.2f };
-			attackshakedown_flag_ = false;
-			attackfase_flag_ = false;
-			attacktimer = 0;
-			player_hp_ -= 1;
-			player_->SetHp(player_hp_);
-			hp_ = 0;
-
-		}
-	}
+	if (state_ != State::kAttack) { return; }
+	AttackCharge();
 }
 
 void NormalEnemy::Damage()
@@ -344,10 +270,7 @@ void NormalEnemy::Damage()
 	//ダメージを受けたとき
 	if (oldhp_ > hp_ && hp_ >= 0) {
 		oldhp_ = hp_;
-		headpart_color_.y -= 0.2f;
-		headpart_color_.z -= 0.2f;
-		bodypart_color_.y -= 0.2f;
-		bodypart_color_.z -= 0.2f;
+		HitColor();
 		for (int i = 0; i < 5; i++) {
 			std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
 			newparticle->Initialize(1, bodypart_pos_, { 0.3f,0.3f,0.3f }, { bodypart_rot_ });
@@ -359,63 +282,37 @@ void NormalEnemy::Damage()
 void NormalEnemy::Death()
 {
 	//生きているときにHPが0になったら
-	if (hp_ <= 0) {
-		oldtrack_point_ = track_point_;
-		hp_ = 0;
-		if (headpart_color_.w > 0) {
-			shadow_color_.w -= Subtraction;
-			armspart_color_.w -= Subtraction;
-			bodypart_color_.w -= Subtraction;
-			headpart_color_.w -= Subtraction;
-		}
-		
-		if (particleefect_flag_ == true) {
-			ParticleEfect();
-		}
-		robotarive_flag_ = false;
-		if (obj_particle_.empty()&&shadow_color_.w<0) {
-			dead_flag_ = true;
-			objparticle_flag_ = true;
-		}
+	if (state_ != State::kDeath) { return; }
+	oldtrack_point_ = track_point_;
+	if (headpart_color_.w > 0) {
+		Transparentize();
 	}
+	ParticleEfect();
+	robotarive_flag_ = false;
+	if (obj_particle_.empty() && shadow_color_.w < 0) {
+		dead_flag_ = true;
+	}
+
 }
-//3D座標から2D座標を取得する
-XMFLOAT2 NormalEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
+
+void NormalEnemy::DeploymentScale()
 {
-	center_->SetRotation(center_rot_);
-	center_mat_ = center_->GetMatrix();
-	const float kDistancePlayerTo3DReticle = 50.0f;
-	offset_ = { 0.0,0.0,1.0f };
-	offset_ = XMVector3TransformNormal(offset_, center_mat_);
-	offset_ = XMVector3Normalize(offset_) * kDistancePlayerTo3DReticle;
+	Action::GetInstance()->EaseOut(headpart_scl_.x, 1.0f);
+	Action::GetInstance()->EaseOut(headpart_scl_.y, 1.0f);
+	Action::GetInstance()->EaseOut(headpart_scl_.z, 1.0f);
 
-	XMVECTOR PositionRet = set3Dposition;
-
-	HelperMath::GetInstance()->ChangeViewPort(matviewport_,offset_);
-
-	XMMATRIX MatVP = matviewport_;
-
-	XMMATRIX View = bringupcamera_->GetViewMatrix();
-	XMMATRIX Pro = bringupcamera_->GetProjectionMatrix();
-
-	XMMATRIX MatViewProjectionViewport = View * Pro * MatVP;
-
-	PositionRet = XMVector3TransformCoord(PositionRet, MatViewProjectionViewport);
-
-	XMFLOAT2 get2dposition;
-	get2dposition.x = PositionRet.m128_f32[0];
-	get2dposition.y = PositionRet.m128_f32[1];
-
-	return get2dposition;
+	Action::GetInstance()->EaseOut(armspart_scl_.x, 0.8f);
+	Action::GetInstance()->EaseOut(armspart_scl_.y, 0.8f);
+	Action::GetInstance()->EaseOut(armspart_scl_.z, 0.8f);
 }
-
 
 void NormalEnemy::ParticleEfect()
 {
+	if (particleefect_flag_ != true) { return; }
 	for (int i = 0; i < 50; i++) {
 		XMFLOAT3 pos;
 		pos = HelperMath::GetInstance()->ConvertToXMVECTOR(bodypart_pos_);
-		
+
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 Vel{};
 		XMFLOAT3 MinValue{ -0.09f,-0.01f,-0.03f };
@@ -445,4 +342,85 @@ void NormalEnemy::WaitTrack(bool otherenemyarive)
 		wait_flag_ = false;
 		atttack_timer_ = 0;
 	}
+}
+//巨大化
+void NormalEnemy::Enlargement()
+{
+	//巨大化していく値
+	XMFLOAT3 gigantic = { 0.0002f ,0.0002f ,0.0002f };
+	armspart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(armspart_scl_, gigantic);
+	bodypart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(bodypart_scl_, gigantic);
+	headpart_scl_ = HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(headpart_scl_, gigantic);
+}
+
+void NormalEnemy::ShakeBody()
+{
+	//震える値の反転
+	if (vibrationchange_flag_ == true) {
+		vibration_ -= 4.2f;
+		if (vibration_ <= -4.2f) {
+			vibrationchange_flag_ = false;
+		}
+	}
+	else {
+		vibration_ += 4.2f;
+		if (vibration_ >= 4.2f) {
+			vibrationchange_flag_ = true;
+		}
+	}
+	//体の震え
+	headpart_rot_.y += vibration_;
+	bodypart_rot_.y += vibration_;
+	armspart_rot_.y += vibration_;
+}
+
+void NormalEnemy::AttackCharge()
+{
+	const float discoloration = 0.01f;
+	const float MaxPoint = 40.f;
+
+	armspart_rot_.x += 1.5f;
+	Enlargement();
+	armspart_color_.y -= discoloration;
+	armspart_color_.z -= discoloration;
+	//腕が最大点に達した時
+	if (armspart_rot_.x < MaxPoint) { return; }
+	armspart_rot_.x = MaxPoint;
+	limit_length_ = 0.1f;
+	//振動させる
+	ShakeBody();
+	attack_charge_ += 0.1f;
+	if (attack_charge_ < 9) { return; }
+	attack_charge_ = 10;
+	Attack();
+}
+
+void NormalEnemy::Attack()
+{
+
+	armspart_rot_.x -= 10.0f;
+	if (armspart_rot_.x <= 0.0f) {
+		player_hp_ -= 1;
+		player_->SetHp(player_hp_);
+		hp_ = 0;
+		state_ = State::kDeath;
+	}
+
+}
+
+void NormalEnemy::Transparentize()
+{
+	shadow_color_.w -= Subtraction;
+	armspart_color_.w -= Subtraction;
+	bodypart_color_.w -= Subtraction;
+	headpart_color_.w -= Subtraction;
+}
+
+void NormalEnemy::HitColor()
+{
+	float subvalue = 0.2f;
+	headpart_color_.y -= subvalue;
+	headpart_color_.z -= subvalue;
+	bodypart_color_.y -= subvalue;
+	bodypart_color_.z -= subvalue;
 }

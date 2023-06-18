@@ -1,4 +1,5 @@
 #include "Action.h"
+#include"Camera.h"
 #include"Mouse.h"
 #include<random>
 
@@ -259,6 +260,33 @@ XMFLOAT3 Action::RandMinAndMax(const XMFLOAT3& minvalue, const XMFLOAT3& maxvalu
 	Value.z = GetRangRand(minvalue.z, maxvalue.z);
 
 	return Value;
+}
+
+XMFLOAT2 Action::WorldToScreen(const XMMATRIX& centermat, const XMVECTOR& position, Camera* camera)
+{
+	const float kDistancePlayerTo3DReticle = 50.0f;
+	XMVECTOR offset_ = { 0.0,0.0,1.0f };
+	offset_ = XMVector3TransformNormal(offset_, centermat);
+	offset_ = XMVector3Normalize(offset_) * kDistancePlayerTo3DReticle;
+
+	XMVECTOR PositionRet = position;
+	XMMATRIX matviewport;
+	HelperMath::GetInstance()->ChangeViewPort(matviewport, offset_);
+
+	XMMATRIX MatVP = matviewport;
+
+	XMMATRIX View = camera->GetViewMatrix();
+	XMMATRIX Pro = camera->GetProjectionMatrix();
+
+	XMMATRIX MatViewProjectionViewport = View * Pro * MatVP;
+
+	PositionRet = XMVector3TransformCoord(PositionRet, MatViewProjectionViewport);
+
+	XMFLOAT2 get2dposition;
+	get2dposition.x = PositionRet.m128_f32[0];
+	get2dposition.y = PositionRet.m128_f32[1];
+
+	return get2dposition;
 }
 
 

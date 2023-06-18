@@ -9,6 +9,8 @@
 
 using namespace DirectX;
 
+class Camera;
+
 class Action
 {
 private:
@@ -114,6 +116,8 @@ public:
 	XMFLOAT3 RandMax(const XMFLOAT3& value,float randvel);
 
 	XMFLOAT3 RandMinAndMax(const XMFLOAT3& minvalue,const XMFLOAT3& maxvalue);
+
+	XMFLOAT2 WorldToScreen(const XMMATRIX& centermat, const XMVECTOR& position,Camera* camera);
 private:
 	float shakelimittime_ = 0.f;
 	float shakingscreenvalue_ = 0.f;
