@@ -26,10 +26,10 @@ BossEnemy::~BossEnemy()
 
 void (BossEnemy::* BossEnemy::StateFuncTable[])() {
 	&BossEnemy::AppearanceProcess,
-	&BossEnemy::MoveProcess,
-	&BossEnemy::StunProcess,
-	&BossEnemy::DeathProcess,
-	&BossEnemy::AttackProcess,
+		& BossEnemy::MoveProcess,
+		& BossEnemy::StunProcess,
+		& BossEnemy::DeathProcess,
+		& BossEnemy::AttackProcess,
 
 };
 
@@ -206,7 +206,7 @@ void BossEnemy::StunProcess()
 	addrot_ = 0.f;
 	all_pos_.m128_f32[2] -= 0.01f;
 	if (player_shot_ == true && hp_ > 0) {
-		if (Collision::GetInstance()->CheckHit2D(player_pos_,rockonhead_pos_,head_distance_,4)) {
+		if (Collision::GetInstance()->CheckHit2D(player_pos_, rockonhead_pos_, head_distance_, 4)) {
 			hp_ -= HeadDamage;
 			player_shot_ = false;
 		}
@@ -232,7 +232,7 @@ void BossEnemy::TrackPlayerMode()
 	Value = HelperMath::GetInstance()->TrackCalculation(all_pos_, track_point_);
 	//’l‚ð2æ
 	XMFLOAT3 SquareValue{};
-	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(Value,2);
+	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(Value, 2);
 	//‹——£‚ÌŒvŽZ
 	length_ = HelperMath::GetInstance()->LengthCalculation(SquareValue);
 	//’Ç”ö‘¬“x‚ÌŒvŽZ
@@ -246,7 +246,7 @@ void BossEnemy::TrackPlayerMode()
 	head_distance_ -= length_;
 	core_distance_ -= length_;
 
-	HelperMath::GetInstance()->TrackEnemytoPlayer(all_pos_,TrackSpeed);
+	HelperMath::GetInstance()->TrackEnemytoPlayer(all_pos_, TrackSpeed);
 }
 
 void BossEnemy::DamageProcess()

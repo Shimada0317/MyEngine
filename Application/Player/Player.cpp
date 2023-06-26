@@ -25,8 +25,8 @@ Player::~Player()
 
 void (Player::* Player::StateFunctable[])() {
 	&Player::WaitProcess,
-	&Player::ReloadProcess,
-	&Player::GunShotProcess,
+		& Player::ReloadProcess,
+		& Player::GunShotProcess,
 };
 
 //初期化処理
@@ -111,7 +111,7 @@ void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot, int gamestate
 	game_phase_ = patern;
 	//マウス操作
 	MouseContoroll();
-	
+
 	//座標や回転、スケールなどのステータスのセット
 	StatusSet(camera, eyerot);
 	//全ての更新処理
@@ -127,31 +127,31 @@ void Player::Update(Camera* camera, Phase patern, XMFLOAT3 eyerot, int gamestate
 //待機状態の処理
 void Player::WaitProcess()
 {
-		//除算する値
-		const int kDivideValuY = 10;
-		const int kDivideValuX = 50;
-		//マウス座標から角度の取得
-		gun_rot_.y = (reticle_pos2d_.x - screenhalfwidth_) / kDivideValuY;
-		gun_rot_.x = (reticle_pos2d_.y - screenhalfheight_) / kDivideValuX;
-		bullet_shotflag_ = false;
+	//除算する値
+	const int kDivideValuY = 10;
+	const int kDivideValuX = 50;
+	//マウス座標から角度の取得
+	gun_rot_.y = (reticle_pos2d_.x - screenhalfwidth_) / kDivideValuY;
+	gun_rot_.x = (reticle_pos2d_.y - screenhalfheight_) / kDivideValuX;
+	bullet_shotflag_ = false;
 
-		//弾の発射前
-		if (remaining_ < MaxRemainingBullet&&
-			Mouse::GetInstance()->PushClick(0)) {
-			//加算する値
-				const int kAddValue = 1;
-				remaining_ += kAddValue;
-				bullet_ui_->Shot(remaining_);
-				recoil_gunflag_ = true;
-				player_state_ = State::kShot;
-				//マズルフラッシュ
-				ParticleEfect(game_phase_);
-		}
+	//弾の発射前
+	if (remaining_ < MaxRemainingBullet &&
+		Mouse::GetInstance()->PushClick(0)) {
+		//加算する値
+		const int kAddValue = 1;
+		remaining_ += kAddValue;
+		bullet_ui_->Shot(remaining_);
+		recoil_gunflag_ = true;
+		player_state_ = State::kShot;
+		//マズルフラッシュ
+		ParticleEfect(game_phase_);
+	}
 
-		if (remaining_!=0&&
-			Mouse::GetInstance()->PushClick(1)) {
-			player_state_ = State::kReload;
-		}
+	if (remaining_ != 0 &&
+		Mouse::GetInstance()->PushClick(1)) {
+		player_state_ = State::kReload;
+	}
 }
 //パーティクル描画
 void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
@@ -166,7 +166,7 @@ void Player::ParticleDraw(ID3D12GraphicsCommandList* cmdeList)
 //スプライト描画
 void Player::SpriteDraw()
 {
-	if (player_state_!=kReload) {
+	if (player_state_ != kReload) {
 		bullet_ui_->Draw();
 	}
 	sprite_reticle_->Draw();
@@ -295,66 +295,66 @@ void Player::ReloadProcess()
 //マズルエフェクト
 void Player::ParticleEfect(int paterncount)
 {
-		for (int i = 0; i < 10; i++) {
-			float radX = reticle_rot_.y * XM_PI / 180.f;
-			float radY = gun_rot_.x * XM_PI / 180.f;
-			float sinradX = sinf(radX);
-			float cosradX = cosf(radX);
-			float sinradY = sinf(radY);
-			float cosradY = cosf(radY);
-			//後ろを向いているとき
-			if (paterncount == Phase::kLandingPointBack ||
-				paterncount == Phase::kMovedPointA ||
-				paterncount == Phase::kMovedPointALeft ||
-				paterncount == Phase::kGoalPointBack) {
-				pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
-				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-				pos.z = gun_worldpos_.m128_f32[2] + 3.0f;
-			}
-			//右を向いているとき
-			else if (paterncount == Phase::kMovedPointC ||
-				paterncount == Phase::kMovedPointCOblique) {
-				pos.x = gun_worldpos_.m128_f32[0] + 2.3f;
-				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
-			}
-			//真っすぐ前を向いているとき
-			else if (paterncount == Phase::kLandingPointFront ||
-				paterncount == Phase::kGoalPoint) {
-				pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
-				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-				pos.z = gun_worldpos_.m128_f32[2] - 3.0f;
-			}
-			//左を向いているとき
-			else if (paterncount == Phase::kMovedPointB) {
-				pos.x = gun_worldpos_.m128_f32[0] - 2.3f;
-				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
-			}
-			//斜めを向いているとき
-			else if (paterncount == Phase::kMovedPointCFront) {
-				pos.x = gun_worldpos_.m128_f32[0] + 2.3f * sinradX;
-				pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
-				pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
-			}
-			const float rnd_vel = 0.001f;
-			XMFLOAT3 vel{};
-			vel = Action::GetInstance()->RandMax(vel,rnd_vel);
-
-			const float smokernd_vel = 0.05f;
-			XMFLOAT3 smokevel{};
-			smokevel = Action::GetInstance()->RandMax(smokevel, smokernd_vel);
-			
-			XMFLOAT3 acc{};
-			acc.y = 0.0;
-
-			XMFLOAT3 Smokeacc{};
-			Smokeacc.y += 0.005f;
-			part_red_->Add(20, pos, vel, acc, 0.7f, 0.f, 1.f);
-			part_green_->Add(20, pos, vel, acc, 0.5f, 0.f, 1.f);
-			part_smoke_->Add(50, pos, smokevel, acc, 0.5f, 0.f, 1.f);
+	for (int i = 0; i < 10; i++) {
+		float radX = reticle_rot_.y * XM_PI / 180.f;
+		float radY = gun_rot_.x * XM_PI / 180.f;
+		float sinradX = sinf(radX);
+		float cosradX = cosf(radX);
+		float sinradY = sinf(radY);
+		float cosradY = cosf(radY);
+		//後ろを向いているとき
+		if (paterncount == Phase::kLandingPointBack ||
+			paterncount == Phase::kMovedPointA ||
+			paterncount == Phase::kMovedPointALeft ||
+			paterncount == Phase::kGoalPointBack) {
+			pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
+			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gun_worldpos_.m128_f32[2] + 3.0f;
 		}
-		SoundEffect();
+		//右を向いているとき
+		else if (paterncount == Phase::kMovedPointC ||
+			paterncount == Phase::kMovedPointCOblique) {
+			pos.x = gun_worldpos_.m128_f32[0] + 2.3f;
+			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
+		}
+		//真っすぐ前を向いているとき
+		else if (paterncount == Phase::kLandingPointFront ||
+			paterncount == Phase::kGoalPoint) {
+			pos.x = gun_worldpos_.m128_f32[0] + sinradX * 3.5f;
+			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gun_worldpos_.m128_f32[2] - 3.0f;
+		}
+		//左を向いているとき
+		else if (paterncount == Phase::kMovedPointB) {
+			pos.x = gun_worldpos_.m128_f32[0] - 2.3f;
+			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
+		}
+		//斜めを向いているとき
+		else if (paterncount == Phase::kMovedPointCFront) {
+			pos.x = gun_worldpos_.m128_f32[0] + 2.3f * sinradX;
+			pos.y = gun_worldpos_.m128_f32[1] - sinradY * 1.5f;
+			pos.z = gun_worldpos_.m128_f32[2] + 2.8f * cosradX;
+		}
+		const float rnd_vel = 0.001f;
+		XMFLOAT3 vel{};
+		vel = Action::GetInstance()->RandMax(vel, rnd_vel);
+
+		const float smokernd_vel = 0.05f;
+		XMFLOAT3 smokevel{};
+		smokevel = Action::GetInstance()->RandMax(smokevel, smokernd_vel);
+
+		XMFLOAT3 acc{};
+		acc.y = 0.0;
+
+		XMFLOAT3 Smokeacc{};
+		Smokeacc.y += 0.005f;
+		part_red_->Add(20, pos, vel, acc, 0.7f, 0.f, 1.f);
+		part_green_->Add(20, pos, vel, acc, 0.5f, 0.f, 1.f);
+		part_smoke_->Add(50, pos, smokevel, acc, 0.5f, 0.f, 1.f);
+	}
+	SoundEffect();
 }
 
 void Player::SlowlyLargeHUD()

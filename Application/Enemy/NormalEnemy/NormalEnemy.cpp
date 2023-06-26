@@ -39,10 +39,10 @@ NormalEnemy::~NormalEnemy()
 
 void(NormalEnemy::* NormalEnemy::StateFuncTable[])() {
 	&NormalEnemy::Defomation,
-		&NormalEnemy::TrackPlayerMode,
-		&NormalEnemy::WaitMode,
-		&NormalEnemy::AttackMode,
-		&NormalEnemy::Death,
+		& NormalEnemy::TrackPlayerMode,
+		& NormalEnemy::WaitMode,
+		& NormalEnemy::AttackMode,
+		& NormalEnemy::Death,
 
 };
 
@@ -145,6 +145,25 @@ void NormalEnemy::AllUpdate()
 //XVˆ—
 void NormalEnemy::Update(Player* player)
 {
+	if (type == Bound::kBoundY) {
+		bound.x -= 0.01f;
+		bound.y += 0.01f;
+		if (bound.y >= 0.05f) {
+			type = Bound::kBoundX;
+		}
+	}
+	else if (type == Bound::kBoundX) {
+		bound.x += 0.01f;
+		bound.y -= 0.01f;
+		if (bound.x >= 0.05f) {
+			type = Bound::kBoundY;
+		}
+	}
+
+	//headpart_scl_=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(headpart_scl_, bound);
+	bodypart_scl_=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(bodypart_scl_, bound);
+	armspart_scl_=HelperMath::GetInstance()->XMFLOAT3AddXMFLOAT3(armspart_scl_, bound);
+
 	player_ = player;
 	player_hp_ = player->GetHp();
 	bool playershot = player->GetBulletShot();

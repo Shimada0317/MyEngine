@@ -30,6 +30,11 @@ private:
 		kAttack,
 		kDeath,
 	}state_;
+
+	enum Bound {
+		kBoundX,
+		kBoundY,
+	}type;
 public:
 	//デストラクタ
 	~NormalEnemy();
@@ -221,8 +226,6 @@ private:
 	XMFLOAT2 anchorpoint_ = { 0.5f,0.5f };
 	XMFLOAT4 rockon_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT2 rockonhead_pos_ = { 0.0f,0.0f };
-	//攻撃の準備時間
-	bool attackshakedown_flag_ = false;
 	float attack_charge_ = 0.0f;
 	//移動速度
 	float movespeed_ = 0.09f;
@@ -243,7 +246,6 @@ private:
 	//振動
 	float vibration_=0.0f;
 	bool vibrationchange_flag_ = false;
-	XMVECTOR attack_beforepos_ = { 0.0f,0.0f,0.0f };
 	float atttack_timer_ = 0.f;
 	float timer_limit_ = 0.f;
 	bool particleefect_flag_ = true;
@@ -253,5 +255,6 @@ private:
 	Player* player_;
 	XMFLOAT2 player_pos_{};
 	int player_hp_ = 0;
+	XMFLOAT3 bound = { 0.f,0.f,0.f };
 };
 

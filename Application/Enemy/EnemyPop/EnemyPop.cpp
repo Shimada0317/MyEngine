@@ -171,7 +171,6 @@ void EnemyPop::Update(Player* player)
 	}
 	for (std::unique_ptr<ThrowEnemy>& ThrowEnemy : throw_) {
 		ThrowEnemy->Update(player);
-
 	}
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
