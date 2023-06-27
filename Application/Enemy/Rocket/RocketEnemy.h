@@ -11,7 +11,7 @@
 class Camera;
 class Player;
 
-class LowEnemy
+class RocketEnemy
 {
 private:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -21,7 +21,7 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 private:
 	//状態遷移の関数ポインタ
-	static void (LowEnemy::* StateFuncTable[])();
+	static void (RocketEnemy::* StateFuncTable[])();
 private:
 	enum State {
 		kDefomation,
@@ -30,13 +30,9 @@ private:
 	}state_;
 
 
-	enum Move {
-		kNormal,
-		kJump,
-	}move_state_;
 public:
 	//デストラクタ
-	~LowEnemy();
+	~RocketEnemy();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -200,6 +196,6 @@ private:
 	XMFLOAT2 player_pos_{};
 	int player_hp_ = 0;
 	float state_timer_ = 0.f;
-	float gravity_timer_=1.f;
+	float gravity_timer_ = 1.f;
 };
 

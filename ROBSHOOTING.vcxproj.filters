@@ -249,6 +249,7 @@
     <ClCompile Include="Application\Enemy\LowEnemy\LowEnemy.cpp">
       <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Enemy\Rocket\RocketEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -443,6 +444,7 @@
     <ClInclude Include="Application\Enemy\LowEnemy\LowEnemy.h">
       <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Enemy\Rocket\RocketEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -707,6 +709,9 @@
     </Filter>
     <Filter Include="AllGame\Application\Enemy\LowEnemy">
       <UniqueIdentifier>{11afec8f-facf-45e5-a471-b1efa62eff92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy\Rocket">
+      <UniqueIdentifier>{c94efa81-f1b4-410e-bba9-b324e142e02c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
