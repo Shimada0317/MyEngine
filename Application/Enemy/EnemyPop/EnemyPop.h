@@ -2,6 +2,7 @@
 #include"Camera.h"
 #include"HelperMath.h"
 #include"NormalEnemy.h"
+#include"LowEnemy.h"
 #include"ThrowEnemy.h"
 #include"BossEnemy.h"
 #include"DirectXCommon.h"
@@ -16,6 +17,7 @@ private:
 		kNormal = 0,
 		kThrow,
 		kBoss,
+		kLow,
 	};
 public:
 	/// <summary>
@@ -58,6 +60,7 @@ private:
 	list<unique_ptr<NormalEnemy>>robot_;
 	list<unique_ptr<BossEnemy>>boss_;
 	list<unique_ptr<ThrowEnemy>>throw_;
+	list<unique_ptr<LowEnemy>>low_;
 	bool otherenemyarive_ = true;
 };
 

@@ -11,7 +11,7 @@
 class Camera;
 class Player;
 
-class NormalEnemy
+class LowEnemy
 {
 private:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -21,19 +21,22 @@ private:
 	using XMMATRIX = DirectX::XMMATRIX;
 private:
 	//状態遷移の関数ポインタ
-	static void (NormalEnemy::* StateFuncTable[])();
+	static void (LowEnemy::* StateFuncTable[])();
 private:
 	enum State {
 		kDefomation,
 		kMove,
-		kWait,
-		kAttack,
 		kDeath,
 	}state_;
 
+
+	enum Move {
+		kNormal,
+		kJump,
+	}move_state_;
 public:
 	//デストラクタ
-	~NormalEnemy();
+	~LowEnemy();
 	/// <summary>
 	/// 初期化処理
 	/// </summary>
@@ -41,7 +44,7 @@ public:
 	/// <param name="allPos">座標</param>
 	/// <param name="came">カメラ</param>
 	/// <param name="Step">移動時に横移動するか</param>
-	void Initialize(const XMFLOAT3& allRot, const XMVECTOR& allPos, Camera* camera, const XMVECTOR& trackpoint);
+	void Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint);
 	/// <summary>
 	/// ステータスをセット
 	/// </summary>
@@ -95,29 +98,6 @@ public:
 	/// </summary>
 	void ParticleEfect();
 	/// <summary>
-	/// 追従する時、先に他の敵がいるか
-	/// </summary>
-	/// <param name="otherenemyarive">自信以外が先にいるか</param>
-	void WaitTrack(bool otherenemyarive);
-	/// <summary>
-	/// パーツを大きくする
-	/// </summary>
-	void Enlargement();
-	/// <summary>
-	/// 揺らす処理
-	/// </summary>
-	void ShakeBody();
-	/// <summary>
-	/// 攻撃チャージ
-	/// </summary>
-	void AttackCharge();
-	
-	void AttackBefore();
-	/// <summary>
-	/// 攻撃
-	/// </summary>
-	void Attack();
-	/// <summary>
 	/// 透明にする
 	/// </summary>
 	void Transparentize();
@@ -158,17 +138,14 @@ private:
 	std::unique_ptr<Object3d> headpart_;
 	//両腕
 	std::unique_ptr<Object3d> armspart_;
-	//体
-	std::unique_ptr<Object3d> bodypart_;
+	//両足
+	std::unique_ptr<Object3d> legspart_;
 	//影
 	std::unique_ptr<Object3d> shadow_;
 	//中心
 	std::unique_ptr<Object3d> center_;
 	//Objパーティクル
 	std::list<std::unique_ptr<ObjParticle>>obj_particle_;
-	//スプライト
-	//体
-	std::unique_ptr<Sprite> rockon_;
 	//頭
 	std::unique_ptr<Sprite> rockonhead_;
 	//ダメージを食らったときのエフェクト
@@ -182,27 +159,25 @@ private:
 	XMFLOAT3 center_rot_ = { 0.0f,0.0f,0.0f };
 	XMMATRIX center_mat_;
 	//敵が持っているステータス
-	int hp_ = 50;
-	int oldhp_ = 0;
+	int hp_ = {};
+	int oldhp_ = {};
 	bool robotarive_flag_ = false;
 	XMVECTOR track_point_ = { 0,0,0 };
 	XMVECTOR oldtrack_point_ = { 0,0,0 };
+	XMVECTOR faketrack_point_ = { 0,0,0 };
 	//パーツごとのスケール
-	XMFLOAT3 headpart_scl_ = { 0.3f,0.3f,0.3f };
-	XMFLOAT3 bodypart_scl_ = { 1.0f,1.0f,1.0f };
-	XMFLOAT3 armspart_scl_ = { 0.2f,0.2f,0.2f };
+	XMFLOAT3 headpart_scl_ = { 0.2f,0.2f,0.2f };
+	XMFLOAT3 armspart_scl_ = { 0.1f,0.1f,0.1f };
 	//パーツごとのポジション
 	XMVECTOR headpart_pos_ = { 0.0f,0.0f,0.0f };
-	XMVECTOR bodypart_pos_ = { 0.0f,0.0f,0.0f };
 	XMVECTOR armspart_pos_ = { 0.0f,0.0f,0.0f };
+	XMVECTOR legspart_pos_ = { 0.0f,0.0f,0.0f };
 	//パーツごとの色
-	XMFLOAT4 armspart_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT4 headpart_color_ = { 1.0f,1.0f,1.0f,1.0f };
-	XMFLOAT4 bodypart_color_ = { 1.0f,1.0f,1.0f,1.0f };
+	XMFLOAT4 armspart_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	//パーツごとの回転
-	XMFLOAT3 armspart_rot_ = { 0.0f,0.0f,0.0f };
 	XMFLOAT3 headpart_rot_ = { 0.0f,0.0f,0.0f };
-	XMFLOAT3 bodypart_rot_ = { 0.0f,0.0f,0.0f };
+	XMFLOAT3 armspart_rot_ = { 0.0f,0.0f,0.0f };
 	//パーツごとに渡すステータス
 	XMVECTOR all_pos_ = { 0.0f,0.0f,-10.0f };
 	XMFLOAT3 all_rot_;
@@ -210,38 +185,29 @@ private:
 	XMVECTOR shadow_pos_ = { 0,0,0 };
 	XMFLOAT4 shadow_color_ = { 0.0f,0.0f,0.0f,0.1f };
 	//敵が持つ2D系のステータス
-	XMFLOAT2 rockon_pos_ = { 0.0f,0.0f };
 	XMFLOAT2 anchorpoint_ = { 0.5f,0.5f };
 	XMFLOAT4 rockon_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT2 rockonhead_pos_ = { 0.0f,0.0f };
-	float attack_charge_ = 0.0f;
 	//移動速度
-	float movespeed_ = 0.09f;
+	float movespeed_ = 0.15f;
 	//プレイヤーと敵の距離
 	float length_ = 3.0f;
-	float limit_length_ =1.5f;
+	float limit_length_ = 1.5f;
 	//死んでいるか
 	bool dead_flag_ = false;
 	//敵とプレイヤーの距離
-	float origin_distance_;
 	float originhead_distance_;
-	float distance_ = 60.0f;
 	float head_distance_ = 30.0f;
-	//敵のモーション用
-	float purse_positiverot_ = 180;
 	//変形用のフラグ
 	float defomation_count_ = 0.0f;
-	//振動
-	float vibration_=0.0f;
-	bool vibrationchange_flag_ = false;
-	float atttack_timer_ = 0.f;
-	float timer_limit_ = 0.f;
+
 	bool particleefect_flag_ = true;
-	//同じ追従先に別の敵がいるかいないか
-	bool wait_flag_ = false;
+
 	//持ってきたプレイヤーの情報
 	Player* player_;
 	XMFLOAT2 player_pos_{};
 	int player_hp_ = 0;
+	float state_timer_ = 0.f;
+	float gravity_timer_=1.f;
 };
 

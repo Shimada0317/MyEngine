@@ -146,6 +146,11 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 					boss_.push_back(std::move(boss));
 					break;
 				}
+				else if (TYPE == ENEMYPATERN::kLow) {
+					std::unique_ptr<LowEnemy> low = std::make_unique<LowEnemy>();
+					low->Initialize(ROTATION, POSITION, camera, TRACK);
+					low_.push_back(std::move(low));
+				}
 				POPSkip = false;
 				TRACKSkip = false;
 				ARIVESkip = false;
@@ -169,12 +174,17 @@ void EnemyPop::Update(Player* player)
 	for (std::unique_ptr<NormalEnemy>& NormalEnemy : robot_) {
 		NormalEnemy->Update(player);
 	}
+	//浮遊している遠距離的
 	for (std::unique_ptr<ThrowEnemy>& ThrowEnemy : throw_) {
 		ThrowEnemy->Update(player);
 	}
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Update(player);
+	}
+	//姿勢の低い敵
+	for (std::unique_ptr<LowEnemy>& low : low_) {
+		low->Update(player);
 	}
 }
 
@@ -215,11 +225,14 @@ void EnemyPop::EnemyDead()
 	boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
 		return boss->IsDead();
 		});
+	low_.remove_if([](std::unique_ptr<LowEnemy>& low) {
+		return low->IsDead();
+		});
 }
 
 bool EnemyPop::KilledAllEnemy()
 {
-	if (robot_.empty() && throw_.empty() && boss_.empty()) {
+	if (robot_.empty() && throw_.empty() && boss_.empty()&&low_.empty()) {
 		return true;
 	}
 	return false;
@@ -235,6 +248,9 @@ void EnemyPop::Draw(DirectXCommon* dxcommon)
 	}
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Draw(dxcommon);
+	}
+	for (std::unique_ptr<LowEnemy>& low : low_) {
+		low->Draw(dxcommon);
 	}
 }
 
