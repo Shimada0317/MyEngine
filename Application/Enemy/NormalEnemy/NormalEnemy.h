@@ -32,6 +32,8 @@ private:
 	}state_;
 
 public:
+	//コンストラクタ
+	NormalEnemy(const XMFLOAT3& allRot, const XMVECTOR& allPos, Camera* camera, const XMVECTOR& trackpoint);
 	//デストラクタ
 	~NormalEnemy();
 	/// <summary>

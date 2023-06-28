@@ -97,6 +97,8 @@
   <ItemGroup>
     <ClCompile Include="Application\Background\CommonBackground\CommonBackground.cpp" />
     <ClCompile Include="Application\Background\GameBackground\GameBackground.cpp" />
+    <ClCompile Include="Application\Background\Obstacle\Obstacle.cpp" />
+    <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp" />
     <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp" />
     <ClCompile Include="Application\Enemy\EnemyPop\EnemyPop.cpp" />
     <ClCompile Include="Application\Enemy\LowEnemy\LowEnemy.cpp" />
@@ -286,6 +288,8 @@
   <ItemGroup>
     <ClInclude Include="Application\Background\CommonBackground\CommonBackground.h" />
     <ClInclude Include="Application\Background\GameBackground\GameBackground.h" />
+    <ClInclude Include="Application\Background\Obstacle\Obstacle.h" />
+    <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h" />
     <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h" />
     <ClInclude Include="Application\Enemy\EnemyPop\EnemyPop.h" />
     <ClInclude Include="Application\Enemy\LowEnemy\LowEnemy.h" />

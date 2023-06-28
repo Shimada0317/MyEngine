@@ -129,8 +129,7 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true&& TYPESkip == true) {
 				if (TYPE == ENEMYPATERN::kNormal) {
-					std::unique_ptr<NormalEnemy> newRobot = std::make_unique<NormalEnemy>();
-					newRobot->Initialize(ROTATION, POSITION, camera, TRACK);
+					std::unique_ptr<NormalEnemy> newRobot = std::make_unique<NormalEnemy>(ROTATION, POSITION, camera, TRACK);
 					robot_.push_back(std::move(newRobot));
 				}
 

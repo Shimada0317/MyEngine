@@ -249,7 +249,13 @@
     <ClCompile Include="Application\Enemy\LowEnemy\LowEnemy.cpp">
       <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\Rocket\RocketEnemy.cpp" />
+    <ClCompile Include="Application\Enemy\Rocket\RocketEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Rocket</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Background\Obstacle\Obstacle.cpp">
+      <Filter>AllGame\Application\Background\Obstacle</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -444,7 +450,13 @@
     <ClInclude Include="Application\Enemy\LowEnemy\LowEnemy.h">
       <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\Rocket\RocketEnemy.h" />
+    <ClInclude Include="Application\Enemy\Rocket\RocketEnemy.h">
+      <Filter>AllGame\Application\Enemy\Rocket</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Background\Obstacle\Obstacle.h">
+      <Filter>AllGame\Application\Background\Obstacle</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -712,6 +724,12 @@
     </Filter>
     <Filter Include="AllGame\Application\Enemy\Rocket">
       <UniqueIdentifier>{c94efa81-f1b4-410e-bba9-b324e142e02c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Background\Obstacle">
+      <UniqueIdentifier>{52e27d2e-c740-439d-881f-968a3f813e60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy\BaseEnemy">
+      <UniqueIdentifier>{6be2db7e-dbf1-42b7-9581-3a88055a5314}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -25,6 +25,46 @@ const XMFLOAT4 operator+(const DirectX::XMFLOAT4& lhs, const DirectX::XMFLOAT4& 
 	return result;
 }
 
+NormalEnemy::NormalEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint)
+{
+	state_ = State::kDefomation;
+	headpart_rot_ = bodypart_rot_ = armspart_rot_ = allrot;
+
+	all_pos_ = allpos;
+	bringupcamera_ = camera;
+
+	purse_positiverot_ += headpart_rot_.y;
+
+	origin_distance_ = distance_;
+	originhead_distance_ = head_distance_;
+
+	shadow_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
+	center_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
+	headpart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kHead));
+	bodypart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBody));
+	armspart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kArms));
+
+	partgreen_ = ParticleManager::Create(bringupcamera_);
+	partred_ = ParticleManager::Create(bringupcamera_);
+
+	center_mat_ = center_->GetMatrix();
+	center_worldpos_ = XMVector3TransformNormal(all_pos_, center_mat_);
+
+	rockon_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockon_pos_, rockon_color_, anchorpoint_));
+	rockonhead_.reset(Sprite::SpriteCreate(Name::kEnemyMarker, rockonhead_pos_, rockon_color_, anchorpoint_));
+
+	headpart_scl_ = { 0.0f,0.0f,0.0f };
+	armspart_scl_ = { 0.0f,0.0f,0.0f };
+
+	track_point_ = oldtrack_point_ = trackpoint;
+
+	hp_ = 160;
+	oldhp_ = hp_;
+	timer_limit_ = 8;
+	robotarive_flag_ = true;
+	center_->SetPosition(center_worldpos_);
+}
+
 //デストラクタ
 NormalEnemy::~NormalEnemy()
 {
@@ -264,7 +304,7 @@ void NormalEnemy::Damage()
 		HitColor();
 		for (int i = 0; i < 5; i++) {
 			std::unique_ptr<ObjParticle> newparticle = std::make_unique<ObjParticle>();
-			newparticle->Initialize(1, bodypart_pos_, { 0.3f,0.3f,0.3f }, { bodypart_rot_ });
+			newparticle->Initialize(1, all_pos_, { 0.3f,0.3f,0.3f }, { bodypart_rot_ });
 			obj_particle_.push_back(std::move(newparticle));
 		}
 	}
