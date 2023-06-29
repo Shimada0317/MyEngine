@@ -32,8 +32,6 @@ private:
 	}state_;
 
 public:
-	//コンストラクタ
-	NormalEnemy(const XMFLOAT3& allRot, const XMVECTOR& allPos, Camera* camera, const XMVECTOR& trackpoint);
 	//デストラクタ
 	~NormalEnemy();
 	/// <summary>
@@ -241,5 +239,6 @@ private:
 	Player* player_;
 	XMFLOAT2 player_pos_{};
 	int player_hp_ = 0;
+	bool particle_flag_ = true;
 };
 
