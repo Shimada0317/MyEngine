@@ -152,8 +152,6 @@ public://Getter Setter
 	/// <returns></returns>
 	bool IsDead() const { return dead_flag_; }
 
-	bool GetArive() { return robotarive_flag_; }
-
 private:
 	//Obj
 	//頭
@@ -186,7 +184,6 @@ private:
 	//敵が持っているステータス
 	int hp_ = 50;
 	int oldhp_ = 0;
-	bool robotarive_flag_ = false;
 	XMVECTOR track_point_ = { 0,0,0 };
 	XMVECTOR oldtrack_point_ = { 0,0,0 };
 	//パーツごとのスケール

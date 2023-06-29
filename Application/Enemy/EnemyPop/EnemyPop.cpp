@@ -194,13 +194,12 @@ void EnemyPop::CheckSameTrackPosition()
 			if (FirstEnemy.get() != SecondEnemy.get()) {
 				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
 				XMVECTOR SecondTrackPosition = SecondEnemy->GetTrackPos();
-				bool secondenemyarive = SecondEnemy->GetArive();
-				bool firstenemyarive = FirstEnemy->GetArive();
+				bool secondenemyarive = SecondEnemy->IsDead();
 				if (Action::GetInstance()->CompletelyTogetherXMVECTOR(FirstTrackPosition, SecondTrackPosition)) {
 					otherenemyarive_ = true;
 					SecondEnemy->WaitTrack(otherenemyarive_);
 				}
-				if (secondenemyarive == false) {
+				if (secondenemyarive == true) {
 					XMVECTOR firstenemytrack = FirstEnemy->CheckTrackPoint();
 					XMVECTOR secondenemytrack = SecondEnemy->CheckTrackPoint();
 					if (Action::GetInstance()->CompletelyTogetherXMVECTOR(firstenemytrack, secondenemytrack)) {

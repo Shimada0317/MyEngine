@@ -61,7 +61,6 @@ NormalEnemy::NormalEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera*
 	hp_ = 160;
 	oldhp_ = hp_;
 	timer_limit_ = 8;
-	robotarive_flag_ = true;
 	center_->SetPosition(center_worldpos_);
 }
 
@@ -121,7 +120,6 @@ void NormalEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Cam
 	hp_ = 160;
 	oldhp_ = hp_;
 	timer_limit_ = 8;
-	robotarive_flag_ = true;
 	center_->SetPosition(center_worldpos_);
 }
 
@@ -312,16 +310,12 @@ void NormalEnemy::Damage()
 
 void NormalEnemy::Death()
 {
-	oldtrack_point_ = track_point_;
-	if (headpart_color_.w > 0) {
-		Transparentize();
-	}
-	ParticleEfect();
-	robotarive_flag_ = false;
 	if (obj_particle_.empty() && shadow_color_.w < 0) {
 		dead_flag_ = true;
 	}
-
+	if (headpart_color_.w <= 0) { return; }
+	Transparentize();
+	ParticleEfect();
 }
 
 void NormalEnemy::DeploymentScale()

@@ -75,9 +75,9 @@ void ThrowEnemy::StatusSet()
 	propeller_->SetRotation(propeller_rot_);
 	propeller_->SetScale(propeller_scl_);
 
-	rockon_pos_ = WorldtoScreen(body_pos_);
+	rockon_pos_ = Action::GetInstance()->WorldToScreen(center_mat_, body_pos_, bringupcamera_);
 	rockon_->SetPosition(rockon_pos_);
-	rockon_bulletpos_ = WorldtoScreen(bullet_pos_);
+	rockon_bulletpos_ = Action::GetInstance()->WorldToScreen(center_mat_, bullet_pos_, bringupcamera_);
 	rockon_bullet_->SetPosition(rockon_bulletpos_);
 }
 //‘S‚Ä‚ÌXVˆ—‚ğ‚Ü‚Æ‚ß‚é
@@ -193,35 +193,7 @@ void ThrowEnemy::DeathProcess()
 	if (color_.w <= 0) { return; }
 	ParticleEfect();
 }
-//3D‚©‚ç2D‚É•ÏŠ·
-XMFLOAT2 ThrowEnemy::WorldtoScreen(const XMVECTOR& set3Dposition)
-{
-	center_->SetRotation(center_rot_);
-	center_mat_ = center_->GetMatrix();
-	const float kDistancePlayerTo3DReticle = 50.0f;
-	offset_ = { 0.0,0.0,1.0f };
-	offset_ = XMVector3TransformNormal(offset_, center_mat_);
-	offset_ = XMVector3Normalize(offset_) * kDistancePlayerTo3DReticle;
 
-	XMVECTOR PositionRet = set3Dposition;
-
-	HelperMath::GetInstance()->ChangeViewPort(matviewport_, offset_);
-
-	XMMATRIX MatVP = matviewport_;
-
-	XMMATRIX View = bringupcamera_->GetViewMatrix();
-	XMMATRIX Pro = bringupcamera_->GetProjectionMatrix();
-
-	XMMATRIX MatViewProjectionViewport = View * Pro * MatVP;
-
-	PositionRet = XMVector3TransformCoord(PositionRet, MatViewProjectionViewport);
-
-	XMFLOAT2 Get2dPosition;
-	Get2dPosition.x = PositionRet.m128_f32[0];
-	Get2dPosition.y = PositionRet.m128_f32[1];
-
-	return Get2dPosition;
-}
 //•`‰æˆ—
 void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 {

@@ -31,7 +31,6 @@ private:
 
 
 public:
-	RocketEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpoint);
 
 	//デストラクタ
 	~RocketEnemy();
@@ -125,11 +124,7 @@ public://Getter Setter
 private:
 	//Obj
 	//頭
-	std::unique_ptr<Object3d> headpart_;
-	//両腕
-	std::unique_ptr<Object3d> armspart_;
-	//両足
-	std::unique_ptr<Object3d> legspart_;
+	std::unique_ptr<Object3d> body_part_;
 	//影
 	std::unique_ptr<Object3d> shadow_;
 	//中心
@@ -190,7 +185,7 @@ private:
 	float head_distance_ = 30.0f;
 	//変形用のフラグ
 	float defomation_count_ = 0.0f;
-
+	float floating_pos_ = 0.f;
 	bool particleefect_flag_ = true;
 
 	//持ってきたプレイヤーの情報
