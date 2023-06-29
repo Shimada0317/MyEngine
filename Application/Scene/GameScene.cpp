@@ -329,7 +329,7 @@ void GameScene::DamageProcess()
 	//‘Ì—Í‚ª0‚É‚È‚Á‚½‚ç
 	else if (playerhp_ <= 0) {
 		postefectcolor_.x += 0.01f;
-		if (postefectcolor_.x >= 2.0f) {
+		if (postefectcolor_.x >= 1.0f) {
 			gamestate_ = CONTINUE;
 		}
 	}

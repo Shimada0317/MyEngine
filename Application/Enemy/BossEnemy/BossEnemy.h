@@ -182,7 +182,7 @@ private:
 	float color_time_ = 1.f;
 	float attack_timer_ = 0.f;
 	//‚Á‚Ä‚«‚½ƒvƒŒƒCƒ„[‚Ìî•ñ
-	Player* player;
+	Player* player_;
 	XMFLOAT2 player_pos_{};
 	bool player_shot_ = false;
 	int player_hp_ = 0;

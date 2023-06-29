@@ -124,7 +124,7 @@ void BossEnemy::AllUpdate()
 
 void BossEnemy::Update(Player* player)
 {
-	player = player;
+	player_ = player;
 	player_pos_ = player->GetRetPosition();
 	player_shot_ = player->GetBulletShot();
 
@@ -142,6 +142,8 @@ void BossEnemy::Update(Player* player)
 			player_shot_ = false;
 		}
 	}
+
+	DamageProcess();
 
 	StatusSet();
 
@@ -300,7 +302,7 @@ void BossEnemy::AttackProcess()
 	if (attack_speed_ > 0.5f) {
 		attack_speed_ = 0.f;
 		player_hp_ -= 5;
-		player->SetHp(player_hp_);
+		player_->SetHp(player_hp_);
 	}
 }
 
