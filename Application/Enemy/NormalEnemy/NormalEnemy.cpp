@@ -331,8 +331,7 @@ void NormalEnemy::DeploymentScale()
 
 void NormalEnemy::ParticleEfect()
 {
-	if (particleefect_flag_ != true) { return; }
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 10; i++) {
 		XMFLOAT3 pos;
 		pos = HelperMath::GetInstance()->ConvertToXMVECTOR(bodypart_pos_);
 
@@ -345,11 +344,9 @@ void NormalEnemy::ParticleEfect()
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		partred_->Add(200, pos, Vel, acc, 4.0f, 0.0f, 150.0f);
-		partgreen_->Add(200, pos, Vel, acc, 3.7f, 0.0f, 150.0f);
+		partred_->Add(30, pos, Vel, acc, 1.0f, 0.0f, 0.0f);
+		partgreen_->Add(30, pos, Vel, acc, 0.7f, 0.0f, 0.0f);
 	}
-	particleefect_flag_ = false;
-
 }
 
 void NormalEnemy::WaitTrack(bool otherenemyarive)

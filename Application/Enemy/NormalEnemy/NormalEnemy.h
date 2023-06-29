@@ -235,7 +235,6 @@ private:
 	bool vibrationchange_flag_ = false;
 	float atttack_timer_ = 0.f;
 	float timer_limit_ = 0.f;
-	bool particleefect_flag_ = true;
 	//“¯‚¶’Ç]æ‚É•Ê‚Ì“G‚ª‚¢‚é‚©‚¢‚È‚¢‚©
 	bool wait_flag_ = false;
 	//‚Á‚Ä‚«‚½ƒvƒŒƒCƒ„[‚Ìî•ñ
