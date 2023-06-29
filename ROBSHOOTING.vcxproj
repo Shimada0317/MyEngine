@@ -103,7 +103,7 @@
     <ClCompile Include="Application\Enemy\EnemyPop\EnemyPop.cpp" />
     <ClCompile Include="Application\Enemy\LowEnemy\LowEnemy.cpp" />
     <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp" />
-    <ClCompile Include="Application\Enemy\Rocket\RocketEnemy.cpp" />
+    <ClCompile Include="Application\Enemy\RocketEnemy\RocketEnemy.cpp" />
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp" />
     <ClCompile Include="Application\HUD\Continue\Continue.cpp" />
     <ClCompile Include="Application\HUD\Movie\Movie.cpp" />
@@ -294,7 +294,7 @@
     <ClInclude Include="Application\Enemy\EnemyPop\EnemyPop.h" />
     <ClInclude Include="Application\Enemy\LowEnemy\LowEnemy.h" />
     <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h" />
-    <ClInclude Include="Application\Enemy\Rocket\RocketEnemy.h" />
+    <ClInclude Include="Application\Enemy\RocketEnemy\RocketEnemy.h" />
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h" />
     <ClInclude Include="Application\HUD\Continue\Continue.h" />
     <ClInclude Include="Application\HUD\Movie\Movie.h" />

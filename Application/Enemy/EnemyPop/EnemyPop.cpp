@@ -151,6 +151,11 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 					low->Initialize(ROTATION, POSITION, camera, TRACK);
 					low_.push_back(std::move(low));
 				}
+				else if (TYPE == ENEMYPATERN::kRocket) {
+					std::unique_ptr<RocketEnemy> rocket = std::make_unique<RocketEnemy>();
+					rocket->Initialize(ROTATION, POSITION, camera, TRACK);
+					rocket_.push_back(std::move(rocket));
+				}
 				POPSkip = false;
 				TRACKSkip = false;
 				ARIVESkip = false;
@@ -185,6 +190,9 @@ void EnemyPop::Update(Player* player)
 	//épê®ÇÃí·Ç¢ìG
 	for (std::unique_ptr<LowEnemy>& low : low_) {
 		low->Update(player);
+	}
+	for (std::unique_ptr<RocketEnemy>& rocket : rocket_) {
+		rocket->Update(player);
 	}
 }
 
@@ -227,11 +235,14 @@ void EnemyPop::EnemyDead()
 	low_.remove_if([](std::unique_ptr<LowEnemy>& low) {
 		return low->IsDead();
 		});
+	rocket_.remove_if([](std::unique_ptr<RocketEnemy>& rocket) {
+		return rocket->IsDead();
+		});
 }
 
 bool EnemyPop::KilledAllEnemy()
 {
-	if (robot_.empty() && throw_.empty() && boss_.empty()&&low_.empty()) {
+	if (robot_.empty() && throw_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()) {
 		return true;
 	}
 	return false;
@@ -250,6 +261,9 @@ void EnemyPop::Draw(DirectXCommon* dxcommon)
 	}
 	for (std::unique_ptr<LowEnemy>& low : low_) {
 		low->Draw(dxcommon);
+	}
+	for (std::unique_ptr<RocketEnemy>& rocket : rocket_) {
+		rocket->Draw(dxcommon);
 	}
 }
 

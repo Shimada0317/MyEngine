@@ -5,6 +5,7 @@
 #include"LowEnemy.h"
 #include"ThrowEnemy.h"
 #include"BossEnemy.h"
+#include"RocketEnemy.h"
 #include"DirectXCommon.h"
 #include<sstream>
 
@@ -18,6 +19,7 @@ private:
 		kThrow,
 		kBoss,
 		kLow,
+		kRocket,
 	};
 public:
 	/// <summary>
@@ -61,6 +63,7 @@ private:
 	list<unique_ptr<BossEnemy>>boss_;
 	list<unique_ptr<ThrowEnemy>>throw_;
 	list<unique_ptr<LowEnemy>>low_;
+	list<unique_ptr<RocketEnemy>>rocket_;
 	bool otherenemyarive_ = true;
 };
 

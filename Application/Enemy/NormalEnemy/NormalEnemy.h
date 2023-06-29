@@ -216,7 +216,7 @@ private:
 	float movespeed_ = 0.09f;
 	//プレイヤーと敵の距離
 	float length_ = 3.0f;
-	float limit_length_ =1.5f;
+	float limit_length_ =1.2f;
 	//死んでいるか
 	bool dead_flag_ = false;
 	//敵とプレイヤーの距離

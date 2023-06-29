@@ -181,7 +181,7 @@ private:
 	XMFLOAT4 rockon_color_ = { 1.0f,1.0f,1.0f,1.0f };
 	XMFLOAT2 rockonhead_pos_ = { 0.0f,0.0f };
 	//移動速度
-	float movespeed_ = 0.15f;
+	float movespeed_ = 0.13f;
 	//プレイヤーと敵の距離
 	float length_ = 3.0f;
 	float limit_length_ = 1.5f;

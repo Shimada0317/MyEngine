@@ -207,7 +207,7 @@ void LowEnemy::TrackPlayerMode()
 	armspart_rot_.x -= 10.f;
 	
 	if (move_state_ == Move::kNormal) {
-		state_timer_ += 0.1f;
+		state_timer_ += 0.05f;
 		if (state_timer_ >= 1) {
 			state_timer_ = 0;
 			move_state_ = Move::kJump;
