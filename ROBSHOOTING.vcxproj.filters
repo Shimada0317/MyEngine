@@ -260,6 +260,8 @@
     <ClCompile Include="Application\Enemy\BaseThrow\BaseThrow.cpp">
       <Filter>AllGame\Application\Enemy\Base\BaseThrow</Filter>
     </ClCompile>
+    <ClCompile Include="ThrowBlueEnemy.cpp" />
+    <ClCompile Include="ThrowGreenEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -465,6 +467,8 @@
     <ClInclude Include="Application\Enemy\BaseThrow\BaseThrow.h">
       <Filter>AllGame\Application\Enemy\Base\BaseThrow</Filter>
     </ClInclude>
+    <ClInclude Include="ThrowBlueEnemy.h" />
+    <ClInclude Include="ThrowGreenEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

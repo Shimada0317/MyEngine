@@ -162,6 +162,8 @@
     <ClCompile Include="GameEngine\3d\ObjModel.cpp" />
     <ClCompile Include="GameEngine\3d\Object3d.cpp" />
     <ClCompile Include="Application\Player\Player.cpp" />
+    <ClCompile Include="ThrowBlueEnemy.cpp" />
+    <ClCompile Include="ThrowGreenEnemy.cpp" />
     <ClCompile Include="ThrowRedEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -356,6 +358,8 @@
     <ClInclude Include="GameEngine\3d\ObjModel.h" />
     <ClInclude Include="GameEngine\3d\Object3d.h" />
     <ClInclude Include="Application\Player\Player.h" />
+    <ClInclude Include="ThrowBlueEnemy.h" />
+    <ClInclude Include="ThrowGreenEnemy.h" />
     <ClInclude Include="ThrowRedEnemy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,13 +1,13 @@
 #pragma once
 #include "BaseThrow.h"
-class ThrowRedEnemy :
+class ThrowGreenEnemy :
     public BaseThrow
 {
 private:
 	//ó‘Ô‘JˆÚ‚ÌŠÖ”ƒ|ƒCƒ“ƒ^
-	static void (ThrowRedEnemy::* StateFuncTable[])();
+	static void (ThrowGreenEnemy::* StateFuncTable[])();
 public:
-	ThrowRedEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpos);
+	ThrowGreenEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpos);
 
 	void Activity()override;
 public:
@@ -27,6 +27,5 @@ public:
 	/// €–Sˆ—
 	/// </summary>
 	void DeathProcess();
-
 };
 

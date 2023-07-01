@@ -18,13 +18,13 @@ class Player;
 
 class BaseThrow
 {
-private:
+protected:
 	enum State {
 		APPEARANCE = 0,
 		WAIT,
 		ATTACK,
 		DEATH,
-	};
+	}state_;
 
 protected:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
@@ -178,7 +178,6 @@ public:
 	bool dead_flag_ = false;
 	float floating_pos_ = 0.f;
 	float fall_time_ = 0.f;
-	int state_ = APPEARANCE;
 	//‚Á‚Ä‚«‚½ƒvƒŒƒCƒ„[‚Ìî•ñ
 	XMFLOAT2 player_pos_{};
 	bool player_shot_ = false;
