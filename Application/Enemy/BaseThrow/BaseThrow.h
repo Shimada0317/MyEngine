@@ -5,35 +5,44 @@
 #include"ObjParticle.h"
 #include"ParticleManager.h"
 #include"Sprite.h"
+#include"HelperMath.h"
+#include"Action.h"
+
+#include"ModelManager.h"
+#include"SpriteManager.h"
+
 #include<DirectXMath.h>
 #include<list>
 
 class Player;
 
-class ThrowEnemy
+class BaseThrow
 {
 private:
 	enum State {
-		APPEARANCE =0,
+		APPEARANCE = 0,
 		WAIT,
 		ATTACK,
 		DEATH,
 	};
 
-private:
+protected:
 	using XMFLOAT2 = DirectX::XMFLOAT2;
 	using XMFLOAT3 = DirectX::XMFLOAT3;
 	using XMFLOAT4 = DirectX::XMFLOAT4;
 	using XMVECTOR = DirectX::XMVECTOR;
 	using XMMATRIX = DirectX::XMMATRIX;
 
-private:
-	//状態遷移の関数ポインタ
-	static void (ThrowEnemy::* StateFuncTable[])();
 public:
-	//デストラクタ
-	~ThrowEnemy();
 
+public:
+	//仮想関数(共通の処理)
+
+	virtual void Activity() = 0;
+	
+
+public:
+	~BaseThrow();
 	/// <summary>
 	/// 初期か
 	/// </summary>
@@ -41,7 +50,7 @@ public:
 	/// <param name="allpos">共通の座標</param>
 	/// <param name="camera">カメラ</param>
 	/// <param name="trackpos">追従先の座標</param>
-	void Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Camera* camera, const XMVECTOR& trackpos);
+	void Initialize(Camera* camera);
 
 	void StatusSet();
 
@@ -53,11 +62,16 @@ public:
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
 	void Update(Player* player);
-	
+
+	/// <summary>
+	/// 描画処理
+	/// </summary>
+	/// <param name="dxCommon"></param>
+	void Draw(DirectXCommon* dxCommon);
 
 	void DamageProcess();
 
-
+	void DeathProcess();
 
 	/// <summary>
 	/// 2D→3D座標
@@ -65,11 +79,7 @@ public:
 	/// <param name="Set3dPosition">表示したい3D座標の場所</param>
 	XMFLOAT2 WorldtoScreen(const XMVECTOR& set3Dposition);
 
-	/// <summary>
-	/// 描画処理
-	/// </summary>
-	/// <param name="dxCommon"></param>
-	void Draw(DirectXCommon* dxCommon);
+	
 
 	void BulletCollision();
 
@@ -98,13 +108,11 @@ public:
 	/// </summary>
 	void WaitProcess();
 	/// <summary>
-	///	攻撃処理
+	/// 
 	/// </summary>
 	void AttackProcess();
-	/// <summary>
-	/// 死亡処理
-	/// </summary>
-	void DeathProcess();
+
+
 public:
 	//オブジェクト
 	unique_ptr<Object3d> center_;
@@ -164,7 +172,7 @@ public:
 	float originbox_distance_;
 	float distance_ = 60.0f;
 	float bullet_distance_ = 0.f;
-	float bullet_magnification_=0.f;
+	float bullet_magnification_ = 0.f;
 	bool bullet_active_ = true;
 	//Hpが0以上か
 	bool dead_flag_ = false;

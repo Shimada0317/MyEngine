@@ -2,6 +2,7 @@
 #include"Action.h"
 #include"Player.h"
 #include<fstream>
+#include "ThrowRedEnemy.h"
 
 void EnemyPop::LoadCsv()
 {
@@ -135,9 +136,9 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 				}
 
 				else if (TYPE == ENEMYPATERN::kThrow) {
-					std::unique_ptr<ThrowEnemy> newRobot = std::make_unique<ThrowEnemy>();
-					newRobot->Initialize(ROTATION, POSITION, camera, TRACK);
-					throw_.push_back(std::move(newRobot));
+					std::unique_ptr<BaseThrow> newRobot = std::make_unique<ThrowRedEnemy>(ROTATION, POSITION ,TRACK);
+					newRobot->Initialize( camera);
+					base_.push_back(std::move(newRobot));
 				}
 
 				else if (TYPE == ENEMYPATERN::kBoss) {
@@ -180,7 +181,7 @@ void EnemyPop::Update(Player* player)
 		NormalEnemy->Update(player);
 	}
 	//浮遊している遠距離的
-	for (std::unique_ptr<ThrowEnemy>& ThrowEnemy : throw_) {
+	for (std::unique_ptr<BaseThrow>& ThrowEnemy : base_) {
 		ThrowEnemy->Update(player);
 	}
 	//ボスの更新処理
@@ -223,7 +224,7 @@ void EnemyPop::CheckSameTrackPosition()
 
 void EnemyPop::EnemyDead()
 {
-	throw_.remove_if([](std::unique_ptr<ThrowEnemy>& throwrobot) {
+	base_.remove_if([](std::unique_ptr<BaseThrow>& throwrobot) {
 		return throwrobot->IsDead();
 		});
 	robot_.remove_if([](std::unique_ptr<NormalEnemy>& robot) {
@@ -242,7 +243,7 @@ void EnemyPop::EnemyDead()
 
 bool EnemyPop::KilledAllEnemy()
 {
-	if (robot_.empty() && throw_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()) {
+	if (robot_.empty() && base_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()) {
 		return true;
 	}
 	return false;
@@ -253,7 +254,7 @@ void EnemyPop::Draw(DirectXCommon* dxcommon)
 	for (std::unique_ptr<NormalEnemy>& robot : robot_) {
 		robot->Draw(dxcommon);
 	}
-	for (std::unique_ptr<ThrowEnemy>& throwrobot : throw_) {
+	for (std::unique_ptr<BaseThrow>& throwrobot : base_) {
 		throwrobot->Draw(dxcommon);
 	}
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {

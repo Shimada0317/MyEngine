@@ -256,6 +256,10 @@
     <ClCompile Include="Application\Enemy\RocketEnemy\RocketEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Rocket</Filter>
     </ClCompile>
+    <ClCompile Include="ThrowRedEnemy.cpp" />
+    <ClCompile Include="Application\Enemy\BaseThrow\BaseThrow.cpp">
+      <Filter>AllGame\Application\Enemy\Base\BaseThrow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -456,6 +460,10 @@
     <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h" />
     <ClInclude Include="Application\Enemy\RocketEnemy\RocketEnemy.h">
       <Filter>AllGame\Application\Enemy\Rocket</Filter>
+    </ClInclude>
+    <ClInclude Include="ThrowRedEnemy.h" />
+    <ClInclude Include="Application\Enemy\BaseThrow\BaseThrow.h">
+      <Filter>AllGame\Application\Enemy\Base\BaseThrow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -728,8 +736,14 @@
     <Filter Include="AllGame\Application\Background\Obstacle">
       <UniqueIdentifier>{52e27d2e-c740-439d-881f-968a3f813e60}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AllGame\Application\Enemy\BaseEnemy">
+    <Filter Include="AllGame\Application\Enemy\Base">
+      <UniqueIdentifier>{f8669188-451a-4c2e-b4e7-bef1545cf362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy\Base\BaseEnemy">
       <UniqueIdentifier>{6be2db7e-dbf1-42b7-9581-3a88055a5314}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy\Base\BaseThrow">
+      <UniqueIdentifier>{4e429b65-1130-4709-9067-07fec2dbd290}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
