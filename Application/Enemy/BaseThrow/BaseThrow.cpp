@@ -88,10 +88,12 @@ void BaseThrow::Update(Player* player)
 		return particle->IsDelete();
 		});
 
-	Activity();
+	
 
 	//ダメージを食らったときの処理
 	DamageProcess();
+	//各機体の行動パターン
+	Activity();
 	//ステータスのセット
 	StatusSet();
 	//全ての更新処理をまとめる
@@ -152,8 +154,8 @@ void BaseThrow::Draw(DirectXCommon* dxCommon)
 	ParticleManager::PostDraw();
 	//スプライト
 	Sprite::PreDraw(dxCommon->GetCmdList());
-	//rockon_->Draw();
-	//rockon_bullet_->Draw();
+	rockon_->Draw();
+	rockon_bullet_->Draw();
 	Sprite::PostDraw();
 }
 //弾の当たり判定
@@ -169,6 +171,12 @@ void BaseThrow::BulletCollision()
 //弾発射
 void BaseThrow::ThrowAttack()
 {
+	timer_ += 0.2f;
+	
+	if (timer_ >= 1) {
+		timer_ = 0.f;
+		bullet_magnification_ += add_value_;
+	}
 	//追尾の計算
 	XMFLOAT3 Value;
 	Value.x = bullet_pos_.m128_f32[0] - landing_point_.m128_f32[0];
@@ -186,15 +194,15 @@ void BaseThrow::ThrowAttack()
 
 	bullet_distance_ = BulletLength;
 	bullet_pos_ -= TrackSpeed;
-	bullet_magnification_ += 0.015f;
-	if (BulletLength <= 0.1f) {
+	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, sub_scl_);
+	if (BulletLength <= 0.5f) {
 		player_hp_ = player_->GetHp();
 		player_hp_ -= 1;
 		player_->SetHp(player_hp_);
 		bullet_pos_ = old_pos_;
 		bullet_scl_ = {};
 		state_ = State::WAIT;
-		bullet_magnification_ = 0.f;
+		bullet_magnification_ = 2.4f;
 	}
 
 	if (bullet_active_ == false) {

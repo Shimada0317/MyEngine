@@ -1,15 +1,16 @@
-#include "ThrowBlueEnemy.h"
+#include "ThrowGreenEnemy.h"
 
-void (ThrowBlueEnemy::* ThrowBlueEnemy::StateFuncTable[])() {
-	&ThrowBlueEnemy::AppearanceProcess,
-		& ThrowBlueEnemy::WaitProcess,
-		& ThrowBlueEnemy::AttackProcess,
-		& ThrowBlueEnemy::DeathProcess,
+void (ThrowGreenEnemy::* ThrowGreenEnemy::StateFuncTable[])() {
+	&ThrowGreenEnemy::AppearanceProcess,
+		& ThrowGreenEnemy::WaitProcess,
+		& ThrowGreenEnemy::AttackProcess,
+		& ThrowGreenEnemy::DeathProcess,
 };
 
-ThrowBlueEnemy::ThrowBlueEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpos)
+ThrowGreenEnemy::ThrowGreenEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpos)
 {
-	color_ = { 0.f,0.f,1.f,1.f };
+	color_ = { 0.f,0.7f,0.f,1.f };
+	bullet_color_ = { 0.f,0.7f,0.f,1.f };
 	floating_pos_ = Action::GetInstance()->GetRangRand(6.f, 7.f);
 	body_rot_ = allrot;
 	body_rot_.x -= 10;
@@ -19,7 +20,7 @@ ThrowBlueEnemy::ThrowBlueEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, c
 
 }
 
-void ThrowBlueEnemy::Activity()
+void ThrowGreenEnemy::Activity()
 {
 	//ŠÖ”ƒ|ƒCƒ“ƒ^‚Åó‘Ô‘JˆÚ
 	(this->*StateFuncTable[state_])();
@@ -27,7 +28,7 @@ void ThrowBlueEnemy::Activity()
 	state_ = State::DEATH;
 }
 
-void ThrowBlueEnemy::AppearanceProcess()
+void ThrowGreenEnemy::AppearanceProcess()
 {
 	const float FallSpeed = 0.15f;
 	//—Ž‰º‚µ‚Ä‚­‚é
@@ -40,7 +41,7 @@ void ThrowBlueEnemy::AppearanceProcess()
 	}
 }
 
-void ThrowBlueEnemy::WaitProcess()
+void ThrowGreenEnemy::WaitProcess()
 {
 	bullet_active_ = true;
 	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, 0.005f);
@@ -48,7 +49,7 @@ void ThrowBlueEnemy::WaitProcess()
 	state_ = State::ATTACK;
 }
 
-void ThrowBlueEnemy::AttackProcess()
+void ThrowGreenEnemy::AttackProcess()
 {
 	//’e”­ŽË
 	ThrowAttack();
@@ -56,7 +57,7 @@ void ThrowBlueEnemy::AttackProcess()
 	BulletCollision();
 }
 
-void ThrowBlueEnemy::DeathProcess()
+void ThrowGreenEnemy::DeathProcess()
 {
 	const float kGravity = 1.8f;
 	fall_time_ += 0.001f;

@@ -3,6 +3,8 @@
 #include"Player.h"
 #include<fstream>
 #include "ThrowRedEnemy.h"
+#include"ThrowBlueEnemy.h"
+#include"ThrowGreenEnemy.h"
 
 void EnemyPop::LoadCsv()
 {
@@ -156,6 +158,21 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 					std::unique_ptr<RocketEnemy> rocket = std::make_unique<RocketEnemy>();
 					rocket->Initialize(ROTATION, POSITION, camera, TRACK);
 					rocket_.push_back(std::move(rocket));
+				}
+				else if (TYPE == ENEMYPATERN::kThrowBlue) {
+					std::unique_ptr<BaseThrow> newRobot = std::make_unique<ThrowBlueEnemy>(ROTATION, POSITION, TRACK);
+					newRobot->Initialize(camera);
+					base_.push_back(std::move(newRobot));
+				}
+				else if (TYPE == ENEMYPATERN::kThrowGreen) {
+					std::unique_ptr<BaseThrow> newRobot = std::make_unique<ThrowGreenEnemy>(ROTATION, POSITION, TRACK);
+					newRobot->Initialize(camera);
+					base_.push_back(std::move(newRobot));
+				}
+				else if (TYPE == ENEMYPATERN::kThrowRed) {
+					std::unique_ptr<BaseThrow> newRobot = std::make_unique<ThrowRedEnemy>(ROTATION, POSITION, TRACK);
+					newRobot->Initialize(camera);
+					base_.push_back(std::move(newRobot));
 				}
 				POPSkip = false;
 				TRACKSkip = false;

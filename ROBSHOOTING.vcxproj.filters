@@ -256,12 +256,18 @@
     <ClCompile Include="Application\Enemy\RocketEnemy\RocketEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Rocket</Filter>
     </ClCompile>
-    <ClCompile Include="ThrowRedEnemy.cpp" />
     <ClCompile Include="Application\Enemy\BaseThrow\BaseThrow.cpp">
       <Filter>AllGame\Application\Enemy\Base\BaseThrow</Filter>
     </ClCompile>
-    <ClCompile Include="ThrowBlueEnemy.cpp" />
-    <ClCompile Include="ThrowGreenEnemy.cpp" />
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowGreenEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -463,12 +469,18 @@
     <ClInclude Include="Application\Enemy\RocketEnemy\RocketEnemy.h">
       <Filter>AllGame\Application\Enemy\Rocket</Filter>
     </ClInclude>
-    <ClInclude Include="ThrowRedEnemy.h" />
     <ClInclude Include="Application\Enemy\BaseThrow\BaseThrow.h">
       <Filter>AllGame\Application\Enemy\Base\BaseThrow</Filter>
     </ClInclude>
-    <ClInclude Include="ThrowBlueEnemy.h" />
-    <ClInclude Include="ThrowGreenEnemy.h" />
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.h">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowGreenEnemy.h">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.h">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

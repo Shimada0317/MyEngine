@@ -21,6 +21,9 @@ private:
 		kBoss,
 		kLow,
 		kRocket,
+		kThrowRed,
+		kThrowBlue,
+		kThrowGreen,
 	};
 public:
 	/// <summary>

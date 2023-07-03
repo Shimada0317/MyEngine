@@ -51,40 +51,37 @@ public:
 	/// <param name="camera">カメラ</param>
 	/// <param name="trackpos">追従先の座標</param>
 	void Initialize(Camera* camera);
-
+	/// <summary>
+	/// ステータスのセット
+	/// </summary>
 	void StatusSet();
-
+	/// <summary>
+	/// 各更新処理をまとめる
+	/// </summary>
 	void AllUpdate();
-
 	/// <summary>
 	/// ロボットの更新処理
 	/// </summary>
 	/// <param name="bull">プレイヤーの弾</param>
 	/// <param name="playerHp">プレイヤーのHP</param>
 	void Update(Player* player);
-
 	/// <summary>
 	/// 描画処理
 	/// </summary>
 	/// <param name="dxCommon"></param>
 	void Draw(DirectXCommon* dxCommon);
-
-	void DamageProcess();
-
-	void DeathProcess();
-
 	/// <summary>
-	/// 2D→3D座標
+	/// ダメージ処理
 	/// </summary>
-	/// <param name="Set3dPosition">表示したい3D座標の場所</param>
-	XMFLOAT2 WorldtoScreen(const XMVECTOR& set3Dposition);
-
-	
-
+	void DamageProcess();
+	/// <summary>
+	/// 弾の当たり判定
+	/// </summary>
 	void BulletCollision();
-
+	/// <summary>
+	/// 投擲攻撃
+	/// </summary>
 	void ThrowAttack();
-
 	/// <summary>
 	/// パーティクル発生
 	/// </summary>
@@ -97,22 +94,6 @@ public:
 	bool IsDead() const { return dead_flag_; }
 
 	void SetPlayer(Player* player) { player_ = player; }
-
-public:
-	/// <summary>
-	/// 登場処理
-	/// </summary>
-	void AppearanceProcess();
-	/// <summary>
-	/// 待機処理
-	/// </summary>
-	void WaitProcess();
-	/// <summary>
-	/// 
-	/// </summary>
-	void AttackProcess();
-
-
 public:
 	//オブジェクト
 	unique_ptr<Object3d> center_;
@@ -166,13 +147,14 @@ public:
 	int hp_ = 50;
 	int oldhp_ = hp_;
 	float length_ = 0.f;
+	float sub_scl_ = -0.0005f;
 	//敵とプレイヤーの距離
 	float origin_distance_;
 	float originhead_distance_;
 	float originbox_distance_;
 	float distance_ = 60.0f;
 	float bullet_distance_ = 0.f;
-	float bullet_magnification_ = 0.f;
+	float bullet_magnification_ = 2.4f;
 	bool bullet_active_ = true;
 	//Hpが0以上か
 	bool dead_flag_ = false;
@@ -182,5 +164,7 @@ public:
 	XMFLOAT2 player_pos_{};
 	bool player_shot_ = false;
 	int player_hp_ = 0;
+	float add_value_ = 0.001f;
+	float timer_ = 0.f;
 };
 

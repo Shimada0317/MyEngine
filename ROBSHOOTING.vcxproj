@@ -105,7 +105,10 @@
     <ClCompile Include="Application\Enemy\LowEnemy\LowEnemy.cpp" />
     <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp" />
     <ClCompile Include="Application\Enemy\RocketEnemy\RocketEnemy.cpp" />
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.cpp" />
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp" />
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowGreenEnemy.cpp" />
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.cpp" />
     <ClCompile Include="Application\HUD\Continue\Continue.cpp" />
     <ClCompile Include="Application\HUD\Movie\Movie.cpp" />
     <ClCompile Include="Application\LightControl\LightControl.cpp" />
@@ -162,9 +165,6 @@
     <ClCompile Include="GameEngine\3d\ObjModel.cpp" />
     <ClCompile Include="GameEngine\3d\Object3d.cpp" />
     <ClCompile Include="Application\Player\Player.cpp" />
-    <ClCompile Include="ThrowBlueEnemy.cpp" />
-    <ClCompile Include="ThrowGreenEnemy.cpp" />
-    <ClCompile Include="ThrowRedEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />
@@ -300,7 +300,10 @@
     <ClInclude Include="Application\Enemy\LowEnemy\LowEnemy.h" />
     <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h" />
     <ClInclude Include="Application\Enemy\RocketEnemy\RocketEnemy.h" />
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.h" />
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h" />
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowGreenEnemy.h" />
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.h" />
     <ClInclude Include="Application\HUD\Continue\Continue.h" />
     <ClInclude Include="Application\HUD\Movie\Movie.h" />
     <ClInclude Include="Application\LightControl\LightControl.h" />
@@ -358,9 +361,6 @@
     <ClInclude Include="GameEngine\3d\ObjModel.h" />
     <ClInclude Include="GameEngine\3d\Object3d.h" />
     <ClInclude Include="Application\Player\Player.h" />
-    <ClInclude Include="ThrowBlueEnemy.h" />
-    <ClInclude Include="ThrowGreenEnemy.h" />
-    <ClInclude Include="ThrowRedEnemy.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

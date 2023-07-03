@@ -9,14 +9,17 @@ void (ThrowRedEnemy::* ThrowRedEnemy::StateFuncTable[])() {
 
 ThrowRedEnemy::ThrowRedEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos,const XMVECTOR& trackpos)
 {
-	color_ = { 1.f,0.f,0.f,1.f };
+	color_ = { 0.7f,0.f,0.f,1.f };
+	bullet_color_= { 0.7f,0.f,0.f,1.f };
+	bullet_speed_ = 0.3f;
 	floating_pos_ = Action::GetInstance()->GetRangRand(6.f, 7.f);
 	body_rot_ = allrot;
 	body_rot_.x -= 10;
 	center_pos_ = allpos;
 	landing_point_ = trackpos;
 	oldhp_ = hp_;
-	
+	sub_scl_ = -0.001f;
+	add_value_ = 0.006f;
 }
 
 void ThrowRedEnemy::Activity()
@@ -43,13 +46,16 @@ void ThrowRedEnemy::AppearanceProcess()
 void ThrowRedEnemy::WaitProcess()
 {
 	bullet_active_ = true;
-	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, 0.005f);
+	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, 0.001f);
 	if (bullet_scl_.z <= 0.3f) { return; }
 	state_ = State::ATTACK;
 }
 
 void ThrowRedEnemy::AttackProcess()
 {
+	
+
+	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, sub_scl_);
 	//’e”­ŽË
 	ThrowAttack();
 	//’e‚Ì“–‚½‚è”»’è
