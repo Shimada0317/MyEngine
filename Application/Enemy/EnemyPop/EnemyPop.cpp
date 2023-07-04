@@ -5,6 +5,7 @@
 #include "ThrowRedEnemy.h"
 #include"ThrowBlueEnemy.h"
 #include"ThrowGreenEnemy.h"
+#include"NormalRedEnemy.h"
 
 void EnemyPop::LoadCsv()
 {
@@ -174,6 +175,11 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 					newRobot->Initialize(camera);
 					base_.push_back(std::move(newRobot));
 				}
+				else if (TYPE == ENEMYPATERN::kNormalRed) {
+					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<NormalRedEnemy>(ROTATION, POSITION, TRACK);
+					newRobot->Initialize(camera);
+					base_enemy_.push_back(std::move(newRobot));
+				}
 				POPSkip = false;
 				TRACKSkip = false;
 				ARIVESkip = false;
@@ -200,6 +206,10 @@ void EnemyPop::Update(Player* player)
 	//浮遊している遠距離的
 	for (std::unique_ptr<BaseThrow>& ThrowEnemy : base_) {
 		ThrowEnemy->Update(player);
+	}
+	//浮遊している遠距離的
+	for (std::unique_ptr<BaseEnemy>& NormalEnemy : base_enemy_) {
+		NormalEnemy->Update(player);
 	}
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
@@ -256,11 +266,14 @@ void EnemyPop::EnemyDead()
 	rocket_.remove_if([](std::unique_ptr<RocketEnemy>& rocket) {
 		return rocket->IsDead();
 		});
+	base_enemy_.remove_if([](std::unique_ptr<BaseEnemy>& base) {
+		return base->IsDead();
+		});
 }
 
 bool EnemyPop::KilledAllEnemy()
 {
-	if (robot_.empty() && base_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()) {
+	if (robot_.empty() && base_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()&&base_enemy_.empty()) {
 		return true;
 	}
 	return false;
@@ -282,6 +295,9 @@ void EnemyPop::Draw(DirectXCommon* dxcommon)
 	}
 	for (std::unique_ptr<RocketEnemy>& rocket : rocket_) {
 		rocket->Draw(dxcommon);
+	}
+	for (std::unique_ptr<BaseEnemy>& base : base_enemy_) {
+		base->Draw(dxcommon);
 	}
 }
 

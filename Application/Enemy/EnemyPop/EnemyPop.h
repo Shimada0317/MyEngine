@@ -5,6 +5,7 @@
 #include"LowEnemy.h"
 #include"ThrowEnemy.h"
 #include"BossEnemy.h"
+#include"BaseEnemy.h"
 #include"BaseThrow.h"
 #include"RocketEnemy.h"
 #include"DirectXCommon.h"
@@ -24,6 +25,7 @@ private:
 		kThrowRed,
 		kThrowBlue,
 		kThrowGreen,
+		kNormalRed,
 	};
 public:
 	/// <summary>
@@ -69,6 +71,7 @@ private:
 	list<unique_ptr<LowEnemy>>low_;
 	list<unique_ptr<RocketEnemy>>rocket_;
 	list<unique_ptr<BaseThrow>>base_;
+	list<unique_ptr<BaseEnemy>>base_enemy_;
 	bool otherenemyarive_ = true;
 };
 

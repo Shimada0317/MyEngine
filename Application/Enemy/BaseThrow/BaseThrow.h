@@ -94,7 +94,7 @@ public:
 	bool IsDead() const { return dead_flag_; }
 
 	void SetPlayer(Player* player) { player_ = player; }
-public:
+protected:
 	//オブジェクト
 	unique_ptr<Object3d> center_;
 	unique_ptr<Object3d> bullet_;
@@ -147,7 +147,7 @@ public:
 	int hp_ = 50;
 	int oldhp_ = hp_;
 	float length_ = 0.f;
-	float sub_scl_ = -0.0005f;
+	float sub_scl_ = -0.0009f;
 	//敵とプレイヤーの距離
 	float origin_distance_;
 	float originhead_distance_;
@@ -164,7 +164,7 @@ public:
 	XMFLOAT2 player_pos_{};
 	bool player_shot_ = false;
 	int player_hp_ = 0;
-	float add_value_ = 0.001f;
+	float add_value_ = 2.f;
 	float timer_ = 0.f;
 };
 

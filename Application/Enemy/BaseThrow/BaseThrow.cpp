@@ -173,10 +173,7 @@ void BaseThrow::ThrowAttack()
 {
 	timer_ += 0.2f;
 	
-	if (timer_ >= 1) {
-		timer_ = 0.f;
-		bullet_magnification_ += add_value_;
-	}
+	
 	//’Ç”ö‚ÌŒvŽZ
 	XMFLOAT3 Value;
 	Value.x = bullet_pos_.m128_f32[0] - landing_point_.m128_f32[0];
@@ -191,7 +188,11 @@ void BaseThrow::ThrowAttack()
 	//’Ç”ö‘¬“x‚ÌŒvŽZ
 	XMVECTOR TrackSpeed{};
 	TrackSpeed = HelperMath::GetInstance()->TrackingVelocityCalculation(Value, BulletLength, bullet_speed_);
-
+	if (timer_ >= 1) {
+		timer_ = 0.f;
+		float AddValue= add_value_ / BulletLength;
+		bullet_magnification_ += AddValue;
+	}
 	bullet_distance_ = BulletLength;
 	bullet_pos_ -= TrackSpeed;
 	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, sub_scl_);

@@ -252,7 +252,6 @@
     <ClCompile Include="Application\Background\Obstacle\Obstacle.cpp">
       <Filter>AllGame\Application\Background\Obstacle</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp" />
     <ClCompile Include="Application\Enemy\RocketEnemy\RocketEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Rocket</Filter>
     </ClCompile>
@@ -268,6 +267,13 @@
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\BaseLow\BaseLow.cpp">
+      <Filter>AllGame\Application\Enemy\Base\BaseLow</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\NormalEnemy\NormalRedEnemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -465,7 +471,6 @@
     <ClInclude Include="Application\Background\Obstacle\Obstacle.h">
       <Filter>AllGame\Application\Background\Obstacle</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h" />
     <ClInclude Include="Application\Enemy\RocketEnemy\RocketEnemy.h">
       <Filter>AllGame\Application\Enemy\Rocket</Filter>
     </ClInclude>
@@ -481,6 +486,13 @@
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.h">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h">
+      <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\BaseLow\BaseLow.h">
+      <Filter>AllGame\Application\Enemy\Base\BaseLow</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\NormalEnemy\NormalRedEnemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -760,6 +772,9 @@
     </Filter>
     <Filter Include="AllGame\Application\Enemy\Base\BaseThrow">
       <UniqueIdentifier>{4e429b65-1130-4709-9067-07fec2dbd290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AllGame\Application\Enemy\Base\BaseLow">
+      <UniqueIdentifier>{5201c08f-c8a6-4632-9b15-0cb894f52af6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
