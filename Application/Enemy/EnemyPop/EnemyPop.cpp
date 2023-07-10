@@ -5,8 +5,7 @@
 #include "ThrowRedEnemy.h"
 #include"ThrowBlueEnemy.h"
 #include"ThrowGreenEnemy.h"
-#include"NormalRedEnemy.h"
-#include"Normal.h"
+#include"NormalEnemy.h"
 
 void EnemyPop::LoadCsv()
 {
@@ -134,7 +133,7 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true&& TYPESkip == true) {
 				if (TYPE == ENEMYPATERN::kNormal) {
-					std::unique_ptr<Base> newRobot = std::make_unique<Normal>(ROTATION, POSITION, TRACK);
+					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<NormalEnemy>(ROTATION, POSITION, TRACK);
 					newRobot->CreateRobot(camera);
 					base_type_.push_back(std::move(newRobot));
 				}
@@ -176,11 +175,7 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 					newRobot->Initialize(camera);
 					base_.push_back(std::move(newRobot));
 				}
-				else if (TYPE == ENEMYPATERN::kNormalRed) {
-					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<NormalRedEnemy>(ROTATION, POSITION, TRACK);
-					newRobot->Initialize(camera);
-					base_enemy_.push_back(std::move(newRobot));
-				}
+
 				POPSkip = false;
 				TRACKSkip = false;
 				ARIVESkip = false;
@@ -201,17 +196,14 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 void EnemyPop::Update(Player* player)
 {
 	//敵の更新処理
-	for (std::unique_ptr<Base>& NormalEnemy : base_type_) {
+	for (std::unique_ptr<BaseEnemy>& NormalEnemy : base_type_) {
 		NormalEnemy->Update(player);
 	}
 	//浮遊している遠距離的
 	for (std::unique_ptr<BaseThrow>& ThrowEnemy : base_) {
 		ThrowEnemy->Update(player);
 	}
-	//浮遊している遠距離的
-	for (std::unique_ptr<BaseEnemy>& NormalEnemy : base_enemy_) {
-		NormalEnemy->Update(player);
-	}
+
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Update(player);
@@ -227,7 +219,7 @@ void EnemyPop::Update(Player* player)
 
 void EnemyPop::CheckSameTrackPosition()
 {
-	for (std::unique_ptr<NormalEnemy>& FirstEnemy : robot_) {
+	/*for (std::unique_ptr<NormalEnemy>& FirstEnemy : robot_) {
 		for (std::unique_ptr<NormalEnemy>& SecondEnemy : robot_) {
 			if (FirstEnemy.get() != SecondEnemy.get()) {
 				XMVECTOR FirstTrackPosition = FirstEnemy->GetTrackPos();
@@ -247,7 +239,7 @@ void EnemyPop::CheckSameTrackPosition()
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void EnemyPop::EnemyDead()
@@ -255,7 +247,7 @@ void EnemyPop::EnemyDead()
 	base_.remove_if([](std::unique_ptr<BaseThrow>& throwrobot) {
 		return throwrobot->IsDead();
 		});
-	base_type_.remove_if([](std::unique_ptr<Base>& robot) {
+	base_type_.remove_if([](std::unique_ptr<BaseEnemy>& robot) {
 		return robot->IsDead();
 		});
 	boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
@@ -267,14 +259,12 @@ void EnemyPop::EnemyDead()
 	rocket_.remove_if([](std::unique_ptr<RocketEnemy>& rocket) {
 		return rocket->IsDead();
 		});
-	base_enemy_.remove_if([](std::unique_ptr<BaseEnemy>& base) {
-		return base->IsDead();
-		});
+
 }
 
 bool EnemyPop::KilledAllEnemy()
 {
-	if (robot_.empty() && base_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()&&base_enemy_.empty()&&base_type_.empty()) {
+	if (base_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()&&base_type_.empty()) {
 		return true;
 	}
 	return false;
@@ -282,9 +272,6 @@ bool EnemyPop::KilledAllEnemy()
 
 void EnemyPop::Draw(DirectXCommon* dxcommon)
 {
-	for (std::unique_ptr<NormalEnemy>& robot : robot_) {
-		robot->Draw(dxcommon);
-	}
 	for (std::unique_ptr<BaseThrow>& throwrobot : base_) {
 		throwrobot->Draw(dxcommon);
 	}
@@ -297,10 +284,8 @@ void EnemyPop::Draw(DirectXCommon* dxcommon)
 	for (std::unique_ptr<RocketEnemy>& rocket : rocket_) {
 		rocket->Draw(dxcommon);
 	}
-	for (std::unique_ptr<BaseEnemy>& base : base_enemy_) {
-		base->Draw(dxcommon);
-	}
-	for (std::unique_ptr<Base>& robot : base_type_) {
+
+	for (std::unique_ptr<BaseEnemy>& robot : base_type_) {
 		robot->Draw(dxcommon);
 	}
 }

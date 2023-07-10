@@ -234,9 +234,6 @@
     <ClCompile Include="Application\HUD\Movie\Movie.cpp">
       <Filter>AllGame\Application\HUD\Movie</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp">
-      <Filter>AllGame\Application\Enemy\Normal</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Enemy\EnemyPop\EnemyPop.cpp">
       <Filter>AllGame\Application\Enemy\EnemyPop</Filter>
     </ClCompile>
@@ -267,18 +264,16 @@
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp">
-      <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Enemy\BaseLow\BaseLow.cpp">
       <Filter>AllGame\Application\Enemy\Base\BaseLow</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\NormalEnemy\NormalRedEnemy.cpp" />
-    <ClCompile Include="Normal.cpp" />
-    <ClCompile Include="Application\Enemy\NormalEnemy\Enemy.cpp" />
-    <ClCompile Include="Application\Enemy\BaseEnemy\Base.cpp">
-      <Filter>imgui</Filter>
+    <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\ThrowEnemy\Throw.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -467,9 +462,6 @@
     <ClInclude Include="Application\LightControl\LightControl.h">
       <Filter>AllGame\Application\LightControl</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h">
-      <Filter>AllGame\Application\Enemy\Normal</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Enemy\LowEnemy\LowEnemy.h">
       <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
     </ClInclude>
@@ -491,16 +483,16 @@
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.h">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h">
-      <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Enemy\BaseLow\BaseLow.h">
       <Filter>AllGame\Application\Enemy\Base\BaseLow</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\NormalEnemy\NormalRedEnemy.h" />
-    <ClInclude Include="Application\Enemy\BaseEnemy\Base.h" />
-    <ClInclude Include="Normal.h" />
-    <ClInclude Include="Application\Enemy\NormalEnemy\Enemy.h" />
+    <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h">
+      <Filter>AllGame\Application\Enemy\Normal</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h">
+      <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\ThrowEnemy\Throw.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

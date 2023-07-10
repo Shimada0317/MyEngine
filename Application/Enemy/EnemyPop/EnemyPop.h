@@ -9,7 +9,7 @@
 #include"BaseThrow.h"
 #include"RocketEnemy.h"
 #include"DirectXCommon.h"
-#include"Base.h"
+#include"BaseEnemy.h"
 #include<sstream>
 
 class Player;
@@ -66,14 +66,12 @@ public:
 	void Draw(DirectXCommon* dxcommon);
 private:
 	stringstream enemypopcommands_;
-	list<unique_ptr<NormalEnemy>>robot_;
 	list<unique_ptr<BossEnemy>>boss_;
 	list<unique_ptr<ThrowEnemy>>throw_;
 	list<unique_ptr<LowEnemy>>low_;
 	list<unique_ptr<RocketEnemy>>rocket_;
 	list<unique_ptr<BaseThrow>>base_;
-	list<unique_ptr<BaseEnemy>>base_enemy_;
-	list<unique_ptr<Base>>base_type_;
+	list<unique_ptr<BaseEnemy>>base_type_;
 	bool otherenemyarive_ = true;
 };
 
