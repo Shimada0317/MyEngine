@@ -274,6 +274,11 @@
       <Filter>AllGame\Application\Enemy\Base\BaseLow</Filter>
     </ClCompile>
     <ClCompile Include="Application\Enemy\NormalEnemy\NormalRedEnemy.cpp" />
+    <ClCompile Include="Normal.cpp" />
+    <ClCompile Include="Application\Enemy\NormalEnemy\Enemy.cpp" />
+    <ClCompile Include="Application\Enemy\BaseEnemy\Base.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -493,6 +498,9 @@
       <Filter>AllGame\Application\Enemy\Base\BaseLow</Filter>
     </ClInclude>
     <ClInclude Include="Application\Enemy\NormalEnemy\NormalRedEnemy.h" />
+    <ClInclude Include="Application\Enemy\BaseEnemy\Base.h" />
+    <ClInclude Include="Normal.h" />
+    <ClInclude Include="Application\Enemy\NormalEnemy\Enemy.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

@@ -6,6 +6,7 @@
 #include"ThrowBlueEnemy.h"
 #include"ThrowGreenEnemy.h"
 #include"NormalRedEnemy.h"
+#include"Normal.h"
 
 void EnemyPop::LoadCsv()
 {
@@ -133,9 +134,9 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true&& TYPESkip == true) {
 				if (TYPE == ENEMYPATERN::kNormal) {
-					std::unique_ptr<NormalEnemy> newRobot = std::make_unique<NormalEnemy>();
-					newRobot->Initialize(ROTATION, POSITION, camera, TRACK);
-					robot_.push_back(std::move(newRobot));
+					std::unique_ptr<Base> newRobot = std::make_unique<Normal>(ROTATION, POSITION, TRACK);
+					newRobot->CreateRobot(camera);
+					base_type_.push_back(std::move(newRobot));
 				}
 
 				else if (TYPE == ENEMYPATERN::kThrow) {
@@ -200,7 +201,7 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 void EnemyPop::Update(Player* player)
 {
 	//ìGÇÃçXêVèàóù
-	for (std::unique_ptr<NormalEnemy>& NormalEnemy : robot_) {
+	for (std::unique_ptr<Base>& NormalEnemy : base_type_) {
 		NormalEnemy->Update(player);
 	}
 	//ïÇóVÇµÇƒÇ¢ÇÈâìãóó£ìI
@@ -254,7 +255,7 @@ void EnemyPop::EnemyDead()
 	base_.remove_if([](std::unique_ptr<BaseThrow>& throwrobot) {
 		return throwrobot->IsDead();
 		});
-	robot_.remove_if([](std::unique_ptr<NormalEnemy>& robot) {
+	base_type_.remove_if([](std::unique_ptr<Base>& robot) {
 		return robot->IsDead();
 		});
 	boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
@@ -273,7 +274,7 @@ void EnemyPop::EnemyDead()
 
 bool EnemyPop::KilledAllEnemy()
 {
-	if (robot_.empty() && base_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()&&base_enemy_.empty()) {
+	if (robot_.empty() && base_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()&&base_enemy_.empty()&&base_type_.empty()) {
 		return true;
 	}
 	return false;
@@ -298,6 +299,9 @@ void EnemyPop::Draw(DirectXCommon* dxcommon)
 	}
 	for (std::unique_ptr<BaseEnemy>& base : base_enemy_) {
 		base->Draw(dxcommon);
+	}
+	for (std::unique_ptr<Base>& robot : base_type_) {
+		robot->Draw(dxcommon);
 	}
 }
 

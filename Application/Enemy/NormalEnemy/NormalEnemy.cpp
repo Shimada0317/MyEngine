@@ -49,12 +49,9 @@ void NormalEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Cam
 {
 	state_ = State::kDefomation;
 	headpart_rot_ = bodypart_rot_ = armspart_rot_ = allrot;
-
 	all_pos_ = allpos;
 	bringupcamera_ = camera;
-
 	purse_positiverot_ += headpart_rot_.y;
-
 	origin_distance_ = distance_;
 	originhead_distance_ = head_distance_;
 
@@ -63,7 +60,6 @@ void NormalEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Cam
 	headpart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kHead));
 	bodypart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kBody));
 	armspart_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kArms));
-
 	partgreen_ = ParticleManager::Create(bringupcamera_);
 	partred_ = ParticleManager::Create(bringupcamera_);
 
@@ -75,9 +71,7 @@ void NormalEnemy::Initialize(const XMFLOAT3& allrot, const XMVECTOR& allpos, Cam
 
 	headpart_scl_ = { 0.0f,0.0f,0.0f };
 	armspart_scl_ = { 0.0f,0.0f,0.0f };
-
 	track_point_ = oldtrack_point_ = trackpoint;
-
 	hp_ = 160;
 	oldhp_ = hp_;
 	timer_limit_ = 8;

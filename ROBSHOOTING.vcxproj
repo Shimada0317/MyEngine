@@ -98,12 +98,14 @@
     <ClCompile Include="Application\Background\CommonBackground\CommonBackground.cpp" />
     <ClCompile Include="Application\Background\GameBackground\GameBackground.cpp" />
     <ClCompile Include="Application\Background\Obstacle\Obstacle.cpp" />
+    <ClCompile Include="Application\Enemy\BaseEnemy\Base.cpp" />
     <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp" />
     <ClCompile Include="Application\Enemy\BaseLow\BaseLow.cpp" />
     <ClCompile Include="Application\Enemy\BaseThrow\BaseThrow.cpp" />
     <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp" />
     <ClCompile Include="Application\Enemy\EnemyPop\EnemyPop.cpp" />
     <ClCompile Include="Application\Enemy\LowEnemy\LowEnemy.cpp" />
+    <ClCompile Include="Application\Enemy\NormalEnemy\Enemy.cpp" />
     <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp" />
     <ClCompile Include="Application\Enemy\NormalEnemy\NormalRedEnemy.cpp" />
     <ClCompile Include="Application\Enemy\RocketEnemy\RocketEnemy.cpp" />
@@ -167,6 +169,7 @@
     <ClCompile Include="GameEngine\3d\ObjModel.cpp" />
     <ClCompile Include="GameEngine\3d\Object3d.cpp" />
     <ClCompile Include="Application\Player\Player.cpp" />
+    <ClCompile Include="Normal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli" />
@@ -295,12 +298,14 @@
     <ClInclude Include="Application\Background\CommonBackground\CommonBackground.h" />
     <ClInclude Include="Application\Background\GameBackground\GameBackground.h" />
     <ClInclude Include="Application\Background\Obstacle\Obstacle.h" />
+    <ClInclude Include="Application\Enemy\BaseEnemy\Base.h" />
     <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h" />
     <ClInclude Include="Application\Enemy\BaseLow\BaseLow.h" />
     <ClInclude Include="Application\Enemy\BaseThrow\BaseThrow.h" />
     <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h" />
     <ClInclude Include="Application\Enemy\EnemyPop\EnemyPop.h" />
     <ClInclude Include="Application\Enemy\LowEnemy\LowEnemy.h" />
+    <ClInclude Include="Application\Enemy\NormalEnemy\Enemy.h" />
     <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h" />
     <ClInclude Include="Application\Enemy\NormalEnemy\NormalRedEnemy.h" />
     <ClInclude Include="Application\Enemy\RocketEnemy\RocketEnemy.h" />
@@ -365,6 +370,7 @@
     <ClInclude Include="GameEngine\3d\ObjModel.h" />
     <ClInclude Include="GameEngine\3d\Object3d.h" />
     <ClInclude Include="Application\Player\Player.h" />
+    <ClInclude Include="Normal.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

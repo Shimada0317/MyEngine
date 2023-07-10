@@ -9,6 +9,7 @@
 #include"BaseThrow.h"
 #include"RocketEnemy.h"
 #include"DirectXCommon.h"
+#include"Base.h"
 #include<sstream>
 
 class Player;
@@ -72,6 +73,7 @@ private:
 	list<unique_ptr<RocketEnemy>>rocket_;
 	list<unique_ptr<BaseThrow>>base_;
 	list<unique_ptr<BaseEnemy>>base_enemy_;
+	list<unique_ptr<Base>>base_type_;
 	bool otherenemyarive_ = true;
 };
 
