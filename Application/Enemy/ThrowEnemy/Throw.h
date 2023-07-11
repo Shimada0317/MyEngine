@@ -101,5 +101,6 @@ private:
     float bullet_value_ = 0.f;
     float body_length_ = 0.f;
     float track_length_ = 0.f;
+    float sub_scl_ = -0.0005f;
 };
 

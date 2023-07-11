@@ -139,6 +139,7 @@ void Throw::ThrowAttack()
 	bullet_distance_ = length_;
 	bullet_pos_ -= TrackSpeed;
 	bullet_value_ += 0.015f;
+	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, sub_scl_);
 	if (length_ <= 0.1f) {
 		player_hp_ -= 1;
 		player_->SetHp(player_hp_);
