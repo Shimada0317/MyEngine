@@ -1,9 +1,6 @@
 #pragma once
 #include"Camera.h"
 #include"HelperMath.h"
-#include"NormalEnemy.h"
-#include"LowEnemy.h"
-#include"ThrowEnemy.h"
 #include"BossEnemy.h"
 #include"BaseEnemy.h"
 #include"BaseThrow.h"
@@ -67,8 +64,6 @@ public:
 private:
 	stringstream enemypopcommands_;
 	list<unique_ptr<BossEnemy>>boss_;
-	list<unique_ptr<ThrowEnemy>>throw_;
-	list<unique_ptr<LowEnemy>>low_;
 	list<unique_ptr<RocketEnemy>>rocket_;
 	list<unique_ptr<BaseThrow>>base_;
 	list<unique_ptr<BaseEnemy>>base_type_;

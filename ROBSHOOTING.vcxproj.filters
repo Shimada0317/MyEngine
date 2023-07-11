@@ -189,9 +189,6 @@
     <ClCompile Include="Application\Enemy\BossEnemy\BossEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Boss</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
-      <Filter>AllGame\Application\Enemy\Throw</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Scene\GameScene.cpp">
       <Filter>AllGame\Application\Scene\Game</Filter>
     </ClCompile>
@@ -273,7 +270,10 @@
     <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\ThrowEnemy\Throw.cpp" />
+    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\LowEnemy\Low.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -408,9 +408,6 @@
     <ClInclude Include="Application\Enemy\BossEnemy\BossEnemy.h">
       <Filter>AllGame\Application\Enemy\Boss</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
-      <Filter>AllGame\Application\Enemy\Throw</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Scene\GameScene.h">
       <Filter>AllGame\Application\Scene\Game</Filter>
     </ClInclude>
@@ -492,7 +489,10 @@
     <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h">
       <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\ThrowEnemy\Throw.h" />
+    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
+      <Filter>AllGame\Application\Enemy\Throw</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\LowEnemy\Low.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">

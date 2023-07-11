@@ -2,10 +2,11 @@
 #include"Action.h"
 #include"Player.h"
 #include<fstream>
-#include"Throw.h"
+#include"ThrowEnemy.h"
 #include "ThrowRedEnemy.h"
 #include"ThrowBlueEnemy.h"
 #include"ThrowGreenEnemy.h"
+#include"Low.h"
 #include"NormalEnemy.h"
 
 void EnemyPop::LoadCsv()
@@ -140,7 +141,7 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 				}
 
 				else if (TYPE == ENEMYPATERN::kThrow) {
-					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<Throw>(ROTATION, POSITION, TRACK);
+					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<ThrowEnemy>(ROTATION, POSITION, TRACK);
 					newRobot->CreateRobot(camera);
 					base_type_.push_back(std::move(newRobot));
 				}
@@ -152,9 +153,9 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 					break;
 				}
 				else if (TYPE == ENEMYPATERN::kLow) {
-					std::unique_ptr<LowEnemy> low = std::make_unique<LowEnemy>();
-					low->Initialize(ROTATION, POSITION, camera, TRACK);
-					low_.push_back(std::move(low));
+					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<Low>(ROTATION, POSITION, TRACK);
+					newRobot->CreateRobot(camera);
+					base_type_.push_back(std::move(newRobot));
 				}
 				else if (TYPE == ENEMYPATERN::kRocket) {
 					std::unique_ptr<RocketEnemy> rocket = std::make_unique<RocketEnemy>();
@@ -209,10 +210,6 @@ void EnemyPop::Update(Player* player)
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Update(player);
 	}
-	//épê®ÇÃí·Ç¢ìG
-	for (std::unique_ptr<LowEnemy>& low : low_) {
-		low->Update(player);
-	}
 	for (std::unique_ptr<RocketEnemy>& rocket : rocket_) {
 		rocket->Update(player);
 	}
@@ -254,9 +251,6 @@ void EnemyPop::EnemyDead()
 	boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
 		return boss->IsDead();
 		});
-	low_.remove_if([](std::unique_ptr<LowEnemy>& low) {
-		return low->IsDead();
-		});
 	rocket_.remove_if([](std::unique_ptr<RocketEnemy>& rocket) {
 		return rocket->IsDead();
 		});
@@ -265,7 +259,7 @@ void EnemyPop::EnemyDead()
 
 bool EnemyPop::KilledAllEnemy()
 {
-	if (base_.empty() && boss_.empty()&&low_.empty()&&rocket_.empty()&&base_type_.empty()) {
+	if (base_.empty() && boss_.empty()&&rocket_.empty()&&base_type_.empty()) {
 		return true;
 	}
 	return false;
@@ -278,9 +272,6 @@ void EnemyPop::Draw(DirectXCommon* dxcommon)
 	}
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Draw(dxcommon);
-	}
-	for (std::unique_ptr<LowEnemy>& low : low_) {
-		low->Draw(dxcommon);
 	}
 	for (std::unique_ptr<RocketEnemy>& rocket : rocket_) {
 		rocket->Draw(dxcommon);
