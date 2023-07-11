@@ -222,7 +222,6 @@ void ThrowEnemy::Draw(DirectXCommon* dxCommon)
 //’e‚Ì“–‚½‚è”»’è
 void ThrowEnemy::BulletCollision()
 {
-	
 	//’e‚ª”­ŽË‚³‚ê‚Ä‚¢‚é
 	if (player_shot_ == false) { return; }
 	//“–‚½‚è”»’è

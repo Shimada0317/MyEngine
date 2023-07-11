@@ -2,6 +2,7 @@
 #include"Action.h"
 #include"Player.h"
 #include<fstream>
+#include"Throw.h"
 #include "ThrowRedEnemy.h"
 #include"ThrowBlueEnemy.h"
 #include"ThrowGreenEnemy.h"
@@ -139,9 +140,9 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 				}
 
 				else if (TYPE == ENEMYPATERN::kThrow) {
-					std::unique_ptr<BaseThrow> newRobot = std::make_unique<ThrowRedEnemy>(ROTATION, POSITION ,TRACK);
-					newRobot->Initialize( camera);
-					base_.push_back(std::move(newRobot));
+					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<Throw>(ROTATION, POSITION, TRACK);
+					newRobot->CreateRobot(camera);
+					base_type_.push_back(std::move(newRobot));
 				}
 
 				else if (TYPE == ENEMYPATERN::kBoss) {
@@ -196,8 +197,8 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 void EnemyPop::Update(Player* player)
 {
 	//“G‚ÌXVˆ—
-	for (std::unique_ptr<BaseEnemy>& NormalEnemy : base_type_) {
-		NormalEnemy->Update(player);
+	for (std::unique_ptr<BaseEnemy>& Enemy : base_type_) {
+		Enemy->Update(player);
 	}
 	//•‚—V‚µ‚Ä‚¢‚é‰“‹——£“I
 	for (std::unique_ptr<BaseThrow>& ThrowEnemy : base_) {

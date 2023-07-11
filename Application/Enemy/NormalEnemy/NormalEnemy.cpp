@@ -12,6 +12,7 @@ void (NormalEnemy::* NormalEnemy::StateFuncTable[])() {
 
 NormalEnemy::NormalEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint)
 {
+	mul_value_ = 1.3f;
 	headpart_rot_ = bodypart_rot_ = armspart_rot_ = allrot;
 	base_pos_ = allpos;
 	purse_positiverot_ += headpart_rot_.y;
@@ -144,6 +145,8 @@ void NormalEnemy::TrackPlayerMode()
 
 	const float AttackTimeMin = 10;
 	const float AttackTimeMax = 20;
+
+	value_ = HelperMath::GetInstance()->TrackCalculation(base_pos_, track_point_);
 	TrackCalculation();
 
 	//‹——£‚ð‚à‚Æ‚Ì’l‚É–ß‚·
@@ -292,7 +295,7 @@ void NormalEnemy::EnemyCollision()
 
 	if (player_shot_ == true && hp_ > 0) {
 		CommonCollision();
-		if (Collision::GetInstance()->CheckHit2D(player_pos_, rockonother_pos_, head_distance_, 1.3f)) {
+		if (Collision::GetInstance()->CheckHit2D(player_pos_, rockonother_pos_, head_distance_,mul_value_)) {
 			hp_ -= HeadDamage;
 			player_shot_ = false;
 		}

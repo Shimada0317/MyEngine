@@ -64,7 +64,7 @@ void BaseEnemy::ObjParticleDelete()
 
 void BaseEnemy::CommonCollision()
 {
-	if (Collision::GetInstance()->CheckHit2D(player_pos_, rockon_pos_, distance_, 1.3f)) {
+	if (Collision::GetInstance()->CheckHit2D(player_pos_, rockon_pos_, distance_, mul_value_)) {
 		hp_ -= damage_value_;
 		player_shot_ = false;
 	}
@@ -72,17 +72,16 @@ void BaseEnemy::CommonCollision()
 
 void BaseEnemy::TrackCalculation()
 {
-	//’Ç”ö‚ÌŒvŽZ
-	XMFLOAT3 Value;
-	Value = HelperMath::GetInstance()->TrackCalculation(base_pos_, track_point_);
+	
+
 	//’l‚ð2æ
 	XMFLOAT3 SquareValue{};
-	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(Value, 2);
+	SquareValue = HelperMath::GetInstance()->SquareToXMFLOAT3(value_, 2);
 	//‹——£‚ÌŒvŽZ
 	length_ = HelperMath::GetInstance()->LengthCalculation(SquareValue);
 	//’Ç”ö‘¬“x‚ÌŒvŽZ
 	TrackSpeed={};
-	TrackSpeed = HelperMath::GetInstance()->TrackingVelocityCalculation(Value, length_, speed_);
+	TrackSpeed = HelperMath::GetInstance()->TrackingVelocityCalculation(value_, length_, speed_);
 }
 
 
@@ -103,21 +102,23 @@ void BaseEnemy::CommonObjDraw()
 
 void BaseEnemy::ParticleEffect()
 {
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < roop_count_; i++) {
 		XMFLOAT3 pos;
 		pos = HelperMath::GetInstance()->ConvertToXMVECTOR(base_pos_);
 
 		const float rnd_vel = 0.04f;
 		XMFLOAT3 Vel{};
-		XMFLOAT3 MinValue{ -0.09f,-0.01f,-0.03f };
+		XMFLOAT3 MinValue{ -0.09f,-0.11f,-0.09f };
 		XMFLOAT3 MaxValue{ 0.09f,0.12f,0.09f };
 		Vel = Action::GetInstance()->RandMinAndMax(MinValue, MaxValue);
 
 		XMFLOAT3 acc{};
 		acc.y = 0.0;
 
-		partred_->Add(200, pos, Vel, acc, 4.0f, 0.0f, 150.0f);
-		partgreen_->Add(200, pos, Vel, acc, 3.7f, 0.0f, 150.0f);
+		float green_scl_ = start_scl_ - 0.3f;
+
+		partred_->Add(file, pos, Vel, acc, start_scl_, end_scl_, time_);
+		partgreen_->Add(file, pos, Vel, acc, green_scl_, end_scl_, time_);
 	}
 }
 

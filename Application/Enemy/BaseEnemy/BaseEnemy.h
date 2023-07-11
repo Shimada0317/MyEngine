@@ -81,6 +81,9 @@ protected://共通の変数
 	ParticleManager* partred_ = nullptr;
 	//カメラ
 	Camera* bringupcamera_;
+
+	//追尾の計算
+	XMFLOAT3 value_;
 	//体の中心の座標
 	XMVECTOR base_pos_{};
 	XMFLOAT3 all_rot_;
@@ -120,6 +123,11 @@ protected://共通の変数
 	float distance_ = 60.0f;
 	//Hpが0以上か
 	bool dead_flag_ = false;
-	
+
+	float start_scl_ = 4.f;
+	float end_scl_ = 0.f;
+	float time_ = 150.f;
+	int roop_count_ = 50;
+	int file = 200;
 };
 

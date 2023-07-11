@@ -45,6 +45,18 @@ public:
     void Draw(DirectXCommon* dxCommon)override;
 private:
     /// <summary>
+    /// íeÇÃìñÇΩÇËîªíË
+    /// </summary>
+    void BulletCollision();
+    /// <summary>
+    /// çUåÇï˚ñ@
+    /// </summary>
+    void ThrowAttack();
+    /// <summary>
+    /// ãóó£ÇÃåvéZ
+    /// </summary>
+    void RangeCalculation();
+    /// <summary>
     /// ìoèÍèàóù
     /// </summary>
     void AppearanceProcess();
@@ -77,13 +89,17 @@ private:
     XMVECTOR bullet_pos_{};
     XMFLOAT3 bullet_rot_{};
     XMFLOAT3 bullet_scl_{};
-
-    XMFLOAT3 body_rot_ = {};
-    XMFLOAT3 body_scl_ = { 1.f,1.f,1.f };
     //íÖíeínì_
     XMVECTOR landing_point_ = {};
     //êF
     XMFLOAT4 color_ = { 1.f,1.f,1.f,1.f };
     XMFLOAT4 bullet_color_ = { 1.f,0.f,0.f,1.f };
+
+    float floating_pos_ = 0.f;
+    float fall_time_ = 0.f;
+    float bullet_distance_ = 0.f;
+    float bullet_value_ = 0.f;
+    float body_length_ = 0.f;
+    float track_length_ = 0.f;
 };
 
