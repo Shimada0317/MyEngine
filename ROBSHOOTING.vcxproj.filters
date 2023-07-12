@@ -255,12 +255,6 @@
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowGreenEnemy.cpp">
-      <Filter>AllGame\Application\Enemy\Throw</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.cpp">
-      <Filter>AllGame\Application\Enemy\Throw</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Enemy\BaseLow\BaseLow.cpp">
       <Filter>AllGame\Application\Enemy\Base\BaseLow</Filter>
     </ClCompile>
@@ -472,12 +466,6 @@
       <Filter>AllGame\Application\Enemy\Base\BaseThrow</Filter>
     </ClInclude>
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.h">
-      <Filter>AllGame\Application\Enemy\Throw</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowGreenEnemy.h">
-      <Filter>AllGame\Application\Enemy\Throw</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.h">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClInclude>
     <ClInclude Include="Application\Enemy\BaseLow\BaseLow.h">

@@ -21,6 +21,11 @@ private:
         kShotBefore=0,
         kShotAfter,
     }bullet_state_;
+
+    enum Move {
+        kUp,
+        kDown,
+    }move_;
 private:
     //ó‘Ô‘JˆÚ‚ÌŠÖ”ƒ|ƒCƒ“ƒ^
     static void (ThrowEnemy::* StateFuncTable[])();
@@ -82,6 +87,8 @@ private:
     /// “–‚½‚è”»’è
     /// </summary>
     void EnemyCollision();
+
+    void MoveProcess();
 private:
     unique_ptr<Object3d> bullet_;
     unique_ptr<Object3d> body_;
@@ -111,9 +118,12 @@ private:
     float bullet_value_ = 0.f;
     float body_length_ = 0.f;
     float track_length_ = 0.f;
-    float sub_scl_ = -0.001f;
+    float sub_scl_ = -0.0008f;
     float timer_ = 0.f;
     float fall_speed_ = 0.15f;
     float add_scl_ = 0.005f;
+
+    //“®‚©‚·
+    float move_timer_ = 0.f;
 };
 

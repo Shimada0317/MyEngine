@@ -109,8 +109,6 @@
     <ClCompile Include="Application\Enemy\RocketEnemy\RocketEnemy.cpp" />
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.cpp" />
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp" />
-    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowGreenEnemy.cpp" />
-    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.cpp" />
     <ClCompile Include="Application\HUD\Continue\Continue.cpp" />
     <ClCompile Include="Application\HUD\Movie\Movie.cpp" />
     <ClCompile Include="Application\LightControl\LightControl.cpp" />
@@ -306,8 +304,6 @@
     <ClInclude Include="Application\Enemy\RocketEnemy\RocketEnemy.h" />
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.h" />
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h" />
-    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowGreenEnemy.h" />
-    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowRedEnemy.h" />
     <ClInclude Include="Application\HUD\Continue\Continue.h" />
     <ClInclude Include="Application\HUD\Movie\Movie.h" />
     <ClInclude Include="Application\LightControl\LightControl.h" />

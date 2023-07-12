@@ -32,13 +32,18 @@ ThrowEnemy::ThrowEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMV
 		speed_ = 0.3f;
 		add_scl_ = 0.001f;
 		fall_speed_ = 0.3f;
+		sub_scl_ = -0.001f;
 		type_ = Type::kRed;
 	}
 	else if (type == 3) {
 		color_ = { 0.f,0.5f,0.f,1.f };
 		add_scl_ = 0.1f;
+		sub_scl_ = -0.001f;
+		type_ = Type::kGreen;
 	}
 	else if (type == 4) {
+		add_scl_ = 0.001f;
+		fall_speed_ = 0.5f;
 		color_ = { 0.f,0.f,0.5f,1.f };
 		type_ = Type::kBlue;
 	}
@@ -192,6 +197,30 @@ void ThrowEnemy::EnemyCollision()
 	}
 }
 
+void ThrowEnemy::MoveProcess()
+{
+	const float AbsoluteValue = 0.05f;
+	const int TimerLimit = 1;
+	const float AddPos = 0.1f;
+	if (type_ != Type::kBlue) { return; }
+	if (move_ == Move::kUp) {
+		move_timer_ += AbsoluteValue;
+		if (move_timer_ >= TimerLimit) {
+			move_ = Move::kDown;
+		}
+	}
+	else {
+		move_timer_ -= AbsoluteValue;
+		if (move_timer_ <= -TimerLimit) {
+			move_ = Move::kUp;
+		}
+	}
+	float AddValue = Action::GetInstance()->EasingOut(move_timer_, AddPos);
+	base_pos_.m128_f32[1] += AddValue;
+	bullet_pos_ = center_worldpos_;
+	bullet_pos_.m128_f32[1] = bullet_pos_.m128_f32[1] - 1.f;
+}
+
 void ThrowEnemy::RangeCalculation()
 {
 	float Vx = 0;
@@ -227,6 +256,8 @@ void ThrowEnemy::WaitProcess()
 {
 	bullet_state_ = BulletState::kShotBefore;
 	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, add_scl_);
+	
+	MoveProcess();
 	if (bullet_scl_.z <= 0.3f) { return; }
 	state_ = State::kAttack;
 }
