@@ -17,12 +17,12 @@ private:
 	enum ENEMYPATERN {
 		kNormal = 0,
 		kThrow,
+		kThrowRed,
+		kThrowGreen,
+		kThrowBlue,
 		kBoss,
 		kLow,
 		kRocket,
-		kThrowRed,
-		kThrowBlue,
-		kThrowGreen,
 		kNormalRed,
 	};
 public:
@@ -64,8 +64,6 @@ public:
 private:
 	stringstream enemypopcommands_;
 	list<unique_ptr<BossEnemy>>boss_;
-	list<unique_ptr<RocketEnemy>>rocket_;
-	list<unique_ptr<BaseThrow>>base_;
 	list<unique_ptr<BaseEnemy>>base_type_;
 	bool otherenemyarive_ = true;
 };

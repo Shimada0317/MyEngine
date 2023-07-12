@@ -42,8 +42,7 @@ public://共通の仮想関数
 	void Update(Player* player);
 
 	bool IsDead()const { return dead_flag_; }
-protected://各クラス内で使われる処理
-	
+protected://各派生クラス内で使われる処理
 
 	void CommonLoad();
 

@@ -140,11 +140,12 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 					base_type_.push_back(std::move(newRobot));
 				}
 
-				else if (TYPE == ENEMYPATERN::kThrow) {
-					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<ThrowEnemy>(ROTATION, POSITION, TRACK);
+				else if (TYPE >= ENEMYPATERN::kThrow&&TYPE<=ENEMYPATERN::kThrowBlue) {
+					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<ThrowEnemy>(ROTATION, POSITION, TRACK,TYPE);
 					newRobot->CreateRobot(camera);
 					base_type_.push_back(std::move(newRobot));
 				}
+				
 
 				else if (TYPE == ENEMYPATERN::kBoss) {
 					std::unique_ptr<BossEnemy> boss = std::make_unique<BossEnemy>();
@@ -157,26 +158,7 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 					newRobot->CreateRobot(camera);
 					base_type_.push_back(std::move(newRobot));
 				}
-				else if (TYPE == ENEMYPATERN::kRocket) {
-					std::unique_ptr<RocketEnemy> rocket = std::make_unique<RocketEnemy>();
-					rocket->Initialize(ROTATION, POSITION, camera, TRACK);
-					rocket_.push_back(std::move(rocket));
-				}
-				else if (TYPE == ENEMYPATERN::kThrowBlue) {
-					std::unique_ptr<BaseThrow> newRobot = std::make_unique<ThrowBlueEnemy>(ROTATION, POSITION, TRACK);
-					newRobot->Initialize(camera);
-					base_.push_back(std::move(newRobot));
-				}
-				else if (TYPE == ENEMYPATERN::kThrowGreen) {
-					std::unique_ptr<BaseThrow> newRobot = std::make_unique<ThrowGreenEnemy>(ROTATION, POSITION, TRACK);
-					newRobot->Initialize(camera);
-					base_.push_back(std::move(newRobot));
-				}
-				else if (TYPE == ENEMYPATERN::kThrowRed) {
-					std::unique_ptr<BaseThrow> newRobot = std::make_unique<ThrowRedEnemy>(ROTATION, POSITION, TRACK);
-					newRobot->Initialize(camera);
-					base_.push_back(std::move(newRobot));
-				}
+
 
 				POPSkip = false;
 				TRACKSkip = false;
@@ -201,18 +183,12 @@ void EnemyPop::Update(Player* player)
 	for (std::unique_ptr<BaseEnemy>& Enemy : base_type_) {
 		Enemy->Update(player);
 	}
-	//浮遊している遠距離的
-	for (std::unique_ptr<BaseThrow>& ThrowEnemy : base_) {
-		ThrowEnemy->Update(player);
-	}
-
+	
 	//ボスの更新処理
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Update(player);
 	}
-	for (std::unique_ptr<RocketEnemy>& rocket : rocket_) {
-		rocket->Update(player);
-	}
+
 }
 
 void EnemyPop::CheckSameTrackPosition()
@@ -242,24 +218,20 @@ void EnemyPop::CheckSameTrackPosition()
 
 void EnemyPop::EnemyDead()
 {
-	base_.remove_if([](std::unique_ptr<BaseThrow>& throwrobot) {
-		return throwrobot->IsDead();
-		});
+	
 	base_type_.remove_if([](std::unique_ptr<BaseEnemy>& robot) {
 		return robot->IsDead();
 		});
 	boss_.remove_if([](std::unique_ptr<BossEnemy>& boss) {
 		return boss->IsDead();
 		});
-	rocket_.remove_if([](std::unique_ptr<RocketEnemy>& rocket) {
-		return rocket->IsDead();
-		});
+
 
 }
 
 bool EnemyPop::KilledAllEnemy()
 {
-	if (base_.empty() && boss_.empty()&&rocket_.empty()&&base_type_.empty()) {
+	if ( boss_.empty()&&base_type_.empty()) {
 		return true;
 	}
 	return false;
@@ -267,14 +239,9 @@ bool EnemyPop::KilledAllEnemy()
 
 void EnemyPop::Draw(DirectXCommon* dxcommon)
 {
-	for (std::unique_ptr<BaseThrow>& throwrobot : base_) {
-		throwrobot->Draw(dxcommon);
-	}
+
 	for (std::unique_ptr<BossEnemy>& boss : boss_) {
 		boss->Draw(dxcommon);
-	}
-	for (std::unique_ptr<RocketEnemy>& rocket : rocket_) {
-		rocket->Draw(dxcommon);
 	}
 
 	for (std::unique_ptr<BaseEnemy>& robot : base_type_) {

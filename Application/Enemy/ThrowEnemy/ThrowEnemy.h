@@ -4,6 +4,12 @@ class ThrowEnemy :
     public BaseEnemy
 {
 private:
+    enum Type {
+        kNormal = 1,
+        kRed,
+        kGreen,
+        kBlue,
+    }type_;
     enum State {
         kAppearance=0,
         kWait,
@@ -19,7 +25,7 @@ private:
     //状態遷移の関数ポインタ
     static void (ThrowEnemy::* StateFuncTable[])();
 public:
-    ThrowEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint);
+    ThrowEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint,int type);
     /// <summary>
     /// 生成
     /// </summary>
@@ -98,13 +104,16 @@ private:
     //色
     XMFLOAT4 color_ = { 1.f,1.f,1.f,1.f };
     XMFLOAT4 bullet_color_ = { 1.f,0.f,0.f,1.f };
-
+    //個体によって変わる値
     float floating_pos_ = 0.f;
     float fall_time_ = 0.f;
     float bullet_distance_ = 0.f;
     float bullet_value_ = 0.f;
     float body_length_ = 0.f;
     float track_length_ = 0.f;
-    float sub_scl_ = -0.0005f;
+    float sub_scl_ = -0.001f;
+    float timer_ = 0.f;
+    float fall_speed_ = 0.15f;
+    float add_scl_ = 0.005f;
 };
 

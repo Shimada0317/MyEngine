@@ -8,16 +8,7 @@ void (ThrowEnemy::* ThrowEnemy::StateFuncTable[])() {
 	& ThrowEnemy::DeathProcess,
 };
 
-ThrowEnemy::ThrowEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint)
-{
-	body_rot_ = allrot;
-	body_rot_.x -= 10;
-	base_pos_ = allpos;
-	landing_point_ = trackpoint;
-	old_hp_ = hp_;
-}
-
-void ThrowEnemy::CreateRobot(Camera* camera)
+ThrowEnemy::ThrowEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint, int type)
 {
 	speed_ = 0.08f;
 	file = 30;
@@ -27,6 +18,35 @@ void ThrowEnemy::CreateRobot(Camera* camera)
 	time_ = 0.f;
 	mul_value_ = 2.f;
 	damage_value_ = 25;
+	body_rot_ = allrot;
+	body_rot_.x -= 10;
+	base_pos_ = allpos;
+	landing_point_ = trackpoint;
+	old_hp_ = hp_;
+	if (type == 1) {
+		type_ = Type::kNormal;
+	}
+	else if (type == 2) {
+		color_ = { 0.5f,0.f,0.f,1.f };
+		bullet_color_ = { 0.f,0.5f,0.f,1.f };
+		speed_ = 0.3f;
+		add_scl_ = 0.001f;
+		fall_speed_ = 0.3f;
+		type_ = Type::kRed;
+	}
+	else if (type == 3) {
+		color_ = { 0.f,0.5f,0.f,1.f };
+		add_scl_ = 0.1f;
+	}
+	else if (type == 4) {
+		color_ = { 0.f,0.f,0.5f,1.f };
+		type_ = Type::kBlue;
+	}
+}
+
+void ThrowEnemy::CreateRobot(Camera* camera)
+{
+	
 	bringupcamera_ = camera;
 	//オブジェクトの生成
 	shadow_ = Object3d::Create(ModelManager::GetInstance()->GetModel(kShadow));
@@ -136,15 +156,26 @@ void ThrowEnemy::ThrowAttack()
 	TrackCalculation();
 	bullet_distance_ = length_;
 	bullet_pos_ -= TrackSpeed;
-	bullet_value_ += 0.015f;
+	if (type_ == Type::kRed) {
+		timer_ += 0.2f;
+		float DivisionValue = 2.f;
+		if (timer_ >= 1) {
+			timer_ = 0.f;
+			float AddValue = DivisionValue / length_;
+			bullet_value_ += AddValue;
+		}
+	}
+	else {
+		bullet_value_ += 0.015f;
+	}
 	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, sub_scl_);
-	if (length_ <= 0.1f) {
+	if (length_ <= 0.5f) {
 		player_hp_ -= 1;
 		player_->SetHp(player_hp_);
 		bullet_pos_ = old_pos_;
 		bullet_scl_ = {};
 		state_ = State::kWait;
-		bullet_value_ = 0.f;
+		bullet_value_ = 2.4f;
 	}
 
 	if (bullet_state_==BulletState::kShotAfter) {
@@ -181,9 +212,9 @@ void ThrowEnemy::RangeCalculation()
 
 void ThrowEnemy::AppearanceProcess()
 {
-	const float FallSpeed = 0.15f;
+	
 	//落下してくる
-	base_pos_.m128_f32[1] -= FallSpeed;
+	base_pos_.m128_f32[1] -= fall_speed_;
 	if (base_pos_.m128_f32[1] <= floating_pos_) {
 		bullet_pos_ = center_worldpos_;
 		bullet_pos_.m128_f32[1] = bullet_pos_.m128_f32[1] - 1.f;
@@ -195,7 +226,7 @@ void ThrowEnemy::AppearanceProcess()
 void ThrowEnemy::WaitProcess()
 {
 	bullet_state_ = BulletState::kShotBefore;
-	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, 0.005f);
+	bullet_scl_ = HelperMath::GetInstance()->XMFLOAT3AddFloat(bullet_scl_, add_scl_);
 	if (bullet_scl_.z <= 0.3f) { return; }
 	state_ = State::kAttack;
 }
