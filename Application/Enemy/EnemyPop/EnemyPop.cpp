@@ -3,7 +3,6 @@
 #include"Player.h"
 #include<fstream>
 #include"ThrowEnemy.h"
-#include"ThrowBlueEnemy.h"
 #include"Low.h"
 #include"NormalEnemy.h"
 

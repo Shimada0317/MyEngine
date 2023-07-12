@@ -3,7 +3,6 @@
 #include"HelperMath.h"
 #include"BossEnemy.h"
 #include"BaseEnemy.h"
-#include"BaseThrow.h"
 #include"RocketEnemy.h"
 #include"DirectXCommon.h"
 #include"BaseEnemy.h"

@@ -240,23 +240,8 @@
     <ClCompile Include="Application\LightControl\LightControl.cpp">
       <Filter>AllGame\Application\LightControl</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\LowEnemy\LowEnemy.cpp">
-      <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Background\Obstacle\Obstacle.cpp">
       <Filter>AllGame\Application\Background\Obstacle</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\RocketEnemy\RocketEnemy.cpp">
-      <Filter>AllGame\Application\Enemy\Rocket</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\BaseThrow\BaseThrow.cpp">
-      <Filter>AllGame\Application\Enemy\Base\BaseThrow</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.cpp">
-      <Filter>AllGame\Application\Enemy\Throw</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Enemy\BaseLow\BaseLow.cpp">
-      <Filter>AllGame\Application\Enemy\Base\BaseLow</Filter>
     </ClCompile>
     <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Normal</Filter>
@@ -267,7 +252,9 @@
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\LowEnemy\Low.cpp" />
+    <ClCompile Include="Application\Enemy\LowEnemy\Low.cpp">
+      <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\imgui\imconfig.h">
@@ -453,23 +440,8 @@
     <ClInclude Include="Application\LightControl\LightControl.h">
       <Filter>AllGame\Application\LightControl</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\LowEnemy\LowEnemy.h">
-      <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Background\Obstacle\Obstacle.h">
       <Filter>AllGame\Application\Background\Obstacle</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\RocketEnemy\RocketEnemy.h">
-      <Filter>AllGame\Application\Enemy\Rocket</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\BaseThrow\BaseThrow.h">
-      <Filter>AllGame\Application\Enemy\Base\BaseThrow</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowBlueEnemy.h">
-      <Filter>AllGame\Application\Enemy\Throw</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Enemy\BaseLow\BaseLow.h">
-      <Filter>AllGame\Application\Enemy\Base\BaseLow</Filter>
     </ClInclude>
     <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h">
       <Filter>AllGame\Application\Enemy\Normal</Filter>
@@ -480,7 +452,9 @@
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\LowEnemy\Low.h" />
+    <ClInclude Include="Application\Enemy\LowEnemy\Low.h">
+      <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\shaders\Basic.hlsli">
@@ -746,9 +720,6 @@
     <Filter Include="AllGame\Application\Enemy\LowEnemy">
       <UniqueIdentifier>{11afec8f-facf-45e5-a471-b1efa62eff92}</UniqueIdentifier>
     </Filter>
-    <Filter Include="AllGame\Application\Enemy\Rocket">
-      <UniqueIdentifier>{c94efa81-f1b4-410e-bba9-b324e142e02c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="AllGame\Application\Background\Obstacle">
       <UniqueIdentifier>{52e27d2e-c740-439d-881f-968a3f813e60}</UniqueIdentifier>
     </Filter>
@@ -757,12 +728,6 @@
     </Filter>
     <Filter Include="AllGame\Application\Enemy\Base\BaseEnemy">
       <UniqueIdentifier>{6be2db7e-dbf1-42b7-9581-3a88055a5314}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AllGame\Application\Enemy\Base\BaseThrow">
-      <UniqueIdentifier>{4e429b65-1130-4709-9067-07fec2dbd290}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AllGame\Application\Enemy\Base\BaseLow">
-      <UniqueIdentifier>{5201c08f-c8a6-4632-9b15-0cb894f52af6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
