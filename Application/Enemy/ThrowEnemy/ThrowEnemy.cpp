@@ -23,29 +23,27 @@ ThrowEnemy::ThrowEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMV
 	base_pos_ = allpos;
 	landing_point_ = trackpoint;
 	old_hp_ = hp_;
-	if (type == 1) {
-		type_ = Type::kNormal;
-	}
-	else if (type == 2) {
+	
+	if (type == EnemyType::kThrowRed) {
 		color_ = { 0.5f,0.f,0.f,1.f };
 		bullet_color_ = { 0.f,0.5f,0.f,1.f };
 		speed_ = 0.3f;
 		add_scl_ = 0.001f;
 		fall_speed_ = 0.3f;
 		sub_scl_ = -0.001f;
-		type_ = Type::kRed;
+		type_ = EnemyType::kThrowRed;
 	}
-	else if (type == 3) {
+	else if (type == EnemyType::kThrowGreen) {
 		color_ = { 0.f,0.5f,0.f,1.f };
 		add_scl_ = 0.1f;
 		sub_scl_ = -0.001f;
-		type_ = Type::kGreen;
+		type_ = EnemyType::kThrowGreen;
 	}
-	else if (type == 4) {
+	else if (type == EnemyType::kThrowBlue) {
 		add_scl_ = 0.001f;
 		fall_speed_ = 0.5f;
 		color_ = { 0.f,0.f,0.5f,1.f };
-		type_ = Type::kBlue;
+		type_ = EnemyType::kThrowBlue;
 	}
 }
 
@@ -161,7 +159,7 @@ void ThrowEnemy::ThrowAttack()
 	TrackCalculation();
 	bullet_distance_ = length_;
 	bullet_pos_ -= TrackSpeed;
-	if (type_ == Type::kRed) {
+	if (type_ == EnemyType::kThrowRed) {
 		timer_ += 0.2f;
 		float DivisionValue = 2.f;
 		if (timer_ >= 1) {
@@ -202,7 +200,7 @@ void ThrowEnemy::MoveProcess()
 	const float AbsoluteValue = 0.05f;
 	const int TimerLimit = 1;
 	const float AddPos = 0.1f;
-	if (type_ != Type::kBlue) { return; }
+	if (type_ != EnemyType::kThrowBlue) { return; }
 	if (move_ == Move::kUp) {
 		move_timer_ += AbsoluteValue;
 		if (move_timer_ >= TimerLimit) {

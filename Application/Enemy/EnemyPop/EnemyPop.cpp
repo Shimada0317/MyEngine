@@ -3,6 +3,7 @@
 #include"Player.h"
 #include<fstream>
 #include"ThrowEnemy.h"
+
 #include"Low.h"
 #include"NormalEnemy.h"
 
@@ -131,30 +132,30 @@ void EnemyPop::PopEnemy(int phase, Camera* camera)
 			}
 
 			if (ARIVESkip == true && POPSkip == true && TRACKSkip == true&& TYPESkip == true) {
-				if (TYPE == ENEMYPATERN::kNormal) {
-					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<NormalEnemy>(ROTATION, POSITION, TRACK);
+				if (TYPE >= BaseEnemy::EnemyType::kNormal&&TYPE<=BaseEnemy::EnemyType::kNormalTank) {
+					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<NormalEnemy>(ROTATION, POSITION, TRACK,TYPE);
 					newRobot->CreateRobot(camera);
 					base_type_.push_back(std::move(newRobot));
 				}
 
-				else if (TYPE >= ENEMYPATERN::kThrow&&TYPE<=ENEMYPATERN::kThrowBlue) {
+				else if (TYPE >= BaseEnemy::EnemyType::kThrowNormal&&TYPE <= BaseEnemy::EnemyType::kThrowBlue) {
 					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<ThrowEnemy>(ROTATION, POSITION, TRACK,TYPE);
 					newRobot->CreateRobot(camera);
 					base_type_.push_back(std::move(newRobot));
 				}
-				
+				else if (TYPE >= BaseEnemy::EnemyType::kLowNormal&&TYPE<=BaseEnemy::EnemyType::kHighJumpLow) {
+					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<Low>(ROTATION, POSITION, TRACK,TYPE);
+					newRobot->CreateRobot(camera);
+					base_type_.push_back(std::move(newRobot));
+				}
 
-				else if (TYPE == ENEMYPATERN::kBoss) {
+				else if (TYPE == BaseEnemy::EnemyType::kBoss) {
 					std::unique_ptr<BossEnemy> boss = std::make_unique<BossEnemy>();
 					boss->Initialize(ROTATION, POSITION, camera, TRACK);
 					boss_.push_back(std::move(boss));
 					break;
 				}
-				else if (TYPE == ENEMYPATERN::kLow) {
-					std::unique_ptr<BaseEnemy> newRobot = std::make_unique<Low>(ROTATION, POSITION, TRACK);
-					newRobot->CreateRobot(camera);
-					base_type_.push_back(std::move(newRobot));
-				}
+				
 
 
 				POPSkip = false;

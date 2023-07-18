@@ -13,7 +13,7 @@ private:
 	}state_;
 
 	enum Type {
-		kNormal,
+		kNormal=0,
 		kRapid,
 	};
 private:
@@ -26,7 +26,7 @@ public:
     /// <param name="allrot"></param>
     /// <param name="allpos"></param>
     /// <param name="trackpoint"></param>
-    NormalEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint);
+    NormalEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint,int type);
     /// <summary>
     /// ê∂ê¨
     /// </summary>

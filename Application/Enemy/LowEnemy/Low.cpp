@@ -7,7 +7,7 @@ void (Low::* Low::StateFuncTable[])() {
 		& Low::Death,
 };
 
-Low::Low(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint)
+Low::Low(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint,int type)
 {
 	damage_value_ = 80;
 	mul_value_ = 1.f;
@@ -20,6 +20,10 @@ Low::Low(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpo
 	track_point_ = oldtrack_point_ = trackpoint;
 	hp_ = 160;
 	old_hp_ = hp_;
+	if (type == EnemyType::kHighJumpLow) {
+		speed_ = 0.05f;
+		gravity_ = 0.7f;
+	}
 }
 
 void Low::CreateRobot(Camera* camera)
@@ -157,9 +161,9 @@ void Low::TrackPlayerMode()
 		}
 	}
 	else {
-		float Gravity = 0.5f;
+		
 		gravity_timer_ -= 0.1f;
-		base_pos_.m128_f32[1] += Gravity * gravity_timer_;
+		base_pos_.m128_f32[1] += gravity_ * gravity_timer_;
 		if (gravity_timer_ <= -1) {
 			gravity_timer_ = 1.f;
 			base_pos_.m128_f32[1] = 0.f;

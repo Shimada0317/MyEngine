@@ -24,7 +24,7 @@ public:
     /// <param name="allrot"></param>
     /// <param name="allpos"></param>
     /// <param name="trackpoint"></param>
-    Low(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint);
+    Low(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint,int type);
     /// <summary>
    /// ê∂ê¨
    /// </summary>
@@ -108,5 +108,6 @@ private:
     float head_distance_ = 30.0f;
     float state_timer_ = 0.f;
     float gravity_timer_ = 1.f;
+    float gravity_ = 0.5f;
 };
 

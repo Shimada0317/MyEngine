@@ -13,6 +13,20 @@ class Player;
 
 class BaseEnemy
 {
+public:
+	enum EnemyType {
+		kNormal=0,
+		kNormalRapid,
+		kNormalTank,
+		kThrowNormal,
+		kThrowRed,
+		kThrowGreen,
+		kThrowBlue,
+		kLowNormal,
+		kHighJumpLow,
+		kBoss,
+	}type_;
+
 
 protected:
 	using XMFLOAT2 = DirectX::XMFLOAT2;

@@ -10,7 +10,7 @@ void (NormalEnemy::* NormalEnemy::StateFuncTable[])() {
 		&NormalEnemy::Death,
 };
 
-NormalEnemy::NormalEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint)
+NormalEnemy::NormalEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const XMVECTOR& trackpoint,int type)
 {
 	mul_value_ = 1.3f;
 	headpart_rot_ = bodypart_rot_ = armspart_rot_ = allrot;
@@ -26,9 +26,19 @@ NormalEnemy::NormalEnemy(const XMFLOAT3& allrot, const XMVECTOR& allpos, const X
 	hp_ = 160;
 	old_hp_ = hp_;
 	timer_limit_ = 8;
-	bodypart_color_ = { 1.f,0.f,0.f,1.f };
-	armspart_color_ = { 1.f,0.f,0.f,1.f };
+	bodypart_color_ = { 1.f,1.f,1.f,1.f };
+	armspart_color_ = { 1.f,1.f,1.f,1.f };
 	speed_ = 0.09f;
+	if (type == EnemyType::kNormalRapid) {
+		speed_ = 0.15f;
+		bodypart_color_ = { 0.7f,0.5f,0.5f,1.f };
+	}
+	else if (type == EnemyType::kNormalTank) {
+		speed_ = 0.05f;
+		hp_ = 300;
+		bodypart_color_ = { 0.5f,0.5f,0.5f,1.f };
+		armspart_color_ = { 0.2f,0.2f,0.2f,1.f };
+	}
 }
 
 void NormalEnemy::CreateRobot(Camera* camera)

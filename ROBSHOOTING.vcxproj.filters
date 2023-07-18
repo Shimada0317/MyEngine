@@ -246,14 +246,14 @@
     <ClCompile Include="Application\Enemy\NormalEnemy\NormalEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp">
-      <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Enemy\ThrowEnemy\ThrowEnemy.cpp">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClCompile>
     <ClCompile Include="Application\Enemy\LowEnemy\Low.cpp">
       <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Enemy\BaseEnemy\BaseEnemy.cpp">
+      <Filter>AllGame\Application\Enemy\Base</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -446,14 +446,14 @@
     <ClInclude Include="Application\Enemy\NormalEnemy\NormalEnemy.h">
       <Filter>AllGame\Application\Enemy\Normal</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h">
-      <Filter>AllGame\Application\Enemy\Base\BaseEnemy</Filter>
-    </ClInclude>
     <ClInclude Include="Application\Enemy\ThrowEnemy\ThrowEnemy.h">
       <Filter>AllGame\Application\Enemy\Throw</Filter>
     </ClInclude>
     <ClInclude Include="Application\Enemy\LowEnemy\Low.h">
       <Filter>AllGame\Application\Enemy\LowEnemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Enemy\BaseEnemy\BaseEnemy.h">
+      <Filter>AllGame\Application\Enemy\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -725,9 +725,6 @@
     </Filter>
     <Filter Include="AllGame\Application\Enemy\Base">
       <UniqueIdentifier>{f8669188-451a-4c2e-b4e7-bef1545cf362}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="AllGame\Application\Enemy\Base\BaseEnemy">
-      <UniqueIdentifier>{6be2db7e-dbf1-42b7-9581-3a88055a5314}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

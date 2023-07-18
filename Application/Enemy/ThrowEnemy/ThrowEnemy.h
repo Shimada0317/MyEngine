@@ -4,12 +4,6 @@ class ThrowEnemy :
     public BaseEnemy
 {
 private:
-    enum Type {
-        kNormal = 1,
-        kRed,
-        kGreen,
-        kBlue,
-    }type_;
     enum State {
         kAppearance=0,
         kWait,
@@ -118,7 +112,7 @@ private:
     float bullet_value_ = 0.f;
     float body_length_ = 0.f;
     float track_length_ = 0.f;
-    float sub_scl_ = -0.0008f;
+    float sub_scl_ = -0.0001f;
     float timer_ = 0.f;
     float fall_speed_ = 0.15f;
     float add_scl_ = 0.005f;
